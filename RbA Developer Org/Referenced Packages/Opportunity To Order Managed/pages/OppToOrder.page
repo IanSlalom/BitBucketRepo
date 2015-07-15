@@ -1,0 +1,46 @@
+<!-- Creating the Opportunity to Order Visualforce Page -->
+
+<!-- creating custom controller -->
+<apex:page controller="Dhruvsoft.OppToOrdmapng" tabStyle="opportunity" >
+<apex:form >
+ <style type="text/css">
+    .pbTitle {
+        white-space: nowrap
+    }
+    </style>
+    
+    <!--creating the page block to display the related fields of Opportunity-->
+    
+    <apex:pageBlock id="theblock" title="{!$Label.dhruvsoft__Title}" mode="edit">
+        <apex:pageBlockSection columns="1">
+        
+        <!--Displaying error and information messages-->
+              <apex:pagemessage severity="info" strength="2" rendered="{!value3}" summary="{!$Label.dhruvsoft__Stage_Message}" />
+      <apex:pagemessage severity="confirm" strength="2" rendered="{!value5}" summary="{!$Label.dhruvsoft__Already_Converted}"/>
+              <apex:pagemessage severity="info" strength="2" rendered="{!value4}" summary="{!$Label.dhruvsoft__Account_required}"/>
+        
+        <!--Displaying related fields of Opportunity Object-->
+         <apex:outputText value="{!opp.name}" id="opname"/>
+         <apex:outputText value="{!opp.account.Name}" id="accid" />
+         <apex:inputCheckbox label="{!$Label.dhruvsoft__Add_Contract}" value="{!addcontract}">
+             <apex:actionSupport event="onchange" reRender="theblock"/>
+         </apex:inputCheckbox>
+                        </apex:pageBlockSection>
+      
+       <!--Displaying related fields of Contract Object-->               
+      <apex:pageBlockSection title="{!$Label.dhruvsoft__Select_contract}" columns="1"  rendered="{!addcontract}"  id="theblock" collapsible="false" >
+         <apex:selectList value="{!od.ContractId}" multiselect="false" size="1">
+            <apex:selectOptions value="{!contracts}"/>
+        </apex:selectList><p/>
+                        </apex:pageBlockSection>
+      
+      <!-- creating custom buttons on Visualforce page-->               
+       <apex:pageBlockButtons location="bottom">
+        <apex:commandButton value="{!$Label.dhruvsoft__Cancel} " action="{!Cancel}" />
+
+        <apex:commandButton value="{!$Label.dhruvsoft__Convert}" action="{!convert}" disabled="{!value1}"/>
+        </apex:pageBlockButtons>
+        
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

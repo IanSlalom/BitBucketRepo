@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Account_required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Account required</shortDescription>
+        <value>Account is required to convert this opportunity</value>
+    </labels>
+    <labels>
+        <fullName>Add_Contract</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Contract</shortDescription>
+        <value>Add Contract</value>
+    </labels>
+    <labels>
+        <fullName>Already_Converted</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Already Converted</shortDescription>
+        <value>This opportunity is already converted</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Convert</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Convert</shortDescription>
+        <value>Convert</value>
+    </labels>
+    <labels>
+        <fullName>Select_contract</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select contract</shortDescription>
+        <value>Select contract</value>
+    </labels>
+    <labels>
+        <fullName>Stage_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Stage Message</shortDescription>
+        <value>The Opportunity is not in Won stage - Do you still want to convert</value>
+    </labels>
+    <labels>
+        <fullName>Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Title</shortDescription>
+        <value>Convert Opportunity to Order</value>
+    </labels>
+</CustomLabels>
