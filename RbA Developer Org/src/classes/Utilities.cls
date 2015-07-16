@@ -11,7 +11,7 @@ public class Utilities {
 		}
 				
 
-		System.Debug('***************masterRTList2.get(sObjectName + devName)=' +masterRTList.get(sObjectName + devName));
+		System.Debug('*****yo**********masterRTList2.get(sObjectName + devName)=' +masterRTList.get(sObjectName + devName));
 		return masterRTList.get(sObjectName + devName);
 	}
 	
