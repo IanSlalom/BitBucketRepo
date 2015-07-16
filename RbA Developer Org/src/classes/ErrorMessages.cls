@@ -1,5 +1,5 @@
 public with sharing class ErrorMessages {
-	public static final String PRODUCT_EMPTY = 'zPlease choose a product and try again.';
+	public static final String PRODUCT_EMPTY = '2zPlease choose a product and try again.';
 	public static final String WIDTH_EMPTY = 'Please enter a width.';
 	public static final String HEIGHT_EMPTY = 'Please enter a height.';
 	public static final String WIDTH_BELOW_MIN = 'The width you entered is below the minimum for this product.';
