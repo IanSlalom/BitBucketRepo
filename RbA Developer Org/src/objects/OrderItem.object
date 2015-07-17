@@ -109,4 +109,15 @@
         <fullName>UnitPrice</fullName>
         <trackHistory>false</trackHistory>
     </fields>
+    <webLinks>
+        <fullName>Add_Line_Item</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Add Line Item</masterLabel>
+        <openType>sidebar</openType>
+        <page>Product_Configuration_Edit</page>
+        <protected>false</protected>
+    </webLinks>
 </CustomObject>

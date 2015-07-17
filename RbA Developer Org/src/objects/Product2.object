@@ -155,6 +155,17 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Min_Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Min Width</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Name</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -213,9 +224,9 @@
     </listViews>
     <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <recordTypes>
-        <fullName>Master_Product</fullName>
+        <fullName>Child_Product</fullName>
         <active>true</active>
-        <label>Master Product</label>
+        <label>Child Product</label>
         <picklistValues>
             <picklist>Color__c</picklist>
             <values>
@@ -244,9 +255,9 @@
         </picklistValues>
     </recordTypes>
     <recordTypes>
-        <fullName>Sub_Product</fullName>
+        <fullName>Master_Product</fullName>
         <active>true</active>
-        <label>Sub Product</label>
+        <label>Master Product</label>
         <picklistValues>
             <picklist>Color__c</picklist>
             <values>

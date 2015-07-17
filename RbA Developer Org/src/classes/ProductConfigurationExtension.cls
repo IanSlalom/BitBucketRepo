@@ -12,26 +12,59 @@ public class ProductConfigurationExtension {
 
     public String inputWidth {get;set;}
     public String inputHeight {get;set;}
-    
+    public Decimal inputUI;    
     /******* Set up ProductMaster PickList  *****************/
 
 //    public Id masterProductId {get;set;} 
     public String masterProductId {get;set;} 
 
+    private static transient Product2 lMasterProduct;
     public Product2 masterProduct {
         get
         {   
+            if (lmasterProduct != null) return lmasterProduct;
             if (masterProductId == '' || masterProductId == null) {
             System.Debug('*************here');
             return null;
             }
-            Product2 masterProduct = [SELECT Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c FROM Product2
+            lMasterProduct = [SELECT Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c FROM Product2
                                                             WHERE Id =: masterProductId
                                                             limit 1].get(0);
-            System.Debug('************masterProduct=' +masterProduct);
-            return masterProduct;
+            System.Debug('************lMasterProduct=' +lMasterProduct);
+            return lMasterProduct;
         }
     }
+
+    public Product2 childProduct {
+        get
+        {   
+            if (masterProductId == '' || masterProductId == null) {
+                return null;
+            }
+            Product2 childProduct; 
+                integer count = 0;
+                System.Debug('*************masterProductId=' +masterProductId);
+                for (Product2 cProd : [SELECT UI_Minimum__c, UI_Maximum__c From Product2 WHERE RecordTypeId =: Utilities.RecordTypeFor('Product2', 'Child_Product')
+                                                                                            AND Master_Product__c =: masterProductId
+                                                                                            AND UI_Minimum__c <=: InputUI
+                                                                                            AND UI_Maximum__c >=: InputUI]) {
+                    childProduct = cProd;
+                    System.Debug('************cprod=' +cProd);
+                    count++;
+                }
+
+            if (count == 0) {
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.CHILD_PRODUCT_NOT_FOUND));
+                return null;
+            }
+            if (count > 1) {
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.MULTIPLE_CHILD_PRODUCTS));
+                return null;
+            }
+            return childProduct;
+        }
+    }
+
     
     private static transient List<SelectOption> lMasterProductItems;
     public List<SelectOption> masterProductItems {
@@ -56,36 +89,10 @@ public class ProductConfigurationExtension {
     }
     
     public virtual pageReference enterProduct() {
-//        if (MasterProductId == '' || masterProductId == null) {
-        if (MasterProduct == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.PRODUCT_EMPTY));
-            System.Debug('got here');
-            return null;          
-        }
-        if (String.isBlank(inputWidth) || String.isBlank(inputHeight)) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_HEIGHT_EMPTY));
-            System.Debug('got here');
-            return null;          
-        
-        } 
-        
-        Pattern p = Pattern.compile('\\d+(\\.\\d+)?');
-    Matcher m =p.matcher(inputHeight);
-
-
-        if (!m.find()) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.INVALID_HEIGHT_FORMAT));
-            System.Debug('got here');
-            return null;             
-        } 
-        
-        if (Decimal.valueOf(inputHeight) < masterProduct.Min_Height__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.HEIGHT_BELOW_MIN));
-            System.Debug('got here');
-            return null;             
-        
-        
-        }
+        if(!checkMakeability())
+            return null;
+        if(!findProductConfiguration())
+            return null;
 
         return null;
     }
@@ -94,4 +101,66 @@ public class ProductConfigurationExtension {
         return;
     }
 
+    private boolean checkMakeability() {
+        // clear master product
+        lMasterProduct = null;
+//        if (MasterProductId == '' || masterProductId == null) {
+        if (MasterProduct == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.PRODUCT_EMPTY));
+            System.Debug('got here');
+            return false;          
+        }
+        if (String.isBlank(inputWidth) || String.isBlank(inputHeight)) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_HEIGHT_EMPTY));
+            System.Debug('got here');
+            return false;          
+        
+        } 
+        
+        Pattern p = Pattern.compile('\\d+(\\.\\d+)?');
+        Matcher mHeight =p.matcher(inputHeight);
+        Matcher mWidth =p.matcher(inputWidth);
+
+
+        if (!mHeight.find()) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.INVALID_HEIGHT_FORMAT));
+            return false;             
+        } 
+        if (!mWidth.find()) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.INVALID_WIDTH_FORMAT));
+            return false;             
+        } 
+        
+        // Check for minimum makeability 
+        if (Decimal.valueOf(inputHeight) < masterProduct.Min_Height__c) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.HEIGHT_BELOW_MIN));
+            System.Debug('got here');
+            return false;                  
+        }
+        if (Decimal.valueOf(inputWidth) < masterProduct.Min_Width__c) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_BELOW_MIN));
+            System.Debug('got here'); 
+            return false;                  
+        }
+
+        // Check for maximum makeability 
+        if (Decimal.valueOf(inputHeight) > masterProduct.Max_Height__c) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.HEIGHT_ABOVE_MAX));
+            return false;                  
+        }
+        if (Decimal.valueOf(inputWidth) > masterProduct.Max_Width__c) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_ABOVE_MAX));
+            return false;                  
+        }
+        
+        inputUI = Decimal.valueOf(inputWidth) + Decimal.valueOf(inputHeight);
+
+        return true;
+    }
+
+    private boolean findProductConfiguration() {
+        System.Debug('************childProduct=' +childProduct);
+        // query pricebook entries where product = childproduct and pricebook = order price book.   How to get order price book? Query pricebooks where order is a child of pricebook
+        return true;
+    }
 }
