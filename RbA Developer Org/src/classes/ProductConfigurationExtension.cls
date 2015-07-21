@@ -12,7 +12,18 @@ public class ProductConfigurationExtension {
 
     public String inputWidth {get;set;}
     public String inputHeight {get;set;}
+    public boolean productSelected {get;set;}    
     public Decimal inputUI;    
+    
+    public  productConfigWrapper prodConfig  {
+        get
+        {   
+            if (prodConfig != null) return prodConfig;
+            prodConfig = new productConfigWrapper();
+            return prodConfig;
+        }    
+        private set;          
+    }
     /******* Set up ProductMaster PickList  *****************/
 
 //    public Id masterProductId {get;set;} 
@@ -27,7 +38,7 @@ public class ProductConfigurationExtension {
             System.Debug('*************here');
             return null;
             }
-            lMasterProduct = [SELECT Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c FROM Product2
+            lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c FROM Product2
                                                             WHERE Id =: masterProductId
                                                             limit 1].get(0);
             System.Debug('************lMasterProduct=' +lMasterProduct);
@@ -80,37 +91,47 @@ public class ProductConfigurationExtension {
             }               
             return lMasterProductItems;
         }
-/*      List<SelectOption> options = new List<SelectOption>();
-        // need to limit to pricebook
-        for (Product2 masterProd : [SELECT Id, Name From Product2 WHERE RecordTypeId =: Utilities.RecordTypeFor('Product2', 'Master_Product')]) {
-            options.add(new SelectOption(masterProd.Name, masterProd.Id));
-        }               
-        return options;*/
     }
 
+    private static transient List<SelectOption> lSizeItems;
+    public List<SelectOption> sizeItems {
+        get
+        {   
+            // need to limit to pricebook
+            if (lSizeItems == null && prodConfig.sizes != null) {
+                lSizeItems = new List<SelectOption>();
+                lSizeItems.add(new SelectOption('', '-- Select --'));
+                for (String size : prodConfig.sizes.split(';')) {
+                    lSizeItems.add(new SelectOption(size, size));
+                }
+            }               
+            return lSizeItems;
+        }
+    }
     /*******************************************************
                     ProductConfig class
     *******************************************************/
 
     public class ProductConfigWrapper
     {
-        public Decimal 	baseUnitPrice        		{ get; private set; }
-        public Decimal	corrosionResistantPrice		{ get; private set; }
-        public boolean	corrosionResistantSelected  { get; private set; }
-        public String dualColorExteriors			{ get; private set; }
-        public String 	dualColorExteriorSelected	{ get; private set; }
-        public String dualColorInteriors       	{ get; private set; }
-        public String 	dualColorInteriorSelected	{ get; private set; }
-        public Decimal 	dualColorPrice				{ get; private set; }
-        public boolean	dualColorSelected       	{ get; private set; }
-        public Decimal 	glidingScreenPrice			{ get; private set; }
-        public boolean	glidingScreenSelected       { get; private set; }
-        public Decimal 	grillesBetweenGlassPrice	{ get; private set; }
-        public boolean	grillesBetweenGlassSelected { get; private set; }
-        public Decimal 	specialtyGlazingPrice		{ get; private set; }
-        public boolean	specialtyGlazingSelected	{ get; private set; }
-        public String sizes				       	{ get; private set; }
-        public String 	sizeSelected				{ get; private set; }
+        public Decimal  baseUnitPrice                   { get; private set; }
+        public Decimal  corrosionResistantPrice         { get; private set; }
+//        public boolean        corrosionResistantSelected  { get; private set; }
+        public String dualColorExteriors                        { get; private set; }
+//        public String         dualColorExteriorSelected       { get; private set; }
+        public String dualColorInteriors        { get; private set; }
+//        public String         dualColorInteriorSelected       { get; private set; }
+        public Decimal  dualColorPrice                          { get; private set; }
+//        public boolean        dualColorSelected               { get; private set; }
+        public Decimal  glidingScreenPrice                      { get; private set; }
+//        public boolean        glidingScreenSelected       { get; private set; }
+        public Decimal  grillesBetweenGlassPrice        { get; private set; }
+//        public boolean        grillesBetweenGlassSelected { get; private set; }
+        public Decimal  specialtyGlazingPrice           { get; private set; }
+//        public boolean        specialtyGlazingSelected        { get; private set; }
+        public String sizes                                     { get; private set; }
+//        public String         sizeSelected                            { get; private set; }
+        public OrderItem orderLI              { get; set; }
 
         public ProductConfigWrapper()
         {
@@ -119,15 +140,16 @@ public class ProductConfigurationExtension {
         public ProductConfigWrapper(PriceBookEntry pBookEntry)
         {
 
-        	baseUnitPrice 				= pBookEntry.Base_Unit__c;
-        	corrosionResistantPrice		= pBookEntry.Corrosion_Resistant__c;
-        	dualColorExteriors 			= pBookEntry.Dual_Color_Exterior__c;
-        	dualColorInteriors 			= pBookEntry.Dual_Color_Interior__c;
-        	dualColorPrice 				= pBookEntry.Dual_Color__c;
-        	glidingScreenPrice 			= pBookEntry.Gliding_Screen__c;
-        	grillesBetweenGlassPrice 	= pBookEntry.Grilles__c;
-        	specialtyGlazingPrice 		= pBookEntry.Specialty_Glazing__c;
-            sizes        				= pBookEntry.Size__c;
+                baseUnitPrice                           = pBookEntry.Base_Unit__c;
+                corrosionResistantPrice         = pBookEntry.Corrosion_Resistant__c;
+                dualColorExteriors                      = pBookEntry.Dual_Color_Exterior__c;
+                dualColorInteriors                      = pBookEntry.Dual_Color_Interior__c;
+                dualColorPrice                          = pBookEntry.Dual_Color__c;
+                glidingScreenPrice                      = pBookEntry.Gliding_Screen__c;
+                grillesBetweenGlassPrice        = pBookEntry.Grilles__c;
+                specialtyGlazingPrice           = pBookEntry.Specialty_Glazing__c;
+            sizes                                       = pBookEntry.Size__c;
+            orderLI = new OrderItem();
         }
     }
 
@@ -138,7 +160,7 @@ public class ProductConfigurationExtension {
             return null;
         if(!findProductConfiguration())
             return null;
-
+                productSelected = true;
         return null;
     }
 
@@ -209,12 +231,15 @@ public class ProductConfigurationExtension {
             Product2 childProduct; 
                 integer count = 0;
                 System.Debug('*************masterProductId=' +masterProductId);
-                for (PricebookEntry pBook : [SELECT PriceBook2Id, Product2Id From PricebookEntry WHERE PriceBook2Id = '01s1a000002Ino2AAC' 
+                for (PricebookEntry pBook : [SELECT PriceBook2Id, Product2Id, Base_Unit__c, Corrosion_Resistant__c, 
+                                                    Dual_Color_Exterior__c, Dual_Color_Interior__c, Dual_Color__c, 
+                                                    Gliding_Screen__c, Grilles__c, Specialty_Glazing__c, Size__c  From PricebookEntry WHERE PriceBook2Id = '01s1a000002Ino2AAC' 
                                                                                //             AND Master_Product__c =: masterProductId
                                                                                //             AND UI_Minimum__c <=: InputUI
                                                                                    AND      Product2Id = '01t1a000000BfyI']) {
              //       childProduct = cProd;
                     System.Debug('************pBook =' +pBook );
+                    prodConfig = new productConfigWrapper(pBook);
                     count++;
                 }
 

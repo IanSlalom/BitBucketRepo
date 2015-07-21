@@ -1,27 +1,50 @@
 <apex:page standardController="OrderItem" extensions="ProductConfigurationExtension">
 <apex:form >
-    <apex:pageBlock title="Enter Product" mode="edit" id="EnterProductBlock">
+    <apex:pageBlock title="Choose Product" mode="edit" id="EnterProductBlock">
         <apex:pageMessages />
-        <apex:pageBlockButtons location="bottom">
+        <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
         </apex:pageBlockButtons>            
 
-        <apex:pageBlockSection columns="1">
+        <apex:pageBlockSection columns="1" rendered="{!!productSelected}">
             <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
                 <apex:selectOptions value="{!masterProductItems}"/>
             </apex:selectList>
             <apex:inputText value="{!inputWidth}" label="Width" id="inputWidth"/>
             <apex:inputText value="{!inputHeight}" label="Height" id="inputHeight"/>
         </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1" rendered="{!productSelected}">
+            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct"/>
+            <apex:outputText value="{!inputWidth}" label="Width" id="outputWidth"/>
+            <apex:outputText value="{!inputHeight}" label="Height" id="outputHeight"/>
+        </apex:pageBlockSection>
     </apex:pageBlock>
 
-    <apex:pageBlock title="Configure Product" mode="edit" id="ConfigureProductBlock">
+    <apex:pageBlock title="Configure Product" mode="edit" id="ConfigureProductBlock" rendered="{!productSelected}">
         <apex:pageBlockButtons location="bottom">
             <apex:commandButton action="{!saveProduct}" value="Save"/>
         </apex:pageBlockButtons>            
 
-        <apex:pageBlockSection columns="1">
+        <apex:pageBlockSection title="Glass Options" columns="1">
+            <apex:inputField value="{!prodConfig.OrderLI.Specialty_Glazing__c}" rendered="{!prodConfig.specialtyGlazingPrice != null}"/>
         </apex:pageBlockSection>
+        <apex:pageBlockSection title="Door Options" columns="1">
+            <apex:selectList value="{!prodConfig.OrderLI.Size__c}" label="Size" size="1" id="size" rendered="{!prodConfig.sizes != null}">
+                <apex:selectOptions value="{!sizeItems}"/>
+            </apex:selectList>
+
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Finishes" columns="1">
+            <apex:inputField value="{!prodConfig.OrderLI.Dual_Color_Exterior__c}"/>
+            <apex:inputField value="{!prodConfig.OrderLI.Dual_Color_Interior__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Hardware Options" columns="1">
+            <apex:inputField value="{!prodConfig.OrderLI.Corrosion_Resistant__c}"  rendered="{!prodConfig.corrosionResistantPrice != null}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Grilles" columns="1">
+            <apex:inputField value="{!prodConfig.OrderLI.Grilles_Between_Glass__c}" rendered="{!prodConfig.grillesBetweenGlassPrice != null}"/>
+        </apex:pageBlockSection>
+
     </apex:pageBlock>
 
 </apex:form>
