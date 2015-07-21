@@ -87,6 +87,51 @@ public class ProductConfigurationExtension {
         }               
         return options;*/
     }
+
+    /*******************************************************
+                    ProductConfig class
+    *******************************************************/
+
+    public class ProductConfigWrapper
+    {
+        public Decimal 	baseUnitPrice        		{ get; private set; }
+        public Decimal	corrosionResistantPrice		{ get; private set; }
+        public boolean	corrosionResistantSelected  { get; private set; }
+        public String dualColorExteriors			{ get; private set; }
+        public String 	dualColorExteriorSelected	{ get; private set; }
+        public String dualColorInteriors       	{ get; private set; }
+        public String 	dualColorInteriorSelected	{ get; private set; }
+        public Decimal 	dualColorPrice				{ get; private set; }
+        public boolean	dualColorSelected       	{ get; private set; }
+        public Decimal 	glidingScreenPrice			{ get; private set; }
+        public boolean	glidingScreenSelected       { get; private set; }
+        public Decimal 	grillesBetweenGlassPrice	{ get; private set; }
+        public boolean	grillesBetweenGlassSelected { get; private set; }
+        public Decimal 	specialtyGlazingPrice		{ get; private set; }
+        public boolean	specialtyGlazingSelected	{ get; private set; }
+        public String sizes				       	{ get; private set; }
+        public String 	sizeSelected				{ get; private set; }
+
+        public ProductConfigWrapper()
+        {
+        }
+
+        public ProductConfigWrapper(PriceBookEntry pBookEntry)
+        {
+
+        	baseUnitPrice 				= pBookEntry.Base_Unit__c;
+        	corrosionResistantPrice		= pBookEntry.Corrosion_Resistant__c;
+        	dualColorExteriors 			= pBookEntry.Dual_Color_Exterior__c;
+        	dualColorInteriors 			= pBookEntry.Dual_Color_Interior__c;
+        	dualColorPrice 				= pBookEntry.Dual_Color__c;
+        	glidingScreenPrice 			= pBookEntry.Gliding_Screen__c;
+        	grillesBetweenGlassPrice 	= pBookEntry.Grilles__c;
+        	specialtyGlazingPrice 		= pBookEntry.Specialty_Glazing__c;
+            sizes        				= pBookEntry.Size__c;
+        }
+    }
+
+
     
     public virtual pageReference enterProduct() {
         if(!checkMakeability())
@@ -161,6 +206,19 @@ public class ProductConfigurationExtension {
     private boolean findProductConfiguration() {
         System.Debug('************childProduct=' +childProduct);
         // query pricebook entries where product = childproduct and pricebook = order price book.   How to get order price book? Query pricebooks where order is a child of pricebook
+            Product2 childProduct; 
+                integer count = 0;
+                System.Debug('*************masterProductId=' +masterProductId);
+                for (PricebookEntry pBook : [SELECT PriceBook2Id, Product2Id From PricebookEntry WHERE PriceBook2Id = '01s1a000002Ino2AAC' 
+                                                                               //             AND Master_Product__c =: masterProductId
+                                                                               //             AND UI_Minimum__c <=: InputUI
+                                                                                   AND      Product2Id = '01t1a000000BfyI']) {
+             //       childProduct = cProd;
+                    System.Debug('************pBook =' +pBook );
+                    count++;
+                }
+
+
         return true;
     }
 }

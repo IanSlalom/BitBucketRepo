@@ -2,7 +2,7 @@
 <apex:form >
     <apex:pageBlock title="Enter Product" mode="edit" id="EnterProductBlock">
         <apex:pageMessages />
-        <apex:pageBlockButtons >
+        <apex:pageBlockButtons location="bottom">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
         </apex:pageBlockButtons>            
 
@@ -16,7 +16,7 @@
     </apex:pageBlock>
 
     <apex:pageBlock title="Configure Product" mode="edit" id="ConfigureProductBlock">
-        <apex:pageBlockButtons >
+        <apex:pageBlockButtons location="bottom">
             <apex:commandButton action="{!saveProduct}" value="Save"/>
         </apex:pageBlockButtons>            
 

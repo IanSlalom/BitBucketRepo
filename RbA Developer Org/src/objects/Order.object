@@ -80,6 +80,36 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Bay_Bow_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>Bay Bow Sales</label>
+        <summarizedField>OrderItem.ListPrice</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>BayBow</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Bay_Bow_Units__c</fullName>
+        <externalId>false</externalId>
+        <label>Bay Bow Units</label>
+        <summarizedField>OrderItem.Quantity</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>BayBow</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>BillToContactId</fullName>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
@@ -155,12 +185,102 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Door_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>Door Sales</label>
+        <summarizedField>OrderItem.ListPrice</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>Door</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Door_Units__c</fullName>
+        <externalId>false</externalId>
+        <label>Door Units</label>
+        <summarizedField>OrderItem.Quantity</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>Door</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>EffectiveDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
         <fullName>EndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>FF_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>FF Sales</label>
+        <summarizedField>OrderItem.ListPrice</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>FF</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>FF_Units__c</fullName>
+        <externalId>false</externalId>
+        <label>FF Units</label>
+        <summarizedField>OrderItem.Quantity</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>FF</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>IF_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>IF Sales</label>
+        <summarizedField>OrderItem.ListPrice</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>IF</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>IF_Units__c</fullName>
+        <externalId>false</externalId>
+        <label>IF Units</label>
+        <summarizedField>OrderItem.Quantity</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>IF</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>IsReductionOrder</fullName>
@@ -199,6 +319,36 @@
         <fullName>QuoteId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Series2_Sales__c</fullName>
+        <externalId>false</externalId>
+        <label>Series2 Sales</label>
+        <summarizedField>OrderItem.ListPrice</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>Series2</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Series2_Units__c</fullName>
+        <externalId>false</externalId>
+        <label>Series2 Units</label>
+        <summarizedField>OrderItem.Quantity</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Product_Type__c</field>
+            <operation>equals</operation>
+            <value>Series2</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>ShipToContactId</fullName>
