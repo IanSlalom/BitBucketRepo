@@ -10,13 +10,15 @@
             <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
                 <apex:selectOptions value="{!masterProductItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!inputWidth}" label="Width" id="inputWidth"/>
-            <apex:inputText value="{!inputHeight}" label="Height" id="inputHeight"/>
+            <apex:inputText value="{!OrderItem.Width__c}" label="Width" id="inputWidth"/>
+            <apex:inputText value="{!OrderItem.Height__c}" label="Height" id="inputHeight"/>
+            <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection columns="1" rendered="{!productSelected}">
             <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct"/>
-            <apex:outputText value="{!inputWidth}" label="Width" id="outputWidth"/>
-            <apex:outputText value="{!inputHeight}" label="Height" id="outputHeight"/>
+            <apex:outputText value="{!OrderItem.Width__c}" label="Width" id="outputWidth"/>
+            <apex:outputText value="{!OrderItem.Height__c}" label="Height" id="outputHeight"/>
+            <apex:outputText value="{!OrderItem.Quantity}" label="Quantity" id="outputQuantity"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
 
@@ -26,26 +28,36 @@
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="Glass Options" columns="1">
-            <apex:inputField value="{!prodConfig.OrderLI.Specialty_Glazing__c}" rendered="{!prodConfig.specialtyGlazingPrice != null}"/>
+            <apex:inputField value="{!OrderItem.Specialty_Glazing__c}" rendered="{!prodConfig.specialtyGlazingPrice != null}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Door Options" columns="1">
-            <apex:selectList value="{!prodConfig.OrderLI.Size__c}" label="Size" size="1" id="size" rendered="{!prodConfig.sizes != null}">
+            <apex:selectList value="{!OrderItem.Size__c}" label="Size" size="1" id="size" rendered="{!prodConfig.sizes != null}">
                 <apex:selectOptions value="{!sizeItems}"/>
+            </apex:selectList>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Gliding Screen" columns="1">
+            <apex:inputField value="{!OrderItem.Gliding_Screen__c}"  rendered="{!prodConfig.glidingScreenPrice != null}"/>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Finishes" columns="1">
+            <apex:selectList value="{!OrderItem.Dual_Color_Exterior__c}" label="Dual Color Exterior" size="1" id="dualColorExterior" rendered="{!prodConfig.dualColorExteriors != null}">
+                <apex:selectOptions value="{!DualColorExteriorItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Dual_Color_Interior__c}" label="Dual Color Interior" size="1" id="dualColorInterior" rendered="{!prodConfig.dualColorInteriors != null}">
+                <apex:selectOptions value="{!DualColorInteriorItems}"/>
             </apex:selectList>
 
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Finishes" columns="1">
-            <apex:inputField value="{!prodConfig.OrderLI.Dual_Color_Exterior__c}"/>
-            <apex:inputField value="{!prodConfig.OrderLI.Dual_Color_Interior__c}"/>
-        </apex:pageBlockSection>
         <apex:pageBlockSection title="Hardware Options" columns="1">
-            <apex:inputField value="{!prodConfig.OrderLI.Corrosion_Resistant__c}"  rendered="{!prodConfig.corrosionResistantPrice != null}"/>
+            <apex:inputField value="{!OrderItem.Corrosion_Resistant__c}"  rendered="{!prodConfig.corrosionResistantPrice != null}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Grilles" columns="1">
-            <apex:inputField value="{!prodConfig.OrderLI.Grilles_Between_Glass__c}" rendered="{!prodConfig.grillesBetweenGlassPrice != null}"/>
+            <apex:inputField value="{!OrderItem.Grilles_Between_Glass__c}" rendered="{!prodConfig.grillesBetweenGlassPrice != null}"/>
         </apex:pageBlockSection>
 
     </apex:pageBlock>
+    <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
 
 </apex:form>
 </apex:page>
