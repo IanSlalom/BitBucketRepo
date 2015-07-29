@@ -5,8 +5,23 @@
     <confirmationTokenRequired>false</confirmationTokenRequired>
     <label>Product Configuration</label>
     <packageVersions>
+        <majorNumber>8</majorNumber>
+        <minorNumber>5</minorNumber>
+        <namespace>APXTConga4</namespace>
+    </packageVersions>
+    <packageVersions>
         <majorNumber>1</majorNumber>
         <minorNumber>2</minorNumber>
         <namespace>Dhruvsoft</namespace>
+    </packageVersions>
+    <packageVersions>
+        <majorNumber>9</majorNumber>
+        <minorNumber>80</minorNumber>
+        <namespace>Loop</namespace>
+    </packageVersions>
+    <packageVersions>
+        <majorNumber>1</majorNumber>
+        <minorNumber>61</minorNumber>
+        <namespace>webm</namespace>
     </packageVersions>
 </ApexPage>
