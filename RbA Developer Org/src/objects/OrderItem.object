@@ -2,7 +2,9 @@
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>AddProduct</actionName>
-        <type>Default</type>
+        <content>Product_Configuration</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>CancelEdit</actionName>
@@ -14,7 +16,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>Edit</actionName>
-        <type>Default</type>
+        <content>Product_Configuration_Edit</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>EditAllProduct</actionName>
@@ -118,6 +122,17 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Height</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
@@ -206,6 +221,17 @@
     <fields>
         <fullName>UnitPrice</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Width</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <webLinks>
         <fullName>Add_Line_Item</fullName>
