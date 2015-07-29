@@ -21,7 +21,6 @@
 
 ***********************************************************/
 
-
 public with sharing class OrderExtension {
 
     /******* Set up Standard Controller for Order  *****************/
