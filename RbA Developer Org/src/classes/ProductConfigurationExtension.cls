@@ -250,7 +250,8 @@ public class ProductConfigurationExtension {
     		if (orderLineItem.PriceBookEntryId != prodConfig.priceBookId) {
     			OrderItem newOrderLineItem = orderLineItem.clone(false,true);
     			newOrderLineItem.PriceBookEntryId = prodConfig.priceBookId;
- //   			newOrderLineItem = orderLineItem;
+				// for this scenario we will need to make sure we clear out selected options that are not available
+				// on the new order line item  
     			insert newOrderLineItem;
     			delete orderLineItem;
 				ref = new PageReference('/' +newOrderLineItem.OrderId);
@@ -260,16 +261,7 @@ public class ProductConfigurationExtension {
     			update orderLineItem;
 				ref = new PageReference('/' +orderLineItem.OrderId);
     		}
-    	}
-//    	orderLineItem.OrderId = '8011a0000000I5H';
-//    	upsert orderLineItem;
-//        ref.setRedirect(true);
-//        return ref;
-
-//		PageReference ref = new PageReference('/' +orderLineItem.OrderId);
-//        ref.setRedirect(true);
-//        return ref;
-    	
+    	}    	
         return ref;
     }
 
