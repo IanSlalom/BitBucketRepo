@@ -279,11 +279,11 @@ public class ProductConfigurationExtension {
 	// calculates the total price for the product based on selected config options
     public decimal calculatePrice() {
     	decimal price = (prodConfig.baseUnitPrice == null) ? 0 : prodConfig.baseUnitPrice;
-        price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.OrderLI.Specialty_Glazing__c == null) ? price : price + prodConfig.specialtyGlazingPrice;    	
-        price = (!prodConfig.OrderLI.Corrosion_Resistant__c || !prodConfig.OrderLI.Corrosion_Resistant__c == null) ? price : price + prodConfig.corrosionResistantPrice;    	
+        price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;    	
+        price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;    	
         price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;    	
-        price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.OrderLI.Gliding_Screen__c == null) ? price : price + prodConfig.glidingScreenPrice;    	
-        price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.OrderLI.Grilles_Between_Glass__c == null ) ? price : price + prodConfig.grillesBetweenGlassPrice;    	
+        price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;    	
+        price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;    	
 
         return price;
     }
