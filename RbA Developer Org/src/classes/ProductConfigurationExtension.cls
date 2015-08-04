@@ -155,7 +155,7 @@ public class ProductConfigurationExtension {
         get
         {   
             // need to limit to pricebook
-            if (lDualColorExteriorItems == null && prodConfig.sizes != null) {
+            if (lDualColorExteriorItems == null && prodConfig.dualColorPrice != null) {
                 lDualColorExteriorItems = new List<SelectOption>();
                 lDualColorExteriorItems.add(new SelectOption('', '-- Select --'));
                 for (String color : prodConfig.dualColorExteriors.split(';')) {
@@ -172,7 +172,7 @@ public class ProductConfigurationExtension {
         get
         {   
             // need to limit to pricebook
-            if (lDualColorInteriorItems == null && prodConfig.sizes != null) {
+            if (lDualColorInteriorItems == null && prodConfig.dualColorPrice != null) {
                 lDualColorInteriorItems = new List<SelectOption>();
                 lDualColorInteriorItems.add(new SelectOption('', '-- Select --'));
                 for (String color : prodConfig.dualColorInteriors.split(';')) {
