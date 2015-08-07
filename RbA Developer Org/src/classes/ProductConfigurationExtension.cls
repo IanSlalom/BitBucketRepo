@@ -22,6 +22,7 @@ public class ProductConfigurationExtension {
 
     /******* public variables  *****************/
 	public boolean newOrderItem {get; set;}     
+	public boolean orderActivated {get; set;}     
 	public String priceBookId;   
     public Decimal inputUI;    
 
@@ -39,9 +40,13 @@ public class ProductConfigurationExtension {
             priceBookId = ApexPages.currentPage().getParameters().get('pid');         
 		// If we are editing an order item, retrieve the master product and price book id from the order item
         } else {
-                for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c From OrderItem WHERE Id =: orderLineItem.Id]) {
+                for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
                     masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
                     priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
+					if (orderItem.Order.Status == 'Activated') {
+             			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.ORDER_ACTIVATED_EDIT));
+						orderActivated = true;
+					}
                 }       	
         }
     }   

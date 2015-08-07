@@ -1,7 +1,7 @@
 <apex:page standardController="OrderItem" extensions="ProductConfigurationExtension">
 <apex:form >
-    <apex:pageBlock title="Choose Product" mode="edit" id="EnterProductBlock">
-        <apex:pageMessages />
+    <apex:pageMessages />
+    <apex:pageBlock title="Choose Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
         </apex:pageBlockButtons>            

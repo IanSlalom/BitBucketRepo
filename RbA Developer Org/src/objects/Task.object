@@ -60,6 +60,9 @@
         <fullName>Email</fullName>
     </fields>
     <fields>
+        <fullName>IsVisibleInSelfService</fullName>
+    </fields>
+    <fields>
         <fullName>OwnerId</fullName>
         <type>Lookup</type>
     </fields>

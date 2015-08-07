@@ -25,6 +25,7 @@ public with sharing class OrderExtension {
 
     /******* Set up Standard Controller for Order  *****************/
     private final Order theOrder;
+    public boolean orderActivated;
     
     public OrderExtension(ApexPages.StandardController stdController) {
         this.theOrder = (Order)stdController.getRecord();
@@ -34,7 +35,14 @@ public with sharing class OrderExtension {
 
     /******* redirect method  *****************/
 	public PageReference redirect() {
-		if (theOrder.Id == null) return null;
+		if (theOrder.Id == null) {
+             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.ORDER_NOT_FOUND));
+			 return null;
+		}
+		if (theOrder.Status == 'Activated') {
+             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.ORDER_ACTIVATED_NEW));
+			 return null;
+		}
     	PageReference p = new PageReference('/apex/Product_Configuration_Edit?oid=' +theOrder.Id +'&pid=' +theOrder.Pricebook2Id);
     	return p;
 	}

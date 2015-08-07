@@ -80,6 +80,38 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Amount_Due__c</fullName>
+        <externalId>false</externalId>
+        <formula>TotalAmount -  Payment_Received__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Amount Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Amount_Due_at_End__c</fullName>
+        <externalId>false</externalId>
+        <label>Amount Due at End</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Amount_Due_at_Start__c</fullName>
+        <externalId>false</externalId>
+        <label>Amount Due at Start</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Bay_Bow_Sales__c</fullName>
         <externalId>false</externalId>
         <label>Bay Bow Sales</label>
@@ -342,6 +374,38 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Payment_Received__c</fullName>
+        <externalId>false</externalId>
+        <label>Payment Received</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Percent_Due_at_End__c</fullName>
+        <defaultValue>50</defaultValue>
+        <externalId>false</externalId>
+        <label>Percent Due at End</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Percent_Due_at_Start__c</fullName>
+        <defaultValue>50</defaultValue>
+        <externalId>false</externalId>
+        <label>Percent Due at Start</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>PoDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>
@@ -441,4 +505,86 @@
         <searchResultsAdditionalFields>ORDERS.ORDER_NUMBER</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Cancel_Order</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Cancel Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)}
+var o = new sforce.SObject(&quot;Order&quot;);
+o.id =&quot;{!Order.Id}&quot;;
+
+function checkError(result)
+{
+  if (!result[0].getBoolean(&apos;success&apos;)) {
+    throw(&quot;error&quot;);
+  }
+}
+try 
+{
+  o.status = &quot;Cancelled&quot;;
+  result = sforce.connection.update([o]);
+  alert(result);
+
+  checkError(result);
+  alert(&quot;Order cancelled!&quot;);
+}
+catch (err)
+{
+  alert(&apos;An error occurred processing your cancellation.  Please contact your administrator and reference order ID &apos;+o.id);
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Invoice</fullName>
+        <availability>online</availability>
+        <description>&amp;DS7=1
+&amp;FP0=1</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>100</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Conga Invoice</masterLabel>
+        <openType>newWindow</openType>
+        <position>topLeft</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com
+?SessionId={!API.Session_ID}
+&amp;ServerUrl={!$Api.Partner_Server_URL_290}
+&amp;Id={!Order.Id}
+&amp;TemplateId=a061a000001Ypt4
+&amp;DS7=1
+&amp;FP0=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Drawloop_Invoice</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Drawloop Invoice</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/loop__looplus?eid={!Order.Id}&amp;sessionid={!$Api.Session_ID}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Webmerge_Invoice</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Webmerge Invoice</masterLabel>
+        <openType>sidebar</openType>
+        <page>WebmergeOrder</page>
+        <protected>false</protected>
+    </webLinks>
 </CustomObject>
