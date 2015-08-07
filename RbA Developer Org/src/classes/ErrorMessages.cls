@@ -10,4 +10,5 @@ public with sharing class ErrorMessages {
 	public static final String HEIGHT_ABOVE_MAX = 'The height you entered is above the maximum for this product.';
 	public static final String CHILD_PRODUCT_NOT_FOUND = 'A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String MULTIPLE_CHILD_PRODUCTS = 'Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
+	public static final String INVALID_CHILD_PRODUCT = 'A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';
 }

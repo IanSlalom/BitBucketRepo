@@ -53,11 +53,11 @@ public class ProductConfigurationExtension {
     public Integer inputQuantity {get;set;}    
     
     /******* property for the product configuration wrapper  *****************/
-    public  productConfigWrapper prodConfig  {
+    public  prodConfigManager.productConfigWrapper prodConfig  {
         get
         {   
             if (prodConfig != null) return prodConfig;
-            prodConfig = new productConfigWrapper();
+            prodConfig = new prodConfigManager.productConfigWrapper();
             return prodConfig;
         }    
         private set;          
@@ -139,11 +139,7 @@ public class ProductConfigurationExtension {
         get
         {   
             if (lSizeItems == null && prodConfig.sizes != null) {
-                lSizeItems = new List<SelectOption>();
-                lSizeItems.add(new SelectOption('', '-- Select --'));
-                for (String size : prodConfig.sizes.split(';')) {
-                    lSizeItems.add(new SelectOption(size, size));
-                }
+                lSizeItems = ProdConfigUtility.retrievePickListItems(prodConfig.sizes);
             }               
             return lSizeItems;
         }
@@ -156,11 +152,7 @@ public class ProductConfigurationExtension {
         {   
             // need to limit to pricebook
             if (lDualColorExteriorItems == null && prodConfig.dualColorPrice != null) {
-                lDualColorExteriorItems = new List<SelectOption>();
-                lDualColorExteriorItems.add(new SelectOption('', '-- Select --'));
-                for (String color : prodConfig.dualColorExteriors.split(';')) {
-                    lDualColorExteriorItems.add(new SelectOption(color, color));
-                }
+                lDualColorExteriorItems = ProdConfigUtility.retrievePickListItems(prodConfig.dualColorExteriors);
             }               
             return lDualColorExteriorItems;
         }
@@ -173,63 +165,30 @@ public class ProductConfigurationExtension {
         {   
             // need to limit to pricebook
             if (lDualColorInteriorItems == null && prodConfig.dualColorPrice != null) {
-                lDualColorInteriorItems = new List<SelectOption>();
-                lDualColorInteriorItems.add(new SelectOption('', '-- Select --'));
-                for (String color : prodConfig.dualColorInteriors.split(';')) {
-                    lDualColorInteriorItems.add(new SelectOption(color, color));
-                }
+                lDualColorInteriorItems = ProdConfigUtility.retrievePickListItems(prodConfig.dualColorInteriors);
             }               
             return lDualColorInteriorItems;
         }
-    }
-    /*******************************************************
-                    ProductConfigWrapper class
-    *******************************************************/
-	// stores the product config prices and the order line item
-    public class ProductConfigWrapper
-    {
-        public Id  		priceBookId                   	{ get; private set; }
-        public Decimal  baseUnitPrice                   { get; private set; }
-        public Decimal  corrosionResistantPrice         { get; private set; }
-        public String 	dualColorExteriors              { get; private set; }
-        public String 	dualColorInteriors        		{ get; private set; }
-        public Decimal  dualColorPrice                  { get; private set; }
-        public Decimal  glidingScreenPrice              { get; private set; }
-        public Decimal  grillesBetweenGlassPrice        { get; private set; }
-        public Decimal  specialtyGlazingPrice           { get; private set; }
-        public String 	sizes                           { get; private set; }
-        public OrderItem orderLI              			{ get; set; }
-
-		// constructors
-        public ProductConfigWrapper(){}
-
-        public ProductConfigWrapper(PriceBookEntry pBookEntry, OrderItem orderLItem)
-        {
-				priceBookId								= pBookEntry.Id;
-                baseUnitPrice                           = pBookEntry.Base_Unit__c;
-                corrosionResistantPrice         		= pBookEntry.Corrosion_Resistant__c;
-                dualColorExteriors                      = pBookEntry.Dual_Color_Exterior__c;
-                dualColorInteriors                      = pBookEntry.Dual_Color_Interior__c;
-                dualColorPrice                          = pBookEntry.Dual_Color__c;
-                glidingScreenPrice                      = pBookEntry.Gliding_Screen__c;
-                grillesBetweenGlassPrice        		= pBookEntry.Grilles__c;
-                specialtyGlazingPrice           		= pBookEntry.Specialty_Glazing__c;
-            	sizes                                   = pBookEntry.Size__c;
-            	orderLI = orderLItem;
-        }
-    }
-
-    
+    } 
 
     /*******************************************************
                     enterProduct method
     *******************************************************/
 	// runs whenever the Enter button is clicked at the master product level
     public virtual pageReference enterProduct() {
-        if(!checkMakeability())
+    	
+        inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
+    	String errorMessage = ProdConfigManager.checkMakeability(masterProduct, orderLineItem);
+        if(!String.isBlank(errorMessage)) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
+            return null;        	
+        }
+        prodConfig = ProdConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id);
+        
+        if (prodConfig == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.INVALID_CHILD_PRODUCT));
             return null;
-        if(!findProductConfiguration())
-            return null;
+    	}
         productSelected = true;
         return null;
     }
@@ -240,7 +199,7 @@ public class ProductConfigurationExtension {
 	// runs whenever the Save button is clicked at the child product level
     public pageReference saveProduct() {
 		PageReference ref;
-    	orderLineItem.unitPrice = calculatePrice();
+    	orderLineItem.unitPrice = ProdConfigManager.calculatePrice(prodConfig);
     	if (newOrderItem) {
     		orderLineItem.PriceBookEntryId = prodConfig.priceBookId;
     		insert orderLineItem;
@@ -265,99 +224,4 @@ public class ProductConfigurationExtension {
         return ref;
     }
 
-    /*******************************************************
-                    calculatePrice method
-    *******************************************************/
-	// calculates the total price for the product based on selected config options
-    public decimal calculatePrice() {
-    	clearNonSelectableValues();
-    	decimal price = (prodConfig.baseUnitPrice == null) ? 0 : prodConfig.baseUnitPrice;
-        price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;    	
-        price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;    	
-        price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;    	
-        price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;    	
-        price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;    	
-
-        return price;
-    }
-
-    /*******************************************************
-                    clearNonSelectableValues method
-    *******************************************************/
-	// clears any fields that are not selectable / do not have a price. 
-	// This is needed for the scenario where the child product changes from one size to another.
-    public void clearNonSelectableValues() {
-        prodConfig.OrderLI.Specialty_Glazing__c = (prodConfig.specialtyGlazingPrice == null) ? false : prodConfig.OrderLI.Specialty_Glazing__c;    	
-        prodConfig.OrderLI.Corrosion_Resistant__c = (prodConfig.corrosionResistantPrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant__c;    	
-        prodConfig.OrderLI.Dual_Color_Exterior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Exterior__c;    	
-        prodConfig.OrderLI.Dual_Color_Interior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Interior__c;    	
-        prodConfig.OrderLI.Gliding_Screen__c = (prodConfig.glidingScreenPrice == null) ? false : prodConfig.OrderLI.Gliding_Screen__c;    	
-        prodConfig.OrderLI.Grilles_Between_Glass__c = (prodConfig.grillesBetweenGlassPrice == null) ? false : prodConfig.OrderLI.Grilles_Between_Glass__c;    	
-    }
-
-    /*******************************************************
-                    checkMakeability method
-    *******************************************************/
-	// checks the entered values against the master product makeability rules
-    private boolean checkMakeability() {
-
-        // Check that values have been entered for width / height
-        if (MasterProduct == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.PRODUCT_EMPTY));
-            System.Debug('got here');
-            return false;          
-        }
-        if (orderLineItem.Width__c == null || orderLineItem.Height__c == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_HEIGHT_EMPTY));
-            System.Debug('got here');
-            return false;                 
-        } 
-        
-        // Check for minimum makeability 
-        if (orderLineItem.Height__c < masterProduct.Min_Height__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.HEIGHT_BELOW_MIN));
-            System.Debug('got here');
-            return false;                  
-        }
-        if (orderLineItem.Width__c < masterProduct.Min_Width__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_BELOW_MIN));
-            System.Debug('got here'); 
-            return false;                  
-        }
-
-        // Check for maximum makeability 
-        if (orderLineItem.Height__c > masterProduct.Max_Height__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.HEIGHT_ABOVE_MAX));
-            return false;                  
-        }
-        if (orderLineItem.Width__c > masterProduct.Max_Width__c) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ErrorMessages.WIDTH_ABOVE_MAX));
-            return false;                  
-        }
-        
-        inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
-
-        return true;
-    }
-
-    /*******************************************************
-                    findProductConfiguration method
-    *******************************************************/
-	// retrieves the correct price book entry based on the pricebook and product id and 
-	// creates the product config wrapper to store the config options
-	// add check here to make sure multiple pricebook entries were not found that match the criteria
-    private boolean findProductConfiguration() {
-    	integer count = 0;
-        for (PricebookEntry pBook : [SELECT PriceBook2Id, Product2Id, Base_Unit__c, Corrosion_Resistant__c, 
-                                                    Dual_Color_Exterior__c, Dual_Color_Interior__c, Dual_Color__c, 
-                                                    Gliding_Screen__c, Grilles__c, Specialty_Glazing__c, Size__c  
-                                                    		From PricebookEntry WHERE PriceBook2Id =: priceBookId 
-                                                           	//             AND Master_Product__c =: masterProductId
-                                                           	//             AND UI_Minimum__c <=: InputUI
-                                                           	AND      Product2Id =: childProduct.Id]) {
-        	prodConfig = new productConfigWrapper(pBook, orderLineItem);
-        	count++;
-        }
-        return true;
-    }
 }
