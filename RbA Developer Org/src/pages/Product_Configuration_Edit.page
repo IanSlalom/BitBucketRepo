@@ -3,7 +3,7 @@
     <apex:pageMessages />
     <apex:pageBlock title="Choose Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
-            <apex:commandButton action="{!enterProduct}" value="Enterq" />
+            <apex:commandButton action="{!enterProduct}" value="Enter" />
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection columns="1" rendered="{!!productSelected}">
