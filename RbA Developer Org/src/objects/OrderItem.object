@@ -43,8 +43,9 @@
     </fields>
     <fields>
         <fullName>Commission_Amount__c</fullName>
+        <description>IF(  ISPICKVAL(Order.Status, &apos;Activated&apos;)  ,  Quantity * UnitPrice , 0)</description>
         <externalId>false</externalId>
-        <formula>IF(  ISPICKVAL(Order.Status, &apos;Activated&apos;)  ,  Quantity * UnitPrice , 0)</formula>
+        <formula>Quantity * UnitPrice</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Commission Amount</label>
         <precision>18</precision>
@@ -187,7 +188,18 @@
     <fields>
         <fullName>Product_Type__c</fullName>
         <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Product_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Product Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Type_old__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Type_old</label>
         <picklist>
             <picklistValues>
                 <fullName>FF</fullName>

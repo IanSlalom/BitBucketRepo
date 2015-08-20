@@ -117,7 +117,7 @@
         <label>Bay Bow Sales</label>
         <summarizedField>OrderItem.ListPrice</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>BayBow</value>
         </summaryFilterItems>
@@ -132,7 +132,7 @@
         <label>Bay Bow Units</label>
         <summarizedField>OrderItem.Quantity</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>BayBow</value>
         </summaryFilterItems>
@@ -149,6 +149,38 @@
     <fields>
         <fullName>BillingAddress</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Commission_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Due__c</fullName>
+        <externalId>false</externalId>
+        <formula>Commission_Amount__c -  Commission_Paid__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Paid__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Paid</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>CompanyAuthorizedById</fullName>
@@ -244,7 +276,7 @@
         <label>Door Sales</label>
         <summarizedField>OrderItem.ListPrice</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>Door</value>
         </summaryFilterItems>
@@ -259,7 +291,7 @@
         <label>Door Units</label>
         <summarizedField>OrderItem.Quantity</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>Door</value>
         </summaryFilterItems>
@@ -280,16 +312,11 @@
         <fullName>FF_Sales__c</fullName>
         <externalId>false</externalId>
         <label>FF Sales</label>
-        <summarizedField>OrderItem.ListPrice</summarizedField>
-        <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
-            <operation>equals</operation>
-            <value>FF</value>
-        </summaryFilterItems>
-        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
-        <summaryOperation>sum</summaryOperation>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
         <trackHistory>false</trackHistory>
-        <type>Summary</type>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>FF_Units__c</fullName>
@@ -297,7 +324,7 @@
         <label>FF Units</label>
         <summarizedField>OrderItem.Quantity</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>FF</value>
         </summaryFilterItems>
@@ -312,7 +339,7 @@
         <label>IF Sales</label>
         <summarizedField>OrderItem.ListPrice</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>IF</value>
         </summaryFilterItems>
@@ -327,7 +354,7 @@
         <label>IF Units</label>
         <summarizedField>OrderItem.Quantity</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>IF</value>
         </summaryFilterItems>
@@ -424,7 +451,7 @@
         <label>Series2 Sales</label>
         <summarizedField>OrderItem.ListPrice</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>Series2</value>
         </summaryFilterItems>
@@ -439,7 +466,7 @@
         <label>Series2 Units</label>
         <summarizedField>OrderItem.Quantity</summarizedField>
         <summaryFilterItems>
-            <field>OrderItem.Product_Type__c</field>
+            <field>OrderItem.Product_Type_old__c</field>
             <operation>equals</operation>
             <value>Series2</value>
         </summaryFilterItems>
