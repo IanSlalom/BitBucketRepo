@@ -1,0 +1,86 @@
+<project name="Sample usage of Salesforce Ant tasks" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+	
+    <!-- Test out deploy and retrieve verbs for package 'mypkg' -->
+    <target name="test">
+      <!-- Upload the contents of the "mypkg" package -->
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="mypkg" pollWaitMillis="20000" maxPoll="100"/>
+      <mkdir dir="retrieveOutput"/>
+      <!-- Retrieve the contents into another directory -->
+      <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="retrieveOutput" packageNames="MyPkg" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Retrieve an unpackaged set of metadata from your org -->
+    <!-- The file unpackaged/package.xml lists what is to be retrieved -->
+    <target name="retrieveUnpackaged">
+      <mkdir dir="retrieveUnpackaged"/>
+      <!-- Retrieve the contents into another directory -->
+      <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="retrieveUnpackaged" unpackaged="unpackaged/package.xml" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Retrieve all the items of a particular metadata type -->
+    <target name="bulkRetrieve">
+      <sf:bulkRetrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" metadataType="${sf.metadataType}" retrieveTarget="retrieveUnpackaged" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Retrieve metadata for all the packages specified under packageNames -->
+    <target name="retrievePkg">
+      <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="retrieveOutput" packageNames="${sf.pkgName}" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Deploy the unpackaged set of metadata retrieved with retrieveUnpackaged -->
+    <target name="deployUnpackaged">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="retrieveUnpackaged" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Deploy a zip of metadata files to the org -->
+    <target name="deployZip">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" zipFile="${sf.zipFile}" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Shows deploying code & running tests for code in directory -->
+    <target name="deployCode">
+      <!-- Upload the contents of the "codepkg" directory, running the tests for just 1 class -->
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" runAllTests="false" pollWaitMillis="20000" maxPoll="100">
+      </sf:deploy>
+    </target>
+
+    <!-- Shows removing code; only succeeds if done after deployCode -->
+    <target name="undeployCode">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="removecodepkg" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Shows retrieving code; only succeeds if done after deployCode -->
+    <target name="retrieveCode">
+      <!-- Retrieve the contents listed in the file codepkg/package.xml into the codepkg directory -->
+      <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="codepkg" unpackaged="codepkg/package.xml" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Shows deploying code, running all tests, and running tests (1 of which fails), and logging. -->
+    <target name="deployCodeFailingTest">
+      <!-- Upload the contents of the "codepkg" package, running all tests -->
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="codepkg" runAllTests="false" logType="Debugonly" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Shows check only; never actually saves to the server -->
+    <target name="deployCodeCheckOnly">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="codepkg" checkOnly="true" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+    <!-- Shows check only; never actually saves to the server -->
+    <target name="deployCwCheckOnly">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="src" checkOnly="true" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+	<!-- Retrieve the information of all items of a particular metadata type -->
+    <target name="listMetadata">
+      <sf:listMetadata username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" metadataType="${sf.metadataType}" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+
+	<!-- Retrieve the information on all supported metadata type -->
+    <target name="describeMetadata">
+      <sf:describeMetadata username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" pollWaitMillis="20000" maxPoll="100"/>
+    </target>
+</project>
