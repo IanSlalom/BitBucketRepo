@@ -5,6 +5,16 @@
     <description>Settings that dictate what queue objects will go in.</description>
     <enableFeeds>false</enableFeeds>
     <fields>
+        <fullName>Account_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Account Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Install_Work_Order_Queue_Id__c</fullName>
         <externalId>false</externalId>
         <label>Install Work Order Queue Id</label>
