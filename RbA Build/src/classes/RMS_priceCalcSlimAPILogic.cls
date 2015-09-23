@@ -105,8 +105,8 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     		//CREATE JOB(CASE)
     		Case job = new Case(
     			AccountId = opp[0].AccountId, 
-    			OwnerId = queueSetting.Job_Queue_Id__c
-    			//Sold_Order__c = ord.Id 
+    			OwnerId = queueSetting.Job_Queue_Id__c,
+    			Sold_Order__c = ord.Id
     			);
 			insert job;
     		
