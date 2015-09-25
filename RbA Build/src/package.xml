@@ -29,6 +29,9 @@
         <name>CustomLabels</name>
     </types>
     <types>
+        <members>Order</members>
+        <members>OrderItem</members>
+        <members>Purchase_Order__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
         <members>SVMXC__Service_Order__c</members>
