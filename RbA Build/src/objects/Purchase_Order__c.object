@@ -42,9 +42,7 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <content>RMS_vendorPurchaseOrder</content>
-        <skipRecordTypeSelect>false</skipRecordTypeSelect>
-        <type>Visualforce</type>
+        <type>Default</type>
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
