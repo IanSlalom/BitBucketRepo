@@ -29,6 +29,9 @@
         <name>CustomLabels</name>
     </types>
     <types>
+        <members>Account</members>
+        <members>Contact</members>
+        <members>Opportunity</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Purchase_Order__c</members>
