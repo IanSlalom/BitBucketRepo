@@ -65,7 +65,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	newPurchaseOrder = true;
 	        orderId = apexpages.currentpage().getparameters().get('orderId');
 	        
-	        
         }//END OF NEW PURCHASE ORDER 
         
 		//EXISTING PURCHASE ORDER	       	
@@ -119,8 +118,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		for(Account vend : vendorsOnOrder){
 			avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
 		}	
-	
-	
 	}//end of constructor
 	
 	public List<SelectOption> getAvaliableVendors() {
@@ -156,20 +153,27 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	
 	//OVERRIDE SAVE METHOD
 	public PageReference save() {
+		system.debug('ads selectedVendor save: '+selectedVendor);
 		if(newPurchaseOrder == true){
-			po.Vendor__c = selectedVendor;
-		 	po.Order__c = orderId;
-		 	//po.RecordType =  
-		 	upsert po;
-	
-		 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-		 	
-		 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-		 		OrderItem oi = oiw.orderItem;
-		 		oi.Purchase_Order__c = po.id;
-		 		orderItemsToUpdateList.add(oi);
-		 	}
-			update orderItemsToUpdateList;
+			if(selectedVendor == '' || selectedVendor == null){
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
+				return null;
+			}else{
+				po.Name = 'PlaceHolderPOName';
+				po.Vendor__c = selectedVendor; 
+			 	po.Order__c = orderId;
+			 	//po.RecordType =  
+			 	upsert po;
+		
+			 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+			 	
+			 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+			 		OrderItem oi = oiw.orderItem;
+			 		oi.Purchase_Order__c = po.id;
+			 		orderItemsToUpdateList.add(oi);
+			 	}
+				update orderItemsToUpdateList;
+			}
 		}else{
 			upsert po;
 		}
@@ -188,7 +192,44 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		newPage.setRedirect(true);
 		return newPage;
 	}
-
+	
+	
+		public PageReference saveAndNew() {
+		if(newPurchaseOrder == true){
+			if(selectedVendor == '' || selectedVendor == null){
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
+				return null;
+			}else{
+				if(selectedVendor == '' || selectedVendor == null){
+					po.addError('Please select a Vendor');
+				}
+				po.Name = 'PlaceHolderPOName';
+				po.Vendor__c = selectedVendor;
+			 	po.Order__c = orderId;
+			 	//po.RecordType =  
+			 	upsert po;
+		
+			 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+			 	
+			 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+			 		OrderItem oi = oiw.orderItem;
+			 		oi.Purchase_Order__c = po.id;
+			 		orderItemsToUpdateList.add(oi);
+			 	}
+				update orderItemsToUpdateList;
+			}
+		}else{
+			upsert po;
+		}
+		
+		
+		PageReference newPage = New PageReference('/apex/RMS_vendorPurchaseOrder?orderId='+orderId);
+       // PageReference newPage = New PageReference('/'+relatedOrder.id);
+       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
+        newPage.setRedirect(true);
+        return newPage;
+        
+	}
 
 
 	public class OrderItemWrapper{
