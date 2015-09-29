@@ -1,248 +1,105 @@
-/*******************************************************//**
+<apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
+  
+	<apex:includeScript value="{!$Resource.jquery}" />
 
-@class      RMS_vendorPurchaseOrderController
+	<apex:pageMessages />
 
-@brief      Controller for VF page RMS_vendorPurchaseOrder.page
+	<apex:form >
+		<apex:pageBlock title="{!IF(newPurchaseOrder, 'Create A Purchase Order' , 'Purchase Order')}" >
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!save}" value="Save" />
+			<apex:commandButton action="{!saveAndNew}" value="Save & New" />
+			<apex:commandButton action="{!cancel}" value="Cancel" />
+			</apex:pageBlockButtons>            
 
-    Manages all of the purchase order creation and editing logic
+			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder == true}" > 
+				<apex:selectList value="{!selectedVendor}" label="Vendor" size="1" id="VendorList">
+					<apex:selectOptions value="{!avaliableVendors}"/>
+					<apex:actionSupport event="onchange" action="{!updateSubTotal}" reRender="PurchaseOrderFields" />
+				</apex:selectList>
+			</apex:pageBlockSection> 
+			
+			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder != true}" > 
+				<apex:outputText value="{!selectedVendorName}" label="Selected Vendor"/>
+			</apex:pageBlockSection> 
+		  
+		    <apex:outputPanel id="PurchaseOrderFields"> 
+			    <apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+			    	<!-- 
+			    	<apex:outputField value="{!Purchase_Order__c.Name}" label="Name" rendered="{! newPurchaseOrder == false}"/>
+			    	<apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
+			    	<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>
+					<apex:outputText value=""/>
+			    	<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" type="date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
+					 -->
+					 
+			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
+			    	
+				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'con' || status == 'rec'}"/>
 
-@author     Anthony Strafaccia (Slalom.CDK)
+				 	<apex:outputText value=""/>
+			    	<apex:outputText value="0" label="Total" id="total" />
+			    
+			    	<apex:inputField value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'con' || status == 'rec'}"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'con' || status == 'rec'}"/>
+			    	
+			    	<apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'con' || status == 'rec'}"/>
+			    
+			    <script>
+					function update(var1,var2){
+						var number1 = Number(var1.replace(/[^0-9\.]+/g,""));
+						var number2 = Number(var2.replace(/[^0-9\.]+/g,""));
+						document.getElementById('{!$component.total}').innerHTML ='$'+ (number1 + number2).toFixed(2);
+					}
+					$( document ).ready(function() {
+					   // if(){
+					    	var subtotal = document.getElementById('{!$component.subtotal}').innerHTML
+					    	var tax = document.getElementById('{!$component.tax}').value;
+					    	update(subtotal, tax);
+					   // }
+					});
+					
+				</script>	
+	 	
+			    </apex:pageBlockSection>
 
-@version    2015-09/16  Slalom.ADS
-    Created.
+				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
+					<apex:column style="width:250px" value="{!oiw.product.Name}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.OrderItemNumber}"/>
+					<apex:column style="width:250px">
+						<apex:facet name="header">Variant</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel'}"/>
+							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'con' || status == 'rec'}"/>
+					</apex:column>
+					<apex:column style="width:250px">
+						<apex:facet name="header">Unit Cost</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel'}"/>
+							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'con' || status == 'rec'}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+			    	
+		    </apex:outputPanel>
+		    
+		    <apex:outputPanel id="SystemInformationFields">
+			    <apex:pageBlockSection title="System Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+			    	<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
+			    	<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+			    </apex:pageBlockSection>
 
-@see        RMS_vendorPurchaseOrderControllerTest
-
-@copyright  (c)2015 Slalom.  All Rights Reserved.
-            Unauthorized use is prohibited.
-
-***********************************************************/
-
-public with sharing class RMS_vendorPurchaseOrderController {
-	 
-	/******* public variables  *****************/
-	
-	 
-	//public variables used on VF page
-	public String selectedVendor {get;set;}
-	public String selectedVendorName {get;set;}
-	
-	//public variables used in both new and edit PO
- 	public Id orderId;
- 	public Order relatedOrder;
-	public List<OrderItem> relatedOrderItems = new List<OrderItem>();
- 	public list<Id> relatedProduct2IDList = new list<Id>();
-	public List<Product2> relatedProducts = new List<Product2>();
- 	public list<Id> vendorIdList = new list<Id>();
-	public list<Account> vendorsOnOrder = new list<Account>();
- 	
-	public Boolean newPurchaseOrder {get;set;}
-	
- 	//public variables to be used in new PO
- 	public list<SelectOption> avaliableVendors = new list<SelectOption>();
- 	
- 	
- 	//public variables to create wrapper
-	public list<OrderItemWrapper> orderItemWrapperList = new list<OrderItemWrapper>();
-	
-	public map<Id, OrderItem> orderItemIdToOrderItemMap = new Map<Id, OrderItem>();
-	public map<Id, Account> accountIdToAccountMap = new Map<Id, Account>();
-	public map<Id, Product2> productIdToProductMap = new Map<Id, Product2>();
-	
-	public list<OrderItemWrapper> orderItemWrapperByVendor = new list<OrderItemWrapper>();
- 	/******* Set up Standard Controller for Purchase_Order__c  *****************/
- 	private Apexpages.StandardController standardController;
- 	private final Purchase_Order__c po;
-	
-	
-	
-	//Constructor
-	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
-		this.po = (Purchase_Order__c)stdController.getRecord();
-		
-		//NEW PURCHASE ORDER
-        if(stdController.getId() == null){
-        	newPurchaseOrder = true;
-	        orderId = apexpages.currentpage().getparameters().get('orderId');
-	        
-        }//END OF NEW PURCHASE ORDER 
-        
-		//EXISTING PURCHASE ORDER	       	
-        else {
-			newPurchaseOrder = false;
-	        
-	        Purchase_Order__c po1 = [SELECT Id, Order__c, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
-	        orderId = po1.Order__c;
-	        selectedVendor = po1.Vendor__c;
-	        selectedVendorName = po1.Vendor__r.Name;
-	    	
-        }
-       
-        //GET THE ORDER
-        relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
-        
-        //GET THE ORDER ITEMS
-        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity FROM OrderItem Where OrderId =: orderId];
-		
-       
-       //USING ORDER ITEMS GET ALL PRODUCTS
-        for(OrderItem oi: relatedOrderItems){
-        	relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
-        	orderItemIdToOrderItemMap.put(oi.id, oi);
-        }
-        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
-		
-		//USING PRODUCTS GET LIST OF ALL VENDORS
-		for(Product2 p : relatedProducts){
-			vendorIdList.add(p.Vendor__c);
-			productIdToProductMap.put(p.id, p);
-		}
-		list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
-        for(Account a : vendorsOnOrder){
-        	accountIdToAccountMap.put(a.id, a);
-        }
-        
-        //USING MAPS TO CREATE WRAPPERS
-        
-        for(OrderItem oi : relatedOrderItems){
-        	Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-        	Account account = accountIdToAccountMap.get(product2.Vendor__c);
-        	OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
-        	
-        	orderItemWrapperList.add(OIW);
-        }
-        
-    	
-    	//BUILD SELECT LIST FOR CHOOSING VENDOR
-		avaliableVendors.add(new SelectOption('','Please Select'));
-		for(Account vend : vendorsOnOrder){
-			avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
-		}	
-	}//end of constructor
-	
-	public List<SelectOption> getAvaliableVendors() {
-		return avaliableVendors;
-    }
-    
-    
-	public List<OrderItemWrapper> getOrderItemWrappersByVendor(){
-		orderItemWrapperByVendor.clear();
-		
-		for(OrderItemWrapper oiw : orderItemWrapperList){
-			system.debug('ADS oiw: '+oiw);
-			if(oiw.account != null && oiw.account.id == selectedVendor){
-				orderItemWrapperByVendor.add(oiw);
-			}
-		}
-		system.debug('ADS orderItemsByVendor: '+orderItemWrapperByVendor);
-		return orderItemWrapperByVendor;
-	}
-	
-	
-	public void updateSubTotal(){
-		List<OrderItemWrapper> venderOrderItems = getOrderItemWrappersByVendor();
-		Decimal subtotal = 0;
-		for(OrderItemWrapper oiw :venderOrderItems){
-			system.debug('ads oiw.OrderItem.Pricebookentry.UnitPrice: ' +oiw.orderItem.Pricebookentry.UnitPrice);
-			subtotal = subtotal + (oiw.orderItem.Pricebookentry.UnitPrice*oiw.orderItem.Quantity);
-		}
-		po.Subtotal__c = subtotal;
-	}
-	
-	
-	
-	//OVERRIDE SAVE METHOD
-	public PageReference save() {
-		system.debug('ads selectedVendor save: '+selectedVendor);
-		if(newPurchaseOrder == true){
-			if(selectedVendor == '' || selectedVendor == null){
-				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
-				return null;
-			}else{
-				po.Name = 'PlaceHolderPOName';
-				po.Vendor__c = selectedVendor; 
-			 	po.Order__c = orderId;
-			 	//po.RecordType =  
-			 	upsert po;
-		
-			 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-			 	
-			 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-			 		OrderItem oi = oiw.orderItem;
-			 		oi.Purchase_Order__c = po.id;
-			 		orderItemsToUpdateList.add(oi);
-			 	}
-				update orderItemsToUpdateList;
-			}
-		}else{
-			upsert po;
-		}
-		
-		
-        PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
-        newPage.setRedirect(true);
-        return newPage;
-        
-	}
-	
-    //OVERRIDE CANCEL METHOD
-	public PageReference cancel() {
-		PageReference newPage = New PageReference('/'+relatedOrder.id);
-		newPage.setRedirect(true);
-		return newPage;
-	}
-	
-	
-		public PageReference saveAndNew() {
-		if(newPurchaseOrder == true){
-			if(selectedVendor == '' || selectedVendor == null){
-				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
-				return null;
-			}else{
-				if(selectedVendor == '' || selectedVendor == null){
-					po.addError('Please select a Vendor');
-				}
-				po.Name = 'PlaceHolderPOName';
-				po.Vendor__c = selectedVendor;
-			 	po.Order__c = orderId;
-			 	//po.RecordType =  
-			 	upsert po;
-		
-			 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-			 	
-			 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-			 		OrderItem oi = oiw.orderItem;
-			 		oi.Purchase_Order__c = po.id;
-			 		orderItemsToUpdateList.add(oi);
-			 	}
-				update orderItemsToUpdateList;
-			}
-		}else{
-			upsert po;
-		}
-		
-		
-		PageReference newPage = New PageReference('/apex/RMS_vendorPurchaseOrder?orderId='+orderId);
-       // PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
-        newPage.setRedirect(true);
-        return newPage;
-        
-	}
-
-
-	public class OrderItemWrapper{
-		public OrderItem orderItem {get; set;}
-   		public Account account {get; set;}
-   		public Product2 product {get; set;}
-   		
-        public OrderItemWrapper(OrderItem oi, Account a, Product2 p) {
-            orderItem = oi;
-            account = a;
-            product = p;
-        }                            
-    } 
-
-
-}
+		    </apex:outputPanel>        
+		           
+		</apex:pageBlock>
+   	</apex:form>
+</apex:page>

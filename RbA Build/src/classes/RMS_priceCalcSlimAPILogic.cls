@@ -86,12 +86,13 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     		map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
     		RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
     		
-    		//ORDER has a case related to it
+    		//ORDER related to the Opp
     		Order ord = new Order(
     			AccountId = opp[0].AccountId,
     			OwnerId = queueSetting.Order_Queue_Id__c,
     			Status = 'Draft',
-    			EffectiveDate = Date.today()
+    			EffectiveDate = Date.today(),
+    			Opportunity = opp 
     		);
     		insert ord;
     		//Unable to create order with Activated status
@@ -102,19 +103,10 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     		//update ord;
     		
     		
-    		//CREATE JOB(CASE)
-    		Case job = new Case(
-    			AccountId = opp[0].AccountId, 
-    			OwnerId = queueSetting.Job_Queue_Id__c
-    			//Sold_Order__c = ord.Id 
-    			);
-			insert job;
-    		
-    		
     		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
     		//CREATE WORK ORDER (TECH MEASURE)
     		SVMXC__Service_Order__c techWO = new SVMXC__Service_Order__c(
-    			SVMXC__Case__c = job.id,
+    			Sold_Order__c = ord.id,
     			RecordType = serviceOrderScheduleRecordType,
     			SVMXC__Order_Type__c = 'Tech Measure',
     			OwnerId = queueSetting.Tech_Measure_Work_Order_Queue_Id__c
@@ -131,14 +123,14 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     		
     		//CREATE WORK ORDER (INSTALL)
     		SVMXC__Service_Order__c installWO = new SVMXC__Service_Order__c(
-    			SVMXC__Case__c = job.id,
+    			Sold_Order__c = ord.id, 
     			RecordType =  serviceOrderScheduleRecordType,
     			SVMXC__Order_Type__c = 'Install',
     			OwnerId = queueSetting.Install_Work_Order_Queue_Id__c
     		);
     		insert installWO;
 			
-			return 'Created Order, Job, Install Work Order and Tech Measure Work Order';
+			return 'Created Order, Install Work Order and Tech Measure Work Order';
     	}
     }
 	

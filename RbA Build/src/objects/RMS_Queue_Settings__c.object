@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <customSettingsVisibility>Public</customSettingsVisibility>
+    <description>Settings that dictate what queue objects will go in.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Account_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Account Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Work_Order_Queue_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Install Work Order Queue Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Job_Queue_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Job Queue Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <description>The name of the Location (Not used in the code, here for ease of use.</description>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order_Queue_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Order Queue Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Work_Order_Queue_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Tech Measure Work Order Queue Id</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>RMS Queue Settings</label>
+</CustomObject>

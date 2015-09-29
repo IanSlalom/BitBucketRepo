@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>RMS_vendorPurchaseOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>RMS_viewPurchaseOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The purchase order header for ordering RbA and 3rd party products linked to order line items</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Comments__c</fullName>
+        <description>Comments regarding the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Comments regarding the purchase order.</inlineHelpText>
+        <label>Comments</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Confirmation_Number__c</fullName>
+        <description>The PO&apos;s confirmation number from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The PO&apos;s confirmation number from the vendor.</inlineHelpText>
+        <label>Confirmation Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Confirmed_Timestamp__c</fullName>
+        <description>The date and time this order was confirmed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date and time this order was confirmed.</inlineHelpText>
+        <label>Confirmed Timestamp</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Date__c</fullName>
+        <defaultValue>Today()</defaultValue>
+        <description>The date of the purchase order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date of the purchase order</inlineHelpText>
+        <label>Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_Ship_Date__c</fullName>
+        <description>The estimated ship date for the purchase order from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The estimated ship date for the purchase order from the vendor.</inlineHelpText>
+        <label>Estimated Ship Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Number__c</fullName>
+        <description>The invoice number linked to this purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The invoice number linked to this purchase order.</inlineHelpText>
+        <label>Invoice Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The parent sales order of this purchase order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The parent sales order of this purchase order</inlineHelpText>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Purchase Orders</relationshipLabel>
+        <relationshipName>Purchase_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PO_System_Number__c</fullName>
+        <description>A system auto-number used within the Purchase Order Number to create a unique number. This is a system only field.</description>
+        <displayFormat>{00000}</displayFormat>
+        <externalId>false</externalId>
+        <label>PO System Number</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>AutoNumber</type>
+    </fields>
+    <fields>
+        <fullName>Product_Received_Date__c</fullName>
+        <description>The date the product was received from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the product was received from the vendor.</inlineHelpText>
+        <label>Product Received Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Released_Timestamp__c</fullName>
+        <description>The date and time the purchase order was released.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date and time the purchase order was released.</inlineHelpText>
+        <label>Released Timestamp</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Requested_Ship_Date__c</fullName>
+        <description>The date you are requesting the order is ship</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date you are requesting the order is ship</inlineHelpText>
+        <label>Requested Ship Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <description>The status of the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The status of the purchase order.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>New</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal__c</fullName>
+        <description>The subtotal of the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The subtotal of the purchase order.</inlineHelpText>
+        <label>Subtotal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Tax__c</fullName>
+        <description>The tax applied to the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The tax applied to the purchase order.</inlineHelpText>
+        <label>Tax</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>Subtotal__c +  Tax__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Vendor__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The vendor linked to the PO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The vendor linked to the PO</inlineHelpText>
+        <label>Vendor</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>The account must be of type Vendor.</errorMessage>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Vendor</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Purchase Orders</relationshipLabel>
+        <relationshipName>Purchase_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>Purchase Order</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>Purchase Order Number</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Purchase Orders</pluralLabel>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Cost_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for non-product / cost purchase orders.</description>
+        <label>Cost Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Product_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for 3rd party product purchase orders.</description>
+        <label>Product Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>RbA_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for Renewal by Andersen purchase orders.</description>
+        <label>RbA Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Service_Purchase_Order</fullName>
+        <active>true</active>
+        <label>Service Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>New_Purchase_Order</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>New Purchase Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId={!Order.Id}&apos;;</url>
+    </webLinks>
+</CustomObject>
