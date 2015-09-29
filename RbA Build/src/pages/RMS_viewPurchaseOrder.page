@@ -94,5 +94,4 @@
     	
    	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
-
 </apex:page>

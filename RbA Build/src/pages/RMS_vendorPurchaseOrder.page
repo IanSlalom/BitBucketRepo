@@ -35,8 +35,8 @@
 			    	<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
 					 
 					 
-			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
-			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rec'}"/>
 			    	<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
 			    	<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
 			    	
@@ -80,13 +80,13 @@
 					<apex:column style="width:250px" value="{!oiw.orderItem.OrderItemNumber}"/>
 					<apex:column style="width:250px">
 						<apex:facet name="header">Variant</apex:facet> 
-							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel'}"/>
-							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'con' || status == 'rec'}"/>
+							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con'}"/>
+							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rec'}"/>
 					</apex:column>
 					<apex:column style="width:250px">
 						<apex:facet name="header">Unit Cost</apex:facet> 
-							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel'}"/>
-							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'con' || status == 'rec'}"/>
+							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con'}"/>
+							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rec'}"/>
 					</apex:column>
 				</apex:pageBlockTable>
 			    	
