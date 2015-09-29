@@ -170,12 +170,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			if(selectedVendor == '' || selectedVendor == null){
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
 				return null;
-			}else{
+			}
+			else{
 				po.Name = 'PlaceHolderPOName';
 				po.Vendor__c = selectedVendor; 
 			 	po.Order__c = orderId;
 			 	//po.RecordType =  
-		}	
+			}	
+		}
 		// check for received status errors
 		if (checkReceived())
 			return null;
@@ -190,22 +192,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			orderItemsToUpdateList.add(oi);
 		}
 		update orderItemsToUpdateList;
-	}
 
-		// check for received status errors
-		if (checkReceived())
-			return null;
-			
-		upsert po;
-		
-		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-
-		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-			OrderItem oi = oiw.orderItem;
-		 	oi.Purchase_Order__c = po.id;
-		 	orderItemsToUpdateList.add(oi);
-		}
-		update orderItemsToUpdateList;		
 		
         PageReference newPage = New PageReference('/'+relatedOrder.id);
        // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
