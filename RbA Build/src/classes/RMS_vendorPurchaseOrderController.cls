@@ -26,6 +26,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	//public variables used on VF page
 	public String selectedVendor {get;set;}
 	public String selectedVendorName {get;set;}
+ 	public String status {get;set;}
 	
 	//public variables used in both new and edit PO
  	public Id orderId;
@@ -59,11 +60,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	//Constructor
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
-		
+	    
+				
 		//NEW PURCHASE ORDER
         if(stdController.getId() == null){
         	newPurchaseOrder = true;
 	        orderId = apexpages.currentpage().getparameters().get('orderId');
+	        status = 'new';
+	        this.po.Status__c = 'New';
 	        
 	        
         }//END OF NEW PURCHASE ORDER 
@@ -76,18 +80,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        orderId = po1.Order__c;
 	        selectedVendor = po1.Vendor__c;
 	        selectedVendorName = po1.Vendor__r.Name;
-	    	
+	        status = 	(this.po.Status__c == 'Released' && selectedVendorName != 'RbA') 	? 	'rel' 	:
+	        			(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'con'	:
+	        			(this.po.Status__c == 'Confirmed')	?									'con'	:
+	        			(this.po.Status__c == 'Received')	?									'rec'	:
+	        			(this.po.Status__c == 'Cancelled')	?									'can'	:
+	        																					'new';
+	        		
+
         }
        
         //GET THE ORDER
         relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
         
         //GET THE ORDER ITEMS
-        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity FROM OrderItem Where OrderId =: orderId];
+        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
 		
        
        //USING ORDER ITEMS GET ALL PRODUCTS
         for(OrderItem oi: relatedOrderItems){
+        	System.debug('***************oi=' +oi);
         	relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         	orderItemIdToOrderItemMap.put(oi.id, oi);
         }
@@ -159,21 +171,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if(newPurchaseOrder == true){
 			po.Vendor__c = selectedVendor;
 		 	po.Order__c = orderId;
-		 	//po.RecordType =  
-		 	upsert po;
-	
-		 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-		 	
-		 	for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-		 		OrderItem oi = oiw.orderItem;
-		 		oi.Purchase_Order__c = po.id;
-		 		orderItemsToUpdateList.add(oi);
-		 	}
-			update orderItemsToUpdateList;
-		}else{
-			upsert po;
+		 	//po.RecordType =  	
+		 			 	
 		}
+
+		// check for received status errors
+		if (checkReceived())
+			return null;
+			
+		upsert po;
 		
+		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+
+		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+			OrderItem oi = oiw.orderItem;
+		 	oi.Purchase_Order__c = po.id;
+		 	orderItemsToUpdateList.add(oi);
+		}
+		update orderItemsToUpdateList;		
 		
         PageReference newPage = New PageReference('/'+relatedOrder.id);
        // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
@@ -189,7 +204,29 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return newPage;
 	}
 
+	// Method to ensure that it's ok to change the status to received
+	public boolean checkReceived() {
+		
+		// If the status is not received just return false
+	 	if (po.Status__c != 'Received')
+	 		return false;
 
+		// If the status is received and the ship date is null, return true
+	 	if (po.Estimated_Ship_Date__c == null) {
+	 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SHIP_DATE_REQUIRED));
+	 		return true;
+	 	}
+	 		
+		// If the status is received and one of the unit costs is null, return true
+		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+			if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+ 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UNIT_COST_REQUIRED));
+ 				return true;					
+			}
+		}
+		// It's ok to change the status to Received so return false
+		return false; 			 				
+	}
 
 	public class OrderItemWrapper{
 		public OrderItem orderItem {get; set;}
