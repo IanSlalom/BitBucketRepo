@@ -83,13 +83,21 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     	if(opp.size() == 0){
     		return 'No Opportunity found with that Id';
     	}else{
-    		map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
-    		RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
+    		//map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
+    		//RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
+
+    		list<Store_Configuration__c> storeConfig = [SELECT 	Id, 
+    															Store__c, 
+    															Install_Work_Order_Queue_Id__c, 
+    															Tech_Measure_Work_Order_Queue_Id__c, 
+    															Order_Queue_Id__c
+    															FROM Store_Configuration__c
+    															WHERE Store__r.id =: opp[0].AccountId];
     		
     		//ORDER related to the Opp
     		Order ord = new Order(
     			AccountId = opp[0].AccountId,
-    			OwnerId = queueSetting.Order_Queue_Id__c,
+    			OwnerId = storeConfig[0].Order_Queue_Id__c,
     			Status = 'Draft',
     			EffectiveDate = Date.today(),
     			Opportunity = opp 
@@ -109,11 +117,11 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     			Sold_Order__c = ord.id,
     			RecordType = serviceOrderScheduleRecordType,
     			SVMXC__Order_Type__c = 'Tech Measure',
-    			OwnerId = queueSetting.Tech_Measure_Work_Order_Queue_Id__c
+    			OwnerId = storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c
     		);
     		 	
-    		 	system.debug('ads queueSetting.Tech_Measure_Work_Order_Queue_Id__c: '+queueSetting.Tech_Measure_Work_Order_Queue_Id__c);
-    		 	list<QueueSobject> x = [SELECT id, sobjectType, QueueId  FROM QueueSobject WHERE QueueId =: queueSetting.Tech_Measure_Work_Order_Queue_Id__c];
+    		 	system.debug('ads storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c: '+storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c);
+    		 	list<QueueSobject> x = [SELECT id, sobjectType, QueueId  FROM QueueSobject WHERE QueueId =: storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c];
 				system.debug('ads checking queue type');
 				system.debug('ads: '+ x[0].sobjectType);
     		
@@ -126,7 +134,7 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     			Sold_Order__c = ord.id, 
     			RecordType =  serviceOrderScheduleRecordType,
     			SVMXC__Order_Type__c = 'Install',
-    			OwnerId = queueSetting.Install_Work_Order_Queue_Id__c
+    			OwnerId = storeConfig[0].Install_Work_Order_Queue_Id__c
     		);
     		insert installWO;
 			

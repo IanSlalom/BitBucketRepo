@@ -7,11 +7,12 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
 			 
-       
-     //   User u = new User(Alias = 'standt', Email='rbaTest@test.com', 
-     //       EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
-     //       LocaleSidKey='en_US', ProfileId = p.Id, 
-      //      TimeZoneSidKey='America/Los_Angeles', UserName='rbaTest@test.com');
+       /*
+        User u = new User(Alias = 'standt', Email='rbaTest@test.com', 
+            EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', ProfileId = p.Id, 
+            TimeZoneSidKey='America/Los_Angeles', UserName='rbaTest@test.com');
+		*/
 		
 		User u = utilities.createUser(p.id);
 		
@@ -40,6 +41,7 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
         	
         	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 			insert customSetting1;
+			
 			
 			
 			Account account1 = utilities.createAccount('1');
@@ -95,73 +97,57 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		RMS_priceCalcSlimAPILogic logic = new RMS_priceCalcSlimAPILogic ();
 		
 		User u = utilities.createUser(p.id);
+
+		RestRequest req = new RestRequest();
+		RestResponse res = new RestResponse();
 		
-       // System.runAs(u) {
+		req.requestURI = '/services/apexrest/pcs/updateOpps';  //Request URL
+		req.httpMethod = 'POST';//HTTP Request Type
+		RestContext.request = req;
+		RestContext.response= res;
+		
+		//Creating Account (Needed for RMS_Queue_Settings__c)
+		Account account1 = utilities.createAccount('1');
+	 	insert account1;
+		
+		//Creating RMS_Settings__c
+    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
+		insert customSetting1;
+		
+		//Creating RMS_Queue_Settings__c
+		Group Order_Queue = utilities.createQueue('Order_Queue');
+		insert Order_Queue;
+		QueueSobject Order_Queue_Link = utilities.createQueueSobject(Order_Queue.id ,'Order');
+		insert Order_Queue_Link;
+		
+		
+    	Group Install_Work_Order_Queue = utilities.createQueue('Install_Work_Order_Queue');
+		insert Install_Work_Order_Queue;
+		QueueSobject Install_Work_Order_Link = utilities.createQueueSobject(Install_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Install_Work_Order_Link;
+		
+		Group Tech_Measure_Work_Order_Queue = utilities.createQueue('Tech_Measure_Work_Order');
+		insert Tech_Measure_Work_Order_Queue;
+		QueueSobject Tech_Measure_Work_Order_Link = utilities.createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Tech_Measure_Work_Order_Link;
+		
+    	Store_Configuration__c storeConfig = new Store_Configuration__c(
+    		Store__c = account1.id,
+        	Order_Queue_Id__c = Order_Queue.id,
+    		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
+        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
+        	);
+    	insert storeConfig;
+		
+		String response1 =  logic.updateOpportunity(null, 'Closed - Won');
+		system.debug('ADS testUpdateOpportunity: '+ response1); 
+		
+    	Opportunity openOpp1 = utilities.createOpportunity(account1.id, 'Open');
+	 	insert openOpp1;
+    	
+    	String response2 =  logic.updateOpportunity(openOpp1.id, 'Closed - Won');
+    	system.debug('ADS testUpdateOpportunity: '+ response2); 
 
-			RestRequest req = new RestRequest();
-			RestResponse res = new RestResponse();
-			
-			req.requestURI = '/services/apexrest/pcs/updateOpps';  //Request URL
-			req.httpMethod = 'POST';//HTTP Request Type
-			RestContext.request = req;
-			RestContext.response= res;
-			
-			//Creating Account (Needed for RMS_Queue_Settings__c)
-			Account account1 = utilities.createAccount('1');
-		 	insert account1;
-			
-			//Creating RMS_Settings__c
-        	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
-			insert customSetting1;
-			
-			//Creating RMS_Queue_Settings__c
-			Group Job_Queue = utilities.createQueue('Job_Queue');
-			insert Job_Queue;
-			QueueSobject Job_Queue_Link = utilities.createQueueSobject(Job_Queue.id ,'Case');
-			insert Job_Queue_Link;
-			
-			Group Order_Queue = utilities.createQueue('Order_Queue');
-			insert Order_Queue;
-			QueueSobject Order_Queue_Link = utilities.createQueueSobject(Order_Queue.id ,'Case');
-			insert Order_Queue_Link;
-			
-        	Group Install_Work_Order_Queue = utilities.createQueue('Install_Work_Order_Queue');
-			insert Install_Work_Order_Queue;
-			QueueSobject Install_Work_Order_Link = utilities.createQueueSobject(Install_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
-			insert Install_Work_Order_Link;
-			
-			Group Tech_Measure_Work_Order_Queue = utilities.createQueue('Tech_Measure_Work_Order');
-			insert Tech_Measure_Work_Order_Queue;
-			QueueSobject Tech_Measure_Work_Order_Link = utilities.createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
-			insert Tech_Measure_Work_Order_Link;
-
-        	RMS_Queue_Settings__c customSetting2 = new RMS_Queue_Settings__c(
-        		Name = account1.id,
-	        	Location__c = 'Test',
-	        	Order_Queue_Id__c = Order_Queue.id,
-	        	Job_Queue_Id__c = Job_Queue.id,
-        		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
-	        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
-	        	);
-        	insert customSetting2;
-			
-			String response1 =  logic.updateOpportunity(null, 'Closed - Won');
-			system.debug('ADS testUpdateOpportunity: '+ response1); 
-			
-			
-        	
-        	Opportunity openOpp1 = utilities.createOpportunity(account1.id, 'Open');
-		 	insert openOpp1;
-        	
-        	String response2 =  logic.updateOpportunity(openOpp1.id, 'Closed - Won');
-        	system.debug('ADS testUpdateOpportunity: '+ response2); 
-        	
-        	
-        	
-        	
-        	
-			
-      //  }
 	}
 
 
