@@ -85,6 +85,9 @@
 			    <apex:pageBlockSection title="System Information" columns="2"> 
 			    	<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 			    	<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+					<!--  hardcoded consider moving this to custom settings-->
+					<apex:outputLink value="/00O3B000000JQk8?pv0={!Purchase_Order__c.id}">Purchase Order Field History</apex:outputLink>
+
 			    </apex:pageBlockSection>
 
 		    </apex:outputPanel>       
@@ -94,4 +97,6 @@
     	
    	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+	
+	
 </apex:page>
