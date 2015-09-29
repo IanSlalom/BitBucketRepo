@@ -25,7 +25,7 @@
 		  
 		    <apex:outputPanel id="PurchaseOrderFields"> 
 			    <apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
-			    	<!-- 
+			    	 
 			    	<apex:outputField value="{!Purchase_Order__c.Name}" label="Name" rendered="{! newPurchaseOrder == false}"/>
 			    	<apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
 			    	<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
@@ -33,7 +33,7 @@
 					<apex:outputText value=""/>
 			    	<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" type="date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
 			    	<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
-					 -->
+					 
 					 
 			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
 			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'con' || status == 'rec'}"/>
