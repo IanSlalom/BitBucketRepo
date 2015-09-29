@@ -47,11 +47,6 @@
         <name>CustomTab</name>
     </types>
     <types>
-        <members>Purchase_Order_Naming-10</members>
-        <members>Purchase_Order_Timestamps-1</members>
-        <name>Flow</name>
-    </types>
-    <types>
         <members>*</members>
         <name>StaticResource</name>
     </types>
