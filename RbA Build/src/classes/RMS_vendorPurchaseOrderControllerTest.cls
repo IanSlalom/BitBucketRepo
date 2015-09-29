@@ -8,7 +8,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
 	
-		Account account1 = utility.createAccount('test1');
+		Account account1 = utility.createVendorAccount('test1');
 		insert account1;
 		
 		Opportunity opp1 = utility.createOpportunity(account1.id, 'Closed - Won');
