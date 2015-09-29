@@ -46,6 +46,7 @@
     </types>
     <types>
         <members>Purchase_Order_Naming-7</members>
+        <members>Purchase_Order_Timestamps</members>
         <members>Purchase_Order_Timestamps-1</members>
         <name>Flow</name>
     </types>
