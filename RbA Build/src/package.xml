@@ -3,6 +3,7 @@
     <types>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
+        <members>RMS_errorMessages</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
@@ -18,6 +19,7 @@
     </types>
     <types>
         <members>RMS_vendorPurchaseOrder</members>
+        <members>RMS_viewPurchaseOrder</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -45,7 +47,7 @@
         <name>CustomTab</name>
     </types>
     <types>
-        <members>Purchase_Order_Naming-7</members>
+        <members>Purchase_Order_Naming-8</members>
         <members>Purchase_Order_Timestamps</members>
         <members>Purchase_Order_Timestamps-1</members>
         <name>Flow</name>
