@@ -1,0 +1,97 @@
+<apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
+	
+	<apex:includeScript value="{!$Resource.jquery}" />
+
+	<apex:pageMessages />
+
+	<apex:form >
+		<apex:pageBlock title="View Purchase Order" >
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!edit}" value="Edit"/>
+				<apex:commandButton action="{!cancel}" value="Return to Order"/>
+			</apex:pageBlockButtons>            
+			
+			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
+				<apex:outputText value="{!selectedVendorName}" label="Selected Vendor"/>
+			</apex:pageBlockSection> 
+		  
+		    <apex:outputPanel id="PurchaseOrderFields">
+			    <apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+			    	
+			    	<apex:outputField value="{!Purchase_Order__c.Name}" label="Name" />
+			    	<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+
+					<apex:outputText value=""/>
+			    	<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
+					
+			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
+			    	<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />
+			    	
+				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
+
+				 	<apex:outputText value=""/>
+			    	<apex:outputText value="0" label="Total" id="total" />
+			    
+			    	<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
+			    	<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
+			    	
+			    	<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
+			    
+			    <script>
+					function update(var1,var2){
+						var number1 = Number(var1.replace(/[^0-9\.]+/g,""));
+						var number2 = Number(var2.replace(/[^0-9\.]+/g,""));
+						document.getElementById('{!$component.total}').innerHTML ='$'+ (number1 + number2).toFixed(2);
+					}
+					$( document ).ready(function() {
+					   // if(){
+					    	var subtotal = document.getElementById('{!$component.subtotal}').innerHTML
+					    	var tax = document.getElementById('{!$component.tax}').value;
+					    	update(subtotal, tax);
+					   // }
+					});
+					
+				</script>	
+	 	
+			    </apex:pageBlockSection>
+			    
+			    <!-- 
+				<apex:pageBlockSection title="Order Items" columns="3" rendered="{! selectedVendor != ''}">
+			    	<apex:repeat value="{!orderItemWrappersByVendor}" var="oiw" id="orderItemRepeat">
+			    		<apex:outputField value="{!oiw.product.Name}" style="width:20%" />
+			    		<apex:outputField value="{!oiw.orderItem.Quantity}" style="width:20%" />
+			    		<apex:outputField value="{!oiw.orderItem.OrderItemNumber}" style="width:20%" />
+			    	</apex:repeat>
+			    </apex:pageBlockSection>	
+			     -->
+				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
+					<apex:column style="width:250px" value="{!oiw.product.Name}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
+					<apex:column style="width:250px" value="{!oiw.orderItem.OrderItemNumber}"/>
+					<apex:column style="width:250px">
+						<apex:facet name="header">Variant Number</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}"/>
+					</apex:column>
+					<apex:column style="width:250px">
+						<apex:facet name="header">Unit Cost</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+			    	
+		    </apex:outputPanel>       
+		    <apex:outputPanel id="SystemInformationFields">
+			    <apex:pageBlockSection title="System Information" columns="2"> 
+			    	<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
+			    	<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+			    </apex:pageBlockSection>
+
+		    </apex:outputPanel>       
+
+		</apex:pageBlock>
+	  
+    	
+   	</apex:form>
+	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+</apex:page>
