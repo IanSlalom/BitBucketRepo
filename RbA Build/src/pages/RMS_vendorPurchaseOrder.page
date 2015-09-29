@@ -35,10 +35,10 @@
 			    	<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec'}"/>
 					 
 					 
-			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con'}"/>
-			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
-			    	<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
-			    	<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
+			    	<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con'}"/>
+			    	<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 			    	
 				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
 			    	<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! status == 'new' || status == 'rel'}"/>
