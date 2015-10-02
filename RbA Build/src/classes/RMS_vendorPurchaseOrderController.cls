@@ -78,8 +78,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        selectedVendor = po1.Vendor__c;
 	        selectedVendorName = po1.Vendor__r.Name;
 	        status = 	(this.po.Status__c == 'Released' && selectedVendorName != 'RbA') 	? 	'rel' 	:
-	        			(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'con'	:
-	        			(this.po.Status__c == 'Confirmed')	?									'con'	:
+	        			(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'rbarel'	:
+	        			(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'	:
+	        			(this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')	?	'rbacon'	:							
 	        			(this.po.Status__c == 'Received')	?									'rec'	:
 	        			(this.po.Status__c == 'Cancelled')	?									'can'	:
 	        																					'new';
@@ -161,7 +162,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			if(selectedVendor == '' || selectedVendor == null){
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
 				return null;
-			}else{
+			}
+			else{
 				po.Name = 'PlaceHolderPOName';
 				po.Vendor__c = selectedVendor; 
 			 	po.Order__c = orderId;
@@ -193,12 +195,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		
 		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
 
-		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-			OrderItem oi = oiw.orderItem;
-		 	oi.Purchase_Order__c = po.id;
-		 	orderItemsToUpdateList.add(oi);
-		}
-		update orderItemsToUpdateList;		
 		
         PageReference newPage = New PageReference('/'+relatedOrder.id);
         newPage.setRedirect(true);
