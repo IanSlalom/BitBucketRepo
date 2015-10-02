@@ -33,16 +33,6 @@ public with sharing class TestUtilityMethods {
         );
         return theAccount;
     }
-    
-    public Account createStore(string x){
-    	 Account theAccount = new Account(
-            Name = x,
-            AccountNumber = x+'1234567890',
-            Phone = '(763) 555-2000'
-        );
-        return theAccount;
-    	
-    }
 
     public Account createVendorAccount(String x){
 		Account account1 = createAccount(x);

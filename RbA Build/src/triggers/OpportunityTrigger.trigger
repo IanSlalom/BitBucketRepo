@@ -12,15 +12,9 @@ trigger OpportunityTrigger on Opportunity (before insert, before update, before 
 	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 	//map<String, Foundation_States__c> allstates = Foundation_States__c.getAll();
 	
-	//Data Loading Profile ID
-	if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
-		if(Trigger.isDelete){
-			Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
-		}else{
-			Trigger.new[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
-		}
-	}
-	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
+	
+
+	if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
 		OpportunityTriggerHandler handler = new OpportunityTriggerHandler();
             
 		// Before Insert

@@ -31,7 +31,7 @@
 			    	<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
 
 				 	<apex:outputText value=""/>
-			    	<apex:outputText value="{!Purchase_Order__c.Total__c}" label="Total"  id="total" />
+			    	<apex:outputText value="0" label="Total" id="total" />
 			    
 			    	<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
 			    	<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
@@ -85,9 +85,6 @@
 			    <apex:pageBlockSection title="System Information" columns="2"> 
 			    	<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 			    	<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
-					<!--  hardcoded consider moving this to custom settings-->
-					<apex:outputLink value="/00O3B000000JQk8?pv0={!Purchase_Order__c.Id_15_digits__c}">Purchase Order Field History</apex:outputLink>
-
 			    </apex:pageBlockSection>
 
 		    </apex:outputPanel>       
@@ -97,6 +94,5 @@
     	
    	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
-	
-	
+
 </apex:page>
