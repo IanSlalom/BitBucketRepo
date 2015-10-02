@@ -6,7 +6,7 @@
 
     Manages all of the purchase order creation and editing logic
 
-@author     Anthony Strafaccia (Slalom.CDK)
+@author     Anthony Strafaccia (Slalom.ADS)
 
 @version    2015-09/16  Slalom.ADS
     Created.
@@ -56,12 +56,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
  	private final Purchase_Order__c po;
 	
 	
-	
 	//Constructor
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
 	    
-				
 		//NEW PURCHASE ORDER
         if(stdController.getId() == null){
         	newPurchaseOrder = true;
@@ -85,8 +83,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        			(this.po.Status__c == 'Received')	?									'rec'	:
 	        			(this.po.Status__c == 'Cancelled')	?									'can'	:
 	        																					'new';
-	        		
-
         }
        
         //GET THE ORDER
@@ -115,7 +111,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         }
         
         //USING MAPS TO CREATE WRAPPERS
-        
         for(OrderItem oi : relatedOrderItems){
         	Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
         	Account account = accountIdToAccountMap.get(product2.Vendor__c);
@@ -124,7 +119,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	orderItemWrapperList.add(OIW);
         }
         
-    	
     	//BUILD SELECT LIST FOR CHOOSING VENDOR
 		avaliableVendors.add(new SelectOption('','Please Select'));
 		for(Account vend : vendorsOnOrder){
@@ -135,7 +129,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public List<SelectOption> getAvaliableVendors() {
 		return avaliableVendors;
     }
-    
     
 	public List<OrderItemWrapper> getOrderItemWrappersByVendor(){
 		orderItemWrapperByVendor.clear();
@@ -150,7 +143,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return orderItemWrapperByVendor;
 	}
 	
-	
 	public void updateSubTotal(){
 		List<OrderItemWrapper> venderOrderItems = getOrderItemWrappersByVendor();
 		Decimal subtotal = 0;
@@ -160,7 +152,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
 		po.Subtotal__c = subtotal;
 	}
-	
 	
 	
 	//OVERRIDE SAVE METHOD
@@ -175,22 +166,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				po.Vendor__c = selectedVendor; 
 			 	po.Order__c = orderId;
 			 	//po.RecordType =  
-		}	
-		// check for received status errors
-		if (checkReceived())
-			return null;
-			 	
-		upsert po;
-		
-		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
-			 	
-		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-			OrderItem oi = oiw.orderItem;
-			oi.Purchase_Order__c = po.id;
-			orderItemsToUpdateList.add(oi);
+			}	
+			
+			// check for received status errors
+			if (checkReceived())
+				return null;
+				 	
+			upsert po;
+			
+			list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+				 	
+			for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+				OrderItem oi = oiw.orderItem;
+				oi.Purchase_Order__c = po.id;
+				orderItemsToUpdateList.add(oi);
+			}
+			
+			update orderItemsToUpdateList;
 		}
-		update orderItemsToUpdateList;
-	}
 
 		// check for received status errors
 		if (checkReceived())
@@ -208,10 +201,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		update orderItemsToUpdateList;		
 		
         PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
         newPage.setRedirect(true);
         return newPage;
-        
 	}
 	
     //OVERRIDE CANCEL METHOD
@@ -221,8 +212,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return newPage;
 	}
 	
-	
-		public PageReference saveAndNew() {
+	//SAVE AND NEW METHOD
+	public PageReference saveAndNew() {
 		if(newPurchaseOrder == true){
 			if(selectedVendor == '' || selectedVendor == null){
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
@@ -252,8 +243,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		
 		
 		PageReference newPage = New PageReference('/apex/RMS_vendorPurchaseOrder?orderId='+orderId);
-       // PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
         newPage.setRedirect(true);
         return newPage;
         
@@ -282,6 +271,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// It's ok to change the status to Received so return false
 		return false; 			 				
 	}
+	
 	public class OrderItemWrapper{
 		public OrderItem orderItem {get; set;}
    		public Account account {get; set;}
@@ -293,6 +283,5 @@ public with sharing class RMS_vendorPurchaseOrderController {
             product = p;
         }                            
     } 
-
 
 }

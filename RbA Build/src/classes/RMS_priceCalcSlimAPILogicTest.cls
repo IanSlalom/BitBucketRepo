@@ -7,7 +7,7 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
 			 
-       /*
+		/*
         User u = new User(Alias = 'standt', Email='rbaTest@test.com', 
             EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
             LocaleSidKey='en_US', ProfileId = p.Id, 
@@ -21,7 +21,6 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
             // The following code runs as user 'u' 
             System.debug('Current User: ' + UserInfo.getUserName());
             System.debug('Current Profile: ' + UserInfo.getProfileId()); 
-        	
 
 			RestRequest req = new RestRequest();
 			RestResponse res = new RestResponse();
@@ -37,11 +36,10 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 			system.debug('ADS Response1: '+ response1);
         	
         	
-    	/////// START CREATE OF DATA //////
+    	/////// START CREATE OF DATA /////////
         	
         	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 			insert customSetting1;
-			
 			
 			
 			Account account1 = utilities.createAccount('1');
@@ -88,8 +86,6 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
         }
 	}
 	
-	
-	
 	static testmethod void testUpdateOpportunity(){
 		
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
@@ -110,6 +106,9 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		Account account1 = utilities.createAccount('1');
 	 	insert account1;
 		
+		Account store1 = utilities.createStore('77 - Twin Cities, MN');
+		insert store1;
+			
 		//Creating RMS_Settings__c
     	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
@@ -119,7 +118,6 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		insert Order_Queue;
 		QueueSobject Order_Queue_Link = utilities.createQueueSobject(Order_Queue.id ,'Order');
 		insert Order_Queue_Link;
-		
 		
     	Group Install_Work_Order_Queue = utilities.createQueue('Install_Work_Order_Queue');
 		insert Install_Work_Order_Queue;
@@ -132,7 +130,7 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		insert Tech_Measure_Work_Order_Link;
 		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(
-    		Store__c = account1.id,
+    		Store__c = store1.id,
         	Order_Queue_Id__c = Order_Queue.id,
     		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
         	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
@@ -142,7 +140,7 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		String response1 =  logic.updateOpportunity(null, 'Closed - Won');
 		system.debug('ADS testUpdateOpportunity: '+ response1); 
 		
-    	Opportunity openOpp1 = utilities.createOpportunity(account1.id, 'Open');
+    	Opportunity openOpp1 = utilities.createOpportunity(store1.id, 'Open');
 	 	insert openOpp1;
     	
     	String response2 =  logic.updateOpportunity(openOpp1.id, 'Closed - Won');

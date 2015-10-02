@@ -1,0 +1,52 @@
+<apex:page standardController="Order" extensions="RMS_viewRelatedWorkOrdersController" standardStylesheets="true">
+	<apex:includeScript value="/support/console/20.0/integration.js"/>
+	
+	
+	<apex:includeScript value="//code.jquery.com/jquery-2.1.1.min.js"/>
+	<apex:includeScript value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/js/jquery.tablesorter.js"/>
+	<apex:includeScript value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/js/jquery.tablesorter.widgets.js"/>
+	<apex:stylesheet value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/css/theme.jui.css"/>
+	<script>
+	    $(document).ready(function(){
+	        $("table").tablesorter({
+		       // theme : 'jui', 
+		        headerTemplate : '{content} {icon}',
+		        widgets : ['uitheme', 'zebra'],
+		        widgetOptions : {
+		          zebra   : ["even", "odd"],
+	        	}
+	  		});
+	    });
+	</script>
+		
+
+	<script type="text/javascript">
+		var workOrderId;
+        
+        //The callback function that openSubtab will call once it's got the ID for its primary tab
+        var callOpenSubtab = function callOpenSubtab(result) {
+            sforce.console.openSubtab(result.id, 
+               'https://cs50.salesforce.com/'+workOrderId, true, workOrderId);
+            workOrderId = '';
+        };
+        
+        function openSubtab(woId) {
+        	workOrderId = woId;
+            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+        }
+	</script>
+	<!-- VISIT -->
+	<apex:pageBlock >
+			<apex:pageBlockTable title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
+				<apex:column headerValue="">  
+					<a href="#" onClick="openSubtab('{!wo.Id}');return false">View</a> 
+				</apex:column>
+		        <apex:column value="{!wo.Type_image__c}"/>
+		        <apex:column value="{!wo.SVMXC__Work_Order_Scheduling_Status__c}"/>
+		        <apex:column value="{!wo.SVMXC__Scheduled_Date_Time__c}"/>
+		        <apex:column value="{!wo.SVMXC__Group_Member__c}"/>
+		        <apex:column value="{!wo.Owner.Name}"/>
+			</apex:pageBlockTable>
+	</apex:pageBlock> 
+	
+</apex:page>
