@@ -33,12 +33,23 @@ public with sharing class TestUtilityMethods {
         );
         return theAccount;
     }
+    
+    public Account createStoreAccount(String x){
+        Account theAccount = new Account(
+            Name = x,
+            AccountNumber = x+'1234567890',
+            Phone = '(763) 555-2000',
+            recordTypeId = UtilityMethods.retrieveRecordTypeId('Store', 'Account')	
+        );
+        return theAccount;
+    }
 
     public Account createVendorAccount(String x){
 		Account account1 = createAccount(x);
 		account1.recordTypeId = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account'); 	
 		return account1;
     }
+    
     
 	public Contact createContact(Id accountId, String x){
         Contact testContact = new Contact(

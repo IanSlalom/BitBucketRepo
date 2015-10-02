@@ -13,8 +13,14 @@ trigger OpportunityTrigger on Opportunity (before insert, before update, before 
 	//map<String, Foundation_States__c> allstates = Foundation_States__c.getAll();
 	
 	
-
-	if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
+	if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
+		if(Trigger.isDelete){
+			Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+		}else{
+			Trigger.new[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+		}
+	}
+	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
 		OpportunityTriggerHandler handler = new OpportunityTriggerHandler();
             
 		// Before Insert

@@ -11,7 +11,7 @@ public with sharing class OrderTriggerHandlerTest {
 		Account account1 = utilities.createAccount('1');
 	 	insert account1;
 		
-		Account store1 = utilities.createStore('77 - Twin Cities, MN');
+		Account store1 = utilities.createStoreAccount('77 - Twin Cities, MN');
 		insert store1;
 			
 		//Creating RMS_Settings__c
