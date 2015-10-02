@@ -83,6 +83,9 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     	if(opp.size() == 0){
     		return 'No Opportunity found with that Id';
     	}else{
+    		//map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
+    		//RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
+
     		list<Store_Configuration__c> storeConfig = [SELECT 	Id, 
     															Store__c, 
     															Install_Work_Order_Queue_Id__c, 
@@ -106,8 +109,6 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     		
     		//ord.Status = 'Activated';
     		//update ord;
-    		
-    		/******************* NOW HANDLED IN TRIGGER
     		
     		
     		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
@@ -136,8 +137,6 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     			OwnerId = storeConfig[0].Install_Work_Order_Queue_Id__c
     		);
     		insert installWO;
-			
-			*********************/
 			
 			return 'Created Order, Install Work Order and Tech Measure Work Order';
     	}

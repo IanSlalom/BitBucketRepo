@@ -36,15 +36,7 @@
         <name>CustomLabels</name>
     </types>
     <types>
-        <members>Account</members>
-        <members>Contact</members>
-        <members>Opportunity</members>
-        <members>Order</members>
-        <members>OrderItem</members>
-        <members>Purchase_Order__c</members>
-        <members>RMS_Queue_Settings__c</members>
-        <members>RMS_Settings__c</members>
-        <members>SVMXC__Service_Order__c</members>
+        <members>*</members>
         <name>CustomObject</name>
     </types>
     <types>
