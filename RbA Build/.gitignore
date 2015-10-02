@@ -2,3 +2,4 @@
 /salesforce.schema
 *.project
 /settings/
+/.settings/
