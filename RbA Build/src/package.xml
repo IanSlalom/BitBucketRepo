@@ -3,15 +3,12 @@
     <types>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
-        <members>OrderTriggerHandler</members>
-        <members>OrderTriggerHandlerTest</members>
         <members>RMS_errorMessages</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
-        <members>RMS_viewRelatedWorkOrdersController</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <name>ApexClass</name>
@@ -23,8 +20,6 @@
     <types>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewPurchaseOrder</members>
-        <members>RMS_viewRelatedWorkOrdersActions</members>
-        <members>RMS_viewRelatedWorkOrdersVisit</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -36,7 +31,15 @@
         <name>CustomLabels</name>
     </types>
     <types>
-        <members>*</members>
+        <members>Account</members>
+        <members>Contact</members>
+        <members>Opportunity</members>
+        <members>Order</members>
+        <members>OrderItem</members>
+        <members>Purchase_Order__c</members>
+        <members>RMS_Queue_Settings__c</members>
+        <members>RMS_Settings__c</members>
+        <members>SVMXC__Service_Order__c</members>
         <name>CustomObject</name>
     </types>
     <types>
