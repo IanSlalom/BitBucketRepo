@@ -228,6 +228,10 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
                 <fullName>Received</fullName>
                 <default>false</default>
             </picklistValues>
@@ -432,6 +436,10 @@
             </values>
             <values>
                 <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
                 <default>false</default>
             </values>
             <values>

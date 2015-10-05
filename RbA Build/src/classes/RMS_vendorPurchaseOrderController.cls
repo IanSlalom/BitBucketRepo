@@ -83,6 +83,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        			(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'rbarel'	:
 	        			(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'	:
 	        			(this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')	?	'rbacon'	:							
+	        			(this.po.Status__c == 'Rejected')	?									'rej'	:
 	        			(this.po.Status__c == 'Received')	?									'rec'	:
 	        			(this.po.Status__c == 'Cancelled')	?									'can'	:
 	        																					'new';
