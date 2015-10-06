@@ -72,7 +72,9 @@ public without sharing class OrderTriggerHandler{
     		////////THIS IS BEING USED FOR DEMO UNTIL ACCOUNT IS POPULATED INSIDE THE ORDER///////////
 	    	id storeLocation = testAccount.id;
 	    	//////////////////////////////////////////////////////////////////////////////////////////
-    		
+    		if(accountIdtoStoreConfigMap.get(storeLocation) == null){
+    			ord.addError('Store Configuation has not been created.');
+    		}
     		Id installQueueId = accountIdtoStoreConfigMap.get(storeLocation).Install_Work_Order_Queue_Id__c;
     		Id techMeasureQueueId = accountIdtoStoreConfigMap.get(storeLocation).Tech_Measure_Work_Order_Queue_Id__c;
     		
