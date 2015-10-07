@@ -1,15 +1,17 @@
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
-  
+
 	<apex:includeScript value="{!$Resource.jquery}" />
+	<apex:includeScript value="/support/console/33.0/integration.js"/>
+
 
 	<apex:pageMessages />
 
 	<apex:form >
 		<apex:pageBlock title="{!IF(newPurchaseOrder, 'Create A Purchase Order' , 'Purchase Order')}" >
 			<apex:pageBlockButtons location="both">
-				<apex:commandButton action="{!save}" value="Save" />
-			<apex:commandButton action="{!saveAndNew}" value="Save & New" />
-			<apex:commandButton action="{!cancel}" value="Cancel" />
+				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO();return false"/>
+			<apex:commandButton action="{!saveAndNew}" value="Save & New"  oncomplete="openNewPO();return false"/>
+			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 			</apex:pageBlockButtons>            
 
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder == true}" > 
@@ -22,6 +24,7 @@
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder != true}" > 
 				<apex:outputText value="{!selectedVendorName}" label="Selected Vendor"/>
 			</apex:pageBlockSection> 
+    		<div id="OrderId" style="display:none;">{!orderId}</div>    
 		  
 		    <apex:outputPanel id="PurchaseOrderFields"> 
 			    <apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
@@ -102,4 +105,101 @@
 		           
 		</apex:pageBlock>
    	</apex:form>
+
+	<script type="text/javascript">
+		var j$ = jQuery.noConflict();
+
+		var	primaryTabId = null;
+		var	subTabId = null;
+		var	previousOnload  = window.onload;
+
+		window.onload = function()
+		{
+		
+			//  perform the previously registered 'onload' function, if any
+			if ( previousOnload ) previousOnload();
+
+			//  get the id's of both the primary tab and this subtab
+			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+			sforce.console.getEnclosingTabId        ( function( result ) { subTabId     = result.id; } );
+
+			//  set the title of this subtab
+			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '* {!Purchase_Order__c.Name}' : 'New Purchase Order' );
+
+		};
+
+		
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		};
+
+		function closeTab() {
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!Purchase_Order__c.Order__c}'; 
+			}
+
+		
+		};
+
+	    function openNewSubTab( subTabURL, subTabLabel )
+	    {
+	        //  if no label was specified, create a default label
+	
+	        //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+	        if ( !subTabURL )
+	        {
+	            closeTab();
+	            return;
+	        }
+
+			sforce.console.refreshPrimaryTabById( primaryTabId, false);
+	
+	        //  otherwise open the new subtab
+	        sforce.console.openSubtab
+	        (   /*  Enclosing Primary Tab Id    */  primaryTabId,
+	            /*  URL for new Subtab          */  subTabURL,
+	            /*  Active (true = take focus)  */  true,
+	            /*  Label for new Subtab        */  subTabLabel,
+	            /*  Id of Subtab to override    */  subTabId,
+	            /*  Callback function           */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+	            /*  Name for new Subtab         */  null
+	        );
+	    }
+	
+		function openSavedPO()
+		{
+			if(sforce.console.isInConsole()) {
+				openNewSubTab();
+			}
+			else {
+				var orderId = getOrderId();
+				location.href='/' +orderId;
+			};
+		}
+
+		function openNewPO()
+		{
+			var orderId = getOrderId();
+			if(sforce.console.isInConsole()) {
+				openNewSubTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw&orderId=' +orderId, 'New Purchase Order' );
+			}
+			else {
+				location.href='/apex/RMS_vendorPurchaseOrder?orderId=' +orderId;
+			}
+	    }
+    function  getOrderId()
+    {
+        return document.getElementById( 'OrderId' ).innerHTML;
+    }
+	</script>
 </apex:page>

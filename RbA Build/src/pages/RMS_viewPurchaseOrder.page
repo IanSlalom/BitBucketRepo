@@ -1,6 +1,7 @@
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
 	
 	<apex:includeScript value="{!$Resource.jquery}" />
+	<apex:includeScript value="/support/console/33.0/integration.js"/>
 
 	<apex:pageMessages />
 
@@ -8,7 +9,7 @@
 		<apex:pageBlock title="View Purchase Order" >
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!edit}" value="Edit"/>
-				<apex:commandButton action="{!cancel}" value="Return to Order"/>
+			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 			</apex:pageBlockButtons>            
 			
 			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
@@ -94,5 +95,32 @@
     	
    	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+	<script type="text/javascript">
+		var j$ = jQuery.noConflict();
 
+
+		var	previousOnload  = window.onload;
+
+		window.onload = function()
+		{
+		
+			//  perform the previously registered 'onload' function, if any
+			if ( previousOnload ) previousOnload();
+
+			//  set the title of this subtab
+
+			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );			
+
+		}
+
+		
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		}
+
+		function closeTab() {
+			sforce.console.getEnclosingTabId(callCloseTab);
+		}
+	</script>
 </apex:page>

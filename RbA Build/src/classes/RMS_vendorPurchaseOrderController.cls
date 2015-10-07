@@ -29,13 +29,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
  	public String status {get;set;}
 	
 	//public variables used in both new and edit PO
- 	public Id orderId;
+ //	public Id orderId;
  	public Order relatedOrder;
 	public List<OrderItem> relatedOrderItems = new List<OrderItem>();
  	public list<Id> relatedProduct2IDList = new list<Id>();
 	public List<Product2> relatedProducts = new List<Product2>();
  	public list<Id> vendorIdList = new list<Id>();
 	public list<Account> vendorsOnOrder = new list<Account>();
+
+    public String orderId             { get; set; }
+    {
+        orderId = apexpages.currentpage().getparameters().get('orderId');
+        if ( orderId == null ) orderId = '';
+    }
  	
 	public Boolean newPurchaseOrder {get;set;}
 	
@@ -61,11 +67,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
 	    
-				
 		//NEW PURCHASE ORDER
         if(stdController.getId() == null){
         	newPurchaseOrder = true;
-	        orderId = apexpages.currentpage().getparameters().get('orderId');
+//	        orderId = apexpages.currentpage().getparameters().get('orderId');
 	        status = 'new';
 	        this.po.Status__c = 'New';
 	        
@@ -125,8 +130,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	
         	orderItemWrapperList.add(OIW);
         }
-        
-    	
     	//BUILD SELECT LIST FOR CHOOSING VENDOR
 		avaliableVendors.add(new SelectOption('','Please Select'));
 		for(Account vend : vendorsOnOrder){
@@ -195,23 +198,16 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
 		update orderItemsToUpdateList;
 
-		
-        PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
-        newPage.setRedirect(true);
-        return newPage;
+		return null;
         
 	}
 	
     //OVERRIDE CANCEL METHOD
-	public PageReference cancel() {
-		PageReference newPage = New PageReference('/'+relatedOrder.id);
-		newPage.setRedirect(true);
-		return newPage;
+	public virtual PageReference cancel() {
+		return null;
 	}
 	
-	
-		public PageReference saveAndNew() {
+	public PageReference saveAndNew() {
 		if(newPurchaseOrder == true){
 			if(selectedVendor == '' || selectedVendor == null){
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Vendor'));
@@ -238,14 +234,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}else{
 			upsert po;
 		}
-		
-		
-		PageReference newPage = New PageReference('/apex/RMS_vendorPurchaseOrder?orderId='+orderId);
-       // PageReference newPage = New PageReference('/'+relatedOrder.id);
-       // newPage.getParameters().put('id',ApexPages.currentPage().getParameters().get('id'));
-        newPage.setRedirect(true);
-        return newPage;
-        
+		return null;
 	}
 
 	// Method to ensure that it's ok to change the status to received
