@@ -98,7 +98,8 @@
 	<script type="text/javascript">
 		var j$ = jQuery.noConflict();
 
-
+		var	primaryTabId = null;
+		var	subTabId = null;
 		var	previousOnload  = window.onload;
 
 		window.onload = function()
@@ -107,20 +108,41 @@
 			//  perform the previously registered 'onload' function, if any
 			if ( previousOnload ) previousOnload();
 
+			//  get the id's of both the primary tab and this subtab
+			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+			sforce.console.getEnclosingTabId        ( function( result ) { subTabId     = result.id; } );
+
 			//  set the title of this subtab
+			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );
 
-			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );			
-
-		}
+		};
 
 		
 		//The callback function that closeTab will call once it's got the ID for its tab
 		var callCloseTab= function callCloseTab(result) {
 			sforce.console.closeTab(result.id);
-		}
+		};
 
 		function closeTab() {
-			sforce.console.getEnclosingTabId(callCloseTab);
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!Purchase_Order__c.Order__c}'; 
+			}
+
+		
+		};
+
+		function  getOrderId()
+		{
+			return document.getElementById( 'OrderId' ).innerHTML;
 		}
 	</script>
 </apex:page>
