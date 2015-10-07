@@ -1,20 +1,20 @@
 /*******************************************************//**
 
-@class      RMS_vendorPurchaseOrderController
+@class	  RMS_vendorPurchaseOrderController
 
-@brief      Controller for VF page RMS_vendorPurchaseOrder.page
+@brief	  Controller for VF page RMS_vendorPurchaseOrder.page
 
-    Manages all of the purchase order creation and editing logic
+	Manages all of the purchase order creation and editing logic
 
-@author     Anthony Strafaccia (Slalom.CDK)
+@author	 Anthony Strafaccia (Slalom.CDK)
 
-@version    2015-09/16  Slalom.ADS
-    Created.
+@version	2015-09/16  Slalom.ADS
+	Created.
 
-@see        RMS_vendorPurchaseOrderControllerTest
+@see		RMS_vendorPurchaseOrderControllerTest
 
 @copyright  (c)2015 Slalom.  All Rights Reserved.
-            Unauthorized use is prohibited.
+			Unauthorized use is prohibited.
 
 ***********************************************************/
 
@@ -37,11 +37,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
  	public list<Id> vendorIdList = new list<Id>();
 	public list<Account> vendorsOnOrder = new list<Account>();
 
-    public String orderId             { get; set; }
-    {
-        orderId = apexpages.currentpage().getparameters().get('orderId');
-        if ( orderId == null ) orderId = '';
-    }
+	public String orderId			 { get; set; }
+	{
+		orderId = apexpages.currentpage().getparameters().get('orderId');
+		if ( orderId == null ) orderId = '';
+	}
  	
 	public Boolean newPurchaseOrder {get;set;}
 	
@@ -66,50 +66,50 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	//Constructor
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
-	    
-		//NEW PURCHASE ORDER
-        if(stdController.getId() == null){
-        	newPurchaseOrder = true;
-//	        orderId = apexpages.currentpage().getparameters().get('orderId');
-	        status = 'new';
-	        this.po.Status__c = 'New';
-	        
-        }//END OF NEW PURCHASE ORDER 
-        
-		//EXISTING PURCHASE ORDER	       	
-        else {
-			newPurchaseOrder = false;
-	        
-	        Purchase_Order__c po1 = [SELECT Id, Order__c, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
-	        orderId = po1.Order__c;
-	        selectedVendor = po1.Vendor__c;
-	        selectedVendorName = po1.Vendor__r.Name;
-	        status = 	(this.po.Status__c == 'Released' && selectedVendorName != 'RbA') 	? 	'rel' 	:
-	        			(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'rbarel'	:
-	        			(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'	:
-	        			(this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')	?	'rbacon'	:							
-	        			(this.po.Status__c == 'Rejected')	?									'rej'	:
-	        			(this.po.Status__c == 'Received')	?									'rec'	:
-	        			(this.po.Status__c == 'Cancelled')	?									'can'	:
-	        																					'new';
-	        		
-
-        }
-       
-        //GET THE ORDER
-        relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
-        
-        //GET THE ORDER ITEMS
-        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
 		
-       
-       //USING ORDER ITEMS GET ALL PRODUCTS
-        for(OrderItem oi: relatedOrderItems){
-        	System.debug('***************oi=' +oi);
-        	relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
-        	orderItemIdToOrderItemMap.put(oi.id, oi);
-        }
-        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+		//NEW PURCHASE ORDER
+		if(stdController.getId() == null){
+			newPurchaseOrder = true;
+//			orderId = apexpages.currentpage().getparameters().get('orderId');
+			status = 'new';
+			this.po.Status__c = 'New';
+			
+		}//END OF NEW PURCHASE ORDER 
+		
+		//EXISTING PURCHASE ORDER		   	
+		else {
+			newPurchaseOrder = false;
+			
+			Purchase_Order__c po1 = [SELECT Id, Order__c, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
+			orderId = po1.Order__c;
+			selectedVendor = po1.Vendor__c;
+			selectedVendorName = po1.Vendor__r.Name;
+			status = 	(this.po.Status__c == 'Released' && selectedVendorName != 'RbA') 	? 	'rel' 	:
+						(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'rbarel'	:
+						(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'	:
+						(this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')	?	'rbacon'	:							
+						(this.po.Status__c == 'Rejected')	?									'rej'	:
+						(this.po.Status__c == 'Received')	?									'rec'	:
+						(this.po.Status__c == 'Cancelled')	?									'can'	:
+																								'new';
+					
+
+		}
+	   
+		//GET THE ORDER
+		relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
+		
+		//GET THE ORDER ITEMS
+		relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
+		
+	   
+	   //USING ORDER ITEMS GET ALL PRODUCTS
+		for(OrderItem oi: relatedOrderItems){
+			System.debug('***************oi=' +oi);
+			relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
+			orderItemIdToOrderItemMap.put(oi.id, oi);
+		}
+		relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
 		
 		//USING PRODUCTS GET LIST OF ALL VENDORS
 		for(Product2 p : relatedProducts){
@@ -117,20 +117,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			productIdToProductMap.put(p.id, p);
 		}
 		list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
-        for(Account a : vendorsOnOrder){
-        	accountIdToAccountMap.put(a.id, a);
-        }
-        
-        //USING MAPS TO CREATE WRAPPERS
-        
-        for(OrderItem oi : relatedOrderItems){
-        	Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-        	Account account = accountIdToAccountMap.get(product2.Vendor__c);
-        	OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
-        	
-        	orderItemWrapperList.add(OIW);
-        }
-    	//BUILD SELECT LIST FOR CHOOSING VENDOR
+		for(Account a : vendorsOnOrder){
+			accountIdToAccountMap.put(a.id, a);
+		}
+		
+		//USING MAPS TO CREATE WRAPPERS
+		
+		for(OrderItem oi : relatedOrderItems){
+			Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
+			Account account = accountIdToAccountMap.get(product2.Vendor__c);
+			OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
+			
+			orderItemWrapperList.add(OIW);
+		}
+		//BUILD SELECT LIST FOR CHOOSING VENDOR
 		avaliableVendors.add(new SelectOption('','Please Select'));
 		for(Account vend : vendorsOnOrder){
 			avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
@@ -139,9 +139,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	
 	public List<SelectOption> getAvaliableVendors() {
 		return avaliableVendors;
-    }
-    
-    
+	}
+	
+	
+	/*******************************************************
+					getOrderItemWrappersByVendor
+	*******************************************************/
 	public List<OrderItemWrapper> getOrderItemWrappersByVendor(){
 		orderItemWrapperByVendor.clear();
 		
@@ -168,7 +171,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	
 	
 	
-	//OVERRIDE SAVE METHOD
+	/*******************************************************
+					save method
+	*******************************************************/
 	public PageReference save() {
 		system.debug('ads selectedVendor save: '+selectedVendor);
 		if(newPurchaseOrder == true){
@@ -199,14 +204,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		update orderItemsToUpdateList;
 
 		return null;
-        
+		
 	}
 	
-    //OVERRIDE CANCEL METHOD
+	/*******************************************************
+					cancel method
+	*******************************************************/
 	public virtual PageReference cancel() {
 		return null;
 	}
 	
+	/*******************************************************
+					saveAndNew method
+	*******************************************************/
 	public PageReference saveAndNew() {
 		if(newPurchaseOrder == true){
 			if(selectedVendor == '' || selectedVendor == null){
@@ -237,6 +247,27 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return null;
 	}
 
+	/*******************************************************
+					release button method
+	*******************************************************/
+	// Nothing happens when the release button is clicked until the user accepts the alert
+	public PageReference release() {
+		System.Debug('*************got to release');
+		return null;
+	}
+
+/*******************************************************
+				releasePurchaseOrder method
+	*******************************************************/
+	// Called after the confirmation window is accepted
+	public void releasePurchaseOrder() {
+		System.Debug('*************got to upsert');
+		po.Status__c = 'Released';	 	
+		upsert po;	
+	}
+	/*******************************************************
+					checkReceived method
+	*******************************************************/
 	// Method to ensure that it's ok to change the status to received
 	public boolean checkReceived() {
 		
@@ -260,17 +291,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// It's ok to change the status to Received so return false
 		return false; 			 				
 	}
+	/*******************************************************
+					OrderItemWrapper Class
+	*******************************************************/
 	public class OrderItemWrapper{
 		public OrderItem orderItem {get; set;}
    		public Account account {get; set;}
    		public Product2 product {get; set;}
    		
-        public OrderItemWrapper(OrderItem oi, Account a, Product2 p) {
-            orderItem = oi;
-            account = a;
-            product = p;
-        }                            
-    } 
+		public OrderItemWrapper(OrderItem oi, Account a, Product2 p) {
+			orderItem = oi;
+			account = a;
+			product = p;
+		}							
+	} 
 
 
 }
