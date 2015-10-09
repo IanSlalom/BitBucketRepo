@@ -118,18 +118,6 @@
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Id_15_digits__c</fullName>
-        <externalId>false</externalId>
-        <formula>LEFT(Id  , 15)</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Id - 15 digits</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Invoice_Number__c</fullName>
         <description>The invoice number linked to this purchase order.</description>
         <externalId>false</externalId>
