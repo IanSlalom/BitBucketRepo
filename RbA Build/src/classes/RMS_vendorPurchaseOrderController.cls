@@ -26,6 +26,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	//public variables used on VF page
 	public String selectedVendor {get;set;}
 	public String selectedVendorName {get;set;}
+	public String selectedPricebook {get;set;}
  	public String status {get;set;}
 	
 	//public variables used in both new and edit PO
@@ -36,6 +37,81 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public List<Product2> relatedProducts = new List<Product2>();
  	public list<Id> vendorIdList = new list<Id>();
 	public list<Account> vendorsOnOrder = new list<Account>();
+ 	public String newProduct { get; set; }
+// 	public Product2 newProduct { get; set; }
+ 	public OrderItem newOrderItem 
+ 	{
+        get
+        {
+            if ( newOrderItem == null )
+            	newOrderItem = new OrderItem();
+            return newOrderItem;
+        }
+        private set;
+ 	}
+ 	public List<OrderItem> newOrderItems 
+ 	{
+        get
+        {
+            if ( newOrderItems == null ) {
+            	newOrderItems = new List<OrderItem>();
+            	OrderItem o = new OrderItem();
+            	newOrderItems.add(o);
+            }	
+            return newOrderItems;
+        }
+        private set;
+ 	}
+
+ 	public List<OrderItemWrapper> newOrderItemWrappers 
+ 	{
+        get
+        {
+            if ( newOrderItemWrappers == null ) {
+            	newOrderItemWrappers = new List<OrderItemWrapper>();
+            	OrderItem o = new OrderItem();
+            	OrderItemWrapper oiw = new OrderItemWrapper(o);
+            	newOrderItemWrappers.add(oiw);
+            }	
+            return newOrderItemWrappers;
+        }
+        private set;
+ 	}
+    public String productFilter
+    {
+        get
+        {
+            System.Debug('**********selectedVendor0=' +selectedVendor);
+            if ( productFilter != null )
+                return productFilter;
+            
+            if (selectedVendor == null)
+                return null;
+            
+            productFilter = ' AND Vendor__c = ';
+            return productFilter;
+        }
+        private set;
+    }
+
+    public String productFilter2
+    {
+        get
+        {
+            if ( productFilter2 != null )
+                return productFilter2;
+            
+            if (selectedVendor == null)
+                return null;
+            
+//            productFilter2 = '0013B000001o5ghQAA';
+            productFilter2 = selectedVendor;
+            return productFilter2;
+        }
+        private set;
+    }
+
+
 
 	public String orderId			 { get; set; }
 	{
@@ -57,6 +133,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public map<Id, Product2> productIdToProductMap = new Map<Id, Product2>();
 	
 	public list<OrderItemWrapper> orderItemWrapperByVendor = new list<OrderItemWrapper>();
+	public list<OrderItemWrapper> orderItemWrapperNew = new list<OrderItemWrapper>();
  	/******* Set up Standard Controller for Purchase_Order__c  *****************/
  	private Apexpages.StandardController standardController;
  	private final Purchase_Order__c po;
@@ -80,10 +157,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		else {
 			newPurchaseOrder = false;
 			
-			Purchase_Order__c po1 = [SELECT Id, Order__c, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
+			Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
 			orderId = po1.Order__c;
 			selectedVendor = po1.Vendor__c;
 			selectedVendorName = po1.Vendor__r.Name;
+			selectedPricebook = po1.Order__r.Pricebook2Id;
 			status = 	(this.po.Status__c == 'Released' && selectedVendorName != 'RbA') 	? 	'rel' 	:
 						(this.po.Status__c == 'Released' && selectedVendorName == 'RbA')	?	'rbarel'	:
 						(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'	:
@@ -158,13 +236,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return orderItemWrapperByVendor;
 	}
 	
-	
 	public void updateSubTotal(){
 		List<OrderItemWrapper> venderOrderItems = getOrderItemWrappersByVendor();
 		Decimal subtotal = 0;
 		for(OrderItemWrapper oiw :venderOrderItems){
-			system.debug('ads oiw.OrderItem.Pricebookentry.UnitPrice: ' +oiw.orderItem.Pricebookentry.UnitPrice);
-			subtotal = subtotal + (oiw.orderItem.Pricebookentry.UnitPrice*oiw.orderItem.Quantity);
+			if (oiw.orderItem.Unit_Wholesale_Cost__c == null || oiw.orderItem.Quantity == null)
+				continue;
+			subtotal = subtotal + (oiw.orderItem.Unit_Wholesale_Cost__c*oiw.orderItem.Quantity);
 		}
 		po.Subtotal__c = subtotal;
 	}
@@ -191,7 +269,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// check for received status errors
 		if (checkReceived())
 			return null;
-			 	
+		updateSubTotal();	 	
 		upsert po;
 		
 		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
@@ -206,7 +284,37 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return null;
 		
 	}
-	
+
+	/*******************************************************
+					addproduct method
+	*******************************************************/
+	public PageReference addproduct() {
+		newOrderItem = newOrderItems[0];
+		
+		if(newProduct == null || newOrderItem.Description == null || newOrderItem.UnitPrice == null || newOrderItem.Quantity == null){
+	 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
+			return null;
+		}
+
+		newOrderItem.OrderId = orderId;
+		newOrderItem.Purchase_Order__c = po.id;
+		
+		for (PricebookEntry pbe : [SELECT Id FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
+			newOrderItem.PricebookEntryId = pbe.Id;	
+		}
+		
+		// add a try - catch here	 	
+		upsert newOrderItem;
+
+		updateSubTotal();	 	
+		upsert po;
+
+		PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
+		pageRef.setRedirect(true);
+		return pageRef;
+
+	}	
+
 	/*******************************************************
 					cancel method
 	*******************************************************/
@@ -215,7 +323,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	}
 	
 	/*******************************************************
-					saveAndNew method
+					saveAndNew method - not used
 	*******************************************************/
 	public PageReference saveAndNew() {
 		if(newPurchaseOrder == true){
@@ -229,7 +337,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				po.Name = 'PlaceHolderPOName';
 				po.Vendor__c = selectedVendor;
 			 	po.Order__c = orderId;
-			 	//po.RecordType =  
 			 	upsert po;
 		
 			 	list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
@@ -252,7 +359,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	*******************************************************/
 	// Nothing happens when the release button is clicked until the user accepts the alert
 	public PageReference release() {
-		System.Debug('*************got to release');
 		return null;
 	}
 
@@ -261,7 +367,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	*******************************************************/
 	// Called after the confirmation window is accepted
 	public void releasePurchaseOrder() {
-		System.Debug('*************got to upsert');
 		po.Status__c = 'Released';	 	
 		upsert po;	
 	}
@@ -303,6 +408,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			orderItem = oi;
 			account = a;
 			product = p;
+		}							
+		public OrderItemWrapper(OrderItem oi) {
+			orderItem = oi;
 		}							
 	} 
 

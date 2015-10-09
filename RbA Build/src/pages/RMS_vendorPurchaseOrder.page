@@ -9,7 +9,7 @@
 		<apex:pageBlock title="{!IF(newPurchaseOrder, 'Create A Purchase Order' , 'Purchase Order')}" >
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO();return false"/>
-			<apex:commandButton action="{!saveAndNew}" value="Save & New"  oncomplete="openNewPO();return false"/>
+			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO();return false"/>
 			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 			</apex:pageBlockButtons>			
 
@@ -103,6 +103,9 @@
 			</apex:outputPanel>		
 				   
 		</apex:pageBlock>
+
+
+
    	</apex:form>
 
 	<script type="text/javascript">
@@ -200,5 +203,7 @@
 	{
 		return document.getElementById( 'OrderId' ).innerHTML;
 	}
+
+
 	</script>
 </apex:page>
