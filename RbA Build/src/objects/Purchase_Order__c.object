@@ -32,7 +32,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <type>Default</type>
+        <content>RMS_vendorPurchaseOrder</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>SaveEdit</actionName>
@@ -116,6 +118,18 @@
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Id_15_digits__c</fullName>
+        <externalId>false</externalId>
+        <formula>LEFT(Id  , 15)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Id - 15 digits</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Invoice_Number__c</fullName>
@@ -232,6 +246,19 @@
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Store_Abbreviation__c</fullName>
+        <description>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</inlineHelpText>
+        <label>Store Abbreviation</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Submitted_Timestamp__c</fullName>
@@ -495,29 +522,6 @@ if (typeof(srcUp) == &apos;function&apos;) {
 // It will execute if the Button/Link will be clicked from normal Salesforce UI
 else{
    location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ;
-}</url>
-    </webLinks>
-    <webLinks>
-        <fullName>test</fullName>
-        <availability>online</availability>
-        <displayType>massActionButton</displayType>
-        <linkType>javascript</linkType>
-        <masterLabel>test</masterLabel>
-        <openType>onClickJavaScript</openType>
-        <protected>false</protected>
-        <requireRowSelection>true</requireRowSelection>
-        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)} 
-{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)} 
-
-var orderId = &quot;{!Order.Id}&quot;; 
-
-// It will execute if the Button/Link will be clicked from with in Service Cloud Console 
-if (typeof(srcUp) == &apos;function&apos;) { 
-srcUp(&apos;/a1T/e?CF00N3B000000SQ8q=00000126&amp;CF00N3B000000SQ8q_lkid=8013B0000004NZCQA2&amp;CF00N61000003IFpE=Test Dwelling&amp;CF00N61000003IFpE_lkid=0013B000001upLzQAI&amp;00N61000003IFr6=300 Stanley Ave&amp;00N61000003IFpA=Long Beach&amp;00N61000003IFr5=California&amp;00N61000003IFrY=90814&amp;00N61000003IFpL=United States&amp;ent=01I610000001Rdn&amp;retURL=%2F8013B0000004NZCQA2&amp;sfdcIFrameOrigin=https%3A%2F%2Fcs50.salesforce.com&amp;RecordType=0123B000000CgWKQA0&apos;); 
-} 
-// It will execute if the Button/Link will be clicked from normal Salesforce UI 
-else{ 
-location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ; 
 }</url>
     </webLinks>
 </CustomObject>
