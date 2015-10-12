@@ -188,13 +188,22 @@
 	
 		function openSavedPO()
 		{
+//			if(sforce.console.isInConsole()) {
+//				openNewSubTab();
+//			}
+//			else {
+//				var orderId = getOrderId();
+//				location.href='/' +orderId;
+//			};
+
+			var orderId = getOrderId();
 			if(sforce.console.isInConsole()) {
-				openNewSubTab();
+				openNewSubTab( '/apex/RMS_viewPurchaseOrder?isdtp=vw&orderId=' +orderId, '{!Purchase_Order__c.Name}' );
 			}
 			else {
-				var orderId = getOrderId();
-				location.href='/' +orderId;
-			};
+				location.href='/apex/RMS_viewPurchaseOrder?orderId=' +orderId;
+			}
+
 		}
 
 		function openNewPO()
