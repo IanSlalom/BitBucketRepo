@@ -196,7 +196,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
             
             Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
             orderId = po1.Order__c;
-        	costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
+//        	costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
+        	costPurchaseOrder = (po.RecordTypeId == UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')) ? true : false;
+
             selectedVendor = po1.Vendor__c;
             selectedVendorName = po1.Vendor__r.Name;
             
@@ -214,9 +216,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
         }
        
-        if (costPurchaseOrder) {
+ /*       if (costPurchaseOrder) {
         	if (po.Id != null)
-        		relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where Purchase_Order__c =: po.Id];
+        		relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, Unit_of_Measure__c FROM OrderItem Where Purchase_Order__c =: po.Id];
         	else {
         		relatedOrderItems = null;
         	}
@@ -241,45 +243,52 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		        }
         	}
         }
-        else {
-	        //GET THE ORDER
-	        relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
+        else {*/
+
+        	if (String.isNotBlank(orderId)) {
+
+		        //GET THE ORDER
+	        	relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
 	        
-	        //GET THE ORDER ITEMS
-	        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
-	       //USING ORDER ITEMS GET ALL PRODUCTS
-	        for(OrderItem oi: relatedOrderItems){
-	            System.debug('***************oi=' +oi);
-	            relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
-	            orderItemIdToOrderItemMap.put(oi.id, oi);
-	        }
-	        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
-	        
-	        //USING PRODUCTS GET LIST OF ALL VENDORS
-	        for(Product2 p : relatedProducts){
-	            vendorIdList.add(p.Vendor__c);
-	            productIdToProductMap.put(p.id, p);
-	        }
-	        list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
-	        for(Account a : vendorsOnOrder){
-	            accountIdToAccountMap.put(a.id, a);
-	        }
-	        
-	        //USING MAPS TO CREATE WRAPPERS
-	        
-	        for(OrderItem oi : relatedOrderItems){
-	            Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-	            Account account = accountIdToAccountMap.get(product2.Vendor__c);
-	            OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
-	            
-	            orderItemWrapperList.add(OIW);
-	        }
-	        //BUILD SELECT LIST FOR CHOOSING VENDOR
-	        avaliableVendors.add(new SelectOption('','Please Select'));
-	        for(Account vend : vendorsOnOrder){
-	            avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
-	        }   	
-        }
+		        //GET THE ORDER ITEMS
+	    	    relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, Unit_of_Measure__c FROM OrderItem Where OrderId =: orderId];
+        	}
+	        	
+        	if (relatedOrderItems != null) {
+		       //USING ORDER ITEMS GET ALL PRODUCTS
+		        for(OrderItem oi: relatedOrderItems){
+		            System.debug('***************oi=' +oi);
+		            relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
+		            orderItemIdToOrderItemMap.put(oi.id, oi);
+		        }
+		        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+		        
+		        //USING PRODUCTS GET LIST OF ALL VENDORS
+		        for(Product2 p : relatedProducts){
+		            vendorIdList.add(p.Vendor__c);
+		            productIdToProductMap.put(p.id, p);
+		        }
+		        list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
+		        for(Account a : vendorsOnOrder){
+		            accountIdToAccountMap.put(a.id, a);
+		        }
+		        
+		        //USING MAPS TO CREATE WRAPPERS
+		        
+		        for(OrderItem oi : relatedOrderItems){
+		            Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
+		            Account account = accountIdToAccountMap.get(product2.Vendor__c);
+		            OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
+		            
+		            orderItemWrapperList.add(OIW);
+		        }
+		        //BUILD SELECT LIST FOR CHOOSING VENDOR
+		        avaliableVendors.add(new SelectOption('','Please Select'));
+		        for(Account vend : vendorsOnOrder){
+		            avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
+		        }   	
+        	}
+      //  }
 
     }//end of constructor
     

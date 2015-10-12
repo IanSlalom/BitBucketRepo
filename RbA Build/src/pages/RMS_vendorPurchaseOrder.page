@@ -37,7 +37,8 @@
 					<apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
 					<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>
-					<apex:outputText value=""/>
+					<apex:inputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
+	                <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
 					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
 					 
@@ -50,7 +51,9 @@
 				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
 					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
-
+				 	<apex:outputText value=""/>
+					<apex:inputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discount" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && costPurchaseOrder == true}"/>
+					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && costPurchaseOrder == true}"/>
 				 	<apex:outputText value=""/>
 					<apex:outputText value="0" label="Total" id="total" />
 				

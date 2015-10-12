@@ -109,6 +109,19 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Discount__c</fullName>
+        <description>The discount applied to the purchase order (used for AROs)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount applied to the purchase order (used for AROs)</inlineHelpText>
+        <label>Discount</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Estimated_Ship_Date__c</fullName>
         <description>The estimated ship date for the purchase order from the vendor.</description>
         <externalId>false</externalId>
@@ -118,6 +131,19 @@
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <description>The GL Account for the cost PO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The GL Account for the cost PO</inlineHelpText>
+        <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Id_15_digits__c</fullName>
@@ -299,9 +325,13 @@
     </fields>
     <fields>
         <fullName>Total__c</fullName>
+        <description>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.
+IF ((ISBLANK(Discount__c)),
+(Subtotal__c +  Tax__c),
+(Subtotal__c - Subtotal__c*Discount__c  +  Tax__c))</description>
         <externalId>false</externalId>
-        <formula>Subtotal__c +  Tax__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <formula>(Subtotal__c +  Tax__c)</formula>
+        <inlineHelpText>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</inlineHelpText>
         <label>Total</label>
         <precision>18</precision>
         <required>false</required>
@@ -338,6 +368,11 @@
     <label>Purchase Order</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Order__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Vendor__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
