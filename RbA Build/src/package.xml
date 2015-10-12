@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
-        <members>COMM_Controller</members>
+        <members>AutocompleteV2_Con</members>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>

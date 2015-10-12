@@ -77,11 +77,38 @@ public with sharing class RMS_vendorPurchaseOrderController {
         }
         private set;
     }
+
+	// SOQL Filters for the vendor autocomplete checklist
+    public String vendorFilter
+    {
+        get
+        {
+            if ( vendorFilter != null )
+                return vendorFilter;
+
+            vendorFilter = ' AND RecordTypeId = ';
+            return vendorFilter;
+        }
+        private set;
+    }
+    public String vendorFilter2
+    {
+        get
+        {
+            if ( vendorFilter2 != null )
+                return vendorFilter2;
+
+            vendorFilter2 = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
+            return vendorFilter2;
+        }
+        private set;
+    }
+
+	// SOQL Filters for the product autocomplete checklist
     public String productFilter
     {
         get
         {
-            System.Debug('**********selectedVendor0=' +selectedVendor);
             if ( productFilter != null )
                 return productFilter;
             
@@ -93,7 +120,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         }
         private set;
     }
-
     public String productFilter2
     {
         get
@@ -103,8 +129,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
             
             if (selectedVendor == null)
                 return null;
-            
-//            productFilter2 = '0013B000001o5ghQAA';
             productFilter2 = selectedVendor;
             return productFilter2;
         }
@@ -120,6 +144,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     
     public Boolean newPurchaseOrder {get;set;}
+    public Boolean costPurchaseOrder {get;set;}
     
     //public variables to be used in new PO
     public list<SelectOption> avaliableVendors = new list<SelectOption>();
@@ -144,14 +169,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
     public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
         this.po = (Purchase_Order__c)stdController.getRecord();
         
-        //NEW PURCHASE ORDER
+        //NEW PRODUCT PURCHASE ORDER
         if(stdController.getId() == null){
+        	costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
+        		
+        	
             newPurchaseOrder = true;
 //          orderId = apexpages.currentpage().getparameters().get('orderId');
             status = 'new';
             this.po.Status__c = 'New';
             
-        }//END OF NEW PURCHASE ORDER 
+        }//END OF NEW PRODUCT PURCHASE ORDER 
+
+        //NEW COST PURCHASE ORDER
+//        if(stdController.getId() == null && orderId == null){
+//            newPurchaseOrder = true;
+//          orderId = apexpages.currentpage().getparameters().get('orderId');
+//            status = 'new';
+//            this.po.Status__c = 'New';
+            
+ //       }//END OF NEW COST PURCHASE ORDER 
         
         //EXISTING PURCHASE ORDER           
         else {
@@ -159,8 +196,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
             
             Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
             orderId = po1.Order__c;
+        	costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
             selectedVendor = po1.Vendor__c;
             selectedVendorName = po1.Vendor__r.Name;
+            
             selectedPricebook = po1.Order__r.Pricebook2Id;
             status =    (this.po.Status__c == 'Released' && selectedVendorName != 'RbA')    ?   'rel'   :
                         (this.po.Status__c == 'Released' && selectedVendorName == 'RbA')    ?   'rbarel'    :
@@ -175,45 +214,73 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
         }
        
-        //GET THE ORDER
-        relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
-        
-        //GET THE ORDER ITEMS
-        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
-        
-       
-       //USING ORDER ITEMS GET ALL PRODUCTS
-        for(OrderItem oi: relatedOrderItems){
-            System.debug('***************oi=' +oi);
-            relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
-            orderItemIdToOrderItemMap.put(oi.id, oi);
+        if (costPurchaseOrder) {
+        	if (po.Id != null)
+        		relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where Purchase_Order__c =: po.Id];
+        	else {
+        		relatedOrderItems = null;
+        	}
+        	if (relatedOrderItems != null) {
+
+		       //USING ORDER ITEMS GET ALL PRODUCTS
+		        for(OrderItem oi: relatedOrderItems){
+		            System.debug('***************oi=' +oi);
+		            relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
+		            orderItemIdToOrderItemMap.put(oi.id, oi);
+		        }
+		        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+	
+		        //USING MAPS TO CREATE WRAPPERS
+		        
+		        for(OrderItem oi : relatedOrderItems){
+		            Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
+		            Account account = new Account();
+		            OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
+		            
+		            orderItemWrapperList.add(OIW);
+		        }
+        	}
         }
-        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
-        
-        //USING PRODUCTS GET LIST OF ALL VENDORS
-        for(Product2 p : relatedProducts){
-            vendorIdList.add(p.Vendor__c);
-            productIdToProductMap.put(p.id, p);
+        else {
+	        //GET THE ORDER
+	        relatedOrder = [SELECT Id, Name  FROM Order WHERE Id = :orderId];
+	        
+	        //GET THE ORDER ITEMS
+	        relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c FROM OrderItem Where OrderId =: orderId];
+	       //USING ORDER ITEMS GET ALL PRODUCTS
+	        for(OrderItem oi: relatedOrderItems){
+	            System.debug('***************oi=' +oi);
+	            relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
+	            orderItemIdToOrderItemMap.put(oi.id, oi);
+	        }
+	        relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+	        
+	        //USING PRODUCTS GET LIST OF ALL VENDORS
+	        for(Product2 p : relatedProducts){
+	            vendorIdList.add(p.Vendor__c);
+	            productIdToProductMap.put(p.id, p);
+	        }
+	        list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
+	        for(Account a : vendorsOnOrder){
+	            accountIdToAccountMap.put(a.id, a);
+	        }
+	        
+	        //USING MAPS TO CREATE WRAPPERS
+	        
+	        for(OrderItem oi : relatedOrderItems){
+	            Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
+	            Account account = accountIdToAccountMap.get(product2.Vendor__c);
+	            OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
+	            
+	            orderItemWrapperList.add(OIW);
+	        }
+	        //BUILD SELECT LIST FOR CHOOSING VENDOR
+	        avaliableVendors.add(new SelectOption('','Please Select'));
+	        for(Account vend : vendorsOnOrder){
+	            avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
+	        }   	
         }
-        list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
-        for(Account a : vendorsOnOrder){
-            accountIdToAccountMap.put(a.id, a);
-        }
-        
-        //USING MAPS TO CREATE WRAPPERS
-        
-        for(OrderItem oi : relatedOrderItems){
-            Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-            Account account = accountIdToAccountMap.get(product2.Vendor__c);
-            OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
-            
-            orderItemWrapperList.add(OIW);
-        }
-        //BUILD SELECT LIST FOR CHOOSING VENDOR
-        avaliableVendors.add(new SelectOption('','Please Select'));
-        for(Account vend : vendorsOnOrder){
-            avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
-        }   
+
     }//end of constructor
     
     public List<SelectOption> getAvaliableVendors() {
@@ -263,11 +330,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
             else{
                 po.Name = 'PlaceHolderPOName';
                 po.Vendor__c = selectedVendor; 
+                if (String.isBlank(orderId)) {
+                	// Need to change this
+                	Account renewal = [SELECT Id FROM Account WHERE Name = 'RbA'];
+             		String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
+                	Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+                	insert costPOOrder;
+                	orderId = costPOOrder.Id;
+                }
                 po.Order__c = orderId;
-                
-                po.RecordTypeId = (selectedVendor == 'RbA') ?
-                				UtilityMethods.retrieveRecordTypeId('Purchase_Order__c', 'RbA Purchase Order')  :
-                				UtilityMethods.retrieveRecordTypeId('Purchase_Order__c', '3rd Party Purchase Order');
+                po.RecordTypeId = 	(costPurchaseOrder) 		?
+                						UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')  :
+                					(selectedVendor == 'RbA') 	?
+                						UtilityMethods.retrieveRecordTypeId( 'RbA_Purchase_Order','Purchase_Order__c')  :
+                						UtilityMethods.retrieveRecordTypeId('Product_Purchase_Order','Purchase_Order__c');
             }   
         }
         // check for received status errors
@@ -299,10 +375,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
             return null;
         }
-
-        newOrderItem.OrderId = orderId;
+//		if (!costPurchaseOrder)
+//newOrderItem.OrderId = '8013B000000CaTX';
+        	newOrderItem.OrderId = orderId;
         newOrderItem.Purchase_Order__c = po.id;
-        
+        System.Debug('*****************newProduct=' +newProduct);
+        System.Debug('*****************selectedPricebook=' +selectedPricebook);
         for (PricebookEntry pbe : [SELECT Id FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
             newOrderItem.PricebookEntryId = pbe.Id; 
         }
