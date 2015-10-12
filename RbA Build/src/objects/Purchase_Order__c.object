@@ -325,12 +325,12 @@
     </fields>
     <fields>
         <fullName>Total__c</fullName>
-        <description>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.
-IF ((ISBLANK(Discount__c)),
-(Subtotal__c +  Tax__c),
-(Subtotal__c - Subtotal__c*Discount__c  +  Tax__c))</description>
+        <description>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</description>
         <externalId>false</externalId>
-        <formula>(Subtotal__c +  Tax__c)</formula>
+        <formula>IF ((ISBLANK(Discount__c)),
+(Subtotal__c +  Tax__c),
+(Subtotal__c - Subtotal__c*Discount__c  +  Tax__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</inlineHelpText>
         <label>Total</label>
         <precision>18</precision>
