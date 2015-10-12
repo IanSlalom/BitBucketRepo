@@ -169,6 +169,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                         (this.po.Status__c == 'Rejected')   ?                                   'rej'   :
                         (this.po.Status__c == 'Received')   ?                                   'rec'   :
                         (this.po.Status__c == 'Cancelled')  ?                                   'can'   :
+                        (selectedVendorName == 'RbA')       ?                                   'rbanew'   :
                                                                                                 'new';
                     
 
@@ -263,7 +264,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
                 po.Name = 'PlaceHolderPOName';
                 po.Vendor__c = selectedVendor; 
                 po.Order__c = orderId;
-                //po.RecordType =  
+                
+                po.RecordTypeId = (selectedVendor == 'RbA') ?
+                				UtilityMethods.retrieveRecordTypeId('Purchase_Order__c', 'RbA Purchase Order')  :
+                				UtilityMethods.retrieveRecordTypeId('Purchase_Order__c', '3rd Party Purchase Order');
             }   
         }
         // check for received status errors

@@ -33,26 +33,26 @@
 					<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>
 					<apex:outputText value=""/>
-					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' ||  status == 'rel'}"/>
+					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
 					 
 					 
-					<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
+					<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew'|| status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 					<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
-					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
+					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					
 				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
-					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
+					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value)" rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 
 				 	<apex:outputText value=""/>
 					<apex:outputText value="0" label="Total" id="total" />
 				
 					<apex:inputField value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
-					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
+					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 					<apex:inputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
-					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
+					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'rbanew' ||status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 					
 					<apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
@@ -83,12 +83,12 @@
 					<apex:column style="width:250px">
 						<apex:facet name="header">Variant</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
-							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
+							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
 					<apex:column style="width:250px">
 						<apex:facet name="header">Unit Cost</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
-							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
+							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
 				</apex:pageBlockTable>
 					
