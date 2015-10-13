@@ -8,8 +8,8 @@
 	<apex:form >
 		<apex:pageBlock title="{!IF(newPurchaseOrder, 'Create A Purchase Order' , 'Purchase Order')}" >
 			<apex:pageBlockButtons location="both">
-				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO();return false"/>
-			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO();return false"/>
+				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
+			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 			</apex:pageBlockButtons>			
 
@@ -49,14 +49,12 @@
 					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					
 				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
-<!--  				<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value,document.getElementById('{!$Component.discount}').value)" rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>-->	
-					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,this.value,IF(document.getElementById('{!$Component.discount}') == null), 0, document.getElementById('{!$Component.discount}').value)" rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
+					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax"  rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 				 	<apex:outputText value=""/>
-					<apex:inputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discount" onblur="update(document.getElementById('{!$Component.subtotal}').innerHTML,document.getElementById('{!$Component.tax}').value,this.value)" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && costPurchaseOrder == true}"/>
+					<apex:inputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discount" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && costPurchaseOrder == true}"/>
 					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && costPurchaseOrder == true}"/>
 				 	<apex:outputText value=""/>
-					<apex:outputText value="0" label="Total" id="total" />
 				
 					<apex:inputField value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
@@ -66,46 +64,6 @@
 					<apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 				
-				<script>
-					function update(var1,var2,var3){
-						alert('v1' +var1);
-						alert(var2);
-						alert(var3);
-						var number1 = Number(var1.replace(/[^0-9\.]+/g,""));
-						alert(number1);
-						var number2 = Number(var2.replace(/[^0-9\.]+/g,""));
-						alert(number2);
-						var number3
-						if (var3 == 0) {
-							number3 = 0;
-						}
-						else {
-						   number3 = Number(var3.replace(/[^0-9\.]+/g,""));
-						}
-						alert(number3);
-						document.getElementById('{!$component.total}').value ='$'+ (number1 - number1*number3*0.01 + number2).toFixed(2);
-					}
-					$( document ).ready(function() {
-					   // if(){
-							var subtotal = document.getElementById('{!$component.subtotal}').innerHTML
-						alert(subtotal);
-							var tax = document.getElementById('{!$component.tax}').value;
-						alert(tax);
-							var discountCheck = document.getElementById('{!$component.discount}');
-							var discount;
-							if (discountCheck != null ) {
-								discount = document.getElementById('{!$component.discount}').value;
-							}
-							else {
-								discount = 0.0;
-							}
-						alert(discount);
-							update(subtotal, tax, discount);
-					   // }
-					});
-					
-				</script>	
-	 	
 				</apex:pageBlockSection>
 
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
@@ -188,7 +146,6 @@
 
 		function openNewSubTab( subTabURL, subTabLabel )
 		{
-			//  if no label was specified, create a default label
 	
 			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
 			if ( !subTabURL )
@@ -196,10 +153,7 @@
 				closeTab();
 				return;
 			}
-
 			sforce.console.refreshPrimaryTabById( primaryTabId, false);
-	
-			//  otherwise open the new subtab
 			sforce.console.openSubtab
 			(   /*  Enclosing Primary Tab Id	*/  primaryTabId,
 				/*  URL for new Subtab		  */  subTabURL,
@@ -210,42 +164,66 @@
 				/*  Name for new Subtab		 */  null
 			);
 		}
+
+		function openNewPrimaryTab( subTabURL, subTabLabel )
+		{
 	
-		function openSavedPO()
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			//  otherwise open the new subtab
+			sforce.console.openPrimaryTab
+			(   /*  Enclosing Primary Tab Id	*/  null,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}	
+		function openSavedPO(poId, costPO)
 		{
 			if(sforce.console.isInConsole()) {
-				openNewSubTab();
+				if (costPO == 'false') {
+					openNewSubTab( '/' +poId +'?isdtp=vw', 'saving');
+				}
+				else {
+					openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
+					closeTab();
+				}
 			}
 			else {
-				var orderId = getOrderId();
-				location.href='/' +orderId;
-			};
-
-//			var orderId = getOrderId();
-//			if(sforce.console.isInConsole()) {
-//				openNewSubTab( '/apex/RMS_viewPurchaseOrder?isdtp=vw&id={!Purchase_Order__c.Id}', '{!Purchase_Order__c.Name}' );
-//			}
-//			else {
-//				location.href='/apex/RMS_viewPurchaseOrder?id={!Purchase_Order__c.Id}';
-//			}
-
+				location.href='/apex/RMS_viewPurchaseOrder?id=' +poId;
+			}
 		}
 
-		function openNewPO()
+		function openNewPO(orderId, costPO)
 		{
-			var orderId = getOrderId();
 			if(sforce.console.isInConsole()) {
-				openNewSubTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw&orderId=' +orderId, 'New Purchase Order' );
+				if (costPO == 'false') {
+					openNewSubTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw&orderId=' +orderId, 'New Purchase Order' );
+				}
+				else {
+					openNewPrimaryTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw', 'New Purchase Order' );					openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
+					closeTab();
+				}		
 			}
 			else {
-				location.href='/apex/RMS_vendorPurchaseOrder?orderId=' +orderId;
+				if (costPO == 'false') {
+					location.href='/apex/RMS_vendorPurchaseOrder?orderId=' +orderId;
+				}
+				else {
+					location.href='/apex/RMS_vendorPurchaseOrder';
+				}
+
 			}
 		}
 	function  getOrderId()
 	{
 		return document.getElementById( 'OrderId' ).innerHTML;
 	}
-
-
 	</script>
 </apex:page>
