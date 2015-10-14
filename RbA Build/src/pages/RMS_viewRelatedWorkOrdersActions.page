@@ -46,7 +46,7 @@
 	    	color:Black !important;
 	    	font-weight: bold;
 	    }     
-	    
+	      
 	</style>
 	<!-- ACTIONS --> 
 	<apex:pageBlock >
