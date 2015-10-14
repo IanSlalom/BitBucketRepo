@@ -1,0 +1,22 @@
+<apex:page standardController="SVMXC__Service_Order__c" >
+	<apex:form >
+	<apex:pageBlock mode="edit">
+		Work Order Edit
+		{!SVMXC__Service_Order__c.Name}
+		
+		<apex:pageBlockSection title="Basics" columns="2">
+			<apex:outputText value="{!SVMXC__Service_Order__c.Owner}" label="Owner" />
+			<apex:outputField value="{!SVMXC__Service_Order__c.Type_image__c}" label="Type" />
+		</apex:pageBlockSection>
+		
+		<apex:pageBlockSection title="Assignment" columns="2">
+			<apex:inputField value="{!SVMXC__Service_Order__c.SVMXC__Service_Group__c}" label="Service Team" />
+			<apex:inputField value="{!SVMXC__Service_Order__c.SVMXC__Group_Member__c}" label="Technician" />
+		</apex:pageBlockSection>
+
+		
+	</apex:pageBlock>
+	</apex:form>	
+
+
+</apex:page>
