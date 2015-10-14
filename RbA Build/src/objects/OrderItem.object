@@ -69,18 +69,6 @@
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
-        <fullName>Measurement__c</fullName>
-        <deleteConstraint>Restrict</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Measurement</label>
-        <referenceTo>Measurement__c</referenceTo>
-        <relationshipLabel>Order Products</relationshipLabel>
-        <relationshipName>Order_Products</relationshipName>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>OrderId</fullName>
         <type>Lookup</type>
     </fields>
