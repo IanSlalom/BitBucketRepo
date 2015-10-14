@@ -24,7 +24,7 @@ Custom Objects to be added in RbA Project
 public with sharing class TestUtilityMethods {
 
     public TestUtilityMethods() {}
-	
+	 
 	
 	public void setUpConfigs(){
 		Account store1 = createStoreAccount('77 - Twin Cities, MN');

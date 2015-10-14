@@ -9,8 +9,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		
 		utility.setUpConfigs();
-		
-		Account account1 = utility.createVendorAccount('test1');
+	
 		RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
 	
