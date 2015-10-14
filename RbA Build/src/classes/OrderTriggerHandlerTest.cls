@@ -2,7 +2,7 @@
 public with sharing class OrderTriggerHandlerTest {
 
 
-	static testmethod void test1(){
+	static testmethod void test1(){ 
 		
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
@@ -48,7 +48,8 @@ public with sharing class OrderTriggerHandlerTest {
 								);
 		insert ord1;
 		
+		delete ord1;
 		
-		
+		//TODO:Assertions
 	}
 }

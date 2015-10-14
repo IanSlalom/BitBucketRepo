@@ -54,64 +54,57 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>Install_Work_Order_Queue_Id__c</fullName>
+        <fullName>Completed__c</fullName>
+        <defaultValue>false</defaultValue>
         <externalId>false</externalId>
-        <label>Install Work Order Queue Id</label>
-        <length>20</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
+        <label>Completed</label>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Order_Queue_Id__c</fullName>
+        <fullName>Order__c</fullName>
         <externalId>false</externalId>
-        <label>Order Queue Id</label>
-        <length>20</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Back Office Checks</relationshipLabel>
+        <relationshipName>Back_Office_Checks</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>Store__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <fullName>Signed_Date__c</fullName>
         <externalId>false</externalId>
-        <label>Store</label>
-        <referenceTo>Account</referenceTo>
-        <relationshipLabel>Store Configurations</relationshipLabel>
-        <relationshipName>Store_Configurations</relationshipName>
+        <inlineHelpText>Date the document was signed.</inlineHelpText>
+        <label>Signed Date</label>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>Lookup</type>
+        <type>Date</type>
     </fields>
-    <fields>
-        <fullName>Tech_Measure_Work_Order_Queue_Id__c</fullName>
-        <externalId>false</externalId>
-        <label>Tech Measure Work Order Queue Id</label>
-        <length>20</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <label>Store Configuration</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
+    <label>Back Office Check</label>
     <nameField>
-        <displayFormat>SS-{00}</displayFormat>
-        <label>Store Setting Record #</label>
-        <trackHistory>false</trackHistory>
-        <type>AutoNumber</type>
+        <label>Back Office Check Name</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
     </nameField>
-    <pluralLabel>Store Configurations</pluralLabel>
+    <pluralLabel>Back Office Checks</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Complete_Multiple</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Update</masterLabel>
+        <openType>sidebar</openType>
+        <page>RMS_completeOrderChecks</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
 </CustomObject>

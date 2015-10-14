@@ -24,7 +24,55 @@ Custom Objects to be added in RbA Project
 public with sharing class TestUtilityMethods {
 
     public TestUtilityMethods() {}
-
+	 
+	
+	public void setUpConfigs(){
+		Account store1 = createStoreAccount('77 - Twin Cities, MN');
+		insert store1;
+		
+		//Creating RMS_Settings__c
+    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
+		insert customSetting1;
+		
+		//Creating RMS_Queue_Settings__c
+		Group Order_Queue = createQueue('Order_Queue');
+		insert Order_Queue;
+		QueueSobject Order_Queue_Link = createQueueSobject(Order_Queue.id ,'Order');
+		insert Order_Queue_Link;
+		
+		
+    	Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
+		insert Install_Work_Order_Queue;
+		QueueSobject Install_Work_Order_Link = createQueueSobject(Install_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Install_Work_Order_Link;
+		
+		Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
+		insert Tech_Measure_Work_Order_Queue;
+		QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Tech_Measure_Work_Order_Link;
+		
+    	Store_Configuration__c storeConfig = new Store_Configuration__c(
+    		Store__c = store1.id,
+        	Order_Queue_Id__c = Order_Queue.id,
+    		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
+        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
+        	);
+    	insert storeConfig;
+		
+		
+		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
+			Store_Configuration__c = storeConfig.id,
+			Contract_Signed__c = true,
+			Lien_Rights_Signed__c = true
+			);
+		insert backOfficeChecklist1;
+		
+		
+		
+	}
+	
+	
+	
     public Account createAccount(String x){
         Account theAccount = new Account(
             Name = x+'Test Account',
