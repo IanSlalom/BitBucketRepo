@@ -1,0 +1,50 @@
+<apex:page standardController="Back_Office_Check__c" recordSetVar="Back_Office_Check__c" tabStyle="Back_Office_Check__c" extensions="RMS_completeOrderChecksController">
+	<apex:includeScript value="/support/console/28.0/integration.js"/>
+	<apex:includeScript value="{!$Resource.jquery}" />
+	
+	<apex:form >
+        <apex:pageBlock title="Edit Stage and Close Date" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}" id="saveButton"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!selectedChecks}" var="boc">
+                <apex:column value="{!boc.Name}"/>
+                <apex:column headerValue="Completed">
+                    <apex:inputField value="{!boc.Completed__c}"/>
+                </apex:column>
+                <apex:column headerValue="Signed Date">
+                    <apex:inputField value="{!boc.Signed_Date__c}"/>
+                </apex:column>
+                 
+            </apex:pageBlockTable>      
+        </apex:pageBlock>
+    </apex:form>
+    <input id="hiddenElementId" type="hidden" />
+	<script type="text/javascript">
+	window.onload = setFocus
+	function setFocus()
+	{
+	         document.getElementById("hiddenElementId").focus();
+	         sforce.console.setTabTitle('Edit Checks');
+	         
+	}
+	</script>
+    
+    
+    <!--
+    <script>
+    
+	$( document ).ready(function() {
+		// $('input[type=checkbox]').first().focus();
+		console.log($(":focus"));
+		$(":focus").blur();
+	});
+	
+
+    </script>
+	-->
+    
+
+</apex:page>
