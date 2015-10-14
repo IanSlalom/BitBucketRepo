@@ -144,6 +144,18 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Unit_of_Measure__c</fullName>
+        <description>Used to describe how the quantity of a Cost PO line item is figured.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to describe how the quantity of a Cost PO line item is figured.</inlineHelpText>
+        <label>Unit of Measure</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Variant_Number__c</fullName>
         <description>The variant number received for the product from manufacturing</description>
         <externalId>false</externalId>

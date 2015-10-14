@@ -135,6 +135,12 @@ public with sharing class TestUtilityMethods {
     	);
 		return testPricebook;
     }
+    public Pricebook2 createPricebook2Name(String name){
+    	Pricebook2 testPricebook = new Pricebook2(
+    		Name = name
+    	);
+		return testPricebook;
+    }
     public Product2 createProduct(){
     	Product2 testProduct = new Product2(
     		Name='Test Product'

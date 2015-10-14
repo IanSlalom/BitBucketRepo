@@ -32,7 +32,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <type>Default</type>
+        <content>RMS_vendorPurchaseOrder</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>SaveEdit</actionName>
@@ -107,6 +109,19 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Discount__c</fullName>
+        <description>The discount applied to the purchase order (used for AROs)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount applied to the purchase order (used for AROs)</inlineHelpText>
+        <label>Discount</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Estimated_Ship_Date__c</fullName>
         <description>The estimated ship date for the purchase order from the vendor.</description>
         <externalId>false</externalId>
@@ -116,6 +131,19 @@
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <description>The GL Account for the cost PO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The GL Account for the cost PO</inlineHelpText>
+        <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Id_15_digits__c</fullName>
@@ -246,6 +274,19 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Store_Abbreviation__c</fullName>
+        <description>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</inlineHelpText>
+        <label>Store Abbreviation</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Submitted_Timestamp__c</fullName>
         <description>The date and time this purchase order was submitted.</description>
         <externalId>false</externalId>
@@ -284,9 +325,13 @@
     </fields>
     <fields>
         <fullName>Total__c</fullName>
+        <description>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</description>
         <externalId>false</externalId>
-        <formula>Subtotal__c +  Tax__c</formula>
+        <formula>IF ((ISBLANK(Discount__c)),
+(Subtotal__c +  Tax__c),
+(Subtotal__c - Subtotal__c*Discount__c  +  Tax__c))</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</inlineHelpText>
         <label>Total</label>
         <precision>18</precision>
         <required>false</required>
@@ -323,6 +368,11 @@
     <label>Purchase Order</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Order__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Vendor__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -495,6 +545,18 @@
         <openType>onClickJavaScript</openType>
         <protected>false</protected>
         <requireRowSelection>true</requireRowSelection>
-        <url>location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId={!Order.Id}&apos;;</url>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var orderId = &quot;{!Order.Id}&quot;;
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+   srcUp(&apos;/apex/RMS_vendorPurchaseOrder?isdtp=vw&amp;orderId=&apos;+orderId);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+   location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ;
+}</url>
     </webLinks>
 </CustomObject>
