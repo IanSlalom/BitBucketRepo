@@ -43,9 +43,9 @@
 	    }
 	    .bigandgreen{
 	    	font-size: 16px;
-	    	color: #33CC33 !important;
+	    	color:Black !important;
 	    	font-weight: bold;
-	    }    
+	    }     
 	    
 	</style>
 	<!-- ACTIONS --> 
