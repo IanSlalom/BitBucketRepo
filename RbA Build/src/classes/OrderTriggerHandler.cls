@@ -173,14 +173,10 @@ public without sharing class OrderTriggerHandler{
 	    		}	
 	    	}
     	}
-    	
-    	system.debug('Ads workOrdersToAdd[0]: ' + workOrdersToAdd[0].RecordType);
-    	system.debug('Ads serviceOrderVisitRecordType: ' + serviceOrderVisitRecordType);
-    	system.debug('Ads workOrdersToAdd[1]: ' + workOrdersToAdd[1].RecordType);
-    	
+
     	insert workOrdersToAdd;
         insert checksToAdd;
-                
+                 
     }
    
 
