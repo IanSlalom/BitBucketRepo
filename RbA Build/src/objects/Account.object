@@ -137,6 +137,16 @@
         <externalId>false</externalId>
         <inlineHelpText>Is this Dwelling require a Building Permit?</inlineHelpText>
         <label>Building Permit</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>You must select a Building record. If the record for you are for isn&apos;t in the system, please contact your manager to have it created.</errorMessage>
+            <filterItems>
+                <field>Municipality__c.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Permit</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Municipality__c</referenceTo>
         <relationshipLabel>Building Permit Dwellings</relationshipLabel>
         <relationshipName>Accounts2</relationshipName>
@@ -180,6 +190,16 @@
         <externalId>false</externalId>
         <inlineHelpText>Is this Dwelling part of an HOA?</inlineHelpText>
         <label>HOA</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>You must select an HOA record.  If the record for you are for isn&apos;t in the system, please contact your manager to have it created.</errorMessage>
+            <filterItems>
+                <field>Municipality__c.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>HOA</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Municipality__c</referenceTo>
         <relationshipLabel>HOA Dwellings</relationshipLabel>
         <relationshipName>Accounts</relationshipName>
@@ -193,6 +213,16 @@
         <externalId>false</externalId>
         <inlineHelpText>Is this Dwelling in a Historical District?</inlineHelpText>
         <label>Historical</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>You must select a Historical record. If the record for you are for isn&apos;t in the system, please contact your manager to have it created.</errorMessage>
+            <filterItems>
+                <field>Municipality__c.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Historical</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Municipality__c</referenceTo>
         <relationshipLabel>Historical Dwellings</relationshipLabel>
         <relationshipName>Accounts1</relationshipName>
