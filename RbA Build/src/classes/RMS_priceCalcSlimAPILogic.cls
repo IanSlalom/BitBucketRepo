@@ -85,14 +85,19 @@ public with sharing class RMS_priceCalcSlimAPILogic {
     	}else{
     		//map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
     		//RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
-
+			
+			////////THIS IS BEING USED FOR DEMO UNTIL ACCOUNT IS POPULATED INSIDE THE ORDER///////////
+	    	Account testAccount = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'];
+	    	//////////////////////////////////////////////////////////////////////////////////////////
+	    	
     		list<Store_Configuration__c> storeConfig = [SELECT 	Id, 
     															Store__c, 
     															Install_Work_Order_Queue_Id__c, 
     															Tech_Measure_Work_Order_Queue_Id__c, 
     															Order_Queue_Id__c
     															FROM Store_Configuration__c
-    															WHERE Store__r.id =: opp[0].AccountId];
+    															WHERE Store__r.id =: testAccount.id];
+    															//WHERE Store__r.id =: opp[0].AccountId];
     		
     		//ORDER related to the Opp
     		Order ord = new Order(

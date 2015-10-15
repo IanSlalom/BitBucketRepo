@@ -8,18 +8,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		return 'View';
 	}
 	public String strurl;
-	
-	/*
-	public String getWorkOrderKeyPrefix(){
-		Schema.DescribeSObjectResult r = SVMXC__Service_Order__c.sObjectType.getDescribe();
-		String keyPrefix = r.getKeyPrefix();
-		return keyPrefix;
-	}
-	
-	public String workOrderSoldOrderFieldId {get;set;}
-	*/
 
-	
 	public string serviceOrderVisitRecordTypeId{get;set;}
 	public string serviceOrderActionsRecordTypeId{get;set;}
 	
@@ -38,6 +27,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		strurl = ApexPages.currentPage().getUrl();
 		strurl = strurl.split('apex/')[1];
 		
+		//TODO: use utility methods
 		list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Visit'];
     	list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Actions'];
     	
@@ -46,6 +36,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     	
     	String ordId = ord.id;
     	
+    	
+    	//TODO: Get rid of dynamic and set record type var
     	String woQuery=	'SELECT id, '+ 
     					'Name, '+ 
     					'Sold_Order__c, '+
@@ -90,20 +82,6 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		map<String, Field_IDs__c> Field_IDs_map = Field_IDs__c.getAll(); 
 		Field_IDs__c workOrderFieldIds = Field_IDs_map.get('Work Order');
 		
-		/*
-		String workOrderObjectId = workOrderFieldIds.Object_ID__c;
-		
-		String workOrderCompanyFieldId = workOrderFieldIds.Company__c;
-		String workOrderSoldOrderFieldId = workOrderFieldIds.Sold_Order__c;
-		
-			
-		String workOrderStreetFieldId = workOrderFieldIds.Street__c;
-		String workOrderCityFieldId = workOrderFieldIds.City__c;
-		String workOrderStateFieldId = workOrderFieldIds.State__c;
-		String workOrderZipFieldId = workOrderFieldIds.Zip__c;
-		String workOrderCountryFieldId = workOrderFieldIds.Country__c;
-		*/
-
 		String baseURL = 	'/'+workOrderKeyPrefix+'/e?'+
 											'CF'+workOrderFieldIds.Sold_Order__c+'='+theOrd[0].OrderNumber+
 											'&CF'+workOrderFieldIds.Sold_Order__c+'_lkid='+Ord.Id+
@@ -117,13 +95,14 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											'&'+workOrderFieldIds.Zip__c+'='+relatedAccount[0].BillingPostalCode+
 											'&'+workOrderFieldIds.Country__c+'='+relatedAccount[0].BillingCountry+
 											'&ent='+workOrderFieldIds.Object_ID__c+
-											'&retURL=%2F'+Ord.Id;
+											'&retURL=%2F'+Ord.Id+
+											'&isdtp=v4';
 											
 		serviceOrderVisitRecordTypeURL = baseURL + '&RecordType='+serviceOrderVisitRecordTypeId;								
 		serviceOrderActionsRecordTypeURL = baseURL + '&RecordType='+serviceOrderActionsRecordTypeId;										
 											
 											
-
+		//serviceOrderVisitRecordTypeURL = '/setup/ui/recordtypeselect.jsp?ent=01I610000001Rdn&ekp=a1T&save_new_url=%2Fa1T%2Fe%3FCF00N3B000000SQ8q%3D00000128%26CF00N3B000000SQ8q_lkid%3D8013B0000004Nc6%26retURL%3D%252F8013B0000004Nc6%253Fisdtp%253Dvw%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526nonce%253D0c13b7484a24a336f546da19c0d30687374693a79ebeb3c0257d6cb707158565%2526sfdcIFrameOrigin%253Dhttps%25253A%25252F%25252Fcs50.salesforce.com&isdtp=vw&nonce=0c13b7484a24a336f546da19c0d30687374693a79ebeb3c0257d6cb707158565&sfdcIFrameOrigin=https%3A%2F%2Fcs50.salesforce.com';
 		 
 	}
 	

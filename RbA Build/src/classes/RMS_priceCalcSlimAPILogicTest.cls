@@ -50,6 +50,9 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		 	Account account2 = utilities.createAccount('2');
 		 	insert account2;
 		 	
+		 	Account store1 = utilities.createStoreAccount('77 - Twin Cities, MN');
+			insert store1;
+		 	
 		 	Opportunity openOpp1 = utilities.createOpportunity(account1.id, 'Open');
 		 	insert openOpp1;
 		 	
@@ -106,9 +109,15 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		RestContext.request = req;
 		RestContext.response= res;
 		
-		//Creating Account (Needed for RMS_Queue_Settings__c)
+		utilities.setUpConfigs();
+		
 		Account account1 = utilities.createAccount('1');
 	 	insert account1;
+	 	
+	 	
+		/*
+		Account store1 = utilities.createStoreAccount('77 - Twin Cities, MN');
+		insert store1;
 		
 		//Creating RMS_Settings__c
     	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
@@ -138,6 +147,8 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
         	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
         	);
     	insert storeConfig;
+		*/
+		
 		
 		String response1 =  logic.updateOpportunity(null, 'Closed - Won');
 		system.debug('ADS testUpdateOpportunity: '+ response1); 

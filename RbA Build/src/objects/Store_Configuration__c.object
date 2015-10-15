@@ -106,9 +106,10 @@
         <label>All</label>
     </listViews>
     <nameField>
-        <label>Store Setting Name</label>
+        <displayFormat>SS-{00}</displayFormat>
+        <label>Store Setting Record #</label>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Store Configurations</pluralLabel>
     <searchLayouts/>

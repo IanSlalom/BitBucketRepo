@@ -1,6 +1,7 @@
 <apex:page standardController="Order" extensions="RMS_viewRelatedWorkOrdersController" standardStylesheets="false" >
 	<!-- VISIT -->
-	<apex:includeScript value="/support/console/20.0/integration.js"/>
+	<!-- //TODO: Change to component along with Actions page -->
+	<apex:includeScript value="/support/console/28.0/integration.js"/>
 
 	<apex:includeScript value="{!$Resource.jquery}" />
 	
@@ -10,27 +11,61 @@
 	<script type="text/javascript">
 	    $(document).ready(function(){
 	  		$("table").tablesorter(); 
-	  		//$(document.getElementById('{!$Component.workOrderTable}').tablesorter(); 
 	  		
-	    });
+	    }); 
 	</script>
 
 	<script type="text/javascript">
 		var theURL;
         var tabName;
+        var primaryTabId;
+        
+        
         //The callback function that openSubtab will call once it's got the ID for its primary tab
         var callOpenSubtab = function callOpenSubtab(result) {
             sforce.console.openSubtab(result.id, 
-               'https://cs50.salesforce.com/'+theURL, true, tabName);
+               theURL, true, tabName);
             theURL = '';
             tabName= '';
         };
-        
-        function openSubtab(urlPart, theTabName) {
-        	theURL = urlPart;
-        	tabName = theTabName;
-            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+		function openSubtab(urlPart, theTabName) {
+        	if(sforce.console.isInConsole()){
+	        	theURL = urlPart;
+	        	tabName = theTabName;
+	            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+        	}else{
+        		top.location.href = '/'+urlPart;
+       		}
         }
+        
+        
+		var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+	        sforce.console.openConsoleUrl(result.id, 
+	        result.consoleUrl, 
+	        true 
+	       // (optional)tabLabels:String, 
+	       // (optional)tabNames:String, 
+	       // (optional)callback:Function
+	        );
+	        
+		};
+       
+        function displayResult(result) {
+             if (result.success) {
+                 alert('Tab status has been successfully updated');
+             } else {
+                 alert('Tab status couldn’t be updated');
+             }
+        }
+        
+        function callGenerateConsoleURL(urlPart, theTabName) {
+        
+        	tabName = theTabName;
+        	var orderURL = '/'+'{!Order.Id}';
+        	sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl);        
+        }
+        
+        
 	</script>
 
 
@@ -38,21 +73,22 @@
 		.dataCell{
 			border-style: solid !important;
 		    border-width: 1px !important;
-	    }
+	    } 
 	    .bigandgreen{
 	    	font-size: 16px;
-	    	color: #33CC33 !important;
-	    	font-weight: bold;
-	    }    
-	    
+	    	color: Black !important;
+	    	font-weight: bold; 
+	    }     
+	     
 	</style>
 	
 	<apex:pageBlock >
-	<!-- 
-	<apex:form>
-		<apex:commandButton onclick="openSubtab('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order')" id="newVisitButton" value="Create New Visit Work Order" style="margin-left:40%"/>
+	
+	<apex:form >
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
+
 	</apex:form>
-	 -->	
+		
 		<apex:pageBlockTable id="workOrderTable" title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
 			<apex:column headerValue="">  
 				<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
