@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>AutoCompleteV2_Con</members>
+        <members>AutocompleteV2_Con_Test</members>
+        <members>Constants</members>
+        <members>OpportunityTriggerHandler</members>
+        <members>OrderTriggerHandler</members>
+        <members>OrderTriggerHandlerTest</members>
+        <members>RMS_completeOrderChecksController</members>
+        <members>RMS_errorMessages</members>
+        <members>RMS_priceCalcSlimAPIController</members>
+        <members>RMS_priceCalcSlimAPILogic</members>
+        <members>RMS_priceCalcSlimAPILogicTest</members>
+        <members>RMS_vendorPurchaseOrderController</members>
+        <members>RMS_vendorPurchaseOrderControllerTest</members>
+        <members>RMS_viewRelatedWorkOrdersController</members>
+        <members>RMS_viewRelatedWorkOrdersControllerTest</members>
+        <members>TestUtilityMethods</members>
+        <members>UtilityMethods</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
+        <members>AutoCompleteV2</members>
         <name>ApexComponent</name>
     </types>
     <types>
-        <members>*</members>
+        <members>AutocompleteV2Demo</members>
+        <members>RMS_completeOrderChecks</members>
+        <members>RMS_createWorkOrder</members>
+        <members>RMS_vendorPurchaseOrder</members>
+        <members>RMS_viewPurchaseOrder</members>
+        <members>RMS_viewRelatedWorkOrdersActions</members>
+        <members>RMS_viewRelatedWorkOrdersVisit</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -18,10 +40,16 @@
     </types>
     <types>
         <members>*</members>
+        <members>CustomLabels</members>
         <name>CustomLabels</name>
     </types>
     <types>
         <members>*</members>
+        <members>Account</members>
+        <members>Contact</members>
+        <members>Opportunity</members>
+        <members>Order</members>
+        <members>OrderItem</members>
         <name>CustomObject</name>
     </types>
     <types>
