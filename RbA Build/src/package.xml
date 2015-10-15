@@ -43,8 +43,10 @@
         <name>CustomLabels</name>
     </types>
     <types>
+        <members>Account</members>
         <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
+        <members>Contact</members>
         <members>Contact_History__c</members>
         <members>Field_IDs__c</members>
         <members>HOA_Historical__c</members>
@@ -52,6 +54,9 @@
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
+        <members>Opportunity</members>
+        <members>Order</members>
+        <members>OrderItem</members>
         <members>Purchase_Order__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
