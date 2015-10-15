@@ -50,7 +50,6 @@
         <members>Contact_History__c</members>
         <members>Field_IDs__c</members>
         <members>HOA_Historical__c</members>
-        <members>Measurement__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
