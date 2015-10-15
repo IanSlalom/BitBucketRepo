@@ -50,6 +50,7 @@
         <members>Opportunity</members>
         <members>Order</members>
         <members>OrderItem</members>
+        <members>SVMXC__Service_Order__c</members>
         <name>CustomObject</name>
     </types>
     <types>
