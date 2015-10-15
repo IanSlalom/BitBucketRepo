@@ -328,27 +328,6 @@
             </values>
         </picklistValues>
     </recordTypes>
-    <recordTypes>
-        <fullName>Permit</fullName>
-        <active>true</active>
-        <description>Hold information for Building Permits</description>
-        <label>Permit</label>
-        <picklistValues>
-            <picklist>Building_Application_Type__c</picklist>
-            <values>
-                <fullName>Both</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>In-Person</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Online</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>
