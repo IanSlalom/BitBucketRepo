@@ -110,7 +110,7 @@
     </fields>
     <fields>
         <fullName>Discount__c</fullName>
-        <description>The discount applied to the purchase order (used for AROs)</description>
+        <description>DELETE: The discount applied to the purchase order (used for AROs)</description>
         <externalId>false</externalId>
         <inlineHelpText>The discount applied to the purchase order (used for AROs)</inlineHelpText>
         <label>Discount</label>
@@ -134,7 +134,7 @@
     </fields>
     <fields>
         <fullName>GL_Account__c</fullName>
-        <description>The GL Account for the cost PO</description>
+        <description>DELETE: The GL Account for the cost PO</description>
         <externalId>false</externalId>
         <inlineHelpText>The GL Account for the cost PO</inlineHelpText>
         <label>GL Account</label>

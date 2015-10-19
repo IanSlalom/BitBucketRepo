@@ -136,7 +136,7 @@
         <description>The wholesale cost of the product</description>
         <externalId>false</externalId>
         <inlineHelpText>The wholesale cost of the product</inlineHelpText>
-        <label>Unit Wholesale Cost</label>
+        <label>Wholesale Cost</label>
         <precision>12</precision>
         <required>false</required>
         <scale>2</scale>
@@ -149,11 +149,19 @@
         <externalId>false</externalId>
         <inlineHelpText>Used to describe how the quantity of a Cost PO line item is figured.</inlineHelpText>
         <label>Unit of Measure</label>
-        <length>255</length>
-        <required>false</required>
+        <picklist>
+            <picklistValues>
+                <fullName>pc</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Variant_Number__c</fullName>
