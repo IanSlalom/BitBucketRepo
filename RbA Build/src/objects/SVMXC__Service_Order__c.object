@@ -262,6 +262,25 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Permit_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Permit Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Pre_Inspection_Required__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -3909,6 +3928,17 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Reason__c</picklist>
             <values>
                 <fullName>%3F%3F%3F</fullName>
@@ -5214,6 +5244,32 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>%3F%3F%3F</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>SVMXC__Auto_Entitlement_Status__c</picklist>
             <values>
                 <fullName>Failed</fullName>
@@ -6302,6 +6358,33 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>SVMXC__Order_Type__c</picklist>
+            <values>
+                <fullName>Building Permit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Install</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>SVMXC__Priority__c</picklist>
             <values>
                 <fullName>High</fullName>
@@ -6485,6 +6568,17 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>XYZ</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -7782,6 +7876,32 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>%3F%3F%3F</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>SVMXC__Auto_Entitlement_Status__c</picklist>
             <values>
                 <fullName>Failed</fullName>
@@ -9068,6 +9188,17 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>XYZ</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
