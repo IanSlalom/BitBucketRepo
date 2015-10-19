@@ -174,7 +174,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c  FROM Order WHERE Id = :orderId];
 			po.Store_Abbreviation__c = relatedOrder.Store_Location2__r.Store_Abbreviation__c;
 			//GET THE ORDER ITEMS
-			relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, Unit_of_Measure__c FROM OrderItem Where OrderId =: orderId];
+			relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, Unit_of_Measure__c FROM OrderItem Where OrderId =: orderId];
 		}
 
 		// If there are related order items
@@ -185,7 +185,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
 				orderItemIdToOrderItemMap.put(oi.id, oi);
 			}
-			relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+			relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
 				
 			//USING PRODUCTS GET LIST OF ALL VENDORS
 			for(Product2 p : relatedProducts){

@@ -46,20 +46,24 @@
 		
 				</apex:pageBlockSection>
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-					<apex:column style="width:200px" value="{!oiw.product.Name}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Quantity}"/>
-				   <apex:column style="width:200px" value="{!oiw.orderItem.Unit_of_Measure__c}"  rendered="{!costPurchaseOrder == true}"/>   
-					<apex:column style="width:200px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.OrderItemNumber}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Variant_Number__c}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:300px" value="{!oiw.product.Description}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}"  rendered="{!costPurchaseOrder == true}"/>   
+					<apex:column style="width:100px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
 				</apex:pageBlockTable>
 
 			<apex:pageBlockSection title="Add Product" columns="1" rendered="{! status == 'new'}">
 				<apex:pageBlockTable title="Add Product" value="{!newOrderItems}" var="noi">
 					<apex:column >
 						<apex:facet name="header">Product</apex:facet> 
-							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:250px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">Description</apex:facet> 
+							<apex:inputField value="{!noi.Description}" style="width:300px"  />
 					</apex:column>
 					<apex:column >
 						<apex:facet name="header">Quantity</apex:facet> 
@@ -70,12 +74,8 @@
 							<apex:inputField value="{!noi.Unit_of_Measure__c}" style="width:50px" required="false"/>
 					</apex:column>
 					<apex:column >
-						<apex:facet name="header">Unit Price</apex:facet> 
-							<apex:inputField value="{!noi.UnitPrice}" style="width:50px" />
-					</apex:column>
-					<apex:column >
-						<apex:facet name="header">Description</apex:facet> 
-							<apex:inputField value="{!noi.Description}" style="width:400px"  />
+						<apex:facet name="header">Retail Price</apex:facet> 
+							<apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
 					</apex:column>
 				</apex:pageBlockTable>				  
 				<apex:commandButton action="{!addProduct}" value="Add Product"/>

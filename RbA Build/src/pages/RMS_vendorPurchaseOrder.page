@@ -67,17 +67,18 @@
 				</apex:pageBlockSection>
 
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-					<apex:column style="width:250px" value="{!oiw.product.Name}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.Quantity}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.OrderItemNumber}"/>
-					<apex:column style="width:250px">
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:300px" value="{!oiw.product.Description}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}"  rendered="{!costPurchaseOrder == true}"/>   
+					<apex:column style="width:50px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:100px">
 						<apex:facet name="header">Variant</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
-					<apex:column style="width:250px">
-						<apex:facet name="header">Unit Cost</apex:facet> 
+					<apex:column style="width:200px">
+						<apex:facet name="header">Wholesale Cost</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
