@@ -60,8 +60,8 @@
         <members>OrderItem</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
-        <members>RMS_Queue_Settings__c</members> 
         <members>RMS_Settings__c</members>
+        <members>RMS_Queue_Settings__c</members> 
         <members>SVMXC__Service_Order__c</members>
         <members>Store_Configuration__c</members>
         <members>HOA_Historical__c</members>
