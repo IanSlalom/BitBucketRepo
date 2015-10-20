@@ -84,8 +84,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		{
 			if ( productFilter != null ) return productFilter;
 			if (selectedVendor == null) return null;
-			
-			productFilter = ' AND Vendor__c = ';
+
+			// If this is a cost PO, only return non-inventoried items, otherwise return inventoried items
+			productFilter = (costPurchaseOrder) ? 	' AND Inventoried_Item__c = false ' :
+													' AND Inventoried_Item__c = true ';
+
+			// Only return active products with a particular vendor (see productFilter2)
+			productFilter += ' AND IsActive = true AND Vendor__c = ';
 			return productFilter;
 		}
 		private set;
@@ -102,7 +107,29 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		private set;
 	}
 
-
+	// Dynamic string used in the page title
+	public String pageTitle
+	{
+		get
+		{
+			if ( pageTitle != null ) return pageTitle;
+			pageTitle = (newPurchaseOrder) ? 'Create ' : '';
+			pageTitle += (costPurchaseOrder) ? 'Cost' : 'Product';
+			return pageTitle;
+		}
+		private set;
+	}
+	// Dynamic string used to change product text to item
+	public String productText
+	{
+		get
+		{
+			if ( productText != null ) return productText;
+			productText = (costPurchaseOrder) ? 'Item' : 'Product';
+			return productText;
+		}
+		private set;
+	}
 
 	public String orderId { get; set; }
 	{
@@ -173,8 +200,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			//GET THE ORDER
 			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c  FROM Order WHERE Id = :orderId];
 			po.Store_Abbreviation__c = relatedOrder.Store_Location2__r.Store_Abbreviation__c;
+
 			//GET THE ORDER ITEMS
-			relatedOrderItems =[Select Id, OrderItemNumber, Pricebookentry.Product2Id, Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, Unit_of_Measure__c FROM OrderItem Where OrderId =: orderId];
+			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
+										Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
+										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c 
+										FROM OrderItem Where OrderId =: orderId]; 
 		}
 
 		// If there are related order items
@@ -185,7 +216,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
 				orderItemIdToOrderItemMap.put(oi.id, oi);
 			}
-			relatedProducts = [SELECT Id, Name, Vendor__c, Vendor__r.Id, Vendor__r.Name FROM Product2 Where Id IN :relatedProduct2IDList];
+			relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
 				
 			//USING PRODUCTS GET LIST OF ALL VENDORS
 			for(Product2 p : relatedProducts){
@@ -241,9 +272,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		List<OrderItemWrapper> venderOrderItems = getOrderItemWrappersByVendor();
 		Decimal subtotal = 0;
 		for(OrderItemWrapper oiw :venderOrderItems){
+			decimal itemDiscount = (oiw.orderItem.Discount_Amount__c == null) ? 0 : oiw.orderItem.Discount_Amount__c;
 			if (oiw.orderItem.Unit_Wholesale_Cost__c == null || oiw.orderItem.Quantity == null)
 				continue;
-			subtotal = subtotal + (oiw.orderItem.Unit_Wholesale_Cost__c*oiw.orderItem.Quantity);
+			subtotal = subtotal + ((oiw.orderItem.Unit_Wholesale_Cost__c-itemDiscount)*oiw.orderItem.Quantity);
 		}
 		po.Subtotal__c = subtotal;
 	}

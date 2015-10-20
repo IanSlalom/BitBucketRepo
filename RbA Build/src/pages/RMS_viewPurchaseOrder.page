@@ -6,7 +6,7 @@
 	<apex:pageMessages />
 
 	<apex:form >
-		<apex:pageBlock title="View Purchase Order" >
+		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!edit}" value="Edit"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
@@ -21,20 +21,20 @@
 			</apex:pageBlockSection> 
 
 			<apex:outputPanel id="PurchaseOrderFields">
-				<apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
 					
-					<apex:outputField value="{!Purchase_Order__c.Name}" label="Name" />
+					<apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" />
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
 					 <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
-					<apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
-
+<!--  					<apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
+-->
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
 					
 					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
 					<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
 					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />					
-					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
-					<apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
+<!--  					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
+-->					<apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
 					<apex:outputText value=""/>
 					<apex:outputField value="{!Purchase_Order__c.Total__c}" label="Total" id="total"/>
@@ -46,20 +46,30 @@
 		
 				</apex:pageBlockSection>
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-					<apex:column style="width:200px" value="{!oiw.product.Name}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Quantity}"/>
-				   <apex:column style="width:200px" value="{!oiw.orderItem.Unit_of_Measure__c}"  rendered="{!costPurchaseOrder == true}"/>   
-					<apex:column style="width:200px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.OrderItemNumber}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Variant_Number__c}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
+					<apex:column style="width:100px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
+					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 				</apex:pageBlockTable>
 
-			<apex:pageBlockSection title="Add Product" columns="1" rendered="{! status == 'new'}">
-				<apex:pageBlockTable title="Add Product" value="{!newOrderItems}" var="noi">
+			<apex:pageBlockSection title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
+				<apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
 					<apex:column >
-						<apex:facet name="header">Product</apex:facet> 
-							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:250px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+						<apex:facet name="header">{!productText}</apex:facet> 
+							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+					</apex:column>
+					<apex:column rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">GL Account</apex:facet> 
+							<apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  />
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">{!productText} Description</apex:facet> 
+							<apex:inputField value="{!noi.Description}" style="width:300px"  />
 					</apex:column>
 					<apex:column >
 						<apex:facet name="header">Quantity</apex:facet> 
@@ -67,18 +77,14 @@
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">
 						<apex:facet name="header">Unit of Measure</apex:facet> 
-							<apex:inputField value="{!noi.Unit_of_Measure__c}" style="width:50px" required="false"/>
+							<apex:inputField value="{!noi.Unit_of_Measure__c}" style="width:75px" required="false"/>
 					</apex:column>
 					<apex:column >
-						<apex:facet name="header">Unit Price</apex:facet> 
-							<apex:inputField value="{!noi.UnitPrice}" style="width:50px" />
-					</apex:column>
-					<apex:column >
-						<apex:facet name="header">Description</apex:facet> 
-							<apex:inputField value="{!noi.Description}" style="width:400px"  />
+						<apex:facet name="header">Retail Price</apex:facet> 
+							<apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
 					</apex:column>
 				</apex:pageBlockTable>				  
-				<apex:commandButton action="{!addProduct}" value="Add Product"/>
+				<apex:commandButton action="{!addProduct}" value="Add {!productText}"/>
 			</apex:pageBlockSection> 
 
 			</apex:outputPanel>	

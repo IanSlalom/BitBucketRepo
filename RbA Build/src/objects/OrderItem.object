@@ -62,8 +62,32 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The discount (in currency) applied to the purchase order (used for AROs)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount (in currency) applied to the purchase order (used for AROs).</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>EndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <description>The GL Account associated to the order line item</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The GL Account associated to the order line item</inlineHelpText>
+        <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>ListPrice</fullName>
@@ -117,7 +141,7 @@
         <fullName>Total_Wholesale_Cost__c</fullName>
         <description>The total wholesale cost for this line item.</description>
         <externalId>false</externalId>
-        <formula>Unit_Wholesale_Cost__c * Quantity</formula>
+        <formula>(Unit_Wholesale_Cost__c - Discount_Amount__c) * Quantity</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The total wholesale cost for this line item.</inlineHelpText>
         <label>Total Wholesale Cost</label>
@@ -136,7 +160,7 @@
         <description>The wholesale cost of the product</description>
         <externalId>false</externalId>
         <inlineHelpText>The wholesale cost of the product</inlineHelpText>
-        <label>Unit Wholesale Cost</label>
+        <label>Wholesale Cost</label>
         <precision>12</precision>
         <required>false</required>
         <scale>2</scale>
@@ -149,11 +173,19 @@
         <externalId>false</externalId>
         <inlineHelpText>Used to describe how the quantity of a Cost PO line item is figured.</inlineHelpText>
         <label>Unit of Measure</label>
-        <length>255</length>
-        <required>false</required>
+        <picklist>
+            <picklistValues>
+                <fullName>pc</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Variant_Number__c</fullName>
