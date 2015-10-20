@@ -235,7 +235,7 @@
     <fields>
         <fullName>Store_Location__c</fullName>
         <externalId>false</externalId>
-        <formula>Account.Store_Location__c</formula>
+        <formula>Account.Store_Location_DEL__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Store Location</label>
         <required>false</required>

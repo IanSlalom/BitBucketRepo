@@ -266,27 +266,6 @@
     <pluralLabel>Municipalities</pluralLabel>
     <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <recordTypes>
-        <fullName>Building</fullName>
-        <active>true</active>
-        <description>Hold information for Building Permits</description>
-        <label>Building</label>
-        <picklistValues>
-            <picklist>Building_Application_Type__c</picklist>
-            <values>
-                <fullName>Both</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>In-Person</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Online</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <recordTypes>
         <fullName>HOA</fullName>
         <active>true</active>
         <description>Homeowner Association Details</description>
@@ -331,7 +310,7 @@
     <recordTypes>
         <fullName>Permit</fullName>
         <active>true</active>
-        <description>Hold information for Building Permits</description>
+        <description>Hold information for Building Permits (not Building)</description>
         <label>Permit</label>
         <picklistValues>
             <picklist>Building_Application_Type__c</picklist>

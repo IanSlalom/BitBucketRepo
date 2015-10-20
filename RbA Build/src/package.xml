@@ -21,7 +21,15 @@
         <name>CustomLabels</name>
     </types>
     <types>
-        <members>*</members>
+        <members>Account</members>
+        <members>Back_Office_Checklist_Configuration__c</members>
+        <members>Contact</members>
+        <members>Municipality_Match__c</members>
+        <members>Municipality__c</members>
+        <members>Opportunity</members>
+        <members>Order</members>
+        <members>OrderItem</members>
+        <members>Store_Configuration__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -31,6 +39,11 @@
     <types>
         <members>*</members>
         <name>StaticResource</name>
+    </types>
+    <types>
+        <members>Municipality_Match__c</members>
+        <members>Municipality__c</members>
+        <name>Workflow</name>
     </types>
     <version>33.0</version>
 </Package>

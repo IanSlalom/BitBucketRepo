@@ -11,6 +11,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 
 	public string serviceOrderVisitRecordTypeId{get;set;}
 	public string serviceOrderActionsRecordTypeId{get;set;}
+	public string serviceOrderPermitRecordTypeId{get;set;}
 	
 	public string serviceOrderVisitRecordTypeURL{get;set;}
 	public string serviceOrderActionsRecordTypeURL{get;set;}
@@ -28,11 +29,15 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		strurl = strurl.split('apex/')[1];
 		
 		//TODO: use utility methods
-		list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Visit'];
-    	list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Actions'];
+		//list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Visit'];
+    	//list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Actions'];
     	
-    	serviceOrderVisitRecordTypeId = serviceOrderVisitRecordType[0].id;
-    	serviceOrderActionsRecordTypeId = serviceOrderActionsRecordType[0].id;
+    	serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+    	serviceOrderActionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+    	serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
+    	
+    	//serviceOrderVisitRecordTypeId = serviceOrderVisitRecordType[0].id;
+    	//serviceOrderActionsRecordTypeId = serviceOrderActionsRecordType[0].id;
     	
     	String ordId = ord.id;
     	
@@ -51,13 +56,15 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     					
     					'FROM SVMXC__Service_Order__c WHERE Sold_Order__c =: ordId';
 		
-		if(strurl.Contains('Visit') && serviceOrderVisitRecordType.size() > 0){
-			String visitRecordType = serviceOrderVisitRecordType[0].id;
-			woQuery = woQuery+' AND RecordTypeId = :visitRecordType';
+		if(strurl.Contains('Visit')){
+			//String visitRecordType = serviceOrderVisitRecordType[0].id;
+			woQuery = woQuery+' AND RecordTypeId = :serviceOrderVisitRecordTypeId';
 		
-		}else if(strurl.Contains('Actions') && serviceOrderActionsRecordType.size() > 0 ){
-			String actionsRecordType = serviceOrderActionsRecordType[0].id;
-			woQuery = woQuery+' AND RecordTypeId = :actionsRecordType';
+		}else if(strurl.Contains('Actions')){
+			//String actionsRecordType = serviceOrderActionsRecordType[0].id;
+			
+			woQuery = woQuery+' AND (RecordTypeId = :serviceOrderActionsRecordTypeId';
+			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPermitRecordTypeId)';
 		}
 		system.debug('ads woQuery: '+woQuery);
 		workOrdersList = Database.query(woQuery);
