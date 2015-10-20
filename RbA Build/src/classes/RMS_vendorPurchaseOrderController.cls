@@ -272,9 +272,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		List<OrderItemWrapper> venderOrderItems = getOrderItemWrappersByVendor();
 		Decimal subtotal = 0;
 		for(OrderItemWrapper oiw :venderOrderItems){
+			decimal itemDiscount = (oiw.orderItem.Discount_Amount__c == null) ? 0 : oiw.orderItem.Discount_Amount__c;
 			if (oiw.orderItem.Unit_Wholesale_Cost__c == null || oiw.orderItem.Quantity == null)
 				continue;
-			subtotal = subtotal + ((oiw.orderItem.Unit_Wholesale_Cost__c-oiw.orderItem.Discount_Amount__c)*oiw.orderItem.Quantity);
+			subtotal = subtotal + ((oiw.orderItem.Unit_Wholesale_Cost__c-itemDiscount)*oiw.orderItem.Quantity);
 		}
 		po.Subtotal__c = subtotal;
 	}
