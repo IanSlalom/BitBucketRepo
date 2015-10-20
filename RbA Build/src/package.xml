@@ -78,12 +78,12 @@
         <name>CustomTab</name>
     </types>
     <types>
+        <members>jquery</members>
         <members>InstallText</members>
         <members>ServiceText</members>
         <members>TechMeasureText</members>
-        <members>jquery</members>
         <members>jquery_TableSorterZip</members>
-        <members>jquery_tableSorter</members>
+        <members>jquery_tableSorter</members> 
         <members>jqueryautocomplete</members>
         <members>select2</members>
         <name>StaticResource</name>
