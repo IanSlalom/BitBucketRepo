@@ -55,7 +55,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 			return selectedVendorName;
 		}
-		private set;
+		set;
 	}
 
 	public List<OrderItem> newOrderItems 
