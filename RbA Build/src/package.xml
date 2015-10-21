@@ -64,7 +64,6 @@
         <members>RMS_Queue_Settings__c</members> 
         <members>SVMXC__Service_Order__c</members>
         <members>Store_Configuration__c</members>
-        <members>HOA_Historical__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -72,7 +71,6 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
-        <members>HOA_Historical__c</members>
         <members>Municipality__c</members>
         <members>Purchase_Order__c</members>
         <members>Store_Configuration__c</members>
