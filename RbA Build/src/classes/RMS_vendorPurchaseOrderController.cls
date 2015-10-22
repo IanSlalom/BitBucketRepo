@@ -27,7 +27,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 	//public variables used on VF page
 	public String selectedVendor {get;set;}
-	public String selectedVendorName {get;set;}
 	public String selectedPricebook {get;set;}
 	public String status {get;set;}
 	public String poId {get;set;}
@@ -40,6 +39,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public list<Id> vendorIdList = new list<Id>();
 	public list<Account> vendorsOnOrder = new list<Account>();
 	public String newProduct { get; set; }
+
+	// The selected vendor name string
+	public String selectedVendorName
+	{
+		get
+		{
+			if ( String.isNotBlank(selectedVendorName) ) return selectedVendorName;
+			if ( selectedVendor == null) {
+				selectedVendorName = '';
+			}
+			else {
+				selectedVendorName = [SELECT Name from Account Where Id =: selectedVendor].Name;
+			}
+
+			return selectedVendorName;
+		}
+		set;
+	}
 
 	public List<OrderItem> newOrderItems 
 	{
@@ -188,7 +205,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 						(this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')	?	'con'		:
 						(this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')	?	'rbacon'	:
 						(this.po.Status__c == 'Rejected')									?	'rej'		:
-						(this.po.Status__c == 'Received')									?	'rec'		:
 						(this.po.Status__c == 'Cancelled')									?	'can'		:
 						(selectedVendorName == 'RbA')										?	'rbanew'	:
 																								'new';
@@ -204,7 +220,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			//GET THE ORDER ITEMS
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
 										Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
-										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c 
+										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c
 										FROM OrderItem Where OrderId =: orderId]; 
 		}
 

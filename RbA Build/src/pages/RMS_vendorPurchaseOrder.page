@@ -71,7 +71,8 @@
 					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:200px">
 						<apex:facet name="header">{!productText} Description</apex:facet> 
-							<apex:outputField value="{!oiw.product.Description}"/>
+							<apex:inputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' || status == 'new') && oiw.orderItem.NSPR__c == true) }"/>
+							<apex:outputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' ||  status == 'new') && oiw.orderItem.NSPR__c == false) || (status != 'rbanew' && status != 'new')}"/>
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
@@ -92,6 +93,7 @@
 							<apex:inputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
 							<apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
 					</apex:column>
+					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
 				</apex:pageBlockTable>
 					
 			</apex:outputPanel>

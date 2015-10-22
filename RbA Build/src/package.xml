@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>AccountTriggerHandler</members>
+        <members>AccountTriggerHandlerTest</members>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
         <members>Constants</members>
@@ -36,6 +38,7 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>AccountTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
         <name>ApexTrigger</name>
@@ -46,13 +49,22 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
+        <members>Contact_History__c</members>
+        <members>Field_IDs__c</members>
+        <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Opportunity</members>
         <members>Order</members>
         <members>OrderItem</members>
+        <members>Product2</members>
+        <members>Purchase_Order__c</members>
+        <members>RMS_Settings__c</members>
+        <members>RMS_Queue_Settings__c</members> 
+        <members>SVMXC__Service_Order__c</members>
         <members>Store_Configuration__c</members>
         <name>CustomObject</name>
     </types>
@@ -61,7 +73,6 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
-        <members>HOA_Historical__c</members>
         <members>Municipality__c</members>
         <members>Purchase_Order__c</members>
         <members>Store_Configuration__c</members>
@@ -69,15 +80,18 @@
     </types>
     <types>
         <members>jquery</members>
+        <members>InstallText</members>
+        <members>ServiceText</members>
+        <members>TechMeasureText</members>
         <members>jquery_TableSorterZip</members>
-        <members>jquery_tableSorter</members>
+        <members>jquery_tableSorter</members> 
         <members>jqueryautocomplete</members>
         <members>select2</members>
         <name>StaticResource</name>
     </types>
     <types>
         <members>Municipality_Match__c</members>
-        <members>Municipality__c</members>
+        <members>Municipality__c</members> 
         <name>Workflow</name>
     </types>
     <version>33.0</version>
