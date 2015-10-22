@@ -52,7 +52,7 @@
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
 					<apex:column style="width:100px" value="{!oiw.orderItem.UnitPrice}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
@@ -63,7 +63,7 @@
 				<apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
 					<apex:column >
 						<apex:facet name="header">{!productText}</apex:facet> 
-							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="true" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">
 						<apex:facet name="header">GL Account</apex:facet> 
@@ -90,7 +90,7 @@
 			</apex:pageBlockSection> 
 
 			</apex:outputPanel>	
-			<apex:outputPanel id="SystemInformationFields">
+			<apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
 				<apex:pageBlockSection title="System Information" columns="2"> 
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />

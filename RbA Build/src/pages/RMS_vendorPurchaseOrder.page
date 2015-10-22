@@ -77,7 +77,7 @@
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.UnitPrice}"/>
-					<apex:column style="width:100px">
+					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
 						<apex:facet name="header">Variant</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
@@ -98,7 +98,7 @@
 					
 			</apex:outputPanel>
 			
-			<apex:outputPanel id="SystemInformationFields">
+			<apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
 				<apex:pageBlockSection title="System Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />

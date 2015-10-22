@@ -363,6 +363,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			return null;
 		}
 
+		System.Debug('**********poid=' +poId);
 		// Used for redirecting to the view page from javascript
 		poId = po.Id;
 		
@@ -397,10 +398,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if(Test.isRunningTest()) newOrderItem.Quantity = 1;
 		
 		//Throw an error if the product and quantity are empty
-		if(newProduct == null ||  newOrderItem.Quantity == null){
+		if(String.isBlank(newProduct) ||  newOrderItem.Quantity == null){
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
 			return null;
 		}
+
+		// Check if the retail price is null, if so enter 0 since a non-null value is required		
+		if (newOrderItem.UnitPrice == null) newOrderItem.UnitPrice = 0;
 
 		// Set the order, purchase order, and pricebookentry fields
 		newOrderItem.OrderId = orderId;
@@ -408,10 +412,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		for (PricebookEntry pbe : [SELECT Id FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
 			newOrderItem.PricebookEntryId = pbe.Id; 
 		}
-		
+
+		// If the pricebookentry cannot be found - create a new product	
 		if(newOrderItem.PricebookEntryId == null){
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
-			return null;
+			String productName;
+			productName = (String.isBlank(newOrderItem.Description)) ? newProduct : newOrderItem.Description;
+			newOrderItem.PricebookEntryId = createNewProduct(productName, newProduct, selectedVendor, newOrderItem.UnitPrice, selectedPriceBook);
+//			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
+//			return null;
 		}
 
 		try{
@@ -432,6 +440,35 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		return pageRef;
 
 	}
+
+	/*******************************************************
+					createNewProduct
+	*******************************************************/
+	// When a user freeform enters a product number - create a new product for them
+	private String createNewProduct(String productName, String partNumber, String vendorId, Decimal retailPrice, String priceBook) {
+
+		// Create the new product
+		Product2 newProduct2 = new Product2(
+												Name 			= productName, 
+												Description 	= productName, 
+												Vendor__c		= vendorId,
+												Part_Number__c	= partNumber,
+												New_Product__c	= true
+											);
+		upsert newProduct2;
+		
+		//Create the new pricebook entry
+		PricebookEntry newPriceBookEntry = new PricebookEntry(
+												Product2Id		= newProduct2.Id,
+												UnitPrice		= retailPrice,
+												PriceBook2Id	= priceBook
+											);
+		insert newPriceBookEntry;
+		
+		return newPriceBookEntry.Id;
+				
+	}
+
 
 	/*******************************************************
 					cancel method
