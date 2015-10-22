@@ -63,7 +63,7 @@
 				<apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
 					<apex:column >
 						<apex:facet name="header">{!productText}</apex:facet> 
-							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="true" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
+							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2="{!productFilter2}"/> 
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">
 						<apex:facet name="header">GL Account</apex:facet> 

@@ -415,11 +415,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 		// If the pricebookentry cannot be found - create a new product	
 		if(newOrderItem.PricebookEntryId == null){
-			String productName;
-			productName = (String.isBlank(newOrderItem.Description)) ? newProduct : newOrderItem.Description;
-			newOrderItem.PricebookEntryId = createNewProduct(productName, newProduct, selectedVendor, newOrderItem.UnitPrice, selectedPriceBook);
-//			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
-//			return null;
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
+			return null;
 		}
 
 		try{
@@ -439,34 +436,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		pageRef.setRedirect(true);
 		return pageRef;
 
-	}
-
-	/*******************************************************
-					createNewProduct
-	*******************************************************/
-	// When a user freeform enters a product number - create a new product for them
-	private String createNewProduct(String productName, String partNumber, String vendorId, Decimal retailPrice, String priceBook) {
-
-		// Create the new product
-		Product2 newProduct2 = new Product2(
-												Name 			= productName, 
-												Description 	= productName, 
-												Vendor__c		= vendorId,
-												Part_Number__c	= partNumber,
-												New_Product__c	= true
-											);
-		upsert newProduct2;
-		
-		//Create the new pricebook entry
-		PricebookEntry newPriceBookEntry = new PricebookEntry(
-												Product2Id		= newProduct2.Id,
-												UnitPrice		= retailPrice,
-												PriceBook2Id	= priceBook
-											);
-		insert newPriceBookEntry;
-		
-		return newPriceBookEntry.Id;
-				
 	}
 
 

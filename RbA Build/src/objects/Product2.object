@@ -105,17 +105,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>New_Product__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Checked whenever a new product is created from a PO by a store location.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked whenever a new product is created from a PO by a store location.</inlineHelpText>
-        <label>New Product</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Part_Number__c</fullName>
         <description>The part number of the product</description>
         <externalId>false</externalId>
@@ -380,13 +369,7 @@
         <columns>Part_Number__c</columns>
         <columns>Vendor__c</columns>
         <columns>PRODUCT2.DESCRIPTION</columns>
-        <columns>New_Product__c</columns>
         <filterScope>Everything</filterScope>
-        <filters>
-            <field>New_Product__c</field>
-            <operation>equals</operation>
-            <value>1</value>
-        </filters>
         <label>New Products Needing Review</label>
     </listViews>
     <searchLayouts>
