@@ -8,7 +8,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		return 'View';
 	}
 	public String strurl;
-
+	public String baseUrl{get;set;}
+	
 	public string serviceOrderVisitRecordTypeId{get;set;}
 	public string serviceOrderActionsRecordTypeId{get;set;}
 	public string serviceOrderPermitRecordTypeId{get;set;}
@@ -27,7 +28,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		
 		strurl = ApexPages.currentPage().getUrl();
 		strurl = strurl.split('apex/')[1];
-		
+		baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
 		//TODO: use utility methods
 		//list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Visit'];
     	//list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Actions'];
@@ -107,8 +108,26 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											
 		serviceOrderVisitRecordTypeURL = baseURL + '&RecordType='+serviceOrderVisitRecordTypeId;								
 		serviceOrderActionsRecordTypeURL = baseURL + '&RecordType='+serviceOrderActionsRecordTypeId;										
+							
+		
+		
+		/*					
+		orderId 
+		accountId
+		billingStreet
+		billingCity
+		billingPostalCode
+		billingCountry					
+		*/					
+							
 											
-											
+		serviceOrderVisitRecordTypeURL = 	'/apex/RMS_createVisitWorkOrder?'+ 
+											'orderId='+Ord.Id+
+											'&accountId='+relatedAccount[0].Id+
+											'&billingStreet='+relatedAccount[0].BillingStreet+
+											'&billingCity='+relatedAccount[0].BillingCity+
+											'&billingPostalCode='+relatedAccount[0].BillingState+
+											'&billingCountry='+relatedAccount[0].BillingCountry;						
 		//serviceOrderVisitRecordTypeURL = '/setup/ui/recordtypeselect.jsp?ent=01I610000001Rdn&ekp=a1T&save_new_url=%2Fa1T%2Fe%3FCF00N3B000000SQ8q%3D00000128%26CF00N3B000000SQ8q_lkid%3D8013B0000004Nc6%26retURL%3D%252F8013B0000004Nc6%253Fisdtp%253Dvw%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526isWsVw%253Dtrue%2526nonce%253D0c13b7484a24a336f546da19c0d30687374693a79ebeb3c0257d6cb707158565%2526sfdcIFrameOrigin%253Dhttps%25253A%25252F%25252Fcs50.salesforce.com&isdtp=vw&nonce=0c13b7484a24a336f546da19c0d30687374693a79ebeb3c0257d6cb707158565&sfdcIFrameOrigin=https%3A%2F%2Fcs50.salesforce.com';
 		 
 	}

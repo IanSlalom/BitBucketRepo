@@ -10,6 +10,7 @@
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
         <members>RMS_completeOrderChecksController</members>
+        <members>RMS_createWorkOrderController</members>
         <members>RMS_errorMessages</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
@@ -28,7 +29,8 @@
     </types>
     <types>
         <members>RMS_completeOrderChecks</members>
-        <members>RMS_createWorkOrder</members>
+        <members>RMS_createVisitWorkOrder</members>
+        <members>RMS_createWorkOrder</members> 
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>

@@ -59,10 +59,14 @@
         }
         
         function callGenerateConsoleURL(urlPart, theTabName) {
-        
-        	tabName = theTabName;
-        	var orderURL = '/'+'{!Order.Id}';
-        	sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl);        
+        	if(sforce.console.isInConsole()) {
+	        	tabName = theTabName;
+	        	var orderURL = '/'+'{!Order.Id}';
+	        	sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+        	}else{
+        		top.location.href = '{!baseUrl}'+urlPart;
+        	
+        	}       
         }
         
         

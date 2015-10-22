@@ -57,7 +57,7 @@ public without sharing class AccountTriggerHandler{
 
         
         for(Account dwelling : listNew){
-        	if(dwelling.RecordTypeId == dwellingAccountRecordType){
+        	if(dwelling.RecordTypeId == dwellingAccountRecordType && dwelling.BillingPostalCode != null && dwelling.BillingCity != null){
         		system.debug('ads permitMunicipalityMatchs.size(): ' +permitMunicipalityMatchs.size());
         		list<Municipality_Match__c> relatedMatches = storeIDtoListOfMatchMap.get(dwelling.Store_Location__c);
         		
