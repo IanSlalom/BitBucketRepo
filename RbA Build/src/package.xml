@@ -30,8 +30,8 @@
     <types>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createVisitWorkOrder</members>
+        <members>RMS_createWorkOrder</members> 
         <members>RMS_vendorPurchaseOrder</members>
-        <members>RMS_createWorkOrder</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
