@@ -154,15 +154,6 @@
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
-        <fullName>Bond_Required__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if a bond is required</inlineHelpText>
-        <label>Bond Required</label>
-        <trackHistory>true</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Building_Permit__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -214,19 +205,6 @@
     <fields>
         <fullName>Fax</fullName>
         <trackHistory>false</trackHistory>
-    </fields>
-    <fields>
-        <fullName>HOA_Historical__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <inlineHelpText>Add the HOA or Historical district this Dwelling is associated with.</inlineHelpText>
-        <label>HOA / Historical</label>
-        <referenceTo>HOA_Historical__c</referenceTo>
-        <relationshipLabel>Accounts</relationshipLabel>
-        <relationshipName>Accounts</relationshipName>
-        <required>false</required>
-        <trackHistory>true</trackHistory>
-        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>HOA__c</fullName>
@@ -466,15 +444,6 @@
         <type>Hierarchy</type>
     </fields>
     <fields>
-        <fullName>Permit_Required__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if a permit is required</inlineHelpText>
-        <label>Permit Required</label>
-        <trackHistory>true</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Phone</fullName>
         <trackHistory>true</trackHistory>
     </fields>
@@ -604,15 +573,6 @@
     <fields>
         <fullName>Site</fullName>
         <trackHistory>false</trackHistory>
-    </fields>
-    <fields>
-        <fullName>Special_Forms_Required__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if a special form is required</inlineHelpText>
-        <label>Special Forms Required</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Store_Abbreviation__c</fullName>
