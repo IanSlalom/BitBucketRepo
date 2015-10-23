@@ -124,12 +124,43 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Check if this account is active</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this account is active</inlineHelpText>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>AnnualRevenue</fullName>
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Baan_Business_Partner_Number__c</fullName>
+        <description>The vendor account&apos;s baan business partner number</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The vendor account&apos;s baan business partner number</inlineHelpText>
+        <label>Baan Business Partner Number</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>BillingAddress</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Bond_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if a bond is required</inlineHelpText>
+        <label>Bond Required</label>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Building_Permit__c</fullName>
@@ -183,6 +214,19 @@
     <fields>
         <fullName>Fax</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>HOA_Historical__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Add the HOA or Historical district this Dwelling is associated with.</inlineHelpText>
+        <label>HOA / Historical</label>
+        <referenceTo>HOA_Historical__c</referenceTo>
+        <relationshipLabel>Accounts</relationshipLabel>
+        <relationshipName>Accounts</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>HOA__c</fullName>
@@ -367,6 +411,10 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>IsPartner</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>Jigsaw</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -420,6 +468,15 @@
         <fullName>ParentId</fullName>
         <trackHistory>false</trackHistory>
         <type>Hierarchy</type>
+    </fields>
+    <fields>
+        <fullName>Permit_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if a permit is required</inlineHelpText>
+        <label>Permit Required</label>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Phone</fullName>
@@ -553,24 +610,21 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Special_Forms_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if a special form is required</inlineHelpText>
+        <label>Special Forms Required</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Store_Abbreviation__c</fullName>
         <description>The two letter abbreviation for the store, used within PO numbers.</description>
         <externalId>false</externalId>
         <inlineHelpText>The two letter abbreviation for the store, used within PO numbers.</inlineHelpText>
         <label>Store Abbreviation</label>
         <length>2</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Store_Location_DEL__c</fullName>
-        <description>Populated via trigger based on the Account Owner</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Populated based on the Account Owner</inlineHelpText>
-        <label>Store Location_DEL</label>
-        <length>50</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
@@ -702,6 +756,16 @@
         <trackHistory>true</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Zero_Dollar_Vendor__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this is a zero dollar vendor</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this is a zero dollar vendor</inlineHelpText>
+        <label>Zero Dollar Vendor</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <listViews>
         <fullName>AllAccounts</fullName>
