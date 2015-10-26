@@ -41,12 +41,14 @@ public without sharing class OrderTriggerHandler{
     	list<Id> relatedAccountIds = new list<Id>();
     	for(Order o : listNew){
     		relatedAccountIds.add(o.AccountId);
-    	}
+    	} 
     	list<Account> relatedAccounts = [SELECT BillingStreet,
 								    			BillingCity,
 								    			BillingState,
+								    			BillingStateCode,
 								    			BillingPostalCode, 
-								    			BillingCountry
+								    			BillingCountry,
+								    			BillingCountryCode
 								    			FROM Account WHERE Id IN :relatedAccountIds];
 		map<id, Account> accountIdToAccountMap = new map<id, Account>();		
     	for(Account a : relatedAccounts){
@@ -171,14 +173,10 @@ public without sharing class OrderTriggerHandler{
 	    		}	
 	    	}
     	}
-    	
-    	system.debug('Ads workOrdersToAdd[0]: ' + workOrdersToAdd[0].RecordType);
-    	system.debug('Ads serviceOrderVisitRecordType: ' + serviceOrderVisitRecordType);
-    	system.debug('Ads workOrdersToAdd[1]: ' + workOrdersToAdd[1].RecordType);
-    	
+
     	insert workOrdersToAdd;
         insert checksToAdd;
-                
+                 
     }
    
 
