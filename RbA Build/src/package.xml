@@ -52,11 +52,13 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Activity</members>
         <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
         <members>Contact_History__c</members>
         <members>Field_IDs__c</members>
+        <members>Financial_Configuration__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
@@ -69,6 +71,7 @@
         <members>RMS_Settings__c</members>
         <members>SVMXC__Service_Order__c</members>
         <members>Store_Configuration__c</members>
+        <members>User</members>
         <name>CustomObject</name>
     </types>
     <types>
