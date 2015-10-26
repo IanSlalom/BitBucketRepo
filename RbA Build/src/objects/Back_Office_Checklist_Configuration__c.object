@@ -54,6 +54,16 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
+        <fullName>Bay_Form__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Was a Bay Form received?</inlineHelpText>
+        <label>Bay Form</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Contract_Signed__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -68,6 +78,16 @@
         <externalId>false</externalId>
         <label>Lien Rights Signed</label>
         <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Pre_Install_Checklist__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Was the Pre-Install Checklist received?</inlineHelpText>
+        <label>Pre-Install Checklist</label>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>

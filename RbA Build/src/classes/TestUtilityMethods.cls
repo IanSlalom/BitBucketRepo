@@ -27,12 +27,12 @@ public with sharing class TestUtilityMethods {
 	 
 	
 	public void setUpConfigs(){
-		Account store1 = createStoreAccount('77 - Twin Cities, MN');
-		insert store1;
-		
 		//Creating RMS_Settings__c
     	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
+		
+		Account store1 = createStoreAccount('77 - Twin Cities, MN');
+		insert store1;
 		
 		//Creating RMS_Queue_Settings__c
 		Group Order_Queue = createQueue('Order_Queue');
