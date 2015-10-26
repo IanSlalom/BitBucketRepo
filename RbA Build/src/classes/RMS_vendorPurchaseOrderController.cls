@@ -39,6 +39,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public list<Id> vendorIdList = new list<Id>();
 	public list<Account> vendorsOnOrder = new list<Account>();
 	public String newProduct { get; set; }
+	public String lineItemToCancel { get; set; }
 
 	// The selected vendor name string
 	public String selectedVendorName
@@ -221,7 +222,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
 										Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
 										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c
-										FROM OrderItem Where OrderId =: orderId]; 
+										FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
 		}
 
 		// If there are related order items
@@ -438,6 +439,22 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 	}
 
+	/*******************************************************
+					cancelLineItem method
+	*******************************************************/
+	public PageReference cancelLineItem() {
+		system.debug('*****Cancelling a line item');
+		system.debug('*****test=' +lineItemToCancel);
+		
+		OrderItem itemToCancel = [SELECT Id, Status__c From OrderItem Where Id =: lineItemToCancel];
+		itemToCancel.Status__c = 'Cancelled';
+		upsert itemToCancel;
+		// Directs the browser back to the same page to view the purchase order
+		PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
+		pageRef.setRedirect(true);
+		return pageRef;
+
+	}
 
 	/*******************************************************
 					cancel method
@@ -448,15 +465,15 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	}
 
 	/*******************************************************
-					release button method
+					confirm method
 	*******************************************************/
-	// Nothing happens when the release button is clicked until the user accepts the alert
-	public PageReference release() {
-		system.debug('*****Release button pressed');
+	// Nothing happens when a button is pressed that requires their confirmation
+	public PageReference confirm() {
+		system.debug('*****Button requiring confirmation was pressed');
 		return null;
 	}
 
-/*******************************************************
+	/*******************************************************
 				releasePurchaseOrder method
 	*******************************************************/
 	// Called after the confirmation window is accepted
@@ -469,9 +486,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			upsert po;  
 		} catch (Exception e){
 			System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.RELEASE_PO_EXCEPTION));
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
 		}
 	}
+
+	/*******************************************************
+				cancelPurchaseOrder method
+	*******************************************************/
+	// Called after the confirmation window is accepted. This cancels the PO and the order line items
+	public void cancelPurchaseOrder() {
+		system.debug('*****Status set to cancelled');
+		po.Status__c = 'Cancelled';	  
+
+		list<OrderItem> orderItemsToCancelList = new list<OrderItem>();
+				
+		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+			OrderItem oi = oiw.orderItem;
+			oi.Status__c = 'Cancelled';
+			orderItemsToCancelList.add(oi);
+		}
+
+		try{
+			// upsert the order line items as cancelled
+			update orderItemsToCancelList;
+		} catch (Exception e){
+			System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the cancelPurchaseOrder cancelling line items:' + e);
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
+		}
+
+		try{
+			// upsert the po as cancelled
+			upsert po;  
+		} catch (Exception e){
+			System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the cancelPurchaseOrder method cancelling the PO:' + e);
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
+		}
+	}
+
 	/*******************************************************
 					checkReceived method
 	*******************************************************/

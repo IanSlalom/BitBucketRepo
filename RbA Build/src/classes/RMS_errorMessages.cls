@@ -8,6 +8,6 @@ public with sharing class RMS_errorMessages {
 	public static final String ADD_PRODUCT_EXCEPTION = 'The system was unable to add the item to the purchase order. Please contact your system admin for help.';
 	public static final String SAVE_PO_EXCEPTION = 'The system was unable to save the purchase order. Please contact your system admin for help.';
 	public static final String UPDATE_PO_LINES_EXCEPTION = 'The system was unable to update the purchase order line items. Please contact your system admin for help.';
-	public static final String RELEASE_PO_EXCEPTION = 'The system was unable to release the purchase order. Please contact your system admin for help.';
+	public static final String UPDATE_PO_EXCEPTION = 'The system was unable to update the purchase order. Please contact your system admin for help.';
 
 }

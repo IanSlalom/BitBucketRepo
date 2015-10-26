@@ -233,17 +233,6 @@
         <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Store_Location__c</fullName>
-        <externalId>false</externalId>
-        <formula>Account.Store_Location_DEL__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Store Location</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>TotalAmount</fullName>
     </fields>
     <fields>
@@ -315,6 +304,36 @@
         <searchResultsAdditionalFields>SALES.ACCOUNT.NAME</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Cancel_Order</fullName>
+        <availability>online</availability>
+        <description>Click to cancel the order</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Cancel Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/apex.js&quot;)}
+    var x;
+    if (confirm(&quot;Are you sure you want to cancel this order?&quot;) == true) {
+        x = &quot;OK&quot;;
+    } else {
+        x = &quot;Cancel&quot;;
+    }
+    if(x == &apos;OK&apos;){
+       var orderId = &quot;{!Order.Id}&quot;;
+
+       // Executes if the Button/Link will be clicked from within Service Console
+       if (typeof(srcUp) == &apos;function&apos;) {
+          srcUp(&apos;/apex/RMS_cancelOrder?isdtp=vw&amp;id=&apos;+orderId);
+       }
+       // Executes if the Button/Link will be clicked from normal Salesforce UI
+       else{
+          location.href=&apos;/apex/RMS_cancelOrder?id=&apos; +orderId ;
+       }
+    }</url>
+    </webLinks>
     <webLinks>
         <fullName>New_Visit_Work_Order</fullName>
         <availability>online</availability>
