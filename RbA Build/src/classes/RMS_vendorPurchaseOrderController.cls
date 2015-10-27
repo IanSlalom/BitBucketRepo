@@ -59,6 +59,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		set;
 	}
 
+	// Used to capture a new order item in a table
 	public List<OrderItem> newOrderItems 
 	{
 		get
