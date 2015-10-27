@@ -282,7 +282,7 @@
         <label>Historical</label>
         <lookupFilter>
             <active>true</active>
-            <errorMessage>You must select a Historical record. If the record for you are for isn&apos;t in the system, please contact your manager to have it created.</errorMessage>
+            <errorMessage>You must select a Historical record. If the record you are for is not in the system, please contact your manager to have it created.</errorMessage>
             <filterItems>
                 <field>Municipality__c.RecordTypeId</field>
                 <operation>equals</operation>
@@ -636,6 +636,18 @@
         <inlineHelpText>The two letter abbreviation for the store, used within PO numbers.</inlineHelpText>
         <label>Store Abbreviation</label>
         <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Location_DEL__c</fullName>
+        <description>Populated via trigger based on the Account Owner</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Populated based on the Account Owner</inlineHelpText>
+        <label>Store Location_DEL</label>
+        <length>50</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>

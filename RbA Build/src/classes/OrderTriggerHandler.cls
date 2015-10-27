@@ -1,11 +1,20 @@
-/*
-Trigger Handler Anthony Strafaccia 2015
+/*******************************************************//**
 
-This is the class for the OrderTrigger that handles all the logic. It is designed so that only one trigger needs to be created for the object and allows for the customization of the order of execution. 
+@class	OrderTriggerHandler
 
-Test Code will be handled inside OrderTriggerHandlerTest
-*/
+@brief	Controller to hold logic for OrderTrigger trigger
 
+@author  Anthony Strafaccia (Slalom.ADS)
+
+@version	2015-10/26  Slalom.ADS
+	Created.
+
+@see		OrderTriggerHandlerTest
+
+@copyright  (c)2015 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited.
+
+***********************************************************/
 
 public without sharing class OrderTriggerHandler{
 
@@ -15,11 +24,87 @@ public without sharing class OrderTriggerHandler{
     } 
     */
 
-    /*
     public void OnBeforeUpdate(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
         system.debug('ads INSIDE BEFORE UPDATE');
-    }
-    */
+    	
+    	map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = getAllStoreConfigs();
+ 
+    	list<id> relatedDwellingIds = new list<id>();
+    	
+    	for(Order ord : listNew){
+    		system.debug('ads ord: '+ ord);
+    		system.debug('ads ord.AccountId: '+ ord.AccountId);
+    		relatedDwellingIds.add(ord.AccountId);
+    	}
+    	
+    	list<Account> relatedDwelling = [SELECT Id, 
+    											Store_Location__c, 
+    											HOA__c, Historical__c, 
+    											Building_Permit__c,
+    											BillingStreet,
+								    			BillingCity,
+								    			BillingState,
+								    			BillingStateCode,
+								    			BillingPostalCode, 
+								    			BillingCountry,
+								    			BillingCountryCode 
+    									
+    										FROM Account Where Id IN : relatedDwellingIds];
+    	
+    	map<id, Account> dwellingIdtoDwellingMap = new map<id, Account>();
+    	for(Account dwel : relatedDwelling){
+    		dwellingIdtoDwellingMap.put(dwel.id, dwel);
+    	}
+    	
+    	list<SVMXC__Service_Order__c> workOrdersToAdd = new list<SVMXC__Service_Order__c>();
+    	
+    	for(Order ord : listNew){
+    		system.debug('ads ord.Status: '+ord.Status);
+    		system.debug('ads mapOld.get(ord.Id).Status: '+ mapOld.get(ord.Id).Status);
+    		if(ord.Status == 'Activated' && mapOld.get(ord.Id).Status == 'Draft'){
+    			
+    			Account dwelling = dwellingIdtoDwellingMap.get(ord.AccountId);
+    			
+    			
+    			Id permitWORecordType = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
+    			Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+    			
+    			Store_Configuration__c storeConfig;
+    			
+    			if(dwelling.Store_Location__c == null){ 
+    				ord.addError('Store has not been set on dwelling.');
+    			}else if(accountIdtoStoreConfigMap.get(dwelling.Store_Location__c) == null){
+    				ord.addError('Store Configuation has not been created.');
+    			}else{
+    				
+    				storeConfig = accountIdtoStoreConfigMap.get(dwelling.Store_Location__c);
+    			
+	    			if(dwelling.HOA__c != null){
+	    				system.debug('ads inside HOA');
+	    				SVMXC__Service_Order__c hoaWorkOrder = buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Permit_Work_Order_Queue_Id__c, 'HOA',  dwelling.HOA__c);
+	    				workOrdersToAdd.add(hoaWorkOrder);
+	    			}
+	    			
+	    			if(dwelling.Historical__c != null){
+	    				system.debug('ads inside historical');
+	    				SVMXC__Service_Order__c historicalWorkOrder = buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Permit_Work_Order_Queue_Id__c, 'Historical', dwelling.Historical__c );
+	    				workOrdersToAdd.add(historicalWorkOrder);
+	    			}
+	    			
+	    			if(dwelling.Building_Permit__c != null){
+	    				system.debug('ads inside building');
+	    				SVMXC__Service_Order__c buildingPermitWorkOrder = buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
+	    				workOrdersToAdd.add(buildingPermitWorkOrder);
+	    			}
+	    			system.debug('ads workOrdersToAdd: '+workOrdersToAdd);
+	    			insert workOrdersToAdd;
+	    		}
+			}
+   	
+    	}
+    
+    } 
+    
 
     /*
     public void OnBeforeDelete(List<Order> listToDelete, Map<Id, Order> mapToDelete){
@@ -197,4 +282,50 @@ public without sharing class OrderTriggerHandler{
          system.debug('ads INSIDE ON UNDELETE'); 
     }
     */
+    
+    
+    
+    public SVMXC__Service_Order__c buildWorkOrder(Account dwelling, Order ord, Id rtID, Id ownerId, String ordType, Id munici ){
+		SVMXC__Service_Order__c wo = new SVMXC__Service_Order__c(
+			Sold_Order__c = ord.id,
+			RecordTypeId = rtID,
+			SVMXC__Order_Type__c = ordType,
+			SVMXC__Company__c = ord.AccountId,
+					
+			SVMXC__Street__c = dwelling.BillingStreet,
+			SVMXC__City__c = dwelling.BillingCity,
+			SVMXC__State__c = dwelling.BillingStateCode,
+			SVMXC__Zip__c = dwelling.BillingPostalCode, 
+			SVMXC__Country__c = dwelling.BillingCountryCode,
+			
+			Municipality__c = munici,
+			
+			OwnerId = ownerId
+			
+		);
+    	
+    	return wo;
+    	
+    }
+    
+    public map<Id, Store_Configuration__c> getAllStoreConfigs(){
+    	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
+
+    	list<Store_Configuration__c> storeConfigs = [SELECT 	Id, 
+    															Store__c, 
+    															Install_Work_Order_Queue_Id__c, 
+    															Tech_Measure_Work_Order_Queue_Id__c, 
+    															Order_Queue_Id__c,
+    															Permit_Work_Order_Queue_Id__c
+    															FROM Store_Configuration__c
+    															];
+    	
+    	for(Store_Configuration__c sc : storeConfigs){
+    		accountIdtoStoreConfigMap.put(sc.Store__c, sc);
+    	}
+    	
+    	return accountIdtoStoreConfigMap;
+    }
+    
+    
 }

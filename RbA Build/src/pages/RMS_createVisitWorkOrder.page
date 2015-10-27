@@ -3,13 +3,13 @@
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
 	
-	<apex:form>
+	<apex:form >
 		<apex:pageBlock title="Work Order">
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedWO('{!woId}');return false"/>
 			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewWO('{!orderId}');return false"/>
 			<!-- <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/> -->
-			<apex:commandButton  value="Cancel" onclick="otherCloseTab();return false"/>
+			<apex:commandButton value="Cancel" onclick="otherCloseTab();return false"/>
 			
 			</apex:pageBlockButtons>
 				

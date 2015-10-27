@@ -1,7 +1,7 @@
 <apex:page standardController="Order" extensions="RMS_viewRelatedWorkOrdersController">
-	<apex:includeScript value="/support/console/20.0/integration.js"/>
-<apex:includeScript value="{!$Resource.jquery}" />
-	
+	<apex:includeScript value="/support/console/28.0/integration.js"/>
+	<apex:includeScript value="{!$Resource.jquery}" />
+		
 	<apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
 	<apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>
 	 

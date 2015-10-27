@@ -65,17 +65,6 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Inventoried_Item__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Check this box if it is an inventoried item.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Check this box if it is an inventoried item.</inlineHelpText>
-        <label>Inventoried Item</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>IsActive</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
@@ -87,17 +76,16 @@
     </fields>
     <fields>
         <fullName>Name_Part_Number__c</fullName>
-        <description>This field is used to allow users to search both the name and part number from POs. If the part number is blank or the same as the name, the value is just equal to the name. Otherwise, we concatenate the name and part number together.</description>
         <externalId>false</externalId>
         <formula>IF ( 
-   OR (
-      ( ISBLANK(Part_Number__c) ),
-      ( Name == Part_Number__c  )
-   ),
-   Name,
-   (Name  &amp; &apos; - &apos; &amp; Part_Number__c)
+OR (
+( ISBLANK(Part_Number__c) ),
+( Name == Part_Number__c )
+),
+Name,
+(Name &amp; &apos; - &apos; &amp; Part_Number__c)
 )</formula>
-        <inlineHelpText>The name and part number together.</inlineHelpText>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Name</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -106,9 +94,7 @@
     </fields>
     <fields>
         <fullName>Part_Number__c</fullName>
-        <description>The part number of the product</description>
         <externalId>false</externalId>
-        <inlineHelpText>The part number of the product</inlineHelpText>
         <label>Part Number</label>
         <length>255</length>
         <required>false</required>
@@ -336,22 +322,10 @@
     <fields>
         <fullName>Vendor__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
-        <description>The vendor that provides this product</description>
         <externalId>false</externalId>
-        <inlineHelpText>The vendor that provides this product</inlineHelpText>
         <label>Vendor</label>
-        <lookupFilter>
-            <active>true</active>
-            <errorMessage>Account must be of type Vendor</errorMessage>
-            <filterItems>
-                <field>Account.RecordTypeId</field>
-                <operation>equals</operation>
-                <value>Vendor</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
         <referenceTo>Account</referenceTo>
-        <relationshipLabel>Products</relationshipLabel>
+        <relationshipLabel>Vendors</relationshipLabel>
         <relationshipName>Products</relationshipName>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>

@@ -152,6 +152,26 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Needs_Board_Approval__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Is board Approval Required?</inlineHelpText>
+        <label>Needs Board Approval</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Permit_Fee_Notes__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Permit Fee Notes</inlineHelpText>
@@ -227,6 +247,7 @@
         <columns>NAME</columns>
         <columns>RECORDTYPE</columns>
         <columns>For_Retail_Location__c</columns>
+        <columns>Permit_Required__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -285,6 +306,17 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Needs_Board_Approval__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Historical</fullName>
@@ -306,6 +338,17 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Needs_Board_Approval__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Permit</fullName>
@@ -324,6 +367,17 @@
             </values>
             <values>
                 <fullName>Online</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Needs_Board_Approval__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

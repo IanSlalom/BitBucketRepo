@@ -51,11 +51,17 @@ public with sharing class TestUtilityMethods {
 		QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
 		insert Tech_Measure_Work_Order_Link;
 		
+		Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
+		insert Permit_Work_Order_Queue;
+		QueueSobject Permit_Work_Order_Link = createQueueSobject(Permit_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Permit_Work_Order_Link;
+		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(
     		Store__c = store1.id,
         	Order_Queue_Id__c = Order_Queue.id,
     		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
-        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id
+        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
+        	Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id
         	);
     	insert storeConfig;
 		
