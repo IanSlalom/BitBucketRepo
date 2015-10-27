@@ -1,3 +1,26 @@
+<!-- ********************************************************* 
+
+@page	RMS_vendorPurchaseOrder
+
+@brief	This page is used to create and edit a purchase order
+
+@author  Creston Kuenzi (Slalom.CDK)
+
+@author  Anthony Strafaccia (Slalom.ADS)
+@author  Creston Kuenzi (Slalom.CDK)
+
+@version	2015-09-16  Slalom.ADS
+	Created.
+@version	2015-10-15  Slalom.CDK
+	Many updates to the functionality and flow of the page.
+
+@see		RMS_vendorPurchaseOrderController
+
+@copyright  (c)2015 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited.
+
+******************************************************** -->
+<apex:page standardController="Order" extensions="RMS_cancelOrderExtension" action="{!cancelOrder}" do
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
 
 	<apex:includeScript value="{!$Resource.jquery}" />
@@ -9,8 +32,8 @@
 		<apex:pageBlock title="{!pageTitle} Purchase Order">
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
-			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
-			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+				<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
+				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 			</apex:pageBlockButtons>			
 
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder == true}" > 
@@ -28,11 +51,12 @@
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder != true}" > 
 				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
 			</apex:pageBlockSection> 
-			<div id="OrderId" style="display:none;">{!orderId}</div>	
+
+			<!--  Used in javascript -->
+			<div id="OrderId" style="display:none;">{!orderId}</div>
 
 			<apex:outputPanel id="PurchaseOrderFields"> 
 				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false || costPurchaseOrder == true}"> 
-					 
 					<apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" rendered="{! newPurchaseOrder == false}"/>
 					<apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
 					<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
@@ -41,20 +65,15 @@
 					<apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
 					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
-					 
-					 
 					<apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew'|| status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
 					<apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					
-				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
+					<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
 					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax"  rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
-<!--  				 	<apex:outputText value=""/>
-					<apex:inputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discount" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && costPurchaseOrder == true}"/>
-					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && costPurchaseOrder == true}"/>
--->				 	<apex:outputText value=""/>
+					<apex:outputText value=""/>
 				
 					<apex:inputField value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
@@ -63,7 +82,7 @@
 					
 					<apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
-				
+
 				</apex:pageBlockSection>
 
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
@@ -103,14 +122,9 @@
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
 				</apex:pageBlockSection>
-
-			</apex:outputPanel>		
-				   
+			</apex:outputPanel>	
 		</apex:pageBlock>
-
-
-
-   	</apex:form>
+	</apex:form>
 
 	<script type="text/javascript">
 		var j$ = jQuery.noConflict();
@@ -121,7 +135,6 @@
 
 		window.onload = function()
 		{
-		
 			//  perform the previously registered 'onload' function, if any
 			if ( previousOnload ) previousOnload();
 
@@ -140,6 +153,7 @@
 			sforce.console.closeTab(result.id);
 		};
 
+		// Closes the current subtab
 		function closeTab() {
 			if(sforce.console.isInConsole()) {
 				sforce.console.refreshPrimaryTabById( primaryTabId, false,
@@ -154,12 +168,11 @@
 				location.href='/{!Purchase_Order__c.Order__c}'; 
 			}
 
-		
 		};
 
+		// Opens up a new subtab 
 		function openNewSubTab( subTabURL, subTabLabel )
 		{
-	
 			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
 			if ( !subTabURL )
 			{
@@ -178,6 +191,7 @@
 			);
 		}
 
+		// Opens up a new primary tab 
 		function openNewPrimaryTab( subTabURL, subTabLabel )
 		{
 	
@@ -197,6 +211,8 @@
 				/*  Name for new Subtab		 */  null
 			);
 		}	
+
+		// opens up the view page for a saved PO
 		function openSavedPO(poId, costPO)
 		{
 			if(sforce.console.isInConsole()) {
@@ -213,6 +229,7 @@
 			}
 		}
 
+		// opens up a new PO page after Save & New
 		function openNewPO(orderId, costPO)
 		{
 			if(sforce.console.isInConsole()) {
@@ -234,6 +251,7 @@
 
 			}
 		}
+	// retrieves the orderId variable from visualforce/controller
 	function  getOrderId()
 	{
 		return document.getElementById( 'OrderId' ).innerHTML;
