@@ -849,7 +849,7 @@
         <filters>
             <field>ACCOUNT.RECORDTYPE</field>
             <operation>equals</operation>
-            <value>0123B000000Cgfo</value>
+            <value>Account.Municipality</value>
         </filters>
         <label>*Municipality</label>
     </listViews>
