@@ -26,7 +26,6 @@
         <name>ApexClass</name>
     </types>
     <types> 
-        <members>AllDemoLink</members>
         <members>AutoCompleteV2</members>
         <name>ApexComponent</name>
     </types>
