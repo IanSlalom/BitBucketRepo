@@ -161,6 +161,7 @@
 		function confirmationWindow(warningType)
 		{
 			// Select the correct warning message depending on the button warning type
+			// TODO: Get error message from constant or label?
 			var warningMessage;
 			if (warningType == 'releasePO') {
 				warningMessage = "Are you sure you want to release this purchase order?";

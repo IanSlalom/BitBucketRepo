@@ -23,7 +23,7 @@ private class RMS_cancelOrderExtensionTest {
 	/*******************************************************
 					createTestRecords
 	*******************************************************/
-	static testmethod void createTestRecords(){
+	static void createTestRecords(){
 		
 		TestUtilityMethods utility = new TestUtilityMethods();
 		

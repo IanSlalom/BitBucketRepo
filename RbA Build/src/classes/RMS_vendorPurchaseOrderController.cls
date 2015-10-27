@@ -181,13 +181,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
 		
-		//NEW PRODUCT PURCHASE ORDER
+		//NEW PURCHASE ORDER
 		if(stdController.getId() == null){
 			costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
 			newPurchaseOrder = true;
+			//TODO
 			status = 'new';
 			this.po.Status__c = 'New';
-		}//END OF NEW PRODUCT PURCHASE ORDER 
+		}//END OF NEW PURCHASE ORDER 
 		
 		//EXISTING PURCHASE ORDER		   
 		else {
