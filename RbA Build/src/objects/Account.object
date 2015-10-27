@@ -642,6 +642,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Store_Location_DEL__c</fullName>
+        <description>Populated via trigger based on the Account Owner</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Populated based on the Account Owner</inlineHelpText>
+        <label>Store Location_DEL</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Store_Location__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>The store location that this dwelling is related</description>

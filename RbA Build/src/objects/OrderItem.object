@@ -93,6 +93,14 @@
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
+        <fullName>NSPR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>NSPR/SPR</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>OrderId</fullName>
         <type>Lookup</type>
     </fields>

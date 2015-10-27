@@ -233,6 +233,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Store_Location__c</fullName>
+        <externalId>false</externalId>
+        <formula>Account.Store_Location_DEL__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Store Location</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>TotalAmount</fullName>
     </fields>
     <fields>

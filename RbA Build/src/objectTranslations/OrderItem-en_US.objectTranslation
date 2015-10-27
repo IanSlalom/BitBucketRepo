@@ -19,10 +19,39 @@
         <name>GL_Account__c</name>
     </fields>
     <fields>
+        <label><!-- NSPR/SPR --></label>
+        <name>NSPR__c</name>
+    </fields>
+    <fields>
         <help><!-- The purchase order that covers this sales order line item --></help>
         <label><!-- Purchase Order --></label>
         <name>Purchase_Order__c</name>
         <relationshipLabel><!-- Order Products --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- The status of the order line item. --></help>
+        <label><!-- Status --></label>
+        <name>Status__c</name>
+        <picklistValues>
+            <masterLabel>Cancelled</masterLabel>
+            <translation><!-- Cancelled --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Configured</masterLabel>
+            <translation><!-- Configured --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Partially Received</masterLabel>
+            <translation><!-- Partially Received --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Received</masterLabel>
+            <translation><!-- Received --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Verified</masterLabel>
+            <translation><!-- Verified --></translation>
+        </picklistValues>
     </fields>
     <fields>
         <help><!-- The total wholesale cost for this line item. --></help>

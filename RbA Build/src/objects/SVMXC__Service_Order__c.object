@@ -3971,6 +3971,15 @@ NULL)</formula>
             <allInternalUsers></allInternalUsers>
         </sharedTo>
     </listViews>
+    <listViews>
+        <fullName>Unassigned_Twin_City_Service_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned - Twin City</label>
+        <queue>Unassigned_Twin_City</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
     <nameField>
         <displayFormat>WO-{00000000}</displayFormat>
         <label>Work Order Number</label>
