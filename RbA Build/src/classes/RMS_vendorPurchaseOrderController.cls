@@ -59,7 +59,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		set;
 	}
 
-	// Used to capture a new order item in a table
 	public List<OrderItem> newOrderItems 
 	{
 		get
@@ -181,14 +180,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
 		this.po = (Purchase_Order__c)stdController.getRecord();
 		
-		//NEW PURCHASE ORDER
+		//NEW PRODUCT PURCHASE ORDER
 		if(stdController.getId() == null){
 			costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
 			newPurchaseOrder = true;
-			//TODO
 			status = 'new';
 			this.po.Status__c = 'New';
-		}//END OF NEW PURCHASE ORDER 
+		}//END OF NEW PRODUCT PURCHASE ORDER 
 		
 		//EXISTING PURCHASE ORDER		   
 		else {
