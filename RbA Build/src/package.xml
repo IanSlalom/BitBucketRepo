@@ -62,10 +62,11 @@
         <members>OrderItem</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
+        <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
-        <members>RMS_Queue_Settings__c</members> 
         <members>SVMXC__Service_Order__c</members>
         <members>Store_Configuration__c</members>
+        <members>User</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -79,19 +80,19 @@
         <name>CustomTab</name>
     </types>
     <types>
-        <members>jquery</members>
         <members>InstallText</members>
         <members>ServiceText</members>
         <members>TechMeasureText</members>
+        <members>jquery</members>
         <members>jquery_TableSorterZip</members>
-        <members>jquery_tableSorter</members> 
+        <members>jquery_tableSorter</members>
         <members>jqueryautocomplete</members>
         <members>select2</members>
         <name>StaticResource</name>
     </types>
     <types>
         <members>Municipality_Match__c</members>
-        <members>Municipality__c</members> 
+        <members>Municipality__c</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>

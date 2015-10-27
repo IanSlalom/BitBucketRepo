@@ -21,7 +21,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 	}
 	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
 		OrderTriggerHandler handler = new OrderTriggerHandler();
-            
+	        
 		// Before Insert
 		/*
 		if(Trigger.isInsert && Trigger.isBefore){
@@ -29,11 +29,11 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		}
 		*/
 		//  Before Update
-		/*
-		else if(Trigger.isUpdate && Trigger.isBefore){
-		    handler.OnBeforeUpdate(Trigger.old, Trigger.new, Trigger.newMap, Trigger.oldMap); 
+		
+		if(Trigger.isUpdate && Trigger.isBefore){
+		    handler.OnBeforeUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap); 
 		}
-		*/
+		 
 	
 		// Before Delete
 		/*
@@ -42,15 +42,11 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		}
 		*/
 		
-		// After Insert
-		
-		/*
-		else 
-		*/ 
-		if(Trigger.isInsert && Trigger.isAfter){
+		// After Insert 
+		else if(Trigger.isInsert && Trigger.isAfter){
 			handler.OnAfterInsert(Trigger.new, Trigger.newMap);
 		}
-		 
+		
 		// After Update
 		/*
 		else if(Trigger.isUpdate && Trigger.isAfter){

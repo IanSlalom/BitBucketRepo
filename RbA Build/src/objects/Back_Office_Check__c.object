@@ -46,6 +46,7 @@
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junction Object between the Back Office Checklist Configurations and Order.  Keeps the history of items that need to checked in order for the order move through the process.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -95,6 +96,29 @@
     <pluralLabel>Back Office Checks</pluralLabel>
     <searchLayouts/>
     <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>UserCannotUpdateCompletedCheckbox</fullName>
+        <active>true</active>
+        <description>Once Completed checkbox is checked the user cannot update the fields.  The user needs to contact their manager to update the field.</description>
+        <errorConditionFormula>AND( 
+PRIORVALUE(Completed__c), TRUE, 
+ISCHANGED(Completed__c), 
+$User.Update_Back_Office_Checklist_Fields__c &lt;&gt; TRUE)</errorConditionFormula>
+        <errorDisplayField>Completed__c</errorDisplayField>
+        <errorMessage>Once Completed checkbox is checked, you cannot update the field. Please create a task and assign it to your manager.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>UserCannotUpdateSignedDate</fullName>
+        <active>true</active>
+        <description>Once Signed Date is populated, the user cannot update the field.  The user needs to contact their manager to update the field.</description>
+        <errorConditionFormula>AND(
+NOT(ISNEW()), 
+TEXT((PRIORVALUE(Signed_Date__c )))&lt;&gt;&quot;&quot;, 
+ISCHANGED( Signed_Date__c ),
+$User.Update_Back_Office_Checklist_Fields__c &lt;&gt; TRUE)</errorConditionFormula>
+        <errorDisplayField>Signed_Date__c</errorDisplayField>
+        <errorMessage>Once Signed Date is populated, you cannot update the field. Please create a task and assign it to your manager.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>Complete_Multiple</fullName>
         <availability>online</availability>
