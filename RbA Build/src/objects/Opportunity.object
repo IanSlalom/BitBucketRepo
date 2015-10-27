@@ -150,6 +150,18 @@
         <type>Percent</type>
     </fields>
     <fields>
+        <fullName>Enabled_Lead_Id__c</fullName>
+        <description>base64 encoded Enabled+ Lead Id</description>
+        <externalId>true</externalId>
+        <label>Enabled+ Lead Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>ExpectedRevenue</fullName>
         <trackTrending>false</trackTrending>
     </fields>
@@ -358,6 +370,16 @@
         <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Window_Problems__c</fullName>
+        <externalId>false</externalId>
+        <label>Window Problems</label>
+        <length>8000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
     </fields>
     <listViews>
         <fullName>AllOpportunities</fullName>

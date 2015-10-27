@@ -9,6 +9,8 @@
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
+        <members>RMS_cancelOrderExtension</members>
+        <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_errorMessages</members>
@@ -28,6 +30,7 @@
         <name>ApexComponent</name>
     </types>
     <types>
+        <members>RMS_cancelOrder</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createWorkOrder</members>
@@ -49,11 +52,13 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Activity</members>
         <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
         <members>Contact_History__c</members>
         <members>Field_IDs__c</members>
+        <members>Financial_Configuration__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>

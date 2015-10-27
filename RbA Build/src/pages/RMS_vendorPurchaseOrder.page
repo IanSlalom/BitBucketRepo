@@ -26,10 +26,10 @@
 			</apex:pageBlockSection> 
 			
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder != true}" > 
-				<apex:outputText value="{!selectedVendorName}" label="Selected Vendor"/>
+				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
 			</apex:pageBlockSection> 
 			<div id="OrderId" style="display:none;">{!orderId}</div>	
-		  
+
 			<apex:outputPanel id="PurchaseOrderFields"> 
 				<apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false || costPurchaseOrder == true}"> 
 					 
@@ -38,7 +38,7 @@
 					<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>
 					<apex:inputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
-	                <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
+					<apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
 					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
 					 
@@ -67,11 +67,17 @@
 				</apex:pageBlockSection>
 
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-					<apex:column style="width:250px" value="{!oiw.product.Name}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.Quantity}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.Pricebookentry.UnitPrice}"/>
-					<apex:column style="width:250px" value="{!oiw.orderItem.OrderItemNumber}"/>
-					<apex:column style="width:250px">
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
+					<apex:column style="width:200px">
+						<apex:facet name="header">{!productText} Description</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' || status == 'new') && oiw.orderItem.NSPR__c == true) }"/>
+							<apex:outputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' ||  status == 'new') && oiw.orderItem.NSPR__c == false) || (status != 'rbanew' && status != 'new')}"/>
+					</apex:column>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
 						<apex:facet name="header">Variant</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
@@ -85,7 +91,7 @@
 					
 			</apex:outputPanel>
 			
-			<apex:outputPanel id="SystemInformationFields">
+			<apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
 				<apex:pageBlockSection title="System Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />

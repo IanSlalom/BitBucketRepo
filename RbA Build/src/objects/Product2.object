@@ -308,6 +308,15 @@
         <filterScope>Everything</filterScope>
         <label>All Products</label>
     </listViews>
+    <listViews>
+        <fullName>New_Products_Needing_Review</fullName>
+        <columns>PRODUCT2.NAME</columns>
+        <columns>Part_Number__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>PRODUCT2.DESCRIPTION</columns>
+        <filterScope>Everything</filterScope>
+        <label>New Products Needing Review</label>
+    </listViews>
     <searchLayouts>
         <customTabListAdditionalFields>PRODUCT2.NAME</customTabListAdditionalFields>
         <customTabListAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</customTabListAdditionalFields>

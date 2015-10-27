@@ -3,13 +3,5 @@
     <apiVersion>33.0</apiVersion>
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>RMS_createVisitWorkOrder</label>
-<<<<<<< HEAD
-    <packageVersions>
-        <majorNumber>15</majorNumber>
-        <minorNumber>50000</minorNumber>
-        <namespace>SVMXC</namespace>
-    </packageVersions>
-=======
->>>>>>> refs/heads/master
+    <label>RMS_cancelOrder</label>
 </ApexPage>

@@ -4,8 +4,6 @@ public with sharing class RMS_priceCalcSlimAPILogic {
 		
 		list<Event> eventsOwned = [SELECT Id, WhatId FROM Event Where OwnerId =: UserId];
 		if(eventsOwned.size() > 0){
-			
-
 			list<appointmentWrapper> appointmentWrapperList = new list<appointmentWrapper>();
 			
 			List<id> accountIdList = new List<id>();
@@ -51,14 +49,11 @@ public with sharing class RMS_priceCalcSlimAPILogic {
 				AppointmentWrapper aw = new AppointmentWrapper(e, opp, account, activeContacts);
 				appointmentWrapperList.add(aw);
 			}	
-			
-			
-			return JSON.serializePretty(appointmentWrapperList);
+			return JSON.serialize(appointmentWrapperList);
 			
 		}else{
 			return 'No appointments found';
 		}
-
 	}
 		
 	public class AppointmentWrapper{
@@ -67,7 +62,6 @@ public with sharing class RMS_priceCalcSlimAPILogic {
    		public Account account {get; set;}
         public List<Contact> contactList {get; set;}
    		
-   		
         public AppointmentWrapper(Event e, Opportunity o, Account a, List<Contact> cl ) {
             event = e;
             opportunity = o;
@@ -75,8 +69,6 @@ public with sharing class RMS_priceCalcSlimAPILogic {
             contactList = cl;
         }                            
     }
-    
-    
     
     public String updateOpportunity(String OppId, String Status){
     	List<Opportunity> opp = [SELECT Id, Name, AccountId FROM Opportunity WHERE Id = :OppId];
