@@ -4,6 +4,8 @@
         <members>AccountTriggerHandler</members>
         <members>AccountTriggerHandlerTest</members>
         <members>Constants</members>
+        <members>AutocompleteV2_Con</members>
+        <members>AutocompleteV2_Con_Test</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
