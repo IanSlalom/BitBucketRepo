@@ -3,9 +3,9 @@
     <types>
         <members>AccountTriggerHandler</members>
         <members>AccountTriggerHandlerTest</members>
-        <members>Constants</members>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
+        <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
@@ -25,7 +25,7 @@
         <members>UtilityMethods</members>
         <name>ApexClass</name>
     </types>
-    <types> 
+    <types>
         <members>AutoCompleteV2</members>
         <name>ApexComponent</name>
     </types>
