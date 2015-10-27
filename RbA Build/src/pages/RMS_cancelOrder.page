@@ -1,3 +1,20 @@
+<!-- *********************************************************
+
+@page	RMS_cancelOrder
+
+@brief	This page is called from the Cancel Order custom button
+
+@author  Creston Kuenzi (Slalom.CDK)
+
+@version	2015-10-25  Slalom.CDK
+	Created.
+
+@see		RMS_cancelOrderExtension
+
+@copyright  (c)2015 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited.
+
+*********************************************************** -->
 <apex:page standardController="Order" extensions="RMS_cancelOrderExtension" action="{!cancelOrder}" docType="html-5.0">
   <apex:sectionHeader title="Order Cancellation"/>
   <apex:outputPanel >

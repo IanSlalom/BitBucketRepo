@@ -86,6 +86,7 @@ private class RMS_cancelOrderExtensionTest {
 		Test.setCurrentPage(pageRef);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(soldOrder);
 		RMS_cancelOrderExtension customController  = new RMS_cancelOrderExtension(stdController);
+		customController.cancelOrder();
 
 	}
 
@@ -109,6 +110,15 @@ private class RMS_cancelOrderExtensionTest {
 		for (Purchase_Order__c cancelledPO :  [SELECT Id, Status__c FROM Purchase_Order__c WHERE Order__c =: soldOrder.Id]) {
 			System.AssertEquals('Cancelled', cancelledPO.Status__c);		
 		}
+
+		// Verify all Order Items are cancelled
+		for (OrderItem cancelledOI :  [SELECT Id, Status__c FROM OrderItem WHERE OrderId =: soldOrder.Id]) {
+			System.AssertEquals('Cancelled', cancelledOI.Status__c);		
+		}
+
+		// Verify the sold order is Cancelled
+		Order soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		System.AssertEquals('Cancelled', soldOrderResult.Status);		
 
 	}
 }
