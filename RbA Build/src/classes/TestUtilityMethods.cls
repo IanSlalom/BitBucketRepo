@@ -223,5 +223,14 @@ public with sharing class TestUtilityMethods {
 		return theQueueSobject;
 	}
 
+	public Municipality__c createMunicipality(Id storeId, Id recordTypeId){
+		Municipality__c muni = new Municipality__c(For_Retail_Location__c = storeId, RecordTypeId = recordTypeId);
+		return muni;
+	}
+
+	public Municipality_Match__c createMunicipalityMatch(Id municipalityId, String zipcode, String city){
+		Municipality_Match__c mm = new Municipality_Match__c(Agency_Name__c = municipalityId, Zip_Code__c = zipcode, City_Township__c = city );
+		return mm;
+	}
  
 }

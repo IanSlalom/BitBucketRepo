@@ -10,6 +10,8 @@
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
+        <members>RMS_MunicipalityMatchManager</members>
+        <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_cancelOrderExtension</members>
         <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>

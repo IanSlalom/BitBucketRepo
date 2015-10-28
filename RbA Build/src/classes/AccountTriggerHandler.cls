@@ -15,38 +15,38 @@
 			Unauthorized use is prohibited.
 
 ***********************************************************/
-
+ 
 
 public without sharing class AccountTriggerHandler{
 
    
     public void OnBeforeInsert(List<Account> listNew){ 
-        system.debug('ads INSIDE BEFORE INSERT');  
-        
+        system.debug('ads INSIDE BEFORE INSERT'); 
+         
+        //TODO: Comments
+        //TODO: change to seperate class Munici logic
+        //TODO: Change Dwelling to Constant
         Id dwellingAccountRecordType = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
         list<id> storeLocationIds = new list<id>();
         for(Account acct : listNew){
         	storeLocationIds.add(acct.Store_Location__c);
         }
-        /*
-        list<Account> storeLocations = [SELECT id, Building_Permit__c FROM Account WHERE id IN :storeLocationIds];
-        list<id> permitMunicipalityIds = new list<id>();
-        for(Account acct : storeLocations){
-        	permitMunicipalityIds.add(acct.Building_Permit__c);
-        }
-        */
+		
+		//TODO: add filter on record type on permit 
         list<Municipality__c> permitMunicipalities = [SELECT Id  FROM Municipality__c WHERE For_Retail_Location__c IN :storeLocationIds];
         list<id> permitMunicipalityIds = new list<id>();
-        for(Municipality__c muni : permitMunicipalities){
-        	permitMunicipalityIds.add(muni.Id);
+        //TODO: fix if statment
+        if(permitMunicipalities.size() > 0){
+	        for(Municipality__c muni : permitMunicipalities){
+	        	permitMunicipalityIds.add(muni.Id);
+	        }
         }
+        
         list<Municipality_Match__c> permitMunicipalityMatchs = [SELECT id, Agency_Name__c, Zip_Code__c, City_Township__c, Agency_Name__r.For_Retail_Location__c FROM Municipality_Match__c WHERE Agency_Name__c IN :permitMunicipalityIds];
         map<id, list<Municipality_Match__c>> storeIDtoListOfMatchMap = new  map<id, list<Municipality_Match__c>>();
 		
 		
-		
-		//map<id, list<Municipality_Match__c>> storeIDtoListOfMatchMap = new  map<id, list<Municipality_Match__c>>();
-		
+		//TODO similar if statement as before
 		for(Municipality_Match__c muniMatch : permitMunicipalityMatchs){
 			if(storeIDtoListOfMatchMap.containsKey(muniMatch.Agency_Name__r.For_Retail_Location__c)){
 				storeIDtoListOfMatchMap.get(muniMatch.Agency_Name__r.For_Retail_Location__c).add(muniMatch);
@@ -71,13 +71,7 @@ public without sharing class AccountTriggerHandler{
         				break;
     				}
         		}
-        		
-        		/*
-        		Store_Location__c on account 
-        		that account has Building_Permit__c a lookup to Municipality__c object with record type Permit 
-        		find all the children of that object of type Municipality_Match__c
-        		Billing Zip/Postal Code + Billing City = Zip Code + City/Township
-        		*/
+  
         	}
         }
     } 

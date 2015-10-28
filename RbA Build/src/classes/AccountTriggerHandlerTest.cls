@@ -1,5 +1,8 @@
 @isTest
 public with sharing class AccountTriggerHandlerTest {
+	
+	//TODO: more test methods 'neg cases'
+	
 	static testmethod void test1(){ 
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
@@ -18,5 +21,8 @@ public with sharing class AccountTriggerHandlerTest {
 		
 		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = '55429' , BillingCity = 'Blaine'  );
 		insert newDwelling;
+		
+		//TODO:assertions
+		
 	}
 }

@@ -8,6 +8,6 @@ public with sharing class UtilityMethods {
 		return recordType.Id;
 	}
 	
-	
+	//TODO STORE CONFIG METHOD
 	
 }
