@@ -49,6 +49,12 @@
         <name>ApexTrigger</name>
     </types>
     <types>
+        <members>Backoffice</members>
+        <members>Homeowner_Resolution</members>
+        <members>Renewal_by_Andersen</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
         <members>CustomLabels</members>
         <name>CustomLabels</name>
     </types>
