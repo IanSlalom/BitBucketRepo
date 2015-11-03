@@ -119,6 +119,7 @@
         <members>Municipality__c-Permit Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
+        <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Discount__c-Order Product Layout</members>
