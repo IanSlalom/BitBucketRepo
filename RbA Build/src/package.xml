@@ -153,11 +153,11 @@
         <name>Workflow</name>
     </types>
     <types>
-        <members>Schedule_Install_TwinCity__c</members>
-        <members>Schedule_Permit_TwinCity__c</members>
-        <members>Schedule_Tech_TwinCity__c</members>
-        <members>Unassigned_Order_TwinCity__c</members>
-        <members>Unassigned_Twin_City__c</members>
+        <members>Schedule_Install_TwinCity</members>
+        <members>Schedule_Permit_TwinCity</members>
+        <members>Schedule_Tech_TwinCity</members>
+        <members>Unassigned_Order_TwinCity</members>
+        <members>Unassigned_Twin_City</members>
         <name>Queue</name>
     </types>
     <version>33.0</version>
