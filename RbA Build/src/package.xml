@@ -72,6 +72,7 @@
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Opportunity</members>
+        <members>Opportunity_Discount__c</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Discount__c</members>
