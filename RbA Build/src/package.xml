@@ -122,7 +122,7 @@
         <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
-        <members>Order_Discount__c-Order Product Layout</members>
+        <members>Order_Discount__c-Order Discount Layout</members>
         <members>Outlook-Homeowner Resolution Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
