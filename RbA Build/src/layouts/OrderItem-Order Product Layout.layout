@@ -27,10 +27,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Variant_Number__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>NSPR__c</field>
             </layoutItems>
         </layoutColumns>
@@ -50,6 +46,10 @@
                 <behavior>Readonly</behavior>
                 <field>Total_Wholesale_Cost__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Variant_Number__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -62,7 +62,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>TotalPrice</field>
+                <field>Total_Retail_Price__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -113,8 +113,8 @@
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <multilineLayoutFields>Product2Id</multilineLayoutFields>
-    <multilineLayoutFields>Quantity</multilineLayoutFields>
     <multilineLayoutFields>UnitPrice</multilineLayoutFields>
+    <multilineLayoutFields>Quantity</multilineLayoutFields>
     <multilineLayoutFields>Description</multilineLayoutFields>
     <multilineLayoutFields>OrderId</multilineLayoutFields>
     <showEmailCheckbox>false</showEmailCheckbox>

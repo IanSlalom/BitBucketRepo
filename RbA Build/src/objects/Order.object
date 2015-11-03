@@ -155,6 +155,23 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The total discount amount rolled up to the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The total discount amount rolled up to the order.</inlineHelpText>
+        <label>Discount Amount</label>
+        <summarizedField>Order_Discount__c.Discount_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Order_Discount__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Applied</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Order_Discount__c.Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>EffectiveDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>
@@ -199,6 +216,37 @@
         <fullName>QuoteId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Subtotal__c</fullName>
+        <description>Retail price subtotal of the order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Retail price subtotal of the order</inlineHelpText>
+        <label>Retail Subtotal</label>
+        <summarizedField>OrderItem.Total_Retail_Price__c</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Cancelled</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Total__c</fullName>
+        <description>The total retail amount (retail subtotal - discount)</description>
+        <externalId>false</externalId>
+        <formula>Retail_Subtotal__c -  Discount_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The total retail amount (retail subtotal - discount)</inlineHelpText>
+        <label>Retail Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>ShipToContactId</fullName>
