@@ -35,12 +35,16 @@
                 <field>Probability</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Discount__c</field>
+                <behavior>Readonly</behavior>
+                <field>Subtotal__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Amount</field>
+                <behavior>Readonly</behavior>
+                <field>Discount_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Opportunity_Total__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -155,11 +159,20 @@
         <fields>Product2</fields>
         <fields>Quantity</fields>
         <fields>UnitPrice</fields>
-        <fields>Discount</fields>
         <fields>TotalPrice</fields>
         <fields>ServiceDate</fields>
         <fields>Description</fields>
         <relatedList>RelatedLineItemList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Discount__c.NAME</fields>
+        <fields>Discount__c.Promotion_Start__c</fields>
+        <fields>Discount__c.Promotion_End__c</fields>
+        <fields>Discount__c.Active__c</fields>
+        <fields>Discount_Amount__c</fields>
+        <fields>Discount__c.Description__c</fields>
+        <relatedList>Opportunity_Discount__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>QUOTE.QUOTENUMBER</fields>

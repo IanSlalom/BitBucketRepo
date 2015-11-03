@@ -137,17 +137,21 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Discount__c</fullName>
-        <description>The discount percent applied to the whole opportunity amount.</description>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The rollup of discounts applied to the opportunity</description>
         <externalId>false</externalId>
-        <inlineHelpText>The discount percent applied to the whole opportunity amount.</inlineHelpText>
-        <label>Discount</label>
-        <precision>5</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
+        <inlineHelpText>The rollup of discounts applied to the opportunity</inlineHelpText>
+        <label>Discount Amount</label>
+        <summarizedField>Opportunity_Discount__c.Discount_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Opportunity_Discount__c.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Cancelled</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Opportunity_Discount__c.Opportunity__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
         <trackTrending>false</trackTrending>
-        <type>Percent</type>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Enabled_Lead_Id__c</fullName>
@@ -232,6 +236,20 @@
         <fullName>NextStep</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
+    </fields>
+    <fields>
+        <fullName>Opportunity_Total__c</fullName>
+        <description>The total of the opportunity (total product price - discounts)</description>
+        <externalId>false</externalId>
+        <formula>Subtotal__c - Discount_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The total of the opportunity (total product price - discounts)</inlineHelpText>
+        <label>Opportunity Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>OwnerId</fullName>
@@ -342,6 +360,18 @@
         <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal__c</fullName>
+        <description>Rollup of the product amounts.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Rollup of the product amounts.</inlineHelpText>
+        <label>Subtotal</label>
+        <summarizedField>OpportunityLineItem.TotalPrice</summarizedField>
+        <summaryForeignKey>OpportunityLineItem.OpportunityId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>SyncedQuoteId</fullName>
