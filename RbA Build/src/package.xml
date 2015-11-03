@@ -78,6 +78,9 @@
         <members>Order_Discount__c</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
+        <members>Quote</members>
+        <members>QuoteLineItem</members>
+        <members>Quote_Discount__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
         <members>SVMXC__Service_Order__c</members>
@@ -133,6 +136,7 @@
         <members>Purchase_Order__c-RbA Purchase Order Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
+        <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
