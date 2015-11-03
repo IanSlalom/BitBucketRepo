@@ -144,7 +144,7 @@
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>User-User Layout</members>
-        <name>Layout</name>
+        <name>Layout</name> 
     </types>
     <types>
         <members>Schedule_Install_TwinCity</members>
