@@ -36,17 +36,6 @@
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
-        <fullName>Measurement__c</fullName>
-        <deleteConstraint>Restrict</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Measurement</label>
-        <referenceTo>Measurement__c</referenceTo>
-        <relationshipLabel>Quote Line Items</relationshipLabel>
-        <relationshipName>Quote_Line_Items</relationshipName>
-        <required>false</required>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Product2Id</fullName>
         <type>Lookup</type>
     </fields>

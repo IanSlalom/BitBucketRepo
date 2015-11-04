@@ -367,6 +367,16 @@
     </fields>
     <label>Purchase Order</label>
     <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Order__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Vendor__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
         <fullName>All_Purchase_Orders</fullName>
         <columns>NAME</columns>
         <columns>Date__c</columns>
