@@ -48,6 +48,7 @@ public with sharing class RMS_cancelOrderExtension {
 
 		List<Purchase_Order__c> purchaseOrdersToCancel = new List<Purchase_Order__c>();
 		List<OrderItem> orderItemsToCancel = new List<OrderItem>();
+		List<Order_Discount__c> discountsToCancel = new List<Order_Discount__c>();
 
 		// Find any purchase orders linked to the order that haven't been cancelled and cancel them
 		for (Purchase_Order__c poToCancel : [SELECT Id, Status__c FROM Purchase_Order__c 
@@ -65,10 +66,19 @@ public with sharing class RMS_cancelOrderExtension {
 			orderItemsToCancel.add(orderItemToCancel);
 		}
 
+		// Find any discounts linked to the order that haven't been cancelled and cancel them
+		for (Order_Discount__c discToCancel : [SELECT Id, Status__c FROM Order_Discount__c 
+											WHERE Order__c =: theOrder.Id AND Status__c != 'Cancelled']) 
+		{
+			discToCancel.Status__c = 'Cancelled';
+			discountsToCancel.add(discToCancel);
+		}
+
 		try{
 			// upsert all of the cancelled order items, pos, and the order
 			upsert purchaseOrdersToCancel;  
 			upsert orderItemsToCancel; 
+			upsert discountsToCancel; 
 			upsert theOrder;
 		} catch (Exception e){
 			// TODO: Add comment here

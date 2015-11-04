@@ -197,6 +197,7 @@
         <fields>Discount__c.Active__c</fields>
         <fields>Discount_Amount__c</fields>
         <fields>Discount__c.Description__c</fields>
+        <fields>Status__c</fields>
         <relatedList>Order_Discount__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>

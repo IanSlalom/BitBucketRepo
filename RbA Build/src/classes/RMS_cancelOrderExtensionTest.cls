@@ -71,6 +71,12 @@ private class RMS_cancelOrderExtensionTest {
 		OrderItem orderItem1 = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100, Purchase_Order__c = purchaseOrder1.Id );
 		insert orderItem1;		
 
+		Discount__c discount1 = new Discount__c(Name = 'my discount');
+		insert discount1;		
+
+		Order_Discount__c orderDiscount1 = new Order_Discount__c(Order__c = Order1.id, Discount__c = discount1.Id, Discount_Amount__c = 50 );
+		insert orderDiscount1;		
+
 	}
 	
 	/*******************************************************
@@ -114,6 +120,11 @@ private class RMS_cancelOrderExtensionTest {
 		// Verify all Order Items are cancelled
 		for (OrderItem cancelledOI :  [SELECT Id, Status__c FROM OrderItem WHERE OrderId =: soldOrder.Id]) {
 			System.AssertEquals('Cancelled', cancelledOI.Status__c);		
+		}
+
+		// Verify all Discounts are cancelled
+		for (Order_Discount__c cancelledOD :  [SELECT Id, Status__c FROM Order_Discount__c WHERE Order__c =: soldOrder.Id]) {
+			System.AssertEquals('Cancelled', cancelledOD.Status__c);		
 		}
 
 		// Verify the sold order is Cancelled
