@@ -53,6 +53,12 @@
         <name>ApexTrigger</name>
     </types>
     <types>
+        <members>Backoffice</members>
+        <members>Homeowner_Resolution</members>
+        <members>Renewal_by_Andersen</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
         <members>CustomLabels</members>
         <name>CustomLabels</name>
     </types>
@@ -63,16 +69,22 @@
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
         <members>Contact_History__c</members>
+        <members>Discount__c</members>
         <members>Field_IDs__c</members>
         <members>Financial_Configuration__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Opportunity</members>
+        <members>Opportunity_Discount__c</members>
         <members>Order</members>
         <members>OrderItem</members>
+        <members>Order_Discount__c</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
+        <members>Quote</members>
+        <members>QuoteLineItem</members>
+        <members>Quote_Discount__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
         <members>SVMXC__Service_Order__c</members>
@@ -89,6 +101,62 @@
         <members>Purchase_Order__c</members>
         <members>Store_Configuration__c</members>
         <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Account-Account Layout</members>
+        <members>Account-Dwelling Layout</members>
+        <members>Account-Store Layout</members>
+        <members>Account-Vendor Layout</members>
+        <members>Back_Office_Check__c-Back Office Check Layout</members>
+        <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
+        <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
+        <members>Contact-Contact Layout</members>
+        <members>Contact-Customer Contact Layout</members>
+        <members>Contact-Vendor Contact Layout</members>
+        <members>Contact_History__c-Associated Contact Layout</members>
+        <members>Discount__c-Discount Layout</members>
+        <members>Financial_Configuration__c-Financial Configuration Layout</members>
+        <members>Global-Global Layout</members>
+        <members>Global-HomeOwner Resolution</members>
+        <members>Municipality_Contact__c-Municipality Contact Layout</members>
+        <members>Municipality_Match__c-Municipality Match Layout</members>
+        <members>Municipality__c-Building Layout</members>
+        <members>Municipality__c-HOA%2FHistorical Layout</members>
+        <members>Municipality__c-Municipality Layout</members>
+        <members>Municipality__c-Permit Layout</members>
+        <members>Opportunity-Opportunity Layout</members>
+        <members>OpportunityLineItem-Opportunity Product Layout</members>
+        <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
+        <members>Order-Order Layout</members>
+        <members>OrderItem-Order Product Layout</members>
+        <members>Order_Discount__c-Order Discount Layout</members>
+        <members>Outlook-Homeowner Resolution Layout</members>
+        <members>Pricebook2-Price Book Layout</members>
+        <members>PricebookEntry-Price Book Entry Layout</members>
+        <members>Product2-Product Layout</members>
+        <members>Purchase_Order__c-Cost Purchase Order Layout</members>
+        <members>Purchase_Order__c-Product Purchase Order Layout</members>
+        <members>Purchase_Order__c-Purchase Order Layout</members>
+        <members>Purchase_Order__c-RbA Purchase Order Layout</members>
+        <members>Quote-Quote Layout</members>
+        <members>QuoteLineItem-Quote Line Item Layout</members>
+        <members>Quote_Discount__c-Quote Discount Layout</members>
+        <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
+        <members>Store_Configuration__c-Store Configuration Layout</members>
+        <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>User-User Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Schedule_Install_TwinCity</members>
+        <members>Schedule_Permit_TwinCity</members>
+        <members>Schedule_Tech_TwinCity</members>
+        <members>Unassigned_Order_TwinCity</members>
+        <members>Unassigned_Twin_City</members>
+        <name>Queue</name>
     </types>
     <types>
         <members>Account-Account Layout</members>
@@ -116,6 +184,7 @@
         <name>StaticResource</name>
     </types>
     <types>
+        <members>Discount__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <name>Workflow</name>

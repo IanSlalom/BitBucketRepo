@@ -367,14 +367,79 @@
     </fields>
     <label>Purchase Order</label>
     <listViews>
-        <fullName>All</fullName>
+        <fullName>All_Purchase_Orders</fullName>
         <columns>NAME</columns>
-        <columns>CREATED_DATE</columns>
-        <columns>Order__c</columns>
-        <columns>RECORDTYPE</columns>
+        <columns>Date__c</columns>
         <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
         <filterScope>Everything</filterScope>
-        <label>All</label>
+        <label>5. All Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Cost_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Cost_Purchase_Order</value>
+        </filters>
+        <label>1. Cost Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Product_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Product_Purchase_Order</value>
+        </filters>
+        <label>3. Product Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>RbA_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.RbA_Purchase_Order</value>
+        </filters>
+        <label>2. RbA Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Service_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Service_Purchase_Order</value>
+        </filters>
+        <label>4. Service Purchase Orders</label>
     </listViews>
     <nameField>
         <label>Purchase Order Number</label>
@@ -534,7 +599,26 @@
             </values>
         </picklistValues>
     </recordTypes>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Vendor__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>RECORDTYPE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Order__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Total__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>OWNER.ALIAS</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Vendor__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>RECORDTYPE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Order__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Total__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.ALIAS</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Vendor__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>RECORDTYPE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Order__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <webLinks>
         <fullName>New_Purchase_Order</fullName>

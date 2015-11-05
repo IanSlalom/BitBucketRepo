@@ -155,6 +155,23 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The total discount amount rolled up to the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The total discount amount rolled up to the order.</inlineHelpText>
+        <label>Discount Amount</label>
+        <summarizedField>Order_Discount__c.Discount_Amount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Order_Discount__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Applied</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Order_Discount__c.Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>EffectiveDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>
@@ -209,6 +226,37 @@
         <fullName>QuoteId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Subtotal__c</fullName>
+        <description>Retail price subtotal of the order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Retail price subtotal of the order</inlineHelpText>
+        <label>Retail Subtotal</label>
+        <summarizedField>OrderItem.Total_Retail_Price__c</summarizedField>
+        <summaryFilterItems>
+            <field>OrderItem.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Cancelled</value>
+        </summaryFilterItems>
+        <summaryForeignKey>OrderItem.OrderId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Total__c</fullName>
+        <description>The total retail amount (retail subtotal - discount)</description>
+        <externalId>false</externalId>
+        <formula>Retail_Subtotal__c -  Discount_Amount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The total retail amount (retail subtotal - discount)</inlineHelpText>
+        <label>Retail Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
@@ -280,41 +328,56 @@
         <type>Picklist</type>
     </fields>
     <listViews>
-        <fullName>AllActivatedOrders</fullName>
+        <fullName>Activated_Orders</fullName>
         <columns>ORDERS.ORDER_NUMBER</columns>
-        <columns>CORE.USERS.ALIAS</columns>
         <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
         <columns>ORDERS.STATUS</columns>
-        <columns>Dhruvsoft__Opportunity__c</columns>
+        <columns>CORE.USERS.LAST_NAME</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>ORDERS.STATUS_CODE</field>
             <operation>equals</operation>
             <value>A</value>
         </filters>
-        <label>All Activated Orders</label>
+        <label>3. Activated Orders</label>
     </listViews>
     <listViews>
-        <fullName>AllDraftOrders</fullName>
-        <columns>CORE.USERS.ALIAS</columns>
+        <fullName>All_Orders</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
         <columns>ORDERS.STATUS</columns>
+        <columns>CORE.USERS.LAST_NAME</columns>
+        <filterScope>Everything</filterScope>
+        <label>4. All Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>DraftOrders</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <columns>CORE.USERS.LAST_NAME</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>ORDERS.STATUS_CODE</field>
             <operation>equals</operation>
             <value>D</value>
         </filters>
-        <label>All Draft Orders</label>
-    </listViews>
-    <listViews>
-        <fullName>AllOrders</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All Orders</label>
+        <label>2. Draft Orders</label>
     </listViews>
     <listViews>
         <fullName>Unassigned_Order_TwinCity</fullName>
         <columns>ORDERS.ORDER_NUMBER</columns>
         <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
         <columns>ORDERS.TOTAL_AMOUNT</columns>
         <columns>ORDERS.EFFECTIVE_DATE</columns>
         <columns>ORDERS.STATUS</columns>
@@ -324,20 +387,73 @@
             <operation>equals</operation>
             <value>Unassigned Order - TwinCity</value>
         </filters>
-        <label>Unassigned Order - TwinCity</label>
+        <label>1. Unassigned Order - TwinCity</label>
     </listViews>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>ARO_Record_Type</fullName>
+        <active>true</active>
+        <label>ARO Record Type</label>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Activated</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Draft</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>CORO_Record_Type</fullName>
+        <active>true</active>
+        <label>CORO Record Type</label>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Activated</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Draft</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
     <searchLayouts>
         <customTabListAdditionalFields>ORDERS.ORDER_NUMBER</customTabListAdditionalFields>
         <customTabListAdditionalFields>SALES.ACCOUNT.NAME</customTabListAdditionalFields>
-        <customTabListAdditionalFields>ORDERS.STATUS</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ORDER.BILL_TO_CONTACT</customTabListAdditionalFields>
         <customTabListAdditionalFields>ORDERS.TOTAL_AMOUNT</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ORDERS.EFFECTIVE_DATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ORDERS.STATUS</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CORE.USERS.ALIAS</customTabListAdditionalFields>
         <excludedStandardButtons>New</excludedStandardButtons>
         <lookupDialogsAdditionalFields>ORDERS.ORDER_NUMBER</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>CONTRACT.OWNERALIAS</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ORDER.BILL_TO_CONTACT</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ORDERS.TOTAL_AMOUNT</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ORDERS.EFFECTIVE_DATE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ORDERS.STATUS</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CORE.USERS.ALIAS</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>ORDERS.ORDER_NUMBER</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CONTRACT.OWNERALIAS</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>ORDERS.ORDER_NUMBER</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>SALES.ACCOUNT.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ORDER.BILL_TO_CONTACT</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ORDERS.TOTAL_AMOUNT</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ORDERS.EFFECTIVE_DATE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ORDERS.STATUS</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
     <webLinks>

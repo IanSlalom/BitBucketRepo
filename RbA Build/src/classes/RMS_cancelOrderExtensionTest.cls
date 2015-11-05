@@ -23,7 +23,7 @@ private class RMS_cancelOrderExtensionTest {
 	/*******************************************************
 					createTestRecords
 	*******************************************************/
-	static testmethod void createTestRecords(){
+	static void createTestRecords(){
 		
 		TestUtilityMethods utility = new TestUtilityMethods();
 		
@@ -71,6 +71,12 @@ private class RMS_cancelOrderExtensionTest {
 		OrderItem orderItem1 = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100, Purchase_Order__c = purchaseOrder1.Id );
 		insert orderItem1;		
 
+		Discount__c discount1 = new Discount__c(Name = 'my discount');
+		insert discount1;		
+
+		Order_Discount__c orderDiscount1 = new Order_Discount__c(Order__c = Order1.id, Discount__c = discount1.Id, Discount_Amount__c = 50 );
+		insert orderDiscount1;		
+
 	}
 	
 	/*******************************************************
@@ -86,6 +92,7 @@ private class RMS_cancelOrderExtensionTest {
 		Test.setCurrentPage(pageRef);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(soldOrder);
 		RMS_cancelOrderExtension customController  = new RMS_cancelOrderExtension(stdController);
+		customController.cancelOrder();
 
 	}
 
@@ -109,6 +116,20 @@ private class RMS_cancelOrderExtensionTest {
 		for (Purchase_Order__c cancelledPO :  [SELECT Id, Status__c FROM Purchase_Order__c WHERE Order__c =: soldOrder.Id]) {
 			System.AssertEquals('Cancelled', cancelledPO.Status__c);		
 		}
+
+		// Verify all Order Items are cancelled
+		for (OrderItem cancelledOI :  [SELECT Id, Status__c FROM OrderItem WHERE OrderId =: soldOrder.Id]) {
+			System.AssertEquals('Cancelled', cancelledOI.Status__c);		
+		}
+
+		// Verify all Discounts are cancelled
+		for (Order_Discount__c cancelledOD :  [SELECT Id, Status__c FROM Order_Discount__c WHERE Order__c =: soldOrder.Id]) {
+			System.AssertEquals('Cancelled', cancelledOD.Status__c);		
+		}
+
+		// Verify the sold order is Cancelled
+		Order soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		System.AssertEquals('Cancelled', soldOrderResult.Status);		
 
 	}
 }
