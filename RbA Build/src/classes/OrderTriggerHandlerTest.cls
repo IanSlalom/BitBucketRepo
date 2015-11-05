@@ -1,15 +1,14 @@
 @isTest
 public with sharing class OrderTriggerHandlerTest {
 
-
+	
 	static testmethod void test1(){ 
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
 		utilities.setUpConfigs();
 		Account store = [SELECT Id FROM account WHERE Name ='77 - Twin Cities, MN'];
 		
-		
-		
+		//TODO TestutilityMethods
 		Municipality__c muniHOA = new Municipality__c(Name ='HOAMuni', RecordTypeId = UtilityMethods.retrieveRecordTypeId('HOA', 'Municipality__c'), For_Retail_Location__c = store.id );
 		insert muniHOA;
 		Municipality__c muniHistorical = new Municipality__c(Name ='HistoricalMuni', RecordTypeId = UtilityMethods.retrieveRecordTypeId('Historical', 'Municipality__c'), For_Retail_Location__c = store.id );
