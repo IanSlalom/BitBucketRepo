@@ -137,7 +137,6 @@
         <relatedList>Municipality_Match__c.Agency_Name__c</relatedList>
     </relatedLists>
     <relatedLists>
-<<<<<<< HEAD
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
         <fields>ACTIVITY.TASK</fields>
@@ -194,42 +193,6 @@
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
-=======
-        <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>ACCOUNT.ADDRESS1_CITY</fields>
-        <fields>ACCOUNT.PHONE1</fields>
-        <relatedList>Account.HOA__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <excludeButtons>New</excludeButtons>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>ACCOUNT.ADDRESS1_CITY</fields>
-        <fields>ACCOUNT.PHONE1</fields>
-        <relatedList>Account.Historical__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>ACCOUNT.ADDRESS1_CITY</fields>
-        <fields>ACCOUNT.PHONE1</fields>
-        <relatedList>Account.Building_Permit__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <excludeButtons>New</excludeButtons>
-        <fields>NAME</fields>
-        <fields>SVMXC__Case__c</fields>
-        <fields>SVMXC__Company__c</fields>
-        <fields>SVMXC__Contact__c</fields>
-        <fields>SVMXC__Order_Status__c</fields>
-        <fields>SVMXC__Order_Type__c</fields>
-        <fields>SVMXC__Service_Group__c</fields>
-        <fields>SVMXC__Group_Member__c</fields>
-        <fields>CREATED_DATE</fields>
-        <fields>OWNER.ALIAS</fields>
-        <relatedList>SVMXC__Service_Order__c.Municipality__c</relatedList>
->>>>>>> refs/heads/master
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>

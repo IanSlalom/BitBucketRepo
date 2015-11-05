@@ -5,6 +5,7 @@
         <members>AccountTriggerHandlerTest</members>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
+        <members>COMM_Controller</members>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
@@ -32,10 +33,18 @@
         <name>ApexClass</name>
     </types>
     <types>
+        <members>AllDemoLink</members>
         <members>AutoCompleteV2</members>
         <name>ApexComponent</name>
     </types>
     <types>
+        <members>AutocompleteV2Demo</members>
+        <members>OBJ_New_ActivityMaster</members>
+        <members>OBJ_New_PMPlan_Template</members>
+        <members>OBJ_New_Service</members>
+        <members>OBJ_New_Service_Plan</members>
+        <members>OBJ_New_Service_Pricebook</members>
+        <members>OBJ_New_Work_Template</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createVisitWorkOrder</members>
@@ -107,6 +116,7 @@
         <members>Account-Dwelling Layout</members>
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
+        <members>AccountContactRole-Account Contact Role Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
@@ -117,7 +127,6 @@
         <members>Discount__c-Discount Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Global-Global Layout</members>
-        <members>Global-HomeOwner Resolution</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -130,7 +139,6 @@
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Discount__c-Order Discount Layout</members>
-        <members>Outlook-Homeowner Resolution Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
         <members>Product2-Product Layout</members>
@@ -142,8 +150,11 @@
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Lead Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-Scheduled Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
@@ -157,27 +168,6 @@
         <members>Unassigned_Order_TwinCity</members>
         <members>Unassigned_Twin_City</members>
         <name>Queue</name>
-    </types>
-    <types>
-        <members>Account-Account Layout</members>
-        <members>Account-Dwelling Layout</members>
-        <members>Account-Store Layout</members>
-        <members>Account-Vendor Layout</members>
-        <members>AccountContactRole-Account Contact Role Layout</members>
-        <members>Municipality_Contact__c-Municipality Contact Layout</members>
-        <members>Municipality_Match__c-Municipality Match Layout</members>
-        <members>Municipality__c-Building Layout</members>
-        <members>Municipality__c-HOA%2FHistorical Layout</members>
-        <members>Order-Order Layout</members>
-        <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Lead Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Paint %2F Stain Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Scheduled Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
-        <members>Store_Configuration__c-Store Setting Layout</members>
-        <name>Layout</name>
     </types>
     <types>
         <members>*</members>

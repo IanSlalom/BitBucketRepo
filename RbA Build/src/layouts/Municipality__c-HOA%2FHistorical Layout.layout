@@ -31,13 +31,10 @@
                 <behavior>Edit</behavior>
                 <field>Phone__c</field>
             </layoutItems>
-<<<<<<< HEAD
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Needs_Board_Approval__c</field>
             </layoutItems>
-=======
->>>>>>> refs/heads/master
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

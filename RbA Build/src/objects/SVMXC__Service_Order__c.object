@@ -4116,6 +4116,15 @@ NULL)</formula>
         </sharedTo>
     </listViews>
     <listViews>
+        <fullName>Schedule_Permit_TwinCity_Service_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule Permit TwinCity</label>
+        <queue>Schedule_Permit_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
         <fullName>Schedule_Tech_TwinCity_Service_Order</fullName>
         <filterScope>Queue</filterScope>
         <label>Schedule - Tech - TwinCity</label>

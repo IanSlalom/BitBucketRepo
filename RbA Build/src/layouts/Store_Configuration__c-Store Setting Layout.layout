@@ -33,7 +33,6 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-<<<<<<< HEAD
         <label>VISIT Work Order Order Type Settings</label>
         <layoutColumns>
             <layoutItems>
@@ -81,29 +80,6 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
-=======
-        <label>Work Order Settings</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Install_Work_Order_Queue_Id__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tech_Measure_Work_Order_Queue_Id__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Permit_Work_Order_Queue_Id__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Action_Work_Order_Queue_Id__c</field>
-            </layoutItems>
-        </layoutColumns>
->>>>>>> refs/heads/master
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
