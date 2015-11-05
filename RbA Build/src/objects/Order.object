@@ -180,6 +180,16 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Installation_Date__c</fullName>
+        <description>Updated via Process Flow</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Installation Date Time pulled from the Work Order</inlineHelpText>
+        <label>Installation Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>IsReductionOrder</fullName>
     </fields>
     <fields>
@@ -216,6 +226,21 @@
         <fullName>QuoteId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Renovate Right Booklet Signed Date</label>
+        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Back_Office_Check__c.Name</field>
+            <operation>equals</operation>
+            <value>Renovate Right Booklet</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Reason__c</fullName>
@@ -355,6 +380,38 @@
             <value>A</value>
         </filters>
         <label>3. Activated Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>AllActivatedOrders</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDERS.STATUS</columns>
+        <columns>Dhruvsoft__Opportunity__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ORDERS.STATUS_CODE</field>
+            <operation>equals</operation>
+            <value>A</value>
+        </filters>
+        <label>All Activated Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>AllDraftOrders</fullName>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>ORDERS.STATUS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ORDERS.STATUS_CODE</field>
+            <operation>equals</operation>
+            <value>D</value>
+        </filters>
+        <label>All Draft Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>AllOrders</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Orders</label>
     </listViews>
     <listViews>
         <fullName>All_Orders</fullName>

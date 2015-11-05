@@ -1,17 +1,28 @@
-/*
-Trigger framework Anthony Strafaccia 2015
+/*******************************************************//**
 
-This trigger is a framework for Order object. It is designed to be the only trigger needed for the Order object and allows for the customization of the order of execution.  
+@trigger OrderTrigger
 
-All logic should be handled on the OrderTriggerHandler class.
-*/
+@brief	trigger framework to secure order of operation
+
+@author  Anthony Strafaccia (Slalom.ADS)
+
+@version	2015-10/15  Slalom.ADS
+	Created.
+
+@see		OrderTriggerTest
+
+@copyright  (c)2015 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited.
+
+***********************************************************/
 
 trigger OrderTrigger on Order (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {
-
-	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
-	//map<String, Foundation_States__c> allstates = Foundation_States__c.getAll();
 	
+	//GET ALL RMS SETTINGS CUSTOM SETTINGS
+	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
+	
+	//CHECK IF DATA LOADING PROFILE	
 	if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
 		if(Trigger.isDelete){
 			Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
@@ -19,8 +30,13 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 			Trigger.new[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
 		}
 	}
+	//IF NOT DATA LOADING PROFILE RUN LOGIC
 	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
-		OrderTriggerHandler handler = new OrderTriggerHandler();
+		
+		//HANDLERS AND MANAGERS
+	    RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
+	    RMS_backOfficeChecklistManager backOfficeCheckListManager = new RMS_backOfficeChecklistManager();
+	     
 	        
 		// Before Insert
 		/*
@@ -31,9 +47,9 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		//  Before Update
 		
 		if(Trigger.isUpdate && Trigger.isBefore){
-		    handler.OnBeforeUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap); 
+			workOrderCreationManager.createWorkOrderOnOrderActivation(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-		 
+		  
 	
 		// Before Delete
 		/*
@@ -44,8 +60,9 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		
 		// After Insert 
 		else if(Trigger.isInsert && Trigger.isAfter){
-			handler.OnAfterInsert(Trigger.new, Trigger.newMap);
-		}
+			workOrderCreationManager.createWorkOrderOnOrderCreation(Trigger.new, Trigger.newMap);
+			backOfficeCheckListManager.createBackOfficeChecksOnOrderCreation(Trigger.new, Trigger.newMap);
+		} 
 		
 		// After Update
 		/*

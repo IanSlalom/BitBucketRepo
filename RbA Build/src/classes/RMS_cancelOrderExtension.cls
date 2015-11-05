@@ -20,11 +20,12 @@
 public with sharing class RMS_cancelOrderExtension {
 
 
-	/******* Set up Standard Controller for Order  *****************/
+	/******* Set up Standard Controller for Purchase_Order__c  *****************/
 	private Apexpages.StandardController standardController;
 	private final Order theOrder;
 	
-	/******* Constructor  *****************/
+	
+	//Constructor
 	public RMS_cancelOrderExtension(ApexPages.StandardController stdController) {
 		this.theOrder = (Order)stdController.getRecord();
 	}
@@ -81,12 +82,12 @@ public with sharing class RMS_cancelOrderExtension {
 			upsert discountsToCancel; 
 			upsert theOrder;
 		} catch (Exception e){
-			// TODO: Add comment here
 			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
+//			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.CANCEL_ORDER_EXCEPTION));
 			return null;
 		}
 
-		// Redirect the user back to the order page
+		// Redirect the user back to the original page
 		PageReference pageRef = new PageReference('/' + theId);
 		pageRef.setRedirect(true);
 		return pageRef;
