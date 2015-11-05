@@ -65,6 +65,17 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Inventoried_Item__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check this box if it is an inventoried item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if it is an inventoried item.</inlineHelpText>
+        <label>Inventoried Item</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>IsActive</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
