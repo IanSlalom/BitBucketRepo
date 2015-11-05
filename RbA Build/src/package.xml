@@ -86,8 +86,8 @@
         <members>Municipality__c</members>
         <members>Opportunity</members>
         <members>Opportunity_Discount__c</members>
-        <members>OrderItem</members>
         <members>Order</members>
+        <members>OrderItem</members>
         <members>Order_Discount__c</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
