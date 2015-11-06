@@ -17,7 +17,7 @@
         <members>RMS_backOfficeChecklistManagerTest</members>
         <members>RMS_cancelOrderExtension</members>
         <members>RMS_cancelOrderExtensionTest</members>
-        <members>RMS_completeOrderChecksController</members> 
+        <members>RMS_completeOrderChecksController</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_errorMessages</members>
         <members>RMS_priceCalcSlimAPIController</members>
