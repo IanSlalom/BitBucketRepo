@@ -14,7 +14,7 @@
 
 @see		RMS_vendorPurchaseOrderController
 
-@copyright  (c)2015 Slalom.  All Rights Reserved.
+@copyright  (c)2015 Slalom.  All Rights Reserved. 
 			Unauthorized use is prohibited.
 
 ***********************************************************/

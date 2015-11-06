@@ -14,7 +14,7 @@
 @see		RMS_cancelOrderExtensionTest
 
 @copyright  (c)2015 Slalom.  All Rights Reserved.
-			Unauthorized use is prohibited.
+			Unauthorized use is prohibited. 
 
 ***********************************************************/
 public with sharing class RMS_cancelOrderExtension {

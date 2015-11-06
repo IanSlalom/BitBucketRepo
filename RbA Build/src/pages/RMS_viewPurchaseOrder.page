@@ -3,7 +3,7 @@
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
 
-	<apex:pageMessages />
+	<apex:pageMessages /> 
 
 	<apex:form >
 		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
