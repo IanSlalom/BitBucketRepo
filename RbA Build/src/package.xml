@@ -23,6 +23,10 @@
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
+        <members>RMS_prodConfigExtension</members>
+        <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigRedirectExtension</members>
+        <members>RMS_prodConfigUtility</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
@@ -40,6 +44,8 @@
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createWorkOrder</members>
+        <members>RMS_prodConfigEdit</members>
+        <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
@@ -80,6 +86,7 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Discount__c</members>
+        <members>PricebookEntry</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
         <members>Quote</members>
