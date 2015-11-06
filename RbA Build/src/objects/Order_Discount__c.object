@@ -157,4 +157,39 @@
     <pluralLabel>Order Discounts</pluralLabel>
     <searchLayouts/>
     <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Cancel_Discount</fullName>
+        <availability>online</availability>
+        <description>Cancels the order discount</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Cancel Discount</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/apex.js&quot;)}
+    var x;
+    if (confirm(&quot;Are you sure you want to cancel this order?&quot;) == true) {
+        x = &quot;OK&quot;;
+    } else {
+        x = &quot;Cancel&quot;;
+    }
+    if(x == &apos;OK&apos;){
+
+       // Create a new object variable
+       var od = new sforce.SObject(&apos;Order_Discount__c&apos;);
+
+       // Get this order discount Id
+       od.Id = &quot;{!Order_Discount__c.Id}&quot;;
+ 
+       // Update the status to Cancelled
+       od.Status__c = &quot;Cancelled&quot;;
+ 
+       // Save the change
+       sforce.connection.update([od]);
+ 
+       //refresh the page
+       window.location.reload();
+    }</url>
+    </webLinks>
 </CustomObject>

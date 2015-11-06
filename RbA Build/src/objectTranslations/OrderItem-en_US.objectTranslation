@@ -54,6 +54,11 @@
         </picklistValues>
     </fields>
     <fields>
+        <help><!-- The total retail price for this order item (quantity &amp; retail price) --></help>
+        <label><!-- Total Retail Price --></label>
+        <name>Total_Retail_Price__c</name>
+    </fields>
+    <fields>
         <help><!-- The total wholesale cost for this line item. --></help>
         <label><!-- Total Wholesale Cost --></label>
         <name>Total_Wholesale_Cost__c</name>
@@ -81,4 +86,11 @@
         <label><!-- Variant Number --></label>
         <name>Variant_Number__c</name>
     </fields>
+    <layouts>
+        <layout>Order Product Layout</layout>
+        <sections>
+            <label><!-- Pricing --></label>
+            <section>Pricing</section>
+        </sections>
+    </layouts>
 </CustomObjectTranslation>

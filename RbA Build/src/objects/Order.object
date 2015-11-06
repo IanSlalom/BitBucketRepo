@@ -180,6 +180,16 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Installation_Date__c</fullName>
+        <description>Updated via Process Flow</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Installation Date Time pulled from the Work Order</inlineHelpText>
+        <label>Installation Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>IsReductionOrder</fullName>
     </fields>
     <fields>
@@ -216,6 +226,58 @@
         <fullName>QuoteId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Renovate Right Booklet Signed Date</label>
+        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Back_Office_Check__c.Name</field>
+            <operation>equals</operation>
+            <value>Renovate Right Booklet</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Reason__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Not sure if all the vaules belong at the Order Level.</inlineHelpText>
+        <label>Reason</label>
+        <picklist>
+            <controllingField>Status</controllingField>
+            <picklistValues>
+                <fullName>HOA/Historical Approval</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Deferred</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Change Order</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Measure Summary</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Finance Funding</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Retail_Subtotal__c</fullName>
@@ -381,6 +443,22 @@
         <label>2. Draft Orders</label>
     </listViews>
     <listViews>
+        <fullName>Sales_Draft_to_Review</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CORE.USERS.ALIAS</field>
+            <operation>equals</operation>
+            <value>Unassigned Order - TwinCity</value>
+        </filters>
+        <label>1. Sales Draft to Review</label>
+    </listViews>
+    <listViews>
         <fullName>Unassigned_Order_TwinCity</fullName>
         <columns>ORDERS.ORDER_NUMBER</columns>
         <columns>SALES.ACCOUNT.NAME</columns>
@@ -402,6 +480,29 @@
         <active>true</active>
         <label>ARO Record Type</label>
         <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Deferred</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance Funding</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA%2FHistorical Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Measure Summary</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Status</picklist>
             <values>
                 <fullName>Activated</fullName>
@@ -421,6 +522,29 @@
         <fullName>CORO_Record_Type</fullName>
         <active>true</active>
         <label>CORO Record Type</label>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Deferred</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance Funding</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA%2FHistorical Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Measure Summary</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Status</picklist>
             <values>

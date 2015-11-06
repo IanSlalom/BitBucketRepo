@@ -20,11 +20,12 @@
 public with sharing class RMS_cancelOrderExtension {
 
 
-	/******* Set up Standard Controller for Order  *****************/
+	/******* Set up Standard Controller for Purchase_Order__c  *****************/
 	private Apexpages.StandardController standardController;
 	private final Order theOrder;
 	
-	/******* Constructor  *****************/
+	
+	//Constructor
 	public RMS_cancelOrderExtension(ApexPages.StandardController stdController) {
 		this.theOrder = (Order)stdController.getRecord();
 	}
@@ -48,6 +49,7 @@ public with sharing class RMS_cancelOrderExtension {
 
 		List<Purchase_Order__c> purchaseOrdersToCancel = new List<Purchase_Order__c>();
 		List<OrderItem> orderItemsToCancel = new List<OrderItem>();
+		List<Order_Discount__c> discountsToCancel = new List<Order_Discount__c>();
 
 		// Find any purchase orders linked to the order that haven't been cancelled and cancel them
 		for (Purchase_Order__c poToCancel : [SELECT Id, Status__c FROM Purchase_Order__c 
@@ -65,18 +67,27 @@ public with sharing class RMS_cancelOrderExtension {
 			orderItemsToCancel.add(orderItemToCancel);
 		}
 
+		// Find any discounts linked to the order that haven't been cancelled and cancel them
+		for (Order_Discount__c discToCancel : [SELECT Id, Status__c FROM Order_Discount__c 
+											WHERE Order__c =: theOrder.Id AND Status__c != 'Cancelled']) 
+		{
+			discToCancel.Status__c = 'Cancelled';
+			discountsToCancel.add(discToCancel);
+		}
+
 		try{
 			// upsert all of the cancelled order items, pos, and the order
 			upsert purchaseOrdersToCancel;  
 			upsert orderItemsToCancel; 
+			upsert discountsToCancel; 
 			upsert theOrder;
 		} catch (Exception e){
-			// TODO: Add comment here
 			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
+//			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.CANCEL_ORDER_EXCEPTION));
 			return null;
 		}
 
-		// Redirect the user back to the order page
+		// Redirect the user back to the original page
 		PageReference pageRef = new PageReference('/' + theId);
 		pageRef.setRedirect(true);
 		return pageRef;
