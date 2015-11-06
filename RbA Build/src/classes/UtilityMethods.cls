@@ -8,6 +8,21 @@ public with sharing class UtilityMethods {
 		return recordType.Id;
 	}
 	
+	// Retrieves Id for recordtype using object name and dev name
+	public static Id RecordTypeFor(String sObjectName, String devName) {
+
+		String devString = sObjectName + devName;
+		if (masterRTList == null || masterRTList.isEmpty()) {
+			for (RecordType rt : [SELECT Id, developerName, sObjectType FROM RecordType]) {
+				masterRTList.put(rt.sObjectType + rt.DeveloperName, rt.Id);
+			}
+		}
+				
+		return masterRTList.get(sObjectName + devName);
+	}
+	
+	// Persistant variable used by RecordTypeFor()
+	public static Map<String,Id> masterRTList = new Map<String,Id>();
 
 	
 	public static SVMXC__Service_Order__c buildWorkOrder(Account dwelling, Order ord, Id rtID, Id ownerId, String ordType, Id munici ){
