@@ -1,6 +1,6 @@
 /*******************************************************//**
 
-@class      prodConfigExtension class
+@class      RMS_prodConfigExtension class
 
 @brief      Extension for the prodConfig VF Page
 
@@ -11,7 +11,7 @@
 @version    2015-07-22  Slalom.CDK
     Created.
 
-@see        prodConfigExtensionTest
+@see        RMS_prodConfigExtensionTest
 
 @copyright  (c)2015 Slalom.  All Rights Reserved.
             Unauthorized use is prohibited.

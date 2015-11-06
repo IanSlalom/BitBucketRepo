@@ -33,8 +33,119 @@
     <fieldSets>
         <fullName>Glass_Options_Picklist</fullName>
         <description>Used in the product configuration pages to display the glass options in the glass option picklist.</description>
+        <displayedFields>
+            <field>Tempered__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>SmartSun__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>SmartSun_And_Tempered__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Obscure__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Obscure_Tempered__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Specialty_Glazing__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Specialty_Tempered_Glazing__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Laminated__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Laminated_And_Tempered__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
         <label>Glass Options Picklist</label>
     </fieldSets>
+    <fields>
+        <fullName>Aluminum_Screen_Cloth__c</fullName>
+        <description>Insect Screen Options: Add for Aluminum Screen Cloth</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for Aluminum Screen Cloth</inlineHelpText>
+        <label>Aluminum Screen Cloth</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aluminum_Screen_Cloth__c</fullName>
+        <description>Insect Screen Options: Add for Aluminum Screen Cloth</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for Aluminum Screen Cloth</inlineHelpText>
+        <label>Aluminum Screen Cloth</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aluminum_Screen_Cloth_Half__c</fullName>
+        <description>Insect Screen Options: Add for Aluminum Screen Cloth (1/2)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for Aluminum Screen Cloth (1/2)</inlineHelpText>
+        <label>Aluminum Screen Cloth (1/2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruSceneTM_Insect_Screen__c</fullName>
+        <description>Insect Screen Options: Add for TrueSceneTM Insect Screen</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TrueSceneTM Insect Screen</inlineHelpText>
+        <label>TruSceneTM Insect Screen</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruSceneTM_Insect_Screen_Dual__c</fullName>
+        <description>Insect Screen Options: Add for TrueSceneTM Dual Insect Screen</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TrueSceneTM Dual Insect Screen</inlineHelpText>
+        <label>TruSceneTM Dual Insect Screen</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruSceneTMI_Vaneered_Frame__c</fullName>
+        <description>Insect Screen Options: Add for TruSceneTM Vaneered Fram</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TruSceneTM Vaneered Fram</inlineHelpText>
+        <label>TruSceneTM Vaneered Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
     <fields>
         <fullName>Base_Unit__c</fullName>
         <externalId>false</externalId>
@@ -159,7 +270,7 @@
         <fullName>IsActive</fullName>
     </fields>
     <fields>
-        <fullName>LaminatedAndTempered__c</fullName>
+        <fullName>Laminated_And_Tempered__c</fullName>
         <description>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</description>
         <externalId>false</externalId>
         <inlineHelpText>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</inlineHelpText>
@@ -181,7 +292,7 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>ObscureTempered__c</fullName>
+        <fullName>Obscure_Tempered__c</fullName>
         <description>Windows -- Glass Options: Add for Obscure Tempered</description>
         <externalId>false</externalId>
         <inlineHelpText>Windows -- Glass Options: Add for Obscure Tempered</inlineHelpText>
@@ -232,7 +343,7 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
-        <fullName>SmartSunAndTempered__c</fullName>
+        <fullName>SmartSun_And_Tempered__c</fullName>
         <description>Windows -- Glass Options: Add for SmartSun And Tempered</description>
         <externalId>false</externalId>
         <inlineHelpText>Windows -- Glass Options: Add for SmartSun and Tempered</inlineHelpText>
@@ -254,7 +365,7 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>SpecialtyGlazing__c</fullName>
+        <fullName>Specialty_Glazing__c</fullName>
         <description>Windows -- Glass Options: Add for Specialty Glazing</description>
         <externalId>false</externalId>
         <inlineHelpText>Windows -- Glass Options: Add for Specialty Glazing</inlineHelpText>
@@ -265,7 +376,7 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>SpecialtyTemperedGlazing__c</fullName>
+        <fullName>Specialty_Tempered_Glazing__c</fullName>
         <description>Windows -- Glass Options: Add for Specialty Tempered Glazing</description>
         <externalId>false</externalId>
         <inlineHelpText>Windows -- Glass Options: Add for Specialty Tempered Glazing</inlineHelpText>
