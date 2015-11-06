@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddPricebookEntryOnPricebook</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddPricebookEntryOnProduct</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddStandardPrice</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fieldSets>
+        <fullName>Glass_Options_Picklist</fullName>
+        <description>Used in the product configuration pages to display the glass options in the glass option picklist.</description>
+        <label>Glass Options Picklist</label>
+    </fieldSets>
+    <fields>
+        <fullName>Base_Unit__c</fullName>
+        <externalId>false</externalId>
+        <label>Base Unit</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant__c</fullName>
+        <externalId>false</externalId>
+        <label>Corrosion Resistant</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Dual_Color_Exterior__c</fullName>
+        <externalId>false</externalId>
+        <label>Dual Color Exterior</label>
+        <picklist>
+            <picklistValues>
+                <fullName>White</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canvas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sandstone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Terratone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cocoa Bean</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dark Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Forest Green</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Black</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Red Rock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Dual_Color_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Dual Color Interior</label>
+        <picklist>
+            <picklistValues>
+                <fullName>White</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canvas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Dual_Color__c</fullName>
+        <externalId>false</externalId>
+        <label>Dual Color Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Grilles__c</fullName>
+        <description>Price is per sash</description>
+        <externalId>false</externalId>
+        <label>Grilles Between Glass</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Height</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsActive</fullName>
+    </fields>
+    <fields>
+        <fullName>LaminatedAndTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</inlineHelpText>
+        <label>Laminated And Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Laminated__c</fullName>
+        <description>Windows -- Glass Options: Add for Laminated (per sq. foot)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Laminated (per sq. foot)</inlineHelpText>
+        <label>Laminated</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>ObscureTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Obscure Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Obscure Tempered</inlineHelpText>
+        <label>Obscure Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Obscure__c</fullName>
+        <description>Windows -- Glass Options: Add for Obscure</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Obscure</inlineHelpText>
+        <label>Obscure</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Pricebook2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Size__c</fullName>
+        <externalId>false</externalId>
+        <label>Size</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Custom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>SmartSunAndTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for SmartSun And Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for SmartSun and Tempered</inlineHelpText>
+        <label>SmartSun And Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SmartSun__c</fullName>
+        <description>Windows -- Glass Options: Add for SmartSun</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for SmartSun</inlineHelpText>
+        <label>SmartSun</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SpecialtyGlazing__c</fullName>
+        <description>Windows -- Glass Options: Add for Specialty Glazing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Specialty Glazing</inlineHelpText>
+        <label>Specialty Glazing</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SpecialtyTemperedGlazing__c</fullName>
+        <description>Windows -- Glass Options: Add for Specialty Tempered Glazing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Specialty Tempered Glazing</inlineHelpText>
+        <label>Specialty Tempered Glazing</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Glazing__c</fullName>
+        <externalId>false</externalId>
+        <label>Specialty Glazing</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>StandardPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Tempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Tempered</inlineHelpText>
+        <label>Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>UnitPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>UseStandardPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Width</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <searchLayouts>
+        <searchResultsAdditionalFields>PRODUCT.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT.CUSTOMER_PRODUCT_ID</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT.DEFAULT_PRICE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.DESCRIPTION</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.FAMILY_ENUM</searchResultsAdditionalFields>
+    </searchLayouts>
+</CustomObject>
