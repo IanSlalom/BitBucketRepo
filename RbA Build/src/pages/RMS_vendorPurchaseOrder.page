@@ -3,10 +3,10 @@
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
 
-	<apex:pageMessages />
+	<apex:pageMessages /> 
 
 	<apex:form >
-		<apex:pageBlock title="{!IF(newPurchaseOrder, 'Create A Purchase Order' , 'Purchase Order')}" >
+		<apex:pageBlock title="{!pageTitle} Purchase Order">
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
 			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
@@ -31,13 +31,13 @@
 			<div id="OrderId" style="display:none;">{!orderId}</div>	
 
 			<apex:outputPanel id="PurchaseOrderFields"> 
-				<apex:pageBlockSection title="Purchase Order" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false || costPurchaseOrder == true}"> 
+				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false || costPurchaseOrder == true}"> 
 					 
-					<apex:outputField value="{!Purchase_Order__c.Name}" label="Name" rendered="{! newPurchaseOrder == false}"/>
+					<apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" rendered="{! newPurchaseOrder == false}"/>
 					<apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
 					<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>
-					<apex:inputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
+					<apex:outputText value=""/>
 					<apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
 					<apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
@@ -51,10 +51,10 @@
 				 	<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
 					<apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax"  rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
-				 	<apex:outputText value=""/>
+<!--  				 	<apex:outputText value=""/>
 					<apex:inputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discount" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && costPurchaseOrder == true}"/>
 					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && costPurchaseOrder == true}"/>
-				 	<apex:outputText value=""/>
+-->				 	<apex:outputText value=""/>
 				
 					<apex:inputField value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
@@ -82,11 +82,18 @@
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
-					<apex:column style="width:250px">
-						<apex:facet name="header">Unit Cost</apex:facet> 
+					<apex:column style="width:100px">
+						<apex:facet name="header">Wholesale Cost</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
 							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
 					</apex:column>
+					<!-- TODO: Add check for ARO and do not show for COROs -->
+					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">Discount Amount</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
+							<apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
+					</apex:column>
+					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
 				</apex:pageBlockTable>
 					
 			</apex:outputPanel>

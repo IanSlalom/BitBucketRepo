@@ -1,3 +1,24 @@
+/*******************************************************//**
+
+@class	RMS_vendorPurchaseOrderControllerTest
+
+@brief	Test Class for RMS_vendorPurchaseOrderController
+
+@author  Anthony Strafaccia (Slalom.ADS)
+@author  Creston Kuenzi (Slalom.CDK)
+
+@version	2015-09-16  Slalom.ADS
+	Created.
+@version	2015-10-12  Slalom.CDK
+	Added ability to add products manually and Cost PO Functionality.
+
+@see		RMS_vendorPurchaseOrderController
+
+@copyright  (c)2015 Slalom.  All Rights Reserved. 
+			Unauthorized use is prohibited.
+
+***********************************************************/
+
 @isTest
 public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	
@@ -30,7 +51,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 			Name='Test Product',
 			Vendor__c = account1.id
 		);
-		
 		
 		insert product1;
 		
@@ -113,7 +133,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		// Test SOQL Filters for autocomplete is correct
 		System.AssertEquals(' AND RecordTypeId = ', customController.vendorFilter);
 		System.AssertEquals(UtilityMethods.retrieveRecordTypeId('Vendor', 'Account'), customController.vendorFilter2);
-//		System.AssertEquals(' AND Vendor__c = ', customController.productFilter);
+		System.AssertEquals(' AND Inventoried_Item__c = false AND IsActive = true AND Vendor__c =', customController.productFilter);
 
 		customController.selectedVendor = 'selectedVendor';
 		System.AssertEquals('selectedVendor', customController.productFilter2);
