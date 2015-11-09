@@ -59,8 +59,11 @@
             </apex:selectList> 
         </apex:pageBlockSection>  -->
 
-        <apex:pageBlockSection title="Gliding Screen" columns="1">
+        <apex:pageBlockSection title="Insect Screens" columns="1">
 <!--            <apex:inputField value="{!OrderItem.Gliding_Screen__c}"  rendered="{!prodConfig.glidingScreenPrice != null}"/> -->
+            <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType">
+                <apex:selectOptions value="{!InsectScreenOptionItems}"/>
+            </apex:selectList>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Finishes" columns="1">
@@ -78,7 +81,10 @@
 
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Hardware Options" columns="1">
- <!--           <apex:inputField value="{!OrderItem.Corrosion_Resistant__c}"  rendered="{!prodConfig.corrosionResistantPrice != null}"/>-->
+            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" rendered="{!prodConfig.hardwareColors != null}">
+                <apex:selectOptions value="{!hardwareColorItems}"/>
+            </apex:selectList>
+            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  rendered="{!prodConfig.corrosionResistantHardwarePrice != null}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Grille Style" columns="1">
             <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle">

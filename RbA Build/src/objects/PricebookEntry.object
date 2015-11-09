@@ -135,6 +135,41 @@
         </displayedFields>
         <label>Grille Style Options</label>
     </fieldSets>
+    <fieldSets>
+        <fullName>Insect_Screen_Options</fullName>
+        <description>Used in the product configuration page to display the insect screen style options picklist.</description>
+        <displayedFields>
+            <field>Aluminum_Screen__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Aluminum_Screen_Half__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Aluminum_Dual__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>TruScene__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>TruScene_Half__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>TruScene_Wood_Vaneer__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>Insect Screen Options</label>
+    </fieldSets>
     <fields>
         <fullName>AluminumScreenCloth__c</fullName>
         <description>Insect Screen Options: Add for Aluminum Screen Cloth</description>

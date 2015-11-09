@@ -111,18 +111,12 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>Corrosion_Resistant_Selected__c</fullName>
+        <fullName>Corrosion_Resistant_Hardware__c</fullName>
         <defaultValue>false</defaultValue>
+        <description>Checked if this corrosion resistant hardware option has been applied to this product.</description>
         <externalId>false</externalId>
-        <label>corrosion Resistant Selected</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Corrosion_Resistant__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Corrosion Resistant</label>
+        <inlineHelpText>Checked if this corrosion resistant hardware option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hardware</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
     </fields>
@@ -277,6 +271,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Hardware_Color__c</fullName>
+        <description>The hardware color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
+        <label>Hardware Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Height__c</fullName>
         <externalId>false</externalId>
         <label>Height</label>
@@ -285,6 +291,18 @@
         <scale>3</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Insect_Screen_Style__c</fullName>
+        <description>The insect screen style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The insect screen style selected for this product.</inlineHelpText>
+        <label>Insect Screen Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -447,6 +465,18 @@
         <externalId>false</externalId>
         <inlineHelpText>The screen type applied to the selected product.</inlineHelpText>
         <label>Screen Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Vaneer_Type__c</fullName>
+        <description>The screen vaneer type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen vaneer type applied to this product.</inlineHelpText>
+        <label>Screen Vaneer Type</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>

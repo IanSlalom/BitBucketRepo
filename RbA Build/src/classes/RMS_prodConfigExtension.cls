@@ -315,6 +315,34 @@ public class RMS_prodConfigExtension {
         }
     } 
 
+    /******* Set up Hardware Color Items  *****************/
+    private static transient List<SelectOption> lHardwareColorItems;
+    public List<SelectOption> hardwareColorItems{
+        get
+        {   
+            // need to limit to pricebook
+            if (lHardwareColorItems == null && prodConfig.dualColorPrice != null) {
+                lHardwareColorItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.exteriorColors);
+            }               
+            return lHardwareColorItems;
+        }
+    }
+
+    /******* Insect Screen Style Items  *****************/
+    private static transient List<SelectOption> lInsectScreenOptionItems;
+    public List<SelectOption> insectScreenOptionItems {
+        get
+        {   
+            // need to limit to pricebook
+            if (lInsectScreenOptionItems == null) {
+                List<Schema.FieldSetMember> insectScreenOptionList = SObjectType.PricebookEntry.FieldSets.Insect_Screen_Options.getFields();
+                lInsectScreenOptionItems = RMS_prodConfigManager.retrievePickListItems2(insectScreenOptionList, prodConfig);
+            }               
+            return lInsectScreenOptionItems;
+        }
+    } 
+
+
     /*******************************************************
                     enterProduct method
     *******************************************************/
