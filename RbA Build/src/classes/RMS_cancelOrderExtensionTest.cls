@@ -9,7 +9,7 @@
 @author  Creston Kuenzi (Slalom.CDK)
 
 @version	2015-10-25  Slalom.CDK
-	Created.
+	Created. 
 
 @see		RMS_cancelOrderExtensionTest
 

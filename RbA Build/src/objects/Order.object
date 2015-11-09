@@ -243,6 +243,43 @@
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Reason__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Not sure if all the vaules belong at the Order Level.</inlineHelpText>
+        <label>Reason</label>
+        <picklist>
+            <controllingField>Status</controllingField>
+            <picklistValues>
+                <fullName>HOA/Historical Approval</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Deferred</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Change Order</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Measure Summary</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Finance Funding</fullName>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Retail_Subtotal__c</fullName>
         <description>Retail price subtotal of the order</description>
         <externalId>false</externalId>
@@ -406,6 +443,22 @@
         <label>2. Draft Orders</label>
     </listViews>
     <listViews>
+        <fullName>Sales_Draft_to_Review</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CORE.USERS.ALIAS</field>
+            <operation>equals</operation>
+            <value>Unassigned Order - TwinCity</value>
+        </filters>
+        <label>1. Sales Draft to Review</label>
+    </listViews>
+    <listViews>
         <fullName>Unassigned_Order_TwinCity</fullName>
         <columns>ORDERS.ORDER_NUMBER</columns>
         <columns>SALES.ACCOUNT.NAME</columns>
@@ -427,6 +480,29 @@
         <active>true</active>
         <label>ARO Record Type</label>
         <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Deferred</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance Funding</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA%2FHistorical Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Measure Summary</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Status</picklist>
             <values>
                 <fullName>Activated</fullName>
@@ -446,6 +522,29 @@
         <fullName>CORO_Record_Type</fullName>
         <active>true</active>
         <label>CORO Record Type</label>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Deferred</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance Funding</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA%2FHistorical Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Measure Summary</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Status</picklist>
             <values>
