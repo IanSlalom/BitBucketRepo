@@ -228,21 +228,6 @@
         <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
-        <externalId>false</externalId>
-        <label>Renovate Right Booklet Signed Date</label>
-        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
-        <summaryFilterItems>
-            <field>Back_Office_Check__c.Name</field>
-            <operation>equals</operation>
-            <value>Renovate Right Booklet</value>
-        </summaryFilterItems>
-        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
-        <summaryOperation>max</summaryOperation>
-        <trackHistory>false</trackHistory>
-        <type>Summary</type>
-    </fields>
-    <fields>
         <fullName>Reason__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Not sure if all the vaules belong at the Order Level.</inlineHelpText>
@@ -278,6 +263,21 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Renovate Right Booklet Signed Date</label>
+        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Back_Office_Check__c.Name</field>
+            <operation>equals</operation>
+            <value>Renovate Right Booklet</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Retail_Subtotal__c</fullName>
@@ -587,6 +587,25 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Add_Product</fullName>
+        <availability>online</availability>
+        <description>Add product button to direct to product config page</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Add Product</masterLabel>
+        <openType>newWindow</openType>
+        <page>RMS_prodConfigRedirect</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
     <webLinks>
         <fullName>Cancel_Order</fullName>
         <availability>online</availability>

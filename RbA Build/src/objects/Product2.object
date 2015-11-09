@@ -85,6 +85,27 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Handing__c</fullName>
+        <description>Select which handing options should be available for this product on the configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select which handing options should be available for this product on the configuration page.</inlineHelpText>
+        <label>Handing</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Vented</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stationary</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Height__c</fullName>
         <externalId>false</externalId>
         <label>Height</label>
@@ -536,6 +557,17 @@ Name,
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Handing__c</picklist>
+            <values>
+                <fullName>Stationary</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vented</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Product_Type__c</picklist>
             <values>
                 <fullName>Bay Bow</fullName>
@@ -686,6 +718,17 @@ Name,
             </values>
             <values>
                 <fullName>None</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Handing__c</picklist>
+            <values>
+                <fullName>Stationary</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vented</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
