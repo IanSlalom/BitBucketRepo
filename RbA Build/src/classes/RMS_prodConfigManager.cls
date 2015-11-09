@@ -18,34 +18,46 @@ public with sharing class RMS_prodConfigManager {
     {
         public Id  		priceBookId                   	{ get; private set; }
         public Decimal  baseUnitPrice                   { get; private set; }
-        public Decimal  corrosionResistantPrice         { get; private set; }
-        public String 	dualColorExteriors              { get; private set; }
-        public String 	dualColorInteriors        		{ get; private set; }
+        public Decimal  EJFramePrice                   	{ get; private set; }
+ //       public Decimal  corrosionResistantPrice         { get; private set; }
+        public String 	exteriorColors              	{ get; private set; }
+        public String 	interiorColors        			{ get; private set; }
+        public String 	colonialGrilleLightsWide        { get; private set; }
+        public String 	colonialGrilleLightsHigh        { get; private set; }
+        public String 	grillePatterns        			{ get; private set; }
+        public Decimal  breatherTubesPrice              { get; private set; }
+        public String 	handingOptions	        		{ get; private set; }
         public Decimal  dualColorPrice                  { get; private set; }
-        public Decimal  glidingScreenPrice              { get; private set; }
-        public Decimal  grillesBetweenGlassPrice        { get; private set; }
-        public Decimal  specialtyGlazingPrice           { get; private set; }
-        public String 	sizes                           { get; private set; }
+//        public Decimal  glidingScreenPrice              { get; private set; }
+        public Decimal  PermanentlyAppliedInteriorWoodGrillePrice        { get; private set; }
+ //       public Decimal  specialtyGlazingPrice           { get; private set; }
+//        public String 	sizes                           { get; private set; }
         public OrderItem orderLI              			{ get; set; }
         public PricebookEntry pBookEntry              	{ get; set; }
-
+ 
 		// constructors
         public ProductConfigWrapper(){}
 
-        public ProductConfigWrapper(PriceBookEntry pBookEntryInput, OrderItem orderLItem)
+        public ProductConfigWrapper(PriceBookEntry pBookEntryInput, OrderItem orderLItem, Product2 masterProductInput)
         {
 				priceBookId								= pBookEntryInput.Id;
                 baseUnitPrice                           = pBookEntryInput.Base_Unit__c;
-                corrosionResistantPrice         		= pBookEntryInput.Corrosion_Resistant__c;
-                dualColorExteriors                      = pBookEntryInput.Dual_Color_Exterior__c;
-                dualColorInteriors                      = pBookEntryInput.Dual_Color_Interior__c;
+				EJFramePrice							= pBookEntryInput.EJ_Frame_Price__c;
+//                corrosionResistantPrice         		= pBookEntryInput.Corrosion_Resistant__c;
+                exteriorColors		                    = pBookEntryInput.Exterior_Color__c;
+                interiorColors                      	= pBookEntryInput.Interior_Color__c;
+                colonialGrilleLightsWide                = pBookEntryInput.Colonial_Grille_Lights_Wide__c;
+                colonialGrilleLightsHigh                = pBookEntryInput.Colonial_Grille_Lights_High__c;
+                grillePatterns                      	= pBookEntryInput.Grille_Patterns__c;
                 dualColorPrice                          = pBookEntryInput.Dual_Color__c;
-                glidingScreenPrice                      = pBookEntryInput.Gliding_Screen__c;
-                grillesBetweenGlassPrice        		= pBookEntryInput.Grilles__c;
-                specialtyGlazingPrice           		= pBookEntryInput.Specialty_Glazing__c;
-            	sizes                                   = pBookEntryInput.Size__c;
-            	orderLI = orderLItem;
-            	pBookEntry = pBookEntryInput;
+                breatherTubesPrice                      = pBookEntryInput.Breather_Tubes__c;
+//                glidingScreenPrice                      = pBookEntryInput.Gliding_Screen__c;
+                PermanentlyAppliedInteriorWoodGrillePrice        		= pBookEntryInput.Permanently_Applied_Interior_Wood_Grille__c;
+ //               specialtyGlazingPrice           		= pBookEntryInput.Specialty_Glazing__c;
+ //           	sizes                                   = pBookEntryInput.Size__c;
+            	orderLI 								= orderLItem;
+            	pBookEntry 								= pBookEntryInput;
+            	handingOptions 							= masterProductInput.Handing__c;
         }
     }
 
@@ -103,7 +115,7 @@ public with sharing class RMS_prodConfigManager {
     *******************************************************/
 	// retrieves the correct price book entry based on the pricebook and product id and 
 	// creates the product config wrapper to store the config options
-	public static productConfigWrapper findProductConfiguration(OrderItem orderLineItem, String priceBookId, String childProductId) {
+	public static productConfigWrapper findProductConfiguration(OrderItem orderLineItem, String priceBookId, String childProductId, Product2 masterProduct) {
 
 		// Check if we have the necessary Ids to retrieve the pricebookentry and return null if not
 		if (orderLineItem == null || priceBookId == null || childProductId == null) return null;
@@ -144,7 +156,7 @@ public with sharing class RMS_prodConfigManager {
 
 		// Create a wrapper with the pricebook entry and order line item and return it
 		productConfigWrapper prodConfig;
-		prodConfig = new productConfigWrapper(pBookEntry, orderLineItem);
+		prodConfig = new productConfigWrapper(pBookEntry, orderLineItem, masterProduct);
 
 		Object o = pBookEntry.get('Id');
 
@@ -206,11 +218,11 @@ public with sharing class RMS_prodConfigManager {
     public static decimal calculatePrice(ProductConfigWrapper prodConfig) {
     	prodConfig = clearNonSelectableValues(prodConfig);
     	decimal price = (prodConfig.baseUnitPrice == null) ? 0 : prodConfig.baseUnitPrice;
-        price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;    	
-        price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;    	
-        price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;    	
-        price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;    	
-        price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;    	
+//        price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;    	
+//        price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;    	
+//        price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;    	
+ //       price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;    	
+//        price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;    	
 
         return price;
     }
@@ -221,12 +233,12 @@ public with sharing class RMS_prodConfigManager {
 	// clears any fields that are not selectable / do not have a price. 
 	// This is needed for the scenario where the child product changes from one size to another.
     public static ProductConfigWrapper clearNonSelectableValues(ProductConfigWrapper prodConfig) {
-        prodConfig.OrderLI.Specialty_Glazing__c = (prodConfig.specialtyGlazingPrice == null) ? false : prodConfig.OrderLI.Specialty_Glazing__c;    	
-        prodConfig.OrderLI.Corrosion_Resistant__c = (prodConfig.corrosionResistantPrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant__c;    	
-        prodConfig.OrderLI.Dual_Color_Exterior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Exterior__c;    	
-        prodConfig.OrderLI.Dual_Color_Interior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Interior__c;    	
-        prodConfig.OrderLI.Gliding_Screen__c = (prodConfig.glidingScreenPrice == null) ? false : prodConfig.OrderLI.Gliding_Screen__c;    	
-        prodConfig.OrderLI.Grilles_Between_Glass__c = (prodConfig.grillesBetweenGlassPrice == null) ? false : prodConfig.OrderLI.Grilles_Between_Glass__c;    	
+//        prodConfig.OrderLI.Specialty_Glazing__c = (prodConfig.specialtyGlazingPrice == null) ? false : prodConfig.OrderLI.Specialty_Glazing__c;    	
+//        prodConfig.OrderLI.Corrosion_Resistant__c = (prodConfig.corrosionResistantPrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant__c;    	
+//        prodConfig.OrderLI.Dual_Color_Exterior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Exterior__c;    	
+//        prodConfig.OrderLI.Dual_Color_Interior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Interior__c;    	
+//        prodConfig.OrderLI.Gliding_Screen__c = (prodConfig.glidingScreenPrice == null) ? false : prodConfig.OrderLI.Gliding_Screen__c;    	
+//        prodConfig.OrderLI.Grilles_Between_Glass__c = (prodConfig.grillesBetweenGlassPrice == null) ? false : prodConfig.OrderLI.Grilles_Between_Glass__c;    	
 		return prodConfig;
     }     
 

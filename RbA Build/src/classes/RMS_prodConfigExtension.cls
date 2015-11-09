@@ -21,10 +21,12 @@ public class RMS_prodConfigExtension {
 
 
     /******* public variables  *****************/
-	public boolean newOrderItem {get; set;}     
-	public boolean orderActivated {get; set;}     
-	public String priceBookId;   
+    public boolean newOrderItem {get; set;}     
+    public boolean orderActivated {get; set;}     
+    public String priceBookId;   
     public Decimal inputUI;    
+    public String exteriorColor {get; set;}     
+    public String interiorColor {get; set;}     
 
 
 
@@ -58,30 +60,30 @@ public class RMS_prodConfigExtension {
         this.orderLineItem = (OrderItem)stdController.getRecord();
         newOrderItem = stdController.getId() == null;
 
-		/// Testing
-		
-//		fetch();
-		
-		
-		
-		/// Testing
+        /// Testing
+        
+//      fetch();
+        
+        
+        
+        /// Testing
 
             
-		// If this is a new order item, retrieve the order and pricebook id from the url params
+        // If this is a new order item, retrieve the order and pricebook id from the url params
         if (newOrderItem) {
-        	newOrderItem = true;
+            newOrderItem = true;
             this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
             priceBookId = ApexPages.currentPage().getParameters().get('pid');         
-		// If we are editing an order item, retrieve the master product and price book id from the order item
+        // If we are editing an order item, retrieve the master product and price book id from the order item
         } else {
                 for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
                     masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
                     priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
-					if (orderItem.Order.Status == 'Activated') {
-             			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
-						orderActivated = true;
-					}
-                }       	
+                    if (orderItem.Order.Status == 'Activated') {
+                        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
+                        orderActivated = true;
+                    }
+                }           
         }
     }   
 
@@ -102,20 +104,20 @@ public class RMS_prodConfigExtension {
         private set;          
     }
 
-	public String masterProductId {get; set;}
+    public String masterProductId {get; set;}
 
     /******* properties/variables to store the master product id/record and makeability *****************/
     private static transient Product2 lMasterProduct;
     public Product2 masterProduct {
         get
         {   
-        	
+            
             if (lmasterProduct != null) return lmasterProduct;
             if (masterProductId == '' || masterProductId == null)
-            	return null;
+                return null;
             
-            // retrieves fields from the master product makeability based on the master product id	
-            lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c FROM Product2
+            // retrieves fields from the master product makeability based on the master product id  
+            lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c FROM Product2
                                                             WHERE Id =: masterProductId
                                                             limit 1].get(0);
             return lMasterProduct;
@@ -132,7 +134,7 @@ public class RMS_prodConfigExtension {
             Product2 childProduct; 
                 integer count = 0;
 
-				// Retrieves the correct child product using the master product id and united inch max/min
+                // Retrieves the correct child product using the master product id and united inch max/min
                 for (Product2 cProd : [SELECT Id, UI_Minimum__c, UI_Maximum__c From Product2 WHERE RecordTypeId =: UtilityMethods.RecordTypeFor('Product2', 'Child_Product')
                                                                                             AND Master_Product__c =: masterProductId
                                                                                             AND UI_Minimum__c <=: InputUI                                                                                           
@@ -141,7 +143,7 @@ public class RMS_prodConfigExtension {
                     count++;
                 }
 
-			// returns an error message if either 0 child products are found matching the criteria or multiple are found.
+            // returns an error message if either 0 child products are found matching the criteria or multiple are found.
             if (count == 0) {
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.CHILD_PRODUCT_NOT_FOUND));
                 return null;
@@ -177,38 +179,43 @@ public class RMS_prodConfigExtension {
     public List<SelectOption> sizeItems {
         get
         {   
-            if (lSizeItems == null && prodConfig.sizes != null) {
-                lSizeItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.sizes);
-            }               
+//            if (lSizeItems == null && prodConfig.sizes != null) {
+//                lSizeItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.sizes);
+ //           }               
             return lSizeItems;
         }
     }
     
-    /******* Set up Dual Color Exterior Items  *****************/
-    private static transient List<SelectOption> lDualColorExteriorItems;
-    public List<SelectOption> dualColorExteriorItems {
+    /******* Set up Exterior Color Items  *****************/
+    private static transient List<SelectOption> lExteriorColorItems;
+    public List<SelectOption> exteriorColorItems{
         get
         {   
             // need to limit to pricebook
-            if (lDualColorExteriorItems == null && prodConfig.dualColorPrice != null) {
-                lDualColorExteriorItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.dualColorExteriors);
+            if (lExteriorColorItems == null && prodConfig.dualColorPrice != null) {
+                lExteriorColorItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.exteriorColors);
             }               
-            return lDualColorExteriorItems;
+            return lExteriorColorItems;
         }
     }
 
-    /******* Set up Dual Color Interior Items  *****************/
-    private static transient List<SelectOption> lDualColorInteriorItems;
-    public List<SelectOption> dualColorInteriorItems {
+    /******* Set up Interior Color Items  *****************/
+    private static transient List<SelectOption> lInteriorColorItems;
+    public List<SelectOption> interiorColorItems{
         get
         {   
             // need to limit to pricebook
-            if (lDualColorInteriorItems == null && prodConfig.dualColorPrice != null) {
-                lDualColorInteriorItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.dualColorInteriors);
+            if (lInteriorColorItems == null && prodConfig.dualColorPrice != null) {
+                lInteriorColorItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.interiorColors);
+                //    lInteriorColorItems.add(new SelectOption('yo','yo')); 
+                
+                //if (String.isNotBlank(exteriorColor))
+                  //  lInteriorColorItems.remove(2); 
             }               
-            return lDualColorInteriorItems;
+            return lInteriorColorItems;
         }
-    } 
+    }
+
 
     /******* Glass Option Items  *****************/
     private static transient List<SelectOption> lglassOptionItems;
@@ -217,31 +224,115 @@ public class RMS_prodConfigExtension {
         {   
             // need to limit to pricebook
             if (lglassOptionItems == null) {
-            	List<Schema.FieldSetMember> glassOptionList = SObjectType.PricebookEntry.FieldSets.Glass_Options_Picklist.getFields();
+                List<Schema.FieldSetMember> glassOptionList = SObjectType.PricebookEntry.FieldSets.Glass_Options.getFields();
                 lglassOptionItems = RMS_prodConfigManager.retrievePickListItems2(glassOptionList, prodConfig);
             }               
             return lglassOptionItems;
         }
     } 
 
+    /******* Grille Style Items  *****************/
+    private static transient List<SelectOption> lGrilleStyleItems;
+    public List<SelectOption> grilleStyleItems {
+        get
+        {   
+            // need to limit to pricebook
+            if (lGrilleStyleItems == null) {
+                List<Schema.FieldSetMember> grilleStyleList = SObjectType.PricebookEntry.FieldSets.Grille_Style_Options.getFields();
+                lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems2(grilleStyleList, prodConfig);
+            }               
+            return lGrilleStyleItems;
+        }
+    } 
+
+    /******* Grille Pattern Items  *****************/
+    private static transient List<SelectOption> lGrillePatternItems;
+    public List<SelectOption> grillePatternItems{
+        get
+        {   
+            // need to limit to pricebook
+            if (lGrillePatternItems== null) {
+                lGrillePatternItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.grillePatterns);
+                //    lInteriorColorItems.add(new SelectOption('yo','yo')); 
+                
+                //if (String.isNotBlank(exteriorColor))
+                  //  lInteriorColorItems.remove(2); 
+            }               
+            return lGrillePatternItems;
+        }
+    }
+    /******* Colonial Grille Lights Wide Items Items  *****************/
+    private static transient List<SelectOption> lColonialGrilleLightsWideItems;
+    public List<SelectOption> colonialGrilleLightsWideItems{
+        get
+        {   
+            // need to limit to pricebook
+            if (lColonialGrilleLightsWideItems== null) {
+                lColonialGrilleLightsWideItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.colonialGrilleLightsWide);
+            }               
+            return lColonialGrilleLightsWideItems;
+        }
+    }
+
+    /******* Colonial Grille Lights High Items Items  *****************/
+    private static transient List<SelectOption> lColonialGrilleLightsHighItems;
+    public List<SelectOption> colonialGrilleLightsHighItems{
+        get
+        {   
+            // need to limit to pricebook
+            if (lColonialGrilleLightsHighItems== null) {
+                lColonialGrilleLightsHighItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.colonialGrilleLightsHigh);
+            }               
+            return lColonialGrilleLightsHighItems;
+        }
+    }
+
+
+    /******* Finish Items  *****************/
+    private static transient List<SelectOption> lfinishOptionItems;
+    public List<SelectOption> finishOptionItems {
+        get
+        {   
+            // need to limit to pricebook
+            if (lfinishOptionItems== null) {
+                List<Schema.FieldSetMember> finishOptionList = SObjectType.PricebookEntry.FieldSets.Finish_Options.getFields();
+                lfinishOptionItems= RMS_prodConfigManager.retrievePickListItems2(finishOptionList, prodConfig);
+            }               
+            return lfinishOptionItems;
+        }
+    } 
+
+    /******* Handing Option Items  *****************/
+    private static transient List<SelectOption> lHandingOptionItems;
+    public List<SelectOption> handingOptionItems {
+        get
+        {   
+            // need to limit to pricebook
+            if (lHandingOptionItems == null) {
+                lHandingOptionItems = RMS_prodConfigUtility.retrievePickListItems(prodConfig.handingOptions);
+            }               
+            return lHandingOptionItems;
+        }
+    } 
+
     /*******************************************************
                     enterProduct method
     *******************************************************/
-	// runs whenever the Enter button is clicked at the master product level
+    // runs whenever the Enter button is clicked at the master product level
     public virtual pageReference enterProduct() {
-    	
+        
         inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
-    	String errorMessage = RMS_prodConfigManager.checkMakeability(masterProduct, orderLineItem);
+        String errorMessage = RMS_prodConfigManager.checkMakeability(masterProduct, orderLineItem);
         if(!String.isBlank(errorMessage)) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
-            return null;        	
+            return null;            
         }
-        prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id);
+        prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProduct);
         
         if (prodConfig == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
             return null;
-    	}
+        }
         productSelected = true;
         return null;
     }
@@ -249,31 +340,32 @@ public class RMS_prodConfigExtension {
     /*******************************************************
                     saveProduct method
     *******************************************************/
-	// runs whenever the Save button is clicked at the child product level
+    // runs whenever the Save button is clicked at the child product level
     public pageReference saveProduct() {
-		PageReference ref;
-    	orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
-    	if (newOrderItem) {
-    		orderLineItem.PriceBookEntryId = prodConfig.priceBookId;
-    		insert orderLineItem;
-			ref = new PageReference('/' +orderLineItem.OrderId);
-    	}
-    	else {
-    		if (orderLineItem.PriceBookEntryId != prodConfig.priceBookId) {
-    			OrderItem newOrderLineItem = orderLineItem.clone(false,true);
-    			newOrderLineItem.PriceBookEntryId = prodConfig.priceBookId;
-				// for this scenario we will need to make sure we clear out selected options that are not available
-				// on the new order line item  
-    			insert newOrderLineItem;
-    			delete orderLineItem;
-				ref = new PageReference('/' +newOrderLineItem.OrderId);
-    			
-    		}
-    		else {
-    			update orderLineItem;
-				ref = new PageReference('/' +orderLineItem.OrderId);
-    		}
-    	}    	
+        PageReference ref;
+        if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
+        orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
+        if (newOrderItem) {
+            orderLineItem.PriceBookEntryId = prodConfig.priceBookId;
+            insert orderLineItem;
+            ref = new PageReference('/' +orderLineItem.OrderId);
+        }
+        else {
+            if (orderLineItem.PriceBookEntryId != prodConfig.priceBookId) {
+                OrderItem newOrderLineItem = orderLineItem.clone(false,true);
+                newOrderLineItem.PriceBookEntryId = prodConfig.priceBookId;
+                // for this scenario we will need to make sure we clear out selected options that are not available
+                // on the new order line item  
+                insert newOrderLineItem;
+                delete orderLineItem;
+                ref = new PageReference('/' +newOrderLineItem.OrderId);
+                
+            }
+            else {
+                update orderLineItem;
+                ref = new PageReference('/' +orderLineItem.OrderId);
+            }
+        }       
         return ref;
     }
 
