@@ -1,17 +1,7 @@
 public with sharing class RMS_createWorkOrderController {
 	
-	/*
-	Sold_Order__c	orderId
 	
-	Company__c		accountId
-	
-	Street__c		BillingStreet
-	City__c			BillingCity
-	State__c		BillingState
-	Zip__c			BillingPostalCode
-	Country__c		BillingCountry
-	*/
-	
+	public string woType {get;set;}
 	public string orderId {get;set;}
 	public string accountId{get;set;}
 	public string billingStreet{get;set;}
@@ -19,8 +9,14 @@ public with sharing class RMS_createWorkOrderController {
 	public string billingState{get;set;}
 	public string billingPostalCode{get;set;}
 	public string billingCountry{get;set;}
+	public string hoa{get;set;}
+	public string historical{get;set;}
+	public string permit{get;set;}
+	public string opportunity{get;set;}
 	public string woId{get;set;}
 	public string woName{get;set;}
+	
+	public string woRTid;
 
 /******* Set up Standard Controller for Purchase_Order__c  *****************/
 	private Apexpages.StandardController standardController;
@@ -30,7 +26,6 @@ public with sharing class RMS_createWorkOrderController {
 	//Constructor
 	public RMS_createWorkOrderController(ApexPages.StandardController stdController) {
 		this.wo = (SVMXC__Service_Order__c)stdController.getRecord();
-		wo.RecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
 		map<string, string> urlParam = ApexPages.currentPage().getParameters();
 
 		orderId = urlParam.get('orderId');
@@ -40,11 +35,38 @@ public with sharing class RMS_createWorkOrderController {
 		billingPostalCode = urlParam.get('billingPostalCode');
 		billingCountry = urlParam.get('billingCountry');
 		billingState = urlParam.get('billingState');
+		woType = urlParam.get('type');
+		
+		opportunity = urlParam.get('relatedOpp');
+		
+		permit = urlParam.get('permit');
+		hoa = urlParam.get('hoa');
+		historical = urlParam.get('historical');
+		
 		woName = wo.Name;
+		
+		if(woType == 'visit'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+			wo.RecordTypeId = woRTid;
+		}else if(woType == 'actions'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+			wo.RecordTypeId  = woRTid;
+		}else if(woType == 'lead'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Lead', 'SVMXC__Service_Order__c');
+			wo.RecordTypeId = woRTid;
+		}else if(woType == 'paintStain'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');
+			wo.RecordTypeId = woRTid; 
+		}else if(woType == 'permit'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
+			wo.RecordTypeId = woRTid;
+			if(permit != null && permit != ''){
+				wo.Municipality__c = permit;
+			}		
+		}
 	}
 	
-	
-	
+
 	public PageReference save() {
 		wo.Sold_Order__c = orderId;
 		wo.SVMXC__Company__c = accountId;
@@ -54,7 +76,15 @@ public with sharing class RMS_createWorkOrderController {
 		wo.SVMXC__Zip__c = billingPostalCode;
 		wo.SVMXC__Country__c = billingCountry;
 		
-		wo.RecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+		wo.Opportunity__c = opportunity;
+		if(hoa != null && hoa != '' && wo.SVMXC__Order_Type__c == 'HOA'){
+			wo.Municipality__c = hoa;
+		}else if(historical != null && historical != '' && wo.SVMXC__Order_Type__c == 'Historical'){
+			wo.Municipality__c = historical;
+		}
+		
+		
+		wo.RecordTypeId = woRTid;
 		
 		insert wo;
 		
