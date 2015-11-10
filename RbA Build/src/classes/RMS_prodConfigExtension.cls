@@ -85,7 +85,10 @@ public class RMS_prodConfigExtension {
 				return null;
 			
 			// retrieves fields from the master product makeability based on the master product id  
-			lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c FROM Product2
+			lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c,
+										Width_to_Height_Cap_Width__c, Width_to_Height_Cap_Height__c, Height_to_Width_Cap_Height__c, 
+										Height_to_Width_Cap_Width__c, United_Inch_Maximum__c 
+															FROM Product2
 															WHERE Id =: masterProductId
 															limit 1].get(0);
 			return lMasterProduct;
@@ -303,6 +306,7 @@ public class RMS_prodConfigExtension {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 			return null;			
 		}
+		if (childProduct == null) return null;
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProduct);
 		
 		if (prodConfig == null) {

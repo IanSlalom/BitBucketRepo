@@ -122,6 +122,25 @@ public with sharing class RMS_prodConfigManager {
 		if (orderLineItem.Height__c > masterProduct.Max_Height__c) {
 			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
 		}
+
+		// Check for maximum united inches 
+		if ((orderLineItem.Height__c + orderLineItem.Width__c) > masterProduct.United_Inch_Maximum__c) {
+			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.UNITED_INCH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.UNITED_INCH_ABOVE_MAX;
+		}
+
+		// Check for height to width cap
+		if ((orderLineItem.Height__c > masterProduct.Height_to_Width_Cap_Height__c) &&
+			 (orderLineItem.Width__c > masterProduct.Height_to_Width_Cap_Width__c)) 
+		{
+			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
+		}
+
+		// Check for width to height cap
+		if ((orderLineItem.Width__c > masterProduct.Height_to_Width_Cap_Width__c) &&
+			 (orderLineItem.Height__c > masterProduct.Height_to_Width_Cap_Height__c))
+		{
+			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
+		}
 		
 		return errorMessage;
 	}
