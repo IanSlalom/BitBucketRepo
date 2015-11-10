@@ -261,8 +261,8 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> hardwareColorItems{
 		get
 		{   
-			if (lHardwareColorItems == null && prodConfig.dualColorPrice != null) {
-				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.exteriorColors);
+			if (lHardwareColorItems == null) {
+				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.hardwareColors);
 			}			   
 			return lHardwareColorItems;
 		}
