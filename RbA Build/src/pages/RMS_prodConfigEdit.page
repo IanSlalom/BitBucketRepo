@@ -64,6 +64,9 @@
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType">
                 <apex:selectOptions value="{!InsectScreenOptionItems}"/>
             </apex:selectList>
+            <apex:selectList value="{!OrderItem.Screen_Vaneer_Type__c}" label="Vaneer Type" size="1" id="screenVaneerType">
+                <apex:selectOptions value="{!ScreenVaneerOptionItems}"/>
+            </apex:selectList>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Finishes" columns="1">
