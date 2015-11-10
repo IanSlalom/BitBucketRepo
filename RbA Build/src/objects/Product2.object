@@ -106,6 +106,32 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Height_to_Width_Cap_Height__c</fullName>
+        <description>Height to Width Cap --- If the Height is greater than this number, then the width must be less than or equal to the Height to Width Cap (Width)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Height to Width Cap --- If the Height is greater than this number, then the width must be less than or equal to the Height to Width Cap (Width)</inlineHelpText>
+        <label>Height to Width Cap (Height)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Height_to_Width_Cap_Width__c</fullName>
+        <description>Height to Width Cap --- If the Height to Width Cap (Width) is greater than that number, then the width must be less than or equal to this number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Height to Width Cap --- If the Height to Width Cap (Width) is greater than that number, then the width must be less than or equal to this number.</inlineHelpText>
+        <label>Height to Width Cap (Width)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Inventoried_Item__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Check this box if it is an inventoried item.</description>
@@ -133,7 +159,9 @@
     </fields>
     <fields>
         <fullName>Max_Height__c</fullName>
+        <description>The maximum height for the makeability exception rules.</description>
         <externalId>false</externalId>
+        <inlineHelpText>The maximum height for the makeability exception rules.</inlineHelpText>
         <label>Max Height</label>
         <precision>18</precision>
         <required>false</required>
@@ -144,7 +172,9 @@
     </fields>
     <fields>
         <fullName>Max_Width__c</fullName>
+        <description>The maximum width for the makeability exception rules.</description>
         <externalId>false</externalId>
+        <inlineHelpText>The maximum width for the makeability exception rules.</inlineHelpText>
         <label>Max Width</label>
         <precision>18</precision>
         <required>false</required>
@@ -155,7 +185,9 @@
     </fields>
     <fields>
         <fullName>Min_Height__c</fullName>
+        <description>The minimum height for the makeability exception rules.</description>
         <externalId>false</externalId>
+        <inlineHelpText>The minimum height for the makeability exception rules.</inlineHelpText>
         <label>Min Height</label>
         <precision>18</precision>
         <required>false</required>
@@ -166,7 +198,9 @@
     </fields>
     <fields>
         <fullName>Min_Width__c</fullName>
+        <description>The minimum width for the makeability exception rules.</description>
         <externalId>false</externalId>
+        <inlineHelpText>The minimum width for the makeability exception rules.</inlineHelpText>
         <label>Min Width</label>
         <precision>18</precision>
         <required>false</required>
@@ -469,6 +503,19 @@ Name,
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>United_Inch_Maximum__c</fullName>
+        <description>The maximum united inches for the makeability exception rules.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The maximum united inches for the makeability exception rules.</inlineHelpText>
+        <label>United Inch Maximum</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Vendor__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -479,6 +526,32 @@ Name,
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Width_to_Height_Cap_Height__c</fullName>
+        <description>Width to Height Cap --- If the Width to Height Cap (Width) is greater than that number, then the height must be less than or equal to this height</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Width to Height Cap --- If the Width to Height Cap (Width) is greater than that number, then the height must be less than or equal to this height</inlineHelpText>
+        <label>Width to Height Cap (Height)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Width_to_Height_Cap_Width__c</fullName>
+        <description>Width to Height Cap --- If the Width is greater than this number, then the height must be less than or equal to the Width to Height Cap (Height)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Width to Height Cap --- If the Width is greater than this number, then the height must be less than or equal to the Width to Height Cap (Height)</inlineHelpText>
+        <label>Width to Height Cap (Width)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <listViews>
         <fullName>AllProducts</fullName>
