@@ -106,16 +106,6 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
-        <fullName>Height__c</fullName>
-        <externalId>false</externalId>
-        <label>Height</label>
-        <length>10</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Inventoried_Item__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Check this box if it is an inventoried item.</description>
@@ -156,17 +146,6 @@
         <fullName>Max_Width__c</fullName>
         <externalId>false</externalId>
         <label>Max Width</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Mid_Width__c</fullName>
-        <externalId>false</externalId>
-        <label>Mid Width</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -500,16 +479,6 @@ Name,
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Width__c</fullName>
-        <externalId>false</externalId>
-        <label>Width</label>
-        <length>10</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
     </fields>
     <listViews>
         <fullName>AllProducts</fullName>
