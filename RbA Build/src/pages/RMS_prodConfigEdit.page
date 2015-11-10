@@ -18,7 +18,7 @@
             <apex:inputText value="{!OrderItem.Sales_Width__c}" label="Sales Width" id="salesInputWidth"/>
             <apex:inputText value="{!OrderItem.Height__c}" label="Height" id="inputHeight"/>
             <apex:inputText value="{!OrderItem.Sales_Height__c}" label="Sales Height" id="salesInputHeight"/>
- <!--           <apex:outputText value="{!OrderItem.Quantity}" label="Quantity" id="outputQuantity"/>  --> 
+            <apex:outputText value="{!OrderItem.Quantity}" label="Quantity" id="outputQuantity"/>   
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Selected Product" columns="1" rendered="{!productSelected}">
