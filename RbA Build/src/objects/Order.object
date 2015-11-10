@@ -228,21 +228,6 @@
         <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
-        <externalId>false</externalId>
-        <label>Renovate Right Booklet Signed Date</label>
-        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
-        <summaryFilterItems>
-            <field>Back_Office_Check__c.Name</field>
-            <operation>equals</operation>
-            <value>Renovate Right Booklet</value>
-        </summaryFilterItems>
-        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
-        <summaryOperation>max</summaryOperation>
-        <trackHistory>false</trackHistory>
-        <type>Summary</type>
-    </fields>
-    <fields>
         <fullName>Reason__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Not sure if all the vaules belong at the Order Level.</inlineHelpText>
@@ -278,6 +263,21 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Renovate Right Booklet Signed Date</label>
+        <summarizedField>Back_Office_Check__c.Signed_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Back_Office_Check__c.Name</field>
+            <operation>equals</operation>
+            <value>Renovate Right Booklet</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Back_Office_Check__c.Order__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Retail_Subtotal__c</fullName>
@@ -354,6 +354,15 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Tech_Measure_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Tech Measured has been scheduled for.</inlineHelpText>
+        <label>Tech Measure Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>TotalAmount</fullName>
     </fields>
     <fields>
@@ -380,6 +389,28 @@
             <value>A</value>
         </filters>
         <label>3. Activated Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Activated_Orders_Install_Needed</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <columns>Installation_Date__c</columns>
+        <columns>CORE.USERS.LAST_NAME</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ORDERS.STATUS_CODE</field>
+            <operation>equals</operation>
+            <value>A</value>
+        </filters>
+        <filters>
+            <field>Installation_Date__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>3. Activated Orders - Install Needed</label>
     </listViews>
     <listViews>
         <fullName>AllActivatedOrders</fullName>
@@ -441,6 +472,28 @@
             <value>D</value>
         </filters>
         <label>2. Draft Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>DraftOrdersNeedTechMeasure</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDER.BILL_TO_CONTACT</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <columns>Tech_Measure_Date__c</columns>
+        <columns>CORE.USERS.LAST_NAME</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ORDERS.STATUS_CODE</field>
+            <operation>equals</operation>
+            <value>D</value>
+        </filters>
+        <filters>
+            <field>Tech_Measure_Date__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>2. Draft Orders - Need Tech Measure</label>
     </listViews>
     <listViews>
         <fullName>Sales_Draft_to_Review</fullName>
@@ -587,6 +640,25 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Add_Product</fullName>
+        <availability>online</availability>
+        <description>Add product button to direct to product config page</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Add Product</masterLabel>
+        <openType>newWindow</openType>
+        <page>RMS_prodConfigRedirect</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
     <webLinks>
         <fullName>Cancel_Order</fullName>
         <availability>online</availability>

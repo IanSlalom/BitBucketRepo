@@ -1,0 +1,7 @@
+<apex:page standardController="Order" extensions="RMS_prodConfigRedirectExtension" action="{!redirect}">
+    <apex:outputField value="{!Order.Pricebook2Id}" rendered="false"/>
+    <apex:outputField value="{!Order.Status}" rendered="false"/>
+    <apex:pageBlock title="Choose Product" mode="edit" id="EnterProductBlock">
+        <apex:pageMessages />
+    </apex:pageBlock>
+</apex:page>

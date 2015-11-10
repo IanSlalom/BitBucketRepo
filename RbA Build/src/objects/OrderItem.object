@@ -14,7 +14,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>Edit</actionName>
-        <type>Default</type>
+        <content>RMS_prodConfigEdit</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>EditAllProduct</actionName>
@@ -36,6 +38,85 @@
     <enableFeeds>false</enableFeeds>
     <fields>
         <fullName>AvailableQuantity</fullName>
+    </fields>
+    <fields>
+        <fullName>Breather_Tubes__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Breather Tubes are needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Breather Tubes are needed.</inlineHelpText>
+        <label>Breather Tubes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lights_High__c</fullName>
+        <description>The number of grille lights high for colonial grille pattern.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of grille lights high for colonial grille pattern.</inlineHelpText>
+        <label>Colonial Grille Lights High</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lights_Wide__c</fullName>
+        <description>The number of grille lights wide for colonial grille pattern.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of grille lights wide for colonial grille pattern.</inlineHelpText>
+        <label>Colonial Grille Lights Wide</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Commission_Amount__c</fullName>
+        <description>IF(  ISPICKVAL(Order.Status, &apos;Activated&apos;)  ,  Quantity * UnitPrice , 0)</description>
+        <externalId>false</externalId>
+        <formula>Quantity * UnitPrice</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Due__c</fullName>
+        <externalId>false</externalId>
+        <formula>Commission_Amount__c - Commission_Paid__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Paid__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Paid</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hardware__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this corrosion resistant hardware option has been applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this corrosion resistant hardware option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hardware</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Description</fullName>
@@ -74,8 +155,42 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>EJ_Frame__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</inlineHelpText>
+        <label>EJ Frame</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>EndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Exterior_Color__c</fullName>
+        <description>The exterior color of the product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior color of the product</inlineHelpText>
+        <label>Exterior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Finish_Option__c</fullName>
+        <description>The finish option applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The finish option applied to this product.</inlineHelpText>
+        <label>Finish Option</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>GL_Account__c</fullName>
@@ -83,6 +198,117 @@
         <externalId>false</externalId>
         <inlineHelpText>The GL Account associated to the order line item</inlineHelpText>
         <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Option_Selected__c</fullName>
+        <description>The glass option that was selected from the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The glass option that was selected from the product configuration page.</inlineHelpText>
+        <label>Glass Option Selected</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern__c</fullName>
+        <description>The grille pattern applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille pattern applied to this product.</inlineHelpText>
+        <label>Grille Pattern</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Style__c</fullName>
+        <description>The grille style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille style selected for this product.</inlineHelpText>
+        <label>Grille Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grilles_Between_Glass__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Grilles Between Glass</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Handing__c</fullName>
+        <description>Handing refers to the direction a window or door opens.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Handing refers to the direction a window or door opens.</inlineHelpText>
+        <label>Handing</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Color__c</fullName>
+        <description>The hardware color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
+        <label>Hardware Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Height</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Insect_Screen_Style__c</fullName>
+        <description>The insect screen style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The insect screen style selected for this product.</inlineHelpText>
+        <label>Insect Screen Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Color__c</fullName>
+        <description>The interior color of the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior color of the product.</inlineHelpText>
+        <label>Interior Color</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -109,11 +335,66 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Permanently Applied Interior Wood Grille</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Product2Id</fullName>
         <type>Lookup</type>
     </fields>
     <fields>
         <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Product_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Type_old__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Type_old</label>
+        <picklist>
+            <picklistValues>
+                <fullName>FF</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>IF</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bay Bow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Series2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Purchase_Order__c</fullName>
@@ -139,8 +420,88 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Room__c</fullName>
+        <description>Identifies the room for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the room for this product.</inlineHelpText>
+        <label>Room</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height__c</fullName>
+        <description>The height of the opening as measured by sales.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height of the opening as measured by sales.</inlineHelpText>
+        <label>Sales Height</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width__c</fullName>
+        <description>The width of the opening as measured by sales.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width of the opening as measured by sales.</inlineHelpText>
+        <label>Sales Width</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Type__c</fullName>
+        <description>The screen type applied to the selected product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen type applied to the selected product.</inlineHelpText>
+        <label>Screen Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Vaneer_Type__c</fullName>
+        <description>The screen vaneer type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen vaneer type applied to this product.</inlineHelpText>
+        <label>Screen Vaneer Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>ServiceDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Size__c</fullName>
+        <externalId>false</externalId>
+        <label>Size</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Specialty_Glazing__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Specialty Glazing</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Status__c</fullName>
@@ -210,6 +571,18 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Unit_Id__c</fullName>
+        <description>The number used to identify the opening(window or door) location for this product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number used to identify the opening(window or door) location for this product</inlineHelpText>
+        <label>Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Unit_Wholesale_Cost__c</fullName>
         <description>The wholesale cost of the product</description>
         <externalId>false</externalId>
@@ -253,4 +626,36 @@
         <type>Text</type>
         <unique>false</unique>
     </fields>
+    <fields>
+        <fullName>Wide_Bar__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the Wide Bar grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the Wide Bar grille option was selected.</inlineHelpText>
+        <label>Wide Bar</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Width</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <webLinks>
+        <fullName>Add_Line_Item</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Add Line Item</masterLabel>
+        <openType>sidebar</openType>
+        <page>RMS_prodConfigEdit</page>
+        <protected>false</protected>
+    </webLinks>
 </CustomObject>

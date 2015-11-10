@@ -1,0 +1,166 @@
+<apex:page standardController="SVMXC__Service_Order__c" extensions="RMS_createWorkOrderController" docType="html-5.0">
+	
+	<apex:includeScript value="{!$Resource.jquery}" />
+	<apex:includeScript value="/support/console/33.0/integration.js"/>
+	
+	<apex:form >
+		<apex:pageBlock title="Work Order">
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedWO('{!woId}');return false"/>
+			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewWO('{!orderId}');return false"/>
+			<!-- <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/> -->
+			<apex:commandButton value="Cancel" onclick="otherCloseTab();return false"/>
+			
+			</apex:pageBlockButtons>
+				
+
+			<apex:pageBlockSection title="Select a type" columns="1"  > 
+				<apex:inputField value="{!SVMXC__Service_Order__c.SVMXC__Order_Type__c}" />
+			</apex:pageBlockSection> 
+		</apex:pageBlock>
+	</apex:form>
+	
+	
+	<script type="text/javascript">
+		var	primaryTabId = null;
+		var	subTabId = null;
+		var	previousOnload  = window.onload;
+
+		window.onload = function()
+		{
+			//  perform the previously registered 'onload' function, if any
+			if ( previousOnload ) previousOnload();
+
+			//  get the id's of both the primary tab and this subtab
+			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+			sforce.console.getEnclosingTabId		( function( result ) { subTabId	 = result.id; } );
+
+			//  set the title of this subtab
+			sforce.console.setTabTitle( '{!SVMXC__Service_Order__c.Id}' ? '* {!SVMXC__Service_Order__c.Name}' : 'New Work Order' );
+			console.log(subTabId);
+		};
+		
+        function otherCloseTab() {
+        	if(sforce.console.isInConsole()) {
+	            //First find the ID of the current tab to close it
+	            sforce.console.getEnclosingTabId(closeSubtab);
+            }else{
+           		location.href='/{!orderId}'; 
+            }
+        }
+        
+        var closeSubtab = function closeSubtab(result) {
+            //Now that we have the tab ID, we can close it
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);
+        };
+		
+		
+
+		
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		};
+
+		function closeTab() {
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!orderId}'; 
+			}
+
+		
+		};
+
+		function openNewSubTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			sforce.console.refreshPrimaryTabById( primaryTabId, false);
+			sforce.console.openSubtab
+			(   /*  Enclosing Primary Tab Id	*/  primaryTabId,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Id of Subtab to override	*/  subTabId,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}
+
+		function openNewPrimaryTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			//  otherwise open the new subtab
+			sforce.console.openPrimaryTab
+			(   /*  Enclosing Primary Tab Id	*/  null,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}	
+		
+		function openSavedWO(woId)
+		{
+			if(sforce.console.isInConsole()) {
+			
+					openNewSubTab( '/' +woId +'?isdtp=vw');
+			
+			}
+			else {
+				location.href='/'+woId;
+			}
+		}
+
+		function openNewWO(orderId)
+		{
+			if(sforce.console.isInConsole()){
+				var theurl =	'/apex/RMS_createActionsWOrkOrder?';
+					theurl = 	theurl+'orderId={!orderId}&';
+					theurl = 	theurl+'accountId={!accountId}&';
+					theurl = 	theurl+'billingStreet={!billingStreet}&';
+					theurl = 	theurl+'billingCity={!billingCity}&';
+					theurl = 	theurl+'billingPostalCode={!billingPostalCode}&';
+					theurl = 	theurl+'billingCountry={!billingCountry}&';
+					
+					theurl = 	theurl+'retURL=%2F{!orderId}';
+					
+					openNewSubTab( theurl, 'New Work Order' );
+ 
+			}else{
+					location.href=	'/apex/RMS_createActionsWOrkOrder?'+
+									'orderId={!orderId}&'+
+									'accountId={!accountId}&'+
+									'billingStreet={!billingStreet}&'+
+									'billingCity={!billingCity}&'+
+									'billingPostalCode={!billingPostalCode}&'+
+									'billingCountry={!billingCountry}';
+			}
+		}
+		function  getOrderId() 
+		{
+			return document.getElementById( 'OrderId' ).innerHTML;
+		}
+	</script>
+</apex:page>

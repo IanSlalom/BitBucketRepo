@@ -19,10 +19,14 @@
         <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_createWorkOrderController</members>
+        <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_errorMessages</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
+        <members>RMS_prodConfigExtension</members>
+        <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
@@ -38,8 +42,11 @@
     <types>
         <members>RMS_cancelOrder</members>
         <members>RMS_completeOrderChecks</members>
+        <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createWorkOrder</members>
+        <members>RMS_prodConfigEdit</members>
+        <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
@@ -80,6 +87,7 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Discount__c</members>
+        <members>PricebookEntry</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
         <members>Quote</members>
@@ -132,6 +140,8 @@
         <members>Order_Discount__c-Order Discount Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
+        <members>Product2-Child Product Layout</members>
+        <members>Product2-Master Product Layout</members>
         <members>Product2-Product Layout</members>
         <members>Purchase_Order__c-Cost Purchase Order Layout</members>
         <members>Purchase_Order__c-Product Purchase Order Layout</members>
