@@ -26,7 +26,6 @@
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigManager</members>
         <members>RMS_prodConfigRedirectExtension</members>
-        <members>RMS_prodConfigUtility</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
@@ -87,7 +86,6 @@
         <members>OrderItem</members>
         <members>Order_Discount__c</members>
         <members>PricebookEntry</members>
-        <members>Pricing_Configuration__c</members>
         <members>Product2</members>
         <members>Purchase_Order__c</members>
         <members>Quote</members>
@@ -140,7 +138,8 @@
         <members>Order_Discount__c-Order Discount Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
-        <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
+        <members>Product2-Child Product Layout</members>
+        <members>Product2-Master Product Layout</members>
         <members>Product2-Product Layout</members>
         <members>Purchase_Order__c-Cost Purchase Order Layout</members>
         <members>Purchase_Order__c-Product Purchase Order Layout</members>
