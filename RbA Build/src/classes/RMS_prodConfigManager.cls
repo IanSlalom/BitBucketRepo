@@ -104,44 +104,54 @@ public with sharing class RMS_prodConfigManager {
 		} 
 		
 		// Check for minimum width makeability 
-		if (orderLineItem.Width__c < masterProduct.Min_Width__c) {
-			errorMessage = RMS_errorMessages.WIDTH_BELOW_MIN;
+		if (masterProduct.Min_Width__c != null) {
+			if (orderLineItem.Width__c < masterProduct.Min_Width__c) {
+				errorMessage = RMS_errorMessages.WIDTH_BELOW_MIN;
+			}
 		}
 		
 		// Check for minimum height makeability 
-		if (orderLineItem.Height__c < masterProduct.Min_Height__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_BELOW_MIN : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_BELOW_MIN;
+		if (masterProduct.Min_Height__c != null) {
+			if (orderLineItem.Height__c < masterProduct.Min_Height__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_BELOW_MIN : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_BELOW_MIN;
+			}
 		}
-
 		// Check for maximum width makeability 
-		if (orderLineItem.Width__c > masterProduct.Max_Width__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_ABOVE_MAX;
+		if (masterProduct.Max_Width__c != null) {
+			if (orderLineItem.Width__c > masterProduct.Max_Width__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_ABOVE_MAX;
+			}
 		}
-		
 		// Check for maximum height makeability 
-		if (orderLineItem.Height__c > masterProduct.Max_Height__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
+		if (masterProduct.Max_Height__c != null) {
+			if (orderLineItem.Height__c > masterProduct.Max_Height__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
+			}
 		}
-
 		// Check for maximum united inches 
-		if ((orderLineItem.Height__c + orderLineItem.Width__c) > masterProduct.United_Inch_Maximum__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.UNITED_INCH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.UNITED_INCH_ABOVE_MAX;
+		if (masterProduct.United_Inch_Maximum__c != null) {
+			if ((orderLineItem.Height__c + orderLineItem.Width__c) > masterProduct.United_Inch_Maximum__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.UNITED_INCH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.UNITED_INCH_ABOVE_MAX;
+			}
 		}
 
 		// Check for height to width cap
-		if ((orderLineItem.Height__c > masterProduct.Height_to_Width_Cap_Height__c) &&
-			 (orderLineItem.Width__c > masterProduct.Height_to_Width_Cap_Width__c)) 
-		{
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
+		if (masterProduct.Height_to_Width_Cap_Height__c != null && masterProduct.Height_to_Width_Cap_Width__c != null) {
+			if ((orderLineItem.Height__c > masterProduct.Height_to_Width_Cap_Height__c) &&
+				 (orderLineItem.Width__c > masterProduct.Height_to_Width_Cap_Width__c)) 
+			{
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
+			}
 		}
 
 		// Check for width to height cap
-		if ((orderLineItem.Width__c > masterProduct.Height_to_Width_Cap_Width__c) &&
-			 (orderLineItem.Height__c > masterProduct.Height_to_Width_Cap_Height__c))
-		{
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
+		if (masterProduct.Width_to_Height_Cap_Width__c != null && masterProduct.Width_to_Height_Cap_Height__c != null) {
+			if ((orderLineItem.Width__c > masterProduct.Width_to_Height_Cap_Width__c) &&
+				 (orderLineItem.Height__c > masterProduct.Width_to_Height_Cap_Height__c))
+			{
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
+			}
 		}
-		
 		return errorMessage;
 	}
 	
