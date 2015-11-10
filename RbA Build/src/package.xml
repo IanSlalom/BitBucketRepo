@@ -21,6 +21,8 @@
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_errorMessages</members>
+        <members>RMS_mobileAppAPIController</members>
+        <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
