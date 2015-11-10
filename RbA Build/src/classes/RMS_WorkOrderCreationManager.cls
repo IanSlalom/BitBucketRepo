@@ -120,6 +120,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         for(Order o : listNew){
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
+            	system.debug('****** order: '+o);
                 if(o.OpportunityId != null){
                     relatedOpportunityIds.add(o.OpportunityId);
                 }  
@@ -168,17 +169,18 @@ public with sharing class RMS_WorkOrderCreationManager {
         map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
         
 
-        for(Order ord : listNew){
+        for(Order ord : listNew){ 
             //CHECKING IF CURRENT ORDER'S OPPORTUNITY HAS ANY RELATED TECH MEASURES IF SO, SKIP LOGIC AND ASSIGN THOSE TO THIS WORK ORDER
+            system.debug('****** ord ' + ord);
             if(ord.OpportunityId != null && oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId) != null){
                 
-            list<SVMXC__Service_Order__c> techMeasureWorkOrders = oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId);
-            
-            for(SVMXC__Service_Order__c wo : techMeasureWorkOrders){
-                wo.Sold_Order__c = ord.id;
-                workOrdersToAdd.add(wo);
-            }
-            
+	            list<SVMXC__Service_Order__c> techMeasureWorkOrders = oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId);
+	            
+	            for(SVMXC__Service_Order__c wo : techMeasureWorkOrders){
+	                wo.Sold_Order__c = ord.id;
+	                workOrdersToAdd.add(wo);
+	            }
+	            
             
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);

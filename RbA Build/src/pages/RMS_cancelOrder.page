@@ -20,4 +20,4 @@
   <apex:outputPanel >
       If you land on this page, an error occurred during the cancellation of the order. Please try again or contact your administrator.
   </apex:outputPanel>
-</apex:page> 
+</apex:page>

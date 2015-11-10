@@ -13,9 +13,17 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 	public string serviceOrderVisitRecordTypeId{get;set;}
 	public string serviceOrderActionsRecordTypeId{get;set;}
 	public string serviceOrderPermitRecordTypeId{get;set;}
+	public string serviceOrderLeadRecordTypeId{get;set;}
+	public string serviceOrderPaintStainRecordTypeId{get;set;}
+	
+	
+	
 	
 	public string serviceOrderVisitRecordTypeURL{get;set;}
 	public string serviceOrderActionsRecordTypeURL{get;set;}
+	public string serviceOrderLeadRecordTypeURL{get;set;}
+	public string serviceOrderPaintStainRecordTypeURL{get;set;}
+	public string serviceOrderPermitRecordTypeURL{get;set;}
 	
 /******* Set up Standard Controller for Purchase_Order__c  *****************/
  	private Apexpages.StandardController standardController;
@@ -36,6 +44,10 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     	serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
     	serviceOrderActionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
     	serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
+    	serviceOrderLeadRecordTypeId = UtilityMethods.retrieveRecordTypeId('Lead', 'SVMXC__Service_Order__c');
+    	serviceOrderPaintStainRecordTypeId = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');
+    	
+    	
     	
     	String ordId = ord.id;
     	
@@ -62,7 +74,11 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 			//String actionsRecordType = serviceOrderActionsRecordType[0].id;
 			
 			woQuery = woQuery+' AND (RecordTypeId = :serviceOrderActionsRecordTypeId';
-			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPermitRecordTypeId)';
+			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPermitRecordTypeId';
+			woQuery = woQuery+' OR RecordTypeId = :serviceOrderLeadRecordTypeId';
+			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPaintStainRecordTypeId)';
+			
+			
 		}
 		system.debug('ads woQuery: '+woQuery);
 		workOrdersList = Database.query(woQuery);
@@ -73,20 +89,24 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		Schema.DescribeSObjectResult r = SVMXC__Service_Order__c.sObjectType.getDescribe();
 		String workOrderKeyPrefix = r.getKeyPrefix();
 		
-		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber FROM Order WHERE Id =:ordId ];
+		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber, OpportunityId FROM Order WHERE Id =:ordId ];
 		
 		list<Account> relatedAccount = [SELECT 	Name,
 												BillingStreet,
 								    			BillingCity,
 								    			BillingState,
 								    			BillingPostalCode, 
-								    			BillingCountry
+								    			BillingCountry,
+								    			Historical__c,
+								    			HOA__c,
+								    			Building_Permit__c
+								    			
 								    			FROM Account WHERE Id = :theOrd[0].AccountId];
 		
 		
 		map<String, Field_IDs__c> Field_IDs_map = Field_IDs__c.getAll(); 
 		Field_IDs__c workOrderFieldIds = Field_IDs_map.get('Work Order');
-		
+		/*
 		String baseURL = 	'/'+workOrderKeyPrefix+'/e?'+
 											'CF'+workOrderFieldIds.Sold_Order__c+'='+theOrd[0].OrderNumber+
 											'&CF'+workOrderFieldIds.Sold_Order__c+'_lkid='+Ord.Id+
@@ -105,18 +125,38 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											
 		serviceOrderVisitRecordTypeURL = baseURL + '&RecordType='+serviceOrderVisitRecordTypeId;								
 		serviceOrderActionsRecordTypeURL = baseURL + '&RecordType='+serviceOrderActionsRecordTypeId;										
-							
+		*/					
 											
-		serviceOrderVisitRecordTypeURL = 	'/apex/RMS_createVisitWorkOrder?'+ 
-											'orderId='+Ord.Id+
+		String endURL =						'&orderId='+Ord.Id+
 											'&accountId='+relatedAccount[0].Id+
 											'&billingStreet='+relatedAccount[0].BillingStreet+
 											'&billingCity='+relatedAccount[0].BillingCity+
 											'&billingPostalCode='+relatedAccount[0].BillingState+
-											'&billingCountry='+relatedAccount[0].BillingCountry;						
+											'&billingCountry='+relatedAccount[0].BillingCountry+
+											'&relatedOpp='+theOrd[0].OpportunityId+
+											'&permit='+relatedAccount[0].Building_Permit__c+	
+											'&hoa='+relatedAccount[0].HOA__c+ 
+											'&historical='+relatedAccount[0].Historical__c; 
+																	 
+		serviceOrderVisitRecordTypeURL = 	'/apex/RMS_createVisitWorkOrder?type=visit'+endURL;
+					
+																				
+		serviceOrderActionsRecordTypeURL = 	'/apex/RMS_createActionsWorkOrder?type=actions'+endURL;
+											 
+											
+		serviceOrderLeadRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=lead'+endURL;
+		 
+		serviceOrderPaintStainRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=paintStain'+endURL; 
+		
+		serviceOrderPermitRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=permit'+endURL;
+											 					
+											
+											
+		 
+		 
+		
+
 		 
 	}
-	
-	
 
 }

@@ -14,18 +14,20 @@
 	</script>
 
 	<script type="text/javascript">
-		var theURL;
+			var theURL;
         var tabName;
+        var primaryTabId;
+        
+        
         //The callback function that openSubtab will call once it's got the ID for its primary tab
         var callOpenSubtab = function callOpenSubtab(result) {
             sforce.console.openSubtab(result.id, 
-               'https://cs50.salesforce.com/'+theURL, true, tabName);
+               theURL, true, tabName);
             theURL = '';
             tabName= '';
         };
-        
-        function openSubtab(urlPart, theTabName) {
-     		if(sforce.console.isInConsole()){
+		function openSubtab(urlPart, theTabName) {
+        	if(sforce.console.isInConsole()){
 	        	theURL = urlPart;
 	        	tabName = theTabName;
 	            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
@@ -33,6 +35,38 @@
         		top.location.href = '/'+urlPart;
        		}
         }
+        
+        
+		var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+	        sforce.console.openConsoleUrl(result.id, 
+	        result.consoleUrl, 
+	        true 
+	       // (optional)tabLabels:String, 
+	       // (optional)tabNames:String, 
+	       // (optional)callback:Function
+	        );
+	        
+		};
+       
+        function displayResult(result) {
+             if (result.success) {
+                 alert('Tab status has been successfully updated');
+             } else {
+                 alert('Tab status couldn’t be updated');
+             }
+        }
+        
+        function callGenerateConsoleURL(urlPart, theTabName) {
+        	if(sforce.console.isInConsole()) {
+	        	tabName = theTabName;
+	        	var orderURL = '/'+'{!Order.Id}';
+	        	sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+        	}else{
+        		top.location.href = '{!baseUrl}'+urlPart;
+        	
+        	}       
+        }
+        
 	</script>
 
 
@@ -50,15 +84,20 @@
 	</style>
 	<!-- ACTIONS --> 
 	<apex:pageBlock >
-	<!-- 
-		<apex:form>
-			<apex:commandButton onclick="openSubtab('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order')" id="newVisitButton" value="Create New Actions Work Order" style="margin-left:40%"/>
-		</apex:form>
-	 -->	
+	
+	<apex:form >
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Hostorical" style="margin-left:20%"/>
+		
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLeadRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create Lead" style="margin-left:2%" />
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" />
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%"/>
+	
+	</apex:form>
+		
 			<apex:pageBlockTable title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
 				<!-- <apex:column value="{!wo.View__c}"/> -->
 				<apex:column headerValue="">  
-					<a href="#" onClick="openSubtab('{!wo.Id}');return false">View</a> 
+					<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
 				</apex:column>
 		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
 		        <apex:column value="{!wo.SVMXC__Order_Status__c}"/>
