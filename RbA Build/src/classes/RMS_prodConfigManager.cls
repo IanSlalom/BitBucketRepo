@@ -193,12 +193,18 @@ public with sharing class RMS_prodConfigManager {
 	// clears any fields that are not selectable / do not have a price. 
 	// This is needed for the scenario where the child product changes from one size to another.
 	public static ProductConfigWrapper clearNonSelectableValues(ProductConfigWrapper prodConfig) {
-//		prodConfig.OrderLI.Specialty_Glazing__c = (prodConfig.specialtyGlazingPrice == null) ? false : prodConfig.OrderLI.Specialty_Glazing__c;	   
-//		prodConfig.OrderLI.Corrosion_Resistant__c = (prodConfig.corrosionResistantPrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant__c;	 
-//		prodConfig.OrderLI.Dual_Color_Exterior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Exterior__c;	   
-//		prodConfig.OrderLI.Dual_Color_Interior__c = (prodConfig.DualColorPrice == null) ? null : prodConfig.OrderLI.Dual_Color_Interior__c;	   
-//		prodConfig.OrderLI.Gliding_Screen__c = (prodConfig.glidingScreenPrice == null) ? false : prodConfig.OrderLI.Gliding_Screen__c;		
-//		prodConfig.OrderLI.Grilles_Between_Glass__c = (prodConfig.grillesBetweenGlassPrice == null) ? false : prodConfig.OrderLI.Grilles_Between_Glass__c;		
+		prodConfig.OrderLI.EJ_Frame__c 							= (prodConfig.EJFramePrice == null) ? false : prodConfig.OrderLI.EJ_Frame__c;		
+		prodConfig.OrderLI.Corrosion_Resistant_Hardware__c 		= (prodConfig.corrosionResistantHardwarePrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant_Hardware__c;		
+		prodConfig.OrderLI.Exterior_Color__c 					= (prodConfig.exteriorColors == null) ? '' : prodConfig.OrderLI.Exterior_Color__c;		
+		prodConfig.OrderLI.Interior_Color__c 					= (prodConfig.interiorColors == null) ? '' : prodConfig.OrderLI.Interior_Color__c;		
+		prodConfig.OrderLI.Hardware_Color__c 					= (prodConfig.hardwareColors == null) ? '' : prodConfig.OrderLI.Hardware_Color__c;		
+		prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c 		= (prodConfig.colonialGrilleLightsWide == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c;		
+		prodConfig.OrderLI.Colonial_Grille_Lights_High__c 		= (prodConfig.colonialGrilleLightsHigh == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_High__c;		
+		prodConfig.OrderLI.Grille_Pattern__c 					= (prodConfig.grillePatterns == null) ? '' : prodConfig.OrderLI.Grille_Pattern__c;		
+		prodConfig.OrderLI.Screen_Vaneer_Type__c 				= (prodConfig.screenVaneerTypes == null) ? '' : prodConfig.OrderLI.Screen_Vaneer_Type__c;		
+		prodConfig.OrderLI.Breather_Tubes__c 					= (prodConfig.breatherTubesPrice == null) ? false : prodConfig.OrderLI.Breather_Tubes__c;		
+		prodConfig.OrderLI.Permanently_Applied_Interior_Wood_Grille__c 	= (prodConfig.PermanentlyAppliedInteriorWoodGrillePrice == null) ? false : prodConfig.OrderLI.Permanently_Applied_Interior_Wood_Grille__c;		
+		prodConfig.OrderLI.Handing__c 							= (prodConfig.handingOptions == null) ? '' : prodConfig.OrderLI.Handing__c;		
 		return prodConfig;
 	}	 
 
