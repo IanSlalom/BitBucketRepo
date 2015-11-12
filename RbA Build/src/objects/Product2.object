@@ -246,6 +246,20 @@ Name,
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Product_Configuration__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The product configuration for this product with picklist values, makeability and other settings</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The product configuration for this product with picklist values, makeability and other settings</inlineHelpText>
+        <label>Product Configuration</label>
+        <referenceTo>Product_Configuration__c</referenceTo>
+        <relationshipLabel>Products</relationshipLabel>
+        <relationshipName>Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Product_Type__c</fullName>
         <externalId>false</externalId>
         <label>Product Type</label>
