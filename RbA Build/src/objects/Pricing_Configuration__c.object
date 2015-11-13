@@ -681,42 +681,12 @@
         <trackTrending>false</trackTrending>
         <type>Currency</type>
     </fields>
-    <fields>
-        <fullName>UI_Maximum__c</fullName>
-        <externalId>false</externalId>
-        <label>UI Maximum</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>UI_Minimum__c</fullName>
-        <externalId>false</externalId>
-        <label>UI Minimum</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>test__c</fullName>
-        <externalId>false</externalId>
-        <label>test</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
     <label>Pricing Configuration</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <label>Pricing Configuration Name</label>
         <trackHistory>false</trackHistory>

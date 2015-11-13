@@ -32,6 +32,7 @@ public with sharing class RMS_errorMessages {
 	public static final String CHILD_PRODUCT_NOT_FOUND = 'A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String MULTIPLE_CHILD_PRODUCTS = 'Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String INVALID_CHILD_PRODUCT = 'A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';
+	public static final String PRODUCT_CONFIG_NOT_FOUND = 'A suitable product configuration for this product could not be found based on the information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String ORDER_NOT_FOUND = 'The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = 'Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = 'Sorry, you cannot edit product line items on an activated order.';

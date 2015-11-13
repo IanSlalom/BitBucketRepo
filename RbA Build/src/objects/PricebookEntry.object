@@ -717,6 +717,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Pricing_Configuration__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Pricing Configuration</label>
+        <referenceTo>Pricing_Configuration__c</referenceTo>
+        <relationshipLabel>Price Book Entries</relationshipLabel>
+        <relationshipName>Price_Book_Entries</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Product2Id</fullName>
         <type>Lookup</type>
     </fields>

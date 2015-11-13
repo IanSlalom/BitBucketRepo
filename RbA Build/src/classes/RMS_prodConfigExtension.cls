@@ -87,11 +87,52 @@ public class RMS_prodConfigExtension {
 			// retrieves fields from the master product makeability based on the master product id  
 			lMasterProduct = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c,
 										Width_to_Height_Cap_Width__c, Width_to_Height_Cap_Height__c, Height_to_Width_Cap_Height__c, 
-										Height_to_Width_Cap_Width__c, United_Inch_Maximum__c 
+										Height_to_Width_Cap_Width__c, United_Inch_Maximum__c, Product_Configuration__c
 															FROM Product2
 															WHERE Id =: masterProductId
 															limit 1].get(0);
 			return lMasterProduct;
+		}
+	}
+
+	/******* properties/variables to store the master product configuration *****************/
+	private static transient Product_Configuration__c lMasterProductConfig;
+	public Product_Configuration__c masterProductConfig {
+		get
+		{   
+			
+			if (lMasterProductConfig != null) return lMasterProductConfig;
+			if (masterProductId == '' || masterProductId == null)
+				return null;
+			if (masterProduct.Product_Configuration__c == null)
+				return null;
+			
+			// Loop through the PricebookEntry fields and comma separate them into a string
+			String commaSeparatedFields = RMS_prodConfigManager.getCommaSeparatedFields('Product_Configuration__c');
+/*			for(String fieldName : getObjectFieldsMap('Pricing_Configuration__c').keyset()){
+				if(commaSeparatedFields == null || commaSeparatedFields == ''){
+					commaSeparatedFields = fieldName;
+				}else{
+					commaSeparatedFields = commaSeparatedFields + ', ' + fieldName;
+				}
+			}*/
+ 
+			// Use the comma separated field string to build a dynamic query to retrieve the Pricing_Configuration__c
+			String query = 'SELECT ' + commaSeparatedFields + ' FROM Product_Configuration__c ' + 
+													' WHERE Id = \'' + masterProduct.Product_Configuration__c + '\''+
+													' LIMIT 1';
+ 
+			// Retrieve all fields from the Product_Configuration__c object in a query
+			lMasterProductConfig = Database.query(query);
+
+			// retrieves fields from the master product config based on the master product id  
+//			lMasterProductConfig = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c,
+//										Width_to_Height_Cap_Width__c, Width_to_Height_Cap_Height__c, Height_to_Width_Cap_Height__c, 
+//										Height_to_Width_Cap_Width__c, United_Inch_Maximum__c 
+//															FROM Product_Configuration__c
+//															WHERE Id =: masterProduct.Product_Configuration__c
+//															limit 1].get(0);
+			return lMasterProductConfig;
 		}
 	}
 
@@ -175,7 +216,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lglassOptionItems == null) {
-				List<Schema.FieldSetMember> glassOptionList = SObjectType.PricebookEntry.FieldSets.Glass_Options.getFields();
+				List<Schema.FieldSetMember> glassOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Glass_Options.getFields();
 				lglassOptionItems = RMS_prodConfigManager.retrievePickListItems(glassOptionList, prodConfig);
 			}			   
 			return lglassOptionItems;
@@ -188,7 +229,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrilleStyleItems == null) {
-				List<Schema.FieldSetMember> grilleStyleList = SObjectType.PricebookEntry.FieldSets.Grille_Style_Options.getFields();
+				List<Schema.FieldSetMember> grilleStyleList = SObjectType.Pricing_Configuration__c.FieldSets.Grille_Style_Options.getFields();
 				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(grilleStyleList, prodConfig);
 			}			   
 			return lGrilleStyleItems;
@@ -237,7 +278,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lfinishOptionItems== null) {
-				List<Schema.FieldSetMember> finishOptionList = SObjectType.PricebookEntry.FieldSets.Finish_Options.getFields();
+				List<Schema.FieldSetMember> finishOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Finish_Options.getFields();
 				lfinishOptionItems= RMS_prodConfigManager.retrievePickListItems(finishOptionList, prodConfig);
 			}			   
 			return lfinishOptionItems;
@@ -274,7 +315,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInsectScreenOptionItems == null) {
-				List<Schema.FieldSetMember> insectScreenOptionList = SObjectType.PricebookEntry.FieldSets.Insect_Screen_Options.getFields();
+				List<Schema.FieldSetMember> insectScreenOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Insect_Screen_Options.getFields();
 				lInsectScreenOptionItems = RMS_prodConfigManager.retrievePickListItems(insectScreenOptionList, prodConfig);
 			}
 			return lInsectScreenOptionItems;
@@ -301,14 +342,15 @@ public class RMS_prodConfigExtension {
 	public virtual pageReference enterProduct() {
 		
 		inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
-		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProduct, orderLineItem);
+		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
 		if(!String.isBlank(errorMessage)) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 			return null;			
 		}
 		if (childProduct == null) return null;
-		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProduct);
+		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProductConfig);
 		
+		System.Debug('***************prodConfig=' +prodConfig);
 		if (prodConfig == null) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
 			return null;
@@ -326,14 +368,14 @@ public class RMS_prodConfigExtension {
 		if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
-			orderLineItem.PriceBookEntryId = prodConfig.priceBookId;
+			orderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
 			insert orderLineItem;
 			ref = new PageReference('/' +orderLineItem.OrderId);
 		}
 		else {
-			if (orderLineItem.PriceBookEntryId != prodConfig.priceBookId) {
+			if (orderLineItem.PriceBookEntryId != prodConfig.priceBookEntryId) {
 				OrderItem newOrderLineItem = orderLineItem.clone(false,true);
-				newOrderLineItem.PriceBookEntryId = prodConfig.priceBookId;
+				newOrderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
 				// for this scenario we will need to make sure we clear out selected options that are not available
 				// on the new order line item  
 				insert newOrderLineItem;
