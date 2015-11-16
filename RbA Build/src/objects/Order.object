@@ -156,9 +156,9 @@
     </fields>
     <fields>
         <fullName>Discount_Amount__c</fullName>
-        <description>The total discount amount rolled up to the order.</description>
+        <description>A roll-up sum of all discounts applied to this order (see the order discount related list).</description>
         <externalId>false</externalId>
-        <inlineHelpText>The total discount amount rolled up to the order.</inlineHelpText>
+        <inlineHelpText>A roll-up sum of all discounts applied to this order (see the order discount related list).</inlineHelpText>
         <label>Discount Amount</label>
         <summarizedField>Order_Discount__c.Discount_Amount__c</summarizedField>
         <summaryFilterItems>
@@ -640,6 +640,25 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Add_Product</fullName>
+        <availability>online</availability>
+        <description>Add product button to direct to product config page</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Add Product</masterLabel>
+        <openType>newWindow</openType>
+        <page>RMS_prodConfigRedirect</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
     <webLinks>
         <fullName>Cancel_Order</fullName>
         <availability>online</availability>

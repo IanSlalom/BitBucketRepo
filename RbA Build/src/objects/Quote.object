@@ -142,6 +142,18 @@
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>External Id field used for data import</description>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
         <fullName>Primary__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Checked if it is the primary/sold quote.</description>
