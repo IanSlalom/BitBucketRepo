@@ -25,8 +25,6 @@ public with sharing class RMS_prodConfigManager {
 					ProductConfigWrapper class
 	*******************************************************/
 
-//	public static Map<String, Schema.SObjectField> pricebookFieldsMap;
-
 	// stores the product config prices and the order line item
 	public class ProductConfigWrapper
 	{
@@ -42,11 +40,16 @@ public with sharing class RMS_prodConfigManager {
 		public String   grillePatterns				  { get; private set; }
 		public String   screenVaneerTypes			   { get; private set; }
 		public Decimal  breatherTubesPrice			  { get; private set; }
-		public String   handingOptions				  { get; private set; }
 		public Decimal  dualColorPrice				  { get; private set; }
 		public Decimal  PermanentlyAppliedInteriorWoodGrillePrice		{ get; private set; }
 		public OrderItem orderLI						{ get; set; }
 		public Pricing_Configuration__c pricingConfig				{ get; set; }
+		public String   handingOptions				  { get; private set; }
+		public String   finishOptions				  { get; private set; }
+		public String   screenTypes				  { get; private set; }
+		public String   glassOptions				  { get; private set; }
+		public String   grilleStyles				  { get; private set; }
+		public String   EJFrameControl					{ get; private set; }
  
 		// constructors
 		public ProductConfigWrapper(){}
@@ -70,6 +73,11 @@ public with sharing class RMS_prodConfigManager {
 				orderLI								 = orderLItem;
 				pricingConfig							= pricingConfigInput;
 				handingOptions						  = masterProductConfig.Handing__c;
+				finishOptions						  = masterProductConfig.Finish_Option__c;
+				screenTypes						  = masterProductConfig.Insect_Screen_Type__c;
+				glassOptions						  = masterProductConfig.Glass_Option__c;
+				grilleStyles						  = masterProductConfig.Grille_Style__c;
+				EJFrameControl						  = masterProductConfig.EJ_Frame_Control__c;
 		}
 	}
 
@@ -195,13 +203,6 @@ public with sharing class RMS_prodConfigManager {
 
 		// Retrieve all fields for Pricing Configuration in a comma separated string
 		String commaSeparatedFields = getCommaSeparatedFields('Pricing_Configuration__c');
-/*		for(String fieldName : getObjectFieldsMap('Pricing_Configuration__c').keyset()){
-			if(commaSeparatedFields == null || commaSeparatedFields == ''){
-				commaSeparatedFields = fieldName;
-			}else{
-				commaSeparatedFields = commaSeparatedFields + ', ' + fieldName;
-			}
-		}*/
  
 		// Use the comma separated field string to build a dynamic query to retrieve the Pricing_Configuration__c
 		String query = 'SELECT ' + commaSeparatedFields + ' FROM Pricing_Configuration__c ' + 
@@ -231,7 +232,7 @@ public with sharing class RMS_prodConfigManager {
 //		price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;		
 //		price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;	  
 //		price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;	 
- //	   price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;	 
+//	   price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;	 
 //		price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;	  
 
 		return price;

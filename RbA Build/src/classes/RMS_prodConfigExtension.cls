@@ -105,17 +105,10 @@ public class RMS_prodConfigExtension {
 			if (masterProduct.Product_Configuration__c == null)
 				return null;
 			
-			// Loop through the PricebookEntry fields and comma separate them into a string
+			// Loop through the Product_Configuration__c fields and comma separate them into a string
 			String commaSeparatedFields = RMS_prodConfigManager.getCommaSeparatedFields('Product_Configuration__c');
-/*			for(String fieldName : getObjectFieldsMap('Pricing_Configuration__c').keyset()){
-				if(commaSeparatedFields == null || commaSeparatedFields == ''){
-					commaSeparatedFields = fieldName;
-				}else{
-					commaSeparatedFields = commaSeparatedFields + ', ' + fieldName;
-				}
-			}*/
  
-			// Use the comma separated field string to build a dynamic query to retrieve the Pricing_Configuration__c
+			// Use the comma separated field string to build a dynamic query to retrieve the Product_Configuration__c
 			String query = 'SELECT ' + commaSeparatedFields + ' FROM Product_Configuration__c ' + 
 													' WHERE Id = \'' + masterProduct.Product_Configuration__c + '\''+
 													' LIMIT 1';
@@ -123,13 +116,6 @@ public class RMS_prodConfigExtension {
 			// Retrieve all fields from the Product_Configuration__c object in a query
 			lMasterProductConfig = Database.query(query);
 
-			// retrieves fields from the master product config based on the master product id  
-//			lMasterProductConfig = [SELECT Name, Min_Width__c, Min_Height__c, Max_Width__c, Max_Height__c, Handing__c,
-//										Width_to_Height_Cap_Width__c, Width_to_Height_Cap_Height__c, Height_to_Width_Cap_Height__c, 
-//										Height_to_Width_Cap_Width__c, United_Inch_Maximum__c 
-//															FROM Product_Configuration__c
-//															WHERE Id =: masterProduct.Product_Configuration__c
-//															limit 1].get(0);
 			return lMasterProductConfig;
 		}
 	}
@@ -214,8 +200,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lglassOptionItems == null) {
-				List<Schema.FieldSetMember> glassOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Glass_Options.getFields();
-				lglassOptionItems = RMS_prodConfigManager.retrievePickListItems(glassOptionList, prodConfig);
+				lglassOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.glassOptions);
 			}			   
 			return lglassOptionItems;
 		}
@@ -227,8 +212,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrilleStyleItems == null) {
-				List<Schema.FieldSetMember> grilleStyleList = SObjectType.Pricing_Configuration__c.FieldSets.Grille_Style_Options.getFields();
-				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(grilleStyleList, prodConfig);
+				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.grilleStyles);
 			}			   
 			return lGrilleStyleItems;
 		}
@@ -276,8 +260,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lfinishOptionItems== null) {
-				List<Schema.FieldSetMember> finishOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Finish_Options.getFields();
-				lfinishOptionItems= RMS_prodConfigManager.retrievePickListItems(finishOptionList, prodConfig);
+				lfinishOptionItems= RMS_prodConfigManager.retrievePickListItems(prodConfig.finishOptions);
 			}			   
 			return lfinishOptionItems;
 		}
@@ -313,8 +296,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInsectScreenOptionItems == null) {
-				List<Schema.FieldSetMember> insectScreenOptionList = SObjectType.Pricing_Configuration__c.FieldSets.Insect_Screen_Options.getFields();
-				lInsectScreenOptionItems = RMS_prodConfigManager.retrievePickListItems(insectScreenOptionList, prodConfig);
+				lInsectScreenOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.screenTypes);
 			}
 			return lInsectScreenOptionItems;
 		}
@@ -348,7 +330,6 @@ public class RMS_prodConfigExtension {
 		if (childProduct == null) return null;
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProductConfig);
 		
-		System.Debug('***************prodConfig=' +prodConfig);
 		if (prodConfig == null) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
 			return null;
