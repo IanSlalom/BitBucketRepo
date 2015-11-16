@@ -25,12 +25,10 @@ public with sharing class RMS_prodConfigManager {
 					ProductConfigWrapper class
 	*******************************************************/
 
-	public static Map<String, Schema.SObjectField> pricebookFieldsMap;
-
 	// stores the product config prices and the order line item
 	public class ProductConfigWrapper
 	{
-		public Id	   priceBookId					 { get; private set; }
+		public Id	   priceBookEntryId					 { get; private set; }
 		public Decimal  baseUnitPrice				   { get; private set; }
 		public Decimal  EJFramePrice					{ get; private set; }
 		public Decimal  corrosionResistantHardwarePrice		 { get; private set; }
@@ -42,60 +40,87 @@ public with sharing class RMS_prodConfigManager {
 		public String   grillePatterns				  { get; private set; }
 		public String   screenVaneerTypes			   { get; private set; }
 		public Decimal  breatherTubesPrice			  { get; private set; }
-		public String   handingOptions				  { get; private set; }
 		public Decimal  dualColorPrice				  { get; private set; }
 		public Decimal  PermanentlyAppliedInteriorWoodGrillePrice		{ get; private set; }
 		public OrderItem orderLI						{ get; set; }
-		public PricebookEntry pBookEntry				{ get; set; }
+		public Pricing_Configuration__c pricingConfig				{ get; set; }
+		public String   handingOptions				  { get; private set; }
+		public String   finishOptions				  { get; private set; }
+		public String   screenTypes				  { get; private set; }
+		public String   glassOptions				  { get; private set; }
+		public String   grilleStyles				  { get; private set; }
+		public String   EJFrameControl					{ get; private set; }
  
 		// constructors
 		public ProductConfigWrapper(){}
 
-		public ProductConfigWrapper(PriceBookEntry pBookEntryInput, OrderItem orderLItem, Product2 masterProductInput)
+		public ProductConfigWrapper(Pricing_Configuration__c pricingConfigInput, OrderItem orderLItem, Product_Configuration__c masterProductConfig)
 		{
-				priceBookId							 = pBookEntryInput.Id;
-				baseUnitPrice						   = pBookEntryInput.Base_Unit__c;
-				EJFramePrice							= pBookEntryInput.EJ_Frame_Price__c;
-				corrosionResistantHardwarePrice		 = pBookEntryInput.Corrosion_Resistant_Hardware__c;
-				exteriorColors						  = pBookEntryInput.Exterior_Color__c;
-				interiorColors						  = pBookEntryInput.Interior_Color__c;
-				hardwareColors						  = pBookEntryInput.Hardware_Colors__c;
-				colonialGrilleLightsWide				= pBookEntryInput.Colonial_Grille_Lights_Wide__c;
-				colonialGrilleLightsHigh				= pBookEntryInput.Colonial_Grille_Lights_High__c;
-				grillePatterns						  = pBookEntryInput.Grille_Patterns__c;
-				screenVaneerTypes					   = pBookEntryInput.Screen_Vaneer_Type__c;
-				dualColorPrice						  = pBookEntryInput.Dual_Color__c;
-				breatherTubesPrice					  = pBookEntryInput.Breather_Tubes__c;
-				PermanentlyAppliedInteriorWoodGrillePrice			   = pBookEntryInput.Permanently_Applied_Interior_Wood_Grille__c;
+				priceBookEntryId							 = orderLItem.priceBookEntryId;
+				baseUnitPrice						   = pricingConfigInput.Base_Unit__c;
+				EJFramePrice							= pricingConfigInput.EJ_Frame_Price__c;
+				corrosionResistantHardwarePrice		 = pricingConfigInput.Corrosion_Resistant_Hardware__c;
+				exteriorColors						  = masterProductConfig.Exterior_Color__c;
+				interiorColors						  = masterProductConfig.Interior_Color__c;
+				hardwareColors						  = masterProductConfig.Hardware_Colors__c;
+				colonialGrilleLightsWide				= masterProductConfig.Colonial_Grille_Lights_Wide__c;
+				colonialGrilleLightsHigh				= masterProductConfig.Colonial_Grille_Lights_High__c;
+				grillePatterns						  = masterProductConfig.Grille_Patterns__c;
+				screenVaneerTypes					   = masterProductConfig.Screen_Vaneer_Type__c;
+				dualColorPrice						  = pricingConfigInput.Dual_Color__c;
+				breatherTubesPrice					  = pricingConfigInput.Breather_Tubes__c;
+				PermanentlyAppliedInteriorWoodGrillePrice			   = pricingConfigInput.Permanently_Applied_Interior_Wood_Grille__c;
 				orderLI								 = orderLItem;
-				pBookEntry							  = pBookEntryInput;
-				handingOptions						  = masterProductInput.Handing__c;
+				pricingConfig							= pricingConfigInput;
+				handingOptions						  = masterProductConfig.Handing__c;
+				finishOptions						  = masterProductConfig.Finish_Option__c;
+				screenTypes						  = masterProductConfig.Insect_Screen_Type__c;
+				glassOptions						  = masterProductConfig.Glass_Option__c;
+				grilleStyles						  = masterProductConfig.Grille_Style__c;
+				EJFrameControl						  = masterProductConfig.EJ_Frame_Control__c;
 		}
 	}
 
 	/*******************************************************
-					getPricebookFieldsMap method
+					getObjectFieldsMap method
 	*******************************************************/
 	// Retrieves the fields from the pricebookentry schema and stores it in a map
-	public static Map<String, Schema.SObjectField> getPricebookFieldsMap() {
+	public static Map<String, Schema.SObjectField> getObjectFieldsMap(String objectName) {
 
-		if (pricebookFieldsMap != null) return pricebookFieldsMap;
+		Map<String, Schema.SObjectField> objectFieldsMap;
 
-		String SobjectApiName = 'PricebookEntry';
 		Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
-		Map<String, Schema.SObjectField> fieldMap = schemaMap.get(SobjectApiName).getDescribe().fields.getMap();
-		pricebookFieldsMap = fieldMap;
+		Map<String, Schema.SObjectField> fieldMap = schemaMap.get(objectName).getDescribe().fields.getMap();
+		objectFieldsMap = fieldMap;
 		return fieldMap;
+	}
+
+	/*******************************************************
+					getCommaSeparatedFields method
+	*******************************************************/
+	// Retrieves the fields from the pricebookentry schema and stores it in a map
+	public static String getCommaSeparatedFields(String objectName) {
+	
+		// Loop through the PricebookEntry fields and comma separate them into a string
+		String commaSeparatedFields = '';
+		for(String fieldName : getObjectFieldsMap(objectName).keyset()){
+			if(commaSeparatedFields == null || commaSeparatedFields == ''){
+				commaSeparatedFields = fieldName;
+			}else{
+				commaSeparatedFields = commaSeparatedFields + ', ' + fieldName;
+			}
+		}
+		return commaSeparatedFields;
 	}
 	/*******************************************************
 					checkMakeability method
 	*******************************************************/
 	// checks the entered values against the master product makeability rules
-	public static String checkMakeability(Product2 masterProduct, OrderItem orderLineItem) {
+	public static String checkMakeability(Product_Configuration__c masterProductConfig, OrderItem orderLineItem) {
 		String errorMessage = '';
 		// Check that values have been entered for width / height
-		if (masterProduct == null) {
-			errorMessage = RMS_errorMessages.PRODUCT_EMPTY;
+		if (masterProductConfig == null) {
+			errorMessage = RMS_errorMessages.PRODUCT_CONFIG_NOT_FOUND;
 			return errorMessage;		  
 		}
 		if (orderLineItem.Width__c == null || orderLineItem.Height__c == null) {
@@ -104,25 +129,54 @@ public with sharing class RMS_prodConfigManager {
 		} 
 		
 		// Check for minimum width makeability 
-		if (orderLineItem.Width__c < masterProduct.Min_Width__c) {
-			errorMessage = RMS_errorMessages.WIDTH_BELOW_MIN;
+		if (masterProductConfig.Min_Width__c != null) {
+			if (orderLineItem.Width__c < masterProductConfig.Min_Width__c) {
+				errorMessage = RMS_errorMessages.WIDTH_BELOW_MIN;
+			}
 		}
 		
 		// Check for minimum height makeability 
-		if (orderLineItem.Height__c < masterProduct.Min_Height__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_BELOW_MIN : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_BELOW_MIN;
+		if (masterProductConfig.Min_Height__c != null) {
+			if (orderLineItem.Height__c < masterProductConfig.Min_Height__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_BELOW_MIN : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_BELOW_MIN;
+			}
+		}
+		// Check for maximum width makeability 
+		if (masterProductConfig.Max_Width__c != null) {
+			if (orderLineItem.Width__c > masterProductConfig.Max_Width__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_ABOVE_MAX;
+			}
+		}
+		// Check for maximum height makeability 
+		if (masterProductConfig.Max_Height__c != null) {
+			if (orderLineItem.Height__c > masterProductConfig.Max_Height__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
+			}
+		}
+		// Check for maximum united inches 
+		if (masterProductConfig.United_Inch_Maximum__c != null) {
+			if ((orderLineItem.Height__c + orderLineItem.Width__c) > masterProductConfig.United_Inch_Maximum__c) {
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.UNITED_INCH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.UNITED_INCH_ABOVE_MAX;
+			}
 		}
 
-		// Check for maximum width makeability 
-		if (orderLineItem.Width__c > masterProduct.Max_Width__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_ABOVE_MAX;
+		// Check for height to width cap
+		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
+			if ((orderLineItem.Height__c > masterProductConfig.Height_to_Width_Cap_Height__c) &&
+				 (orderLineItem.Width__c > masterProductConfig.Height_to_Width_Cap_Width__c)) 
+			{
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
+			}
 		}
-		
-		// Check for maximum height makeability 
-		if (orderLineItem.Height__c > masterProduct.Max_Height__c) {
-			errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
+
+		// Check for width to height cap
+		if (masterProductConfig.Width_to_Height_Cap_Width__c != null && masterProductConfig.Width_to_Height_Cap_Height__c != null) {
+			if ((orderLineItem.Width__c > masterProductConfig.Width_to_Height_Cap_Width__c) &&
+				 (orderLineItem.Height__c > masterProductConfig.Width_to_Height_Cap_Height__c))
+			{
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
+			}
 		}
-		
 		return errorMessage;
 	}
 	
@@ -131,40 +185,37 @@ public with sharing class RMS_prodConfigManager {
 	*******************************************************/
 	// retrieves the correct price book entry based on the pricebook and product id and 
 	// creates the product config wrapper to store the config options
-	public static productConfigWrapper findProductConfiguration(OrderItem orderLineItem, String priceBookId, String childProductId, Product2 masterProduct) {
+	public static productConfigWrapper findProductConfiguration(OrderItem orderLineItem, String priceBookId, String childProductId, Product_Configuration__c masterProductConfig) {
 
 		// Check if we have the necessary Ids to retrieve the pricebookentry and return null if not
 		if (orderLineItem == null || priceBookId == null || childProductId == null) return null;
 
-		PricebookEntry pBookEntry = new PricebookEntry();
+		PricebookEntry pBookEntry = [SELECT Id, Pricing_Configuration__c FROM PricebookEntry
+																	WHERE 	PriceBook2Id =: pricebookId AND
+																			Product2Id =:	childProductId
+																	LIMIT 1 ];
+		
+		if (orderLineItem.Id == null) orderLineItem.PriceBookEntryId = pBookEntry.Id;
+		Pricing_Configuration__c pricingConfig = new Pricing_Configuration__c();
 
-		// Loop through the PricebookEntry fields and comma separate them into a string
-		String commaSeparatedFields = '';
-		for(String fieldName : getPricebookFieldsMap().keyset()){
-			if(commaSeparatedFields == null || commaSeparatedFields == ''){
-				commaSeparatedFields = fieldName;
-			}else{
-				commaSeparatedFields = commaSeparatedFields + ', ' + fieldName;
-			}
-		}
+		// If the pricingConfig was not found return null
+		if (pBookEntry.Pricing_Configuration__c == null) return null;
+
+		// Retrieve all fields for Pricing Configuration in a comma separated string
+		String commaSeparatedFields = getCommaSeparatedFields('Pricing_Configuration__c');
  
-		// Use the comma separated field string to build a dynamic query to retrieve the PricebookEntry
-		String query = 'SELECT ' + commaSeparatedFields + ' FROM PricebookEntry ' + 
-													' WHERE PriceBook2Id = \'' + priceBookId + '\''+
-													' AND Product2Id = \'' + childProductId + '\'' +
+		// Use the comma separated field string to build a dynamic query to retrieve the Pricing_Configuration__c
+		String query = 'SELECT ' + commaSeparatedFields + ' FROM Pricing_Configuration__c ' + 
+													' WHERE Id = \'' + pBookEntry.Pricing_Configuration__c + '\''+
 													' LIMIT 1';
  
 		// Retrieve all fields from the PricebookEntry object in a query
-		pBookEntry = Database.query(query);
+		pricingConfig = Database.query(query);
 
-		// If the pricebookentry was not found return null
-		if (pBookEntry == null) return null;
 
 		// Create a wrapper with the pricebook entry and order line item and return it
 		productConfigWrapper prodConfig;
-		prodConfig = new productConfigWrapper(pBookEntry, orderLineItem, masterProduct);
-
-		Object o = pBookEntry.get('Id');
+		prodConfig = new productConfigWrapper(pricingConfig, orderLineItem, masterProductConfig);
 
 		return prodConfig;
 
@@ -181,7 +232,7 @@ public with sharing class RMS_prodConfigManager {
 //		price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;		
 //		price = (!prodConfig.OrderLI.Corrosion_Resistant__c || prodConfig.corrosionResistantPrice == null) ? price : price + prodConfig.corrosionResistantPrice;	  
 //		price = (prodConfig.OrderLI.Dual_Color_Exterior__c == null || prodConfig.OrderLI.Dual_Color_Interior__c == null) ? price : price + prodConfig.DualColorPrice;	 
- //	   price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;	 
+//	   price = (!prodConfig.OrderLI.Gliding_Screen__c || prodConfig.glidingScreenPrice == null) ? price : price + prodConfig.glidingScreenPrice;	 
 //		price = (!prodConfig.OrderLI.Grilles_Between_Glass__c || prodConfig.grillesBetweenGlassPrice == null) ? price : price + prodConfig.grillesBetweenGlassPrice;	  
 
 		return price;
@@ -219,7 +270,7 @@ public with sharing class RMS_prodConfigManager {
 		if (fieldSetMembers == null) return pickListItems;
 		
 		for (Schema.FieldSetMember fsm : fieldSetMembers) {
-			Object o = prodConfig.pBookEntry.get(fsm.getFieldPath());
+			Object o = prodConfig.pricingConfig.get(fsm.getFieldPath());
 
 			if (o != null) 
 				pickListItems.add(new SelectOption(fsm.getLabel(), fsm.getLabel()));

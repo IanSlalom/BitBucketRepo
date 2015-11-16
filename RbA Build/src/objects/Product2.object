@@ -85,27 +85,6 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Handing__c</fullName>
-        <description>Select which handing options should be available for this product on the configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select which handing options should be available for this product on the configuration page.</inlineHelpText>
-        <label>Handing</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Vented</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Stationary</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
         <fullName>Inventoried_Item__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Check this box if it is an inventoried item.</description>
@@ -130,50 +109,6 @@
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Max_Height__c</fullName>
-        <externalId>false</externalId>
-        <label>Max Height</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Max_Width__c</fullName>
-        <externalId>false</externalId>
-        <label>Max Width</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Min_Height__c</fullName>
-        <externalId>false</externalId>
-        <label>Min Height</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Min_Width__c</fullName>
-        <externalId>false</externalId>
-        <label>Min Width</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Name</fullName>
@@ -210,6 +145,20 @@ Name,
     <fields>
         <fullName>ProductCode</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Product_Configuration__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The product configuration for this product with picklist values, makeability and other settings</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The product configuration for this product with picklist values, makeability and other settings</inlineHelpText>
+        <label>Product Configuration</label>
+        <referenceTo>Product_Configuration__c</referenceTo>
+        <relationshipLabel>Products</relationshipLabel>
+        <relationshipName>Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Product_Type__c</fullName>
@@ -526,17 +475,6 @@ Name,
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Handing__c</picklist>
-            <values>
-                <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Vented</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Product_Type__c</picklist>
             <values>
                 <fullName>Bay Bow</fullName>
@@ -687,17 +625,6 @@ Name,
             </values>
             <values>
                 <fullName>None</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Handing__c</picklist>
-            <values>
-                <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Vented</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

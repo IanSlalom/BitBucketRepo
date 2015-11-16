@@ -45,9 +45,10 @@
             <apex:selectList value="{!OrderItem.Handing__c}" label="Handing" size="1" id="handingOption">
                 <apex:selectOptions value="{!HandingOptionItems}"/>
             </apex:selectList>
-            <apex:inputField value="{!OrderItem.EJ_Frame__c}"  rendered="{!prodConfig.EJFramePrice != null}"/>
+            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.EJFrameControl == 'Required'}" rendered="{!prodConfig.EJFrameControl != 'Disabled'}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Glass Options" columns="1">
+
             <apex:selectList value="{!OrderItem.Glass_Option_Selected__c}" label="Glass Option" size="1" id="glassOption">
                 <apex:selectOptions value="{!GlassOptionItems}"/>
             </apex:selectList>

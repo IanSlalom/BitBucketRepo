@@ -24,9 +24,15 @@ public with sharing class RMS_errorMessages {
 	public static final String HEIGHT_BELOW_MIN = 'The height you entered is below the minimum for this product.';
 	public static final String WIDTH_ABOVE_MAX = 'The width you entered is above the maximum for this product.';
 	public static final String HEIGHT_ABOVE_MAX = 'The height you entered is above the maximum for this product.';
+	public static final String UNITED_INCH_ABOVE_MAX = 'The united inch total for the measurements entered is above the maximum for this product.';
+	public static final String HEIGHT_TO_WIDTH_CAP = 'The height and width you entered exceeds the height to width cap.';
+	public static final String WIDTH_TO_HEIGHT_CAP = 'The width and height you entered exceeds the width to height cap.';
+
+
 	public static final String CHILD_PRODUCT_NOT_FOUND = 'A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String MULTIPLE_CHILD_PRODUCTS = 'Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String INVALID_CHILD_PRODUCT = 'A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';
+	public static final String PRODUCT_CONFIG_NOT_FOUND = 'A suitable product configuration for this product could not be found based on the information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String ORDER_NOT_FOUND = 'The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = 'Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = 'Sorry, you cannot edit product line items on an activated order.';

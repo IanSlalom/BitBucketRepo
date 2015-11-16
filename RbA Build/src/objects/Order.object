@@ -156,9 +156,9 @@
     </fields>
     <fields>
         <fullName>Discount_Amount__c</fullName>
-        <description>The total discount amount rolled up to the order.</description>
+        <description>A roll-up sum of all discounts applied to this order (see the order discount related list).</description>
         <externalId>false</externalId>
-        <inlineHelpText>The total discount amount rolled up to the order.</inlineHelpText>
+        <inlineHelpText>A roll-up sum of all discounts applied to this order (see the order discount related list).</inlineHelpText>
         <label>Discount Amount</label>
         <summarizedField>Order_Discount__c.Discount_Amount__c</summarizedField>
         <summaryFilterItems>
