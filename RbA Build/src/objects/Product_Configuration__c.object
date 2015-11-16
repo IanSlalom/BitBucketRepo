@@ -123,6 +123,56 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Corrosion_Resistant_Control__c</fullName>
+        <description>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Corrosion Resistant Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Frame_Control__c</fullName>
+        <description>Controls whether EJ Frame is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether EJ Frame is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>EJ Frame Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Exterior_Color__c</fullName>
         <description>The exterior color</description>
         <externalId>false</externalId>
@@ -173,6 +223,90 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Finish_Option__c</fullName>
+        <description>The finish options available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The finish options available for this product configuration.</inlineHelpText>
+        <label>Finish Option</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Brickmold - Picture Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brickmould - Traditional</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Brickmould</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Chamfered Edge</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Flange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Glass_Option__c</fullName>
+        <description>Select the glass options to make available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass options to make available for this product configuration.</inlineHelpText>
+        <label>Glass Option</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Tempered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Specialty Glazing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Specialty Tempered Glazing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Laminated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Laminated And Tempered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Obscure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Obscure Tempered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SmartSun</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SmartSun And Tempered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Grille_Patterns__c</fullName>
         <description>Select the grille patterns that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -205,6 +339,40 @@
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Grille_Style__c</fullName>
+        <description>Select the options for grill style to make available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the options for grill style to make available for this product configuration.</inlineHelpText>
+        <label>Grille Style</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Grilles Between Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Interior Wood Only</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Interior Wood and GBG</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Simulated Divided Light</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Full Divided Light</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Handing__c</fullName>
@@ -319,6 +487,44 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Insect_Screen_Type__c</fullName>
+        <description>Select the options for screen type that you want to make available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the options for screen type that you want to make available for this product configuration.</inlineHelpText>
+        <label>Insect Screen Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum (1/2)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum Dual</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene (1/2)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene (Wood Vaneer)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Interior_Color__c</fullName>
         <description>The interior color of the product</description>
         <externalId>false</externalId>
@@ -421,6 +627,31 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Perm_App_Int_Wood_Grille_Control__c</fullName>
+        <description>Controls whether Permanently Applied Interior Wood Grille is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Permanently Applied Interior Wood Grille is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Perm App Int Wood Grille Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Screen_Vaneer_Type__c</fullName>
         <description>Select the screen vaneer types that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -459,6 +690,31 @@
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Wide_Bar_Control__c</fullName>
+        <description>Controls whether Wide Bar is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Wide Bar is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Wide Bar Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Width_to_Height_Cap_Height__c</fullName>
