@@ -1,6 +1,8 @@
 @isTest
 public with sharing class RMS_backOfficeChecklistManagerTest {
 	
+	
+	
 	static testmethod void matchingBackOfficeChecks(){
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
@@ -10,26 +12,20 @@ public with sharing class RMS_backOfficeChecklistManagerTest {
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
 		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni1;
-		
-		Municipality__c muni2 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni2;
-		
-		Municipality_Match__c mm1 = utility.createMunicipalityMatch(muni1.id, '55429', 'Blaine');
-		insert mm1;
-		
-		Municipality_Match__c mm2 = utility.createMunicipalityMatch(muni1.id, '55444', 'Blaine');
-		insert mm2;
-
 		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = '55429' , BillingCity = 'Blaine' );
 		insert newDwelling;
 		
-		Account dwelling = [SELECT Id, Building_Permit__c FROM Account WHERE Id = :newDwelling.id];
+		Order ord1 = new Order( AccountId = newDwelling.id ,
+								Status = 'Draft', 
+								EffectiveDate = Date.Today()
+								);
+		insert ord1;
 		
-		System.assertEquals(dwelling.Building_Permit__c, muni1.id);
+		list<Back_Office_Check__c> checks = [SELECT Id, Order__c FROM Back_Office_Check__c WHERE Order__c = :ord1.id];
+		
+		System.assertEquals(checks.size(), 2);
 
-	}
+	} 
 	
 	static testmethod void notMatchingBackOfficeChecks(){
 		TestUtilityMethods utility = new TestUtilityMethods();
@@ -39,15 +35,6 @@ public with sharing class RMS_backOfficeChecklistManagerTest {
 		id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
-		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni1;
-		
-		Municipality__c muni2 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni2;
-
-		Municipality_Match__c mm2 = utility.createMunicipalityMatch(muni1.id, '55444', 'Blaine');
-		insert mm2;
 
 		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = '55429' , BillingCity = 'Blaine' );
 		insert newDwelling;
@@ -55,7 +42,21 @@ public with sharing class RMS_backOfficeChecklistManagerTest {
 		
 		Account dwelling = [SELECT Id, Building_Permit__c FROM Account WHERE Id = :newDwelling.id];
 		
-		System.assertEquals(dwelling.Building_Permit__c, null);
+		Back_Office_Checklist_Configuration__c bocc = [SELECT id, Contract_Signed__c, Lien_Rights_Signed__c FROM Back_Office_Checklist_Configuration__c];
+		
+		bocc.Contract_Signed__c = false;
+		bocc.Lien_Rights_Signed__c = false;
+		update bocc;
+		
+		Order ord1 = new Order( AccountId = newDwelling.id ,
+								Status = 'Draft', 
+								EffectiveDate = Date.Today()
+								);
+		insert ord1;
+		
+		list<Back_Office_Check__c> checks = [SELECT Id, Order__c FROM Back_Office_Check__c WHERE Order__c = :ord1.id];
+		
+		System.assertEquals(checks.size(), 0);
 	}
 
 

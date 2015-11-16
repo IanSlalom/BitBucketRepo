@@ -25,6 +25,8 @@
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
+        <members>RMS_salesOrderManager</members>
+        <members>RMS_salesOrderManagerTest</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
