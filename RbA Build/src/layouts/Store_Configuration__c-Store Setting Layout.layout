@@ -151,13 +151,21 @@
         <fields>State_Supplement__c</fields>
         <relatedList>Back_Office_Checklist_Configuration__c.Store_Configuration__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>UPDATEDBY_USER</fields>
+        <fields>LAST_UPDATE</fields>
+        <relatedList>Financial_Configuration__c.Store_Configuration__c</relatedList>
+        <sortField>LAST_UPDATE</sortField>
+        <sortOrder>Desc</sortOrder>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000RDpO</masterLabel>
+        <masterLabel>00h3B000000Mu0q</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
