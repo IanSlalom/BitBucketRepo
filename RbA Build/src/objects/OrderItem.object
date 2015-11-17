@@ -125,26 +125,6 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
-        <fullName>Dhruvsoft__converted_form_opportunity__c</fullName>
-        <defaultValue>false</defaultValue>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>converted form opportunity</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Dhruvsoft__opportunity_line_item_Id__c</fullName>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>opportunity line item Id</label>
-        <length>18</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>The discount (in currency) applied to the purchase order (used for AROs)</description>
         <externalId>false</externalId>

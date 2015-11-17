@@ -115,28 +115,6 @@
         <trackTrending>false</trackTrending>
     </fields>
     <fields>
-        <fullName>Dhruvsoft__IsConverted1__c</fullName>
-        <defaultValue>false</defaultValue>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>IsConverted</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <trackTrending>false</trackTrending>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Dhruvsoft__OrderNumber__c</fullName>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>Order Number</label>
-        <length>8</length>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>The rollup of discounts applied to the opportunity</description>
         <externalId>false</externalId>
@@ -253,6 +231,11 @@
     <fields>
         <fullName>OwnerId</fullName>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PartnerAccountId</fullName>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -735,16 +718,5 @@ COPY THE URL FROM THIS BUTTON and paste it into your own custom button or link. 
 &amp;serverUrl={!API.Partner_Server_URL_290}
 &amp;id={!Opportunity.Id}</url>
         <width>900</width>
-    </webLinks>
-    <webLinks>
-        <fullName>Dhruvsoft__Convert_To_Order</fullName>
-        <availability>online</availability>
-        <displayType>button</displayType>
-        <encodingKey>UTF-8</encodingKey>
-        <linkType>url</linkType>
-        <masterLabel>Convert To Order</masterLabel>
-        <openType>replace</openType>
-        <protected>false</protected>
-        <url>/apex/Dhruvsoft__OppToOrder?id={!Opportunity.Id}</url>
     </webLinks>
 </CustomObject>

@@ -122,39 +122,6 @@
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
-        <fullName>Dhruvsoft__OpportunityId__c</fullName>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>OpportunityId</label>
-        <length>18</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Dhruvsoft__Opportunity__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>Opportunity</label>
-        <referenceTo>Opportunity</referenceTo>
-        <relationshipLabel>Orders</relationshipLabel>
-        <relationshipName>Orders</relationshipName>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Dhruvsoft__convert_from_opportunity__c</fullName>
-        <defaultValue>false</defaultValue>
-        <deprecated>false</deprecated>
-        <externalId>false</externalId>
-        <label>convert from opportunity</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>A roll-up sum of all discounts applied to this order (see the order discount related list).</description>
         <externalId>false</externalId>
@@ -418,7 +385,6 @@
         <columns>CORE.USERS.ALIAS</columns>
         <columns>SALES.ACCOUNT.NAME</columns>
         <columns>ORDERS.STATUS</columns>
-        <columns>Dhruvsoft__Opportunity__c</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>ORDERS.STATUS_CODE</field>
