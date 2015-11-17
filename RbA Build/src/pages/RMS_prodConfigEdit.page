@@ -90,26 +90,32 @@
             </apex:selectList>
             <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  rendered="{!prodConfig.corrosionResistantHardwarePrice != null}"/>
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Grille Style" columns="1">
-            <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle">
-                <apex:selectOptions value="{!GrilleStyleItems}"/>
-            </apex:selectList>
-            <apex:inputField value="{!OrderItem.Permanently_Applied_Interior_Wood_Grille__c}"  rendered="{!prodConfig.PermanentlyAppliedInteriorWoodGrillePrice != null}"/>
-            <apex:inputField value="{!OrderItem.Wide_Bar__c}"/>
-        </apex:pageBlockSection>
-        <apex:pageBlockSection title="Grille Pattern" columns="1">
-            <apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Pattern" size="1" id="grillePattern" rendered="{!prodConfig.grillePatterns != null}">
-                <apex:selectOptions value="{!GrillePatternItems}"/>
-            </apex:selectList>
-            <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_Wide__c}" label="Colonial Grille Lights Wide" size="1" id="colonialGrilleLightsWide" rendered="{!prodConfig.ColonialGrilleLightsWide != null}">
-                <apex:selectOptions value="{!ColonialGrilleLightsWideItems}"/>
-            </apex:selectList>
-            <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_High__c}" label="Colonial Grille Lights High" size="1" id="colonialGrilleLightsHigh" rendered="{!prodConfig.ColonialGrilleLightsHigh != null}">
-                <apex:selectOptions value="{!ColonialGrilleLightsHighItems}"/>
-            </apex:selectList>
 
-
-        </apex:pageBlockSection>
+		<apex:tabPanel switchType="Sash" selectedTab="AllSashes" id="sashPanel">
+			<apex:tab label="All Sashes" name="allsashes" id="allsashes">
+		        <apex:pageBlockSection title="Grille Style" columns="1">
+        		    <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle">
+                		<apex:selectOptions value="{!GrilleStyleItems}"/>
+		            </apex:selectList>
+        		    <apex:inputField value="{!OrderItem.Permanently_Applied_Interior_Wood_Grille__c}"  rendered="{!prodConfig.PermanentlyAppliedInteriorWoodGrillePrice != null}"/>
+ 		           <apex:inputField value="{!OrderItem.Wide_Bar__c}"/>
+        		</apex:pageBlockSection>
+     		   <apex:pageBlockSection title="Grille Pattern" columns="1">
+     		       <apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Pattern" size="1" id="grillePattern" rendered="{!prodConfig.grillePatterns != null}">
+            		    <apex:selectOptions value="{!GrillePatternItems}"/>
+ 		           </apex:selectList>
+        		    <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_Wide__c}" label="Colonial Grille Lights Wide" size="1" id="colonialGrilleLightsWide" rendered="{!prodConfig.ColonialGrilleLightsWide != null}">
+                		<apex:selectOptions value="{!ColonialGrilleLightsWideItems}"/>
+  		          </apex:selectList>
+        		    <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_High__c}" label="Colonial Grille Lights High" size="1" id="colonialGrilleLightsHigh" rendered="{!prodConfig.ColonialGrilleLightsHigh != null}">
+                		<apex:selectOptions value="{!ColonialGrilleLightsHighItems}"/>
+     		       </apex:selectList>
+       		 </apex:pageBlockSection>
+			</apex:tab>
+		    <apex:tab label="Sash 1" name="sash1" id="sash1">content for sash 1</apex:tab>
+		    <apex:tab label="Sash 2" name="sash2" id="sash2">content for sash 2</apex:tab>
+		    <apex:tab label="Sash 3" name="sash3" id="sash3">content for sash 3</apex:tab>
+		</apex:tabPanel>
 
     </apex:pageBlock>
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
