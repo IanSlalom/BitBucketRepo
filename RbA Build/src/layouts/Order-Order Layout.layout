@@ -24,10 +24,6 @@
                 <behavior>Edit</behavior>
                 <field>BillToContactId</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Dhruvsoft__Opportunity__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
