@@ -251,6 +251,17 @@
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Municipality Contact</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>The Municipality Contact must be attached to the Municipality associated to the Work Order.</errorMessage>
+            <filterItems>
+                <field>$Source.Municipality__c</field>
+                <operation>equals</operation>
+                <valueField>Municipality_Contact__c.Municipality__c</valueField>
+            </filterItems>
+            <infoMessage>The Municipality Contact must be attached to the Municipality associated to the Work Order.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Municipality_Contact__c</referenceTo>
         <relationshipLabel>Permit Work Orders</relationshipLabel>
         <relationshipName>Work_Orders</relationshipName>
@@ -2545,6 +2556,14 @@ IF (SVMXC__Age__c &lt;= 30, &quot;16 to 30 days&quot;,
                 <default>false</default>
             </picklistValues>
             <picklistValues>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
                 <fullName>Scheduled</fullName>
                 <default>false</default>
             </picklistValues>
@@ -2561,19 +2580,15 @@ IF (SVMXC__Age__c &lt;= 30, &quot;16 to 30 days&quot;,
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Applied</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Pulled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
                 <fullName>Approved</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Final Failed</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -9340,7 +9355,23 @@ NULL)</formula>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Pulled</fullName>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Failed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
