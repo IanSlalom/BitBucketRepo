@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <fields>
+        <help><!-- Checked if Breather Tubes are needed. --></help>
+        <label><!-- Breather Tubes --></label>
+        <name>Breather_Tubes__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of grille lights high for colonial grille pattern. --></help>
+        <label><!-- Colonial Grille Lights High --></label>
+        <name>Colonial_Grille_Lights_High__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of grille lights wide for colonial grille pattern. --></help>
+        <label><!-- Colonial Grille Lights Wide --></label>
+        <name>Colonial_Grille_Lights_Wide__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Amount --></label>
+        <name>Commission_Amount__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Due --></label>
+        <name>Commission_Due__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Paid --></label>
+        <name>Commission_Paid__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if this corrosion resistant hardware option has been applied to this product. --></help>
+        <label><!-- Corrosion Resistant Hardware --></label>
+        <name>Corrosion_Resistant_Hardware__c</name>
+    </fields>
+    <fields>
         <label><!-- converted form opportunity --></label>
         <name>Dhruvsoft__converted_form_opportunity__c</name>
     </fields>
@@ -14,19 +46,151 @@
         <name>Discount_Amount__c</name>
     </fields>
     <fields>
+        <help><!-- Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed. --></help>
+        <label><!-- EJ Frame --></label>
+        <name>EJ_Frame__c</name>
+    </fields>
+    <fields>
+        <help><!-- The exterior color of the product --></help>
+        <label><!-- Exterior Color --></label>
+        <name>Exterior_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The finish option applied to this product. --></help>
+        <label><!-- Finish Option --></label>
+        <name>Finish_Option__c</name>
+    </fields>
+    <fields>
         <help><!-- The GL Account associated to the order line item --></help>
         <label><!-- GL Account --></label>
         <name>GL_Account__c</name>
+    </fields>
+    <fields>
+        <help><!-- The glass option that was selected from the product configuration page. --></help>
+        <label><!-- Glass Option Selected --></label>
+        <name>Glass_Option_Selected__c</name>
+    </fields>
+    <fields>
+        <label><!-- Gliding Screen --></label>
+        <name>Gliding_Screen__c</name>
+    </fields>
+    <fields>
+        <help><!-- The grille pattern applied to this product. --></help>
+        <label><!-- Grille Pattern --></label>
+        <name>Grille_Pattern__c</name>
+    </fields>
+    <fields>
+        <help><!-- The grille style selected for this product. --></help>
+        <label><!-- Grille Style --></label>
+        <name>Grille_Style__c</name>
+    </fields>
+    <fields>
+        <label><!-- Grilles Between Glass --></label>
+        <name>Grilles_Between_Glass__c</name>
+    </fields>
+    <fields>
+        <help><!-- Handing refers to the direction a window or door opens. --></help>
+        <label><!-- Handing --></label>
+        <name>Handing__c</name>
+    </fields>
+    <fields>
+        <help><!-- The hardware color applied to this product. --></help>
+        <label><!-- Hardware Color --></label>
+        <name>Hardware_Color__c</name>
+    </fields>
+    <fields>
+        <label><!-- Height --></label>
+        <name>Height__c</name>
+    </fields>
+    <fields>
+        <help><!-- The insect screen style selected for this product. --></help>
+        <label><!-- Insect Screen Style --></label>
+        <name>Insect_Screen_Style__c</name>
+    </fields>
+    <fields>
+        <help><!-- The interior color of the product. --></help>
+        <label><!-- Interior Color --></label>
+        <name>Interior_Color__c</name>
     </fields>
     <fields>
         <label><!-- NSPR/SPR --></label>
         <name>NSPR__c</name>
     </fields>
     <fields>
+        <help><!-- Checked if the permanently applied interior wood grille option was selected. --></help>
+        <label><!-- Permanently Applied Interior Wood Grille --></label>
+        <name>Permanently_Applied_Interior_Wood_Grille__c</name>
+    </fields>
+    <fields>
+        <label><!-- Product Type --></label>
+        <name>Product_Type__c</name>
+    </fields>
+    <fields>
+        <label><!-- Product Type_old --></label>
+        <name>Product_Type_old__c</name>
+        <picklistValues>
+            <masterLabel>Bay Bow</masterLabel>
+            <translation><!-- Bay Bow --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Door</masterLabel>
+            <translation><!-- Door --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Entry Door</masterLabel>
+            <translation><!-- Entry Door --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>FF</masterLabel>
+            <translation><!-- FF --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>IF</masterLabel>
+            <translation><!-- IF --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Series2</masterLabel>
+            <translation><!-- Series2 --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
         <help><!-- The purchase order that covers this sales order line item --></help>
         <label><!-- Purchase Order --></label>
         <name>Purchase_Order__c</name>
         <relationshipLabel><!-- Order Products --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Identifies the room for this product. --></help>
+        <label><!-- Room --></label>
+        <name>Room__c</name>
+    </fields>
+    <fields>
+        <help><!-- The height of the opening as measured by sales. --></help>
+        <label><!-- Sales Height --></label>
+        <name>Sales_Height__c</name>
+    </fields>
+    <fields>
+        <help><!-- The width of the opening as measured by sales. --></help>
+        <label><!-- Sales Width --></label>
+        <name>Sales_Width__c</name>
+    </fields>
+    <fields>
+        <help><!-- The screen type applied to the selected product. --></help>
+        <label><!-- Screen Type --></label>
+        <name>Screen_Type__c</name>
+    </fields>
+    <fields>
+        <help><!-- The screen vaneer type applied to this product. --></help>
+        <label><!-- Screen Vaneer Type --></label>
+        <name>Screen_Vaneer_Type__c</name>
+    </fields>
+    <fields>
+        <label><!-- Size --></label>
+        <name>Size__c</name>
+    </fields>
+    <fields>
+        <label><!-- Specialty Glazing --></label>
+        <name>Specialty_Glazing__c</name>
     </fields>
     <fields>
         <help><!-- The status of the order line item. --></help>
@@ -64,6 +228,11 @@
         <name>Total_Wholesale_Cost__c</name>
     </fields>
     <fields>
+        <help><!-- The number used to identify the opening(window or door) location for this product --></help>
+        <label><!-- Unit Id --></label>
+        <name>Unit_Id__c</name>
+    </fields>
+    <fields>
         <help><!-- The wholesale cost of the product --></help>
         <label><!-- Wholesale Cost --></label>
         <name>Unit_Wholesale_Cost__c</name>
@@ -86,11 +255,56 @@
         <label><!-- Variant Number --></label>
         <name>Variant_Number__c</name>
     </fields>
+    <fields>
+        <help><!-- Checked if the Wide Bar grille option was selected. --></help>
+        <label><!-- Wide Bar --></label>
+        <name>Wide_Bar__c</name>
+    </fields>
+    <fields>
+        <label><!-- Width --></label>
+        <name>Width__c</name>
+    </fields>
     <layouts>
         <layout>Order Product Layout</layout>
         <sections>
+            <label><!-- Finishes --></label>
+            <section>Finishes</section>
+        </sections>
+        <sections>
+            <label><!-- Glass Options --></label>
+            <section>Glass Options</section>
+        </sections>
+        <sections>
+            <label><!-- Grille Pattern --></label>
+            <section>Grille Pattern</section>
+        </sections>
+        <sections>
+            <label><!-- Grille Style --></label>
+            <section>Grille Style</section>
+        </sections>
+        <sections>
+            <label><!-- Handing &amp; Frame --></label>
+            <section>Handing &amp; Frame</section>
+        </sections>
+        <sections>
+            <label><!-- Hardware Options --></label>
+            <section>Hardware Options</section>
+        </sections>
+        <sections>
+            <label><!-- Insect Screen --></label>
+            <section>Insect Screen</section>
+        </sections>
+        <sections>
+            <label><!-- Measurements --></label>
+            <section>Measurements</section>
+        </sections>
+        <sections>
             <label><!-- Pricing --></label>
             <section>Pricing</section>
+        </sections>
+        <sections>
+            <label><!-- Product Config --></label>
+            <section>Product Config</section>
         </sections>
     </layouts>
 </CustomObjectTranslation>
