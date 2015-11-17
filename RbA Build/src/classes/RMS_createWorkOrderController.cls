@@ -71,12 +71,14 @@ public with sharing class RMS_createWorkOrderController {
 		wo.Sold_Order__c = orderId;
 		wo.SVMXC__Company__c = accountId;
 		wo.SVMXC__Street__c = billingStreet;
-		wo.SVMXC__City__c = billingCity;
+		wo.SVMXC__City__c = billingCity; 
 		wo.SVMXC__State__c = billingState;
 		wo.SVMXC__Zip__c = billingPostalCode;
 		wo.SVMXC__Country__c = billingCountry;
-		
-		wo.Opportunity__c = opportunity;
+		        
+        if(opportunity != null && opportunity != ''){
+            wo.Opportunity__c = opportunity;
+        }
 		if(hoa != null && hoa != '' && wo.SVMXC__Order_Type__c == 'HOA'){
 			wo.Municipality__c = hoa;
 		}else if(historical != null && historical != '' && wo.SVMXC__Order_Type__c == 'Historical'){

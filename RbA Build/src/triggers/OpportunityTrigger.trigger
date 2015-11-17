@@ -12,7 +12,6 @@ trigger OpportunityTrigger on Opportunity (before insert, before update, before 
 	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 	//map<String, Foundation_States__c> allstates = Foundation_States__c.getAll();
 	
-	
 	if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
 		if(Trigger.isDelete){
 			Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
@@ -21,7 +20,9 @@ trigger OpportunityTrigger on Opportunity (before insert, before update, before 
 		}
 	}
 	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
-		OpportunityTriggerHandler handler = new OpportunityTriggerHandler();
+
+        RMS_salesOrderManager salesOrderManager = new RMS_salesOrderManager();
+        
             
 		// Before Insert
 		/*
@@ -47,16 +48,19 @@ trigger OpportunityTrigger on Opportunity (before insert, before update, before 
 		// After Insert
 		/*
 		else if(Trigger.isInsert && Trigger.isAfter){
-		handler.OnAfterInsert(Trigger.new, Trigger.newMap);
+			handler.OnAfterInsert(Trigger.new, Trigger.newMap);
 		}
 		*/
 		 
 		// After Update
 		/*
-		else if(Trigger.isUpdate && Trigger.isAfter){
-		    handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-		}
+		else 
 		*/
+		
+		if(Trigger.isUpdate && Trigger.isAfter){
+		    salesOrderManager.createSalesOrderOnOpportunityClosedWon(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		} 
+		
 		            
 		//After Delete
 		/*
