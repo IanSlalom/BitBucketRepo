@@ -169,13 +169,37 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* Set up Width Fraction Items  *****************/
+	private static transient List<SelectOption> lWidthFractionItems;
+	public List<SelectOption> widthFractionItems{
+		get
+		{   
+			if (lWidthFractionItems == null) {
+				lWidthFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Width_Fractions__c);
+			}			   
+			return lWidthFractionItems;
+		}
+	}
+
+	/******* Set up Height Fraction Items  *****************/
+	private static transient List<SelectOption> lHeightFractionItems;
+	public List<SelectOption> heightFractionItems{
+		get
+		{   
+			if (lHeightFractionItems == null) {
+				lHeightFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Height_Fractions__c);
+			}			   
+			return lHeightFractionItems;
+		}
+	}
+
 	/******* Set up Exterior Color Items  *****************/
 	private static transient List<SelectOption> lExteriorColorItems;
 	public List<SelectOption> exteriorColorItems{
 		get
 		{   
-			if (lExteriorColorItems == null && prodConfig.dualColorPrice != null) {
-				lExteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.exteriorColors);
+			if (lExteriorColorItems == null) {
+				lExteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Color__c);
 			}			   
 			return lExteriorColorItems;
 		}
@@ -186,23 +210,35 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> interiorColorItems{
 		get
 		{   
-			if (lInteriorColorItems == null && prodConfig.dualColorPrice != null) {
-				lInteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.interiorColors);
+			if (lInteriorColorItems == null) {
+				lInteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Color__c);
 			}
 			return lInteriorColorItems;
 		}
 	}
 
 
-	/******* Glass Option Items  *****************/
-	private static transient List<SelectOption> lglassOptionItems;
-	public List<SelectOption> glassOptionItems {
+	/******* Glazing Items  *****************/
+	private static transient List<SelectOption> lGlazingItems;
+	public List<SelectOption> glazingItems {
 		get
 		{   
-			if (lglassOptionItems == null) {
-				lglassOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.glassOptions);
+			if (lGlazingItems == null) {
+				lGlazingItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glazing__c);
 			}			   
-			return lglassOptionItems;
+			return lGlazingItems;
+		}
+	} 
+
+	/******* Glass Pattern Items  *****************/
+	private static transient List<SelectOption> lGlassPatternItems;
+	public List<SelectOption> glassPatternItems {
+		get
+		{   
+			if (lGlassPatternItems == null) {
+				lGlassPatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glass_Pattern__c);
+			}			   
+			return lGlassPatternItems;
 		}
 	} 
 
@@ -254,15 +290,51 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Finish Items  *****************/
-	private static transient List<SelectOption> lfinishOptionItems;
-	public List<SelectOption> finishOptionItems {
+	/******* Exterior Trim Items  *****************/
+	private static transient List<SelectOption> lExteriorTrimItems;
+	public List<SelectOption> exteriorTrimItems {
 		get
 		{   
-			if (lfinishOptionItems== null) {
-				lfinishOptionItems= RMS_prodConfigManager.retrievePickListItems(prodConfig.finishOptions);
+			if (lExteriorTrimItems== null) {
+				lExteriorTrimItems= RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim__c);
 			}			   
-			return lfinishOptionItems;
+			return lExteriorTrimItems;
+		}
+	} 
+
+	/******* Frame Type Items  *****************/
+	private static transient List<SelectOption> lFrameTypeItems;
+	public List<SelectOption> frameTypeItems {
+		get
+		{   
+			if (lFrameTypeItems == null) {
+				lFrameTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Frame_Type__c);
+			}			   
+			return lFrameTypeItems;
+		}
+	} 
+
+	/******* Checkrail Style Items  *****************/
+	private static transient List<SelectOption> lCheckrailStyleItems;
+	public List<SelectOption> checkrailStyleItems {
+		get
+		{   
+			if (lCheckrailStyleItems == null) {
+				lCheckrailStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Checkrail_Style__c);
+			}			   
+			return lCheckrailStyleItems;
+		}
+	} 
+
+	/******* Interior Trim Items  *****************/
+	private static transient List<SelectOption> lInteriorTrimItems;
+	public List<SelectOption> interiorTrimItems {
+		get
+		{   
+			if (lInteriorTrimItems == null) {
+				lInteriorTrimItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Trim__c);
+			}			   
+			return lInteriorTrimItems;
 		}
 	} 
 
@@ -290,15 +362,40 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Insect Screen Style Items  *****************/
-	private static transient List<SelectOption> lInsectScreenOptionItems;
-	public List<SelectOption> insectScreenOptionItems {
+	/******* Lifts Pulls Items  *****************/
+	private static transient List<SelectOption> lLiftsPullsItems;
+	public List<SelectOption> liftsPullsItems {
 		get
 		{   
-			if (lInsectScreenOptionItems == null) {
-				lInsectScreenOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.screenTypes);
+			if (lLiftsPullsItems == null) {
+				lLiftsPullsItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lifts_Pulls__c);
+			}			   
+			return lLiftsPullsItems;
+		}
+	} 
+
+	/******* Locks Sash Items  *****************/
+	private static transient List<SelectOption> lLocksSashItems;
+	public List<SelectOption> locksSashItems {
+		get
+		{   
+			if (lLocksSashItems == null) {
+				lLocksSashItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Locks_Sash__c);
+			}			   
+			return lLocksSashItems;
+		}
+	} 
+
+
+	/******* Screen Type Items  *****************/
+	private static transient List<SelectOption> lScreenTypeItems;
+	public List<SelectOption> screenTypeItems {
+		get
+		{   
+			if (lScreenTypeItems == null) {
+				lScreenTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Type__c);
 			}
-			return lInsectScreenOptionItems;
+			return lScreenTypeItems;
 		}
 	} 
 
@@ -321,7 +418,8 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Enter button is clicked at the master product level
 	public virtual pageReference enterProduct() {
 		
-		inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
+//		inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
+		inputUI = 0;
 		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
 		if(!String.isBlank(errorMessage)) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));

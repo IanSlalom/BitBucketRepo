@@ -45,11 +45,9 @@ public with sharing class RMS_prodConfigManager {
 		public OrderItem orderLI						{ get; set; }
 		public Pricing_Configuration__c pricingConfig				{ get; set; }
 		public String   handingOptions				  { get; private set; }
-		public String   finishOptions				  { get; private set; }
-		public String   screenTypes				  { get; private set; }
-		public String   glassOptions				  { get; private set; }
 		public String   grilleStyles				  { get; private set; }
 		public String   EJFrameControl					{ get; private set; }
+		public Product_Configuration__c mpc				{ get; set; }
  
 		// constructors
 		public ProductConfigWrapper(){}
@@ -73,11 +71,9 @@ public with sharing class RMS_prodConfigManager {
 				orderLI								 = orderLItem;
 				pricingConfig							= pricingConfigInput;
 				handingOptions						  = masterProductConfig.Handing__c;
-				finishOptions						  = masterProductConfig.Finish_Option__c;
-				screenTypes						  = masterProductConfig.Insect_Screen_Type__c;
-				glassOptions						  = masterProductConfig.Glass_Option__c;
 				grilleStyles						  = masterProductConfig.Grille_Style__c;
 				EJFrameControl						  = masterProductConfig.EJ_Frame_Control__c;
+				mpc										= masterProductConfig;
 		}
 	}
 
@@ -119,7 +115,7 @@ public with sharing class RMS_prodConfigManager {
 	public static String checkMakeability(Product_Configuration__c masterProductConfig, OrderItem orderLineItem) {
 		String errorMessage = '';
 		// Check that values have been entered for width / height
-		if (masterProductConfig == null) {
+/*		if (masterProductConfig == null) {
 			errorMessage = RMS_errorMessages.PRODUCT_CONFIG_NOT_FOUND;
 			return errorMessage;		  
 		}
@@ -176,7 +172,7 @@ public with sharing class RMS_prodConfigManager {
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
-		}
+		}*/
 		return errorMessage;
 	}
 	
