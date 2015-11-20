@@ -175,7 +175,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lMeasurementFractionItems == null) {
-//				lMeasurementFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Measurement_Fractions__c);
+				lMeasurementFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Measurement_Fractions__c);
 			}			   
 			return lMeasurementFractionItems;
 		}
@@ -447,6 +447,269 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* Mull Sequence Mullion Items  *****************/
+	private static transient List<SelectOption> lMullSequenceMullionItems;
+	public List<SelectOption> mullSequenceMullionItems{
+		get
+		{   
+			if (lMullSequenceMullionItems== null) {
+				lMullSequenceMullionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Mull_Sequence_Mullion__c);
+			}
+			return lMullSequenceMullionItems;
+		}
+	}
+
+	/******* Sash Operation Items  *****************/
+	private static transient List<SelectOption> lSashOperationItems;
+	public List<SelectOption> sashOperationItems{
+		get
+		{   
+			if (lSashOperationItems == null) {
+				lSashOperationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Operation__c);
+			}
+			return lSashOperationItems;
+		}
+	}
+
+	/******* EJ Thickness Items  *****************/
+	private static transient List<SelectOption> lEJThicknessItems;
+	public List<SelectOption> EJThicknessItems{
+		get
+		{   
+			if (lEJThicknessItems == null) {
+				lEJThicknessItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Thickness__c);
+			}
+			return lEJThicknessItems;
+		}
+	}
+
+	/******* EJ Wall Depth Items  *****************/
+	private static transient List<SelectOption> lEJWallDepthItems;
+	public List<SelectOption> EJWallDepthItems{
+		get
+		{   
+			if (lEJWallDepthItems == null) {
+				lEJWallDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Wall_Depth__c);
+			}
+			return lEJWallDepthItems;
+		}
+	}
+
+	/******* EJ Species Items  *****************/
+	private static transient List<SelectOption> lEJSpeciesItems;
+	public List<SelectOption> EJSpeciesItems{
+		get
+		{   
+			if (lEJSpeciesItems == null) {
+				lEJSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Species__c);
+			}
+			return lEJSpeciesItems;
+		}
+	}
+
+	/******* EJ Color Items  *****************/
+	private static transient List<SelectOption> lEJColorItems;
+	public List<SelectOption> EJColorItems{
+		get
+		{   
+			if (lEJColorItems == null) {
+				lEJColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Color__c);
+			}
+			return lEJColorItems;
+		}
+	}
+
+	/******* Casing Profile Items  *****************/
+	private static transient List<SelectOption> lCasingProfileItems;
+	public List<SelectOption> casingProfileItems{
+		get
+		{   
+			if (lCasingProfileItems == null) {
+				lCasingProfileItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Profile__c);
+			}
+			return lCasingProfileItems;
+		}
+	}
+
+	/******* Casing Species Items  *****************/
+	private static transient List<SelectOption> lCasingSpeciesItems;
+	public List<SelectOption> casingSpeciesItems{
+		get
+		{   
+			if (lCasingSpeciesItems == null) {
+				lCasingSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Species__c);
+			}
+			return lCasingSpeciesItems;
+		}
+	}
+
+	/******* Casing Location Items  *****************/
+	private static transient List<SelectOption> lCasingLocationItems;
+	public List<SelectOption> casingLocationItems{
+		get
+		{   
+			if (lCasingLocationItems == null) {
+				lCasingLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Location__c);
+			}
+			return lCasingLocationItems;
+		}
+	}
+
+	/******* Brickmould Location Items  *****************/
+	private static transient List<SelectOption> lBrickmouldLocationItems;
+	public List<SelectOption> brickmouldLocationItems{
+		get
+		{   
+			if (lBrickmouldLocationItems == null) {
+				lBrickmouldLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Brickmould_Location__c);
+			}
+			return lBrickmouldLocationItems;
+		}
+	}
+
+	/******* Drip Cap Pieces Items  *****************/
+	private static transient List<SelectOption> lDripCapPiecesItems;
+	public List<SelectOption> dripCapPiecesItems{
+		get
+		{   
+			if (lDripCapPiecesItems == null) {
+				lDripCapPiecesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Drip_Cap_Pieces__c);
+			}
+			return lDripCapPiecesItems;
+		}
+	}
+
+	/******* Screen Color Items  *****************/
+	private static transient List<SelectOption> lScreenColorItems;
+	public List<SelectOption> screenColorItems{
+		get
+		{   
+			if (lScreenColorItems == null) {
+				lScreenColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Color__c);
+			}
+			return lScreenColorItems;
+		}
+	}
+
+	/******* Exterior Grille Color Items  *****************/
+	private static transient List<SelectOption> lExteriorGrilleColorItems;
+	public List<SelectOption> exteriorGrilleColorItems{
+		get
+		{   
+			if (lExteriorGrilleColorItems == null) {
+				lExteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Grille_Color__c);
+			}
+			return lExteriorGrilleColorItems;
+		}
+	}
+
+	/******* Interior Grille Color Items  *****************/
+	private static transient List<SelectOption> lInteriorGrilleColorItems;
+	public List<SelectOption> interiorGrilleColorItems{
+		get
+		{   
+			if (lInteriorGrilleColorItems == null) {
+				lInteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Grille_Color__c);
+			}
+			return lInteriorGrilleColorItems;
+		}
+	}
+
+	/******* Storm Window Color Items  *****************/
+	private static transient List<SelectOption> lStormWindowColorItems;
+	public List<SelectOption> StormWindowColorItems{
+		get
+		{   
+			if (lStormWindowColorItems == null) {
+				lStormWindowColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Color__c);
+			}
+			return lStormWindowColorItems;
+		}
+	}
+
+	/******* Exterior Trim Color Items  *****************/
+	private static transient List<SelectOption> lExteriorTrimColorItems;
+	public List<SelectOption> ExteriorTrimColorItems{
+		get
+		{   
+			if (lExteriorTrimColorItems == null) {
+				lExteriorTrimColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim_Color__c);
+			}
+			return lExteriorTrimColorItems;
+		}
+	}
+
+	/******* Jamb Liner Color Items  *****************/
+	private static transient List<SelectOption> lJambLinerColorItems;
+	public List<SelectOption> JambLinerColorItems{
+		get
+		{   
+			if (lJambLinerColorItems == null) {
+				lJambLinerColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Jamb_Liner_Color__c);
+			}
+			return lJambLinerColorItems;
+		}
+	}
+
+	/******* Interior Sash Color Items  *****************/
+	private static transient List<SelectOption> lInteriorSashColorItems;
+	public List<SelectOption> interiorSashColorItems{
+		get
+		{   
+			if (lInteriorSashColorItems == null) {
+				lInteriorSashColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Sash_Color__c);
+			}
+			return lInteriorSashColorItems;
+		}
+	}
+
+	/******* Astragal Color Items  *****************/
+	private static transient List<SelectOption> lAstragalColorItems;
+	public List<SelectOption> astragalColorItems{
+		get
+		{   
+			if (lAstragalColorItems == null) {
+				lAstragalColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Astragal__c);
+			}
+			return lAstragalColorItems;
+		}
+	}
+
+	/******* Storm Window Items  *****************/
+	private static transient List<SelectOption> lStormWindowItems;
+	public List<SelectOption> stormWindowItems{
+		get
+		{   
+			if (lStormWindowItems == null) {
+				lStormWindowItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window__c);
+			}
+			return lStormWindowItems;
+		}
+	}
+
+	/******* Storm Window Items  *****************/
+	private static transient List<SelectOption> lStormWindowStyleItems;
+	public List<SelectOption> stormWindowStyleItems{
+		get
+		{   
+			if (lStormWindowStyleItems == null) {
+				lStormWindowStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Style__c);
+			}
+			return lStormWindowStyleItems;
+		}
+	}
+
+	/******* Install Track Location Items  *****************/
+	private static transient List<SelectOption> lInstallTrackLocationItems;
+	public List<SelectOption> installTrackLocationItems{
+		get
+		{   
+			if (lInstallTrackLocationItems == null) {
+				lInstallTrackLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Install_Track_Location__c);
+			}
+			return lInstallTrackLocationItems;
+		}
+	}
 
 	/*******************************************************
 					enterProduct method
