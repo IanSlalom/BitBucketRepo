@@ -1,4 +1,5 @@
 <apex:page standardController="OrderItem" extensions="RMS_prodConfigExtension">
+<<<<<<< HEAD
 	<apex:includeScript value="{!$Resource.jquery}" />
 	
 	<apex:form >
@@ -351,4 +352,128 @@
 			} 
 		}
 	</script>
+=======
+<apex:form >
+    <apex:pageMessages />
+    <apex:pageBlock title="Add New Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
+        <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
+            <apex:commandButton action="{!enterProduct}" value="Enter" />
+        </apex:pageBlockButtons>            
+
+        <apex:pageBlockSection title="Select Product" columns="1" rendered="{!!productSelected}">
+            <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId"/>
+            <apex:inputText value="{!OrderItem.Room__c}" label="Room" id="room"/>
+            <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
+                <apex:selectOptions value="{!masterProductItems}"/>
+            </apex:selectList>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Enter Measurements" columns="2" rendered="{!!productSelected}">
+            <apex:inputText value="{!OrderItem.Width__c}" label="Width" id="inputWidth"/>
+            <apex:inputText value="{!OrderItem.Sales_Width__c}" label="Sales Width" id="salesInputWidth"/>
+            <apex:inputText value="{!OrderItem.Height__c}" label="Height" id="inputHeight"/>
+            <apex:inputText value="{!OrderItem.Sales_Height__c}" label="Sales Height" id="salesInputHeight"/>
+            <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity"/>   
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Selected Product" columns="1" rendered="{!productSelected}">
+            <apex:outputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId"/>
+            <apex:outputText value="{!OrderItem.Room__c}" label="Room" id="room"/>
+            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Enter Measurements" columns="2" rendered="{!productSelected}">
+            <apex:outputText value="{!OrderItem.Width__c}" label="Width" id="inputWidth"/>
+            <apex:outputText value="{!OrderItem.Sales_Width__c}" label="Sales Width" id="salesInputWidth"/>
+            <apex:outputText value="{!OrderItem.Height__c}" label="Height" id="inputHeight"/>
+            <apex:outputText value="{!OrderItem.Sales_Height__c}" label="Sales Height" id="salesInputHeight"/>
+            <apex:outputText value="{!OrderItem.Quantity}" label="Quantity" id="outputQuantity"/>  
+        </apex:pageBlockSection>
+
+    </apex:pageBlock>
+
+    <apex:pageBlock title="Configure Product" mode="edit" id="ConfigureProductBlock" rendered="{!productSelected}">
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton action="{!saveProduct}" value="Save"/>
+        </apex:pageBlockButtons>            
+
+        <apex:pageBlockSection title="Handing & Frame Options" columns="1">
+            <apex:selectList value="{!OrderItem.Handing__c}" label="Handing" size="1" id="handingOption">
+                <apex:selectOptions value="{!HandingOptionItems}"/>
+            </apex:selectList>
+            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.EJFrameControl == 'Required'}" rendered="{!prodConfig.EJFrameControl != 'Disabled'}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Glass Options" columns="1">
+
+            <apex:selectList value="{!OrderItem.Glass_Option_Selected__c}" label="Glass Option" size="1" id="glassOption">
+                <apex:selectOptions value="{!GlassOptionItems}"/>
+            </apex:selectList>
+            <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  rendered="{!prodConfig.BreatherTubesPrice != null}"/>
+        </apex:pageBlockSection>
+ <!--       <apex:pageBlockSection title="Door Options" columns="1">
+            <apex:selectList value="{!OrderItem.Size__c}" label="Size" size="1" id="size" rendered="{!prodConfig.sizes != null}">
+                <apex:selectOptions value="{!sizeItems}"/>
+            </apex:selectList> 
+        </apex:pageBlockSection>  -->
+
+        <apex:pageBlockSection title="Insect Screens" columns="1">
+<!--            <apex:inputField value="{!OrderItem.Gliding_Screen__c}"  rendered="{!prodConfig.glidingScreenPrice != null}"/> -->
+            <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType">
+                <apex:selectOptions value="{!InsectScreenOptionItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Screen_Vaneer_Type__c}" label="Vaneer Type" size="1" id="screenVaneerType">
+                <apex:selectOptions value="{!ScreenVaneerOptionItems}"/>
+            </apex:selectList>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Finishes" columns="1">
+            <apex:selectList value="{!OrderItem.Finish_Option__c}" label="Finish Option" size="1" id="finishOption">
+                <apex:selectOptions value="{!FinishOptionItems}"/>
+            </apex:selectList>
+
+              <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" rendered="{!prodConfig.exteriorColors != null}">
+                <apex:selectOptions value="{!exteriorColorItems}"/>
+                <apex:actionSupport event="onchange" reRender="interiorColor"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" rendered="{!prodConfig.interiorColors != null}">
+                <apex:selectOptions value="{!interiorColorItems}"/>
+            </apex:selectList>
+
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Hardware Options" columns="1">
+            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" rendered="{!prodConfig.hardwareColors != null}">
+                <apex:selectOptions value="{!hardwareColorItems}"/>
+            </apex:selectList>
+            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  rendered="{!prodConfig.corrosionResistantHardwarePrice != null}"/>
+        </apex:pageBlockSection>
+
+		<apex:tabPanel switchType="Sash" selectedTab="AllSashes" id="sashPanel">
+			<apex:tab label="All Sashes" name="allsashes" id="allsashes">
+		        <apex:pageBlockSection title="Grille Style" columns="1">
+        		    <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle">
+                		<apex:selectOptions value="{!GrilleStyleItems}"/>
+		            </apex:selectList>
+        		    <apex:inputField value="{!OrderItem.Permanently_Applied_Interior_Wood_Grille__c}"  rendered="{!prodConfig.PermanentlyAppliedInteriorWoodGrillePrice != null}"/>
+ 		           <apex:inputField value="{!OrderItem.Wide_Bar__c}"/>
+        		</apex:pageBlockSection>
+     		   <apex:pageBlockSection title="Grille Pattern" columns="1">
+     		       <apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Pattern" size="1" id="grillePattern" rendered="{!prodConfig.grillePatterns != null}">
+            		    <apex:selectOptions value="{!GrillePatternItems}"/>
+ 		           </apex:selectList>
+        		    <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_Wide__c}" label="Colonial Grille Lights Wide" size="1" id="colonialGrilleLightsWide" rendered="{!prodConfig.ColonialGrilleLightsWide != null}">
+                		<apex:selectOptions value="{!ColonialGrilleLightsWideItems}"/>
+  		          </apex:selectList>
+        		    <apex:selectList value="{!OrderItem.Colonial_Grille_Lights_High__c}" label="Colonial Grille Lights High" size="1" id="colonialGrilleLightsHigh" rendered="{!prodConfig.ColonialGrilleLightsHigh != null}">
+                		<apex:selectOptions value="{!ColonialGrilleLightsHighItems}"/>
+     		       </apex:selectList>
+       		 </apex:pageBlockSection>
+			</apex:tab>
+		    <apex:tab label="Sash 1" name="sash1" id="sash1">content for sash 1</apex:tab>
+		    <apex:tab label="Sash 2" name="sash2" id="sash2">content for sash 2</apex:tab>
+		    <apex:tab label="Sash 3" name="sash3" id="sash3">content for sash 3</apex:tab>
+		</apex:tabPanel>
+
+    </apex:pageBlock>
+    <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
+
+</apex:form>
+>>>>>>> refs/heads/master
 </apex:page>
