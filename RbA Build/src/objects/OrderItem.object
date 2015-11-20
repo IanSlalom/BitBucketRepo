@@ -52,6 +52,18 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Checkrail_Style__c</fullName>
+        <description>The checkrail style applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The checkrail style applied to this product.</inlineHelpText>
+        <label>Checkrail Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Colonial_Grille_Lights_High__c</fullName>
         <description>The number of grille lights high for colonial grille pattern.</description>
         <externalId>false</externalId>
@@ -121,6 +133,17 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Custom_Grille_Details__c</fullName>
+        <description>Details entered describing the custom grille sold.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Details entered describing the custom grille sold.</inlineHelpText>
+        <label>Custom Grille Details</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
         <fullName>Description</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -163,11 +186,57 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Exterior_Trim__c</fullName>
+        <description>The exterior trim option applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior trim option applied to this product.</inlineHelpText>
+        <label>Exterior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fibrex_L_Trim__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Fibrex L-Trim option is selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Fibrex L-Trim option is selected for this product.</inlineHelpText>
+        <label>Fibrex L-Trim</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Finish_Option__c</fullName>
         <description>The finish option applied to this product.</description>
         <externalId>false</externalId>
         <inlineHelpText>The finish option applied to this product.</inlineHelpText>
         <label>Finish Option</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Floor__c</fullName>
+        <description>Identifies the floor for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the floor for this product.</inlineHelpText>
+        <label>Floor</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Frame_Type__c</fullName>
+        <description>The frame type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The frame type applied to this product.</inlineHelpText>
+        <label>Frame Type</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -192,6 +261,30 @@
         <externalId>false</externalId>
         <inlineHelpText>The glass option that was selected from the product configuration page.</inlineHelpText>
         <label>Glass Option Selected</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S1__c</fullName>
+        <description>The glass pattern that was selected for Sash 1 from the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The glass pattern that was selected for Sash 1 from the product configuration page.</inlineHelpText>
+        <label>Glass Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S1__c</fullName>
+        <description>The glazing selected for Sash 1 for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The glazing selected for Sash 1 for this product.</inlineHelpText>
+        <label>Glazing S1</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -263,6 +356,31 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Height_Fraction__c</fullName>
+        <description>The height measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height measurement in fractions.</inlineHelpText>
+        <label>Height Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Height_Inches__c</fullName>
+        <description>The final height measurement in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The final height measurement in inches.</inlineHelpText>
+        <label>Height_Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Height__c</fullName>
         <externalId>false</externalId>
         <label>Height</label>
@@ -298,7 +416,55 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Interior_Trim__c</fullName>
+        <description>The interior trim selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior trim selected for the product.</inlineHelpText>
+        <label>Interior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Level__c</fullName>
+        <description>Identifies the dwelling level for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the dwelling level for this product.</inlineHelpText>
+        <label>Level</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lifts_Pulls__c</fullName>
+        <description>The number of extra lifts/pulls for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra lifts/pulls for this product.</inlineHelpText>
+        <label>Lifts/Pulls</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>ListPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Locks_Sash__c</fullName>
+        <description>The number of extra locks/sash for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra locks/sash for this product.</inlineHelpText>
+        <label>Locks/Sash</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>NSPR__c</fullName>
@@ -402,6 +568,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Room_Description__c</fullName>
+        <description>Allows the user enter a description of the dwelling&apos;s room for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Allows the user enter a description of the dwelling&apos;s room for this product.</inlineHelpText>
+        <label>Room Description</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
         <fullName>Room__c</fullName>
         <description>Identifies the room for this product.</description>
         <externalId>false</externalId>
@@ -414,6 +591,31 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Sales_Height_Fraction__c</fullName>
+        <description>The sales height measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales height measurement in fractions.</inlineHelpText>
+        <label>Sales Height Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height_Inches__c</fullName>
+        <description>The height of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Height Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Sales_Height__c</fullName>
         <description>The height of the opening as measured by sales.</description>
         <externalId>false</externalId>
@@ -422,6 +624,31 @@
         <precision>18</precision>
         <required>false</required>
         <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Fraction__c</fullName>
+        <description>The sales width measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales width measurement in fractions.</inlineHelpText>
+        <label>Sales Width Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Inches__c</fullName>
+        <description>The width of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Width Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
@@ -466,6 +693,18 @@
     <fields>
         <fullName>ServiceDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Side__c</fullName>
+        <description>Identifies the dwelling&apos;s side for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the dwelling&apos;s side for this product.</inlineHelpText>
+        <label>Side</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Size__c</fullName>
@@ -516,6 +755,26 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Tax_Credit_Qualified__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this particular product qualifies for a tax credit.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this particular product qualifies for a tax credit.</inlineHelpText>
+        <label>Tax Credit Qualified</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S1__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 1 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 1 of this product is tempered.</inlineHelpText>
+        <label>Tempered S1</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>TotalPrice</fullName>
@@ -617,6 +876,31 @@
         <label>Wide Bar</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Width_Fraction__c</fullName>
+        <description>The width measurement in fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width measurement in fraction.</inlineHelpText>
+        <label>Width Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Width_Inches__c</fullName>
+        <description>The actual width measurement in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The actual width measurement in inches.</inlineHelpText>
+        <label>Width Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Width__c</fullName>
