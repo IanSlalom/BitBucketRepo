@@ -67,26 +67,26 @@
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="Handing & Frame Options" columns="1">
-            <apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Frame_Type_Control__c != 'Disabled'}">
+	        <apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Frame_Type_Control__c != 'Disabled'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 <apex:selectOptions value="{!frameTypeItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Checkrail_Style_Control__c != 'Disabled'}">
+	            <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Checkrail_Style_Control__c != 'Disabled'}" html-data-jsid="checkrailStyle">
                 <apex:selectOptions value="{!checkrailStyleItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Trim_Control__c != 'Disabled'}">
+	            <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Trim_Control__c != 'Disabled'}" html-data-jsid="interiorTrim">
                 <apex:selectOptions value="{!interiorTrimItems}"/>
             </apex:selectList>
             <apex:selectList value="{!OrderItem.Handing__c}" label="Handing" size="1" id="handingOption">
                 <apex:selectOptions value="{!HandingOptionItems}"/>
             </apex:selectList>
             <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.EJFrameControl == 'Required'}" rendered="{!prodConfig.EJFrameControl != 'Disabled'}"/>
-            <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}"/>
+	            <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}" html-data-jsid="fibrexLTrim"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Glass Options" columns="1">
-              <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing S1" size="1" id="glazingS1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}">
+	              <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing S1" size="1" id="glazingS1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazingS1" onChange="callRule('glazingS1')">
                 <apex:selectOptions value="{!glazingItems}"/>
             </apex:selectList>
-              <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern S1" size="1" id="glassPatternS1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}">
+	              <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern S1" size="1" id="glassPatternS1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPatternS1">
                 <apex:selectOptions value="{!GlassPatternItems}"/>
             </apex:selectList>
             <apex:inputField value="{!OrderItem.Tempered_S1__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}"/>
@@ -108,7 +108,7 @@
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Finishes" columns="1">
-              <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}">
+	              <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}" html-data-jsid="exteriorTrim">
                 <apex:selectOptions value="{!exteriorTrimItems}"/>
             </apex:selectList>
 
@@ -162,7 +162,7 @@
             <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh">
                 		<apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
      		       </apex:selectList>
- 		           <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details__c}" cols="50" rows="5" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}"/>
+	 		           <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details__c}" cols="50" rows="5" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails"/>
        		 </apex:pageBlockSection>
 			</apex:tab>
 		    <apex:tab label="Sash 1" name="sash1" id="sash1">content for sash 1</apex:tab>
@@ -301,6 +301,7 @@
 <script>
 
 	$( document ).ready(function() {
+		startUpDefaults();
     	exteriorColor('Sandstone');
     	exteriorColor('Terratone');
     	exteriorColor('Dark Bronze');
@@ -309,6 +310,8 @@
     	grillePattern();
     	interiorColor('White');
 		interiorColor('Dark Bronze');
+		glazingS1();
+		frameType();
 	});
 	
 	
@@ -326,6 +329,17 @@
 		}else if(ruleName == 'interiorColor'){
 			interiorColor('White');
 			interiorColor('Dark Bronze');
+		}else if(ruleName == 'glazingS1'){
+			glazingS1();
+		}else if(ruleName == 'frameType'){
+			frameType();
+		}
+	}
+		
+		
+	function startUpDefaults(){
+		if($("select[data-jsid='screenType']").val() == ''){
+			$("select[data-jsid='screenType']").val('Fiberglass');
 		}
 	}
 	
@@ -390,6 +404,12 @@
 			$("select[data-jsid='colonialGrilleLightsHigh']").val(null);
 			$("select[data-jsid='colonialGrilleLightsHigh']").closest('tr').hide();
 		}
+			if($("select[data-jsid='grillePattern']").val() == 'Custom'){
+				$("textarea[data-jsid='customGrilleDetails']").closest('tr').show();
+			}else{
+				$("textarea[data-jsid='customGrilleDetails']").val(null);
+				$("textarea[data-jsid='customGrilleDetails']").closest('tr').hide();
+			}
 	}
 	
 	function interiorColor(color){
@@ -401,7 +421,64 @@
 	}
 
 	
-</script>
+		function glazingS1(){
+			if($("select[data-jsid='glazingS1']").val() == 'High Performance SmartSun w/ HeatLock'){
+				$("select[data-jsid='glassPatternS1']").val(null);
+				$("select[data-jsid='glassPatternS1']").closest('tr').hide();
+			}else{
+				$("select[data-jsid='glassPatternS1']").closest('tr').show();
+			}
+			
+		}
+		
+		
+		function frameType(){
+			if($("select[data-jsid='frameType']").val() == 'Full-Frame'){
+				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+					if($(this).val() != 'Brickmold - Picture Frame' &&  $(this).val() !='Brickmould - Traditional'){
+				  		$(this).hide();
+			  		}else{
+			  			$(this).show();
+			  		}
+				});	
+				if($("select[data-jsid='exteriorTrim']").val() != 'Brickmold - Picture Frame' &&  $("select[data-jsid='exteriorTrim']").val() !='Brickmould - Traditional' ){
+					$("select[data-jsid='exteriorTrim']").val('');
+				}
+			}else if($("select[data-jsid='frameType']").val() == 'Flat Sill Insert'){
+				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+					if($(this).val() != 'Overfit Brickmould' &&  $(this).val() !='Overfit Chamfered Edge' &&  $(this).val() !='Overfit Flange'){
+				  		$(this).hide();
+			  		}else{
+			  			$(this).show();
+			  		}
+				});
+				if($("select[data-jsid='exteriorTrim']").val() != 'Overfit Brickmould' &&  $("select[data-jsid='exteriorTrim']").val() !='Overfit Chamfered Edge' &&  $("select[data-jsid='exteriorTrim']").val() != 'Overfit Flange' ){
+					$("select[data-jsid='exteriorTrim']").val('');
+				}	
+			}else{
+				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+				  		$(this).show();
+				});
+			}
+			
+			if($("select[data-jsid='frameType']").val() == 'Slope Sill Insert'){
+				$("select[data-jsid='exteriorTrim']").val(null);
+				$("select[data-jsid='exteriorTrim']").closest('tr').hide();
+			}else{
+				$("select[data-jsid='exteriorTrim']").closest('tr').show();
+			} 
 
+			if($("select[data-jsid='frameType']").val() == 'Insert Frame'){
+				$("input[data-jsid='fibrexLTrim']").closest('tr').show();
+				
+				$("select[data-jsid='interiorTrim']").closest('tr').show();
+			}else{
+				$("input[data-jsid='fibrexLTrim']").attr('checked',false);
+				$("input[data-jsid='fibrexLTrim']").closest('tr').hide();
 
+				$("select[data-jsid='interiorTrim']").val('');
+				$("select[data-jsid='interiorTrim']").closest('tr').hide();
+			} 
+		}
+	</script>
 </apex:page>
