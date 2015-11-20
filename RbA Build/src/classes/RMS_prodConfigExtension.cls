@@ -169,27 +169,15 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Set up Width Fraction Items  *****************/
-	private static transient List<SelectOption> lWidthFractionItems;
-	public List<SelectOption> widthFractionItems{
+	/******* Set up Measurement Fraction Items  *****************/
+	private static transient List<SelectOption> lMeasurementFractionItems;
+	public List<SelectOption> measurementFractionItems{
 		get
 		{   
-			if (lWidthFractionItems == null) {
-				lWidthFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Width_Fractions__c);
+			if (lMeasurementFractionItems == null) {
+//				lMeasurementFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Measurement_Fractions__c);
 			}			   
-			return lWidthFractionItems;
-		}
-	}
-
-	/******* Set up Height Fraction Items  *****************/
-	private static transient List<SelectOption> lHeightFractionItems;
-	public List<SelectOption> heightFractionItems{
-		get
-		{   
-			if (lHeightFractionItems == null) {
-				lHeightFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Height_Fractions__c);
-			}			   
-			return lHeightFractionItems;
+			return lMeasurementFractionItems;
 		}
 	}
 
@@ -248,7 +236,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrilleStyleItems == null) {
-				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.grilleStyles);
+				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Style__c);
 			}			   
 			return lGrilleStyleItems;
 		}
@@ -260,33 +248,33 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrillePatternItems== null) {
-				lGrillePatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.grillePatterns);
+				lGrillePatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Patterns__c);
 			}
 			return lGrillePatternItems;
 		}
 	}
 
 	/******* Colonial Grille Lights Wide Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLightsWideItems;
-	public List<SelectOption> colonialGrilleLightsWideItems{
+	private static transient List<SelectOption> lColonialGrilleLitesWideItems;
+	public List<SelectOption> colonialGrilleLitesWideItems{
 		get
 		{   
-			if (lColonialGrilleLightsWideItems== null) {
-				lColonialGrilleLightsWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.colonialGrilleLightsWide);
+			if (lColonialGrilleLitesWideItems== null) {
+				lColonialGrilleLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_Wide__c);
 			}			   
-			return lColonialGrilleLightsWideItems;
+			return lColonialGrilleLitesWideItems;
 		}
 	}
 
 	/******* Colonial Grille Lights High Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLightsHighItems;
-	public List<SelectOption> colonialGrilleLightsHighItems{
+	private static transient List<SelectOption> lColonialGrilleLitesHighItems;
+	public List<SelectOption> colonialGrilleLitesHighItems{
 		get
 		{   
-			if (lColonialGrilleLightsHighItems== null) {
-				lColonialGrilleLightsHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.colonialGrilleLightsHigh);
+			if (lColonialGrilleLitesHighItems== null) {
+				lColonialGrilleLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_High__c);
 			}			   
-			return lColonialGrilleLightsHighItems;
+			return lColonialGrilleLitesHighItems;
 		}
 	}
 
@@ -350,15 +338,51 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Set up Hardware Color Items  *****************/
-	private static transient List<SelectOption> lHardwareColorItems;
-	public List<SelectOption> hardwareColorItems{
+	/******* Set up Hardware Finish/Color Items  *****************/
+	private static transient List<SelectOption> lHardwareFinishColorItems;
+	public List<SelectOption> hardwareFinishColorItems{
 		get
 		{   
-			if (lHardwareColorItems == null) {
-				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.hardwareColors);
+			if (lHardwareFinishColorItems == null) {
+				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
 			}			   
-			return lHardwareColorItems;
+			return lHardwareFinishColorItems;
+		}
+	}
+
+	/******* Set up Hardware Style Items  *****************/
+	private static transient List<SelectOption> lHardwareStyleItems;
+	public List<SelectOption> hardwareStyleItems{
+		get
+		{   
+			if (lHardwareStyleItems == null) {
+				lHardwareStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Style__c);
+			}			   
+			return lHardwareStyleItems;
+		}
+	}
+
+	/******* Set up Hardware Option Items  *****************/
+	private static transient List<SelectOption> lHardwareOptionItems;
+	public List<SelectOption> hardwareOptionItems{
+		get
+		{   
+			if (lHardwareOptionItems == null) {
+				lHardwareOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Option__c);
+			}			   
+			return lHardwareOptionItems;
+		}
+	}
+
+	/******* Set up Handle Type Items  *****************/
+	private static transient List<SelectOption> lHandleTypeItems;
+	public List<SelectOption> handleTypeItems{
+		get
+		{   
+			if (lHandleTypeItems == null) {
+				lHandleTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Handle_Type__c);
+			}			   
+			return lHandleTypeItems;
 		}
 	}
 
@@ -399,15 +423,27 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Screen Vaneer Option Items  *****************/
-	private static transient List<SelectOption> lScreenVaneerOptionItems;
-	public List<SelectOption> screenVaneerOptionItems{
+	/******* Screen Vaneer Type Items  *****************/
+	private static transient List<SelectOption> lScreenVaneerTypeItems;
+	public List<SelectOption> screenVaneerTypeItems{
 		get
 		{   
-			if (lScreenVaneerOptionItems== null) {
-				lScreenVaneerOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.screenVaneerTypes);
+			if (lScreenVaneerTypeItems== null) {
+				lScreenVaneerTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Vaneer_Type__c);
 			}
-			return lScreenVaneerOptionItems;
+			return lScreenVaneerTypeItems;
+		}
+	}
+
+	/******* Sill Angle Items  *****************/
+	private static transient List<SelectOption> lSillAngleItems;
+	public List<SelectOption> sillAngleItems{
+		get
+		{   
+			if (lSillAngleItems== null) {
+				lSillAngleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sill_Angle__c);
+			}
+			return lSillAngleItems;
 		}
 	}
 

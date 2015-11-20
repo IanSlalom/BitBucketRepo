@@ -34,18 +34,18 @@ public with sharing class RMS_prodConfigManager {
 		public Decimal  corrosionResistantHardwarePrice		 { get; private set; }
 		public String   exteriorColors				  { get; private set; }
 		public String   interiorColors				  { get; private set; }
-		public String   hardwareColors				  { get; private set; }
-		public String   colonialGrilleLightsWide		{ get; private set; }
-		public String   colonialGrilleLightsHigh		{ get; private set; }
-		public String   grillePatterns				  { get; private set; }
-		public String   screenVaneerTypes			   { get; private set; }
+//		public String   hardwareColors				  { get; private set; }
+//		public String   colonialGrilleLightsWide		{ get; private set; }
+//		public String   colonialGrilleLightsHigh		{ get; private set; }
+//		public String   grillePatterns				  { get; private set; }
+//		public String   screenVaneerTypes			   { get; private set; }
 		public Decimal  breatherTubesPrice			  { get; private set; }
 		public Decimal  dualColorPrice				  { get; private set; }
 		public Decimal  PermanentlyAppliedInteriorWoodGrillePrice		{ get; private set; }
 		public OrderItem orderLI						{ get; set; }
 		public Pricing_Configuration__c pricingConfig				{ get; set; }
 		public String   handingOptions				  { get; private set; }
-		public String   grilleStyles				  { get; private set; }
+//		public String   grilleStyles				  { get; private set; }
 		public String   EJFrameControl					{ get; private set; }
 		public Product_Configuration__c mpc				{ get; set; }
  
@@ -60,18 +60,18 @@ public with sharing class RMS_prodConfigManager {
 				corrosionResistantHardwarePrice		 = pricingConfigInput.Corrosion_Resistant_Hardware__c;
 				exteriorColors						  = masterProductConfig.Exterior_Color__c;
 				interiorColors						  = masterProductConfig.Interior_Color__c;
-				hardwareColors						  = masterProductConfig.Hardware_Colors__c;
-				colonialGrilleLightsWide				= masterProductConfig.Colonial_Grille_Lights_Wide__c;
-				colonialGrilleLightsHigh				= masterProductConfig.Colonial_Grille_Lights_High__c;
-				grillePatterns						  = masterProductConfig.Grille_Patterns__c;
-				screenVaneerTypes					   = masterProductConfig.Screen_Vaneer_Type__c;
+//				hardwareColors						  = masterProductConfig.Hardware_Colors__c;
+//				colonialGrilleLightsWide				= masterProductConfig.Colonial_Grille_Lights_Wide__c;
+//				colonialGrilleLightsHigh				= masterProductConfig.Colonial_Grille_Lights_High__c;
+//				grillePatterns						  = masterProductConfig.Grille_Patterns__c;
+//				screenVaneerTypes					   = masterProductConfig.Screen_Vaneer_Type__c;
 				dualColorPrice						  = pricingConfigInput.Dual_Color__c;
-				breatherTubesPrice					  = pricingConfigInput.Breather_Tubes__c;
+//				breatherTubesPrice					  = pricingConfigInput.Breather_Tubes__c;
 				PermanentlyAppliedInteriorWoodGrillePrice			   = pricingConfigInput.Permanently_Applied_Interior_Wood_Grille__c;
 				orderLI								 = orderLItem;
 				pricingConfig							= pricingConfigInput;
 				handingOptions						  = masterProductConfig.Handing__c;
-				grilleStyles						  = masterProductConfig.Grille_Style__c;
+//				grilleStyles						  = masterProductConfig.Grille_Style__c;
 				EJFrameControl						  = masterProductConfig.EJ_Frame_Control__c;
 				mpc										= masterProductConfig;
 		}
@@ -244,11 +244,11 @@ public with sharing class RMS_prodConfigManager {
 		prodConfig.OrderLI.Corrosion_Resistant_Hardware__c 		= (prodConfig.corrosionResistantHardwarePrice == null) ? false : prodConfig.OrderLI.Corrosion_Resistant_Hardware__c;		
 		prodConfig.OrderLI.Exterior_Color__c 					= (prodConfig.exteriorColors == null) ? '' : prodConfig.OrderLI.Exterior_Color__c;		
 		prodConfig.OrderLI.Interior_Color__c 					= (prodConfig.interiorColors == null) ? '' : prodConfig.OrderLI.Interior_Color__c;		
-		prodConfig.OrderLI.Hardware_Color__c 					= (prodConfig.hardwareColors == null) ? '' : prodConfig.OrderLI.Hardware_Color__c;		
-		prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c 		= (prodConfig.colonialGrilleLightsWide == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c;		
-		prodConfig.OrderLI.Colonial_Grille_Lights_High__c 		= (prodConfig.colonialGrilleLightsHigh == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_High__c;		
-		prodConfig.OrderLI.Grille_Pattern__c 					= (prodConfig.grillePatterns == null) ? '' : prodConfig.OrderLI.Grille_Pattern__c;		
-		prodConfig.OrderLI.Screen_Vaneer_Type__c 				= (prodConfig.screenVaneerTypes == null) ? '' : prodConfig.OrderLI.Screen_Vaneer_Type__c;		
+//		prodConfig.OrderLI.Hardware_Color__c 					= (prodConfig.hardwareColors == null) ? '' : prodConfig.OrderLI.Hardware_Color__c;		
+//		prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c 		= (prodConfig.colonialGrilleLightsWide == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_Wide__c;		
+//		prodConfig.OrderLI.Colonial_Grille_Lights_High__c 		= (prodConfig.colonialGrilleLightsHigh == null) ? '' : prodConfig.OrderLI.Colonial_Grille_Lights_High__c;		
+//		prodConfig.OrderLI.Grille_Pattern__c 					= (prodConfig.grillePatterns == null) ? '' : prodConfig.OrderLI.Grille_Pattern__c;		
+//		prodConfig.OrderLI.Screen_Vaneer_Type__c 				= (prodConfig.screenVaneerTypes == null) ? '' : prodConfig.OrderLI.Screen_Vaneer_Type__c;		
 		prodConfig.OrderLI.Breather_Tubes__c 					= (prodConfig.breatherTubesPrice == null) ? false : prodConfig.OrderLI.Breather_Tubes__c;		
 		prodConfig.OrderLI.Permanently_Applied_Interior_Wood_Grille__c 	= (prodConfig.PermanentlyAppliedInteriorWoodGrillePrice == null) ? false : prodConfig.OrderLI.Permanently_Applied_Interior_Wood_Grille__c;		
 		prodConfig.OrderLI.Handing__c 							= (prodConfig.handingOptions == null) ? '' : prodConfig.OrderLI.Handing__c;		
