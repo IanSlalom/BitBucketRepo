@@ -4,9 +4,6 @@
         <members>AccountTriggerHandler</members>
         <members>AccountTriggerHandlerTest</members>
         <members>AutoCompleteV2_Con</members>
-        <members>AutocompleteV2Demo_con</members>
-        <members>AutocompleteV2_Con_Test</members>
-        <members>COMM_Controller</members>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
@@ -47,13 +44,6 @@
         <name>ApexComponent</name>
     </types>
     <types>
-        <members>AutocompleteV2Demo</members>
-        <members>OBJ_New_ActivityMaster</members>
-        <members>OBJ_New_PMPlan_Template</members>
-        <members>OBJ_New_Service</members>
-        <members>OBJ_New_Service_Plan</members>
-        <members>OBJ_New_Service_Pricebook</members>
-        <members>OBJ_New_Work_Template</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionWorkOrder</members>
