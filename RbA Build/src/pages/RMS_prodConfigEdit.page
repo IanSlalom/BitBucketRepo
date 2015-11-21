@@ -10,34 +10,36 @@
 
         <apex:pageBlockSection title="Select Product" columns="1" rendered="{!!productSelected}">
                 <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled'}"/>
- <!--             <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId"/>
--->            <apex:inputText value="{!OrderItem.Room__c}" label="Room" id="room" required="{!prodConfig.mpc.Room_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Room_Control__c != 'Disabled'}"/>
+            <apex:inputText value="{!OrderItem.Room__c}" label="Room" id="room" required="{!prodConfig.mpc.Room_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Room_Control__c != 'Disabled'}"/>
             <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
                 <apex:selectOptions value="{!masterProductItems}"/>
             </apex:selectList>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Enter Measurements" columns="2" rendered="{!!productSelected}">
             <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'}"/>
-            <apex:inputText value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesInputWidth"  required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'}"/>
- <!--             <apex:inputText value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}"/>
- -->        <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
+            <apex:outputField value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesOutputWidth"/> 
+            <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
   
-<!--              <apex:inputText value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesInputWidthFraction"  required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}"/>
- -->        <apex:selectList value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" size="1" id="salesInputWidthFraction"  required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!measurementFractionItems}"/>
-            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
             <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
-            <apex:inputText value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
-<!--            <apex:inputText value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" id="inputHeightFraction"  required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}"/>
- -->        <apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
+            <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
+         <apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-<!--              <apex:inputText value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"  required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}"/>
- -->        <apex:selectList value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" size="1" id="salesInputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
+            <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
+
+            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'}"/>
+
+            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'}"/>
+            <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
+            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Fraction_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!measurementFractionItems}"/>
+            </apex:selectList>
+
             <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity"/>   
         </apex:pageBlockSection>
 
@@ -66,39 +68,41 @@
             <apex:commandButton action="{!saveProduct}" value="Save"/>
         </apex:pageBlockButtons>            
 
-        <apex:pageBlockSection title="Handing & Frame Options" columns="1">
+        <apex:pageBlockSection title="Handing & Frame Options" columns="2">
+            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sashOperationItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sill_Angle_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sillAngleItems}"/>
+            </apex:selectList>
 	        <apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Frame_Type_Control__c != 'Disabled'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 <apex:selectOptions value="{!frameTypeItems}"/>
             </apex:selectList>
-	            <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Checkrail_Style_Control__c != 'Disabled'}" html-data-jsid="checkrailStyle">
+	        <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Checkrail_Style_Control__c != 'Disabled'}" html-data-jsid="checkrailStyle">
                 <apex:selectOptions value="{!checkrailStyleItems}"/>
             </apex:selectList>
-	            <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Trim_Control__c != 'Disabled'}" html-data-jsid="interiorTrim">
-                <apex:selectOptions value="{!interiorTrimItems}"/>
-            </apex:selectList>
+            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'}"/>
             <apex:selectList value="{!OrderItem.Handing__c}" label="Handing" size="1" id="handingOption">
                 <apex:selectOptions value="{!HandingOptionItems}"/>
             </apex:selectList>
+            <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!mullSequenceMullionItems}"/>
+            </apex:selectList>
             <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.EJFrameControl == 'Required'}" rendered="{!prodConfig.EJFrameControl != 'Disabled'}"/>
-	            <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}" html-data-jsid="fibrexLTrim"/>
+	        <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}" html-data-jsid="fibrexLTrim"/>
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Glass Options" columns="1">
+        <apex:pageBlockSection title="Glazing" columns="2">
 	              <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing S1" size="1" id="glazingS1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazingS1" onChange="callRule('glazingS1')">
                 <apex:selectOptions value="{!glazingItems}"/>
             </apex:selectList>
-	              <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern S1" size="1" id="glassPatternS1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPatternS1">
+	         <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern S1" size="1" id="glassPatternS1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPatternS1">
                 <apex:selectOptions value="{!GlassPatternItems}"/>
             </apex:selectList>
             <apex:inputField value="{!OrderItem.Tempered_S1__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}"/>
             <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breathing_Tubes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Breathing_Tubes_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
- <!--       <apex:pageBlockSection title="Door Options" columns="1">
-            <apex:selectList value="{!OrderItem.Size__c}" label="Size" size="1" id="size" rendered="{!prodConfig.sizes != null}">
-                <apex:selectOptions value="{!sizeItems}"/>
-            </apex:selectList> 
-        </apex:pageBlockSection>  -->
 
-        <apex:pageBlockSection title="Insect Screens" columns="1">
+        <apex:pageBlockSection title="Insect Screens" columns="2">
               <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Type_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!screenTypeItems}"/>
             </apex:selectList>
@@ -107,8 +111,8 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Finishes" columns="1">
-	              <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}" html-data-jsid="exteriorTrim">
+        <apex:pageBlockSection title="Finishes" columns="2">
+	        <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}" html-data-jsid="exteriorTrim">
                 <apex:selectOptions value="{!exteriorTrimItems}"/>
             </apex:selectList>
 
@@ -121,7 +125,7 @@
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.BM_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Applied_Control__c != 'Disabled'}"/>
 
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Hardware Options" columns="1">
+        <apex:pageBlockSection title="Hardware" columns="2">
             <apex:selectList value="{!OrderItem.Hardware_Style__c}" label="Hardware Style" size="1" id="hardwareStyle"  required="{!prodConfig.mpc.Hardware_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Style_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!hardwareStyleItems}"/>
             </apex:selectList>
@@ -143,90 +147,67 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-		<apex:tabPanel switchType="Sash" selectedTab="AllSashes" id="sashPanel">
-			<apex:tab label="All Sashes" name="allsashes" id="allsashes">
-		        <apex:pageBlockSection title="Grille Style" columns="1">
+<!--  		<apex:tabPanel switchType="Sash" selectedTab="AllSashes" id="sashPanel">
+			<apex:tab label="All Sashes" name="allsashes" id="allsashes">-->
+		        <apex:pageBlockSection title="Grilles" columns="2">
         		    <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')">
                 		<apex:selectOptions value="{!grilleStyleItems}"/>
 		            </apex:selectList>
+            		<apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Alignment_Control__c != 'Disabled'}"/>
         		    <apex:inputField value="{!OrderItem.Permanently_Applied_Interior_Wood_Grille__c}"  rendered="{!prodConfig.PermanentlyAppliedInteriorWoodGrillePrice != null}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille"/>
  		           <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'}"/>
-        		</apex:pageBlockSection>
-     		   <apex:pageBlockSection title="Grille Pattern" columns="1">
-            <apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Pattern" size="1" id="grillePattern" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern" onChange="callRule('grillePattern')">
+            		<apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Pattern" size="1" id="grillePattern" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern" onChange="callRule('grillePattern')">
             		    <apex:selectOptions value="{!grillePatternItems}"/>
  		           </apex:selectList>
-              <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide__c}" label="Grille Lites Wide" size="1" id="colonialGrilleLightsWide"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide">
+              	<apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide__c}" label="Grille Lites Wide" size="1" id="colonialGrilleLightsWide"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide">
                 		<apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
   		          </apex:selectList>
-            <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh">
+            	<apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh">
                 		<apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
      		       </apex:selectList>
 	 		           <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details__c}" cols="50" rows="5" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails"/>
+           		 <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'}"/>
+            	<apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'}"/>
        		 </apex:pageBlockSection>
-			</apex:tab>
+<!--  			</apex:tab>
 		    <apex:tab label="Sash 1" name="sash1" id="sash1">content for sash 1</apex:tab>
 		    <apex:tab label="Sash 2" name="sash2" id="sash2">content for sash 2</apex:tab>
 		    <apex:tab label="Sash 3" name="sash3" id="sash3">content for sash 3</apex:tab>
-		</apex:tabPanel>
+		</apex:tabPanel>-->
 
-        <apex:pageBlockSection title="Additional Job Cost Details" columns="1">
-            <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
-            <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
-
-            <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sill_Angle_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!sillAngleItems}"/>
-            </apex:selectList>
-
-            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'}"/>
-            <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Fraction_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!measurementFractionItems}"/>
-            </apex:selectList>
-
-            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'}"/>
-            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Fraction_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!measurementFractionItems}"/>
-            </apex:selectList>
-
-            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'}"/>
-            <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!mullSequenceMullionItems}"/>
-            </apex:selectList>
-
-            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!sashOperationItems}"/>
-            </apex:selectList>
-
-            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Alignment_Control__c != 'Disabled'}"/>
-
+        <apex:pageBlockSection title="Trim & Casing" columns="2">
             <apex:selectList value="{!OrderItem.EJ_Thickness__c}" label="EJ Thickness" size="1" id="EJThickness"   required="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Thickness_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!EJThicknessItems}"/>
             </apex:selectList>
-
+	         <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Trim_Control__c != 'Disabled'}" html-data-jsid="interiorTrim">
+                <apex:selectOptions value="{!interiorTrimItems}"/>
+            </apex:selectList>
             <apex:selectList value="{!OrderItem.EJ_Wall_Depth__c}" label="EJ Wall Depth" size="1" id="EJWallDepth"   required="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Wall_Depth_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!EJWallDepthItems}"/>
-            </apex:selectList>
-
-            <apex:selectList value="{!OrderItem.EJ_Species__c}" label="EJ Species" size="1" id="EJSpecies"   required="{!prodConfig.mpc.EJ_Species_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Species_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!EJSpeciesItems}"/>
-            </apex:selectList>
-
-            <apex:selectList value="{!OrderItem.EJ_Color__c}" label="EJ Color" size="1" id="EJColor"   required="{!prodConfig.mpc.EJ_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Color_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!EJColorItems}"/>
             </apex:selectList>
 
             <apex:selectList value="{!OrderItem.Casing_Profile__c}" label="Casing Profile" size="1" id="casingProfile"   required="{!prodConfig.mpc.Casing_Profile_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Profile_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!casingProfileItems}"/>
             </apex:selectList>
 
+            <apex:selectList value="{!OrderItem.EJ_Species__c}" label="EJ Species" size="1" id="EJSpecies"   required="{!prodConfig.mpc.EJ_Species_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Species_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!EJSpeciesItems}"/>
+            </apex:selectList>
+
             <apex:selectList value="{!OrderItem.Casing_Species__c}" label="Casing Species" size="1" id="casingSpecies"   required="{!prodConfig.mpc.Casing_Species_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Species_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!casingSpeciesItems}"/>
+            </apex:selectList>
+
+            <apex:selectList value="{!OrderItem.EJ_Color__c}" label="EJ Color" size="1" id="EJColor"   required="{!prodConfig.mpc.EJ_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Color_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!EJColorItems}"/>
             </apex:selectList>
 
             <apex:selectList value="{!OrderItem.Casing_Location__c}" label="Casing Location" size="1" id="casingLocation"   required="{!prodConfig.mpc.Casing_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Location_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!casingLocationItems}"/>
             </apex:selectList>
 
+       	</apex:pageBlockSection>
+        <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2">
             <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.BM_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Location_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!brickmouldLocationItems}"/>
             </apex:selectList>
@@ -234,7 +215,9 @@
             <apex:selectList value="{!OrderItem.Drip_Cap_Pieces__c}" label="Drip Cap Pieces" size="1" id="dripCapPieces" required="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!dripCapPiecesItems}"/>
             </apex:selectList>
+       	</apex:pageBlockSection>
 
+        <apex:pageBlockSection title="Storm Windows" columns="2">
             <apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!stormWindowItems}"/>
             </apex:selectList>
@@ -242,9 +225,11 @@
             <apex:selectList value="{!OrderItem.Storm_Window_Style__c}" label="Storm Window Style" size="1" id="stormWindowStyle" required="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Style_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!stormWindowStyleItems}"/>
             </apex:selectList>
+       	</apex:pageBlockSection>
 
-            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'}"/>
-            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'}"/>
+        <apex:pageBlockSection title="Additional Job Cost Details" columns="2">
+            <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
 
         </apex:pageBlockSection>
 
@@ -291,7 +276,8 @@
 
         </apex:pageBlockSection>
         
-		<apex:pageBlockSection columns="1">
+		<apex:pageBlockSection title="Order Information" columns="2">
+       		 <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'}"/>
        		 <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
