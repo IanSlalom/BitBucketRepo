@@ -100,10 +100,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Width_Fractions__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Mull_Sequence_Mullion__c</field>
             </layoutItems>
             <layoutItems>
