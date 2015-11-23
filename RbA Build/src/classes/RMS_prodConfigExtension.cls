@@ -12,6 +12,8 @@
 	Created.
 @version	2015-11-09  Slalom.CDK
 	Updated for first release to build
+@version	2015-11-20  Slalom.CDK
+	Updated to pull product config from master product instead of pricebookentry
 
 @see		RMS_prodConfigExtensionTest
 
@@ -332,7 +334,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHandingOptionItems == null) {
-				lHandingOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.handingOptions);
+				lHandingOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Handing__c);
 			}			   
 			return lHandingOptionItems;
 		}
@@ -716,9 +718,9 @@ public class RMS_prodConfigExtension {
 	*******************************************************/
 	// runs whenever the Enter button is clicked at the master product level
 	public virtual pageReference enterProduct() {
-		
-//		inputUI = orderLineItem.Width__c + orderLineItem.Height__c;
-		inputUI = 0;
+
+/*		
+		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
 		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
 		if(!String.isBlank(errorMessage)) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
@@ -733,6 +735,12 @@ public class RMS_prodConfigExtension {
 		}
 		productSelected = true;
 		return null;
+*/
+		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
+		productSelected = true;
+		return null;
+
+
 	}
 
 	/*******************************************************
@@ -740,6 +748,23 @@ public class RMS_prodConfigExtension {
 	*******************************************************/
 	// runs whenever the Save button is clicked at the child product level
 	public pageReference saveProduct() {
+
+		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
+		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+		if(!String.isBlank(errorMessage)) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
+			return null;			
+		}
+		if (childProduct == null) return null;
+		prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
+		
+		if (prodConfig == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
+			return null;
+		}
+
+
+
 		PageReference ref;
 		if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
