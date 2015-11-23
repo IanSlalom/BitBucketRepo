@@ -382,8 +382,60 @@
         <type>Picklist</type>
     </fields>
     <fields>
+<<<<<<< HEAD
         <fullName>Casing_Species__c</fullName>
         <description>Select the Casing Species that should be made available for selection in the product configuration page.</description>
+=======
+        <fullName>Checkrail_Style_Control__c</fullName>
+        <description>Controls whether Checkrail Style is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Checkrail Style is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Checkrail Style Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Checkrail_Style__c</fullName>
+        <description>Select the checkrail styles that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the checkrail styles that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Checkrail Style</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Traditional</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contemporary</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lights_High__c</fullName>
+        <description>Select the number of colonial grille lights high that should be made available for selection in the product configuration page.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Select the Casing Species that should be made available for selection in the product configuration page.</inlineHelpText>
         <label>Casing Species</label>
@@ -598,6 +650,7 @@
         <type>Picklist</type>
     </fields>
     <fields>
+<<<<<<< HEAD
         <fullName>Drip_Cap_Pieces__c</fullName>
         <description>Select the drip cap pieces selections that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -624,6 +677,8 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+=======
+>>>>>>> refs/heads/master
         <fullName>Dwelling_Information__c</fullName>
         <description>Controls whether Dwelling Information (floor, side, description) is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -969,8 +1024,72 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+<<<<<<< HEAD
         <fullName>Exterior_Grille_Color__c</fullName>
         <description>Select the Exterior Grille Colors that should be made available for selection in the product configuration page.</description>
+=======
+        <fullName>Exterior_Trim_Control__c</fullName>
+        <description>Controls whether Exterior Trim is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Exterior Trim is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Exterior Trim</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim__c</fullName>
+        <description>The exterior trim options available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior trim options available for this product configuration.</inlineHelpText>
+        <label>Exterior Trim</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Brickmold - Picture Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brickmould - Traditional</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Brickmould</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Chamfered Edge</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Flange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Factory_Applied_Brickmould_Control__c</fullName>
+        <description>Controls whether Factory Applied Brickmould is required, enabled, or disabled for this product configuration.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Select the Exterior Grille Colors that should be made available for selection in the product configuration page.</inlineHelpText>
         <label>Exterior Grille Color</label>
@@ -1081,6 +1200,34 @@
         <picklist>
             <picklistValues>
                 <fullName>Disabled</fullName>
+<<<<<<< HEAD
+=======
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Fibrex_L_Trim_Control__c</fullName>
+        <description>Controls whether Fibrex L-Trim is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Fibrex L-Trim is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Fibrex L-Trim</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+>>>>>>> refs/heads/master
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -1184,6 +1331,64 @@
     <fields>
         <fullName>Frame_Type_Control__c</fullName>
         <description>Controls whether Frame Type is required, enabled, or disabled for this product configuration.</description>
+<<<<<<< HEAD
+=======
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Frame Type is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Frame Type Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Type__c</fullName>
+        <description>Select the frame types that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the frame types that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Frame Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Full-Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Flat Sill Insert</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Slope Sill Insert</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Insert Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Glass_Option__c</fullName>
+        <description>Select the glass options to make available for this product configuration.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Controls whether Frame Type is required, enabled, or disabled for this product configuration.</inlineHelpText>
         <label>Frame Type Control</label>
@@ -1239,6 +1444,93 @@
     <fields>
         <fullName>Glass_Pattern_Control__c</fullName>
         <description>Controls whether Glass Pattern is required, enabled, or disabled for this product configuration.</description>
+<<<<<<< HEAD
+=======
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Glass Pattern is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Glass Pattern Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern__c</fullName>
+        <description>Select the glass pattern to make available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern to make available for this product configuration.</inlineHelpText>
+        <label>Glass Pattern</label>
+        <picklist>
+            <picklistValues>
+                <fullName>No Pattern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Obscure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cascade</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Reed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Glazing_Control__c</fullName>
+        <description>Controls whether Glazing is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Glazing is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Glazing</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Glazing_Sash1_Control__c</fullName>
+        <description>Controls whether Glazing Sash1 is required, enabled, or disabled for this product configuration.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Controls whether Glass Pattern is required, enabled, or disabled for this product configuration.</inlineHelpText>
         <label>Glass Pattern Control</label>
@@ -1347,6 +1639,38 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
+<<<<<<< HEAD
+=======
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Glazing__c</fullName>
+        <description>Select the glazing options to make available on the product configuration page for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing options to make available on the product configuration page for this product.</inlineHelpText>
+        <label>Glazing</label>
+        <picklist>
+            <picklistValues>
+                <fullName>High Performance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High Performance SmartSun</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High Performance SmartSun w/ HeatLock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High Performance Sun</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+>>>>>>> refs/heads/master
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
     </fields>
@@ -1888,8 +2212,38 @@
         <type>Picklist</type>
     </fields>
     <fields>
+<<<<<<< HEAD
         <fullName>Hardware_Style__c</fullName>
         <description>Select the hardware styles that should be made available for selection in the product configuration page.</description>
+=======
+        <fullName>Height_Fraction_Control__c</fullName>
+        <description>Controls whether Height Fraction is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Height Fraction is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Height Fraction</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Height_Fractions_Control__c</fullName>
+        <description>Controls whether Height Fractions is required, enabled, or disabled for this product configuration.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Select the hardware styles that should be made available for selection in the product configuration page.</inlineHelpText>
         <label>Hardware Style</label>
@@ -1929,6 +2283,84 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Height_Fractions__c</fullName>
+        <description>The fractions that should be made available for the height measurements in the product config.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The fractions that should be made available for the height measurements in the product config.</inlineHelpText>
+        <label>Height Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Height_Inches_Control__c</fullName>
@@ -2033,6 +2465,31 @@
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Interior_Color_Control__c</fullName>
+        <description>Controls whether Interior Color is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Interior Color is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Interior Color</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Interior_Color_Control__c</fullName>
@@ -2229,6 +2686,36 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Trim__c</fullName>
+        <description>Select the interior trim options that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the interior trim options that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Interior Trim</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Quarter-Round</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Colonial</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shoe</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Flat</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Interior_Trim__c</fullName>
@@ -3123,6 +3610,48 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Screen_Type__c</fullName>
+        <description>Select the options for screen type that you want to make available for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the options for screen type that you want to make available for this product configuration.</inlineHelpText>
+        <label>Screen Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum (1/2)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum Dual</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene (1/2)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene (Wood Vaneer)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Screen_Vaneer_Type__c</fullName>
         <description>Select the screen vaneer types that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -3537,6 +4066,81 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Tax_Credit_Qualified_Control__c</fullName>
+        <description>Controls whether Tax Credit Qualified is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Tax Credit Qualified is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Tax Credit Qualified Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_Control__c</fullName>
+        <description>Controls whether Tempered is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Tempered is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Tempered Control</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Unit_Id_Control__c</fullName>
+        <description>Controls whether Unit (Floor Plan) Id is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Unit (Floor Plan) Id is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Unit Id</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>United_Inch_Maximum__c</fullName>
         <description>The maximum united inches for the makeability exception rules.</description>
         <externalId>false</externalId>
@@ -3603,6 +4207,34 @@
     <fields>
         <fullName>Width_Fraction_Control__c</fullName>
         <description>Controls whether Width Fraction is required, enabled, or disabled for this product configuration.</description>
+<<<<<<< HEAD
+=======
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Width Fraction is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Width Fraction</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Width_Fractions_Control__c</fullName>
+        <description>Controls whether Width Fractions is required, enabled, or disabled for this product configuration.</description>
+>>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Controls whether Width Fraction is required, enabled, or disabled for this product configuration.</inlineHelpText>
         <label>Width Fraction</label>

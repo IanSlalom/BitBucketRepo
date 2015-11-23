@@ -196,9 +196,8 @@
     </fields>
     <label>Municipality Contact</label>
     <nameField>
-        <displayFormat>MC-{00}</displayFormat>
-        <label>Municipality Contact #</label>
-        <type>AutoNumber</type>
+        <label>Contact</label>
+        <type>Text</type>
     </nameField>
     <pluralLabel>Municipality Contacts</pluralLabel>
     <searchLayouts/>

@@ -97,12 +97,11 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>View__c</fields>
+        <fields>NAME</fields>
         <fields>Contact_Type__c</fields>
-        <fields>Name__c</fields>
-        <fields>Phone__c</fields>
         <fields>Fax__c</fields>
         <fields>Email__c</fields>
+        <fields>Phone__c</fields>
         <relatedList>Municipality_Contact__c.Municipality__c</relatedList>
     </relatedLists>
     <relatedLists>
