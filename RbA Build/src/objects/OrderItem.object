@@ -39,6 +39,18 @@
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <enableFeeds>false</enableFeeds>
     <fields>
+        <fullName>Astragal__c</fullName>
+        <description>The Astragal Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Astragal Color selected for the product.</inlineHelpText>
+        <label>Astragal</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>AvailableQuantity</fullName>
     </fields>
     <fields>
@@ -50,6 +62,64 @@
         <label>Breather Tubes</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Applied__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if brickmould should be applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if brickmould should be applied to this product.</inlineHelpText>
+        <label>Brickmould Applied</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Location__c</fullName>
+        <description>The Brickmould Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Brickmould Location selected for the product.</inlineHelpText>
+        <label>Brickmould Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Location__c</fullName>
+        <description>The Casing Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Location selected for the product.</inlineHelpText>
+        <label>Casing Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Profile__c</fullName>
+        <description>The Casing Profile selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Profile selected for the product.</inlineHelpText>
+        <label>Casing Profile</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Species__c</fullName>
+        <description>The Casing Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Species selected for the product.</inlineHelpText>
+        <label>Casing Species</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Checkrail_Style__c</fullName>
@@ -64,11 +134,11 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Colonial_Grille_Lights_High__c</fullName>
-        <description>The number of grille lights high for colonial grille pattern.</description>
+        <fullName>Colonial_Grille_Lites_High__c</fullName>
+        <description>The number of grille lites high for colonial grille pattern.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The number of grille lights high for colonial grille pattern.</inlineHelpText>
-        <label>Colonial Grille Lights High</label>
+        <inlineHelpText>The number of grille lites high for colonial grille pattern.</inlineHelpText>
+        <label>Colonial Grille Lites High</label>
         <length>1</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -76,11 +146,11 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Colonial_Grille_Lights_Wide__c</fullName>
-        <description>The number of grille lights wide for colonial grille pattern.</description>
+        <fullName>Colonial_Grille_Lites_Wide__c</fullName>
+        <description>The number of grille lites wide for colonial grille pattern.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The number of grille lights wide for colonial grille pattern.</inlineHelpText>
-        <label>Colonial Grille Lights Wide</label>
+        <inlineHelpText>The number of grille lites wide for colonial grille pattern.</inlineHelpText>
+        <label>Colonial Grille Lites Wide</label>
         <length>1</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -160,6 +230,31 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Drip_Cap_Pieces__c</fullName>
+        <description>The Drip Cap Pieces selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Drip Cap Pieces selected for the product.</inlineHelpText>
+        <label>Drip Cap Pieces</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Color__c</fullName>
+        <description>The EJ Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Color selected for the product.</inlineHelpText>
+        <label>EJ Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>EJ_Frame__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</description>
@@ -168,6 +263,42 @@
         <label>EJ Frame</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Species__c</fullName>
+        <description>The EJ Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Species selected for the product.</inlineHelpText>
+        <label>EJ Species</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Thickness__c</fullName>
+        <description>The EJ Thickness selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Thickness selected for the product.</inlineHelpText>
+        <label>EJ Thickness</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Wall_Depth__c</fullName>
+        <description>The EJ Wall Depth selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Wall Depth selected for the product.</inlineHelpText>
+        <label>EJ Wall Depth</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>EndDate</fullName>
@@ -179,6 +310,30 @@
         <externalId>false</externalId>
         <inlineHelpText>The exterior color of the product</inlineHelpText>
         <label>Exterior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Grille_Color__c</fullName>
+        <description>The Exterior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Grille Color selected for the product.</inlineHelpText>
+        <label>Exterior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim_Color__c</fullName>
+        <description>The Exterior Trim Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Trim Color selected for the product.</inlineHelpText>
+        <label>Exterior Trim Color</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -320,11 +475,47 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Hardware_Color__c</fullName>
-        <description>The hardware color applied to this product.</description>
+        <fullName>Handle_Type__c</fullName>
+        <description>The handle type selected for this product.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
-        <label>Hardware Color</label>
+        <inlineHelpText>The handle type selected for this product.</inlineHelpText>
+        <label>Handle Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>The hardware finish/color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish/color applied to this product.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Option__c</fullName>
+        <description>The hardware option selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware option selected for this product.</inlineHelpText>
+        <label>Hardware Option</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Style__c</fullName>
+        <description>The hardware style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware style selected for this product.</inlineHelpText>
+        <label>Hardware Style</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -349,11 +540,23 @@
         <externalId>false</externalId>
         <inlineHelpText>The final height measurement in inches.</inlineHelpText>
         <label>Height_Inches</label>
-        <precision>18</precision>
+        <precision>3</precision>
         <required>false</required>
         <scale>0</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hubs__c</fullName>
+        <description>The number of hubs selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of hubs selected for the product.</inlineHelpText>
+        <label>Hubs</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -362,6 +565,30 @@
         <externalId>false</externalId>
         <inlineHelpText>The insect screen style selected for this product.</inlineHelpText>
         <label>Insect Screen Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Holes_Location__c</fullName>
+        <description>The Install Holes Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Holes Location selected for the product.</inlineHelpText>
+        <label>Install Holes Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Track_Location__c</fullName>
+        <description>The Install Track Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Track Location selected for the product.</inlineHelpText>
+        <label>Install Track Location</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -381,6 +608,30 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Interior_Grille_Color__c</fullName>
+        <description>The Interior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Grille Color selected for the product.</inlineHelpText>
+        <label>Interior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Sash_Color__c</fullName>
+        <description>The Interior Sash Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Sash Color selected for the product.</inlineHelpText>
+        <label>Interior Sash Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Interior_Trim__c</fullName>
         <description>The interior trim selected for the product.</description>
         <externalId>false</externalId>
@@ -390,6 +641,43 @@
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Jamb_Liner_Color__c</fullName>
+        <description>The Jamb Liner Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Jamb Liner Color selected for the product.</inlineHelpText>
+        <label>Jamb Liner Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Fraction__c</fullName>
+        <description>The left leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg measurement fraction.</inlineHelpText>
+        <label>Left Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Inches__c</fullName>
+        <description>The left leg dimension in inches selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg dimension in inches selected for this product.</inlineHelpText>
+        <label>Left Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -432,6 +720,30 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Mfg_Mull_Sequence__c</fullName>
+        <description>The manufacturing mull sequence selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The manufacturing mull sequence selected for this product.</inlineHelpText>
+        <label>Mfg Mull Sequence</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mull_Sequence_Mullion__c</fullName>
+        <description>The mull sequence mullion selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The mull sequence mullion selected for this product.</inlineHelpText>
+        <label>Mull Sequence Mullion</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>NSPR__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -446,6 +758,26 @@
     <fields>
         <fullName>OriginalOrderItemId</fullName>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bay__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bay window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bay window.</inlineHelpText>
+        <label>Part of Bay</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bow__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bow window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bow window.</inlineHelpText>
+        <label>Part of Bow</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
@@ -533,6 +865,31 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Right_Leg_Fraction__c</fullName>
+        <description>The right leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg measurement fraction.</inlineHelpText>
+        <label>Right Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Right_Leg_Inches__c</fullName>
+        <description>The right leg in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg in inches.</inlineHelpText>
+        <label>Right Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Room_Description__c</fullName>
         <description>Allows the user enter a description of the dwelling&apos;s room for this product.</description>
         <externalId>false</externalId>
@@ -549,6 +906,18 @@
         <externalId>false</externalId>
         <inlineHelpText>Identifies the dwelling&apos;s room for this product.</inlineHelpText>
         <label>Room</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SW_Grille_Alignment__c</fullName>
+        <description>The SW grille alignment selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The SW grille alignment selected for this product.</inlineHelpText>
+        <label>SW Grille Alignment</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -606,6 +975,30 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Sash_Operation__c</fullName>
+        <description>The Sash Operation selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sash Operation selected for the product.</inlineHelpText>
+        <label>Sash Operation</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Color__c</fullName>
+        <description>The Screen Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Screen Color selected for the product.</inlineHelpText>
+        <label>Screen Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Screen_Type__c</fullName>
         <description>The screen type applied to the selected product.</description>
         <externalId>false</externalId>
@@ -646,6 +1039,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Sill_Angle__c</fullName>
+        <description>The Sill Angle selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sill Angle selected for the product.</inlineHelpText>
+        <label>Sill Angle</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Size__c</fullName>
         <externalId>false</externalId>
         <label>Size</label>
@@ -662,6 +1067,18 @@
         <label>Specialty Glazing</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Spokes__c</fullName>
+        <description>The number of spokes selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of spokes selected for the product.</inlineHelpText>
+        <label>Spokes</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Status__c</fullName>
@@ -694,6 +1111,42 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Color__c</fullName>
+        <description>The Storm Window Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Storm Window Color selected for the product.</inlineHelpText>
+        <label>Storm Window Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Style__c</fullName>
+        <description>The storm window style selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The storm window style selected for the product.</inlineHelpText>
+        <label>Storm Window Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window__c</fullName>
+        <description>The storm window selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The storm window selected for the product.</inlineHelpText>
+        <label>Storm Window</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Tax_Credit_Qualified__c</fullName>
@@ -807,6 +1260,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Verify_Item_Configuration__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Check if you want to verify the product configuration against the makeability rules.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to verify the product configuration against the makeability rules.</inlineHelpText>
+        <label>Verify Item Configuration</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Wide_Bar__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Checked if the wide Bar grille option was selected.</description>
@@ -834,7 +1297,7 @@
         <externalId>false</externalId>
         <inlineHelpText>The actual width measurement in inches.</inlineHelpText>
         <label>Width Inches</label>
-        <precision>18</precision>
+        <precision>3</precision>
         <required>false</required>
         <scale>0</scale>
         <trackHistory>false</trackHistory>
