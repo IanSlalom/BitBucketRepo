@@ -25,9 +25,39 @@
         <startsWith>Vowel</startsWith>
     </fields>
     <fields>
+        <help><!-- The Astragal Color selected for the product. --></help>
+        <label><!-- Astragal --></label>
+        <name>Astragal__c</name>
+    </fields>
+    <fields>
         <help><!-- Checked if Breather Tubes are needed. --></help>
         <label><!-- Breather Tubes --></label>
         <name>Breather_Tubes__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if brickmould should be applied to this product. --></help>
+        <label><!-- Brickmould Applied --></label>
+        <name>Brickmould_Applied__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Brickmould Location selected for the product. --></help>
+        <label><!-- Brickmould Location --></label>
+        <name>Brickmould_Location__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Casing Location selected for the product. --></help>
+        <label><!-- Casing Location --></label>
+        <name>Casing_Location__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Casing Profile selected for the product. --></help>
+        <label><!-- Casing Profile --></label>
+        <name>Casing_Profile__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Casing Species selected for the product. --></help>
+        <label><!-- Casing Species --></label>
+        <name>Casing_Species__c</name>
     </fields>
     <fields>
         <help><!-- The checkrail style applied to this product. --></help>
@@ -43,6 +73,16 @@
         <help><!-- The number of grille lights wide for colonial grille pattern. --></help>
         <label><!-- Colonial Grille Lights Wide --></label>
         <name>Colonial_Grille_Lights_Wide__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of grille lites high for colonial grille pattern. --></help>
+        <label><!-- Colonial Grille Lites High --></label>
+        <name>Colonial_Grille_Lites_High__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of grille lites wide for colonial grille pattern. --></help>
+        <label><!-- Colonial Grille Lites Wide --></label>
+        <name>Colonial_Grille_Lites_Wide__c</name>
     </fields>
     <fields>
         <label><!-- Commission Amount --></label>
@@ -72,14 +112,49 @@
         <name>Discount_Amount__c</name>
     </fields>
     <fields>
+        <help><!-- The Drip Cap Pieces selected for the product. --></help>
+        <label><!-- Drip Cap Pieces --></label>
+        <name>Drip_Cap_Pieces__c</name>
+    </fields>
+    <fields>
+        <help><!-- The EJ Color selected for the product. --></help>
+        <label><!-- EJ Color --></label>
+        <name>EJ_Color__c</name>
+    </fields>
+    <fields>
         <help><!-- Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed. --></help>
         <label><!-- EJ Frame --></label>
         <name>EJ_Frame__c</name>
     </fields>
     <fields>
+        <help><!-- The EJ Species selected for the product. --></help>
+        <label><!-- EJ Species --></label>
+        <name>EJ_Species__c</name>
+    </fields>
+    <fields>
+        <help><!-- The EJ Thickness selected for the product. --></help>
+        <label><!-- EJ Thickness --></label>
+        <name>EJ_Thickness__c</name>
+    </fields>
+    <fields>
+        <help><!-- The EJ Wall Depth selected for the product. --></help>
+        <label><!-- EJ Wall Depth --></label>
+        <name>EJ_Wall_Depth__c</name>
+    </fields>
+    <fields>
         <help><!-- The exterior color of the product --></help>
         <label><!-- Exterior Color --></label>
         <name>Exterior_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Exterior Grille Color selected for the product. --></help>
+        <label><!-- Exterior Grille Color --></label>
+        <name>Exterior_Grille_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Exterior Trim Color selected for the product. --></help>
+        <label><!-- Exterior Trim Color --></label>
+        <name>Exterior_Trim_Color__c</name>
     </fields>
     <fields>
         <help><!-- The exterior trim option applied to this product. --></help>
@@ -150,9 +225,29 @@
         <name>Handing__c</name>
     </fields>
     <fields>
+        <help><!-- The handle type selected for this product. --></help>
+        <label><!-- Handle Type --></label>
+        <name>Handle_Type__c</name>
+    </fields>
+    <fields>
         <help><!-- The hardware color applied to this product. --></help>
         <label><!-- Hardware Color --></label>
         <name>Hardware_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The hardware finish/color applied to this product. --></help>
+        <label><!-- Hardware Finish/Color --></label>
+        <name>Hardware_Finish_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The hardware option selected for this product. --></help>
+        <label><!-- Hardware Option --></label>
+        <name>Hardware_Option__c</name>
+    </fields>
+    <fields>
+        <help><!-- The hardware style selected for this product. --></help>
+        <label><!-- Hardware Style --></label>
+        <name>Hardware_Style__c</name>
     </fields>
     <fields>
         <help><!-- The height measurement in fractions. --></help>
@@ -169,9 +264,24 @@
         <name>Height__c</name>
     </fields>
     <fields>
+        <help><!-- The number of hubs selected for the product. --></help>
+        <label><!-- Hubs --></label>
+        <name>Hubs__c</name>
+    </fields>
+    <fields>
         <help><!-- The insect screen style selected for this product. --></help>
         <label><!-- Insect Screen Style --></label>
         <name>Insect_Screen_Style__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Install Holes Location selected for the product. --></help>
+        <label><!-- Install Holes Location --></label>
+        <name>Install_Holes_Location__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Install Track Location selected for the product. --></help>
+        <label><!-- Install Track Location --></label>
+        <name>Install_Track_Location__c</name>
     </fields>
     <fields>
         <help><!-- The interior color of the product. --></help>
@@ -179,9 +289,34 @@
         <name>Interior_Color__c</name>
     </fields>
     <fields>
+        <help><!-- The Interior Grille Color selected for the product. --></help>
+        <label><!-- Interior Grille Color --></label>
+        <name>Interior_Grille_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Interior Sash Color selected for the product. --></help>
+        <label><!-- Interior Sash Color --></label>
+        <name>Interior_Sash_Color__c</name>
+    </fields>
+    <fields>
         <help><!-- The interior trim selected for the product. --></help>
         <label><!-- Interior Trim --></label>
         <name>Interior_Trim__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Jamb Liner Color selected for the product. --></help>
+        <label><!-- Jamb Liner Color --></label>
+        <name>Jamb_Liner_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The left leg measurement fraction. --></help>
+        <label><!-- Left Leg Fraction --></label>
+        <name>Left_Leg_Fraction__c</name>
+    </fields>
+    <fields>
+        <help><!-- The left leg dimension in inches selected for this product. --></help>
+        <label><!-- Left Leg --></label>
+        <name>Left_Leg_Inches__c</name>
     </fields>
     <fields>
         <help><!-- Identifies the dwelling level for this product. --></help>
@@ -199,8 +334,28 @@
         <name>Locks_Sash__c</name>
     </fields>
     <fields>
+        <help><!-- The manufacturing mull sequence selected for this product. --></help>
+        <label><!-- Mfg Mull Sequence --></label>
+        <name>Mfg_Mull_Sequence__c</name>
+    </fields>
+    <fields>
+        <help><!-- The mull sequence mullion selected for this product. --></help>
+        <label><!-- Mull Sequence Mullion --></label>
+        <name>Mull_Sequence_Mullion__c</name>
+    </fields>
+    <fields>
         <label><!-- NSPR/SPR --></label>
         <name>NSPR__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if this product is a part of a bay window. --></help>
+        <label><!-- Part of Bay --></label>
+        <name>Part_of_Bay__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if this product is a part of a bow window. --></help>
+        <label><!-- Part of Bow --></label>
+        <name>Part_of_Bow__c</name>
     </fields>
     <fields>
         <help><!-- Checked if the permanently applied interior wood grille option was selected. --></help>
@@ -246,14 +401,29 @@
         <relationshipLabel><!-- Order Products --></relationshipLabel>
     </fields>
     <fields>
+        <help><!-- The right leg measurement fraction. --></help>
+        <label><!-- Right Leg Fraction --></label>
+        <name>Right_Leg_Fraction__c</name>
+    </fields>
+    <fields>
+        <help><!-- The right leg in inches. --></help>
+        <label><!-- Right Leg --></label>
+        <name>Right_Leg_Inches__c</name>
+    </fields>
+    <fields>
         <help><!-- Allows the user enter a description of the dwelling&apos;s room for this product. --></help>
         <label><!-- Room Description --></label>
         <name>Room_Description__c</name>
     </fields>
     <fields>
-        <help><!-- Identifies the room for this product. --></help>
+        <help><!-- Identifies the dwelling&apos;s room for this product. --></help>
         <label><!-- Room --></label>
         <name>Room__c</name>
+    </fields>
+    <fields>
+        <help><!-- The SW grille alignment selected for this product. --></help>
+        <label><!-- SW Grille Alignment --></label>
+        <name>SW_Grille_Alignment__c</name>
     </fields>
     <fields>
         <help><!-- The sales height measurement in fractions. --></help>
@@ -286,6 +456,16 @@
         <name>Sales_Width__c</name>
     </fields>
     <fields>
+        <help><!-- The Sash Operation selected for the product. --></help>
+        <label><!-- Sash Operation --></label>
+        <name>Sash_Operation__c</name>
+    </fields>
+    <fields>
+        <help><!-- The Screen Color selected for the product. --></help>
+        <label><!-- Screen Color --></label>
+        <name>Screen_Color__c</name>
+    </fields>
+    <fields>
         <help><!-- The screen type applied to the selected product. --></help>
         <label><!-- Screen Type --></label>
         <name>Screen_Type__c</name>
@@ -301,12 +481,22 @@
         <name>Side__c</name>
     </fields>
     <fields>
+        <help><!-- The Sill Angle selected for the product. --></help>
+        <label><!-- Sill Angle --></label>
+        <name>Sill_Angle__c</name>
+    </fields>
+    <fields>
         <label><!-- Size --></label>
         <name>Size__c</name>
     </fields>
     <fields>
         <label><!-- Specialty Glazing --></label>
         <name>Specialty_Glazing__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of spokes selected for the product. --></help>
+        <label><!-- Spokes --></label>
+        <name>Spokes__c</name>
     </fields>
     <fields>
         <help><!-- The status of the order line item. --></help>
@@ -332,6 +522,21 @@
             <masterLabel>Verified</masterLabel>
             <translation><!-- Verified --></translation>
         </picklistValues>
+    </fields>
+    <fields>
+        <help><!-- The Storm Window Color selected for the product. --></help>
+        <label><!-- Storm Window Color --></label>
+        <name>Storm_Window_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The storm window style selected for the product. --></help>
+        <label><!-- Storm Window Style --></label>
+        <name>Storm_Window_Style__c</name>
+    </fields>
+    <fields>
+        <help><!-- The storm window selected for the product. --></help>
+        <label><!-- Storm Window --></label>
+        <name>Storm_Window__c</name>
     </fields>
     <fields>
         <help><!-- Check if this particular product qualifies for a tax credit. --></help>
@@ -382,7 +587,12 @@
         <name>Variant_Number__c</name>
     </fields>
     <fields>
-        <help><!-- Checked if the Wide Bar grille option was selected. --></help>
+        <help><!-- Check if you want to verify the product configuration against the makeability rules. --></help>
+        <label><!-- Verify Item Configuration --></label>
+        <name>Verify_Item_Configuration__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if the wide Bar grille option was selected. --></help>
         <label><!-- Wide Bar --></label>
         <name>Wide_Bar__c</name>
     </fields>
@@ -403,20 +613,24 @@
     <layouts>
         <layout>Order Product Layout</layout>
         <sections>
+            <label><!-- Brickmould &amp; Drip Cap Options --></label>
+            <section>Brickmould &amp; Drip Cap Options</section>
+        </sections>
+        <sections>
+            <label><!-- Dwelling Information --></label>
+            <section>Dwelling Information</section>
+        </sections>
+        <sections>
             <label><!-- Finishes --></label>
             <section>Finishes</section>
         </sections>
         <sections>
-            <label><!-- Glass Options --></label>
-            <section>Glass Options</section>
+            <label><!-- Glazing --></label>
+            <section>Glazing</section>
         </sections>
         <sections>
-            <label><!-- Grille Pattern --></label>
-            <section>Grille Pattern</section>
-        </sections>
-        <sections>
-            <label><!-- Grille Style --></label>
-            <section>Grille Style</section>
+            <label><!-- Grilles --></label>
+            <section>Grilles</section>
         </sections>
         <sections>
             <label><!-- Handing &amp; Frame --></label>
@@ -435,12 +649,24 @@
             <section>Measurements</section>
         </sections>
         <sections>
+            <label><!-- Order Information --></label>
+            <section>Order Information</section>
+        </sections>
+        <sections>
             <label><!-- Pricing --></label>
             <section>Pricing</section>
         </sections>
         <sections>
-            <label><!-- Product Config --></label>
-            <section>Product Config</section>
+            <label><!-- Special Options --></label>
+            <section>Special Options</section>
+        </sections>
+        <sections>
+            <label><!-- Storm Windows --></label>
+            <section>Storm Windows</section>
+        </sections>
+        <sections>
+            <label><!-- Trim &amp; Casing --></label>
+            <section>Trim &amp; Casing</section>
         </sections>
     </layouts>
     <webLinks>

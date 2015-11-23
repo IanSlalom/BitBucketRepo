@@ -4,6 +4,7 @@
         <members>AccountTriggerHandler</members>
         <members>AccountTriggerHandlerTest</members>
         <members>AutoCompleteV2_Con</members>
+        <members>AutocompleteV2_Con_Test</members>
         <members>Constants</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
@@ -39,14 +40,12 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>AllDemoLink</members>
         <members>AutoCompleteV2</members>
         <name>ApexComponent</name>
     </types>
     <types>
         <members>RMS_cancelOrder</members>
         <members>RMS_completeOrderChecks</members>
-        <members>RMS_createActionWorkOrder</members>
         <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createWorkOrder</members>
@@ -84,7 +83,6 @@
         <members>Discount__c</members>
         <members>Field_IDs__c</members>
         <members>Financial_Configuration__c</members>
-        <members>HOA_Historical__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
@@ -113,7 +111,6 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
-        <members>HOA_Historical__c</members>
         <members>Municipality__c</members>
         <members>Pricing_Configuration__c</members>
         <members>Product_Configuration__c</members>
