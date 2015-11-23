@@ -55,8 +55,6 @@
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
-        <members>temppage</members>
-        <members>temppage2</members>
         <name>ApexPage</name>
     </types>
     <types>
