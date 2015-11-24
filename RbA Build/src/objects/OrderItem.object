@@ -154,37 +154,8 @@
         <unique>false</unique>
     </fields>
     <fields>
-<<<<<<< HEAD
         <fullName>Colonial_Grille_Lites_High_S1__c</fullName>
         <description>Select the number of grille lites high for colonial grille pattern on sash 1.</description>
-=======
-        <fullName>Colonial_Grille_Lights_High__c</fullName>
-        <description>The number of grille lights high for colonial grille pattern.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The number of grille lights high for colonial grille pattern.</inlineHelpText>
-        <label>Colonial Grille Lights High</label>
-        <length>1</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Colonial_Grille_Lights_Wide__c</fullName>
-        <description>The number of grille lights wide for colonial grille pattern.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The number of grille lights wide for colonial grille pattern.</inlineHelpText>
-        <label>Colonial Grille Lights Wide</label>
-        <length>1</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Colonial_Grille_Lites_High__c</fullName>
-        <description>The number of grille lites high for colonial grille pattern.</description>
->>>>>>> refs/heads/master
         <externalId>false</externalId>
         <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 1.</inlineHelpText>
         <label>Colonial Grille Lites High S1</label>
@@ -482,18 +453,6 @@
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Finish_Option__c</fullName>
-        <description>The finish option applied to this product.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The finish option applied to this product.</inlineHelpText>
-        <label>Finish Option</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Floor__c</fullName>
         <description>Identifies the floor for this product.</description>
         <externalId>false</externalId>
@@ -523,18 +482,6 @@
         <externalId>false</externalId>
         <inlineHelpText>The GL Account associated to the order line item</inlineHelpText>
         <label>GL Account</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Glass_Option_Selected__c</fullName>
-        <description>The glass option that was selected from the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The glass option that was selected from the product configuration page.</inlineHelpText>
-        <label>Glass Option Selected</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -702,18 +649,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Hardware_Color__c</fullName>
-        <description>The hardware color applied to this product.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
-        <label>Hardware Color</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Hardware_Finish_Color__c</fullName>
         <description>The hardware finish/color applied to this product.</description>
         <externalId>false</externalId>
@@ -770,17 +705,6 @@
         <precision>3</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Height__c</fullName>
-        <externalId>false</externalId>
-        <label>Height</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>3</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
@@ -1188,19 +1112,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Sales_Height__c</fullName>
-        <description>The height of the opening as measured by sales.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The height of the opening as measured by sales.</inlineHelpText>
-        <label>Sales Height</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Sales_Width_Fraction__c</fullName>
         <description>The sales width measurement in fractions.</description>
         <externalId>false</externalId>
@@ -1221,19 +1132,6 @@
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Sales_Width__c</fullName>
-        <description>The width of the opening as measured by sales.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The width of the opening as measured by sales.</inlineHelpText>
-        <label>Sales Width</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>3</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
@@ -1584,17 +1482,6 @@
         <precision>3</precision>
         <required>false</required>
         <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <type>Number</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Width__c</fullName>
-        <externalId>false</externalId>
-        <label>Width</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>3</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>

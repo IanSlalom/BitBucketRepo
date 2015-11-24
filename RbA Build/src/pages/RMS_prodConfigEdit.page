@@ -353,7 +353,6 @@
 <script type ="text/javascript">
     var j$ = jQuery.noConflict();
 
-<<<<<<< HEAD
     j$( document ).ready(function() {
         startUpDefaults();
         exteriorColor('Sandstone');
@@ -530,145 +529,9 @@
     	var applyToAllCheck = j$("input[data-jsid='applyToAllGrilles']").prop('checked');
         if( applyToAllCheck == true){
         	applyToAllGrilles();
-=======
-	$( document ).ready(function() {
-		startUpDefaults();
-    	exteriorColor('Sandstone');
-    	exteriorColor('Terratone');
-    	exteriorColor('Dark Bronze');
-    	screenType();
-    	grilleStyle();
-    	grillePattern();
-    	interiorColor('White');
-		interiorColor('Dark Bronze');
-		glazingS1();
-		frameType();
-	});
-	
-	
-	function callRule(ruleName){
-		if(ruleName == 'exteriorColor'){
-			exteriorColor('Sandstone');
-			exteriorColor('Terratone');
-			exteriorColor('Dark Bronze');
-		}else if(ruleName == 'screenType'){
-			screenType();
-		}else if(ruleName == 'grilleStyle'){
-			grilleStyle();
-		}else if(ruleName == 'grillePattern'){
-			grillePattern();
-		}else if(ruleName == 'interiorColor'){
-			interiorColor('White');
-			interiorColor('Dark Bronze');
-		}else if(ruleName == 'glazingS1'){
-			glazingS1();
-		}else if(ruleName == 'frameType'){
-			frameType();
-		}
-	}
-		
-		
-	function startUpDefaults(){
-		if($("select[data-jsid='screenType']").val() == ''){
-			$("select[data-jsid='screenType']").val('Fiberglass');
-		}
-	}
-	
-	function exteriorColor(color){
-		if($("select[data-jsid='exteriorColor']").val() != color){
-			$("select[data-jsid='interiorColor'] option[value=\'"+color+"\']").remove();
-			
-		}else{
-			$("select[data-jsid='interiorColor'] option:last").after($('<option value=\''+color+'\'>'+color+'</option>').attr('selected', true));
-		}
-		
-		if($("select[data-jsid='exteriorColor']").val() == 'White'){
-			$("select[data-jsid='interiorColor']").val('White')
-		}else if($("select[data-jsid='exteriorColor']").val() == 'Canvas'){
-			$("select[data-jsid='interiorColor']").val('Canvas')
-		} 
-		
-		callRule('interiorColor');
-	
-	}
-	
-	function screenType(){
-		if($("select[data-jsid='screenType']").val() == 'TruScene (Wood Vaneer)'){
-			$("select[data-jsid='screenVaneerType']").show();
-			$("label[for='"+$("select[data-jsid='screenVaneerType']").attr("id")+"']").show();
-		}else{
-			$("select[data-jsid='screenVaneerType']").val(null);
-			$("select[data-jsid='screenVaneerType']").hide();
-			$("label[for='"+$("select[data-jsid='screenVaneerType']").attr("id")+"']").hide();
-		}
-	}
-	
-	
-	function grilleStyle(){ 
-		if($("select[data-jsid='grilleStyle']").val() == 'No Grilles'){
-			$("select[data-jsid='grillePattern']").val(null);
-			$("select[data-jsid='grillePattern']").hide();
-			$("label[for='"+$("select[data-jsid='grillePattern']").attr("id")+"']").hide();
-			
-			$("input[data-jsid='wideBar']").attr('checked',false);
-			$("input[data-jsid='wideBar']").hide();
-			$("label[for='"+$("input[data-jsid='wideBar']").attr("id")+"']").hide();
-		}else{
-			$("select[data-jsid='grillePattern']").show();
-			$("label[for='"+$("select[data-jsid='grillePattern']").attr("id")+"']").show();
-			
-			$("input[data-jsid='wideBar']").show();
-			$("label[for='"+$("input[data-jsid='wideBar']").attr("id")+"']").show();
-		}
-		
-		if($("select[data-jsid='grilleStyle']").val()  ==	'No Grilles' ||
-			$("select[data-jsid='grilleStyle']").val() ==	'Grilles Between Glass' ||
-			$("select[data-jsid='grilleStyle']").val() ==	'Interior Wood Only'){
-				$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
-				$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
-				$("label[for='"+$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").hide();
-		}else{
-			$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
-			$("label[for='"+$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").show();
-		}
-		grillePattern();
-	}
-	
-	function grillePattern(){
-		if($("select[data-jsid='grillePattern']").val() == 'Colonial'){
-			$("select[data-jsid='colonialGrilleLightsWide']").show();
-			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").show();
-			$("select[data-jsid='colonialGrilleLightsHigh']").show();
-			$("label[for='"+$("select[data-jsid='colonialGrilleLightsHigh']").attr("id")+"']").show();
-		}else{
-			$("select[data-jsid='colonialGrilleLightsWide']").val(null);
-			$("select[data-jsid='colonialGrilleLightsWide']").hide();
-			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").hide();
-			
-			$("select[data-jsid='colonialGrilleLightsHigh']").val(null);
-			$("select[data-jsid='colonialGrilleLightsHigh']").hide();
-			$("label[for='"+$("select[data-jsid='colonialGrilleLightsHigh']").attr("id")+"']").hide();
-		}
-			if($("select[data-jsid='grillePattern']").val() == 'Custom'){
-				$("textarea[data-jsid='customGrilleDetails']").show();
-				$("label[for='"+$("textarea[data-jsid='customGrilleDetails']").attr("name")+"']").show();
-			}else{
-				$("textarea[data-jsid='customGrilleDetails']").val(null);
-				$("textarea[data-jsid='customGrilleDetails']").hide();
-				$("label[for='"+$("textarea[data-jsid='customGrilleDetails']").attr("name")+"']").hide();
-			}
-	}
-	
-	function interiorColor(color){
-		if($("select[data-jsid='interiorColor']").val() == color){
-			$("select[data-jsid='hardwareColor']").val(color);
-		}else if($("select[data-jsid='interiorColor']").val() == ''){
-			$("select[data-jsid='hardwareColor']").val('Stone')
->>>>>>> refs/heads/master
 		}
 	}
 
-<<<<<<< HEAD
     function applyToAllGrilles(){
    		var grillePattern1 = j$("select[data-jsid='grillePattern1']").val();
    		var colonialGrilleLightsWide1 = j$("select[data-jsid='colonialGrilleLightsWide1']").val();
@@ -692,64 +555,7 @@
             j$("select[data-jsid='hardwareColor']").val('Stone')
         }
     }
-=======
-	
-		function glazingS1(){
-			if($("select[data-jsid='glazingS1']").val() == 'High Performance SmartSun w/ HeatLock'){
-				$("select[data-jsid='glassPatternS1']").val(null);
-				$("select[data-jsid='glassPatternS1']").hide();
-				$("label[for='"+$("select[data-jsid='glassPatternS1']").attr("id")+"']").hide();
-			}else{
-				$("select[data-jsid='glassPatternS1']").show();
-				$("label[for='"+$("select[data-jsid='glassPatternS1']").attr("id")+"']").show();
-			}
-			
-		}
-		
-		
-		function frameType(){
-			if($("select[data-jsid='frameType']").val() == 'Full-Frame'){
-				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
-					if($(this).val() != 'Brickmold - Picture Frame' &&  $(this).val() !='Brickmould - Traditional'){
-				  		$(this).hide();
-			  		}else{
-			  			$(this).show();
-			  		}
-				});	
-				if($("select[data-jsid='exteriorTrim']").val() != 'Brickmold - Picture Frame' &&  $("select[data-jsid='exteriorTrim']").val() !='Brickmould - Traditional' ){
-					$("select[data-jsid='exteriorTrim']").val('');
-				}
-			}else if($("select[data-jsid='frameType']").val() == 'Flat Sill Insert'){
-				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
-					if($(this).val() != 'Overfit Brickmould' &&  $(this).val() !='Overfit Chamfered Edge' &&  $(this).val() !='Overfit Flange'){
-				  		$(this).hide();
-			  		}else{
-			  			$(this).show();
-			  		}
-				});
-				if($("select[data-jsid='exteriorTrim']").val() != 'Overfit Brickmould' &&  $("select[data-jsid='exteriorTrim']").val() !='Overfit Chamfered Edge' &&  $("select[data-jsid='exteriorTrim']").val() != 'Overfit Flange' ){
-					$("select[data-jsid='exteriorTrim']").val('');
-				}	
-			}else{
-				$.each($("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
-				  		$(this).show();
-				});
-			}
-			
-			if($("select[data-jsid='frameType']").val() == 'Slope Sill Insert'){
-				$("select[data-jsid='exteriorTrim']").val(null);
-				
-				$("select[data-jsid='exteriorTrim']").hide();
-				$("label[for='"+$("select[data-jsid='exteriorTrim']").attr("id")+"']").hide();
-			}else{
-				$("select[data-jsid='exteriorTrim']").show();
-				$("label[for='"+$("select[data-jsid='exteriorTrim']").attr("id")+"']").show();
-				
-				
-			} 
->>>>>>> refs/heads/master
 
-<<<<<<< HEAD
     function glazing(sashnumber){
 		  if (sashnumber == '1') {
 			 applyToAllGlassCheck();
@@ -771,26 +577,6 @@
     	var applyToAllCheck = j$("input[data-jsid='applyToAllGlass']").prop('checked');
         if( applyToAllCheck == true){
         	applyToAllGlass();
-=======
-			if($("select[data-jsid='frameType']").val() == 'Insert Frame'){
-				$("input[data-jsid='fibrexLTrim']").show();
-				$("label[for='"+$("input[data-jsid='fibrexLTrim']").attr("id")+"']").show();
-				
-				
-				$("select[data-jsid='interiorTrim']").show();
-				$("label[for='"+$("select[data-jsid='interiorTrim']").attr("id")+"']").show();
-				
-				
-			}else{
-				$("input[data-jsid='fibrexLTrim']").attr('checked',false);
-				$("input[data-jsid='fibrexLTrim']").hide();
-				$("label[for='"+$("input[data-jsid='fibrexLTrim']").attr("id")+"']").hide();
-
-				$("select[data-jsid='interiorTrim']").val('');
-				$("select[data-jsid='interiorTrim']").hide();
-				$("label[for='"+$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
-			} 
->>>>>>> refs/heads/master
 		}
 	}
 
