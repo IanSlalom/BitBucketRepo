@@ -55,7 +55,7 @@
             <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity"/>   
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Handing & Frame Options" columns="1">
+        <apex:pageBlockSection title="Handing & Frame Options" columns="2">
             <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!sashOperationItems}"/>
             </apex:selectList>
@@ -127,7 +127,7 @@
             <apex:inputField value="{!OrderItem.Tempered_S1__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered0"/>
             <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breathing_Tubes_Control__c == 'Required'}" id="breathingtubes0" rendered="{!prodConfig.mpc.Breathing_Tubes_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Screens" columns="1">
+        <apex:pageBlockSection title="Screens" columns="2">
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Type_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!screenTypeItems}"/>
             </apex:selectList>
@@ -136,7 +136,7 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Finishes" columns="1">
+        <apex:pageBlockSection title="Finishes" columns="2">
             <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}" html-data-jsid="exteriorTrim">
                 <apex:selectOptions value="{!exteriorTrimItems}"/>
             </apex:selectList>
@@ -150,7 +150,7 @@
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.BM_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Applied_Control__c != 'Disabled'}"/>
 
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Hardware" columns="1">
+        <apex:pageBlockSection title="Hardware" columns="2">
             <apex:selectList value="{!OrderItem.Hardware_Style__c}" label="Hardware Style" size="1" id="hardwareStyle"  required="{!prodConfig.mpc.Hardware_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Style_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!hardwareStyleItems}"/>
             </apex:selectList>
@@ -171,7 +171,7 @@
                 <apex:selectOptions value="{!locksSashItems}"/>
             </apex:selectList>
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Grille Style" columns="1">
+        <apex:pageBlockSection title="Grille Style" columns="2">
         	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')">
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
@@ -241,7 +241,7 @@
                        <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" cols="50" rows="5" id="customGrilleDetails0" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails0" />
          </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Trim & Casing" columns="1">
+        <apex:pageBlockSection title="Trim & Casing" columns="2">
             <apex:selectList value="{!OrderItem.EJ_Thickness__c}" label="EJ Thickness" size="1" id="EJThickness"   required="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Thickness_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!EJThicknessItems}"/>
             </apex:selectList>
@@ -273,7 +273,7 @@
             </apex:selectList>
 
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="1">
+        <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2">
             <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.BM_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Location_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!brickmouldLocationItems}"/>
             </apex:selectList>
@@ -283,7 +283,7 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Storm Windows" columns="1">
+        <apex:pageBlockSection title="Storm Windows" columns="2">
             <apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!stormWindowItems}"/>
             </apex:selectList>
@@ -293,14 +293,14 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Additional Job Cost Details" columns="1">
+        <apex:pageBlockSection title="Additional Job Cost Details" columns="2">
             <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
             <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
 
         </apex:pageBlockSection>
 
 
-        <apex:pageBlockSection title="Special Options" columns="1" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled'}">
+        <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled'}">
 
             <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" >
                 <apex:selectOptions value="{!screenColorItems}"/>
@@ -342,7 +342,7 @@
 
         </apex:pageBlockSection>
         
-        <apex:pageBlockSection title="Order Information" columns="1">
+        <apex:pageBlockSection title="Order Information" columns="2">
              <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'}"/>
              <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
@@ -397,11 +397,11 @@
         }else if(ruleName == 'glazing0'){
             glazing(0);
         }else if(ruleName == 'glazing1'){
-            glazing1();
+            glazing(1);
         }else if(ruleName == 'glazing2'){
-            glazing2();
+            glazing(2);
         }else if(ruleName == 'glazing3'){
-            glazing3();
+            glazing(3);
         }else if(ruleName == 'frameType'){
             frameType();
         }else if(ruleName == 'applyToAllGrillesCheck'){
@@ -409,8 +409,7 @@
         }else if(ruleName == 'applyToAllGlassCheck'){
             applyToAllGlassCheck();
         }
-    }
-        
+    }       
         
     function startUpDefaults(){
         if(j$("select[data-jsid='screenType']").val() == ''){
@@ -438,10 +437,12 @@
     
     function screenType(){
         if(j$("select[data-jsid='screenType']").val() == 'TruScene (Wood Vaneer)'){
-            j$("select[data-jsid='screenVaneerType']").closest('tr').show();
+            j$("select[data-jsid='screenVaneerType']").show();
+			j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").show();
         }else{
             j$("select[data-jsid='screenVaneerType']").val(null);
-            j$("select[data-jsid='screenVaneerType']").closest('tr').hide();
+            j$("select[data-jsid='screenVaneerType']").hide();
+			j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").hide();
         }
     }
     
@@ -449,31 +450,43 @@
     function grilleStyle(){ 
         if(j$("select[data-jsid='grilleStyle']").val() == 'No Grilles'){
             j$("select[data-jsid='grillePattern0']").val(null);
-            j$("select[data-jsid='grillePattern0']").closest('tr').hide();
+            j$("select[data-jsid='grillePattern0']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").hide();
             j$("select[data-jsid='grillePattern1']").val(null);
-            j$("select[data-jsid='grillePattern1']").closest('tr').hide();
+            j$("select[data-jsid='grillePattern1']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
             j$("select[data-jsid='grillePattern2']").val(null);
-            j$("select[data-jsid='grillePattern2']").closest('tr').hide();
+            j$("select[data-jsid='grillePattern2']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
             j$("select[data-jsid='grillePattern3']").val(null);
-            j$("select[data-jsid='grillePattern3']").closest('tr').hide();
+            j$("select[data-jsid='grillePattern3']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
-            j$("input[data-jsid='wideBar']").closest('tr').hide();
+            j$("input[data-jsid='wideBar']").hide();
+			j$("label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"']").hide();
         }else{
-            j$("select[data-jsid='grillePattern0']").closest('tr').show();
-            j$("select[data-jsid='grillePattern1']").closest('tr').show();
-            j$("select[data-jsid='grillePattern2']").closest('tr').show();
-            j$("select[data-jsid='grillePattern3']").closest('tr').show();
-            j$("input[data-jsid='wideBar']").closest('tr').show();
+            j$("select[data-jsid='grillePattern0']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern1']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern2']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern3']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
+            j$("input[data-jsid='wideBar']").show();
+			j$("label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"']").show();
         }
         
         if(j$("select[data-jsid='grilleStyle']").val()  ==   'No Grilles' ||
             j$("select[data-jsid='grilleStyle']").val() ==   'Grilles Between Glass' ||
             j$("select[data-jsid='grilleStyle']").val() ==   'Interior Wood Only'){
                 j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
-                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").closest('tr').hide();
+                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
+				j$("label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").hide();
         }else{
-            j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").closest('tr').show();
+            j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
+			j$("label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").show();
         }
         grillePattern(0);
         grillePattern(1);
@@ -487,19 +500,27 @@
 		  }
 
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
-            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").closest('tr').show();
-            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").closest('tr').show();
+            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").show();
+			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").show();
+			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").show();
+            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").show();
+			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").show();
         }else{
             j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").val(null);
-            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").closest('tr').hide();
+            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").hide();
+			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").hide();
+
             j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").val(null);
-            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").closest('tr').hide();
+            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").hide();
+			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").hide();
         }
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Custom'){
-            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").closest('tr').show();
+            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").show();
+			j$("label[for='"+j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").attr("name")+"']").show();
         }else{
             j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").val(null);
-            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").closest('tr').hide();
+            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").hide();
+			j$("label[for='"+j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").attr("name")+"']").hide();
         }
     }
 
@@ -542,9 +563,11 @@
 		  
           if(j$("select[data-jsid=glazing" +sashnumber +"]").val() == 'High Performance SmartSun w/ HeatLock'){
               j$("select[data-jsid=glassPattern" +sashnumber +"]").val(null);
-              j$("select[data-jsid=glassPattern" +sashnumber +"]").closest('tr').hide();
+              j$("select[data-jsid=glassPattern" +sashnumber +"]").hide();
+			  j$("label[for='"+j$("select[data-jsid=glassPattern" +sashnumber +"]").attr("id")+"']").hide();
           }else{
-              j$("select[data-jsid=glassPattern" +sashnumber +"]").closest('tr').show();
+              j$("select[data-jsid=glassPattern" +sashnumber +"]").show();
+				j$("label[for='"+j$("select[data-jsid=glassPattern" +sashnumber +"]").attr("id")+"']").show();
           }
           
     }
@@ -602,21 +625,27 @@
             
             if(j$("select[data-jsid='frameType']").val() == 'Slope Sill Insert'){
                 j$("select[data-jsid='exteriorTrim']").val(null);
-                j$("select[data-jsid='exteriorTrim']").closest('tr').hide();
+                j$("select[data-jsid='exteriorTrim']").hide();
+				j$("label[for='"+j$("select[data-jsid='exteriorTrim']").attr("id")+"']").hide();
             }else{
-                j$("select[data-jsid='exteriorTrim']").closest('tr').show();
+                j$("select[data-jsid='exteriorTrim']").show();
+				j$("label[for='"+j$("select[data-jsid='exteriorTrim']").attr("id")+"']").show();
             } 
 
             if(j$("select[data-jsid='frameType']").val() == 'Insert Frame'){
-                j$("input[data-jsid='fibrexLTrim']").closest('tr').show();
+                j$("input[data-jsid='fibrexLTrim']").show();
+				j$("label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"']").show();
                 
-                j$("select[data-jsid='interiorTrim']").closest('tr').show();
+                j$("select[data-jsid='interiorTrim']").show();
+				j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").show();
             }else{
                 j$("input[data-jsid='fibrexLTrim']").attr('checked',false);
-                j$("input[data-jsid='fibrexLTrim']").closest('tr').hide();
+                j$("input[data-jsid='fibrexLTrim']").hide();
+				j$("label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"']").hide();
 
                 j$("select[data-jsid='interiorTrim']").val('');
-                j$("select[data-jsid='interiorTrim']").closest('tr').hide();
+                j$("select[data-jsid='interiorTrim']").hide();
+				j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
             } 
         }
     </script>
