@@ -2694,6 +2694,31 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Number_of_Sashes__c</fullName>
+        <description>Select the number of sashes included in the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of sashes included in the product.</inlineHelpText>
+        <label>Number of Sashes</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Overfit_Control__c</fullName>
         <description>Controls whether Overfit is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
