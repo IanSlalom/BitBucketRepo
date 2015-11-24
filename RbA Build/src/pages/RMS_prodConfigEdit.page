@@ -336,10 +336,12 @@
 	
 	function screenType(){
 		if($("select[data-jsid='screenType']").val() == 'TruScene (Wood Vaneer)'){
-			$("select[data-jsid='screenVaneerType']").closest('tr').show();
+			$("select[data-jsid='screenVaneerType']").show();
+			$("label[for='"+$("select[data-jsid='screenVaneerType']").attr("id")+"']").show();
 		}else{
 			$("select[data-jsid='screenVaneerType']").val(null);
-			$("select[data-jsid='screenVaneerType']").closest('tr').hide();
+			$("select[data-jsid='screenVaneerType']").hide();
+			$("label[for='"+$("select[data-jsid='screenVaneerType']").attr("id")+"']").hide();
 		}
 	}
 	
@@ -347,41 +349,55 @@
 	function grilleStyle(){ 
 		if($("select[data-jsid='grilleStyle']").val() == 'No Grilles'){
 			$("select[data-jsid='grillePattern']").val(null);
-			$("select[data-jsid='grillePattern']").closest('tr').hide();
+			$("select[data-jsid='grillePattern']").hide();
+			$("label[for='"+$("select[data-jsid='grillePattern']").attr("id")+"']").hide();
 			
 			$("input[data-jsid='wideBar']").attr('checked',false);
-			$("input[data-jsid='wideBar']").closest('tr').hide();
+			$("input[data-jsid='wideBar']").hide();
+			$("label[for='"+$("input[data-jsid='wideBar']").attr("id")+"']").hide();
 		}else{
-			$("select[data-jsid='grillePattern']").closest('tr').show();
-			$("input[data-jsid='wideBar']").closest('tr').show();
+			$("select[data-jsid='grillePattern']").show();
+			$("label[for='"+$("select[data-jsid='grillePattern']").attr("id")+"']").show();
+			
+			$("input[data-jsid='wideBar']").show();
+			$("label[for='"+$("input[data-jsid='wideBar']").attr("id")+"']").show();
 		}
 		
 		if($("select[data-jsid='grilleStyle']").val()  ==	'No Grilles' ||
 			$("select[data-jsid='grilleStyle']").val() ==	'Grilles Between Glass' ||
 			$("select[data-jsid='grilleStyle']").val() ==	'Interior Wood Only'){
 				$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
-				$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").closest('tr').hide();
+				$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
+				$("label[for='"+$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").hide();
 		}else{
-			$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").closest('tr').show();
+			$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
+			$("label[for='"+$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").show();
 		}
 		grillePattern();
 	}
 	
 	function grillePattern(){
 		if($("select[data-jsid='grillePattern']").val() == 'Colonial'){
-			$("select[data-jsid='colonialGrilleLightsWide']").closest('tr').show();
-			$("select[data-jsid='colonialGrilleLightsHigh']").closest('tr').show();
+			$("select[data-jsid='colonialGrilleLightsWide']").show();
+			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").show();
+			$("select[data-jsid='colonialGrilleLightsHigh']").show();
+			$("label[for='"+$("select[data-jsid='colonialGrilleLightsHigh']").attr("id")+"']").show();
 		}else{
 			$("select[data-jsid='colonialGrilleLightsWide']").val(null);
-			$("select[data-jsid='colonialGrilleLightsWide']").closest('tr').hide();
+			$("select[data-jsid='colonialGrilleLightsWide']").hide();
+			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").hide();
+			
 			$("select[data-jsid='colonialGrilleLightsHigh']").val(null);
-			$("select[data-jsid='colonialGrilleLightsHigh']").closest('tr').hide();
+			$("select[data-jsid='colonialGrilleLightsHigh']").hide();
+			$("label[for='"+$("select[data-jsid='colonialGrilleLightsHigh']").attr("id")+"']").hide();
 		}
 			if($("select[data-jsid='grillePattern']").val() == 'Custom'){
-				$("textarea[data-jsid='customGrilleDetails']").closest('tr').show();
+				$("textarea[data-jsid='customGrilleDetails']").show();
+				$("label[for='"+$("textarea[data-jsid='customGrilleDetails']").attr("name")+"']").show();
 			}else{
 				$("textarea[data-jsid='customGrilleDetails']").val(null);
-				$("textarea[data-jsid='customGrilleDetails']").closest('tr').hide();
+				$("textarea[data-jsid='customGrilleDetails']").hide();
+				$("label[for='"+$("textarea[data-jsid='customGrilleDetails']").attr("name")+"']").hide();
 			}
 	}
 	
@@ -397,9 +413,11 @@
 		function glazingS1(){
 			if($("select[data-jsid='glazingS1']").val() == 'High Performance SmartSun w/ HeatLock'){
 				$("select[data-jsid='glassPatternS1']").val(null);
-				$("select[data-jsid='glassPatternS1']").closest('tr').hide();
+				$("select[data-jsid='glassPatternS1']").hide();
+				$("label[for='"+$("select[data-jsid='glassPatternS1']").attr("id")+"']").hide();
 			}else{
-				$("select[data-jsid='glassPatternS1']").closest('tr').show();
+				$("select[data-jsid='glassPatternS1']").show();
+				$("label[for='"+$("select[data-jsid='glassPatternS1']").attr("id")+"']").show();
 			}
 			
 		}
@@ -436,21 +454,33 @@
 			
 			if($("select[data-jsid='frameType']").val() == 'Slope Sill Insert'){
 				$("select[data-jsid='exteriorTrim']").val(null);
-				$("select[data-jsid='exteriorTrim']").closest('tr').hide();
+				
+				$("select[data-jsid='exteriorTrim']").hide();
+				$("label[for='"+$("select[data-jsid='exteriorTrim']").attr("id")+"']").hide();
 			}else{
-				$("select[data-jsid='exteriorTrim']").closest('tr').show();
+				$("select[data-jsid='exteriorTrim']").show();
+				$("label[for='"+$("select[data-jsid='exteriorTrim']").attr("id")+"']").show();
+				
+				
 			} 
 
 			if($("select[data-jsid='frameType']").val() == 'Insert Frame'){
-				$("input[data-jsid='fibrexLTrim']").closest('tr').show();
+				$("input[data-jsid='fibrexLTrim']").show();
+				$("label[for='"+$("input[data-jsid='fibrexLTrim']").attr("id")+"']").show();
 				
-				$("select[data-jsid='interiorTrim']").closest('tr').show();
+				
+				$("select[data-jsid='interiorTrim']").show();
+				$("label[for='"+$("select[data-jsid='interiorTrim']").attr("id")+"']").show();
+				
+				
 			}else{
 				$("input[data-jsid='fibrexLTrim']").attr('checked',false);
-				$("input[data-jsid='fibrexLTrim']").closest('tr').hide();
+				$("input[data-jsid='fibrexLTrim']").hide();
+				$("label[for='"+$("input[data-jsid='fibrexLTrim']").attr("id")+"']").hide();
 
 				$("select[data-jsid='interiorTrim']").val('');
-				$("select[data-jsid='interiorTrim']").closest('tr').hide();
+				$("select[data-jsid='interiorTrim']").hide();
+				$("label[for='"+$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
 			} 
 		}
 	</script>
