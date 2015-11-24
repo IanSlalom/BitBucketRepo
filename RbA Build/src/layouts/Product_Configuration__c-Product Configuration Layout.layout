@@ -110,6 +110,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Number_of_Sashes__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Sash_Operation__c</field>
             </layoutItems>
             <layoutItems>

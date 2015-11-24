@@ -233,14 +233,42 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Glass_Pattern_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glass_Pattern_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Glazing_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S3__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Tempered_S1__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S3__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Apply_to_All_Sashes_Glass__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Breather_Tubes__c</field>
@@ -347,18 +375,46 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Grille_Pattern__c</field>
+                <field>Grille_Pattern_S1__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_Wide__c</field>
+                <field>Grille_Pattern_S2__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_High__c</field>
+                <field>Grille_Pattern_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_High_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_High_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_High_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_Wide_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_Wide_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Colonial_Grille_Lites_Wide_S3__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Apply_to_All_Sashes_Grilles__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SW_Grille_Alignment__c</field>
@@ -553,7 +609,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Custom_Grille_Details__c</field>
+                <field>Custom_Grille_Details_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S3__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
