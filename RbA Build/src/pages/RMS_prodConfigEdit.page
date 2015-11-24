@@ -502,7 +502,6 @@
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
             j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").show();
 			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").show();
-			$("label[for='"+$("select[data-jsid='colonialGrilleLightsWide']").attr("id")+"']").show();
             j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").show();
 			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").show();
         }else{
