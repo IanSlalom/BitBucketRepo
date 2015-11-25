@@ -25,6 +25,16 @@
         <startsWith>Vowel</startsWith>
     </fields>
     <fields>
+        <help><!-- Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product. --></help>
+        <label><!-- Apply to All Sashes --></label>
+        <name>Apply_to_All_Sashes_Glass__c</name>
+    </fields>
+    <fields>
+        <help><!-- Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product. --></help>
+        <label><!-- Apply to All Sashes --></label>
+        <name>Apply_to_All_Sashes_Grilles__c</name>
+    </fields>
+    <fields>
         <help><!-- The Astragal Color selected for the product. --></help>
         <label><!-- Astragal --></label>
         <name>Astragal__c</name>
@@ -65,24 +75,34 @@
         <name>Checkrail_Style__c</name>
     </fields>
     <fields>
-        <help><!-- The number of grille lights high for colonial grille pattern. --></help>
-        <label><!-- Colonial Grille Lights High --></label>
-        <name>Colonial_Grille_Lights_High__c</name>
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 1. --></help>
+        <label><!-- Colonial Grille Lites High S1 --></label>
+        <name>Colonial_Grille_Lites_High_S1__c</name>
     </fields>
     <fields>
-        <help><!-- The number of grille lights wide for colonial grille pattern. --></help>
-        <label><!-- Colonial Grille Lights Wide --></label>
-        <name>Colonial_Grille_Lights_Wide__c</name>
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 2. --></help>
+        <label><!-- Colonial Grille Lites High S2 --></label>
+        <name>Colonial_Grille_Lites_High_S2__c</name>
     </fields>
     <fields>
-        <help><!-- The number of grille lites high for colonial grille pattern. --></help>
-        <label><!-- Colonial Grille Lites High --></label>
-        <name>Colonial_Grille_Lites_High__c</name>
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 3. --></help>
+        <label><!-- Colonial Grille Lites High S3 --></label>
+        <name>Colonial_Grille_Lites_High_S3__c</name>
     </fields>
     <fields>
-        <help><!-- The number of grille lites wide for colonial grille pattern. --></help>
-        <label><!-- Colonial Grille Lites Wide --></label>
-        <name>Colonial_Grille_Lites_Wide__c</name>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 1. --></help>
+        <label><!-- Colonial Grille Lites Wide S1 --></label>
+        <name>Colonial_Grille_Lites_Wide_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 2. --></help>
+        <label><!-- Colonial Grille Lites Wide S2 --></label>
+        <name>Colonial_Grille_Lites_Wide_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 3. --></help>
+        <label><!-- Colonial Grille Lites Wide S3 --></label>
+        <name>Colonial_Grille_Lites_Wide_S3__c</name>
     </fields>
     <fields>
         <label><!-- Commission Amount --></label>
@@ -102,9 +122,19 @@
         <name>Corrosion_Resistant_Hardware__c</name>
     </fields>
     <fields>
-        <help><!-- Details entered describing the custom grille sold. --></help>
-        <label><!-- Custom Grille Details --></label>
-        <name>Custom_Grille_Details__c</name>
+        <help><!-- Enter details describing the custom grille sold for sash 1. --></help>
+        <label><!-- Custom Grille Details S1 --></label>
+        <name>Custom_Grille_Details_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enter details describing the custom grille sold for sash 2. --></help>
+        <label><!-- Custom Grille Details S2 --></label>
+        <name>Custom_Grille_Details_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enter details describing the custom grille sold for sash 3. --></help>
+        <label><!-- Custom Grille Details S3 --></label>
+        <name>Custom_Grille_Details_S3__c</name>
     </fields>
     <fields>
         <help><!-- The discount (in currency) applied to the purchase order (used for AROs). --></help>
@@ -167,11 +197,6 @@
         <name>Fibrex_L_Trim__c</name>
     </fields>
     <fields>
-        <help><!-- The finish option applied to this product. --></help>
-        <label><!-- Finish Option --></label>
-        <name>Finish_Option__c</name>
-    </fields>
-    <fields>
         <help><!-- Identifies the floor for this product. --></help>
         <label><!-- Floor --></label>
         <name>Floor__c</name>
@@ -187,28 +212,53 @@
         <name>GL_Account__c</name>
     </fields>
     <fields>
-        <help><!-- The glass option that was selected from the product configuration page. --></help>
-        <label><!-- Glass Option Selected --></label>
-        <name>Glass_Option_Selected__c</name>
-    </fields>
-    <fields>
-        <help><!-- The glass pattern that was selected for Sash 1 from the product configuration page. --></help>
+        <help><!-- Select the glass pattern for Sash 1. --></help>
         <label><!-- Glass Pattern S1 --></label>
         <name>Glass_Pattern_S1__c</name>
     </fields>
     <fields>
-        <help><!-- The glazing selected for Sash 1 for this product. --></help>
+        <help><!-- Select the glass pattern for Sash 2. --></help>
+        <label><!-- Glass Pattern S2 --></label>
+        <name>Glass_Pattern_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the glass pattern for Sash 3. --></help>
+        <label><!-- Glass Pattern S3 --></label>
+        <name>Glass_Pattern_S3__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the glazing for Sash 1. --></help>
         <label><!-- Glazing S1 --></label>
         <name>Glazing_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the glazing for Sash 2. --></help>
+        <label><!-- Glazing S2 --></label>
+        <name>Glazing_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the glazing for Sash 3. --></help>
+        <label><!-- Glazing S3 --></label>
+        <name>Glazing_S3__c</name>
     </fields>
     <fields>
         <label><!-- Gliding Screen --></label>
         <name>Gliding_Screen__c</name>
     </fields>
     <fields>
-        <help><!-- The grille pattern applied to this product. --></help>
-        <label><!-- Grille Pattern --></label>
-        <name>Grille_Pattern__c</name>
+        <help><!-- Select the grille pattern for Sash 1. --></help>
+        <label><!-- Grille Pattern S1 --></label>
+        <name>Grille_Pattern_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the grille pattern for Sash 2. --></help>
+        <label><!-- Grille Pattern S2 --></label>
+        <name>Grille_Pattern_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the grille pattern for Sash 3. --></help>
+        <label><!-- Grille Pattern S3 --></label>
+        <name>Grille_Pattern_S3__c</name>
     </fields>
     <fields>
         <help><!-- The grille style selected for this product. --></help>
@@ -228,11 +278,6 @@
         <help><!-- The handle type selected for this product. --></help>
         <label><!-- Handle Type --></label>
         <name>Handle_Type__c</name>
-    </fields>
-    <fields>
-        <help><!-- The hardware color applied to this product. --></help>
-        <label><!-- Hardware Color --></label>
-        <name>Hardware_Color__c</name>
     </fields>
     <fields>
         <help><!-- The hardware finish/color applied to this product. --></help>
@@ -258,10 +303,6 @@
         <help><!-- The final height measurement in inches. --></help>
         <label><!-- Height_Inches --></label>
         <name>Height_Inches__c</name>
-    </fields>
-    <fields>
-        <label><!-- Height --></label>
-        <name>Height__c</name>
     </fields>
     <fields>
         <help><!-- The number of hubs selected for the product. --></help>
@@ -436,11 +477,6 @@
         <name>Sales_Height_Inches__c</name>
     </fields>
     <fields>
-        <help><!-- The height of the opening as measured by sales. --></help>
-        <label><!-- Sales Height --></label>
-        <name>Sales_Height__c</name>
-    </fields>
-    <fields>
         <help><!-- The sales width measurement in fractions. --></help>
         <label><!-- Sales Width Fraction --></label>
         <name>Sales_Width_Fraction__c</name>
@@ -449,11 +485,6 @@
         <help><!-- The width of the opening as measured by sales in inches. --></help>
         <label><!-- Sales Width Inches --></label>
         <name>Sales_Width_Inches__c</name>
-    </fields>
-    <fields>
-        <help><!-- The width of the opening as measured by sales. --></help>
-        <label><!-- Sales Width --></label>
-        <name>Sales_Width__c</name>
     </fields>
     <fields>
         <help><!-- The Sash Operation selected for the product. --></help>
@@ -549,6 +580,16 @@
         <name>Tempered_S1__c</name>
     </fields>
     <fields>
+        <help><!-- Checked if the glass for Sash 2 of this product is tempered. --></help>
+        <label><!-- Tempered S2 --></label>
+        <name>Tempered_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Checked if the glass for Sash 3 of this product is tempered. --></help>
+        <label><!-- Tempered S3 --></label>
+        <name>Tempered_S3__c</name>
+    </fields>
+    <fields>
         <help><!-- The total retail price for this order item (quantity &amp; retail price) --></help>
         <label><!-- Total Retail Price --></label>
         <name>Total_Retail_Price__c</name>
@@ -605,10 +646,6 @@
         <help><!-- The actual width measurement in inches. --></help>
         <label><!-- Width Inches --></label>
         <name>Width_Inches__c</name>
-    </fields>
-    <fields>
-        <label><!-- Width --></label>
-        <name>Width__c</name>
     </fields>
     <layouts>
         <layout>Order Product Layout</layout>
