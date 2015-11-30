@@ -144,6 +144,13 @@
         <fields>NAME</fields>
         <relatedList>Municipality__c.For_Retail_Location__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>PRICEBOOK2.NAME</fields>
+        <fields>PRICEBOOK2.DESCRIPTION</fields>
+        <fields>PRICEBOOK2.LAST_UPDATE</fields>
+        <fields>PRICEBOOK2.IS_ACTIVE</fields>
+        <relatedList>Pricebook2.Store__c</relatedList>
+    </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
