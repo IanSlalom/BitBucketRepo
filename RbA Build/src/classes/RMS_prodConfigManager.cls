@@ -246,6 +246,7 @@ public with sharing class RMS_prodConfigManager {
 
 	//Method to receive a multi picklist and return select options for use in a single picklist.
 	public static List<SelectOption> retrievePickListItems(String multiPickList) {
+		System.Debug('**************multiPickList=' +multiPickList);
 		List<SelectOption> pickListItems = new List<SelectOption>();
 		pickListItems.add(new SelectOption('', '-- Select --'));
 		// need to limit to pricebook

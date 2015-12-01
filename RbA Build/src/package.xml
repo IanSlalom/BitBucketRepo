@@ -27,6 +27,7 @@
         <members>RMS_priceCalcSlimAPILogic</members>
         <members>RMS_priceCalcSlimAPILogicTest</members>
         <members>RMS_prodConfigExtension</members>
+        <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_salesOrderManager</members>

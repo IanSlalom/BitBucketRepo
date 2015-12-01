@@ -97,6 +97,16 @@ public with sharing class TestUtilityMethods {
         );
         return theAccount;
     }
+
+    public Account createDwellingAccount(String x){
+        Account theAccount = new Account(
+            Name = x,
+            AccountNumber = x+'1234567890',
+            Phone = '(763) 555-2000',
+            recordTypeId = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account')	
+        );
+        return theAccount;
+    }
     
     public Account createStoreAccount(String x){
         Account theAccount = new Account(

@@ -133,7 +133,7 @@ public class RMS_prodConfigExtension {
 				integer count = 0;
 
 				// Retrieves the correct child product using the master product id and united inch max/min
-				for (Product2 cProd : [SELECT Id, UI_Minimum__c, UI_Maximum__c From Product2 WHERE RecordTypeId =: UtilityMethods.RecordTypeFor('Product2', 'Child_Product')
+				for (Product2 cProd : [SELECT Id, Name, UI_Minimum__c, UI_Maximum__c From Product2 WHERE RecordTypeId =: UtilityMethods.RecordTypeFor('Product2', 'Child_Product')
 																							AND Master_Product__c =: masterProductId
 																							AND UI_Minimum__c <=: InputUI																						   
 																							AND UI_Maximum__c >=: InputUI]) {
@@ -751,11 +751,15 @@ public class RMS_prodConfigExtension {
 
 		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
 		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+		System.Debug('*************errorMessage=' +errorMessage);
 		if(!String.isBlank(errorMessage)) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 			return null;			
 		}
 		if (childProduct == null) return null;
+		System.Debug('****************prodConfig=' +prodConfig);
+		System.Debug('****************priceBookId=' +priceBookId);
+		System.Debug('****************childProduct.Id=' +childProduct.Id);
 		prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
 		
 		if (prodConfig == null) {
@@ -763,13 +767,12 @@ public class RMS_prodConfigExtension {
 			return null;
 		}
 
-
-
 		PageReference ref;
 		if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
 			orderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
+			System.Debug('**********************orderLineItemFinal=' +orderLineItem);
 			insert orderLineItem;
 			ref = new PageReference('/' +orderLineItem.OrderId);
 		}
@@ -785,7 +788,7 @@ public class RMS_prodConfigExtension {
 				
 			}
 			else {
-				update orderLineItem;
+				upsert orderLineItem;
 				ref = new PageReference('/' +orderLineItem.OrderId);
 			}
 		}	   
