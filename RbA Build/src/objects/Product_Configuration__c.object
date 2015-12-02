@@ -1498,6 +1498,18 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Glass_Square_Ft_Max__c</fullName>
+        <externalId>false</externalId>
+        <label>Glass Square Ft Max</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Glazing_Control__c</fullName>
         <description>Controls whether Glazing is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -2883,31 +2895,6 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Left_Leg_Fractions_Control__c</fullName>
-        <description>Controls whether Left Leg Fractions is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Left Leg Fractions is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Left Leg Fractions</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
         <fullName>Left_Leg_Inches_Control__c</fullName>
         <description>Controls whether Left Leg is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -3194,6 +3181,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Minimum_Leg_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Minimum Leg Height</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Mull_Sequence_Mullion_Control__c</fullName>
         <description>Controls whether Mull Sequence Mullion is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -3265,6 +3264,31 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Sashes__c</fullName>
+        <description>Select the number of sashes included in the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of sashes included in the product.</inlineHelpText>
+        <label>Number of Sashes</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -3349,6 +3373,18 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Peak_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Peak Height</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Perm_App_Int_Wood_Grille_Control__c</fullName>
         <description>Controls whether Permanently Applied Interior Wood Grille is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -3379,31 +3415,6 @@
         <externalId>false</externalId>
         <inlineHelpText>Controls whether Right Leg Fraction is required, enabled, or disabled for this product configuration.</inlineHelpText>
         <label>Right Leg Fraction</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Right_Leg_Fractions_Control__c</fullName>
-        <description>Controls whether Right Leg Fractions is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Right Leg Fractions is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Right Leg Fractions</label>
         <picklist>
             <picklistValues>
                 <fullName>Disabled</fullName>
@@ -3876,6 +3887,30 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Width_to_Height_Ratio_Max__c</fullName>
+        <externalId>false</externalId>
+        <label>Specialty Width to Height Ratio Max</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Specialty_Width_to_Height_Ratio_Min__c</fullName>
+        <externalId>false</externalId>
+        <label>Specialty Width to Height Ratio Min</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Spokes_Control__c</fullName>
