@@ -714,4 +714,26 @@ COPY THE URL FROM THIS BUTTON and paste it into your own custom button or link. 
 &amp;id={!Opportunity.Id}</url>
         <width>900</width>
     </webLinks>
+    <webLinks>
+        <fullName>Convert_to_Order</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Convert to Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/29.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/29.0/apex.js&quot;)}
+
+var result = sforce.apex.execute(&quot;RMS_opportunityUtilities&quot;,&quot;convertOpportunity&quot;,{oppId:&quot;{!Opportunity.Id}&quot;});
+
+if(result == &apos;alreadyConverted&apos;){
+     alert(&apos;Opportunity has already been converted&apos;);
+}
+else if(result == &apos;noSyncedQuote&apos;){
+     alert(&apos;Opportunity has no synced quote&apos;);
+}else{
+     window.location.assign(&quot;/&quot;+result);
+}</url>
+    </webLinks>
 </CustomObject>

@@ -92,6 +92,7 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Discount__c</members>
+        <members>Pricebook2</members>
         <members>PricebookEntry</members>
         <members>Pricing_Configuration__c</members>
         <members>Product2</members>

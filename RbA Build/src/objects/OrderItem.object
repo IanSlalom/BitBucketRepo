@@ -39,6 +39,26 @@
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <enableFeeds>false</enableFeeds>
     <fields>
+        <fullName>Apply_to_All_Sashes_Glass__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Apply_to_All_Sashes_Grilles__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Astragal__c</fullName>
         <description>The Astragal Color selected for the product.</description>
         <externalId>false</externalId>
@@ -158,12 +178,84 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Colonial_Grille_Lites_High_S1__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 1.</inlineHelpText>
+        <label>Colonial Grille Lites High S1</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_High_S2__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 2</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 2.</inlineHelpText>
+        <label>Colonial Grille Lites High S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_High_S3__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 3.</inlineHelpText>
+        <label>Colonial Grille Lites High S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Colonial_Grille_Lites_High__c</fullName>
         <description>The number of grille lites high for colonial grille pattern.</description>
         <externalId>false</externalId>
         <inlineHelpText>The number of grille lites high for colonial grille pattern.</inlineHelpText>
         <label>Colonial Grille Lites High</label>
         <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S1__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 1.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S1</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S2__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 2.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S3__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 3.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S3</label>
+        <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
@@ -225,6 +317,39 @@
         <label>Corrosion Resistant Hardware</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S1__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 1.</inlineHelpText>
+        <label>Custom Grille Details S1</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S2__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 2.</inlineHelpText>
+        <label>Custom Grille Details S2</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S3__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 3.</inlineHelpText>
+        <label>Custom Grille Details S3</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
     </fields>
     <fields>
         <fullName>Custom_Grille_Details__c</fullName>
@@ -448,9 +573,9 @@
     </fields>
     <fields>
         <fullName>Glass_Pattern_S1__c</fullName>
-        <description>The glass pattern that was selected for Sash 1 from the product configuration page.</description>
+        <description>Select the glass pattern for Sash 1.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The glass pattern that was selected for Sash 1 from the product configuration page.</inlineHelpText>
+        <inlineHelpText>Select the glass pattern for Sash 1.</inlineHelpText>
         <label>Glass Pattern S1</label>
         <length>255</length>
         <required>false</required>
@@ -459,11 +584,59 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Glazing_S1__c</fullName>
-        <description>The glazing selected for Sash 1 for this product.</description>
+        <fullName>Glass_Pattern_S2__c</fullName>
+        <description>Select the glass pattern for Sash 2.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The glazing selected for Sash 1 for this product.</inlineHelpText>
+        <inlineHelpText>Select the glass pattern for Sash 2.</inlineHelpText>
+        <label>Glass Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S3__c</fullName>
+        <description>Select the glass pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 3.</inlineHelpText>
+        <label>Glass Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S1__c</fullName>
+        <description>Select the glazing for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 1.</inlineHelpText>
         <label>Glazing S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S2__c</fullName>
+        <description>Select the glazing for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 2.</inlineHelpText>
+        <label>Glazing S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S3__c</fullName>
+        <description>Select the glazing for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 3.</inlineHelpText>
+        <label>Glazing S3</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -477,6 +650,42 @@
         <label>Gliding Screen</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S1__c</fullName>
+        <description>Select the grille pattern for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 1.</inlineHelpText>
+        <label>Grille Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S2__c</fullName>
+        <description>Select the grille pattern for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 2.</inlineHelpText>
+        <label>Grille Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S3__c</fullName>
+        <description>Select the grille pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 3.</inlineHelpText>
+        <label>Grille Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Grille_Pattern__c</fullName>
@@ -1262,6 +1471,26 @@
         <externalId>false</externalId>
         <inlineHelpText>Checked if the glass for Sash 1 of this product is tempered.</inlineHelpText>
         <label>Tempered S1</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S2__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 2 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 2 of this product is tempered.</inlineHelpText>
+        <label>Tempered S2</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S3__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 3 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 3 of this product is tempered.</inlineHelpText>
+        <label>Tempered S3</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
     </fields>

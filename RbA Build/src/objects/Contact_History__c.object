@@ -56,25 +56,27 @@
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
         <fullName>Contact__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <deleteConstraint>Restrict</deleteConstraint>
         <externalId>false</externalId>
         <label>Contact</label>
         <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Contact Histories</relationshipLabel>
         <relationshipName>Associated_Contacts</relationshipName>
-        <required>false</required>
+        <required>true</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Dwelling__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <deleteConstraint>Restrict</deleteConstraint>
         <externalId>false</externalId>
         <inlineHelpText>What Dwelling is this Contact associated with?</inlineHelpText>
         <label>Dwelling</label>
         <referenceTo>Account</referenceTo>
+        <relationshipLabel>Contact Histories</relationshipLabel>
         <relationshipName>Associated_Contacts</relationshipName>
-        <required>false</required>
+        <required>true</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
