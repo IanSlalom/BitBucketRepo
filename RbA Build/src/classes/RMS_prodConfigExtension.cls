@@ -763,9 +763,9 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Save button is clicked at the child product level
 	public pageReference saveProduct() {
 
+		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
 		// Only verify the makeability rules when Verify Item Config is checked
 		if (orderLineItem.Verify_Item_Configuration__c) {
-			inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
 			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
 			if(!String.isBlank(errorMessage)) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
