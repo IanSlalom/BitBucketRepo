@@ -85,45 +85,9 @@
         <name>Colonial_Grille_Lites_High_S2__c</name>
     </fields>
     <fields>
-<<<<<<< HEAD
         <help><!-- Select the number of grille lites high for colonial grille pattern on sash 3. --></help>
         <label><!-- Colonial Grille Lites High S3 --></label>
         <name>Colonial_Grille_Lites_High_S3__c</name>
-=======
-        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 1. --></help>
-        <label><!-- Colonial Grille Lites High S1 --></label>
-        <name>Colonial_Grille_Lites_High_S1__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 2. --></help>
-        <label><!-- Colonial Grille Lites High S2 --></label>
-        <name>Colonial_Grille_Lites_High_S2__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 3. --></help>
-        <label><!-- Colonial Grille Lites High S3 --></label>
-        <name>Colonial_Grille_Lites_High_S3__c</name>
-    </fields>
-    <fields>
-        <help><!-- The number of grille lites high for colonial grille pattern. --></help>
-        <label><!-- Colonial Grille Lites High --></label>
-        <name>Colonial_Grille_Lites_High__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 1. --></help>
-        <label><!-- Colonial Grille Lites Wide S1 --></label>
-        <name>Colonial_Grille_Lites_Wide_S1__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 2. --></help>
-        <label><!-- Colonial Grille Lites Wide S2 --></label>
-        <name>Colonial_Grille_Lites_Wide_S2__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 3. --></help>
-        <label><!-- Colonial Grille Lites Wide S3 --></label>
-        <name>Colonial_Grille_Lites_Wide_S3__c</name>
->>>>>>> refs/heads/master
     </fields>
     <fields>
         <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 1. --></help>
@@ -156,21 +120,6 @@
         <help><!-- Checked if this corrosion resistant hardware option has been applied to this product. --></help>
         <label><!-- Corrosion Resistant Hardware --></label>
         <name>Corrosion_Resistant_Hardware__c</name>
-    </fields>
-    <fields>
-        <help><!-- Enter details describing the custom grille sold for sash 1. --></help>
-        <label><!-- Custom Grille Details S1 --></label>
-        <name>Custom_Grille_Details_S1__c</name>
-    </fields>
-    <fields>
-        <help><!-- Enter details describing the custom grille sold for sash 2. --></help>
-        <label><!-- Custom Grille Details S2 --></label>
-        <name>Custom_Grille_Details_S2__c</name>
-    </fields>
-    <fields>
-        <help><!-- Enter details describing the custom grille sold for sash 3. --></help>
-        <label><!-- Custom Grille Details S3 --></label>
-        <name>Custom_Grille_Details_S3__c</name>
     </fields>
     <fields>
         <help><!-- Enter details describing the custom grille sold for sash 1. --></help>
@@ -248,6 +197,11 @@
         <name>Fibrex_L_Trim__c</name>
     </fields>
     <fields>
+        <help><!-- The number of extra finger lifts for this product. --></help>
+        <label><!-- Finger Lifts --></label>
+        <name>Finger_Lifts__c</name>
+    </fields>
+    <fields>
         <help><!-- Identifies the floor for this product. --></help>
         <label><!-- Floor --></label>
         <name>Floor__c</name>
@@ -263,14 +217,6 @@
         <name>GL_Account__c</name>
     </fields>
     <fields>
-<<<<<<< HEAD
-=======
-        <help><!-- The glass option that was selected from the product configuration page. --></help>
-        <label><!-- Glass Option Selected --></label>
-        <name>Glass_Option_Selected__c</name>
-    </fields>
-    <fields>
->>>>>>> refs/heads/master
         <help><!-- Select the glass pattern for Sash 1. --></help>
         <label><!-- Glass Pattern S1 --></label>
         <name>Glass_Pattern_S1__c</name>
@@ -301,35 +247,6 @@
         <name>Glazing_S3__c</name>
     </fields>
     <fields>
-        <help><!-- Select the glazing for Sash 2. --></help>
-        <label><!-- Glazing S2 --></label>
-        <name>Glazing_S2__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the glazing for Sash 3. --></help>
-        <label><!-- Glazing S3 --></label>
-        <name>Glazing_S3__c</name>
-    </fields>
-    <fields>
-        <label><!-- Gliding Screen --></label>
-        <name>Gliding_Screen__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the grille pattern for Sash 1. --></help>
-        <label><!-- Grille Pattern S1 --></label>
-        <name>Grille_Pattern_S1__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the grille pattern for Sash 2. --></help>
-        <label><!-- Grille Pattern S2 --></label>
-        <name>Grille_Pattern_S2__c</name>
-    </fields>
-    <fields>
-        <help><!-- Select the grille pattern for Sash 3. --></help>
-        <label><!-- Grille Pattern S3 --></label>
-        <name>Grille_Pattern_S3__c</name>
-    </fields>
-    <fields>
         <help><!-- Select the grille pattern for Sash 1. --></help>
         <label><!-- Grille Pattern S1 --></label>
         <name>Grille_Pattern_S1__c</name>
@@ -348,10 +265,6 @@
         <help><!-- The grille style selected for this product. --></help>
         <label><!-- Grille Style --></label>
         <name>Grille_Style__c</name>
-    </fields>
-    <fields>
-        <label><!-- Grilles Between Glass --></label>
-        <name>Grilles_Between_Glass__c</name>
     </fields>
     <fields>
         <help><!-- Handing refers to the direction a window or door opens. --></help>
@@ -444,11 +357,6 @@
         <name>Left_Leg_Inches__c</name>
     </fields>
     <fields>
-        <help><!-- Identifies the dwelling level for this product. --></help>
-        <label><!-- Level --></label>
-        <name>Level__c</name>
-    </fields>
-    <fields>
         <help><!-- The number of extra lifts/pulls for this product. --></help>
         <label><!-- Lifts/Pulls --></label>
         <name>Lifts_Pulls__c</name>
@@ -490,34 +398,6 @@
     <fields>
         <label><!-- Product Type --></label>
         <name>Product_Type__c</name>
-    </fields>
-    <fields>
-        <label><!-- Product Type_old --></label>
-        <name>Product_Type_old__c</name>
-        <picklistValues>
-            <masterLabel>Bay Bow</masterLabel>
-            <translation><!-- Bay Bow --></translation>
-        </picklistValues>
-        <picklistValues>
-            <masterLabel>Door</masterLabel>
-            <translation><!-- Door --></translation>
-        </picklistValues>
-        <picklistValues>
-            <masterLabel>Entry Door</masterLabel>
-            <translation><!-- Entry Door --></translation>
-        </picklistValues>
-        <picklistValues>
-            <masterLabel>FF</masterLabel>
-            <translation><!-- FF --></translation>
-        </picklistValues>
-        <picklistValues>
-            <masterLabel>IF</masterLabel>
-            <translation><!-- IF --></translation>
-        </picklistValues>
-        <picklistValues>
-            <masterLabel>Series2</masterLabel>
-            <translation><!-- Series2 --></translation>
-        </picklistValues>
     </fields>
     <fields>
         <help><!-- The purchase order that covers this sales order line item --></help>
@@ -576,6 +456,11 @@
         <name>Sash_Operation__c</name>
     </fields>
     <fields>
+        <help><!-- The Sash Ratio selected for the product. --></help>
+        <label><!-- Sash Ratio --></label>
+        <name>Sash_Ratio__c</name>
+    </fields>
+    <fields>
         <help><!-- The Screen Color selected for the product. --></help>
         <label><!-- Screen Color --></label>
         <name>Screen_Color__c</name>
@@ -591,22 +476,9 @@
         <name>Screen_Vaneer_Type__c</name>
     </fields>
     <fields>
-        <help><!-- Identifies the dwelling&apos;s side for this product. --></help>
-        <label><!-- Side --></label>
-        <name>Side__c</name>
-    </fields>
-    <fields>
         <help><!-- The Sill Angle selected for the product. --></help>
         <label><!-- Sill Angle --></label>
         <name>Sill_Angle__c</name>
-    </fields>
-    <fields>
-        <label><!-- Size --></label>
-        <name>Size__c</name>
-    </fields>
-    <fields>
-        <label><!-- Specialty Glazing --></label>
-        <name>Specialty_Glazing__c</name>
     </fields>
     <fields>
         <help><!-- The number of spokes selected for the product. --></help>
@@ -738,6 +610,10 @@
             <section>Brickmould &amp; Drip Cap Options</section>
         </sections>
         <sections>
+            <label><!-- Custom Grille Details --></label>
+            <section>Custom Grille Details</section>
+        </sections>
+        <sections>
             <label><!-- Dwelling Information --></label>
             <section>Dwelling Information</section>
         </sections>
@@ -768,6 +644,10 @@
         <sections>
             <label><!-- Measurements --></label>
             <section>Measurements</section>
+        </sections>
+        <sections>
+            <label><!-- Obsolete Options --></label>
+            <section>Obsolete Options</section>
         </sections>
         <sections>
             <label><!-- Order Information --></label>
