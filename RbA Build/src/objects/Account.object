@@ -873,6 +873,22 @@ IF(ISBLANK(Year_Built__c ),1,
         <label>Contractors</label>
     </listViews>
     <listViews>
+        <fullName>Dwellings</fullName>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>Dwelling_Style__c</columns>
+        <columns>ACCOUNT.PHONE1</columns>
+        <columns>Store_Location__c</columns>
+        <columns>Regional_Manager__c</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ACCOUNT.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Account.Dwelling</value>
+        </filters>
+        <label>Dwellings</label>
+    </listViews>
+    <listViews>
         <fullName>MyAccounts</fullName>
         <filterScope>Mine</filterScope>
         <label>My Accounts</label>

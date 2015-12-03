@@ -292,6 +292,29 @@
         </filters>
         <label>Historical</label>
     </listViews>
+    <listViews>
+        <fullName>Permit</fullName>
+        <columns>NAME</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Municipality__c.Permit</value>
+        </filters>
+        <label>Permit</label>
+    </listViews>
+    <listViews>
+        <fullName>X77_Twin_Cities</fullName>
+        <columns>NAME</columns>
+        <columns>RECORDTYPE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>For_Retail_Location__c</field>
+            <operation>startsWith</operation>
+            <value>77</value>
+        </filters>
+        <label>77 - Twin Cities</label>
+    </listViews>
     <nameField>
         <label>Agency Name</label>
         <trackHistory>false</trackHistory>

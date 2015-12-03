@@ -11,26 +11,32 @@
 public with sharing class RMS_mobileAppRequestHelper {
 
 	public String findAppointments(String UserId){
-		list<Event> eventsOwned = [SELECT Id, WhatId FROM Event Where OwnerId =: UserId];
+		List<Event> eventsOwned = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId FROM Event Where OwnerId =: UserId];
 		if(eventsOwned.size() > 0){
-			List<appointmentWrapper> appointmentWrapperList = new List<appointmentWrapper>();
+			List<SalesAppointmentWrapper> appointmentWrapperList = new List<SalesAppointmentWrapper>();
 			List<id> accountIdList = new List<id>();
 			List<id> opportunityIdList = new List<id>();
-			List<id> contactIdList = New List<id>();
 			for(Event e : eventsOwned){
 				opportunityIdList.add(e.whatId);
 			}
-			
-			List<Opportunity> relatedOpportunities = [SELECT Id, Name, AccountId FROM Opportunity WHERE Id IN :opportunityIdList];
+
+			// we need to be able to distinguish types of appointments for users who have multiple roles.
+			// the whatId object will changes based on the event type			
+			List<Opportunity> relatedOpportunities = [SELECT Id, Name, StageName, AccountId, isClosed FROM Opportunity WHERE Id IN :opportunityIdList];
 			for(Opportunity o : relatedOpportunities){
 				accountIdList.add(o.AccountId);
 			}
-						
-			List<Account> relatedAccounts = [SELECT Id, Name FROM Account WHERE Id IN :accountIdList];
-			List<Contact> relatedContacts = [SELECT Id, Name, AccountId FROM Contact WHERE AccountId IN: accountIdList];
+			// get the contacts
+			List<OpportunityContactRole> relatedOppContacts = [select Id, contactId, isPrimary, opportunityId, Role, 
+				Contact.Id, Contact.FirstName, Contact.LastName, Contact.Email, Contact.HomePhone, 
+				Contact.MobilePhone, Contact.OtherPhone, Contact.Phone, Contact.Salutation
+				from OpportunityContactRole where isDeleted = false and opportunityId in :opportunityIdList order by opportunityId];
+
+			List<Account> relatedAccounts = [SELECT Id, Name, Dwelling_Style__c, Shipping_County__c, ShippingCity, ShippingCountryCode, ShippingLatitude, ShippingLongitude, ShippingPostalCode, ShippingStateCode, ShippingStreet, Year_Built__c FROM Account WHERE Id IN :accountIdList and isDeleted = false];
+
 			Map<id,Opportunity> opportunityIdToOpportunityMap = new Map<id, Opportunity>();
 			Map<id,Account> accountIdToAccountMap = new Map<id, Account>();
-			Map<id,list<Contact>> accountIdtoContactListMap = new Map<id, list<Contact>>();
+			Map<id,list<Contact>> opportunityIdtoContactListMap = new Map<id, list<Contact>>();
 			
 			for(Opportunity o : relatedOpportunities){
 				opportunityIdToOpportunityMap.put(o.id, o);
@@ -38,11 +44,14 @@ public with sharing class RMS_mobileAppRequestHelper {
 			for(Account a : relatedAccounts){
 				accountIdToAccountMap.put(a.id, a);
 			}
-			for(Contact c : relatedContacts){
-				if(accountIdtoContactListMap.containsKey(c.AccountId)){
-					accountIdtoContactListMap.get(c.AccountId).add(c);
+
+			for(OpportunityContactRole ocr : relatedOppContacts){
+				Contact c = new Contact(Id=ocr.Contact.Id, FirstName = ocr.Contact.FirstName, LastName = ocr.Contact.LastName, Email = ocr.Contact.Email, HomePhone = ocr.Contact.HomePhone, 
+				MobilePhone = ocr.Contact.MobilePhone, OtherPhone = ocr.Contact.OtherPhone, Phone = ocr.Contact.Phone, Salutation = ocr.Contact.Salutation);
+				if(opportunityIdtoContactListMap.containsKey(ocr.opportunityId)){
+					opportunityIdtoContactListMap.get(ocr.opportunityId).add(c);
 				}else{
-					accountIdtoContactListMap.put(c.AccountId, new list<Contact>{c});
+					opportunityIdtoContactListMap.put(ocr.opportunityId, new list<Contact>{c});
 				}
 			}
 					
@@ -50,32 +59,18 @@ public with sharing class RMS_mobileAppRequestHelper {
 			for(Event e : eventsOwned){
 				Opportunity opp = opportunityIdToOpportunityMap.get(e.WhatId);
 				Account account = accountIdToAccountMap.get(opp.AccountId);
-				List<Contact> activeContacts = accountIdtoContactListMap.get(account.id);
+				List<Contact> activeContacts = opportunityIdtoContactListMap.get(e.WhatId);
 				
-				AppointmentWrapper aw = new AppointmentWrapper(e, opp, account, activeContacts);
+				SalesAppointmentWrapper aw = new SalesAppointmentWrapper(e, opp, account, activeContacts);
 				appointmentWrapperList.add(aw);
 			}	
 			return JSON.serialize(appointmentWrapperList);
 			
 		}else{
-			return 'No appointments found';
+			return JSON.serialize('No appointments found');
 		}
 	}
 		
-	public class AppointmentWrapper{
-		public Event event {get; set;}
-   		public Opportunity opportunity {get; set;}
-   		public Account account {get; set;}
-        public List<Contact> contactList {get; set;}
-   		
-        public AppointmentWrapper(Event e, Opportunity o, Account a, List<Contact> cl ) {
-            event = e;
-            opportunity = o;
-            account = a;
-            contactList = cl;
-        }                            
-    }
-    
     public String updateOpportunity(String OppId, String Status){
     	List<Opportunity> opp = [SELECT Id, Name, AccountId FROM Opportunity WHERE Id = :OppId];
     	if(opp.size() == 0){
@@ -144,5 +139,20 @@ public with sharing class RMS_mobileAppRequestHelper {
 			return 'Created Order, Install Work Order and Tech Measure Work Order';
     	}
     }
+
+	public class SalesAppointmentWrapper{
+		public Event event {get; set;}
+   		public Opportunity opportunity {get; set;}
+   		public Account account {get; set;}
+        public List<Contact> contactList {get; set;}
+   		
+        public SalesAppointmentWrapper(Event e, Opportunity o, Account a, List<Contact> cl ) {
+            event = e;
+            opportunity = o;
+            account = a;
+            contactList = cl;
+        }                            
+    }
+    
 
 }
