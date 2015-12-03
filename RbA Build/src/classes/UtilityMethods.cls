@@ -71,5 +71,17 @@ public with sharing class UtilityMethods {
     	
     	return accountIdtoStoreConfigMap;
 	}
+	
+	public static decimal calculateFraction(String fraction){
+		if(fraction == 'Even'){
+			fraction = null;
+		}
+		if(fraction != null){
+			list<String>liststr = fraction.split('/');
+			return (decimal.valueOf(liststr[0]) / decimal.valueOf(listStr[1])).setScale(3);
+		}else{
+			return 0;
+		}
+	}
     
 }

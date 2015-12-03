@@ -85,9 +85,45 @@
         <name>Colonial_Grille_Lites_High_S2__c</name>
     </fields>
     <fields>
+<<<<<<< HEAD
         <help><!-- Select the number of grille lites high for colonial grille pattern on sash 3. --></help>
         <label><!-- Colonial Grille Lites High S3 --></label>
         <name>Colonial_Grille_Lites_High_S3__c</name>
+=======
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 1. --></help>
+        <label><!-- Colonial Grille Lites High S1 --></label>
+        <name>Colonial_Grille_Lites_High_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 2. --></help>
+        <label><!-- Colonial Grille Lites High S2 --></label>
+        <name>Colonial_Grille_Lites_High_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites high for colonial grille pattern on sash 3. --></help>
+        <label><!-- Colonial Grille Lites High S3 --></label>
+        <name>Colonial_Grille_Lites_High_S3__c</name>
+    </fields>
+    <fields>
+        <help><!-- The number of grille lites high for colonial grille pattern. --></help>
+        <label><!-- Colonial Grille Lites High --></label>
+        <name>Colonial_Grille_Lites_High__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 1. --></help>
+        <label><!-- Colonial Grille Lites Wide S1 --></label>
+        <name>Colonial_Grille_Lites_Wide_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 2. --></help>
+        <label><!-- Colonial Grille Lites Wide S2 --></label>
+        <name>Colonial_Grille_Lites_Wide_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 3. --></help>
+        <label><!-- Colonial Grille Lites Wide S3 --></label>
+        <name>Colonial_Grille_Lites_Wide_S3__c</name>
+>>>>>>> refs/heads/master
     </fields>
     <fields>
         <help><!-- Select the number of grille lites wide for colonial grille pattern on sash 1. --></help>
@@ -120,6 +156,21 @@
         <help><!-- Checked if this corrosion resistant hardware option has been applied to this product. --></help>
         <label><!-- Corrosion Resistant Hardware --></label>
         <name>Corrosion_Resistant_Hardware__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enter details describing the custom grille sold for sash 1. --></help>
+        <label><!-- Custom Grille Details S1 --></label>
+        <name>Custom_Grille_Details_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enter details describing the custom grille sold for sash 2. --></help>
+        <label><!-- Custom Grille Details S2 --></label>
+        <name>Custom_Grille_Details_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Enter details describing the custom grille sold for sash 3. --></help>
+        <label><!-- Custom Grille Details S3 --></label>
+        <name>Custom_Grille_Details_S3__c</name>
     </fields>
     <fields>
         <help><!-- Enter details describing the custom grille sold for sash 1. --></help>
@@ -212,6 +263,14 @@
         <name>GL_Account__c</name>
     </fields>
     <fields>
+<<<<<<< HEAD
+=======
+        <help><!-- The glass option that was selected from the product configuration page. --></help>
+        <label><!-- Glass Option Selected --></label>
+        <name>Glass_Option_Selected__c</name>
+    </fields>
+    <fields>
+>>>>>>> refs/heads/master
         <help><!-- Select the glass pattern for Sash 1. --></help>
         <label><!-- Glass Pattern S1 --></label>
         <name>Glass_Pattern_S1__c</name>
@@ -242,8 +301,33 @@
         <name>Glazing_S3__c</name>
     </fields>
     <fields>
+        <help><!-- Select the glazing for Sash 2. --></help>
+        <label><!-- Glazing S2 --></label>
+        <name>Glazing_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the glazing for Sash 3. --></help>
+        <label><!-- Glazing S3 --></label>
+        <name>Glazing_S3__c</name>
+    </fields>
+    <fields>
         <label><!-- Gliding Screen --></label>
         <name>Gliding_Screen__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the grille pattern for Sash 1. --></help>
+        <label><!-- Grille Pattern S1 --></label>
+        <name>Grille_Pattern_S1__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the grille pattern for Sash 2. --></help>
+        <label><!-- Grille Pattern S2 --></label>
+        <name>Grille_Pattern_S2__c</name>
+    </fields>
+    <fields>
+        <help><!-- Select the grille pattern for Sash 3. --></help>
+        <label><!-- Grille Pattern S3 --></label>
+        <name>Grille_Pattern_S3__c</name>
     </fields>
     <fields>
         <help><!-- Select the grille pattern for Sash 1. --></help>

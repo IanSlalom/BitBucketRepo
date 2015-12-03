@@ -143,7 +143,60 @@ public with sharing class RMS_prodConfigManager {
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
 		}
+	
+		if(masterProductConfig.Peak_Height__c != null && orderLineItem.Width_Inches__c != null){
+			
+			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
+			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
+			
+			if(((leftLeg - rightleg).abs()) < ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height__c)){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.PEAK_HEIGHT : errorMessage + '\r\n' + RMS_errorMessages.PEAK_HEIGHT;
+			}
+		}
+
+		if(masterProductConfig.Glass_Square_Ft_Max__c != null){
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			
+			if((widthInches * heightInches) / 144 > masterProductConfig.Glass_Square_Ft_Max__c ){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GLASS_MAX_SQ_FEET : errorMessage + '\r\n' + RMS_errorMessages.GLASS_MAX_SQ_FEET;
+			}
+		}
+		
+		if(masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c != null){
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			
+			if(widthInches/heightInches >= masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MAX;
+			}
+		} 
+		
+		if(masterProductConfig.Specialty_Width_to_Height_Ratio_Min__c != null){
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			
+			if(widthInches/heightInches <= masterProductConfig.Specialty_Width_to_Height_Ratio_Min__c){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MIN : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MIN;
+			}
+		}
+		
+		if(masterProductConfig.Minimum_Leg_Height__c != null){
+			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
+			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
+			
+			if(leftLeg < masterProductConfig.Minimum_Leg_Height__c ){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.MINIMUM_LEG_HEIGHT_LEFT : errorMessage + '\r\n' + RMS_errorMessages.MINIMUM_LEG_HEIGHT_LEFT;
+			}
+			if(rightLeg < masterProductConfig.Minimum_Leg_Height__c){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.MINIMUM_LEG_HEIGHT_RIGHT : errorMessage + '\r\n' + RMS_errorMessages.MINIMUM_LEG_HEIGHT_RIGHT;
+			}
+		}
+		
+		
+		
 		return errorMessage;
+	
 	}
 	
 	/*******************************************************

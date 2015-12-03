@@ -467,7 +467,8 @@
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
-			j$("label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"']").hide();
+			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").hide()
+			
         }else{
             j$("select[data-jsid='grillePattern0']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").show();
@@ -478,7 +479,7 @@
             j$("select[data-jsid='grillePattern3']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
             j$("input[data-jsid='wideBar']").show();
-			j$("label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"']").show();
+			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
         }
         
         if(j$("select[data-jsid='grilleStyle']").val()  ==   'No Grilles' ||
@@ -486,10 +487,11 @@
             j$("select[data-jsid='grilleStyle']").val() ==   'Interior Wood Only'){
                 j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
                 j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
-				j$("label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").hide();
+				j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").hide()
         }else{
             j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
-			j$("label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"']").show();
+			j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").show()
+			
         }
         grillePattern(0);
         grillePattern(1);
@@ -636,14 +638,16 @@
 
             if(j$("select[data-jsid='frameType']").val() == 'Insert Frame'){
                 j$("input[data-jsid='fibrexLTrim']").show();
-				j$("label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"']").show();
+				j$("span:has(label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"'])").show()
                 
                 j$("select[data-jsid='interiorTrim']").show();
 				j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").show();
             }else{
                 j$("input[data-jsid='fibrexLTrim']").attr('checked',false);
                 j$("input[data-jsid='fibrexLTrim']").hide();
-				j$("label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"']").hide();
+				j$("span:has(label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"'])").hide()
+			
+				
 
                 j$("select[data-jsid='interiorTrim']").val('');
                 j$("select[data-jsid='interiorTrim']").hide();
