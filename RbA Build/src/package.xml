@@ -24,9 +24,8 @@
         <members>RMS_mobileAppAPIController</members>
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_opportunityUtilities</members>
-        <members>RMS_priceCalcSlimAPIController</members>
-        <members>RMS_priceCalcSlimAPILogic</members>
-        <members>RMS_priceCalcSlimAPILogicTest</members>
+        <members>RMS_mobileAppRequestHelperTest</members>
+        <members>RMS_opportunityUtilities</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -83,6 +82,7 @@
         <members>Contact</members>
         <members>Contact_History__c</members>
         <members>Discount__c</members>
+        <members>Event</members>
         <members>Field_IDs__c</members>
         <members>Financial_Configuration__c</members>
         <members>Municipality_Contact__c</members>
