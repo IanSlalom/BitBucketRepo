@@ -573,6 +573,14 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
         <description>Select the grille pattern for Sash 1.</description>
         <externalId>false</externalId>
@@ -602,6 +610,18 @@
         <externalId>false</externalId>
         <inlineHelpText>Select the grille pattern for Sash 3.</inlineHelpText>
         <label>Grille Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern__c</fullName>
+        <description>The grille pattern applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille pattern applied to this product.</inlineHelpText>
+        <label>Grille Pattern</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
