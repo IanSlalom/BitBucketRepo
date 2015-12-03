@@ -376,18 +376,6 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Set up Handle Type Items  *****************/
-	private static transient List<SelectOption> lHandleTypeItems;
-	public List<SelectOption> handleTypeItems{
-		get
-		{   
-			if (lHandleTypeItems == null) {
-				lHandleTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Handle_Type__c);
-			}			   
-			return lHandleTypeItems;
-		}
-	}
-
 	/******* Lifts Pulls Items  *****************/
 	private static transient List<SelectOption> lLiftsPullsItems;
 	public List<SelectOption> liftsPullsItems {
@@ -412,6 +400,17 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
+	/******* Finger Lifts Items  *****************/
+	private static transient List<SelectOption> lfingerLiftItems;
+	public List<SelectOption> fingerLiftItems {
+		get
+		{   
+			if (lfingerLiftItems == null) {
+				lfingerLiftItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Finger_Lifts__c);
+			}			   
+			return lfingerLiftItems;
+		}
+	} 
 
 	/******* Screen Type Items  *****************/
 	private static transient List<SelectOption> lScreenTypeItems;
@@ -458,6 +457,18 @@ public class RMS_prodConfigExtension {
 				lMullSequenceMullionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Mull_Sequence_Mullion__c);
 			}
 			return lMullSequenceMullionItems;
+		}
+	}
+
+	/******* Sash Ratio Items  *****************/
+	private static transient List<SelectOption> lSashRatioItems;
+	public List<SelectOption> sashRatioItems{
+		get
+		{   
+			if (lSashRatioItems == null) {
+				lSashRatioItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Ratio__c);
+			}
+			return lSashRatioItems;
 		}
 	}
 
@@ -738,6 +749,9 @@ public class RMS_prodConfigExtension {
 */
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
+		
+		// Default the verify item config to true if a product configuration record was found
+		if (prodConfig.mpc != null) orderLineItem.Verify_Item_Configuration__c = true;
 		return null;
 
 
@@ -749,12 +763,14 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Save button is clicked at the child product level
 	public pageReference saveProduct() {
 
-		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
-		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
-		System.Debug('*************errorMessage=' +errorMessage);
-		if(!String.isBlank(errorMessage)) {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
-			return null;			
+		// Only verify the makeability rules when Verify Item Config is checked
+		if (orderLineItem.Verify_Item_Configuration__c) {
+			inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
+			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+			if(!String.isBlank(errorMessage)) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
+				return null;			
+			}
 		}
 		if (childProduct == null) return null;
 		System.Debug('****************prodConfig=' +prodConfig);

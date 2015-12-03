@@ -206,7 +206,6 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Hardware_Finish_Color__c = 'HF1; HF2';
 		prodConfig.Hardware_Style__c = 'HS1; HS2';
 		prodConfig.Hardware_Option__c = 'HO1; HO2';
-		prodConfig.Handle_Type__c = 'HT1; HT2';
 		prodConfig.Lifts_Pulls__c = '1; 2';
 		prodConfig.Locks_Sash__c = '1; 2';
 		prodConfig.Screen_Type__c = 'ST1; ST2';
@@ -231,6 +230,8 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Jamb_Liner_Color__c = 'Red; White';
 		prodConfig.Interior_Sash_Color__c = 'Red; White';
 		prodConfig.Astragal__c = 'Red; White';
+		prodConfig.Storm_Window__c = 'SW1; SW2';
+		prodConfig.Storm_Window_Style__c = 'SWS1; SWS2';
 		prodConfig.Install_Track_Location__c = 'L1; L2';
 		
 		update prodConfig;
@@ -316,10 +317,6 @@ private class RMS_prodConfigExtensionTest {
 		// Verify the hardware option picklist items
 		List<SelectOption> hardwareOptItems = ext.hardwareOptionItems;
 		System.AssertEquals(3, hardwareOptItems.size());
-
-		// Verify the handleTypeItems
-		List<SelectOption> handleTypeItems = ext.handleTypeItems;
-		System.AssertEquals(3, handleTypeItems.size());
 
 		// Verify the liftsPullsItems
 		List<SelectOption> liftsPullsItems = ext.liftsPullsItems;
@@ -417,6 +414,14 @@ private class RMS_prodConfigExtensionTest {
 		List<SelectOption> astragalColorItems = ext.astragalColorItems;
 		System.AssertEquals(3, astragalColorItems.size());
 
+		// Verify the stormWindowItems
+		List<SelectOption> stormWindowItems = ext.stormWindowItems;
+		System.AssertEquals(3, stormWindowItems.size());
+
+		// Verify the stormWindowStyleItems
+		List<SelectOption> stormWindowStyleItems = ext.stormWindowStyleItems;
+		System.AssertEquals(3, stormWindowStyleItems.size());
+
 		// Verify the installTrackLocationItems
 		List<SelectOption> installTrackLocationItems = ext.installTrackLocationItems;
 		System.AssertEquals(3, installTrackLocationItems.size());
@@ -473,7 +478,6 @@ private class RMS_prodConfigExtensionTest {
 		pageReference savePage = ext.saveProduct();
 		System.Assert(savePage != null);
 
-//		OrderItem oi2 = new OrderItem(Width_Inches__c = 19, Height_Inches__c = 19);
 		OrderItem oi2 = [SELECT Id, PricebookEntryId, Width_Inches__c, Height_Inches__c from OrderItem where Order.Id =: soldOrder.Id limit 1];
 		oi2.Width_Inches__c = 19;
 		oi2.Height_Inches__c = 19;
@@ -486,7 +490,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension ext2 = new RMS_prodConfigExtension(stdController2);
 		pageReference newPage2 = ext2.enterProduct();
 		pageReference savePage2 = ext2.saveProduct();
-//		System.Assert(savePage2 != null);
+		System.Assert(savePage2 != null);
 
 		
 	}

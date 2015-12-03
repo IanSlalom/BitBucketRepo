@@ -37,7 +37,7 @@
             <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
             <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
             <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
-         <apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
+         	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
@@ -56,11 +56,14 @@
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Handing & Frame Options" columns="2">
-            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!sashOperationItems}"/>
+            <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Ratio_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sashRatioItems}"/>
             </apex:selectList>
             <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sill_Angle_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!sillAngleItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sashOperationItems}"/>
             </apex:selectList>
             <apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Frame_Type_Control__c != 'Disabled'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 <apex:selectOptions value="{!frameTypeItems}"/>
@@ -89,7 +92,7 @@
 		                <apex:selectOptions value="{!GlassPatternItems}"/>
 		            </apex:selectList>
 		            <apex:inputField value="{!OrderItem.Tempered_S1__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered1" onChange="callRule('applyToAllGlassCheck')"/>
-		            <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breathing_Tubes_Control__c == 'Required'}" id="breathingtubes0" rendered="{!prodConfig.mpc.Breathing_Tubes_Control__c != 'Disabled'}"/>
+ 		            <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Required'}" id="breathertubes0" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c != 'Disabled'}"/>
                 	<apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Glass__c}" label="Apply to All" id="applyToAllGlass" html-data-jsid="applyToAllGlass" onChange="callRule('applyToAllGlassCheck')" />
 		        </apex:pageBlockSection>
             </apex:tab>
@@ -125,7 +128,7 @@
                 <apex:selectOptions value="{!GlassPatternItems}"/>
             </apex:selectList>
             <apex:inputField value="{!OrderItem.Tempered_S1__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered0"/>
-            <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breathing_Tubes_Control__c == 'Required'}" id="breathingtubes0" rendered="{!prodConfig.mpc.Breathing_Tubes_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Required'}" id="breathertubes0" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Screens" columns="2">
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Type_Control__c != 'Disabled'}">
@@ -157,9 +160,6 @@
               <apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Option_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!hardwareOptionItems}"/>
             </apex:selectList>
-              <apex:selectList value="{!OrderItem.Handle_Type__c}" label="Handle Type" size="1" id="handleType"  required="{!prodConfig.mpc.Handle_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Handle_Type_Control__c != 'Disabled'}">
-                <apex:selectOptions value="{!handleTypeItems}"/>
-            </apex:selectList>
               <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish/Color" size="1" id="hardwareFinishColor"  required="{!prodConfig.mpc.Hardware_Finish_Color__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish_Color__c != 'Disabled'}" html-data-jsid="hardwareColor">
                 <apex:selectOptions value="{!hardwareFinishColorItems}"/>
             </apex:selectList>
@@ -169,6 +169,9 @@
             </apex:selectList>
             <apex:selectList value="{!OrderItem.Locks_Sash__c}" label="Locks/Sash" size="1" id="locksSash" required="{!prodConfig.mpc.Locks_Sash_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Locks_Sash_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!locksSashItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Finger_Lifts__c}" label="Finger Lifts" size="1" id="fingerLifts" required="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Finger_Lifts_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!fingerLiftItems}"/>
             </apex:selectList>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Grille Style" columns="2">
@@ -355,7 +358,7 @@
 
     j$( document ).ready(function() {
         startUpDefaults();
-        exteriorColor('Sandstone');
+        exteriorColor('Sandtone');
         exteriorColor('Terratone');
         exteriorColor('Dark Bronze');
         screenType();
@@ -376,7 +379,7 @@
     
     function callRule(ruleName){
         if(ruleName == 'exteriorColor'){
-            exteriorColor('Sandstone');
+            exteriorColor('Sandtone');
             exteriorColor('Terratone');
             exteriorColor('Dark Bronze');
         }else if(ruleName == 'screenType'){
