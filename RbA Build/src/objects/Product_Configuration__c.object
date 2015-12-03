@@ -184,11 +184,11 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Breathing_Tubes_Control__c</fullName>
-        <description>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</description>
+        <fullName>Breather_Tubes_Control__c</fullName>
+        <description>Controls whether Breather Tubes is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
-        <inlineHelpText>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Breathing Tubes</label>
+        <inlineHelpText>Controls whether Breather Tubes is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Breather Tubes</label>
         <picklist>
             <picklistValues>
                 <fullName>Disabled</fullName>
@@ -216,15 +216,15 @@
         <label>Brickmould Location</label>
         <picklist>
             <picklistValues>
-                <fullName>AS</fullName>
+                <fullName>All Sides</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>AO</fullName>
+                <fullName>Arch Only</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>NS</fullName>
+                <fullName>No Sill</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -267,15 +267,15 @@
         <label>Casing Location</label>
         <picklist>
             <picklistValues>
-                <fullName>AS</fullName>
+                <fullName>All Sides</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>AO</fullName>
+                <fullName>Arch Only</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>NS</fullName>
+                <fullName>No Sill</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -934,7 +934,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Sandstone</fullName>
+                <fullName>Sandtone</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -1105,7 +1105,7 @@
         <label>Exterior Trim</label>
         <picklist>
             <picklistValues>
-                <fullName>Brickmold - Picture Frame</fullName>
+                <fullName>Brickmould - Picture Frame</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -1132,31 +1132,6 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
-        <fullName>Factory_Applied_Brickmould_Control__c</fullName>
-        <description>Controls whether Factory Applied Brickmould is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Factory Applied Brickmould is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Factory Applied Brickmould</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
         <fullName>Fibrex_L_Trim_Control__c</fullName>
         <description>Controls whether Fibrex L-Trim is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -1180,6 +1155,57 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Finger_Lifts_Control__c</fullName>
+        <description>Controls whether Finger Lifts is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Finger Lifts is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Finger Lifts</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Finger_Lifts__c</fullName>
+        <description>Select the number of finger lifts that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of finger lifts that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Finger Lifts</label>
+        <picklist>
+            <picklistValues>
+                <fullName>0</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Frame_Type_Control__c</fullName>
@@ -1296,6 +1322,18 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Glass_Square_Ft_Max__c</fullName>
+        <externalId>false</externalId>
+        <label>Glass Square Ft Max</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Glazing_Control__c</fullName>
         <description>Controls whether Glazing is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -1329,6 +1367,10 @@
         <picklist>
             <picklistValues>
                 <fullName>High Performance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High Performance Obscure</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -1452,137 +1494,28 @@
                 <fullName>Custom</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Renaissance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sunburst</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open Hub Sunburst</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gothic</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>5</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Grille_Sash13_Lites_High_Control__c</fullName>
-        <description>Controls whether Grille Sash 1 and 3 Lites High is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Grille Sash 1 and 3 Lites High is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Grille Sash13 Lites High</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Grille_Sash13_Lites_Wide_Control__c</fullName>
-        <description>Controls whether Grille Sash 1 and 3 Lites Wide is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Grille Sash 1 and 3 Lites Wide is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Grille Sash13 Lites Wide</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Grille_Sash2_Lites_Control__c</fullName>
-        <description>Controls whether Grille Sash2 Lites is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Grille Sash2 Lites is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Grille Sash2 Lites</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Grille_Sash2_Lites_High_Control__c</fullName>
-        <description>Controls whether Grille Sash 2 Lites High is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Grille Sash 2 Lites High is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Grille Sash2 Lites High</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Grille_Sash2_Lites_Wide_Control__c</fullName>
-        <description>Controls whether Grille Sash 2 Lites Wide is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Grille Sash 2 Lites Wide is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Grille Sash2 Lites Wide</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Grille_Style_Control__c</fullName>
@@ -1660,65 +1593,6 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Stationary</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Handle_Type_Control__c</fullName>
-        <description>Controls whether Handle Type is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Handle Type is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Handle Type</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Handle_Type__c</fullName>
-        <description>Select the handle types that should be made available for selection in the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select the handle types that should be made available for selection in the product configuration page.</inlineHelpText>
-        <label>Handle Type</label>
-        <picklist>
-            <picklistValues>
-                <fullName>STD</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>MET</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>COM</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>ANV</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>NBY</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2075,7 +1949,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Sandstone</fullName>
+                <fullName>Sandtone</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -2436,15 +2310,15 @@
         <label>Locks/Sash</label>
         <picklist>
             <picklistValues>
-                <fullName>0</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
                 <fullName>1</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1Y</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2614,6 +2488,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Minimum_Leg_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Minimum Leg Height</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Mull_Sequence_Mullion_Control__c</fullName>
         <description>Controls whether Mull Sequence Mullion is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -2658,7 +2544,179 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>more..</fullName>
+                <fullName>302: a/b/c</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>303: a-(b/c)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>304: (a/b)-c</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>305: a/(b-c)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>306: (a-b)-c</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>401: a-b-c-d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>402: a/b/c/d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>403: (a-b)/(c-d)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>404: a-(b/c/d)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>405: (a/b/c)-d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>406: a/(b-c-d)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>407: (a-b-c)/d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>408: a/b/(c-d)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>409: a/(b-c)/d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>410: (a-b)/c/d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>411: a-b-(c/d)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>412: a-(b/c)-d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>413: (a/b)-c-d</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>501: a-b-c-d-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>502: a/b/c/d/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>503: a-(b/c/d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>504: (a/b/c/d)-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>505: a/(b-c-d-e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>506: (a-b-c-d)/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>507: a/b/(c-d-e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>508: a/(b-c-d)/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>509: (a-b-c)/d/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>510: a-b-(c/d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>511: a-(b/c/d)-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>512: (a/b/c)-d-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>513: a-(b/c)-(d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>514: (a/b)-c-(d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>515: (a/b)-(c/d)-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>516: a/(b-c)/(d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>517: (a-b)/c/(d-e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>518: (a-b)/(c-d)/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>519: a/b/c/(d-e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>520: a/b/(c-d)/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>521: a/(b-c)/d/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>522: (a-b)/c/d/e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>523: a-b-c-(d/e)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>524: a-b-(c/d)-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>525: a-(b/c)-d-e</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>526: (a/b)-c-d-e</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2667,31 +2725,6 @@
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Nail_Flange_Control__c</fullName>
-        <description>Controls whether Nail Flange is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Nail Flange is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Nail Flange</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Number_of_Sashes__c</fullName>
@@ -2710,31 +2743,6 @@
             </picklistValues>
             <picklistValues>
                 <fullName>3</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Overfit_Control__c</fullName>
-        <description>Controls whether Overfit is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Overfit is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Overfit</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2792,6 +2800,18 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Peak_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Peak Height</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Perm_App_Int_Wood_Grille_Control__c</fullName>
@@ -3006,6 +3026,52 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Sash_Ratio__c</fullName>
+        <description>Select the Sash Ratios that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the Sash Ratios that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Sash Ratio</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1:1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:1:1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:2:1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2:3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2:4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3:2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4:2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Screen_Color__c</fullName>
         <description>Select the Screen Colors that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -3089,6 +3155,10 @@
         <picklist>
             <picklistValues>
                 <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fiberglass (1/2)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -3296,6 +3366,30 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Width_to_Height_Ratio_Max__c</fullName>
+        <externalId>false</externalId>
+        <label>Specialty Width to Height Ratio Max</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Specialty_Width_to_Height_Ratio_Min__c</fullName>
+        <externalId>false</externalId>
+        <label>Specialty Width to Height Ratio Min</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Spokes_Control__c</fullName>
@@ -3649,84 +3743,6 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Width_Fractions__c</fullName>
-        <description>The fractions that should be made available for the width measurements in the product config.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The fractions that should be made available for the width measurements in the product config.</inlineHelpText>
-        <label>Width Fractions</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Even</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>1/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>1/8</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>1/4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>5/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3/8</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>7/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>1/2</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>9/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>5/8</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>11/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3/4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>13/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>7/8</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>15/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Width_Inches_Control__c</fullName>

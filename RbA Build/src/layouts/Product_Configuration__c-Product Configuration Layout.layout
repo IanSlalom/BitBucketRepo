@@ -92,6 +92,37 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
+        <label>Specialty Makeability Exceptions</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glass_Square_Ft_Max__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Minimum_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Peak_Height__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Specialty_Width_to_Height_Ratio_Min__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Specialty_Width_to_Height_Ratio_Max__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
         <label>Basic Configuration</label>
         <layoutColumns>
             <layoutItems>
@@ -106,6 +137,10 @@
                 <behavior>Edit</behavior>
                 <field>Install_Track_Location__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Sill_Angle__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -114,11 +149,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sash_Operation__c</field>
+                <field>Sash_Ratio__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sill_Angle__c</field>
+                <field>Sash_Operation__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -202,10 +237,6 @@
                 <behavior>Edit</behavior>
                 <field>Hardware_Option__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Handle_Type__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -219,6 +250,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Locks_Sash__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Finger_Lifts__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -413,7 +448,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Breathing_Tubes_Control__c</field>
+                <field>Breather_Tubes_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -442,10 +477,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Drip_Cap_Pieces_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Dwelling_Information__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -481,6 +512,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Finger_Lifts_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Frame_Type_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -506,10 +541,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Grille_Style_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Handle_Type_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -591,7 +622,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Room_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Sash_Operation_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Sash_Ratio_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
