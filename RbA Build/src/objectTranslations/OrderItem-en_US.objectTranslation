@@ -247,6 +247,10 @@
         <name>Glazing_S3__c</name>
     </fields>
     <fields>
+        <label><!-- Gliding Screen --></label>
+        <name>Gliding_Screen__c</name>
+    </fields>
+    <fields>
         <help><!-- Select the grille pattern for Sash 1. --></help>
         <label><!-- Grille Pattern S1 --></label>
         <name>Grille_Pattern_S1__c</name>
@@ -260,6 +264,11 @@
         <help><!-- Select the grille pattern for Sash 3. --></help>
         <label><!-- Grille Pattern S3 --></label>
         <name>Grille_Pattern_S3__c</name>
+    </fields>
+    <fields>
+        <help><!-- The grille pattern applied to this product. --></help>
+        <label><!-- Grille Pattern --></label>
+        <name>Grille_Pattern__c</name>
     </fields>
     <fields>
         <help><!-- The grille style selected for this product. --></help>

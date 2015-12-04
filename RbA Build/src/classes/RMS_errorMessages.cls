@@ -33,8 +33,8 @@ public with sharing class RMS_errorMessages {
 	public static final String WIDTH_TO_HEIGHT_RATIO_MIN = 'The height and width you have entered is below the width to height ratio minimum for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_RIGHT = 'The right leg height is below the minimum leg height for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_LEFT = 'The left leg height is below the minimum leg height for this product.';
-
-
+	public static final String BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED = 'Brickmould is not available on Double Hung Insert Frames with Sloped Sills'; 
+ 
 	public static final String CHILD_PRODUCT_NOT_FOUND = 'A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String MULTIPLE_CHILD_PRODUCTS = 'Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String INVALID_CHILD_PRODUCT = 'A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';

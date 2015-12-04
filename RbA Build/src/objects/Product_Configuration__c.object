@@ -209,6 +209,31 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Breathing_Tubes_Control__c</fullName>
+        <description>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Breathing Tubes</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Brickmould_Location__c</fullName>
         <description>Select the Brickmould Locations that should be made available for selection in the product configuration page.</description>
         <externalId>false</externalId>
@@ -1568,6 +1593,65 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Stationary</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Handle_Type_Control__c</fullName>
+        <description>Controls whether Handle Type is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Handle Type is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Handle Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Handle_Type__c</fullName>
+        <description>Select the handle types that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the handle types that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Handle Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>STD</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>MET</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>COM</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ANV</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NBY</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>

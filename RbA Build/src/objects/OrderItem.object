@@ -573,6 +573,14 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
         <description>Select the grille pattern for Sash 1.</description>
         <externalId>false</externalId>
