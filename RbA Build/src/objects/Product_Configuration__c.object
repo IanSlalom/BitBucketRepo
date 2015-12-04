@@ -1105,7 +1105,7 @@
         <label>Exterior Trim</label>
         <picklist>
             <picklistValues>
-                <fullName>Brickmold - Picture Frame</fullName>
+                <fullName>Brickmould - Picture Frame</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>

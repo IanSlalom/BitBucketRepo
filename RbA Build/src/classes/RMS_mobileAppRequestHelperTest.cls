@@ -1,48 +1,42 @@
+/**
+ *@class	RMS_mobileAppRequestHelper
+ *@brief	Help class for handling api call business logic
+ *@author  Anthony Strafaccia (Slalom.ADS)
+ *@author  Mark Wochnick (Slalom.MAW)
+ *@version	2015-09/16  Slalom.ADS	Created.
+ *@version	2015-10/12  Slalom.MAW
+ *@copyright  (c)2015 Slalom.  All Rights Reserved.	Unauthorized use is prohibited.
+ */
 @isTest
-public with sharing class RMS_priceCalcSlimAPILogicTest {
-	
-	
+private class RMS_mobileAppRequestHelperTest {
+
 	static testmethod void testFindAppointments(){
 		
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
-			 
-       /*
-        User u = new User(Alias = 'standt', Email='rbaTest@test.com', 
-            EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
-            LocaleSidKey='en_US', ProfileId = p.Id, 
-            TimeZoneSidKey='America/Los_Angeles', UserName='rbaTest@test.com');
-		*/
-		
 		User u = utilities.createUser(p.id);
-		
-		
         System.runAs(u) {
             // The following code runs as user 'u' 
             System.debug('Current User: ' + UserInfo.getUserName());
             System.debug('Current Profile: ' + UserInfo.getProfileId()); 
         	
-
 			RestRequest req = new RestRequest();
 			RestResponse res = new RestResponse();
 			
-			req.requestURI = '/services/apexrest/pcs/';  //Request URL
+			req.requestURI = '/services/apexrest/1net/';  //Request URL
 			req.httpMethod = 'GET';//HTTP Request Type
 			RestContext.request = req;
 			RestContext.response= res;
 			
-			RMS_priceCalcSlimAPILogic logic = new RMS_priceCalcSlimAPILogic ();
+			RMS_mobileAppRequestHelper logic = new RMS_mobileAppRequestHelper ();
         	
         	String response1 =  logic.findAppointments(UserInfo.getUserId());
 			system.debug('ADS Response1: '+ response1);
-        	
         	
     	/////// START CREATE OF DATA //////
         	
         	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 			insert customSetting1;
-			
-			
 			
 			Account account1 = utilities.createAccount('1');
 		 	insert account1;
@@ -97,7 +91,7 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
 		
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
-		RMS_priceCalcSlimAPILogic logic = new RMS_priceCalcSlimAPILogic ();
+		RMS_mobileAppRequestHelper logic = new RMS_mobileAppRequestHelper ();
 		
 		User u = utilities.createUser(p.id);
 
@@ -158,8 +152,5 @@ public with sharing class RMS_priceCalcSlimAPILogicTest {
     	
     	String response2 =  logic.updateOpportunity(openOpp1.id, 'Closed - Won');
     	system.debug('ADS testUpdateOpportunity: '+ response2); 
-
 	}
-
-
 }

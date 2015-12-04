@@ -9,28 +9,40 @@
  */
 @RestResource(urlMapping='/1net/*')
 global with sharing class RMS_mobileAppAPIController {
+	// REST API Constants
+	public static final String GET_APPOINTMENTS = 'getAppointments';
+	
+	// REST API Error Messages
+	public static final String NO_REQUEST_FOUND = 'No request found: ';
 
+	/* Reads only */	
 	@HttpGet
-    global static void httpGet() {
+    global static void doGet() {
+    	
 		RestRequest req = RestContext.request;
-		String finalURLpart = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
-		if(finalURLpart == '' || finalURLpart == null){
+		String temp = req.requestURI.substringAfter('/');
+		temp = temp.substringAfter('/');
+		String operation = temp.substringBefore('/');
+		if (operation == null || operation== ''){
+			RestContext.response.responseBody = Blob.valueOf(NO_REQUEST_FOUND + req.requestURI);
+		} else if (operation.equals(GET_APPOINTMENTS)) {
 			Id userId = UserInfo.getUserId();
-			RMS_priceCalcSlimAPILogic handler = new RMS_priceCalcSlimAPILogic();
+			RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 			RestContext.response.addHeader('Content-Type', 'application/json');
 			RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId));
 		}else{
-			RestContext.response.responseBody = Blob.valueOf('error');
+			RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 		}
     }
     
-    
+	/* creates and multi operation requests */
+	@HttpPut
     @HttpPost
-    global static String httpPost(){
+    global static String doPost(){
 		RestRequest req = RestContext.request;
 		String finalURLpart = req.requestURI.substring(req.requestURI.lastIndexOf('/')+1);
     	if(finalURLpart == 'updateOpps'){
-			RMS_priceCalcSlimAPILogic handler = new RMS_priceCalcSlimAPILogic();
+			RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 			Map<String, String> parameters = req.params;
     		return handler.updateOpportunity(parameters.get('OppId'),parameters.get('Status'));
 			return 'true';
@@ -41,6 +53,22 @@ global with sharing class RMS_mobileAppAPIController {
 		}else{
 			return 'error';
 		}
-    	
     }
+
+	/* Updates only */
+    @HttpPatch
+    global static String doPatch(){
+		return 'patch';
+    }
+
+	/* Deletes only */
+    @HttpDelete
+    global static String doDelete(){
+		return 'delete';
+    }
+
+//    @HttpHead
+//    global static String httpHead(){
+//		return 'HEAD - Not Sujpported';
+//    }
 }
