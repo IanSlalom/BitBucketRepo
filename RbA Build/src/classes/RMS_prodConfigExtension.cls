@@ -153,6 +153,33 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* property for the sash tab name  *****************/
+	public  String sashTabName  {
+		get
+		{   
+			if (sashTabName != null) return sashTabName;
+			if (prodConfig.mpc.Number_of_Sashes__c == '3')
+				sashTabName = 'Sash 1/3';
+			else
+				sashTabName = 'Sash 1';
+			return sashTabName;
+		}	
+		private set;		  
+	}
+
+	/******* property for the sash field name  *****************/
+	public  String sashFieldName  {
+		get
+		{   
+			if (sashFieldName != null) return sashFieldName;
+			if (prodConfig.mpc.Number_of_Sashes__c == '3')
+				sashFieldName = '1/3';
+			else
+				sashFieldName = '1';
+			return sashFieldName;
+		}	
+		private set;		  
+	}
 	
 	/******* Set up ProductMaster PickList Items  *****************/
 	private static transient List<SelectOption> lMasterProductItems;
