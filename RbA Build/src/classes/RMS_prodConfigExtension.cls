@@ -173,9 +173,9 @@ public class RMS_prodConfigExtension {
 		{   
 			if (sashFieldName != null) return sashFieldName;
 			if (prodConfig.mpc.Number_of_Sashes__c == '3')
-				sashFieldName = '1/3';
+				sashFieldName = 'S1/3';
 			else
-				sashFieldName = '1';
+				sashFieldName = 'S1';
 			return sashFieldName;
 		}	
 		private set;		  
