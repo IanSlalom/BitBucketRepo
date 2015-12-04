@@ -61,7 +61,6 @@ public class RMS_prodConfigExtension {
 	public String inputWidth {get;set;}
 	public String inputHeight {get;set;}
 	public boolean productSelected {get;set;}	
-	public Integer inputQuantity {get;set;}	
 	
 	/******* property for the product configuration wrapper  *****************/
 	public  RMS_prodConfigManager.productConfigWrapper prodConfig  {
@@ -747,6 +746,10 @@ public class RMS_prodConfigExtension {
 		productSelected = true;
 		return null;
 */
+		if (masterProductId == '' || masterProductId == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.PRODUCT_EMPTY));
+			return null;
+		}
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
 		
@@ -762,6 +765,11 @@ public class RMS_prodConfigExtension {
 	*******************************************************/
 	// runs whenever the Save button is clicked at the child product level
 	public pageReference saveProduct() {
+
+		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
+			return null;			
+		}
 		
 		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c; 
 		// Only verify the makeability rules when Verify Item Config is checked
@@ -785,7 +793,6 @@ public class RMS_prodConfigExtension {
 		}
 
 		PageReference ref;
-		if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
 			orderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;

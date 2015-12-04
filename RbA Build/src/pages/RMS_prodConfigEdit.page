@@ -12,7 +12,7 @@
             <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
                 <apex:selectOptions value="{!masterProductItems}"/>
             </apex:selectList>
-                <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
+                  <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="" columns="1" rendered="{!productSelected}">
@@ -20,7 +20,7 @@
         </apex:pageBlockSection>
     </apex:pageBlock>
 
-    <apex:pageBlock title="Configure Product" mode="edit" id="ConfigureProductBlock" rendered="{!productSelected}">
+    <apex:pageBlock title="Configure Product" id="ConfigureProductBlock" rendered="{!productSelected}">
         <apex:pageBlockButtons location="bottom">
             <apex:commandButton action="{!saveProduct}" value="Save"/>
         </apex:pageBlockButtons>            
@@ -119,7 +119,7 @@
 		        </apex:pageBlockSection>
             </apex:tab>
         </apex:tabPanel>
-
+  
         <apex:pageBlockSection title="Glazing" columns="1" rendered="{!prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3'}">
                   <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing S1" size="1" id="glazing0"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing0" onChange="callRule('glazing0')">
                 <apex:selectOptions value="{!glazingItems}"/>
@@ -185,7 +185,7 @@
             <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
 
-        <apex:tabPanel switchType="client" selectedTab="AllSashes" id="sashPanel" rendered="{!prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3'}">
+        <apex:tabPanel switchType="client" selectedTab="AllSashesG" id="sashPanelG" rendered="{!prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3'}" html-data-jsid="sashGrilleTabPanel" >
             <apex:tab label="Sash 1" name="sash1" id="sash1" rendered="true">
                 <apex:pageBlockSection title="Grille Pattern" columns="1">
                     <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')">
@@ -231,7 +231,7 @@
               </apex:pageBlockSection>
             </apex:tab>
         </apex:tabPanel>
-        <apex:pageBlockSection title="Grille Pattern" columns="1" rendered="{!prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3'}">
+        <apex:pageBlockSection title="Grille Pattern" columns="1" rendered="{!prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3'}" html-data-jsid="GrillePatternSection">
             <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern" size="1" id="grillePattern0" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern0" onChange="callRule('grillePattern0')">
                <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
@@ -296,7 +296,7 @@
             </apex:selectList>
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Additional Job Cost Details" columns="2">
+        <apex:pageBlockSection id="jobCostDetailsSection" title="Additional Job Cost Details" columns="2" collapsible="true">
             <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
             <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
 
@@ -468,6 +468,8 @@
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").hide()
+            j$("table[data-jsid='sashGrilleTabPanel']").hide();
+			
 			
         }else{
             j$("select[data-jsid='grillePattern0']").show();
@@ -480,6 +482,7 @@
 			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
             j$("input[data-jsid='wideBar']").show();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
+            j$("table[data-jsid='sashGrilleTabPanel']").show();
         }
         
         if(j$("select[data-jsid='grilleStyle']").val()  ==   'No Grilles' ||
