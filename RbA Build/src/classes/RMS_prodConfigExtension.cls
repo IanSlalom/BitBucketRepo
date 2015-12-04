@@ -765,8 +765,8 @@ public class RMS_prodConfigExtension {
 
 		// Only verify the makeability rules when Verify Item Config is checked
 		if (orderLineItem.Verify_Item_Configuration__c) {
-			inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
-			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+			inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c; 
+			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem, masterProduct.Name);
 			if(!String.isBlank(errorMessage)) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 				return null;			
