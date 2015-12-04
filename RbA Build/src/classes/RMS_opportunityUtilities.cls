@@ -11,9 +11,16 @@ global with sharing class RMS_opportunityUtilities {
 			return 'noSyncedQuote';
 		}
 		else{
+			if (opp.StageName == 'Closed Won') {
+				opp.StageName = 'New';
+				update opp;				
+			}
 			opp.StageName = 'Closed Won';
 			update opp;
 			Order ord = [SELECT Id, OpportunityId FROM Order WHERE OpportunityId = :oppId];
+			if (ord == null) {
+				return 'noOrderCreated';
+			}
 			return String.ValueOf(ord.id);
 		}
 	}
