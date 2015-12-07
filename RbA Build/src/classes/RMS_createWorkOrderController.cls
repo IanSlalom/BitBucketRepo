@@ -76,7 +76,7 @@ public with sharing class RMS_createWorkOrderController {
 		wo.SVMXC__Zip__c = billingPostalCode;
 		wo.SVMXC__Country__c = billingCountry;
 		        
-        if(opportunity != null && opportunity != ''){
+        if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }
 		if(hoa != null && hoa != '' && wo.SVMXC__Order_Type__c == 'HOA'){

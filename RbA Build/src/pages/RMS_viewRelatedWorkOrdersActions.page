@@ -104,7 +104,8 @@
 				</apex:column>
 		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.SVMXC__Order_Type__c != 'Lead Paint','notRed', 'red')}" />
 		        <apex:column value="{!wo.SVMXC__Order_Status__c}"/>
-		        <apex:column value="{!wo.Owner.Name}"/>
+		        <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
+		        <apex:column value="{!wo.CreatedDate}"/>
 			</apex:pageBlockTable>
 	</apex:pageBlock>
 </apex:page>
