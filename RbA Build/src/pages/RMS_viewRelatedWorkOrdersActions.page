@@ -75,10 +75,13 @@
 			border-style: solid !important;
 		    border-width: 1px !important;
 	    }
-	    .bigandgreen{
+	    .bigandBold{
 	    	font-size: 16px;
 	    	color:Black !important;
 	    	font-weight: bold;
+	    }
+	    .red{
+	    	color:Red !important;
 	    }     
 	      
 	</style>
@@ -95,11 +98,11 @@
 	</apex:form>
 		
 			<apex:pageBlockTable title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
-				<!-- <apex:column value="{!wo.View__c}"/> -->
+				<!-- <apex:column value="{!wo.View__c}"/> --> 
 				<apex:column headerValue="">  
 					<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
 				</apex:column>
-		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
+		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.SVMXC__Order_Type__c != 'Lead Paint','notRed', 'red')}" />
 		        <apex:column value="{!wo.SVMXC__Order_Status__c}"/>
 		        <apex:column value="{!wo.Owner.Name}"/>
 			</apex:pageBlockTable>
