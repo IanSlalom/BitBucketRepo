@@ -17,6 +17,7 @@ public with sharing class RMS_errorMessages {
 					Product Configuration Errors
 	*******************************************************/
 	public static final String PRODUCT_EMPTY = 'Please choose a product and try again.';
+	public static final String QUANTITY_EMPTY = 'Please enter a quantity and try again.';
 	public static final String WIDTH_HEIGHT_EMPTY = 'Please enter a width and height.';
 	public static final String INVALID_HEIGHT_FORMAT = 'Please enter the height as either a whole number or decimal.';
 	public static final String INVALID_WIDTH_FORMAT = 'Please enter the width as either a whole number or decimal.';
