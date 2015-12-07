@@ -60,7 +60,7 @@ public with sharing class RMS_createWorkOrderController {
 		}else if(woType == 'permit'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
 			wo.RecordTypeId = woRTid;
-			if(permit != null && permit != ''){
+			if(permit != null && permit != '' && permit != 'null'){
 				wo.Municipality__c = permit;
 			}		
 		}
