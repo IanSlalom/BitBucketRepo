@@ -26,7 +26,9 @@ public class RMS_prodConfigExtension {
 	/******* public variables  *****************/
 	public boolean newOrderItem {get; set;}	 
 	public boolean orderActivated {get; set;}	 
-	public String priceBookId;   
+	public String priceBookId {get; set;}   
+	public String orderId {get; set;}   
+	public String oiId {get;set;} // used for redirecting of tabs
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
@@ -43,12 +45,14 @@ public class RMS_prodConfigExtension {
 		if (newOrderItem) {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
+			orderId = orderLineItem.OrderId;
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
+					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
@@ -791,7 +795,7 @@ public class RMS_prodConfigExtension {
 					saveProduct method
 	*******************************************************/
 	// runs whenever the Save button is clicked at the child product level
-	public pageReference saveProduct() {
+	public virtual pageReference saveProduct() {
 
 		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
@@ -842,8 +846,19 @@ public class RMS_prodConfigExtension {
 				upsert orderLineItem;
 				ref = new PageReference('/' +orderLineItem.OrderId);
 			}
-		}	   
-		return ref;
+		}	
+		oiId = orderLineItem.Id;  // used to redirect to correct tab   
+//		return ref;
+		System.Debug('***************oiId=' +oiId);
+		return null;
+	}
+
+	/*******************************************************
+					cancel method
+	*******************************************************/
+	public virtual PageReference cancel() {
+		system.debug('*****Cancel button pressed');
+		return null;
 	}
 
 }
