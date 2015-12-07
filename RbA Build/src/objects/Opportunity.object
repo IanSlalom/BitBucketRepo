@@ -748,6 +748,8 @@ if(result == &apos;alreadyConverted&apos;){
 }
 else if(result == &apos;noSyncedQuote&apos;){
      alert(&apos;Opportunity has no synced quote&apos;);
+}else if(result == &apos;noOrderCreated&apos;){
+     alert(&apos;The was a problem creating the order. Please contact your system administrator for help.&apos;);
 }else{
      window.location.assign(&quot;/&quot;+result);
 }</url>
