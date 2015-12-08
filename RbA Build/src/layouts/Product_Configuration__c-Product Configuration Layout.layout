@@ -241,7 +241,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Hardware_Finish_Color__c</field>
+                <field>Hardware_Finish__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -432,6 +432,20 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
+        <label>Special Options</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hardware_Color__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns/>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
         <label>Controls</label>
         <layoutColumns>
             <layoutItems>
@@ -544,7 +558,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Hardware_Finish_Color_Control__c</field>
+                <field>Hardware_Finish_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
