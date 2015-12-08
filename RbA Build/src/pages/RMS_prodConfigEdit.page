@@ -1,11 +1,115 @@
 <apex:page standardController="OrderItem" extensions="RMS_prodConfigExtension">
 <apex:includeScript value="{!$Resource.jquery}" />
+<apex:includeScript value="/support/console/33.0/integration.js"/>
 
-<apex:form >
-    <apex:pageMessages />
+<apex:form id="page-form" >
+<script>
+    var j$ = jQuery.noConflict();
+
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		};
+
+		function closeTab() {
+
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!OrderItem.OrderId}'; 
+			}
+
+		
+		};
+
+		function openNewSubTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			sforce.console.refreshPrimaryTabById( primaryTabId, false);
+			sforce.console.openSubtab
+			(   /*  Enclosing Primary Tab Id	*/  primaryTabId,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Id of Subtab to override	*/  subTabId,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}
+
+		function openNewPrimaryTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			//  otherwise open the new subtab
+			sforce.console.openPrimaryTab
+			(   /*  Enclosing Primary Tab Id	*/  null,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}	
+		function openSavedOI(oiId)
+		{
+			var errorOccurred = '{!errorOccurred}';
+			if (errorOccurred == 'false') {
+				if(sforce.console.isInConsole()) {
+					openNewSubTab( '/' +oiId +'?isdtp=vw');
+					closeTab();
+				}
+				else {
+					location.href='/' +oiId;
+				}
+			}
+		}
+
+		function openNewOI(orderId, priceBookId)
+		{
+			var errorOccurred = '{!errorOccurred}';
+			if (errorOccurred == 'false') {
+				if(sforce.console.isInConsole()) {
+					openNewSubTab( '/apex/RMS_prodConfigEdit?isdtp=vw&oid=' +orderId +'&pid=' +priceBookId, 'New Order Item' );
+					closeTab();
+				}
+				else {
+					location.href='/apex/RMS_prodConfigEdit?oid=' +orderId +'&pid=' +priceBookId;
+				}
+			}
+		}
+//	function  getOrderId()
+//	{
+//		return document.getElementById( 'OrderId' ).innerHTML;
+//	}
+
+
+</script>
+ 
+  <apex:pageMessages />
+	<div id="OrderId" style="display:none;">{!orderId}</div>	
     <apex:pageBlock title="Select Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
@@ -20,9 +124,15 @@
         </apex:pageBlockSection>
     </apex:pageBlock>
 
+    <apex:actionRegion >
     <apex:pageBlock title="Configure Product" id="ConfigureProductBlock" rendered="{!productSelected}">
+        <apex:actionStatus id="save-status"  onstop="openSavedOI('{!oiId}');return false"/>
+        <apex:actionStatus id="save-new-status"  onstop="openNewOI('{!orderId}','{!priceBookId}');return false"/>
+
         <apex:pageBlockButtons location="bottom">
-            <apex:commandButton action="{!saveProduct}" value="Save"/>
+            <apex:commandButton action="{!saveProduct}" value="Save" status="save-status" rerender="page-form"/>
+			<apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="Enter Measurements" columns="2" rendered="{!productSelected}">
@@ -149,8 +259,8 @@
               <apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Option_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!hardwareOptionItems}"/>
             </apex:selectList>
-              <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish/Color" size="1" id="hardwareFinishColor"  required="{!prodConfig.mpc.Hardware_Finish_Color__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish_Color__c != 'Disabled'}" html-data-jsid="hardwareColor">
-                <apex:selectOptions value="{!hardwareFinishColorItems}"/>
+            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish__c != 'Disabled'}" html-data-jsid="hardwareFinish">
+                <apex:selectOptions value="{!hardwareFinishItems}"/>
             </apex:selectList>
             <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Control__c != 'Disabled'}"/>
             <apex:selectList value="{!OrderItem.Lifts_Pulls__c}" label="Lifts/Pulls" size="1" id="liftsPulls" required="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Lifts_Pulls_Control__c != 'Disabled'}">
@@ -273,51 +383,60 @@
         <apex:pageBlockSection id="jobCostDetailsSection" title="Additional Job Cost Details" columns="2" collapsible="true">
             <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
             <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
-
         </apex:pageBlockSection>
 
+		<hr></hr>
+		<apex:outputPanel rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled'}" >
+			<apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
+			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')"/>
+		</apex:outputPanel>
 
-        <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled'}">
+        <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled'}" html-data-jsid="specialOptions">
 
-            <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" >
+            <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" html-data-jsid="screenColor">
                 <apex:selectOptions value="{!screenColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" >
+            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" html-data-jsid="hardwareColor">
+                <apex:selectOptions value="{!hardwareColorItems}"/>
+            </apex:selectList>
+
+            <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" html-data-jsid="extGrilleColor">
+            
                 <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" >
+            <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" html-data-jsid="intGrilleColor">
                 <apex:selectOptions value="{!interiorGrilleColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" >
+            <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" html-data-jsid="stormWindowColor">
                 <apex:selectOptions value="{!stormWindowColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" >
+            <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" html-data-jsid="exteriorTrimColor">
                 <apex:selectOptions value="{!exteriorTrimColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" >
+            <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" html-data-jsid="jambLinerColor">
                 <apex:selectOptions value="{!jambLinerColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" >
+            <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" html-data-jsid="interiorSashColor" >
                 <apex:selectOptions value="{!interiorSashColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled'}">
+            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled'}" html-data-jsid="astragalColor">
                 <apex:selectOptions value="{!astragalColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" >
+            <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" html-data-jsid="installTrackLocation">
                 <apex:selectOptions value="{!installTrackLocationItems}"/>
             </apex:selectList>
 
-            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" />
+            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" html-data-jsid="installHolesLocation"/>
 
-	        <apex:pageBlockSection title="Sash 3 Glazing" columns="1">
+	        <apex:pageBlockSection title="Sash 3 Glazing" columns="1" html-data-jsid="glazing3Section">
 	            <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing3" onChange="callRule('glazing3')">
 	                <apex:selectOptions value="{!glazingItems}"/>
 	            </apex:selectList>
@@ -335,11 +454,35 @@
         </apex:pageBlockSection>
     </apex:pageBlock>
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
+    </apex:actionRegion>
 
 </apex:form>
 <script type ="text/javascript">
     var j$ = jQuery.noConflict();
 
+		var	primaryTabId = null;
+		var	subTabId = null;
+		var	previousOnload  = window.onload;
+
+		window.onload = function()
+		{
+		
+			//  perform the previously registered 'onload' function, if any
+			if ( previousOnload ) previousOnload();
+
+			//  get the id's of both the primary tab and this subtab
+			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+			sforce.console.getEnclosingTabId		( function( result ) { subTabId	 = result.id; } );
+
+			//  set the title of this subtab
+			sforce.console.setTabTitle( '{!OrderItem.Id}' ? '* {!OrderItem.PricebookEntry.Product2.Name}' : 'New Order Item' );
+
+		};
+
+		
+
+
+	// Custom dynamic defaulting / picklists for makeability 
     j$( document ).ready(function() {
         startUpDefaults();
         exteriorColor('Sandtone');
@@ -358,6 +501,7 @@
         glazing(2);
         glazing(3);
         frameType();
+        specialOptions();
     });
     
     
@@ -393,6 +537,8 @@
             applyToAllGrillesCheck();
         }else if(ruleName == 'applyToAllGlassCheck'){
             applyToAllGlassCheck();
+        }else if(ruleName == 'specialOptions'){
+            specialOptions();
         }
     }       
         
@@ -625,5 +771,30 @@
 				j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
             } 
         }
+        
+    function specialOptions(){
+		// If the specialOptions checkbox is checked, display the special options section
+    	var specialOptionsCheck = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
+        if( specialOptionsCheck == true){
+            j$("div[data-jsid='specialOptions']").show();
+        }else{
+            j$("select[data-jsid='screenColor']").val(null);
+            j$("select[data-jsid='hardwareColor']").val(null);
+            j$("select[data-jsid='extGrilleColor']").val(null);
+            j$("select[data-jsid='intGrilleColor']").val(null);
+            j$("select[data-jsid='stormWindowColor']").val(null);
+            j$("select[data-jsid='exteriorTrimColor']").val(null);
+            j$("select[data-jsid='jambLinerColor']").val(null);
+            j$("select[data-jsid='interiorSashColor']").val(null);
+            j$("select[data-jsid='astragalColor']").val(null);
+            j$("select[data-jsid='installTrackLocation']").val(null);
+            j$("input[data-jsid='installHolesLocation']").val(null);
+            j$("select[data-jsid='glazing3']").val(null);
+            j$("select[data-jsid='glassPattern3']").val(null);
+            j$("input[data-jsid='tempered3']").prop('checked',false);
+            j$("div[data-jsid='specialOptions']").hide();
+        }
+    }
+
     </script>
 </apex:page>

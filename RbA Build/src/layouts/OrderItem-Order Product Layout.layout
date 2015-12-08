@@ -6,7 +6,12 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Dwelling Information</label>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Special_Options__c</field>
+            </layoutItems>
+        </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -353,7 +358,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Hardware_Finish_Color__c</field>
+                <field>Hardware_Finish__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -578,6 +583,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Screen_Color__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hardware_Color__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

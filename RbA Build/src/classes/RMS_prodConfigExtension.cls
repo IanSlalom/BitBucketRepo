@@ -26,10 +26,13 @@ public class RMS_prodConfigExtension {
 	/******* public variables  *****************/
 	public boolean newOrderItem {get; set;}	 
 	public boolean orderActivated {get; set;}	 
-	public String priceBookId;   
+	public String priceBookId {get; set;}   
+	public String orderId {get; set;}   
+	public String oiId {get;set;} // used for redirecting of tabs
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
+	public String errorOccurred {get; set;}	 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -43,12 +46,14 @@ public class RMS_prodConfigExtension {
 		if (newOrderItem) {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
+			orderId = orderLineItem.OrderId;
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
+					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
@@ -366,15 +371,27 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Set up Hardware Finish/Color Items  *****************/
-	private static transient List<SelectOption> lHardwareFinishColorItems;
-	public List<SelectOption> hardwareFinishColorItems{
+	/******* Set up Hardware Finish Items  *****************/
+	private static transient List<SelectOption> lHardwareFinishItems;
+	public List<SelectOption> hardwareFinishItems{
 		get
 		{   
-			if (lHardwareFinishColorItems == null) {
-				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
+			if (lHardwareFinishItems == null) {
+				lHardwareFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish__c);
 			}			   
-			return lHardwareFinishColorItems;
+			return lHardwareFinishItems;
+		}
+	}
+
+	/******* Set up Hardware Color Items  *****************/
+	private static transient List<SelectOption> lHardwareColorItems;
+	public List<SelectOption> hardwareColorItems{
+		get
+		{   
+			if (lHardwareColorItems == null) {
+				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Color__c);
+			}			   
+			return lHardwareColorItems;
 		}
 	}
 
@@ -791,7 +808,10 @@ public class RMS_prodConfigExtension {
 					saveProduct method
 	*******************************************************/
 	// runs whenever the Save button is clicked at the child product level
-	public pageReference saveProduct() {
+	public virtual pageReference saveProduct() {
+
+		// Set this flag to true so we know to exit the javascript before redirecting
+		errorOccurred = 'true';
 
 		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
@@ -842,8 +862,22 @@ public class RMS_prodConfigExtension {
 				upsert orderLineItem;
 				ref = new PageReference('/' +orderLineItem.OrderId);
 			}
-		}	   
-		return ref;
+		}	
+		oiId = orderLineItem.Id;  // used to redirect to correct tab   
+//		return ref;
+		System.Debug('***************oiId=' +oiId);
+		// Set this flag back to false so we know it's ok to redirect from javascript
+		errorOccurred = 'false';
+		return null;
+	}
+
+	/*******************************************************
+					cancel method
+	*******************************************************/
+	public virtual PageReference cancel() {
+		system.debug('*****Cancel button pressed');
+		errorOccurred = 'false';
+		return null;
 	}
 
 }
