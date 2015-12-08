@@ -60,7 +60,7 @@ public with sharing class RMS_createWorkOrderController {
 		}else if(woType == 'permit'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
 			wo.RecordTypeId = woRTid;
-			if(permit != null && permit != ''){
+			if(permit != null && permit != '' && permit != 'null'){
 				wo.Municipality__c = permit;
 			}		
 		}
@@ -79,9 +79,9 @@ public with sharing class RMS_createWorkOrderController {
         if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }
-		if(hoa != null && hoa != '' && wo.SVMXC__Order_Type__c == 'HOA'){
+		if(hoa != null && hoa != '' && hoa != 'null' && wo.SVMXC__Order_Type__c == 'HOA' ){
 			wo.Municipality__c = hoa;
-		}else if(historical != null && historical != '' && wo.SVMXC__Order_Type__c == 'Historical'){
+		}else if(historical != null && historical != '' && historical != 'null' && wo.SVMXC__Order_Type__c == 'Historical'){
 			wo.Municipality__c = historical;
 		}
 		
