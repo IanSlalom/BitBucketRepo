@@ -203,7 +203,8 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Checkrail_Style__c = 'CR1; CR2';
 		prodConfig.Interior_Trim__c = 'TR1; TR2';
 		prodConfig.Handing__c = 'HO1; HO2';
-		prodConfig.Hardware_Finish_Color__c = 'HF1; HF2';
+		prodConfig.Hardware_Finish__c = 'HF1; HF2';
+		prodConfig.Hardware_Color__c = 'HC1; HC2';
 		prodConfig.Hardware_Style__c = 'HS1; HS2';
 		prodConfig.Hardware_Option__c = 'HO1; HO2';
 		prodConfig.Lifts_Pulls__c = '1; 2';
@@ -306,9 +307,13 @@ private class RMS_prodConfigExtensionTest {
 		List<SelectOption> handingOptItems = ext.handingOptionItems;
 		System.AssertEquals(3, handingOptItems.size());
 
-		// Verify the hardwareFinishColorItems
-		List<SelectOption> hardwareFinishColorItems = ext.hardwareFinishColorItems;
-		System.AssertEquals(3, hardwareFinishColorItems.size());
+		// Verify the hardwareFinishItems
+		List<SelectOption> hardwareFinishItems = ext.hardwareFinishItems;
+		System.AssertEquals(3, hardwareFinishItems.size());
+
+		// Verify the hardwareColorItems
+		List<SelectOption> hardwareColorItems = ext.hardwareColorItems;
+		System.AssertEquals(3, hardwareColorItems.size());
 
 		// Verify the hardware style picklist items
 		List<SelectOption> hardwareStyItems = ext.hardwareStyleItems;

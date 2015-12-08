@@ -32,6 +32,7 @@ public class RMS_prodConfigExtension {
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
+	public String errorOccurred {get; set;}	 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -370,15 +371,27 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Set up Hardware Finish/Color Items  *****************/
-	private static transient List<SelectOption> lHardwareFinishColorItems;
-	public List<SelectOption> hardwareFinishColorItems{
+	/******* Set up Hardware Finish Items  *****************/
+	private static transient List<SelectOption> lHardwareFinishItems;
+	public List<SelectOption> hardwareFinishItems{
 		get
 		{   
-			if (lHardwareFinishColorItems == null) {
-				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
+			if (lHardwareFinishItems == null) {
+				lHardwareFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish__c);
 			}			   
-			return lHardwareFinishColorItems;
+			return lHardwareFinishItems;
+		}
+	}
+
+	/******* Set up Hardware Color Items  *****************/
+	private static transient List<SelectOption> lHardwareColorItems;
+	public List<SelectOption> hardwareColorItems{
+		get
+		{   
+			if (lHardwareColorItems == null) {
+				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Color__c);
+			}			   
+			return lHardwareColorItems;
 		}
 	}
 
@@ -797,6 +810,9 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Save button is clicked at the child product level
 	public virtual pageReference saveProduct() {
 
+		// Set this flag to true so we know to exit the javascript before redirecting
+		errorOccurred = 'true';
+
 		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
 			return null;			
@@ -850,6 +866,8 @@ public class RMS_prodConfigExtension {
 		oiId = orderLineItem.Id;  // used to redirect to correct tab   
 //		return ref;
 		System.Debug('***************oiId=' +oiId);
+		// Set this flag back to false so we know it's ok to redirect from javascript
+		errorOccurred = 'false';
 		return null;
 	}
 
@@ -858,6 +876,7 @@ public class RMS_prodConfigExtension {
 	*******************************************************/
 	public virtual PageReference cancel() {
 		system.debug('*****Cancel button pressed');
+		errorOccurred = 'false';
 		return null;
 	}
 
