@@ -17,6 +17,7 @@ public with sharing class RMS_errorMessages {
 					Product Configuration Errors
 	*******************************************************/
 	public static final String PRODUCT_EMPTY = 'Please choose a product and try again.';
+	public static final String QUANTITY_EMPTY = 'Please enter a quantity and try again.';
 	public static final String WIDTH_HEIGHT_EMPTY = 'Please enter a width and height.';
 	public static final String INVALID_HEIGHT_FORMAT = 'Please enter the height as either a whole number or decimal.';
 	public static final String INVALID_WIDTH_FORMAT = 'Please enter the width as either a whole number or decimal.';
@@ -28,13 +29,13 @@ public with sharing class RMS_errorMessages {
 	public static final String HEIGHT_TO_WIDTH_CAP = 'The height and width you entered exceeds the height to width cap.';
 	public static final String WIDTH_TO_HEIGHT_CAP = 'The width and height you entered exceeds the width to height cap.';
 	public static final String PEAK_HEIGHT = 'The left and right leg difference is greater then the width times the product\'s peak height.';
-	public static final String GLASS_MAX_SQ_FEET = 'The height and width you have entered exceededs the max square feet allowed for this product.';
-	public static final String WIDTH_TO_HEIGHT_RATIO_MAX = 'The height and width you have entered exceededs the width to height ratio max for this product.';
+	public static final String GLASS_MAX_SQ_FEET = 'The height and width you have entered exceeds the max square feet allowed for this product.';
+	public static final String WIDTH_TO_HEIGHT_RATIO_MAX = 'The height and width you have entered exceeds the width to height ratio max for this product.';
 	public static final String WIDTH_TO_HEIGHT_RATIO_MIN = 'The height and width you have entered is below the width to height ratio minimum for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_RIGHT = 'The right leg height is below the minimum leg height for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_LEFT = 'The left leg height is below the minimum leg height for this product.';
-
-
+	public static final String BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED = 'The Brickmould exterior trim is not available on Double Hung Insert Frames with Sloped Sills.'; 
+ 
 	public static final String CHILD_PRODUCT_NOT_FOUND = 'A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String MULTIPLE_CHILD_PRODUCTS = 'Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String INVALID_CHILD_PRODUCT = 'A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';

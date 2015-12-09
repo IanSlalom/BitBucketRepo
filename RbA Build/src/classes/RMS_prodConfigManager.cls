@@ -7,6 +7,7 @@
 	Contains the product config wrapper and methods around it
 
 @author	 Creston Kuenzi (Slalom.CDK)
+@author	 Anthony Strafaccia (Slalom.ADS)
 
 @version	2015-07-29  Slalom.CDK
 	Created POC
@@ -14,6 +15,8 @@
 	Updated for first release to build
 @version	2015-11-20  Slalom.CDK
 	Updated to pull product config from master product instead of pricebookentry
+@version	2015-12-04  Slalom.ADS
+	Added in new makability rules 
 @see		RMS_prodConfigManagerTest
 
 @copyright  (c)2015 Slalom.  All Rights Reserved.
@@ -82,7 +85,7 @@ public with sharing class RMS_prodConfigManager {
 					checkMakeability method
 	*******************************************************/
 	// checks the entered values against the master product makeability rules
-	public static String checkMakeability(Product_Configuration__c masterProductConfig, OrderItem orderLineItem) {
+	public static String checkMakeability(Product_Configuration__c masterProductConfig, OrderItem orderLineItem, String masterProductName) {
 		String errorMessage = '';
 		// Check that values have been entered for width / height
 		if (masterProductConfig == null) {
@@ -96,40 +99,44 @@ public with sharing class RMS_prodConfigManager {
 		
 		// Check for minimum width makeability 
 		if (masterProductConfig.Min_Width__c != null) {
-			if (orderLineItem.Width_Inches__c < masterProductConfig.Min_Width__c) {
+			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c))  < masterProductConfig.Min_Width__c) {
+
 				errorMessage = RMS_errorMessages.WIDTH_BELOW_MIN;
 			}
 		}
 		
 		// Check for minimum height makeability 
 		if (masterProductConfig.Min_Height__c != null) {
-			if (orderLineItem.Height_Inches__c < masterProductConfig.Min_Height__c) {
+			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < masterProductConfig.Min_Height__c) {
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_BELOW_MIN : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_BELOW_MIN;
 			}
 		}
 		// Check for maximum width makeability 
 		if (masterProductConfig.Max_Width__c != null) {
-			if (orderLineItem.Width_Inches__c > masterProductConfig.Max_Width__c) {
+			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Max_Width__c) {
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_ABOVE_MAX;
 			}
 		}
 		// Check for maximum height makeability 
 		if (masterProductConfig.Max_Height__c != null) {
-			if (orderLineItem.Height_Inches__c > masterProductConfig.Max_Height__c) {
+			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Max_Height__c) {
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_ABOVE_MAX;
 			}
 		}
 		// Check for maximum united inches 
 		if (masterProductConfig.United_Inch_Maximum__c != null) {
-			if ((orderLineItem.Height_Inches__c + orderLineItem.Width_Inches__c) > masterProductConfig.United_Inch_Maximum__c) {
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			
+			if ((heightInches + widthInches) > masterProductConfig.United_Inch_Maximum__c) {
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.UNITED_INCH_ABOVE_MAX : errorMessage + '\r\n' + RMS_errorMessages.UNITED_INCH_ABOVE_MAX;
 			}
 		}
 
 		// Check for height to width cap
 		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
-			if ((orderLineItem.Height_Inches__c > masterProductConfig.Height_to_Width_Cap_Height__c) &&
-				 (orderLineItem.Width_Inches__c > masterProductConfig.Height_to_Width_Cap_Width__c)) 
+			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Height__c) &&
+				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Width__c)) 
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '\r\n' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
 			}
@@ -137,8 +144,8 @@ public with sharing class RMS_prodConfigManager {
 
 		// Check for width to height cap
 		if (masterProductConfig.Width_to_Height_Cap_Width__c != null && masterProductConfig.Width_to_Height_Cap_Height__c != null) {
-			if ((orderLineItem.Width_Inches__c > masterProductConfig.Width_to_Height_Cap_Width__c) &&
-				 (orderLineItem.Height_Inches__c > masterProductConfig.Width_to_Height_Cap_Height__c))
+			if (((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Width_to_Height_Cap_Width__c) &&
+				 ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Width_to_Height_Cap_Height__c))
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
@@ -167,7 +174,7 @@ public with sharing class RMS_prodConfigManager {
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 			
-			if(widthInches/heightInches >= masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c){
+			if(widthInches != 0 && widthInches != null && heightInches != 0 && heightInches != null && widthInches/heightInches >= masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c){
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MAX : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MAX;
 			}
 		} 
@@ -176,7 +183,7 @@ public with sharing class RMS_prodConfigManager {
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 			
-			if(widthInches/heightInches <= masterProductConfig.Specialty_Width_to_Height_Ratio_Min__c){
+			if(widthInches != 0 && widthInches != null && heightInches != 0 && heightInches != null && widthInches/heightInches <= masterProductConfig.Specialty_Width_to_Height_Ratio_Min__c){
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MIN : errorMessage + '\r\n' + RMS_errorMessages.WIDTH_TO_HEIGHT_RATIO_MIN;
 			}
 		}
@@ -193,7 +200,14 @@ public with sharing class RMS_prodConfigManager {
 			}
 		}
 		
-		
+		// Brickmould is not available on Double Hung Insert Frames with Sloped Sills
+		if(	masterProductName == 'Double-Hung' && 
+			orderLineItem.Frame_Type__c == 'Insert Frame' &&
+			orderLineItem.Sill_Angle__c != 'FS' &&
+			(orderLineItem.Exterior_Trim__c == 'Brickmould - Picture Frame' || orderLineItem.Exterior_Trim__c == 'Brickmould - Traditional')
+			){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED : errorMessage + '\r\n' + RMS_errorMessages.BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED;
+		}
 		
 		return errorMessage;
 	

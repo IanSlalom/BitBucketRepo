@@ -573,6 +573,14 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
         <description>Select the grille pattern for Sash 1.</description>
         <externalId>false</externalId>
@@ -657,11 +665,23 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Hardware_Finish_Color__c</fullName>
-        <description>The hardware finish/color applied to this product.</description>
+        <fullName>Hardware_Color__c</fullName>
+        <description>The hardware color applied to this product.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The hardware finish/color applied to this product.</inlineHelpText>
-        <label>Hardware Finish/Color</label>
+        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
+        <label>Hardware Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish__c</fullName>
+        <description>The hardware finish applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish applied to this product.</inlineHelpText>
+        <label>Hardware Finish</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -1173,6 +1193,16 @@
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Special_Options__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check to enable the special option fields</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check to enable the special option fields</inlineHelpText>
+        <label>Special Options</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Spokes__c</fullName>

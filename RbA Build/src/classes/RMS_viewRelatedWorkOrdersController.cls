@@ -62,7 +62,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     					'SVMXC__Group_Member__c, '+
     					'SVMXC__Order_Status__c, '+
     					'Owner.Name, '+
-    					'SVMXC__Order_Type__c '+
+    					'SVMXC__Order_Type__c, '+
+    					'CreatedDate '+
     					
     					'FROM SVMXC__Service_Order__c WHERE Sold_Order__c =: ordId';
 		

@@ -26,10 +26,13 @@ public class RMS_prodConfigExtension {
 	/******* public variables  *****************/
 	public boolean newOrderItem {get; set;}	 
 	public boolean orderActivated {get; set;}	 
-	public String priceBookId;   
+	public String priceBookId {get; set;}   
+	public String orderId {get; set;}   
+	public String oiId {get;set;} // used for redirecting of tabs
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
+	public String errorOccurred {get; set;}	 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -43,12 +46,14 @@ public class RMS_prodConfigExtension {
 		if (newOrderItem) {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
+			orderId = orderLineItem.OrderId;
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
+					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
@@ -61,7 +66,6 @@ public class RMS_prodConfigExtension {
 	public String inputWidth {get;set;}
 	public String inputHeight {get;set;}
 	public boolean productSelected {get;set;}	
-	public Integer inputQuantity {get;set;}	
 	
 	/******* property for the product configuration wrapper  *****************/
 	public  RMS_prodConfigManager.productConfigWrapper prodConfig  {
@@ -154,6 +158,33 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* property for the sash tab name  *****************/
+	public  String sashTabName  {
+		get
+		{   
+			if (sashTabName != null) return sashTabName;
+			if (prodConfig.mpc.Number_of_Sashes__c == '3')
+				sashTabName = 'Sash 1/3';
+			else
+				sashTabName = 'Sash 1';
+			return sashTabName;
+		}	
+		private set;		  
+	}
+
+	/******* property for the sash field name  *****************/
+	public  String sashFieldName  {
+		get
+		{   
+			if (sashFieldName != null) return sashFieldName;
+			if (prodConfig.mpc.Number_of_Sashes__c == '3')
+				sashFieldName = 'S1/3';
+			else
+				sashFieldName = 'S1';
+			return sashFieldName;
+		}	
+		private set;		  
+	}
 	
 	/******* Set up ProductMaster PickList Items  *****************/
 	private static transient List<SelectOption> lMasterProductItems;
@@ -340,15 +371,27 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Set up Hardware Finish/Color Items  *****************/
-	private static transient List<SelectOption> lHardwareFinishColorItems;
-	public List<SelectOption> hardwareFinishColorItems{
+	/******* Set up Hardware Finish Items  *****************/
+	private static transient List<SelectOption> lHardwareFinishItems;
+	public List<SelectOption> hardwareFinishItems{
 		get
 		{   
-			if (lHardwareFinishColorItems == null) {
-				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
+			if (lHardwareFinishItems == null) {
+				lHardwareFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish__c);
 			}			   
-			return lHardwareFinishColorItems;
+			return lHardwareFinishItems;
+		}
+	}
+
+	/******* Set up Hardware Color Items  *****************/
+	private static transient List<SelectOption> lHardwareColorItems;
+	public List<SelectOption> hardwareColorItems{
+		get
+		{   
+			if (lHardwareColorItems == null) {
+				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Color__c);
+			}			   
+			return lHardwareColorItems;
 		}
 	}
 
@@ -747,6 +790,10 @@ public class RMS_prodConfigExtension {
 		productSelected = true;
 		return null;
 */
+		if (masterProductId == '' || masterProductId == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.PRODUCT_EMPTY));
+			return null;
+		}
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
 		
@@ -761,12 +808,21 @@ public class RMS_prodConfigExtension {
 					saveProduct method
 	*******************************************************/
 	// runs whenever the Save button is clicked at the child product level
-	public pageReference saveProduct() {
+	public virtual pageReference saveProduct() {
 
-		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
+		// Set this flag to true so we know to exit the javascript before redirecting
+		errorOccurred = 'true';
+
+		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
+			return null;			
+		}
+		
+		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c; 
 		// Only verify the makeability rules when Verify Item Config is checked
 		if (orderLineItem.Verify_Item_Configuration__c) {
-			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+			
+			String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem, masterProduct.Name);
 			if(!String.isBlank(errorMessage)) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 				return null;			
@@ -784,7 +840,6 @@ public class RMS_prodConfigExtension {
 		}
 
 		PageReference ref;
-		if (orderLineItem.Quantity == null) orderLineItem.Quantity = 1;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
 			orderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
@@ -807,8 +862,22 @@ public class RMS_prodConfigExtension {
 				upsert orderLineItem;
 				ref = new PageReference('/' +orderLineItem.OrderId);
 			}
-		}	   
-		return ref;
+		}	
+		oiId = orderLineItem.Id;  // used to redirect to correct tab   
+//		return ref;
+		System.Debug('***************oiId=' +oiId);
+		// Set this flag back to false so we know it's ok to redirect from javascript
+		errorOccurred = 'false';
+		return null;
+	}
+
+	/*******************************************************
+					cancel method
+	*******************************************************/
+	public virtual PageReference cancel() {
+		system.debug('*****Cancel button pressed');
+		errorOccurred = 'false';
+		return null;
 	}
 
 }

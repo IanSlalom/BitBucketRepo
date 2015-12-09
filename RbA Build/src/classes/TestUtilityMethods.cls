@@ -169,7 +169,8 @@ public with sharing class TestUtilityMethods {
     }
     public Product2 createProduct(){
     	Product2 testProduct = new Product2(
-    		Name='Test Product'
+    		Name='Test Product',
+    		IsActive=true
 		);
 		return testProduct;
     } 
@@ -252,5 +253,120 @@ public with sharing class TestUtilityMethods {
 		Municipality_Match__c mm = new Municipality_Match__c(Agency_Name__c = municipalityId, Zip_Code__c = zipcode, City_Township__c = city );
 		return mm;
 	}
- 
+ 	
+ 	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder){
+ 		setUpConfigs();
+ 		Account dwelling1 = createDwellingAccount('1');
+ 		insert dwelling1;
+ 		
+ 		Account store1 = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'][0];
+ 		dwelling1.Store_Location__c = store1.id;
+ 		update dwelling1;
+ 		
+ 		Contact contact1 = createContact(dwelling1.id , '1');
+ 		insert contact1;
+ 		
+ 		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
+ 		insert opp1;
+ 		
+ 		Event event1 = new Event(WhatId = opp1.id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60);
+ 		insert event1;
+ 		
+ 		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
+ 		insert ocr1;
+ 		
+ 		if(createWithOrder = true){
+	 		
+	 		Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
+			insert quote1;
+			Product2 prod1 = createProduct();
+			insert prod1;
+
+			PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), prod1.id);
+			insert pbEntry1;
+    		
+			QuoteLineItem qli1 = createQuoteLineItem(pbEntry1.Id, quote1.Id);
+			insert  qli1;
+			
+			opp1.SyncedQuoteId = quote1.id;
+			update opp1;
+			
+			opp1.StageName = 'Closed Won';
+			update opp1;
+	
+ 		}
+ 	}
+ 	
+ 	public void createTMAppt(Id userId, Datetime apptStartDateTime){
+ 		setUpConfigs();
+ 		Account dwelling1 = createDwellingAccount('1');
+ 		insert dwelling1;
+ 		
+ 		Account store1 = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'][0];
+ 		dwelling1.Store_Location__c = store1.id;
+ 		update dwelling1;
+ 		
+ 		Contact contact1 = createContact(dwelling1.id , '1');
+ 		insert contact1;
+ 		
+ 		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
+ 		insert opp1;
+ 		
+ 		Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
+		insert quote1;
+		Product2 prod1 = createProduct();
+		insert prod1;
+
+		PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), prod1.id);
+		insert pbEntry1;
+    		
+		QuoteLineItem qli1 = createQuoteLineItem(pbEntry1.Id, quote1.Id);
+		insert  qli1;
+			
+		opp1.SyncedQuoteId = quote1.id;
+		update opp1;
+		
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+		SVMXC__Service_Order__c techWorkOrder = new SVMXC__Service_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Opportunity__c = opp1.id,
+															                SVMXC__Order_Type__c = 'Tech Measure'  
+															                    );
+    	insert techWorkOrder;
+		
+		opp1.StageName = 'Closed Won';
+		update opp1;
+		
+		Order ord1 = [SELECT Id FROM Order WHERE OpportunityId = :opp1.id][0];
+		
+		List<SVMXC__Service_Order__c> workOrder = [SELECT Id FROM SVMXC__Service_Order__c  WHERE Opportunity__c = :opp1.id AND Sold_Order__c = :ord1.id];
+		
+		Event event1 = new Event(WhatId = workOrder[0].id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60);
+ 		insert event1;
+		
+		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
+ 		insert ocr1;
+ 	}
+ 	
+
+ 	
+ /*
+Tech Measure Appointment
+method createTMAppt (Id userId, Datetime apptStartDateTime) should create
+ 	dwelling
+ 	contact
+ 	opportunity linked to dwelling
+ 	SVMAX work order linked to opportunity and order
+ 	event - StartDateTime should be set to the parameter 
+ 	
+ 	WhatId should be the SVMAX work order Id
+ 	Who Id should be the primary contact
+ 	Owner should be the passed in User
+ 	OpportunityConactRole links contact to the Opportunity
+ 	create a quote with line items and an order with line items linked to the opportunity
+ 	
+ */
+ 	
+ 	
+ 	
 }

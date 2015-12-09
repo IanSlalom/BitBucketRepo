@@ -6939,6 +6939,21 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Lead_Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
                 <fullName>Homeowner</fullName>
@@ -8253,6 +8268,17 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Tentative</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -11021,6 +11047,21 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Lead_Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
                 <fullName>Homeowner</fullName>
@@ -12323,6 +12364,17 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Tentative</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
