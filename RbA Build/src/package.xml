@@ -124,6 +124,7 @@
     </types>
     <types>
         <members>Account-Account Layout</members>
+        <members>Account-Contractor Layout</members>
         <members>Account-Dwelling Layout</members>
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>

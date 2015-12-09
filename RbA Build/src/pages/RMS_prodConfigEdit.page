@@ -475,7 +475,7 @@
 			sforce.console.getEnclosingTabId		( function( result ) { subTabId	 = result.id; } );
 
 			//  set the title of this subtab
-			sforce.console.setTabTitle( '{!OrderItem.Id}' ? '* {!OrderItem.PricebookEntry.Product2.Name}' : 'New Order Item' );
+			sforce.console.setTabTitle( '{!OrderItem.Id}' ? '* {!OrderItem.PricebookEntry.Product2.Name}' : 'Add New Product' );
 
 		};
 
