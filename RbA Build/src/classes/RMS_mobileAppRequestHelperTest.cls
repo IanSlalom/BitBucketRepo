@@ -30,7 +30,7 @@ private class RMS_mobileAppRequestHelperTest {
 			
 			RMS_mobileAppRequestHelper logic = new RMS_mobileAppRequestHelper ();
         	
-        	String response1 =  logic.findAppointments(UserInfo.getUserId());
+        	String response1 =  logic.findAppointments(UserInfo.getUserId(), null);
 			system.debug('ADS Response1: '+ response1);
         	
     	/////// START CREATE OF DATA //////
@@ -79,8 +79,8 @@ private class RMS_mobileAppRequestHelperTest {
 		//////// END CREATE OF DATA /////////
 
 
-			String response2 =  logic.findAppointments(UserInfo.getUserId());
-			system.debug('ADS Response2: '+ response2);
+//			String response2 =  logic.findAppointments(UserInfo.getUserId());
+//			system.debug('ADS Response2: '+ response2);
 			
         }
 	}
