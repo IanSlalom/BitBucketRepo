@@ -11,9 +11,11 @@
 global with sharing class RMS_mobileAppAPIController {
 	// REST API Constants
 	public static final String GET_APPOINTMENTS = 'getAppointments';
+	public static final String TIME_STAMP_KEY = 'after';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
+	public static final String INVALID_DATETIMESTAMP = 'Invalid Date/Time Parameter';
 
 	/* Reads only */	
 	@HttpGet
@@ -27,10 +29,19 @@ global with sharing class RMS_mobileAppAPIController {
 			RestContext.response.responseBody = Blob.valueOf(NO_REQUEST_FOUND + req.requestURI);
 		} else if (operation.equals(GET_APPOINTMENTS)) {
 			Id userId = UserInfo.getUserId();
+			String afterDateParam = req.params.get(TIME_STAMP_KEY);
+			Datetime afterDTStamp = null;
+			try {
+				afterDTStamp = Datetime.valueOf(afterDateParam);
+			} catch (Exception e) {
+				// if the parameter is not set or the parameter format is incorrect set the query to now
+				System.debug('RMS_mobileAppAPIController.doGet ' + INVALID_DATETIMESTAMP + ': ' + afterDateParam);
+				afterDTStamp = Datetime.now();
+			}
 			RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId));
-		}else{
+			RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId, afterDTStamp));
+		} else {
 			RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 		}
     }
