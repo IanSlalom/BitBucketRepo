@@ -8,6 +8,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         system.debug('******INSIDE RMS_WorkOrderCreationManager/createWorkOrderOnActivation');
 
         list<Order> activatedOrders = new list<Order>();
+        list<id> activatedOrderId = new list<id>();
         list<id> relatedDwellingIds = new list<id>();
         list<id> dwellingStoreLocationIds = new list<id>();
         
@@ -16,6 +17,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             if(ord.Status == 'Activated' && mapOld.get(ord.Id).Status == 'Draft'){
                 relatedDwellingIds.add(ord.AccountId);
                 activatedOrders.add(ord);
+                activatedOrderId.add(ord.id);
             }
         }
         
@@ -41,7 +43,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                     BillingStateCode,
                                                     BillingPostalCode, 
                                                     BillingCountry,
-                                                    BillingCountryCode 
+                                                    BillingCountryCode,
+                                                    Year_Built__c
                                                 FROM Account Where Id IN : relatedDwellingIds];
             
             //BUILDING MAP OF ID TO DWELLING TO USE WHILE LOOPING THROUGH ORDERS
@@ -51,10 +54,26 @@ public with sharing class RMS_WorkOrderCreationManager {
                 
             }
             
+            
             //RETREVING RECORD TYPES USED IN WORK ORDER CREATION
             Id permitWORecordType = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
             Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+            Id LeadWORecordType = UtilityMethods.retrieveRecordTypeId('Lead', 'SVMXC__Service_Order__c');
             
+            
+            
+            //BUILDING MAP OF ORD ID TO LIST OF LEAD WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
+            map<id, list<SVMXC__Service_Order__c>> ordIdtoListOfLeadWOMap = new map<id, list<SVMXC__Service_Order__c>>();
+            list<SVMXC__Service_Order__c> relatedLeadWorkOrders = [SELECT id, Sold_Order__c, RecordTypeId FROM SVMXC__Service_Order__c WHERE Sold_Order__c IN :activatedOrderId AND RecordTypeId = :LeadWORecordType];
+
+            for(SVMXC__Service_Order__c wo : relatedLeadWorkOrders){
+                if(ordIdtoListOfLeadWOMap.containsKey(wo.Sold_Order__c)){
+                    ordIdtoListOfLeadWOMap.get(wo.Sold_Order__c).add(wo);
+                }else{
+                    ordIdtoListOfLeadWOMap.put(wo.Sold_Order__c, new list<SVMXC__Service_Order__c>{wo});
+                }
+            }
+ 
             //LIST OF ORDERS TO INSERT AFTER FOR LOOP
             list<SVMXC__Service_Order__c> workOrdersToAdd = new list<SVMXC__Service_Order__c>();
             
@@ -90,6 +109,13 @@ public with sharing class RMS_WorkOrderCreationManager {
                     if(dwelling.Building_Permit__c != null){
                         SVMXC__Service_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
                         workOrdersToAdd.add(buildingPermitWorkOrder);
+                    }
+                    //CREATE LEAD WORK ORDER IF NO LEAD WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1970
+                    if(ordIdtoListOfLeadWOMap.get(ord.id) == null || ordIdtoListOfLeadWOMap.get(ord.id).size() == 0){
+	                    if(dwelling.Year_Built__c == null || dwelling.Year_Built__c == ''  || Integer.valueof(Dwelling.Year_Built__c) < 1970){
+	                        SVMXC__Service_Order__c leadWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, LeadWORecordType, storeConfig.Paint_Stain_Work_Order_Queue_ID__c, 'Lead Paint', null );
+	                        workOrdersToAdd.add(leadWorkOrder);
+	                    }
                     }
                 }
             }

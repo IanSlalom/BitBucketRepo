@@ -61,6 +61,11 @@ public with sharing class TestUtilityMethods {
 		QueueSobject Action_Work_Order_Link = createQueueSobject(Action_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
 		insert Action_Work_Order_Link;
 		
+		Group Lead_Work_Order_Queue = createQueue('Lead_Work_Order');
+		insert Lead_Work_Order_Queue;
+		QueueSobject Lead_Work_Order_Link = createQueueSobject(Lead_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		insert Lead_Work_Order_Link;
+		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(
     		Store__c = store1.id,
         	Order_Queue_Id__c = Order_Queue.id,
@@ -71,7 +76,9 @@ public with sharing class TestUtilityMethods {
         	
         	Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-        	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id
+        	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+        	Paint_Stain_Work_Order_Queue_ID__c = Lead_Work_Order_Queue.id
+        	
         	);
     	insert storeConfig;
 		
