@@ -89,7 +89,7 @@
 	<apex:pageBlock >
 	
 	<apex:form >
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Hostorical" style="margin-left:20%"/>
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Historical" style="margin-left:20%"/>
 		
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLeadRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create Lead" style="margin-left:2%" />
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" />
