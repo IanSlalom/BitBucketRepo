@@ -1391,11 +1391,15 @@
         <label>Unit of Measure</label>
         <picklist>
             <picklistValues>
-                <fullName>pc</fullName>
+                <fullName>Each</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>box</fullName>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Roll</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
