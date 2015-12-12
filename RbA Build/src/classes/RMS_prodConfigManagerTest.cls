@@ -103,7 +103,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					ProdConfigWrapperTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void ProdConfigWrapperTest(){
 		createTestRecords();
 
@@ -123,7 +123,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					findProductConfigurationTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void findProductConfigurationTest(){
 		createTestRecords();
 
@@ -145,7 +145,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					findPricingConfigurationTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void findPricingConfigurationTest(){
 		createTestRecords();
 
@@ -171,7 +171,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					getObjectFieldsMapTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void getObjectFieldsMapTest(){
 		
 		// Retrieve the fieldMap for the account object
@@ -184,7 +184,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					getCommaSeparatedFieldsTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void getCommaSeparatedFieldsTest(){
 		
 		// Retrieve the comma separated fields for the account object
@@ -198,7 +198,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					retrievePickListItemsTest
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void retrievePickListItemsTest(){		
 		
 		String testString = 'option1;option2;option3';
@@ -212,7 +212,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					checkMakeabilityTestNoProdConfig
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void checkMakeabilityTestNoProdConfig(){
 		createTestRecords();
 
@@ -233,7 +233,7 @@ private class RMS_prodConfigManagerTest {
 
 	/*******************************************************
 					checkMakeabilityTestNullHeightWidth
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void checkMakeabilityTestNullHeightWidth(){
 		createTestRecords();
 
@@ -297,6 +297,10 @@ private class RMS_prodConfigManagerTest {
 		soldOrderItem.Width_Fraction__c = '1/16';
 		soldOrderItem.Height_Inches__c = 15;
 		soldOrderItem.Height_Fraction__c = '1/16';
+		soldOrderItem.Left_Leg_Inches__c = 10;
+		soldOrderItem.Left_Leg_Fraction__c = '1/16';
+		soldOrderItem.Right_Leg_Inches__c = 10;
+		soldOrderItem.Right_Leg_Fraction__c = '1/16';
 
 		// check the makeability
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
