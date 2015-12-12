@@ -25,10 +25,10 @@
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_mobileAppRequestHelperTest</members>
         <members>RMS_opportunityUtilities</members>
-        <members>RMS_opportunityUtilities</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
