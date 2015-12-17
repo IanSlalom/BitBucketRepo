@@ -51,8 +51,8 @@ public with sharing class RMS_createWorkOrderController {
 		}else if(woType == 'actions'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
 			wo.RecordTypeId  = woRTid;
-		}else if(woType == 'lead'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('Lead', 'SVMXC__Service_Order__c');
+		}else if(woType == 'lswp'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
 			wo.RecordTypeId = woRTid;
 		}else if(woType == 'paintStain'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');

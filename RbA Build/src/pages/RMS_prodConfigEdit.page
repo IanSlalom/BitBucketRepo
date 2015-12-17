@@ -104,7 +104,7 @@
 
 </script>
  
-  <apex:pageMessages />
+  <apex:pageMessages escape="false" />
 	<div id="OrderId" style="display:none;">{!orderId}</div>	
     <apex:pageBlock title="Select Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">

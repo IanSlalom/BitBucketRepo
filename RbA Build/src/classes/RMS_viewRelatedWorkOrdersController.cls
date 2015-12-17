@@ -13,7 +13,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 	public string serviceOrderVisitRecordTypeId{get;set;}
 	public string serviceOrderActionsRecordTypeId{get;set;}
 	public string serviceOrderPermitRecordTypeId{get;set;}
-	public string serviceOrderLeadRecordTypeId{get;set;}
+	public string serviceOrderLSWPRecordTypeId{get;set;}
 	public string serviceOrderPaintStainRecordTypeId{get;set;}
 	
 	
@@ -21,7 +21,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 	
 	public string serviceOrderVisitRecordTypeURL{get;set;}
 	public string serviceOrderActionsRecordTypeURL{get;set;}
-	public string serviceOrderLeadRecordTypeURL{get;set;}
+	public string serviceOrderLSWPRecordTypeURL{get;set;}
 	public string serviceOrderPaintStainRecordTypeURL{get;set;}
 	public string serviceOrderPermitRecordTypeURL{get;set;}
 	
@@ -44,7 +44,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     	serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
     	serviceOrderActionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
     	serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
-    	serviceOrderLeadRecordTypeId = UtilityMethods.retrieveRecordTypeId('Lead', 'SVMXC__Service_Order__c');
+    	serviceOrderLSWPRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
     	serviceOrderPaintStainRecordTypeId = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');
     	
     	
@@ -76,7 +76,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 			
 			woQuery = woQuery+' AND (RecordTypeId = :serviceOrderActionsRecordTypeId';
 			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPermitRecordTypeId';
-			woQuery = woQuery+' OR RecordTypeId = :serviceOrderLeadRecordTypeId';
+			woQuery = woQuery+' OR RecordTypeId = :serviceOrderLSWPRecordTypeId';
 			woQuery = woQuery+' OR RecordTypeId = :serviceOrderPaintStainRecordTypeId)';
 			
 			
@@ -145,7 +145,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		serviceOrderActionsRecordTypeURL = 	'/apex/RMS_createActionsWorkOrder?type=actions'+endURL;
 											 
 											
-		serviceOrderLeadRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=lead'+endURL;
+		serviceOrderLSWPRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=lswp'+endURL;
 		 
 		serviceOrderPaintStainRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=paintStain'+endURL; 
 		

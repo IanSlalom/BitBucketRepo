@@ -85,6 +85,7 @@
         <members>Event</members>
         <members>Field_IDs__c</members>
         <members>Financial_Configuration__c</members>
+        <members>Labor__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
@@ -139,6 +140,7 @@
         <members>Discount__c-Discount Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Global-Global Layout</members>
+        <members>Labor__c-Labor Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -167,12 +169,14 @@
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
+        <members>SVMXC__Service_Order__c-LSWP Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Lead Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Scheduled Work Order Layout</members>
         <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
+        <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>User-User Layout</members>

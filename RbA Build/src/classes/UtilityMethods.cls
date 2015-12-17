@@ -59,7 +59,7 @@ public with sharing class UtilityMethods {
     															HOA_Work_Order_Queue_Id__c,
     															Historical_Work_Order_Queue_Id__c,
     															Building_Permit_Work_Order_Queue_Id__c,
-    															Paint_Stain_Work_Order_Queue_ID__c
+    															LSWP_WO_Owner_ID__c
     															
     															FROM Store_Configuration__c 
     															WHERE Store__c IN :storeIds

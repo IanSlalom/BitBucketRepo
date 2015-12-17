@@ -68,8 +68,8 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		
 		
 		
-		String leadUrl = '/apex/RMS_createActionsWorkOrder?'+
-		'type=lead'+
+		String lswpUrl = '/apex/RMS_createActionsWorkOrder?'+
+		'type=lswp'+
 		'&orderId='+ord1.id+
 		'&accountId='+newDwelling.id+
 		'&billingStreet=300 Stanley Ave'+
@@ -80,11 +80,11 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		'&permit='+
 		'&hoa='+
 		'&historical=';
-		PageReference pageReflead = new PageReference(leadUrl); 
-		Test.setCurrentPage(pageReflead);
+		PageReference pageReflswp = new PageReference(lswpUrl); 
+		Test.setCurrentPage(pageReflswp);
 			
-		ApexPages.StandardController stdControllerlead = new ApexPages.StandardController(workOrder);
-		RMS_createWorkOrderController customControllerlead  = new RMS_createWorkOrderController(stdControllerlead);
+		ApexPages.StandardController stdControllerlswp = new ApexPages.StandardController(workOrder);
+		RMS_createWorkOrderController customControllerlswp = new RMS_createWorkOrderController(stdControllerlswp);
 		
 		
 		

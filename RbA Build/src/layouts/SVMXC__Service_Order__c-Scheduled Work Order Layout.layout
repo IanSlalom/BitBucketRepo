@@ -729,6 +729,12 @@
         <fields>NAME</fields>
         <relatedList>SVMXC__PM_History__c.SVMXC__Work_Order__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Date_Applied__c</fields>
+        <fields>Work_Order_Type__c</fields>
+        <relatedList>Labor__c.Related_Work_Order__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
