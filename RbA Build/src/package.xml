@@ -114,7 +114,6 @@
         <name>CustomObject</name>
     </types>
     <types>
-        <members>OrderItem-en_US</members>
         <name>CustomObjectTranslation</name>
     </types>
     <types>
