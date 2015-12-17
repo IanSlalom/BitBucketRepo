@@ -341,6 +341,11 @@
         <name>Install_Track_Location__c</name>
     </fields>
     <fields>
+        <help><!-- The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP. --></help>
+        <label><!-- Intercompany AP Account --></label>
+        <name>Intercompany_AP_Account__c</name>
+    </fields>
+    <fields>
         <help><!-- The interior color of the product. --></help>
         <label><!-- Interior Color --></label>
         <name>Interior_Color__c</name>
@@ -594,12 +599,16 @@
         <label><!-- Unit of Measure --></label>
         <name>Unit_of_Measure__c</name>
         <picklistValues>
-            <masterLabel>box</masterLabel>
-            <translation><!-- box --></translation>
+            <masterLabel>Each</masterLabel>
+            <translation><!-- Each --></translation>
         </picklistValues>
         <picklistValues>
-            <masterLabel>pc</masterLabel>
-            <translation><!-- pc --></translation>
+            <masterLabel>Roll</masterLabel>
+            <translation><!-- Roll --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>box</masterLabel>
+            <translation><!-- box --></translation>
         </picklistValues>
     </fields>
     <fields>

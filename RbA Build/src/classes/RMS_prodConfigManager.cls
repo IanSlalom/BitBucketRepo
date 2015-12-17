@@ -33,7 +33,6 @@ public with sharing class RMS_prodConfigManager {
 	public class ProductConfigWrapper
 	{
 		public Id	   priceBookEntryId					 { get; private set; }
-		public Decimal  baseUnitPrice				   { get; private set; }
 		public OrderItem orderLI						{ get; set; }
 		public Pricing_Configuration__c pricingConfig				{ get; set; }
 		public Product_Configuration__c mpc				{ get; set; }
@@ -176,17 +175,6 @@ public with sharing class RMS_prodConfigManager {
 			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Height__c) &&
 				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Width__c)) 
 			{	
-				/*
-				String enteredValue = String.ValueOf(orderLineItem.Width_Inches__c);
-				if(orderLineItem.Width_Fraction__c != null){
-					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Width_Fraction__c);
-				}
-				String requiredValue = String.ValueOf(masterProductConfig.Max_Width__c);
-				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_ABOVE_MAX, enteredValue, requiredValue);
-
-				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-				
-				*/
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '<BR>' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
 			}
 		}
@@ -201,6 +189,7 @@ public with sharing class RMS_prodConfigManager {
 		}
 		
 		// Check for Peak Height
+		// Check for peak height
 		if(masterProductConfig.Peak_Height__c != null && orderLineItem.Width_Inches__c != null){
 			
 			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
@@ -212,6 +201,7 @@ public with sharing class RMS_prodConfigManager {
 		}
 		
 		//Check for glass sq feet max
+		// Check for glass square footage
 		if(masterProductConfig.Glass_Square_Ft_Max__c != null){
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -226,6 +216,7 @@ public with sharing class RMS_prodConfigManager {
 		}
 	 	
 	 	// Check for width to heither ratio max
+		// Check for specialty width / height ratio max
 		if(masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c != null){
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -249,7 +240,7 @@ public with sharing class RMS_prodConfigManager {
 			}
 		} 
 		
-		// Check for width to heither ratio min
+		// Check for specialty width / height ratio min
 		if(masterProductConfig.Specialty_Width_to_Height_Ratio_Min__c != null){
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -272,6 +263,7 @@ public with sharing class RMS_prodConfigManager {
 			}
 		}
 		
+		// Check for minimum leg heights
 		if(masterProductConfig.Minimum_Leg_Height__c != null){
 			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
 			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
@@ -301,7 +293,7 @@ public with sharing class RMS_prodConfigManager {
 			}
 		}
 		
-		// Brickmould is not available on Double Hung Insert Frames with Sloped Sills
+		// Check for Brickmould is not available on Double Hung Insert Frames with Sloped Sills
 		if(	masterProductName == 'Double-Hung' && 
 			orderLineItem.Frame_Type__c == 'Insert Frame' &&
 			orderLineItem.Sill_Angle__c != 'FS' &&
@@ -464,14 +456,7 @@ public with sharing class RMS_prodConfigManager {
 					}
 					
 				}
-			}
-			/*
-			Int_Color_Max_Width_Fractions__c	
-			Int_Color_Max_Width_Inches__c
-			Int_Color_Max__c
-			INTERIOR_COLOR_MAX_WIDTH
-			*/
-			
+			}	
 		}
 		
 		
@@ -539,10 +524,11 @@ public with sharing class RMS_prodConfigManager {
 	/*******************************************************
 					calculatePrice method
 	*******************************************************/
-	// calculates the total price for the product based on selected config options
+	// TODO: This is where the price could be rolled up using the pricing configuration object
 	public static decimal calculatePrice(ProductConfigWrapper prodConfig) {
 		prodConfig = clearNonSelectableValues(prodConfig);
-		decimal price = (prodConfig.baseUnitPrice == null) ? 0 : prodConfig.baseUnitPrice;
+		decimal price = 0;
+//		decimal price = (prodConfig.baseUnitPrice == null) ? 0 : prodConfig.baseUnitPrice;
 //		price = (!prodConfig.OrderLI.Specialty_Glazing__c || prodConfig.specialtyGlazingPrice == null) ? price : price + prodConfig.specialtyGlazingPrice;		
 
 		return price;
@@ -551,8 +537,7 @@ public with sharing class RMS_prodConfigManager {
 	/*******************************************************
 					clearNonSelectableValues method
 	*******************************************************/
-	// clears any fields that are not selectable / do not have a price. 
-	// This is needed for the scenario where the child product changes from one size to another.
+	// TODO: This is where we need to clear all non selectable values when a product is edited and changes from one product to another
 	public static ProductConfigWrapper clearNonSelectableValues(ProductConfigWrapper prodConfig) {
 //		prodConfig.OrderLI.Handing__c 							= (prodConfig.handingOptions == null) ? '' : prodConfig.OrderLI.Handing__c;		
 		return prodConfig;
@@ -560,23 +545,8 @@ public with sharing class RMS_prodConfigManager {
 
 
 	/*******************************************************
-					retrievePickListItems methods
+					retrievePickListItems method
 	*******************************************************/
-	//Utility method to receive a field set and return select options for use in a single picklist.
-	public static List<SelectOption> retrievePickListItems(List<Schema.FieldSetMember> fieldSetMembers, ProductConfigWrapper prodConfig) {
-		List<SelectOption> pickListItems = new List<SelectOption>();
-		pickListItems.add(new SelectOption('', '-- Select --'));
-		if (fieldSetMembers == null) return pickListItems;
-		
-		for (Schema.FieldSetMember fsm : fieldSetMembers) {
-			Object o = prodConfig.pricingConfig.get(fsm.getFieldPath());
-
-			if (o != null) 
-				pickListItems.add(new SelectOption(fsm.getLabel(), fsm.getLabel()));
-		}
-		return pickListItems;
-	} 
-
 	//Method to receive a multi picklist and return select options for use in a single picklist.
 	public static List<SelectOption> retrievePickListItems(String multiPickList) {
 		System.Debug('**************multiPickList=' +multiPickList);
