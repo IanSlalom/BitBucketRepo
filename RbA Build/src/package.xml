@@ -84,6 +84,7 @@
         <members>Discount__c</members>
         <members>Event</members>
         <members>Field_IDs__c</members>
+        <members>Financial_Account_Number__c</members>
         <members>Financial_Configuration__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
@@ -115,7 +116,10 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
+        <members>Discount__c</members>
+        <members>Financial_Account_Number__c</members>
         <members>Municipality__c</members>
+        <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
         <members>Product_Configuration__c</members>
         <members>Purchase_Order__c</members>
@@ -137,6 +141,7 @@
         <members>Contact-Vendor Contact Layout</members>
         <members>Contact_History__c-Associated Contact Layout</members>
         <members>Discount__c-Discount Layout</members>
+        <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Global-Global Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
