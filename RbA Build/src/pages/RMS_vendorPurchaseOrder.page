@@ -3,15 +3,132 @@
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
 
-	<apex:pageMessages /> 
+	<apex:form id="page-form" >
 
-	<apex:form >
+	<script>
+    var j$ = jQuery.noConflict();
+
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		};
+		function closeTab() {
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!Purchase_Order__c.Order__c}'; 
+			}
+
+		
+		};
+		function openNewSubTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			sforce.console.refreshPrimaryTabById( primaryTabId, false);
+			sforce.console.openSubtab
+			(   /*  Enclosing Primary Tab Id	*/  primaryTabId,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Id of Subtab to override	*/  subTabId,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}
+		function openNewPrimaryTab( subTabURL, subTabLabel )
+		{
+	
+			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
+			if ( !subTabURL )
+			{
+				closeTab();
+				return;
+			}
+			//  otherwise open the new subtab
+			sforce.console.openPrimaryTab
+			(   /*  Enclosing Primary Tab Id	*/  null,
+				/*  URL for new Subtab		  */  subTabURL,
+				/*  Active (true = take focus)  */  true,
+				/*  Label for new Subtab		*/  subTabLabel,
+				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+				/*  Name for new Subtab		 */  null
+			);
+		}	
+		
+		function openSavedPO(poId, costPO)
+		{
+			var errorOccurred = '{!errorOccurred}';
+			if (errorOccurred == 'false') {
+				if(sforce.console.isInConsole()) {
+					if (costPO == 'false') {
+						openNewSubTab( '/' +poId +'?isdtp=vw', 'saving');
+					}
+					else {
+						openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
+						closeTab();
+					}
+				}
+				else {
+					location.href='/apex/RMS_viewPurchaseOrder?id=' +poId;
+				}
+			}
+		}
+
+		function openNewPO(orderId, costPO)
+		{
+			var errorOccurred = '{!errorOccurred}';
+			if (errorOccurred == 'false') {
+				if(sforce.console.isInConsole()) {
+					if (costPO == 'false') {
+						openNewSubTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw&orderId=' +orderId, 'New Purchase Order' );
+					}
+					else {
+						openNewPrimaryTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw', 'New Purchase Order' );					
+//						openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
+						closeTab();
+					}		
+				}
+				else {
+					if (costPO == 'false') {
+						location.href='/apex/RMS_vendorPurchaseOrder?orderId=' +orderId;
+					}
+					else {
+						location.href='/apex/RMS_vendorPurchaseOrder';
+					}
+				}
+			}
+		}
+	function  getOrderId()
+	{
+		return document.getElementById( 'OrderId' ).innerHTML;
+	}
+	</script>
+	
+	<apex:pageMessages /> 
+    	<apex:actionRegion >
 		<apex:pageBlock title="{!pageTitle} Purchase Order">
-			<apex:pageBlockButtons location="both">
-				<apex:commandButton action="{!save}" value="Save"  oncomplete="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
-			<apex:commandButton action="{!save}" value="Save & New"  oncomplete="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
-			<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-			</apex:pageBlockButtons>			
+	        <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
+    	    <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
+
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton action="{!save}" value="Save" status="save-status" rerender="page-form"/>
+			<apex:commandButton action="{!save}" value="Save & New" status="save-new-status" rerender="page-form"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+        </apex:pageBlockButtons>            
+
 
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder == true}" > 
 				<apex:pageBlockSectionItem rendered="{!costPurchaseOrder == false}">
@@ -71,8 +188,8 @@
 					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:200px">
 						<apex:facet name="header">{!productText} Description</apex:facet> 
-							<apex:inputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' || status == 'new') && oiw.orderItem.NSPR__c == true) }"/>
-							<apex:outputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'rbanew' ||  status == 'new') && oiw.orderItem.NSPR__c == false) || (status != 'rbanew' && status != 'new')}"/>
+							<apex:inputField value="{!oiw.orderItem.Description}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
+							<apex:outputField value="{!oiw.orderItem.Description}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
@@ -93,7 +210,11 @@
 							<apex:inputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
 							<apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
 					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
+					<apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
+						<apex:facet name="header">NSPR/SPR</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
+							<apex:outputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
+					</apex:column>
 				</apex:pageBlockTable>
 					
 			</apex:outputPanel>
@@ -108,6 +229,7 @@
 				   
 		</apex:pageBlock>
 
+    </apex:actionRegion>
 
 
    	</apex:form>
@@ -134,109 +256,5 @@
 
 		};
 
-		
-		//The callback function that closeTab will call once it's got the ID for its tab
-		var callCloseTab= function callCloseTab(result) {
-			sforce.console.closeTab(result.id);
-		};
-
-		function closeTab() {
-			if(sforce.console.isInConsole()) {
-				sforce.console.refreshPrimaryTabById( primaryTabId, false,
-					function()
-					{
-						if ( subTabId ) sforce.console.closeTab( subTabId );
-					}
-				);
-				return false;
-			}
-			else {
-				location.href='/{!Purchase_Order__c.Order__c}'; 
-			}
-
-		
-		};
-
-		function openNewSubTab( subTabURL, subTabLabel )
-		{
-	
-			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
-			if ( !subTabURL )
-			{
-				closeTab();
-				return;
-			}
-			sforce.console.refreshPrimaryTabById( primaryTabId, false);
-			sforce.console.openSubtab
-			(   /*  Enclosing Primary Tab Id	*/  primaryTabId,
-				/*  URL for new Subtab		  */  subTabURL,
-				/*  Active (true = take focus)  */  true,
-				/*  Label for new Subtab		*/  subTabLabel,
-				/*  Id of Subtab to override	*/  subTabId,
-				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
-				/*  Name for new Subtab		 */  null
-			);
-		}
-
-		function openNewPrimaryTab( subTabURL, subTabLabel )
-		{
-	
-			//  if there's nowhere to go, and nowhere to go back to, just close this subtab
-			if ( !subTabURL )
-			{
-				closeTab();
-				return;
-			}
-			//  otherwise open the new subtab
-			sforce.console.openPrimaryTab
-			(   /*  Enclosing Primary Tab Id	*/  null,
-				/*  URL for new Subtab		  */  subTabURL,
-				/*  Active (true = take focus)  */  true,
-				/*  Label for new Subtab		*/  subTabLabel,
-				/*  Callback function		   */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
-				/*  Name for new Subtab		 */  null
-			);
-		}	
-		function openSavedPO(poId, costPO)
-		{
-			if(sforce.console.isInConsole()) {
-				if (costPO == 'false') {
-					openNewSubTab( '/' +poId +'?isdtp=vw', 'saving');
-				}
-				else {
-					openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
-					closeTab();
-				}
-			}
-			else {
-				location.href='/apex/RMS_viewPurchaseOrder?id=' +poId;
-			}
-		}
-
-		function openNewPO(orderId, costPO)
-		{
-			if(sforce.console.isInConsole()) {
-				if (costPO == 'false') {
-					openNewSubTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw&orderId=' +orderId, 'New Purchase Order' );
-				}
-				else {
-					openNewPrimaryTab( '/apex/RMS_vendorPurchaseOrder?isdtp=vw', 'New Purchase Order' );					openNewPrimaryTab( '/' +poId +'?isdtp=vw', 'saving');
-					closeTab();
-				}		
-			}
-			else {
-				if (costPO == 'false') {
-					location.href='/apex/RMS_vendorPurchaseOrder?orderId=' +orderId;
-				}
-				else {
-					location.href='/apex/RMS_vendorPurchaseOrder';
-				}
-
-			}
-		}
-	function  getOrderId()
-	{
-		return document.getElementById( 'OrderId' ).innerHTML;
-	}
 	</script>
 </apex:page>

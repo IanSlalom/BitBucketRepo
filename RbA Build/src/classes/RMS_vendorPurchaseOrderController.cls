@@ -9,10 +9,12 @@
 @author  Anthony Strafaccia (Slalom.ADS)
 @author  Creston Kuenzi (Slalom.CDK)
 
-@version	2015-09/16  Slalom.ADS
+@version	2015-09-16  Slalom.ADS
 	Created.
-@version	2015-10/12  Slalom.CDK
+@version	2015-10-12  Slalom.CDK
 	Added ability to add products manually and Cost PO Functionality.
+@version	2015-12-17  Slalom.CDK
+	Added account number functionality
 
 @see		RMS_vendorPurchaseOrderControllerTest 
 
@@ -40,6 +42,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public list<Account> vendorsOnOrder = new list<Account>();
 	public String newProduct { get; set; }
 	public String lineItemToCancel { get; set; }
+	public Id storeId { get; set; }
+	public String glAccount;
+	public String intercompanyAccount;
+	public String errorOccurred {get; set;}	 
 
 	// The selected vendor name string
 	public String selectedVendorName
@@ -215,8 +221,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if (String.isNotBlank(orderId)) {
 
 			//GET THE ORDER
-			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c  FROM Order WHERE Id = :orderId];
+			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c, Store_Location__c  FROM Order WHERE Id = :orderId];
 			po.Store_Abbreviation__c = relatedOrder.Store_Location2__r.Store_Abbreviation__c;
+			po.Store_Location__c = relatedOrder.Store_Location2__c;
 
 			//GET THE ORDER ITEMS
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
@@ -302,6 +309,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	*******************************************************/
 	public PageReference save() {
 		system.debug('*****Saving this vendor: '+selectedVendor);
+
+		// Set this flag to true so we know to exit the javascript before redirecting
+		errorOccurred = 'true';
+		
+//		String glAccount;
+//		String intercompanyAccount;
 		if(newPurchaseOrder == true){
 			// If no vendor is selected throw an error
 			if(selectedVendor == '' || selectedVendor == null){
@@ -328,6 +341,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 					if (storeLocation != null) {
 						costPOOrder.Store_Location2__c = storeLocation.Id;
 						po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
+						po.Store_Location__c = storeLocation.Id;
+					}
+					else {
+						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+						return null;
+						
 					}
 				}
 				try{
@@ -347,6 +366,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 								(selectedVendorName == 'RbA') 	?
 										UtilityMethods.retrieveRecordTypeId( 'RbA_Purchase_Order','Purchase_Order__c')		:
 										UtilityMethods.retrieveRecordTypeId('Product_Purchase_Order','Purchase_Order__c');
+
+			// checks that the gl and intercompany accounts are available
+			if (!costPurchaseOrder) {
+				if (checkAccountNumbers(po.Store_Location__c))
+					return null;
+			}								
 		}
 		// check for received status errors
 		if (checkReceived())
@@ -369,10 +394,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		poId = po.Id;
 		
 		list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+		
 				
 		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
 			OrderItem oi = oiw.orderItem;
 			oi.Purchase_Order__c = po.id;
+			oi.GL_Account__c = glAccount;
+			oi.Intercompany_AP_Account__c = intercompanyAccount;
 			orderItemsToUpdateList.add(oi);
 		}
 
@@ -384,6 +412,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
 		}
 
+		errorOccurred = 'false';
 		return null;
 		
 	}
@@ -414,7 +443,16 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			newOrderItem.PricebookEntryId = pbe.Id; 
 		}
 
-		// If the pricebookentry cannot be found - create a new product	
+		// checks that the gl and intercompany accounts are available
+		if (!costPurchaseOrder) {
+			if (checkAccountNumbers(po.Store_Location__c))
+				return null;
+		}
+
+		newOrderItem.GL_Account__c = glAccount;
+		newOrderItem.Intercompany_AP_Account__c = intercompanyAccount;
+
+		// If the pricebookentry cannot be found - add an error and return null
 		if(newOrderItem.PricebookEntryId == null){
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
 			return null;
@@ -550,6 +588,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// It's ok to change the status to Received so return false
 		return false;						   
 	}
+
+	/*******************************************************
+					checkAccountNumbers() method
+	*******************************************************/
+	// Method to ensure that it's ok to change the status to received
+	public boolean checkAccountNumbers(Id storeLocationId) {
+		system.debug('*****Checking the account numbers');
+		
+		// If the store location Id is blank, add an error message and return true
+		if (storeLocationId == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+			return true;
+		}
+		// If we've already retrieved the account numbers, just return false
+		if (String.isNotBlank(glAccount) && String.isNotBlank(intercompanyAccount)) 
+			return false;
+
+		//Retrieves the financial account numbers for the purchase order's store location
+		Map<String,String> accountNumberMap = UtilityMethods.retrieveAccountNumbers(storeLocationId);
+		glAccount = accountNumberMap.get('Inventory Acct');
+		intercompanyAccount = accountNumberMap.get('Intercompany Accounts Payable');
+			
+		// TODO:  add a check for cost purchase order if the check isn't done before calling the method.May not need to do this
+		// Add an error and return true if either of the account numbers are blank
+		if (String.isBlank(glAccount)) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.INVENTORY_GL_ACCOUNT_NOT_FOUND));
+			return true;
+		}
+		if (String.isBlank(intercompanyAccount)) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.INTERCOMPANY_AP_ACCOUNT_NOT_FOUND));
+			return true;
+		}
+
+		// The account numbers have been retrieved successfully, so return false
+		return false;						   
+	}
+
 	/*******************************************************
 					OrderItemWrapper Class
 	*******************************************************/

@@ -179,7 +179,7 @@
         <url>{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/connection.js&quot;)}
 {!REQUIRESCRIPT(&quot;/soap/ajax/33.0/apex.js&quot;)}
     var x;
-    if (confirm(&quot;Are you sure you want to cancel this order?&quot;) == true) {
+    if (confirm(&quot;Are you sure you want to cancel this order discount?&quot;) == true) {
         x = &quot;OK&quot;;
     } else {
         x = &quot;Cancel&quot;;

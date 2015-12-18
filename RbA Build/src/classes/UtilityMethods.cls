@@ -58,8 +58,8 @@ public with sharing class UtilityMethods {
     															Order_Queue_Id__c,
     															HOA_Work_Order_Queue_Id__c,
     															Historical_Work_Order_Queue_Id__c,
-    															Building_Permit_Work_Order_Queue_Id__c
-    															
+    															Building_Permit_Work_Order_Queue_Id__c,
+    															LSWP_WO_Owner_ID__c
     															
     															FROM Store_Configuration__c 
     															WHERE Store__c IN :storeIds
@@ -82,6 +82,18 @@ public with sharing class UtilityMethods {
 		}else{
 			return 0;
 		}
+	}
+
+	// Method used to retrieve a store's financial account numbers in the form of a map of strings (AccountType, Number)
+	public static Map<String,String> retrieveAccountNumbers(Id AccountId){
+		if(AccountId == null){
+			return null;
+		}
+		Map<String,String> accountNumberMap = new Map<String,String>();
+		for (Financial_Account_Number__c fan : [SELECT Account_Type__c, Name FROM Financial_Account_Number__c WHERE Store_Configuration__r.Store__c =: AccountId]) {
+			accountNumberMap.put(fan.Account_Type__c, fan.Name);	
+		}
+		return accountNumberMap;
 	}
     
 }

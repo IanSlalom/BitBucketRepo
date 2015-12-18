@@ -826,8 +826,8 @@ public class RMS_prodConfigExtension {
 			if(!String.isBlank(errorMessage)) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
 				return null;			
-			}
-		}
+			} 
+		} 
 		if (childProduct == null) return null;
 		System.Debug('****************prodConfig=' +prodConfig);
 		System.Debug('****************priceBookId=' +priceBookId);

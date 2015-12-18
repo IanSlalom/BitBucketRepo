@@ -287,6 +287,21 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The store location from which this purchase order was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store location from which this purchase order was created.</inlineHelpText>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Purchase Orders (Store Location)</relationshipLabel>
+        <relationshipName>Purchase_Orders_Store</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Submitted_Timestamp__c</fullName>
         <description>The date and time this purchase order was submitted.</description>
         <externalId>false</externalId>

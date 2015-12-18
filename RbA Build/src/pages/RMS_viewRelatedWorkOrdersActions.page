@@ -89,9 +89,9 @@
 	<apex:pageBlock >
 	
 	<apex:form >
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Hostorical" style="margin-left:20%"/>
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Historical" style="margin-left:20%"/>
 		
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLeadRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create Lead" style="margin-left:2%" />
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLSWPRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create LSWP" style="margin-left:2%" />
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" />
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%"/>
 	
@@ -102,7 +102,7 @@
 				<apex:column headerValue="">  
 					<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
 				</apex:column>
-		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.SVMXC__Order_Type__c != 'Lead Paint','notRed', 'red')}" />
+		        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.SVMXC__Order_Type__c != 'LSWP','notRed', 'red')}" />
 		        <apex:column value="{!wo.SVMXC__Order_Status__c}"/>
 		        <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
 		        <apex:column value="{!wo.CreatedDate}"/>

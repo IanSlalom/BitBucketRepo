@@ -8,6 +8,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         system.debug('******INSIDE RMS_WorkOrderCreationManager/createWorkOrderOnActivation');
 
         list<Order> activatedOrders = new list<Order>();
+        list<id> activatedOrderId = new list<id>();
         list<id> relatedDwellingIds = new list<id>();
         list<id> dwellingStoreLocationIds = new list<id>();
         
@@ -16,6 +17,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             if(ord.Status == 'Activated' && mapOld.get(ord.Id).Status == 'Draft'){
                 relatedDwellingIds.add(ord.AccountId);
                 activatedOrders.add(ord);
+                activatedOrderId.add(ord.id);
             }
         }
         
@@ -41,7 +43,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                     BillingStateCode,
                                                     BillingPostalCode, 
                                                     BillingCountry,
-                                                    BillingCountryCode 
+                                                    BillingCountryCode,
+                                                    Year_Built__c
                                                 FROM Account Where Id IN : relatedDwellingIds];
             
             //BUILDING MAP OF ID TO DWELLING TO USE WHILE LOOPING THROUGH ORDERS
@@ -51,10 +54,26 @@ public with sharing class RMS_WorkOrderCreationManager {
                 
             }
             
+            
             //RETREVING RECORD TYPES USED IN WORK ORDER CREATION
             Id permitWORecordType = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
             Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+            Id LSWPWORecordType = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
             
+            
+            
+            //BUILDING MAP OF ORD ID TO LIST OF LSWP WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
+            map<id, list<SVMXC__Service_Order__c>> ordIdtoListOfLSWPWOMap = new map<id, list<SVMXC__Service_Order__c>>();
+            list<SVMXC__Service_Order__c> relatedLSWPWorkOrders = [SELECT id, Sold_Order__c, RecordTypeId FROM SVMXC__Service_Order__c WHERE Sold_Order__c IN :activatedOrderId AND RecordTypeId = :LSWPWORecordType];
+
+            for(SVMXC__Service_Order__c wo : relatedLSWPWorkOrders){
+                if(ordIdtoListOfLSWPWOMap.containsKey(wo.Sold_Order__c)){
+                    ordIdtoListOfLSWPWOMap.get(wo.Sold_Order__c).add(wo);
+                }else{
+                    ordIdtoListOfLSWPWOMap.put(wo.Sold_Order__c, new list<SVMXC__Service_Order__c>{wo});
+                }
+            }
+ 
             //LIST OF ORDERS TO INSERT AFTER FOR LOOP
             list<SVMXC__Service_Order__c> workOrdersToAdd = new list<SVMXC__Service_Order__c>();
             
@@ -90,6 +109,13 @@ public with sharing class RMS_WorkOrderCreationManager {
                     if(dwelling.Building_Permit__c != null){
                         SVMXC__Service_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
                         workOrdersToAdd.add(buildingPermitWorkOrder);
+                    }
+                    //CREATE LSWP WORK ORDER IF NO LSWP WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1970
+                    if(ordIdtoListOfLSWPWOMap.get(ord.id) == null || ordIdtoListOfLSWPWOMap.get(ord.id).size() == 0){
+	                    if(dwelling.Year_Built__c == null || dwelling.Year_Built__c == ''  || Integer.valueof(Dwelling.Year_Built__c) < 1970){
+	                        SVMXC__Service_Order__c LSWPWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, LSWPWORecordType, storeConfig.LSWP_WO_Owner_ID__c, 'LSWP', null );
+	                        workOrdersToAdd.add(LSWPWorkOrder);
+	                    }
                     }
                 }
             }

@@ -677,6 +677,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>The hardware finish/color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish/color applied to this product.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Hardware_Finish__c</fullName>
         <description>The hardware finish applied to this product.</description>
         <externalId>false</externalId>
@@ -779,6 +791,18 @@
         <externalId>false</externalId>
         <inlineHelpText>The Install Track Location selected for the product.</inlineHelpText>
         <label>Install Track Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Intercompany_AP_Account__c</fullName>
+        <description>The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP.</inlineHelpText>
+        <label>Intercompany AP Account</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -1391,11 +1415,15 @@
         <label>Unit of Measure</label>
         <picklist>
             <picklistValues>
-                <fullName>pc</fullName>
+                <fullName>Each</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Roll</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
