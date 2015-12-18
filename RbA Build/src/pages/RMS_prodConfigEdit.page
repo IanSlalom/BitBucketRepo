@@ -69,9 +69,10 @@
 				/*  Name for new Subtab		 */  null
 			);
 		}	
-		function openSavedOI(oiId)
+		function openSavedOI()
 		{
 			var errorOccurred = '{!errorOccurred}';
+			var oiId = '{!oiId}';
 			if (errorOccurred == 'false') {
 				if(sforce.console.isInConsole()) {
 					openNewSubTab( '/' +oiId +'?isdtp=vw');
@@ -126,7 +127,7 @@
 
     <apex:actionRegion >
     <apex:pageBlock title="Configure Product" id="ConfigureProductBlock" rendered="{!productSelected}">
-        <apex:actionStatus id="save-status"  onstop="openSavedOI('{!oiId}');return false"/>
+        <apex:actionStatus id="save-status"  onstop="openSavedOI();return false"/>
         <apex:actionStatus id="save-new-status"  onstop="openNewOI('{!orderId}','{!priceBookId}');return false"/>
 
         <apex:pageBlockButtons location="bottom">
