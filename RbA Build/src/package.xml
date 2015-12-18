@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AccountTriggerHandler</members>
@@ -85,6 +85,7 @@
         <members>Event</members>
         <members>Field_IDs__c</members>
         <members>Financial_Configuration__c</members>
+        <members>Journal_Entry__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
@@ -92,6 +93,7 @@
         <members>Opportunity_Discount__c</members>
         <members>Order</members>
         <members>OrderItem</members>
+        <members>Order_Code_Lookup__c</members>
         <members>Order_Discount__c</members>
         <members>Payment__c</members>
         <members>Pricebook2</members>
@@ -133,12 +135,16 @@
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Contact-Contact Layout</members>
+        <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
         <members>Contact_History__c-Associated Contact Layout</members>
         <members>Discount__c-Discount Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Global-Global Layout</members>
+        <members>Journal_Entry__c-Journal Credit Entry Layout</members>
+        <members>Journal_Entry__c-Journal Debit Entry Layout</members>
+        <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -150,6 +156,7 @@
         <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
+        <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
         <members>Order_Discount__c-Order Discount Layout</members>
         <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>

@@ -286,9 +286,19 @@
         <name>Handle_Type__c</name>
     </fields>
     <fields>
+        <help><!-- The hardware color applied to this product. --></help>
+        <label><!-- Hardware Color --></label>
+        <name>Hardware_Color__c</name>
+    </fields>
+    <fields>
         <help><!-- The hardware finish/color applied to this product. --></help>
         <label><!-- Hardware Finish/Color --></label>
         <name>Hardware_Finish_Color__c</name>
+    </fields>
+    <fields>
+        <help><!-- The hardware finish applied to this product. --></help>
+        <label><!-- Hardware Finish --></label>
+        <name>Hardware_Finish__c</name>
     </fields>
     <fields>
         <help><!-- The hardware option selected for this product. --></help>
@@ -488,6 +498,11 @@
         <help><!-- The Sill Angle selected for the product. --></help>
         <label><!-- Sill Angle --></label>
         <name>Sill_Angle__c</name>
+    </fields>
+    <fields>
+        <help><!-- Check to enable the special option fields --></help>
+        <label><!-- Special Options --></label>
+        <name>Special_Options__c</name>
     </fields>
     <fields>
         <help><!-- The number of spokes selected for the product. --></help>
