@@ -30,8 +30,8 @@ public with sharing class RMS_errorMessages {
 	public static final String WIDTH_ABOVE_MAX = '&bull; The width you entered[enteredValue] is above the maximum[requiredValue] for this product.';
 	public static final String HEIGHT_ABOVE_MAX = '&bull; The height you entered[enteredValue] is above the maximum[requiredValue] for this product.';
 	public static final String UNITED_INCH_ABOVE_MAX = '&bull; The united inch total for the measurements entered[enteredValue] is above the maximum[requiredValue] for this product.';
-	public static final String HEIGHT_TO_WIDTH_CAP = '&bull; The height and width you entered[enteredValue] exceeds the height to width cap[requiredValue].';
-	public static final String WIDTH_TO_HEIGHT_CAP = '&bull; The width and height you entered[enteredValue] exceeds the width to height cap[requiredValue].';
+	public static final String HEIGHT_TO_WIDTH_CAP = '&bull; The height and width you entered exceeds the height to width cap.';
+	public static final String WIDTH_TO_HEIGHT_CAP = '&bull; The width and height you entered exceeds the width to height cap.';
 	public static final String PEAK_HEIGHT = '&bull; The left and right leg difference is greater then the width times the product\'s peak height.';
 	public static final String GLASS_MAX_SQ_FEET = '&bull; The height and width you have entered[enteredValue] exceeds the max[requiredValue] square feet allowed for this product.';
 	public static final String WIDTH_TO_HEIGHT_RATIO_MAX = '&bull; The height and width you have entered[enteredValue] exceeds the width to height ratio max[requiredValue] for this product.';
