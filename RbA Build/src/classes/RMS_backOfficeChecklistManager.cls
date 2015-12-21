@@ -7,8 +7,6 @@ public with sharing class RMS_backOfficeChecklistManager {
 	public void createBackOfficeChecksOnOrderCreation(List<Order> listNew, Map<Id, Order> mapNew){
 		system.debug('******INSIDE RMS_backOfficeChecklistManager/createBackOfficeChecksOnOrderCreation');
 		
-		
-		
 		list<Id> relatedAccountIds = new list<Id>();
     	for(Order o : listNew){
     		relatedAccountIds.add(o.AccountId);
@@ -30,8 +28,6 @@ public with sharing class RMS_backOfficeChecklistManager {
     		dwellingStoreLocationIds.add(a.Store_Location__c);
     	}
 
-
-	
     	//GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
 	    map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
 
@@ -40,7 +36,6 @@ public with sharing class RMS_backOfficeChecklistManager {
     		storeConfigIdList.add(sc.id);
     	}
 
-    	
     	SObjectType xBOC = Schema.getGlobalDescribe().get('Back_Office_Checklist_Configuration__c');
 		map<String,Schema.SObjectField> bocFieldsMap = xBOC.getDescribe().fields.getMap();
 	    
@@ -54,8 +49,6 @@ public with sharing class RMS_backOfficeChecklistManager {
 	    bocQuery = bocQuery + ' FROM Back_Office_Checklist_Configuration__c WHERE Store_Configuration__c IN :storeConfigIdList';
 	    
 	    list<Back_Office_Checklist_Configuration__c> backOfficeCheckList = Database.query(bocQuery);
-    
-    
     
     	map<id, Back_Office_Checklist_Configuration__c> storeConfigIdToBackOfficeChecklistMap = new map<id, Back_Office_Checklist_Configuration__c>();
     	for(Back_Office_Checklist_Configuration__c boc : backOfficeCheckList){
@@ -87,7 +80,6 @@ public with sharing class RMS_backOfficeChecklistManager {
 				    		checksToAdd.add(boc);
 			    		}	
 			    	}
-			
 					insert checksToAdd;
 		    	}
 			}
