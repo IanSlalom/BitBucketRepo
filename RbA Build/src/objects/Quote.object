@@ -94,18 +94,6 @@
         <type>Summary</type>
     </fields>
     <fields>
-        <fullName>Discount__c</fullName>
-        <description>Discount applied to the entire quote.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Discount applied to the entire quote.</inlineHelpText>
-        <label>Discount</label>
-        <precision>5</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Percent</type>
-    </fields>
-    <fields>
         <fullName>Email</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
@@ -152,16 +140,6 @@
         <trackFeedHistory>false</trackFeedHistory>
         <type>Text</type>
         <unique>true</unique>
-    </fields>
-    <fields>
-        <fullName>Primary__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Checked if it is the primary/sold quote.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if it is the primary/sold quote.</inlineHelpText>
-        <label>Primary</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>QuoteToName</fullName>
@@ -228,17 +206,6 @@
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
-        <fullName>Subtotal__c</fullName>
-        <description>Rollup of the product amounts.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Rollup of the product amounts.</inlineHelpText>
-        <label>Subtotal</label>
-        <summarizedField>QuoteLineItem.TotalPrice</summarizedField>
-        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
-        <summaryOperation>sum</summaryOperation>
-        <type>Summary</type>
-    </fields>
-    <fields>
         <fullName>Tax</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
@@ -250,7 +217,7 @@
         <fullName>Total__c</fullName>
         <description>The total of the quote (total product price - discounts)</description>
         <externalId>false</externalId>
-        <formula>Subtotal__c - Discount_Amount__c</formula>
+        <formula>Subtotal - Discount_Amount__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The total of the quote (total product price - discounts)</inlineHelpText>
         <label>Total</label>
@@ -258,6 +225,16 @@
         <required>false</required>
         <scale>2</scale>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>isSold__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if it is the primary/sold quote.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if it is the primary/sold quote.</inlineHelpText>
+        <label>Is Sold?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
     </fields>
     <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
     <recordTypes>

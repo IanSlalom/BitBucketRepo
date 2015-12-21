@@ -121,6 +121,15 @@
         <type>Number</type>
         <unique>false</unique>
     </fields>
+    <fields>
+        <fullName>isCancelled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the appointment has been cancelled</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if the appointment has been cancelled</inlineHelpText>
+        <label>Is Cancelled?</label>
+        <type>Checkbox</type>
+    </fields>
     <listViews>
         <fullName>MyActivities</fullName>
         <filterScope>Mine</filterScope>
