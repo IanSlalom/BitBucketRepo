@@ -950,6 +950,41 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S3__c = null;	
 			oI.Tempered_S3__c = false;
 		}
+
+		//If any of the glass/grille controls are disabled, clear the corresponding Sash 1 fields:
+		if(newProdConfig.Grille_Pattern_Control__c == 'Disabled') {
+			oI.Grille_Pattern_S1__c = null;
+			oI.Grille_Pattern_S2__c = null;
+			oI.Grille_Pattern_S3__c = null;
+		}
+		if(newProdConfig.Grille_Lites_Control__c == 'Disabled') {
+			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
+			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
+			oI.Colonial_Grille_Lites_High_S2__c = null;	
+			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
+			oI.Colonial_Grille_Lites_High_S3__c = null;	
+		}
+		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled') {
+			oI.Custom_Grille_Details_S1__c	= null;
+			oI.Custom_Grille_Details_S2__c	= null;
+			oI.Custom_Grille_Details_S3__c	= null;
+		}
+		if(newProdConfig.Glazing_Control__c == 'Disabled') {
+			oI.Glazing_S1__c = null;	
+			oI.Glazing_S2__c = null;	
+			oI.Glazing_S3__c = null;	
+		}
+		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled') {
+			oI.Glass_Pattern_S1__c = null; 
+			oI.Glass_Pattern_S2__c = null; 
+			oI.Glass_Pattern_S3__c = null; 
+		}
+		if(newProdConfig.Tempered_Control__c == 'Disabled') {
+			oI.Tempered_S1__c = false;
+			oI.Tempered_S2__c = false;
+			oI.Tempered_S3__c = false;
+		}
 		
 		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1'){
@@ -961,6 +996,17 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S2__c = null; 
 			oI.Tempered_S2__c = false;
 		}
+		//If Prod Config -> Number of Sashes = 1 or 2, clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2'){
+			oI.Grille_Pattern_S3__c = null;
+			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
+			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Custom_Grille_Details_S3__c	= null;
+			oI.Glazing_S3__c = null;	
+			oI.Glass_Pattern_S3__c = null; 
+			oI.Tempered_S3__c = false;
+		}
+
 		return oI;
 	}//END OF clearNonSelectableValues Method
 	
