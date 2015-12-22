@@ -256,6 +256,15 @@
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>Date__c</fields>
+        <fields>NAME</fields>
+        <fields>Type__c</fields>
+        <fields>Credit_General_Ledger_Account__c</fields>
+        <fields>Amount__c</fields>
+        <fields>Date_Sent_to_BaanERP__c</fields>
+        <relatedList>Journal_Entry__c.Order__c</relatedList>
+    </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>

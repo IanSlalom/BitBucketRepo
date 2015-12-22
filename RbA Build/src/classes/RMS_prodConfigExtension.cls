@@ -33,13 +33,16 @@ public class RMS_prodConfigExtension {
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
-
-
+	
 	/******* Set up Standard Controller for OrderItem  *****************/
 	private final OrderItem orderLineItem;
 	public final String originalProdConfig;
 	
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> refs/heads/master
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
@@ -53,8 +56,13 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
+<<<<<<< HEAD
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
+=======
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status, orderItem.PricebookEntry.Product2.Product_Configuration__c From OrderItem WHERE Id =: orderLineItem.Id]) {
+					masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
+>>>>>>> refs/heads/master
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					originalProdConfig = orderItem.PricebookEntry.Product2.Product_Configuration__c;
 					orderId = orderItem.OrderId;
@@ -789,12 +797,35 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Enter button is clicked at the master product level
 	public virtual pageReference enterProduct() {
 
+<<<<<<< HEAD
+=======
+	
+
+/*		
+		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
+		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
+		if(!String.isBlank(errorMessage)) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
+			return null;			
+		}
+		if (childProduct == null) return null;
+		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProductConfig);
+		
+		if (prodConfig == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
+			return null;
+		}
+		productSelected = true;
+		return null;
+*/
+>>>>>>> refs/heads/master
 		if (masterProductId == '' || masterProductId == null) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.PRODUCT_EMPTY));
 			return null;
 		}
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
+		
 		
 		// Default the verify item config to true if a product configuration record was found
 		if (prodConfig.mpc != null) orderLineItem.Verify_Item_Configuration__c = true;
@@ -844,8 +875,13 @@ public class RMS_prodConfigExtension {
 				// on the new order line item  
 				newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
 				insert newOrderLineItem;
+<<<<<<< HEAD
 				delete orderLineItem;				
 				oiId = newOrderLineItem.Id;  // used to redirect to correct tab 
+=======
+				delete orderLineItem;
+				ref = new PageReference('/' +newOrderLineItem.OrderId); 
+>>>>>>> refs/heads/master
 				
 			}
 			else {
@@ -866,7 +902,25 @@ public class RMS_prodConfigExtension {
 		errorOccurred = 'false';
 		return null;
 	}
+	
+	/**********************************************************
+	clearNonSelectableValues(newOrderLineItem, masterProductConfig)
+	**********************************************************/
+	public static OrderItem clearNonSelectableValues(OrderItem oI, Product_Configuration__c newProdConfig){
+		//DYNAMICLY GET ALL FIELDS ON THE PRODUCT CONFIG
+    	SObjectType xPC = Schema.getGlobalDescribe().get('Product_Configuration__c');
+      	map<String,Schema.SObjectField> pcFieldsMap = xPC.getDescribe().fields.getMap();
+		list<String> activatedControlFieldNames = new list<String>();
+		  
+		for(String pcField : pcFieldsMap.KeySet()){
+			if(pcField.contains('control') && (newProdConfig.get(pcField) == 'Disabled' || newProdConfig.get(pcField) == null) ){
+				activatedControlFieldNames.add(pcField);
+			}
+		}
+		for(String pcField : activatedControlFieldNames){
+			String controlledField = pcField.replace('_control', '');
 
+<<<<<<< HEAD
 	/**********************************************************
 	clearNonSelectableValues(newOrderLineItem, masterProductConfig)
 	**********************************************************/
@@ -883,6 +937,8 @@ public class RMS_prodConfigExtension {
 		for(String pcField : activatedControlFieldNames){
 			String controlledField = pcField.replace('_control', '');
 
+=======
+>>>>>>> refs/heads/master
 			Map<String, Schema.SObjectField> OrderItemFieldsMap = Schema.SObjectType.OrderItem.fields.getMap();
 			Set<String> OrderItemFields = OrderItemFieldsMap.keySet();
 

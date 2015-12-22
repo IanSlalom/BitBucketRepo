@@ -49,6 +49,10 @@
         <description>ARO Sales Process</description>
         <isActive>true</isActive>
         <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Closed Lost</fullName>
             <default>false</default>
         </values>
@@ -65,6 +69,10 @@
         <fullName>CORO Sales Process</fullName>
         <description>CORO Sales Process</description>
         <isActive>true</isActive>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
         <values>
             <fullName>Closed Lost</fullName>
             <default>false</default>
@@ -305,6 +313,15 @@
                 <closed>true</closed>
                 <default>false</default>
                 <description>No sale.</description>
+                <forecastCategory>Omitted</forecastCategory>
+                <probability>0</probability>
+                <won>false</won>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <closed>true</closed>
+                <default>false</default>
+                <description>Cancelled sales visits</description>
                 <forecastCategory>Omitted</forecastCategory>
                 <probability>0</probability>
                 <won>false</won>

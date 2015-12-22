@@ -19,6 +19,7 @@ private class RMS_mobileAppRequestHelperTest {
             // The following code runs as user 'u' 
             System.debug('Current User: ' + UserInfo.getUserName());
             System.debug('Current Profile: ' + UserInfo.getProfileId()); 
+			//
         	
 			RestRequest req = new RestRequest();
 			RestResponse res = new RestResponse();
@@ -143,7 +144,7 @@ private class RMS_mobileAppRequestHelperTest {
     	insert storeConfig;
 		*/
 		
-		
+/*		
 		String response1 =  logic.updateOpportunity(null, 'Closed - Won');
 		system.debug('ADS testUpdateOpportunity: '+ response1); 
 		
@@ -152,5 +153,6 @@ private class RMS_mobileAppRequestHelperTest {
     	
     	String response2 =  logic.updateOpportunity(openOpp1.id, 'Closed - Won');
     	system.debug('ADS testUpdateOpportunity: '+ response2); 
+*/
 	}
 }
