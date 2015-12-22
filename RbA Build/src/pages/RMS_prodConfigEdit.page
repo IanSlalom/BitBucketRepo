@@ -245,7 +245,7 @@
             <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" onChange="callRule('interiorColor')" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Color_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!interiorColorItems}"/>
             </apex:selectList>
-            <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.BM_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Applied_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled'}"/>
 
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Hardware" columns="2" rendered="{!prodConfig.mpc != null}">
@@ -255,10 +255,10 @@
               <apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Option_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!hardwareOptionItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish__c != 'Disabled'}" html-data-jsid="hardwareFinish">
+            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish_Control__c != 'Disabled'}" html-data-jsid="hardwareFinish">
                 <apex:selectOptions value="{!hardwareFinishItems}"/>
             </apex:selectList>
-            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c != 'Disabled'}"/>
             <apex:selectList value="{!OrderItem.Lifts_Pulls__c}" label="Lifts/Pulls" size="1" id="liftsPulls" required="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Lifts_Pulls_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!liftsPullsItems}"/>
             </apex:selectList>
@@ -273,8 +273,8 @@
         	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')">
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Alignment_Control__c != 'Disabled'}"/>
-            <apex:inputField value="{!OrderItem.Permanently_Applied_Interior_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_App_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_App_Int_Wood_Grille_Control__c != 'Disabled'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille"/>
+            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille"/>
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'}"/>
             <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'}"/>
             <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'}"/>
@@ -357,7 +357,7 @@
 
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2" rendered="{!prodConfig.mpc != null}">
-            <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.BM_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.BM_Location_Control__c != 'Disabled'}">
+            <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Location_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!brickmouldLocationItems}"/>
             </apex:selectList>
 
