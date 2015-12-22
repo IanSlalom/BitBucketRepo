@@ -3574,6 +3574,21 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The product this configuration is related to.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The product this configuration is related to.</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Product Configurations</relationshipLabel>
+        <relationshipName>Product_Configurations</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Right_Leg_Fraction_Control__c</fullName>
         <description>Controls whether Right Leg Fraction is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -4094,6 +4109,75 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Shape__c</fullName>
+        <description>If this product configuration is for a specialty window, choose a shape.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this product configuration is for a specialty window, choose a shape.</inlineHelpText>
+        <label>Specialty Shape</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Equal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Peak Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hexagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Octagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle Top</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Chord</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Springline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quarter Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Right Triangle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trapezoid</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unequal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Half Springline</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
