@@ -115,7 +115,7 @@
 
         <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
 					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2=""/> 
-            <apex:inputField value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="specialtyShape" required="{!prodConfig.mpc.Specialty_Shape_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Specialty_Shape_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="specialtyShape" />
                   <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
         </apex:pageBlockSection>
 
