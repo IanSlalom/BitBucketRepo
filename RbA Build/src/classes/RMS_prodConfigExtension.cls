@@ -36,9 +36,7 @@ public class RMS_prodConfigExtension {
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
-	private final OrderItem orderLineItem;
-	public final String originalProdConfig;
-	
+	private final OrderItem orderLineItem;	
 
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
@@ -56,7 +54,6 @@ public class RMS_prodConfigExtension {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
-					originalProdConfig = orderItem.PricebookEntry.Product2.Product_Configuration__c;
 					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
@@ -104,6 +101,23 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	// SOQL Filters for the product autocomplete checklist
+	public String productFilter
+	{
+		get
+		{
+			if ( productFilter != null ) return productFilter;
+
+			// return inventoried items
+			productFilter = ' AND Inventoried_Item__c = true ';
+
+			// Only return active products without a master product
+			productFilter += ' AND IsActive = true';
+			return productFilter;
+		}
+		private set;
+	}
+
 	/******* properties/variables to store the master product configuration *****************/
 	private static transient Product_Configuration__c lMasterProductConfig;
 	public Product_Configuration__c masterProductConfig {
@@ -117,13 +131,18 @@ public class RMS_prodConfigExtension {
 			// Loop through the Product_Configuration__c fields and comma separate them into a string
 			String commaSeparatedFields = RMS_prodConfigManager.getCommaSeparatedFields('Product_Configuration__c');
  
+ 			String specialtyShapeString = orderLineItem.Specialty_Shape__c != null ?
+ 											' AND Specialty_Shape__c = \'' + orderLineItem.Specialty_Shape__c + '\'' : '';
 			// Use the comma separated field string to build a dynamic query to retrieve the Product_Configuration__c
 			String query = 'SELECT ' + commaSeparatedFields + ' FROM Product_Configuration__c ' + 
 													' WHERE Product__c = \'' + masterProductId + '\''+
+													specialtyShapeString+
 													' LIMIT 1';
  
 			// Retrieve all fields from the Product_Configuration__c object in a query
-			lMasterProductConfig = Database.query(query);
+			List<Product_Configuration__c> resultConfigs = Database.query(query);
+			if(resultConfigs.size() > 0)
+				lMasterProductConfig = resultConfigs.get(0);
 
 			return lMasterProductConfig;
 		}
@@ -797,7 +816,7 @@ public class RMS_prodConfigExtension {
 		productSelected = true;
 		
 		// Default the verify item config to true if a product configuration record was found
-		if (prodConfig.mpc != null) orderLineItem.Verify_Item_Configuration__c = true;
+		orderLineItem.Verify_Item_Configuration__c = (prodConfig.mpc != null) ? true : false;
 		return null;
 
 	}
@@ -815,8 +834,9 @@ public class RMS_prodConfigExtension {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
 			return null;			
 		}
-		
-		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c; 
+		inputUI = (orderLineItem.Width_Inches__c != null && orderLineItem.Height_Inches__c != null) ?
+					orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c : 0;
+
 		// Only verify the makeability rules when Verify Item Config is checked
 		if (orderLineItem.Verify_Item_Configuration__c) {
 			
@@ -842,7 +862,8 @@ public class RMS_prodConfigExtension {
 				newOrderLineItem.PriceBookEntryId = priceBookEntryId;
 				// for this scenario we will need to make sure we clear out selected options that are not available
 				// on the new order line item  
-				newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
+				if (masterProductConfig != null)
+					newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
 				insert newOrderLineItem;
 				delete orderLineItem;				
 				oiId = newOrderLineItem.Id;  // used to redirect to correct tab 
