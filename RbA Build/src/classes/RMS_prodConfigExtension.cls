@@ -37,6 +37,8 @@ public class RMS_prodConfigExtension {
 
 	/******* Set up Standard Controller for OrderItem  *****************/
 	private final OrderItem orderLineItem;
+	public final String originalProdConfig;
+	
 
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
@@ -50,9 +52,11 @@ public class RMS_prodConfigExtension {
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
+			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
+					originalProdConfig = orderItem.PricebookEntry.Product2.Product_Configuration__c;
 					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
@@ -838,6 +842,7 @@ public class RMS_prodConfigExtension {
 				newOrderLineItem.PriceBookEntryId = priceBookEntryId;
 				// for this scenario we will need to make sure we clear out selected options that are not available
 				// on the new order line item  
+				newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
 				insert newOrderLineItem;
 				delete orderLineItem;				
 				oiId = newOrderLineItem.Id;  // used to redirect to correct tab 
@@ -862,4 +867,81 @@ public class RMS_prodConfigExtension {
 		return null;
 	}
 
-}
+	/**********************************************************
+	clearNonSelectableValues(newOrderLineItem, masterProductConfig)
+	**********************************************************/
+	public static OrderItem clearNonSelectableValues(OrderItem oI, Product_Configuration__c newProdConfig){
+		//DYNAMICLY GET ALL FIELDS ON THE PRODUCT CONFIG
+    	SObjectType xPC = Schema.getGlobalDescribe().get('Product_Configuration__c');
+      	map<String,Schema.SObjectField> pcFieldsMap = xPC.getDescribe().fields.getMap();
+		list<String> activatedControlFieldNames = new list<String>();
+		  
+		for(String pcField : pcFieldsMap.KeySet()){
+			if(pcField.contains('control') && (newProdConfig.get(pcField) == 'Disabled' || newProdConfig.get(pcField) == null) ){
+				activatedControlFieldNames.add(pcField);
+}		}
+		for(String pcField : activatedControlFieldNames){
+			String controlledField = pcField.replace('_control', '');
+
+			Map<String, Schema.SObjectField> OrderItemFieldsMap = Schema.SObjectType.OrderItem.fields.getMap();
+			Set<String> OrderItemFields = OrderItemFieldsMap.keySet();
+
+			if(OrderItemFields.contains(controlledField)) {
+				Schema.SObjectField field = OrderItemFieldsMap.get(controlledField);
+				Schema.DisplayType fldType = field.getDescribe().getType();
+			
+				if(String.ValueOf(fldType) == 'BOOLEAN'){
+					oI.put(controlledField, false);
+				}else{
+					oI.put(controlledField, null);
+				}
+			}
+			
+			/*
+			list<String> selectedOptions = String.valueOf(newProdConfig.get(pcField)).split(';');
+			boolean foundMatch = false;
+			for(String option : selectedOptions){
+				if(oI.get(pcField) == option ){
+					foundMatch = true;
+					break;
+				}
+			}
+			if(foundMatch == false){
+				oI.put(pcField, null);
+			}
+			*/
+		}
+		
+		//If Prod Config -> Special Options Control is disabled clear the following Order Line Item fields:
+		if(newProdConfig.Special_Options_Control__c == 'Disabled' || newProdConfig.Special_Options_Control__c == null) {
+			oI.Screen_Color__c = null;
+			oI.Hardware_Color__c = null;	
+			oI.Exterior_Grille_Color__c = null;	
+			oI.Interior_Grille_Color__c = null;	
+			oI.Storm_Window_Color__c = null;	
+			oI.Exterior_Trim_Color__c = null;	
+			oI.Jamb_Liner_Color__c = null;	
+			oI.Interior_Sash_Color__c = null;
+			oI.Astragal__c = null;	
+			oI.Install_Track_Location__c = null;	
+			oI.Install_Holes_Location__c = null;	
+			oI.Glazing_S3__c = null;	
+			oI.Glass_Pattern_S3__c = null;	
+			oI.Tempered_S3__c = false;
+		}
+		
+		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == '1'){
+			oI.Grille_Pattern_S2__c = null;
+			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
+			oI.Colonial_Grille_Lites_High_S2__c = null;	
+			oI.Custom_Grille_Details_S2__c	= null;
+			oI.Glazing_S2__c = null;	
+			oI.Glass_Pattern_S2__c = null; 
+			oI.Tempered_S2__c = false;
+		}
+		return oI;
+	}//END OF clearNonSelectableValues Method
+	
+
+}//EOF

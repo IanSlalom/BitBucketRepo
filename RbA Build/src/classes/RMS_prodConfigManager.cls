@@ -119,7 +119,7 @@ public with sharing class RMS_prodConfigManager {
 				if(orderLineItem.Height_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Height_Fraction__c);
 				}
-				String requiredValue = String.ValueOf(masterProductConfig.Min_Width__c);
+				String requiredValue = String.ValueOf(masterProductConfig.Min_Height__c);
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_BELOW_MIN, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
