@@ -114,6 +114,7 @@
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
+<!--  			<apex:inputText style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>-->
             <apex:selectList value="{!masterProductId}" label="Product" size="1" id="masterProduct">
                 <apex:selectOptions value="{!masterProductItems}"/>
             </apex:selectList>
@@ -144,7 +145,6 @@
             <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-  
             <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
             <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
             <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
@@ -449,9 +449,16 @@
 
         </apex:pageBlockSection>
         
-        <apex:pageBlockSection title="Order Information" columns="2">
-             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'}"/>
-             <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'}"/>
+          <apex:pageBlockSection title="Order Information" columns="2">
+			<apex:outputField value="{!OrderItem.Order.Name}"/>
+			<apex:inputField value="{!OrderItem.Purchase_Order__c}"/>
+			<apex:inputField value="{!OrderItem.Description}"/>
+			<apex:inputField value="{!OrderItem.UnitPrice}"/>
+			<apex:inputField value="{!OrderItem.Variant_Number__c}"/>
+			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
+			<apex:inputField value="{!OrderItem.NSPR__c}"/>
+            <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'}"/>
+            <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
