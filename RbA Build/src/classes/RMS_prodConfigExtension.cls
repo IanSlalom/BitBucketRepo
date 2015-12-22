@@ -986,6 +986,16 @@ public class RMS_prodConfigExtension {
 			oI.Tempered_S3__c = false;
 		}
 		
+		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == null){
+			oI.Grille_Pattern_S1__c = null;
+			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
+			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Custom_Grille_Details_S1__c	= null;
+			oI.Glazing_S1__c = null;	
+			oI.Glass_Pattern_S1__c = null; 
+			oI.Tempered_S1__c = false;
+		}
 		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1'){
 			oI.Grille_Pattern_S2__c = null;
