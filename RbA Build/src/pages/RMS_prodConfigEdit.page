@@ -164,7 +164,7 @@
 
         </apex:pageBlockSection>
 
-        <apex:pageBlockSection title="Handing & Frame Options" columns="2" rendered="{!prodConfig.mpc != null}">
+        <apex:pageBlockSection title="Frame Options" columns="2" rendered="{!prodConfig.mpc != null}">
             <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Ratio_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!sashRatioItems}"/>
             </apex:selectList>
@@ -181,13 +181,10 @@
                 <apex:selectOptions value="{!checkrailStyleItems}"/>
             </apex:selectList>
             <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'}"/>
-            <apex:selectList value="{!OrderItem.Handing__c}" label="Handing" size="1" id="handingOption">
-                <apex:selectOptions value="{!HandingOptionItems}"/>
-            </apex:selectList>
+            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled'}"/>
             <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!mullSequenceMullionItems}"/>
             </apex:selectList>
-            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled'}"/>
             <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}" html-data-jsid="fibrexLTrim"/>
         </apex:pageBlockSection>
 
