@@ -15,12 +15,6 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
-        <actionName>Edit</actionName>
-        <content>RMS_prodConfigEdit</content>
-        <skipRecordTypeSelect>false</skipRecordTypeSelect>
-        <type>Visualforce</type>
-    </actionOverrides>
-    <actionOverrides>
         <actionName>EditAllProduct</actionName>
         <type>Default</type>
     </actionOverrides>
