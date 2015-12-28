@@ -33,12 +33,11 @@ public class RMS_prodConfigExtension {
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
-	
+
+
 	/******* Set up Standard Controller for OrderItem  *****************/
-	private final OrderItem orderLineItem;
-	public final String originalProdConfig;
-	
-	
+	private final OrderItem orderLineItem;	
+
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
@@ -52,10 +51,9 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
-				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Master_Product__c, Order.Status, orderItem.PricebookEntry.Product2.Product_Configuration__c From OrderItem WHERE Id =: orderLineItem.Id]) {
-					masterProductId = orderItem.PricebookEntry.Product2.Master_Product__c;
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
+					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
-					originalProdConfig = orderItem.PricebookEntry.Product2.Product_Configuration__c;
 					orderId = orderItem.OrderId;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
@@ -94,12 +92,30 @@ public class RMS_prodConfigExtension {
 				return null;
 			
 			// retrieves fields from the master product makeability based on the master product id  
-			lMasterProduct = [SELECT Name, Product_Configuration__c
+			lMasterProduct = [SELECT Id, Name
 															FROM Product2
 															WHERE Id =: masterProductId
+					
 															limit 1].get(0);
 			return lMasterProduct;
 		}
+	}
+
+	// SOQL Filters for the product autocomplete checklist
+	public String productFilter
+	{
+		get
+		{
+			if ( productFilter != null ) return productFilter;
+
+			// return inventoried items
+			productFilter = ' AND Inventoried_Item__c = true ';
+
+			// Only return active products without a master product
+			productFilter += ' AND IsActive = true';
+			return productFilter;
+		}
+		private set;
 	}
 
 	/******* properties/variables to store the master product configuration *****************/
@@ -111,23 +127,48 @@ public class RMS_prodConfigExtension {
 			if (lMasterProductConfig != null) return lMasterProductConfig;
 			if (masterProductId == '' || masterProductId == null)
 				return null;
-			if (masterProduct.Product_Configuration__c == null)
-				return null;
 			
 			// Loop through the Product_Configuration__c fields and comma separate them into a string
 			String commaSeparatedFields = RMS_prodConfigManager.getCommaSeparatedFields('Product_Configuration__c');
  
+ 			String specialtyShapeString = orderLineItem.Specialty_Shape__c != null ?
+ 											' AND Specialty_Shape__c = \'' + orderLineItem.Specialty_Shape__c + '\'' : '';
 			// Use the comma separated field string to build a dynamic query to retrieve the Product_Configuration__c
 			String query = 'SELECT ' + commaSeparatedFields + ' FROM Product_Configuration__c ' + 
-													' WHERE Id = \'' + masterProduct.Product_Configuration__c + '\''+
+													' WHERE Product__c = \'' + masterProductId + '\''+
+													specialtyShapeString+
 													' LIMIT 1';
  
 			// Retrieve all fields from the Product_Configuration__c object in a query
-			lMasterProductConfig = Database.query(query);
+			List<Product_Configuration__c> resultConfigs = Database.query(query);
+			if(resultConfigs.size() > 0)
+				lMasterProductConfig = resultConfigs.get(0);
 
 			return lMasterProductConfig;
 		}
 	}
+
+	private static transient Id lPriceBookEntryId;
+	public Id priceBookEntryId {
+		get
+		{   
+			
+			if (lPriceBookEntryId != null) return lPriceBookEntryId;
+			if (masterProductId == '' || masterProductId == null)
+				return null;
+			
+
+			// Retrieve the pricebookentryId for the master product and the current price book
+			lPriceBookEntryId = [SELECT Id  FROM PricebookEntry
+																	WHERE 	PriceBook2Id =: priceBookId AND
+																			Product2Id =:	masterProductId
+																			LIMIT 1 ].Id;
+
+			return lPriceBookEntryId;
+		}
+	}
+
+		
 
 	/******* properties to store the child product record that this order item will be linked to *****************/
 	public Product2 childProduct {
@@ -148,15 +189,6 @@ public class RMS_prodConfigExtension {
 					count++;
 				}
 
-			// returns an error message if either 0 child products are found matching the criteria or multiple are found.
-			if (count == 0) {
-				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.CHILD_PRODUCT_NOT_FOUND));
-				return null;
-			}
-			if (count > 1) {
-				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.MULTIPLE_CHILD_PRODUCTS));
-				return null;
-			}
 			return childProduct;
 		}
 	}
@@ -776,25 +808,6 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Enter button is clicked at the master product level
 	public virtual pageReference enterProduct() {
 
-	
-
-/*		
-		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c;
-		String errorMessage = RMS_prodConfigManager.checkMakeability(masterProductConfig, orderLineItem);
-		if(!String.isBlank(errorMessage)) {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
-			return null;			
-		}
-		if (childProduct == null) return null;
-		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, priceBookId, childProduct.Id, masterProductConfig);
-		
-		if (prodConfig == null) {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
-			return null;
-		}
-		productSelected = true;
-		return null;
-*/
 		if (masterProductId == '' || masterProductId == null) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.PRODUCT_EMPTY));
 			return null;
@@ -802,9 +815,8 @@ public class RMS_prodConfigExtension {
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
 		
-		
 		// Default the verify item config to true if a product configuration record was found
-		if (prodConfig.mpc != null) orderLineItem.Verify_Item_Configuration__c = true;
+		orderLineItem.Verify_Item_Configuration__c = (prodConfig.mpc != null) ? true : false;
 		return null;
 
 	}
@@ -815,15 +827,16 @@ public class RMS_prodConfigExtension {
 	// runs whenever the Save button is clicked at the child product level
 	public virtual pageReference saveProduct() {
 
-		// Set this flag to true so we know to exit the javascript before redirecting
+		// Set these flags to true so we know to exit the javascript before redirecting
 		errorOccurred = 'true';
 
 		if (orderLineItem.Quantity == null || orderLineItem.Quantity < 1) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.QUANTITY_EMPTY));
 			return null;			
 		}
-		
-		inputUI = orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c; 
+		inputUI = (orderLineItem.Width_Inches__c != null && orderLineItem.Height_Inches__c != null) ?
+					orderLineItem.Width_Inches__c + orderLineItem.Height_Inches__c : 0;
+
 		// Only verify the makeability rules when Verify Item Config is checked
 		if (orderLineItem.Verify_Item_Configuration__c) {
 			
@@ -833,45 +846,34 @@ public class RMS_prodConfigExtension {
 				return null;			
 			} 
 		} 
-		if (childProduct == null) return null;
-		System.Debug('****************prodConfig=' +prodConfig);
-		System.Debug('****************priceBookId=' +priceBookId);
-		System.Debug('****************childProduct.Id=' +childProduct.Id);
-		prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
+		if (childProduct != null)
+			prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
 		
-		if (prodConfig == null) {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.INVALID_CHILD_PRODUCT));
-			return null;
-		}
-
-		PageReference ref;
 		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
-			orderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
+			orderLineItem.PriceBookEntryId = priceBookEntryId;
 			System.Debug('**********************orderLineItemFinal=' +orderLineItem);
 			insert orderLineItem;
-			ref = new PageReference('/' +orderLineItem.OrderId);
+			oiId = orderLineItem.Id;  // used to redirect to correct tab 
 		}
 		else {
-			if (orderLineItem.PriceBookEntryId != prodConfig.priceBookEntryId) {
+			if (orderLineItem.PriceBookEntryId != priceBookEntryId) {
 				OrderItem newOrderLineItem = orderLineItem.clone(false,true);
-				newOrderLineItem.PriceBookEntryId = prodConfig.priceBookEntryId;
+				newOrderLineItem.PriceBookEntryId = priceBookEntryId;
 				// for this scenario we will need to make sure we clear out selected options that are not available
 				// on the new order line item  
-				newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
+				if (masterProductConfig != null)
+					newOrderLineItem = clearNonSelectableValues(newOrderLineItem, masterProductConfig);
 				insert newOrderLineItem;
-				delete orderLineItem;
-				ref = new PageReference('/' +newOrderLineItem.OrderId); 
+				delete orderLineItem;				
+				oiId = newOrderLineItem.Id;  // used to redirect to correct tab 
 				
 			}
 			else {
 				upsert orderLineItem;
-				ref = new PageReference('/' +orderLineItem.OrderId);
+				oiId = orderLineItem.Id;  // used to redirect to correct tab 
 			}
 		}	
-		oiId = orderLineItem.Id;  // used to redirect to correct tab   
-//		return ref;
-		System.Debug('***************oiId=' +oiId);
 		// Set this flag back to false so we know it's ok to redirect from javascript
 		errorOccurred = 'false';
 		return null;
@@ -885,7 +887,7 @@ public class RMS_prodConfigExtension {
 		errorOccurred = 'false';
 		return null;
 	}
-	
+
 	/**********************************************************
 	clearNonSelectableValues(newOrderLineItem, masterProductConfig)
 	**********************************************************/
@@ -898,8 +900,7 @@ public class RMS_prodConfigExtension {
 		for(String pcField : pcFieldsMap.KeySet()){
 			if(pcField.contains('control') && (newProdConfig.get(pcField) == 'Disabled' || newProdConfig.get(pcField) == null) ){
 				activatedControlFieldNames.add(pcField);
-			}
-		}
+}		}
 		for(String pcField : activatedControlFieldNames){
 			String controlledField = pcField.replace('_control', '');
 
@@ -949,7 +950,52 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S3__c = null;	
 			oI.Tempered_S3__c = false;
 		}
+
+		//If any of the glass/grille controls are disabled, clear the corresponding Sash 1 fields:
+		if(newProdConfig.Grille_Pattern_Control__c == 'Disabled') {
+			oI.Grille_Pattern_S1__c = null;
+			oI.Grille_Pattern_S2__c = null;
+			oI.Grille_Pattern_S3__c = null;
+		}
+		if(newProdConfig.Grille_Lites_Control__c == 'Disabled') {
+			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
+			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
+			oI.Colonial_Grille_Lites_High_S2__c = null;	
+			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
+			oI.Colonial_Grille_Lites_High_S3__c = null;	
+		}
+		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled') {
+			oI.Custom_Grille_Details_S1__c	= null;
+			oI.Custom_Grille_Details_S2__c	= null;
+			oI.Custom_Grille_Details_S3__c	= null;
+		}
+		if(newProdConfig.Glazing_Control__c == 'Disabled') {
+			oI.Glazing_S1__c = null;	
+			oI.Glazing_S2__c = null;	
+			oI.Glazing_S3__c = null;	
+		}
+		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled') {
+			oI.Glass_Pattern_S1__c = null; 
+			oI.Glass_Pattern_S2__c = null; 
+			oI.Glass_Pattern_S3__c = null; 
+		}
+		if(newProdConfig.Tempered_Control__c == 'Disabled') {
+			oI.Tempered_S1__c = false;
+			oI.Tempered_S2__c = false;
+			oI.Tempered_S3__c = false;
+		}
 		
+		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == null){
+			oI.Grille_Pattern_S1__c = null;
+			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
+			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Custom_Grille_Details_S1__c	= null;
+			oI.Glazing_S1__c = null;	
+			oI.Glass_Pattern_S1__c = null; 
+			oI.Tempered_S1__c = false;
+		}
 		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1'){
 			oI.Grille_Pattern_S2__c = null;
@@ -960,6 +1006,17 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S2__c = null; 
 			oI.Tempered_S2__c = false;
 		}
+		//If Prod Config -> Number of Sashes = 1 or 2, clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2'){
+			oI.Grille_Pattern_S3__c = null;
+			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
+			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Custom_Grille_Details_S3__c	= null;
+			oI.Glazing_S3__c = null;	
+			oI.Glass_Pattern_S3__c = null; 
+			oI.Tempered_S3__c = false;
+		}
+
 		return oI;
 	}//END OF clearNonSelectableValues Method
 	

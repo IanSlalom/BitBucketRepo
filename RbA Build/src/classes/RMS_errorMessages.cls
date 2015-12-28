@@ -47,11 +47,7 @@ public with sharing class RMS_errorMessages {
  	public static final String LOCK_MIN_WIDTH = '&bull; You must select at least [enteredValue] locks when the width is greater than [requiredValue] inches.';
  	public static final String LOCK_MIN_HEIGHT = '&bull; You must select at least [enteredValue] locks when the height is greater than [requiredValue] inches.';
  	public static final String INTERIOR_COLOR_MAX_WIDTH = '&bull; The width cannot be more than [enteredValue] when the Interior Color is set to [requiredValue].';
- 	
- 	
-	public static final String CHILD_PRODUCT_NOT_FOUND = '&bull; A suitable product could not be found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
-	public static final String MULTIPLE_CHILD_PRODUCTS = '&bull; Multiple products were found based on the product information you entered. Please contact your Administrator for help in resolving this issue.';
-	public static final String INVALID_CHILD_PRODUCT = '&bull; A suitable product could not be found based on the product information you entered. Either zero or multiple products were found in the system. Please contact your Administrator for help in resolving this issue.';
+ 	 	
 	public static final String PRODUCT_CONFIG_NOT_FOUND = '&bull; A suitable product configuration for this product could not be found based on the information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String ORDER_NOT_FOUND = '&bull; The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = '&bull; Sorry, you cannot add product line items to an activated order.';

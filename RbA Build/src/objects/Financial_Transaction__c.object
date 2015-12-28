@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Object to store financial transaction records</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Credit_Account_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the account number to credit in this financial transaction</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the account number to credit in this financial transaction</inlineHelpText>
+        <label>Credit Account Number</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Only account numbers related to this financial transaction&apos;s store location can be selected.</errorMessage>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Configuration__c</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Financial Transactions Credit</relationshipLabel>
+        <relationshipName>Financial_Transactions_Credit</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Debit_Account_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the account number to debit in this financial transaction</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the account number to debit in this financial transaction</inlineHelpText>
+        <label>Debit Account Number</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Only account numbers related to this financial transaction&apos;s store location can be selected.</errorMessage>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Configuration__c</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Financial Transactions Debit</relationshipLabel>
+        <relationshipName>Financial_Transactions_Debit</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>The description of this financial transaction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The description of this financial transaction.</inlineHelpText>
+        <label>Description</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Store_Configuration__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <description>The store configuration this transaction is related to</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store configuration this transaction is related to</inlineHelpText>
+        <label>Store Configuration</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>Financial Transactions</relationshipLabel>
+        <relationshipName>Financial_Transactions</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Transaction_Type__c</fullName>
+        <description>Select the transaction type for this record. This will determine when these accounts will be debited/credited.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the transaction type for this record. This will determine when these accounts will be debited/credited.</inlineHelpText>
+        <label>Transaction Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Deposit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Final Payment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Inventory Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Inventory Installed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <label>Financial Transaction</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>FT-{00000}</displayFormat>
+        <label>Financial Transaction Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Financial Transactions</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

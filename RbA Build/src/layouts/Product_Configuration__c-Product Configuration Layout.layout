@@ -10,6 +10,14 @@
                 <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Product__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Specialty_Shape__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -517,11 +525,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>BM_Applied_Control__c</field>
+                <field>Brickmould_Applied_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>BM_Location_Control__c</field>
+                <field>Brickmould_Location_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -545,7 +553,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Corrosion_Resistant_Control__c</field>
+                <field>Corrosion_Resistant_Hardware_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -605,7 +613,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Grille_Alignment_Control__c</field>
+                <field>SW_Grille_Alignment_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -687,7 +695,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Perm_App_Int_Wood_Grille_Control__c</field>
+                <field>Perm_Applied_Int_Wood_Grille_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
