@@ -134,11 +134,86 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>BM_Applied_Control__c</fullName>
+        <description>Controls whether BM Applied is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether BM Applied is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>BM Applied</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>BM_Location_Control__c</fullName>
+        <description>Controls whether BM Location is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether BM Location is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>BM Location</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Breather_Tubes_Control__c</fullName>
         <description>Controls whether Breather Tubes is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
         <inlineHelpText>Controls whether Breather Tubes is required, enabled, or disabled for this product configuration.</inlineHelpText>
         <label>Breather Tubes</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Breathing_Tubes_Control__c</fullName>
+        <description>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Breathing Tubes is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Breathing Tubes</label>
         <picklist>
             <picklistValues>
                 <fullName>Disabled</fullName>
@@ -521,6 +596,31 @@
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Control__c</fullName>
+        <description>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Corrosion Resistant</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Corrosion_Resistant_Hardware_Control__c</fullName>
@@ -1368,6 +1468,31 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Grille_Alignment_Control__c</fullName>
+        <description>Controls whether Grille Alignment is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Grille Alignment is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Grille Alignment</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Grille_Lites_Control__c</fullName>
         <description>Controls whether Grille Lites is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -1632,6 +1757,93 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Dark Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color_Control__c</fullName>
+        <description>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>Select the hardware finish/color that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the hardware finish/color that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <picklist>
+            <picklistValues>
+                <fullName>White</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canvas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dark Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bright Brass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Antique Brass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Polished Chrome</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brushed Chrome</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Oil Rubbed Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Distressed Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Distressed Nickel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Satin Nickel</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -3410,6 +3622,31 @@
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Perm_App_Int_Wood_Grille_Control__c</fullName>
+        <description>Controls whether Permanently Applied Interior Wood Grille is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Permanently Applied Interior Wood Grille is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Perm App Int Wood Grille</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Perm_Applied_Int_Wood_Grille_Control__c</fullName>
