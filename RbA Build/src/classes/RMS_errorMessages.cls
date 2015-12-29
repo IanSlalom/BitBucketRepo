@@ -52,4 +52,19 @@ public with sharing class RMS_errorMessages {
 	public static final String ORDER_NOT_FOUND = '&bull; The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = '&bull; Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = '&bull; Sorry, you cannot edit product line items on an activated order.';
+
+
+	/*******************************************************
+					Financial Transation Errors
+	*******************************************************/
+	
+	public static final String NO_FINACIAL_TRANSACTION_RECORDS = '&bull;There is no financial transaction record of type [Transaction Type] for your store. Please consult your system admin for help resolving this error.';
+	public static final String EXTRA_FINACIAL_TRANSACTION_RECORDS = '&bull;There are two or more financial transaction records of type [Transaction Type] for your store. Please consult your system admin for help resolving this error.';
+	public static final String FINACIAL_TRANSACTION_RECORDS_NO_CREDIT_ACCOUNT_NUMBER = '&bull;The financial transaction record of type [Transaction Type] for your store does not have a Credit Account Number.';
+	public static final String FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER = '&bull;The financial transaction record of type [Transaction Type] for your store does not have a Debit Account Number.';
+		
+	public static final String PAYMENT_ID_IS_NULL = '&bull;The Payment Id is null.';
+	public static final String ORDER_IS_NULL = '&bull;The Order is null.';
+	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;The payment amount is null.';
+	public static final String CONTACT_IS_NULL = '&bull;The Contact is null';
 }

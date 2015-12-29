@@ -37,17 +37,17 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
 	        
 		// Before Insert
-		
+		/*
 		if(Trigger.isInsert && Trigger.isBefore){
-		    financialTransactionManager.onBeforeInsert(Trigger.new);
+		    handler.onBeforeInsert(Trigger.new);
 		}
-		
+		*/
 		//  Before Update
-		
+		/*
 		if(Trigger.isUpdate && Trigger.isBefore){
 			financialTransactionManager.onBeforeInsert(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-	  
+		*/  
 	
 	
 	
@@ -59,9 +59,9 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		*/
 		
 		// After Insert
-		/*
+		 /*
 		else if(Trigger.isInsert && Trigger.isAfter){
-			handler.onAfterInsert(Trigger.new, Trigger.newMap);
+			financialTransactionManager.onAfterInsert(Trigger.new, Trigger.newMap);
 		} 
 		*/
 		 
