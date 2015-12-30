@@ -114,7 +114,7 @@
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
-					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraSOQL1="{!productFilter}" extraSOQL2=""/> 
+					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/> 
             <apex:inputField value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="specialtyShape" />
                   <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
         </apex:pageBlockSection>

@@ -1,0 +1,6 @@
+<apex:page standardController="Labor__c" extensions="RMS_newLaborRedirectExtension" action="{!redirect}">
+    <apex:outputField value="{!Labor__c.Related_Work_Order__c}" rendered="false"/>
+    <apex:pageBlock title="Labor Entry" mode="edit" id="LaborEntryBlock">
+        <apex:pageMessages />
+    </apex:pageBlock>
+</apex:page>
