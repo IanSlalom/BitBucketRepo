@@ -115,7 +115,9 @@
         <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Vendor__c</members>
         <members>User</members>
+        <members>Vendor_Product__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -154,6 +156,7 @@
         <members>Journal_Entry__c-Journal Debit Entry Layout</members>
         <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Labor__c-Labor Layout</members>
+        <members>Labor__c-Misc Reimbursement Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -193,7 +196,9 @@
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
+        <members>Vendor_Product__c-Vendor Product Layout</members>
         <name>Layout</name>
     </types>
     <types>
