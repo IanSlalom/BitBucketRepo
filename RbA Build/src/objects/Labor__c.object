@@ -30,7 +30,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <type>Default</type>
+        <content>RMS_newLaborRedirect</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>SaveEdit</actionName>
@@ -55,6 +57,30 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
+        <fullName>Check_Date__c</fullName>
+        <description>Check date used for the reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check date used for the reimbursement</inlineHelpText>
+        <label>Check Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Check_Number__c</fullName>
+        <description>Check number used for the reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check number used for the reimbursement</inlineHelpText>
+        <label>Check Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Date_Applied__c</fullName>
         <externalId>false</externalId>
         <label>Date Applied</label>
@@ -76,7 +102,7 @@
     <fields>
         <fullName>External_Labor_Amount__c</fullName>
         <externalId>false</externalId>
-        <label>External Labor Amount</label>
+        <label>External Payment Amount</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -95,6 +121,19 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installer_Account_Number__c</fullName>
+        <description>The installer&apos;s account number</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The installer&apos;s account number</inlineHelpText>
+        <label>Installer Account Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -185,6 +224,11 @@
         <unique>false</unique>
     </fields>
     <label>Labor</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <displayFormat>Labor Record # - {00}</displayFormat>
         <label>Labor Record #</label>
@@ -198,6 +242,12 @@
         <active>true</active>
         <description>Used to track Labor against the Work Order</description>
         <label>Labor</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Misc_Reimbursement</fullName>
+        <active>true</active>
+        <description>Used to enter miscellaneous reimbursements to contractor. This was formerly called misc sub payments.</description>
+        <label>Misc Reimbursement</label>
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
