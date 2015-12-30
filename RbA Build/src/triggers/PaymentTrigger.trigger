@@ -1,0 +1,89 @@
+/*******************************************************//**
+
+@trigger PaymentTrigger
+
+@brief	trigger framework to secure order of operation
+
+@author  Anthony Strafaccia (Slalom.ADS)
+
+@version	2015-12/25  Slalom.ADS
+	Created.
+
+@see		PaymentTriggerTest
+
+@copyright  (c)2015 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited.
+
+***********************************************************/
+
+trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete, 
+										after update, before delete, before insert, before update) {
+	
+	//GET ALL RMS SETTINGS CUSTOM SETTINGS
+	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
+	
+	//CHECK IF DATA LOADING PROFILE	
+	if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
+		if(Trigger.isDelete){
+			Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+		}else{
+			Trigger.new[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+		}
+	}
+	//IF NOT DATA LOADING PROFILE RUN LOGIC
+	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
+		
+		//HANDLERS AND MANAGERS
+		RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
+	        
+		// Before Insert
+		/*
+		if(Trigger.isInsert && Trigger.isBefore){
+		    handler.onBeforeInsert(Trigger.new);
+		}
+		*/
+		//  Before Update
+		/*
+		if(Trigger.isUpdate && Trigger.isBefore){
+			financialTransactionManager.onBeforeInsert(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		}
+		*/  
+	
+	
+	
+		// Before Delete
+		/*
+		else if(Trigger.isDelete && Trigger.isBefore){
+		    financialTransactionManager.onBeforeDelete(Trigger.old, Trigger.oldMap);
+		}
+		*/
+		
+		// After Insert
+		 /*
+		else if(Trigger.isInsert && Trigger.isAfter){
+			financialTransactionManager.onAfterInsert(Trigger.new, Trigger.newMap);
+		} 
+		*/
+		 
+		// After Update
+		/*
+		else if(Trigger.isUpdate && Trigger.isAfter){
+		    handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		}
+		*/
+		            
+		//After Delete
+		/*
+		else if(Trigger.isDelete && Trigger.isAfter){
+		    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
+		}
+		*/
+		
+		// After Undelete 
+		/*
+		else if(Trigger.isUnDelete){
+		    handler.onUndelete(Trigger.new);
+		}
+		*/
+	}
+}

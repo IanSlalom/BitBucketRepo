@@ -677,6 +677,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>The hardware finish/color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish/color applied to this product.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Hardware_Finish__c</fullName>
         <description>The hardware finish applied to this product.</description>
         <externalId>false</externalId>
@@ -976,6 +988,16 @@
         <externalId>false</externalId>
         <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
         <label>Perm Applied Int Wood Grille</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Permanently Applied Interior Wood Grille</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
     </fields>
@@ -1475,7 +1497,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Box</fullName>
+                <fullName>box</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
