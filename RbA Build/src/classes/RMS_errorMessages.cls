@@ -13,6 +13,7 @@ public with sharing class RMS_errorMessages {
 	public static final String UPDATE_PO_LINES_EXCEPTION = 'The system was unable to update the purchase order line items. Please contact your system admin for help.';
 	public static final String UPDATE_PO_EXCEPTION = 'The system was unable to update the purchase order. Please contact your system admin for help.';
 	public static final String USER_STORE_LOCATION_BLANK = 'Your user record is not associated with a store location. Please contact your system admin for help.';
+	public static final String STORE_LOCATION_BLANK = 'The order is not associated with a store location. Please add the store location and try again.';
 	public static final String INVENTORY_GL_ACCOUNT_NOT_FOUND = 'The inventory GL account number could not be found. Please contact your system admin for help.';
 	public static final String INTERCOMPANY_AP_ACCOUNT_NOT_FOUND = 'The intercompany AP account number could not be found. Please contact your system admin for help.';
 

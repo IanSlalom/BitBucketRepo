@@ -79,6 +79,59 @@ public class RMS_prodConfigExtension {
 		private set;		  
 	}
 
+	/******* property for the store location acount  *****************/
+	public Id storeLocationId {
+		get
+		{   
+			if (storeLocationId != null) return storeLocationId;
+			
+			Order relatedOrder = [SELECT Id, Name, Store_Location2__c  FROM Order WHERE Id = :orderId];
+
+//			for (Order o : [SELECT Store_Location__c FROM Order WHERE Id =: orderId]) {
+				storeLocationId = relatedOrder.Store_Location2__c;
+//			}
+			
+			if (storeLocationId == null)
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_BLANK));
+
+			return storeLocationId;
+		}
+		private set;		  
+	}
+
+	// The set of vendor ids associated with the store
+	public Set<Id> storeVendors
+	{
+		get
+		{
+			if ( storeVendors != null) return storeVendors;
+			if (storeLocationId == null) return null;
+			storeVendors = new Set<Id>();
+			for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocationId AND Vendor__c != null]) {
+				storeVendors.add(sv.Vendor__c);
+			}
+			
+
+			return storeVendors;
+		}
+		set;
+	}
+
+	// The set of products ids associated with the store vendor
+	public Set<Id> vendorProducts
+	{
+		get
+		{
+			if ( vendorProducts != null) return vendorProducts;
+			vendorProducts = new Set<Id>();
+			for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c IN : storeVendors AND Product__c != null]) {
+				vendorProducts.add(vp.Product__c);
+			}
+			return vendorProducts;
+		}
+		set;
+	}	
+
 	public String masterProductId {get; set;}
 
 	/******* properties/variables to store the master product id/record and makeability *****************/
@@ -102,22 +155,42 @@ public class RMS_prodConfigExtension {
 	}
 
 	// SOQL Filters for the product autocomplete checklist
-	public String productFilter
+	public String productQueries
 	{
 		get
 		{
-			if ( productFilter != null ) return productFilter;
+			if ( productQueries != null ) return productQueries;
 
 			// return inventoried items
-			productFilter = ' AND Inventoried_Item__c = true ';
+			productQueries = 'Inventoried_Item__c = true ';
 
 			// Only return active products without a master product
-			productFilter += ' AND IsActive = true';
-			return productFilter;
+			productQueries += ' AND IsActive = true AND Master_Product__c = null';
+
+			// The query side of making sure the product id is in the vendor product id set
+			productQueries += ' AND Id IN :';
+			return productQueries;
 		}
 		private set;
 	}
 
+	public String productVariables
+	{
+		get
+		{
+			if ( productVariables != null ) return productVariables;
+			
+			String joinedString = '';
+			for (Id v : vendorProducts) {
+				joinedString += (joinedString==''?'':',')+v;
+			}
+			if (String.isBlank(joinedString)) joinedString = 'empty';
+			productVariables = joinedString;
+
+			return productVariables;
+		}
+		private set;
+	}
 	/******* properties/variables to store the master product configuration *****************/
 	private static transient Product_Configuration__c lMasterProductConfig;
 	public Product_Configuration__c masterProductConfig {

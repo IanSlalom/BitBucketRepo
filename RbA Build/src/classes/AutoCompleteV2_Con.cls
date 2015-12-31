@@ -38,8 +38,8 @@ public class AutoCompleteV2_Con {
     public String sObjVal{get;set;}
     public Integer randomJsIden{get;set;}
     public Object cacheField{get;private set;} 
-    public String extraSOQLVar1{ get; set; }
-    public String extraSOQLVar2{ get; set; }
+    public String extraQueries{ get; set; }
+    public String extraVariables{ get; set; }
     
     private Object targetFieldVar;
     
@@ -93,14 +93,38 @@ public class AutoCompleteV2_Con {
     *This method queries data according to the passed parameters
     ***/
     @RemoteAction
-    public static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param, String extraSOQL1, String extraSOQL2){
+    public static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param, String extraQueries, String extraVariables){
        
         List<AutoCompleteData> AutoCompleteDatas = new List<AutoCompleteData>();
         param = String.escapeSingleQuotes(param);
         
  		String extraSOQL = '';
- 		if (String.isNotBlank(extraSOQL1) && String.isNotBlank(extraSOQL2))
-        	extraSOQL = extraSOQL1 + '\'' +extraSOQL2 +'\'';
+ 		integer cnt = 0;
+ 		
+ 		if (extraQueries != null && extraVariables != null) {
+ 					System.Debug('************extraQueries=' +extraQueries);
+ 					System.Debug('************extraVariables=' +extraVariables);
+	        List<String> extraQueriesList = extraQueries.split(';');
+    	    List<String> extraVariablesList = extraVariables.split(';');
+ 					System.Debug('************extraVariablesList=' +extraVariablesList);
+ 					System.Debug('************extraQueriesList=' +extraQueriesList);
+ 			for (String extraQuery : extraQueriesList) {
+				Set<Id> accountIds;
+ 				if (extraQuery.contains('IN') )			{
+ 					List<String> stringIds = new List<String>();
+ 					System.Debug('************extraVariablesList[cnt]=' +extraVariablesList[cnt]);
+ 					System.Debug('************String.isNotBlank(extraVariablesList[cnt])=' +String.isNotBlank(extraVariablesList[cnt]));
+ 					
+ 					if (String.isNotBlank(extraVariablesList[cnt]))
+ 						stringIds = extraVariablesList[cnt].split(',');
+ 	 				extraSOQL = ' AND ' +extraQuery + 'stringIds';
+ 				} else {
+ 				extraSOQL = ' AND ' +extraQuery + '\'' +extraVariablesList[cnt] +'\'';
+ 				}
+ 				cnt++;
+ 			}
+ 		}
+ 		System.Debug('***************query=' +'SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+labelFieldVar+' LIKE \'%'+param+'%\'' +extraSOQL);
         for( Sobject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+labelFieldVar+' LIKE \'%'+param+'%\'' +extraSOQL)){
             AutoCompleteDatas.add(new AutoCompleteData(sObj.get(valueFieldVar),sObj.get(labelFieldVar)));
         }
