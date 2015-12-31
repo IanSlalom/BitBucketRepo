@@ -64,7 +64,13 @@ public with sharing class RMS_errorMessages {
 	public static final String FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER = '&bull;The financial transaction record of type [Transaction Type] for your store does not have a Debit Account Number.';
 		
 	public static final String PAYMENT_ID_IS_NULL = '&bull;The Payment Id is null.';
-	public static final String ORDER_IS_NULL = '&bull;The Order is null.';
-	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;The payment amount is null.';
-	public static final String CONTACT_IS_NULL = '&bull;The Contact is null';
+	public static final String ORDER_IS_NULL = '&bull;Please enter an Order before creating a payment record on this order';
+	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;Please enter a Payment Amount before creating a payment record on this order';
+	public static final String CONTACT_IS_NULL = '&bull;Please enter a Contact on the Order before creating a payment record on this order';
+	public static final String PAYMENT_ALREADY_SUBMITTED = '&bull;This payment has already been submitted, so you cannot change it.';
+	
+	public static final String PAYMENT_ALREADY_SUBMITTED_DELETE = '&bull;This payment has already been submitted, so you cannot delete it.';
+	public static final String MULTIPLE_JOURNAL_ENTRIES = '&bull;This payment has more then one journal entry. Please consult your system admin for help resolving this error.';
+	
+	
 }

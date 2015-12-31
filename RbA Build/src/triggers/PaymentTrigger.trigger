@@ -45,32 +45,26 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		//  Before Update
 		/*
 		if(Trigger.isUpdate && Trigger.isBefore){
-			financialTransactionManager.onBeforeInsert(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+			financialTransactionManager.onBeforeUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-		*/  
-	
-	
-	
+		 */
+
 		// Before Delete
-		/*
-		else if(Trigger.isDelete && Trigger.isBefore){
+		//else 
+		if(Trigger.isDelete && Trigger.isBefore){
 		    financialTransactionManager.onBeforeDelete(Trigger.old, Trigger.oldMap);
 		}
-		*/
-		
+
 		// After Insert
-		 /*
 		else if(Trigger.isInsert && Trigger.isAfter){
 			financialTransactionManager.onAfterInsert(Trigger.new, Trigger.newMap);
 		} 
-		*/
 		 
 		// After Update
-		/*
 		else if(Trigger.isUpdate && Trigger.isAfter){
-		    handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		    financialTransactionManager.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-		*/
+		
 		            
 		//After Delete
 		/*

@@ -132,7 +132,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											'&accountId='+relatedAccount[0].Id+
 											'&billingStreet='+relatedAccount[0].BillingStreet+
 											'&billingCity='+relatedAccount[0].BillingCity+
-											'&billingPostalCode='+relatedAccount[0].BillingState+
+											'&billingState='+relatedAccount[0].BillingState+
+											'&billingPostalCode='+relatedAccount[0].BillingPostalCode+
 											'&billingCountry='+relatedAccount[0].BillingCountry+
 											'&relatedOpp='+theOrd[0].OpportunityId+
 											'&permit='+relatedAccount[0].Building_Permit__c+	
