@@ -68,6 +68,19 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Amount_Refunded__c</fullName>
+        <description>The total amount refunded (rollup of the refunds linked to this payment record).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The total amount refunded (rollup of the refunds linked to this payment record).</inlineHelpText>
+        <label>Amount Refunded</label>
+        <summarizedField>Refund__c.Amount__c</summarizedField>
+        <summaryForeignKey>Refund__c.Payment__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>Description__c</fullName>
         <description>Area to enter more details about the payment.</description>
         <externalId>false</externalId>
@@ -290,4 +303,19 @@
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Payment_Amount_Must_Be_Positive</fullName>
+        <active>true</active>
+        <description>Payment Amount Must Be Positive</description>
+        <errorConditionFormula>Payment_Amount__c &lt;= 0</errorConditionFormula>
+        <errorDisplayField>Payment_Amount__c</errorDisplayField>
+        <errorMessage>The payment amount must be a positive number.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Refund_Amount_Cannot_Exceed_Payment</fullName>
+        <active>true</active>
+        <description>The amount refunded cannot exceed the original payment</description>
+        <errorConditionFormula>Amount_Refunded__c &gt; Payment_Amount__c</errorConditionFormula>
+        <errorMessage>The amount refunded cannot exceed the original payment amount.</errorMessage>
+    </validationRules>
 </CustomObject>
