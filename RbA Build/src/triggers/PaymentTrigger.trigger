@@ -76,7 +76,7 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		// After Undelete 
 		/*
 		else if(Trigger.isUnDelete){
-		    handler.onUndelete(Trigger.new);
+		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
 		}
 		*/
 	}

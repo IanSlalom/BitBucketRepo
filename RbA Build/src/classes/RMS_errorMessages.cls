@@ -65,6 +65,7 @@ public with sharing class RMS_errorMessages {
 	public static final String FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER = '&bull;The financial transaction record of type [Transaction Type] for your store does not have a Debit Account Number.';
 		
 	public static final String PAYMENT_ID_IS_NULL = '&bull;The Payment Id is null.';
+	public static final String STORE_LOCATION_IS_BLANK = '&bull;The Store Location is blank, please this is a required field.';
 	public static final String ORDER_IS_NULL = '&bull;Please enter an Order before creating a payment record on this order';
 	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;Please enter a Payment Amount before creating a payment record on this order';
 	public static final String CONTACT_IS_NULL = '&bull;Please enter a Contact on the Order before creating a payment record on this order';

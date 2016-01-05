@@ -18,20 +18,21 @@
 
 public with sharing class RMS_financialTransactionManager {
 
-
+ 
 	public void onAfterInsert(list<Payment__c> listNew, map<id,Payment__c> mapNew){
+		//CHECK FOR DEPOSIT TYPE
 		createOrUpdateJournalEntry(listNew, mapNew);
 	}
 
 	public void onAfterUpdate(list<Payment__c> listOld, list<Payment__c> listNew, map<Id, Payment__c> mapOld, map<Id, Payment__c> mapNew){
+		//CHECK FOR DEPOSIT TYPE
 		createOrUpdateJournalEntry(listNew, mapNew);
 	}
 	
 	public void onBeforeDelete(list<Payment__c> listOld, map<Id, Payment__c> mapOld){
 		allowDeleteOrNot(listOld, mapOld);
 	}
-	
-	
+
 	public void allowDeleteOrNot(list<Payment__c> listOld, map<id,Payment__c> mapOld ){
 		list<Journal_Entry__c> journalEntriesToDelete= new list<Journal_Entry__c>();
 		map<Id, list<Journal_Entry__c>> paymentIdToJournalEntryMap = linkJournalEntries(listOld);
@@ -65,8 +66,8 @@ public with sharing class RMS_financialTransactionManager {
 													Payment_Amount__c,
 													Payment_Type__c,
 													Order__r.Store_Location2__c,
-													RecordTypeId
-													
+													RecordTypeId,
+													Store_Location__c
 													FROM Payment__c WHERE Id IN :mapNew.keyset()];		
 		
 		map<Id, list<Journal_Entry__c>> paymentIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
@@ -75,9 +76,12 @@ public with sharing class RMS_financialTransactionManager {
 		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		
 		for(Payment__c p : extraFieldsList){
-			if(p.RecordTypeId == paymentDespositRecordTypeId){
+			if(p.RecordTypeId == paymentDespositRecordTypeId && p.Payment_Type__c == 'Deposit'){
+				string errorMessage;
+				if(p.Store_Location__c == null || p.Store_Location__c == ''){
+					errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
+				}
 				if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
-					string errorMessage;
 					
 					errorMessage = checkFinacialTransationForErrors(paymentIdToDepositFinacialTransactionList.get(p.id) , errorMessage, p.Payment_Type__c);
 					errorMessage = checkPaymentForErrors(p, errorMessage);
@@ -91,10 +95,10 @@ public with sharing class RMS_financialTransactionManager {
 						Payment__c = p.id,
 						Order__c = p.Order__c,
 						Amount__c = p.Payment_Amount__c,
-						Customer__c = p.Order__r.BillToContactId,
+						Customer__c = p.Order__r.BillToContactId, 
 						
-						Credit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Credit_Account_Number__c,
-						Debit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Debit_Account_Number__c
+						Credit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Credit_Account_Number__r.Name,
+						Debit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name
 						);
 						journalEntriesToUpsert.add(newJE);
 					}else{
@@ -107,7 +111,8 @@ public with sharing class RMS_financialTransactionManager {
 						Journal_Entry__c je = paymentIdToJournalEntryMap.get(p.id)[0];
 						if(je.Sent_to_BaanERP__c == true){
 							//Journal Entry already sent to BaanERP, throw error
-							String errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
+							//String 
+							errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
 							mapNew.get(p.id).addError(errorMessage, FALSE);
 						}else{
 							//Journal Entry NOT sent to BaanERP, update Journal Entry
@@ -169,6 +174,7 @@ public with sharing class RMS_financialTransactionManager {
 		list<id> storeListId = new list<id>();
 		for(Payment__c p : paymentList){
 			paymentIdList.add(p.id);
+			//TODOO pull store from payment if isn't throw error
 			storeListId.add(p.Order__r.Store_Location2__c);
 		}
 		
@@ -176,7 +182,9 @@ public with sharing class RMS_financialTransactionManager {
 																				Store_Configuration__c, 
 																				Store_Configuration__r.Store__c,
 																				Credit_Account_Number__c,
-																				Debit_Account_Number__c
+																				Credit_Account_Number__r.Name,
+																				Debit_Account_Number__c,
+																				Debit_Account_Number__r.Name
 																			FROM Financial_Transaction__c 
 											 								WHERE Store_Configuration__r.Store__c IN :storeListId
 																			AND Transaction_Type__c = :typeToGet
