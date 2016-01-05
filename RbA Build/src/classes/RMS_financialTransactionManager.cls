@@ -201,7 +201,7 @@ public with sharing class RMS_financialTransactionManager {
 		
 		map<id, list<Financial_Transaction__c>> paymentIdToListFinancialTransaction = new map<id, list<Financial_Transaction__c>>();
 		for(Payment__c p : paymentList){
-			paymentIdToListFinancialTransaction.put(p.id, storeIdToListFinancialTransaction.get(p.Order__r.Store_Location2__c));
+			paymentIdToListFinancialTransaction.put(p.id, storeIdToListFinancialTransaction.get(p.Store_Location__c));
 		}
 		system.debug('ads paymentIdToListFinancialTransaction: '+paymentIdToListFinancialTransaction);
 		return paymentIdToListFinancialTransaction;
