@@ -175,7 +175,7 @@ public with sharing class RMS_financialTransactionManager {
 		for(Payment__c p : paymentList){
 			paymentIdList.add(p.id);
 			//TODOO pull store from payment if isn't throw error
-			storeListId.add(p.Order__r.Store_Location2__c);
+			storeListId.add(p.Store_Location__c);
 		}
 		
 		list<Financial_Transaction__c> relatedFinancialTransactions = [SELECT 	id, 
