@@ -301,7 +301,24 @@
             </values>
         </picklistValues>
     </recordTypes>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Order__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Payment_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Payment_Method__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Payment_Amount__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Order__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Payment_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Payment_Method__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Payment_Amount__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Order__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Payment_Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Payment_Method__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Payment_Amount__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Order__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Payment_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Payment_Method__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Payment_Amount__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Payment_Amount_Must_Be_Positive</fullName>
