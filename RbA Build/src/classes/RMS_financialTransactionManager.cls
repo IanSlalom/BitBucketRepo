@@ -78,7 +78,7 @@ public with sharing class RMS_financialTransactionManager {
 		for(Payment__c p : extraFieldsList){
 			if(p.RecordTypeId == paymentDespositRecordTypeId && p.Payment_Type__c == 'Deposit'){
 				string errorMessage;
-				if(p.Store_Location__c == null || p.Store_Location__c == ''){
+				if(p.Store_Location__c == null ){ 
 					errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
 				}
 				if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
