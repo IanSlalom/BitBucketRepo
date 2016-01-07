@@ -116,9 +116,6 @@
         <name>CustomObject</name>
     </types>
     <types>
-        <name>CustomObjectTranslation</name>
-    </types>
-    <types>
         <members>Discount__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Municipality__c</members>
