@@ -64,6 +64,10 @@
                 <behavior>Edit</behavior>
                 <field>Store_Location__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Amount_Refunded__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -114,6 +118,13 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <fields>NAME</fields>
+        <fields>Reason__c</fields>
+        <fields>Amount__c</fields>
+        <fields>Date__c</fields>
+        <relatedList>Refund__c.Payment__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
         <fields>ACTIVITY.TASK</fields>
@@ -138,7 +149,9 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Amount__c</fields>
-        <fields>Type__c</fields>
+        <fields>Date__c</fields>
+        <fields>Debit_General_Ledger_Account__c</fields>
+        <fields>Credit_General_Ledger_Account__c</fields>
         <relatedList>Journal_Entry__c.Payment__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
@@ -147,7 +160,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000N2m4</masterLabel>
+        <masterLabel>00h3B000000N1Rj</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

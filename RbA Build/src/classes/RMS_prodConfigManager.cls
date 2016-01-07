@@ -119,7 +119,7 @@ public with sharing class RMS_prodConfigManager {
 				if(orderLineItem.Height_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Height_Fraction__c);
 				}
-				String requiredValue = String.ValueOf(masterProductConfig.Min_Width__c);
+				String requiredValue = String.ValueOf(masterProductConfig.Min_Height__c);
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_BELOW_MIN, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -471,7 +471,7 @@ public with sharing class RMS_prodConfigManager {
 	// creates the product config wrapper to store the config options
 	public static productConfigWrapper findProductConfiguration(OrderItem orderLineItem, String childProductId, Product_Configuration__c masterProductConfig) {
 
-		// Check if we have the necessary Ids to create teh wrapper and return null if not
+		// Check if we have the necessary Ids to create the wrapper and return null if not
 		if (orderLineItem == null ) return null;
 
 		// Create a wrapper with the pricebook entry and order line item and return it
@@ -489,19 +489,21 @@ public with sharing class RMS_prodConfigManager {
 	// creates the product config wrapper to store the config options
 	public static productConfigWrapper findPricingConfiguration(productConfigWrapper theWrapper, String priceBookId, String childProductId) {
 
-		// Check if we have the necessary Ids to retrieve the pricebookentry and return null if not
-		if (childProductId == null) return null;
+		// Check if we have the necessary Ids to retrieve the pricebookentry and return the wrapper unchanged if so
+		if (childProductId == null) return theWrapper;
 
 		PricebookEntry pBookEntry = [SELECT Id, Pricing_Configuration__c FROM PricebookEntry
 																	WHERE 	PriceBook2Id =: priceBookId AND
 																			Product2Id =:	childProductId
 																	LIMIT 1 ];
 		
-		if (theWrapper.orderLI.Id == null) theWrapper.orderLI.PriceBookEntryId = pBookEntry.Id;
+		// If the child product's pricebook entry cannot be found, return the wrapper unchanged
+		if (pBookEntry == null) return theWrapper;
+
 		Pricing_Configuration__c pricingConfig = new Pricing_Configuration__c();
 
-		// If the pricingConfig was not found return null
-		if (pBookEntry.Pricing_Configuration__c == null) return null;
+		// If the pricingConfig was not found return the wrapper unchanged
+		if (pBookEntry.Pricing_Configuration__c == null) return theWrapper;
 
 		// Retrieve all fields for Pricing Configuration in a comma separated string
 		String commaSeparatedFields = getCommaSeparatedFields('Pricing_Configuration__c');
@@ -516,7 +518,6 @@ public with sharing class RMS_prodConfigManager {
 
 
 		theWrapper.pricingConfig = pricingConfig;
-		theWrapper.priceBookEntryId = pBookEntry.Id;
 		return theWrapper;
 
 	}   

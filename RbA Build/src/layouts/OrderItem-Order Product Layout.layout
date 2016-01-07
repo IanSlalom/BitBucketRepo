@@ -25,6 +25,10 @@
                 <field>Product2Id</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Specialty_Shape__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Product_Type__c</field>
             </layoutItems>
@@ -61,11 +65,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>NSPR__c</field>
+                <field>Tax_Credit_Qualified__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Tax_Credit_Qualified__c</field>
+                <field>NSPR__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -178,15 +182,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sales_Width_Fraction__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Sales_Height_Inches__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Sales_Height_Fraction__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -454,7 +450,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Permanently_Applied_Interior_Wood_Grille__c</field>
+                <field>Perm_Applied_Int_Wood_Grille__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -682,8 +678,8 @@
     <multilineLayoutFields>ListPrice</multilineLayoutFields>
     <multilineLayoutFields>UnitPrice</multilineLayoutFields>
     <multilineLayoutFields>Quantity</multilineLayoutFields>
-    <multilineLayoutFields>Description</multilineLayoutFields>
     <multilineLayoutFields>OrderId</multilineLayoutFields>
+    <multilineLayoutFields>Description</multilineLayoutFields>
     <multilineLayoutFields>TotalPrice</multilineLayoutFields>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>

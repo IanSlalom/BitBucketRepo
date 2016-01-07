@@ -10,6 +10,7 @@
     <tab>standard-Opportunity</tab>
     <tab>standard-Order</tab>
     <tab>Purchase_Order__c</tab>
+    <tab>Labor__c</tab>
     <tab>standard-report</tab>
     <tab>standard-Dashboard</tab>
 </CustomApplication>

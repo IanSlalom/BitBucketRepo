@@ -49,13 +49,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <apex:attribute name="allowClear" description="Set true to give user a option to clear existing value" type="Boolean" default="true"/>
         
     <apex:attribute name="Style" description="style for the input component" type="String"/>
-      <apex:attribute name="extraSOQL1"
-        description="Additional SOQL passed to filter the results"
-        type="String" required="false" assignTo="{!extraSOQLVar1}"/>
+      <apex:attribute name="extraQueriesAttribute"
+        description="Additional Queries passed to filter the results"
+        type="String" required="false" assignTo="{!extraQueries}"/>
     <apex:attribute name="Style" description="style for the input component" type="String"/>
-      <apex:attribute name="extraSOQL2"
-        description="Additional SOQL passed to filter the results"
-        type="String" required="false" assignTo="{!extraSOQLVar2}"/>
+      <apex:attribute name="extraVariablesAttribute"
+        description="Additional variables passed to filter the results"
+        type="String" required="false" assignTo="{!extraVariables}"/>
 
     <!--Required js files-->
     <apex:outputPanel rendered="{!importJquery}">
@@ -135,7 +135,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         function queryData{!randomJsIden}(query){
           
            Visualforce.remoting.Manager.invokeAction(
-                     '{!$RemoteAction.AutoCompleteV2_Con.getData}','{!sObjVal}','{!labelFieldVar}','{!valueFieldVar}',query.term, '{!extraSOQLVar1}', '{!extraSOQLVar2}',
+                     '{!$RemoteAction.AutoCompleteV2_Con.getData}','{!sObjVal}','{!labelFieldVar}','{!valueFieldVar}',query.term, '{!extraQueries}', '{!extraVariables}',
                      function(result, event){
                           
                          //if success

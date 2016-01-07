@@ -80,53 +80,104 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	}
 
 	// SOQL Filters for the vendor autocomplete checklist
-	public String vendorFilter
+	public String vendorQueries
 	{
 		get
 		{
-			if ( vendorFilter != null ) return vendorFilter;
-			vendorFilter = ' AND RecordTypeId = ';
-			return vendorFilter;
-		}
-		private set;
-	}
-	public String vendorFilter2
-	{
-		get
-		{
-			if ( vendorFilter2 != null ) return vendorFilter2;
-			vendorFilter2 = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
-			return vendorFilter2;
+			if ( vendorQueries != null ) return vendorQueries;
+			vendorQueries = 'RecordTypeId = ';
+			vendorQueries += ';Id IN :';
+			return vendorQueries;
 		}
 		private set;
 	}
 
-	// SOQL Filters for the product autocomplete checklist
-	public String productFilter
+	public String vendorVariables
 	{
 		get
 		{
-			if ( productFilter != null ) return productFilter;
+			if ( vendorVariables != null ) return vendorVariables;
+			vendorVariables = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
+			String joinedString = '';
+			for (Id s : storeVendors) {
+				joinedString += (joinedString==''?'':',')+s;
+			}
+			if (String.isBlank(joinedString)) joinedString = 'empty';
+			vendorVariables += ';' +joinedString;
+			return vendorVariables;
+		}
+		private set;
+	}
+
+	// The set of vendor ids associated with the store
+	public Set<Id> storeVendors
+	{
+		get
+		{
+			if ( storeVendors != null) return storeVendors;
+			if (storeLocation == null) return null;
+			storeVendors = new Set<Id>();
+			for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocation.Id AND Vendor__c != null]) {
+				storeVendors.add(sv.Vendor__c);
+			}
+			
+
+			return storeVendors;
+		}
+		set;
+	}
+
+	// The set of products ids associated with the selected vendor
+	public Set<Id> vendorProducts
+	{
+		get
+		{
+			if ( vendorProducts != null) return vendorProducts;
+			vendorProducts = new Set<Id>();
+			for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c =: selectedVendor AND Product__c != null]) {
+				vendorProducts.add(vp.Product__c);
+			}
+			return vendorProducts;
+		}
+		set;
+	}
+
+
+	// SOQL Filters for the product autocomplete checklist
+	public String productQueries
+	{
+		get
+		{
+			if ( productQueries != null ) return productQueries;
 			if (selectedVendor == null) return null;
 
 			// If this is a cost PO, only return non-inventoried items, otherwise return inventoried items
-			productFilter = (costPurchaseOrder) ? 	' AND Inventoried_Item__c = false ' :
-													' AND Inventoried_Item__c = true ';
+			productQueries = (costPurchaseOrder) ? 	'Inventoried_Item__c = false ' :
+															'Inventoried_Item__c = true ';
 
 			// Only return active products with a particular vendor (see productFilter2)
-			productFilter += ' AND IsActive = true AND Vendor__c = ';
-			return productFilter;
+			productQueries += ' AND IsActive = true AND Vendor__c = ';
+			productQueries += ';Id IN :';
+			return productQueries;
 		}
 		private set;
 	}
-	public String productFilter2
+	public String productVariables
 	{
 		get
 		{
-			if ( productFilter2 != null ) return productFilter2;
+			if ( productVariables != null ) return productVariables;
 			if (selectedVendor == null) return null;
-			productFilter2 = selectedVendor;
-			return productFilter2;
+			
+			productVariables = selectedVendor;
+			String joinedString = '';
+			for (Id v : vendorProducts) {
+				joinedString += (joinedString==''?'':',')+v;
+			}
+			if (String.isBlank(joinedString)) joinedString = 'empty';
+			productVariables += ';' +joinedString;
+
+			return productVariables;
 		}
 		private set;
 	}
@@ -160,12 +211,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		orderId = apexpages.currentpage().getparameters().get('orderId');
 		if ( orderId == null ) orderId = '';
 	}
-	
+
+	public Account storeLocation { get; set; }	
 	public Boolean newPurchaseOrder {get;set;}
 	public Boolean costPurchaseOrder {get;set;}
 	
 	//public variables to be used in new PO
-	public list<SelectOption> avaliableVendors = new list<SelectOption>();
+	public list<SelectOption> availableVendors = new list<SelectOption>();
 	
 	//public variables to create wrapper
 	public list<OrderItemWrapper> orderItemWrapperList = new list<OrderItemWrapper>();
@@ -222,8 +274,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 			//GET THE ORDER
 			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c, Store_Location__c  FROM Order WHERE Id = :orderId];
-			po.Store_Abbreviation__c = relatedOrder.Store_Location2__r.Store_Abbreviation__c;
-			po.Store_Location__c = relatedOrder.Store_Location2__c;
+			storeLocation = relatedOrder.Store_Location2__r;
+
+			po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
+			po.Store_Location__c = storeLocation.Id;
 
 			//GET THE ORDER ITEMS
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
@@ -248,7 +302,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				productIdToProductMap.put(p.id, p);
 			}
 
-			list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList];
+			System.Debug('**********************vendorIdList=' +vendorIdList);
+			System.Debug('**********************storeVendors=' +storeVendors);
+			list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList AND Id IN :storeVendors];
 			for(Account a : vendorsOnOrder){
 				accountIdToAccountMap.put(a.id, a);
 			}
@@ -263,16 +319,32 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			}
 
 			//BUILD SELECT LIST FOR CHOOSING VENDOR
-			avaliableVendors.add(new SelectOption('','Please Select'));
+			availableVendors.add(new SelectOption('','Please Select'));
 			for(Account vend : vendorsOnOrder){
-				avaliableVendors.add(new SelectOption(vend.Id,vend.Name));
+				availableVendors.add(new SelectOption(vend.Id,vend.Name));
 			}	
+		}
+		
+		// For Cost POs, pulls the current user's store location and recovers the abbreviation
+		if (costPurchaseOrder && storeLocation == null) {
+			String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+			if (String.isNotBlank(storeLocationName)) {
+				storeLocation = [SELECT Id, Store_Abbreviation__c FROM Account WHERE Name =: storeLocationName];
+					if (storeLocation != null) {
+						po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
+						po.Store_Location__c = storeLocation.Id;
+					}
+					else {
+						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+						
+					}
+				}
 		}
 
 	}//end of constructor
 	
-	public List<SelectOption> getAvaliableVendors() {
-		return avaliableVendors;
+	public List<SelectOption> getAvailableVendors() {
+		return availableVendors;
 	}
 	
 	/*******************************************************
@@ -283,7 +355,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		
 		for(OrderItemWrapper oiw : orderItemWrapperList){
 			system.debug('ADS oiw: '+oiw);
-			if(oiw.account != null && oiw.account.id == selectedVendor){
+			if(oiw.account != null && oiw.account.id == selectedVendor && vendorProducts.contains(oiw.product.id) ){
 				orderItemWrapperByVendor.add(oiw);
 			}
 		}
@@ -333,9 +405,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				Account renewal = [SELECT Id FROM Account WHERE Name = 'RbA'];
 				String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
 				Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+				costPOOrder.Store_Location2__c = storeLocation.Id;
 
 				// For Cost POs, pulls the current user's store location and recovers the abbreviation
-				String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+/*				String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
 				if (String.isNotBlank(storeLocationName)) {
 					Account storeLocation = [SELECT Id, Store_Abbreviation__c FROM Account WHERE Name =: storeLocationName];
 					if (storeLocation != null) {
@@ -348,7 +421,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 						return null;
 						
 					}
-				}
+				}*/
 				try{
 					// Inserts the dummy Order as a parent for the cost PO
 					insert costPOOrder;

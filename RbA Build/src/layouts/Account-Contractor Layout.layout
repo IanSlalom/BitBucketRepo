@@ -26,7 +26,12 @@
                 <field>Baan_Business_Partner_Number__c</field>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Store_Location__c</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -54,6 +59,22 @@
         <fields>PRODUCT2.DESCRIPTION</fields>
         <relatedList>Product2.Vendor__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>SVMXC__Company__c</fields>
+        <fields>SVMXC__Contact__c</fields>
+        <fields>SVMXC__Order_Status__c</fields>
+        <fields>SVMXC__Order_Type__c</fields>
+        <fields>SVMXC__Service_Group__c</fields>
+        <fields>SVMXC__Group_Member__c</fields>
+        <fields>CREATED_DATE</fields>
+        <fields>OWNER.ALIAS</fields>
+        <relatedList>SVMXC__Service_Order__c.Vendor__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
@@ -61,7 +82,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000MsY7</masterLabel>
+        <masterLabel>00h3B000000RJwf</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

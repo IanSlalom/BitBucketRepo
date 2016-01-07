@@ -51,7 +51,7 @@
     <description>Service Order is used to plan, execute and manage Service events for Field and Depot Service activities. Depending upon the service scenario, the order creation can be triggered by many events: When creating a Support Case, when one or more installed products require periodic service or calibration, when troubleshooting a customer problem on the field, if the field service engineer learns that the product requires specialized conditions of a factory/depot to resolve the problem, or when a new/repair shipment to customer requires specialized installation activity.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
-    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
@@ -503,6 +503,16 @@
         <formula>Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Renovate Right Booklet Signed Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Request_sent_to_Paint_Stain_Vendor__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the request was sent to vendor.</inlineHelpText>
+        <label>Request sent to Paint/Stain Vendor</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
@@ -4139,6 +4149,57 @@ NULL)</formula>
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Vendor_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Vendor Contact</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Contact.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Vendor Contacts</value>
+            </filterItems>
+            <filterItems>
+                <field>$Source.Vendor__c</field>
+                <operation>equals</operation>
+                <valueField>Contact.AccountId</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Work Orders (LSWP)</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Vendor__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Vendor preforming the work.</inlineHelpText>
+        <label>Vendor</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Contractor</value>
+            </filterItems>
+            <infoMessage>The Vendor must be associated with the Store the Order is associated to.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Work Orders (LSWP)</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>View__c</fullName>
         <externalId>false</externalId>
         <formula>HYPERLINK(&quot;/&quot;&amp;Id,&quot;View&quot;)</formula>
@@ -4219,6 +4280,24 @@ NULL)</formula>
             <value>HOA</value>
         </filters>
         <label>HOA</label>
+    </listViews>
+    <listViews>
+        <fullName>Paint_Stain</fullName>
+        <columns>NAME</columns>
+        <columns>SVMXC__Company__c</columns>
+        <columns>SVMXC__Order_Status__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>Vendor_Contact__c</columns>
+        <columns>Request_sent_to_Paint_Stain_Vendor__c</columns>
+        <columns>Paint_Stain_Invoice_Attached__c</columns>
+        <columns>Paint_Stain_Order_Attached_to_Order__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>SVMXC__Service_Order__c.Paint_Stain</value>
+        </filters>
+        <label>Paint/Stain</label>
     </listViews>
     <listViews>
         <fullName>SVMXC__All_Work_Orders</fullName>
@@ -11182,6 +11261,24 @@ NULL)</formula>
         <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>LSWP_Closed</fullName>
+        <active>true</active>
+        <description>Before Closing a LSWP Work Order the following fields are required:
+Vendor, Order Attached, Invoice Attached, Request Sent to Vendor.</description>
+        <errorConditionFormula>AND(
+RecordType.Name = &quot;Paint/Stain&quot;,
+ISPICKVAL(SVMXC__Order_Status__c , &quot;Closed&quot;),
+OR(
+ISBLANK(Request_sent_to_Paint_Stain_Vendor__c),
+Paint_Stain_Order_Attached_to_Order__c = False,
+Paint_Stain_Invoice_Attached__c = False,
+ISBLANK (Vendor__c)
+))</errorConditionFormula>
+        <errorDisplayField>SVMXC__Order_Status__c</errorDisplayField>
+        <errorMessage>Before Closing a LSWP Work Order the following fields are required:
+Vendor, Order Attached, Invoice Attached, Request Sent to Vendor.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>Refresh_Primary_Tab</fullName>
         <availability>online</availability>

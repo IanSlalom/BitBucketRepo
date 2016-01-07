@@ -133,12 +133,12 @@
 			<apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder == true}" > 
 				<apex:pageBlockSectionItem rendered="{!costPurchaseOrder == false}">
 					<apex:selectList value="{!selectedVendor}" label="Vendor" size="1" id="VendorList">
-						<apex:selectOptions value="{!avaliableVendors}"/>
+						<apex:selectOptions value="{!availableVendors}"/>
 						<apex:actionSupport event="onchange" action="{!updateSubTotal}" reRender="PurchaseOrderFields" />
 					</apex:selectList>
 				</apex:pageBlockSectionItem>
 				<apex:pageBlockSectionItem rendered="{!costPurchaseOrder == true}">
-					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraSOQL1="{!vendorFilter}" extraSOQL2="{!vendorFilter2}"/> 
+					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}"/> 
 				</apex:pageBlockSectionItem>
 			</apex:pageBlockSection> 
 			
