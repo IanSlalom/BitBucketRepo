@@ -244,34 +244,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 			qcList.add(qc);
 		}
 
-<<<<<<< HEAD
-=======
-		// get the orders
-		Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
-			Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location2__c, Tech_Measure_Date__c
-			from Order where OpportunityId in :oppIds and isDeleted = false]);
-		// get the order line items
-		List<OrderItem> oiList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
-			Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
-			Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, Colonial_Grille_Lites_High_S1__c, Colonial_Grille_Lites_High_S2__c, 
-			Colonial_Grille_Lites_High_S3__c, Colonial_Grille_Lites_Wide_S1__c, Colonial_Grille_Lites_Wide_S2__c, Colonial_Grille_Lites_Wide_S3__c, 
-			Corrosion_Resistant_Hardware__c, Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c, Drip_Cap_Pieces__c, 
-			EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, 
-			Exterior_Trim_Color__c, Fibrex_L_Trim__c, Finger_Lifts__c, Frame_Type__c, Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, 
-			Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, Grille_Pattern__c, Grille_Pattern_S1__c, Grille_Pattern_S2__c, 
-			Grille_Pattern_S3__c, Grille_Style__c, Handing__c, Hardware_Color__c, Hardware_Finish__c, 
-			Hardware_Option__c, Hardware_Style__c, Height_Inches__c, Height_Fraction__c, Hubs__c, Insect_Screen_Style__c, Install_Holes_Location__c, 
-			Install_Track_Location__c, Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
-			Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c, Locks_Sash__c, Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, NSPR__c, Part_of_Bay__c, 
-			Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, Room_Description__c, 
-			Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-			Screen_Color__c,Screen_Type__c, Screen_Vaneer_Type__c, Sill_Angle__c, Special_Options__c, Spokes__c, Storm_Window__c, Storm_Window_Color__c, 
-			Storm_Window_Style__c, SW_Grille_Alignment__c, Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Total_Retail_Price__c, 
-			Total_Wholesale_Cost__c, Unit_Id__c, Variant_Number__c, Unit_Wholesale_Cost__c, Wide_Bar__c, Width_Fraction__c, Width_Inches__c
-			from OrderItem where OrderId in :orderMap.keySet() and isDeleted = false];
-		// get the order discounts
-		List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderMap.keySet() and isDeleted = false];
->>>>>>> refs/heads/master
 		// build the orderContainers
 		List<OrderContainer> orcList = buildOrderContainers(oppIds);
 
@@ -571,7 +543,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 				dwellingIds.add(sa.account.Id);
 			}
 		}
-
 		// get some setup information
 		// get record types
    		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
