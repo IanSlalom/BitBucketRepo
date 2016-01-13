@@ -18,7 +18,7 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
 	public static final String INVALID_DATETIMESTAMP = 'Invalid Date/Time Parameter';
 
-	/* Reads only */	
+	/* Reads only */
 	@HttpGet
     global static void doGet() {
 		try {

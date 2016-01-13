@@ -182,15 +182,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sales_Width_Fraction__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Sales_Height_Inches__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Sales_Height_Fraction__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

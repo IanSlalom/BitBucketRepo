@@ -244,50 +244,8 @@ public with sharing class RMS_mobileAppRequestHelper {
 			qcList.add(qc);
 		}
 
-		// get the orders
-		Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
-			Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location2__c, Tech_Measure_Date__c
-			from Order where OpportunityId in :oppIds and isDeleted = false]);
-		// get the order line items
-		List<OrderItem> oiList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
-			Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
-			Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, Colonial_Grille_Lites_High_S1__c, Colonial_Grille_Lites_High_S2__c, 
-			Colonial_Grille_Lites_High_S3__c, Colonial_Grille_Lites_Wide_S1__c, Colonial_Grille_Lites_Wide_S2__c, Colonial_Grille_Lites_Wide_S3__c, 
-			Corrosion_Resistant_Hardware__c, Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c, Drip_Cap_Pieces__c, 
-			EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, 
-			Exterior_Trim_Color__c, Fibrex_L_Trim__c, Finger_Lifts__c, Frame_Type__c, Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, 
-			Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, Grille_Pattern__c, Grille_Pattern_S1__c, Grille_Pattern_S2__c, 
-			Grille_Pattern_S3__c, Grille_Style__c, Handing__c, Hardware_Color__c, Hardware_Finish__c, 
-			Hardware_Option__c, Hardware_Style__c, Height_Inches__c, Height_Fraction__c, Hubs__c, Insect_Screen_Style__c, Install_Holes_Location__c, 
-			Install_Track_Location__c, Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
-			Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c, Locks_Sash__c, Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, NSPR__c, Part_of_Bay__c, 
-			Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, Room_Description__c, 
-			Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-			Screen_Color__c,Screen_Type__c, Screen_Vaneer_Type__c, Sill_Angle__c, Special_Options__c, Spokes__c, Storm_Window__c, Storm_Window_Color__c, 
-			Storm_Window_Style__c, SW_Grille_Alignment__c, Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Total_Retail_Price__c, 
-			Total_Wholesale_Cost__c, Unit_Id__c, Variant_Number__c, Unit_Wholesale_Cost__c, Wide_Bar__c, Width_Fraction__c, Width_Inches__c
-			from OrderItem where OrderId in :orderMap.keySet() and isDeleted = false];
-		// get the order discounts
-		List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderMap.keySet() and isDeleted = false];
 		// build the orderContainers
-		List<OrderContainer> orcList = new List<OrderContainer>();
-		for (Order ord : orderMap.values()) {
-			OrderContainer orc = new OrderContainer();
-			orc.anOrder = ord;
-			orc.oiList = new List<OrderItem>();
-			for (OrderItem oi : oiList) {
-				if (oi.OrderId == ord.Id) {
-					orc.oiList.add(oi);
-				}
-			}
-			orc.orderDiscountList = new List<Order_Discount__c>();
-			for (Order_Discount__c od : odList) {
-				if (od.Order__c == ord.Id) {
-					orc.orderDiscountList.add(od);
-				}
-			}
-			orcList.add(orc);
-		}
+		List<OrderContainer> orcList = buildOrderContainers(oppIds);
 
 		// build the opportunityContainers
 		for (Opportunity oppty: relatedOpportunityMap.values()) {
@@ -313,6 +271,88 @@ public with sharing class RMS_mobileAppRequestHelper {
 		return ocMap;
 	}
 		
+	/* @method: buildOrderContainers(List<Id> opptyIds)
+	 * @param: List<Id> opptyIds
+	 * @return: List<OrderContainer>
+	 */
+    public List<OrderContainer> buildOrderContainers(List<Id> opptyIds){
+		// get the orders
+		Map<Id, Order> orderMap = queryOrders(opptyIds);
+		// get the order line items
+		List<OrderItem> oiList = queryOrderItems(orderMap.keySet());
+		// get the order discounts
+		List<Order_Discount__c> odList = queryOrderDiscounts(orderMap.keySet());
+
+		// build the orderContainers
+		List<OrderContainer> orcList = new List<OrderContainer>();
+		for (Order ord : orderMap.values()) {
+			OrderContainer orc = new OrderContainer();
+			orc.anOrder = ord;
+			orc.oiList = new List<OrderItem>();
+			for (OrderItem oi : oiList) {
+				if (oi.OrderId == ord.Id) {
+					orc.oiList.add(oi);
+				}
+			}
+			orc.orderDiscountList = new List<Order_Discount__c>();
+			for (Order_Discount__c od : odList) {
+				if (od.Order__c == ord.Id) {
+					orc.orderDiscountList.add(od);
+				}
+			}
+			orcList.add(orc);
+		}
+		return orcList;
+	}
+
+	/* @method: queryOrders(List<Id> opptyIds)
+	 * @param: List<Id> opptyIds
+	 * @return: Map<Id, Order>
+	 */
+    public Map<Id, Order> queryOrders(List<Id> opptyIds){
+		Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
+			Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location2__c, Tech_Measure_Date__c
+			from Order where OpportunityId in :opptyIds and isDeleted = false]);
+
+		return orderMap;
+	}
+
+	/* @method: queryOrderDiscounts(List<Id> orderIds)
+	 * @param: List<Id> orderIds
+	 * @return: List<Order_Discount__c>
+	 */
+    public List<Order_Discount__c> queryOrderDiscounts(Set<Id> orderIds){
+		List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
+		return odList;
+	}
+
+	/* @method: queryOrderItems(List<Id> orderIds)
+	 * @param: List<Id> orderIds
+	 * @return: List<OrderItem>
+	 */
+    public List<OrderItem> queryOrderItems(Set<Id> orderIds){
+		List<OrderItem> oiList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
+			Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
+			Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, Colonial_Grille_Lites_High_S1__c, Colonial_Grille_Lites_High_S2__c, 
+			Colonial_Grille_Lites_High_S3__c, Colonial_Grille_Lites_Wide_S1__c, Colonial_Grille_Lites_Wide_S2__c, Colonial_Grille_Lites_Wide_S3__c, 
+			Corrosion_Resistant_Hardware__c, Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c, Drip_Cap_Pieces__c, 
+			EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, 
+			Exterior_Trim_Color__c, Fibrex_L_Trim__c, Finger_Lifts__c, Frame_Type__c, Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, 
+			Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, Grille_Pattern__c, Grille_Pattern_S1__c, Grille_Pattern_S2__c, 
+			Grille_Pattern_S3__c, Grille_Style__c, Handing__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, 
+			Hardware_Option__c, Hardware_Style__c, Height_Inches__c, Height_Fraction__c, Hubs__c, Insect_Screen_Style__c, Install_Holes_Location__c, 
+			Install_Track_Location__c, Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
+			Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c, Locks_Sash__c, Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, NSPR__c, Part_of_Bay__c, 
+			Part_of_Bow__c, Permanently_Applied_Interior_Wood_Grille__c, Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, Room_Description__c, 
+			Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
+			Screen_Color__c,Screen_Type__c, Screen_Vaneer_Type__c, Sill_Angle__c, Special_Options__c, Spokes__c, Storm_Window__c, Storm_Window_Color__c, 
+			Storm_Window_Style__c, SW_Grille_Alignment__c, Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Total_Retail_Price__c, 
+			Total_Wholesale_Cost__c, Unit_Id__c, Variant_Number__c, Unit_Wholesale_Cost__c, Wide_Bar__c, Width_Fraction__c, Width_Inches__c
+			from OrderItem where OrderId in :orderIds and isDeleted = false];
+		return oiList;		
+	}
+
+
 	/* @method: updateOpportunity(Id OppId, String status)
 	 * @param: Id oppId
 	 * @param: String status
@@ -321,8 +361,6 @@ public with sharing class RMS_mobileAppRequestHelper {
     public String resultSalesAppointments(Id userId, String input){
 		// parse the input JSON string into an Opportunity Container
 		Appointments appts = (Appointments)JSON.deserialize(input, Appointments.class);
-		// now that we've parsed it, put sequence numbers on the 
-//		appts = addSequenceNums(appts);
 
 		// now lets save the quotes to the opportunitiez
 		appts = saveQuotes(appts);
@@ -330,15 +368,18 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// note that we will need to add the quote ids to quote line items before we can save the quotes
 		appts=saveQuoteLineItemsAndDiscounts(appts);
 		// now save the opportunity changes
-// do the opportunity update
-
+		appts=saveOpportunities(appts);
 		// now that we are done lets return the updated records to the client
+		// most everything is updated but we need to add the order details that were generated from any closed won opportunities
+		appts = updateAppts(appts);
+		// process any closed won opportunities by creating work order activities
+		createWorkOrders(appts);
 
-		return 'SUCCESS: ' + JSON.serialize(appts);
+		return JSON.serialize(appts);
 	}
 
 
-	/* @method: saveQuotesLinteItems(Appointments appts)
+	/* @method: saveQuotes(Appointments appts)
 	 * @param: Appointments appts
 	 * @return: Appointments - comes back with committed quotes and/or error messages
 	 */
@@ -352,19 +393,29 @@ public with sharing class RMS_mobileAppRequestHelper {
 			}
 		}
 		if (quotes.size() > 0) {
+			// lets set a database save point
+			System.SavePoint sp = Database.setSavePoint();
 			try {
-				insert quotes;
-			} catch (DMLException dmle) {
-				if (appts.errors == null) {
-					appts.errors = new String[]{};
+				Database.SaveResult[] lsr = Database.insert(quotes, false);
+				for(Database.SaveResult sr : lsr){
+					if (!sr.isSuccess()) {
+						// add error messages 
+						// Operation failed, so get all errors               
+						for(Database.Error err : sr.getErrors()) {
+							appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
+						}
+					}
 				}
-				appts.errors.add('Insert error on quotes: ' + dmle.getMessage());
+			} catch (Exception e) {
+				// we've got another error
+				// rollback the inserts if possible
+				Database.rollBack(sp);
+				// put the errors in the appts errors
+				appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+				System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 			}
 		} else {
-			if (appts.errors == null) {
-				appts.errors = new String[]{};
-			}
-			appts.errors.add('No Quotes Found');
+			appts.getErrors().add('No Quotes Found');
 		}
 		return appts;
 	}
@@ -391,117 +442,154 @@ public with sharing class RMS_mobileAppRequestHelper {
 				}
 			}
 		}
+		// lets set a database save point
+		System.SavePoint sp = Database.setSavePoint();
 		try {
+			// attempt to insert the quote line item record
 			if (qliList.size() > 0) {
 				Database.SaveResult[] lsr = Database.insert(qliList, false);
 				for(Database.SaveResult sr : lsr){
 					if (!sr.isSuccess()) {
-						if (appts.errors == null) {
-							appts.errors = new String[]{};
-						}
 						// add error messages 
 						// Operation failed, so get all errors               
 						for(Database.Error err : sr.getErrors()) {
-							appts.errors.add(err.getStatusCode() + ': ' + err.getMessage() + ': qli fields that affected this error: ' + err.getFields());
+							appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': qli fields that affected this error: ' + err.getFields());
 						}
 					}
 				}
-//				insert qliList;
 			} else {
-				if (appts.errors == null) {
-					appts.errors = new String[]{};
-				}
-				appts.errors.add('No Quote Line Items Found');
+				appts.getErrors().add('No Quote Line Items Found');
 			}
-		} catch (Exception e) {
-		}
-		try {
+			// attempt to insert the qoute discount records
 			if (qdList.size() > 0) {
-				insert qdList;
+				Database.SaveResult[] lsr = Database.insert(qdList, false);
+				for(Database.SaveResult sr : lsr){
+					if (!sr.isSuccess()) {
+						// add error messages 
+						// Operation failed, so get all errors               
+						for(Database.Error err : sr.getErrors()) {
+							appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': qoute discount fields that affected this error: ' + err.getFields());
+						}
+					}
+				}
+			} else {
+				appts.getErrors().add('No Quote Line Items Found');
 			}
 		} catch (Exception e) {
+			// we've got another error
+			// rollback the inserts if possible
+			Database.rollBack(sp);
+			// put the errors in the appts errors
+			appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+
 		}
 		return appts;
 	}
 
-		// we should have an opportunity with a list of quotes and quote line items
-		// the opportunity should be marked as sold won/lost and if sold a quote should be marked as the quote that sold.
-		
+	/* @method: saveOpportunities(Appointments appts)
+	 * @param: Appointments appts
+	 * @return: Appointments - comes back with committed opportunities and/or error messages
+	 */
+	public Appointments saveOpportunities(Appointments appts) {
+		List<Opportunity> oppList = new List<Opportunity>();
+		for (SalesAppointment sa : appts.salesAppts) {
+			oppList.add(sa.opptyContainer.oppty);
+		}
+		update oppList;
+		return appts;
+	}
 
+	/* @method: updateAppts(Appointments appts)
+	 * @param: Appointments appts
+	 * @return: Appointments - comes back with any newly created orders, orderitems and orderDiscounts on Closed Won opportunities and/or error messages
+	 */
+	public Appointments updateAppts(Appointments appts) {
+		// first find the closed won opportunities
+		List<Id> oppIds = new List<Id>();
+		for (SalesAppointment sa: appts.salesAppts) {
+			if (sa.opptyContainer.oppty.StageName.equals('Closed Won') && sa.opptyContainer.anOrderContainer == null) {
+				oppIds.add(sa.opptyContainer.oppty.Id);
+			}
+		}
 
-/*		
-    	List<Opportunity> opp = [SELECT Id, Name, AccountId FROM Opportunity WHERE Id = :oppId];
-    	if(opp.size() == 0){
-    		return 'No Opportunity found with that Id';
-    	}else{
-    		//map<String, RMS_Queue_Settings__c> RMS_Queue_Settings_map = RMS_Queue_Settings__c.getAll(); 
-    		//RMS_Queue_Settings__c queueSetting = RMS_Queue_Settings_map.get(opp[0].AccountId);
-			
-			////////THIS IS BEING USED FOR DEMO UNTIL ACCOUNT IS POPULATED INSIDE THE ORDER///////////
-	    	Account testAccount = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'];
-	    	//////////////////////////////////////////////////////////////////////////////////////////
-	    	
-    		list<Store_Configuration__c> storeConfig = [SELECT 	Id, 
-    															Store__c, 
-    															Install_Work_Order_Queue_Id__c, 
-    															Tech_Measure_Work_Order_Queue_Id__c, 
-    															Order_Queue_Id__c
-    															FROM Store_Configuration__c
-    															WHERE Store__r.id =: testAccount.id];
-    															//WHERE Store__r.id =: opp[0].AccountId];
-    		
-    		//ORDER related to the Opp
-    		Order ord = new Order(
-    			AccountId = opp[0].AccountId,
-    			OwnerId = storeConfig[0].Order_Queue_Id__c,
-    			Status = 'Draft',
-    			EffectiveDate = Date.today(),
-    			Opportunity = opp 
-    		);
-    		insert ord;
-    		//Unable to create order with Activated status
-    		
-    		//Create products on order here
-    		
-    		//ord.Status = 'Activated';
-    		//update ord;
-    		
-    		
-    		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
-    		//CREATE WORK ORDER (TECH MEASURE)
-    		SVMXC__Service_Order__c techWO = new SVMXC__Service_Order__c(
-    			Sold_Order__c = ord.id,
-    			RecordType = serviceOrderScheduleRecordType,
-    			SVMXC__Order_Type__c = 'Tech Measure',
-    			OwnerId = storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c
-    		);
-    		 	
-    		 	system.debug('ads storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c: '+storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c);
-    		 	list<QueueSobject> x = [SELECT id, sobjectType, QueueId  FROM QueueSobject WHERE QueueId =: storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c];
-				system.debug('ads checking queue type');
-				system.debug('ads: '+ x[0].sobjectType);
-    		
-    		
-    		insert techWO;
-    		
-    		
-    		//CREATE WORK ORDER (INSTALL)
-    		SVMXC__Service_Order__c installWO = new SVMXC__Service_Order__c(
-    			Sold_Order__c = ord.id, 
-    			RecordType =  serviceOrderScheduleRecordType,
-    			SVMXC__Order_Type__c = 'Install',
-    			OwnerId = storeConfig[0].Install_Work_Order_Queue_Id__c
-    		);
-    		insert installWO;
-*/
-//		return 'Created Order, Install Work Order and Tech Measure Work Order';
+		// build the orderContainers
+		List<OrderContainer> orcList = buildOrderContainers(oppIds);
+
+		// update the appointments
+		for (SalesAppointment sa: appts.salesAppts) {
+			if (sa.opptyContainer.oppty.StageName.equals('Closed Won') && sa.opptyContainer.anOrderContainer == null) {
+				for (OrderContainer orc : orcList) {
+					if (sa.opptyContainer.oppty.Id == orc.anOrder.OpportunityId) {
+						sa.opptyContainer.anOrderContainer = orc;
+					}
+				}
+			}
+		}
+		return appts;
+	}
+
+	/* @method: createWorkOrders(Appointments appts)
+	 * @param: Appointments appts
+	 * @return: void
+	 */
+	public void createWorkOrders(Appointments appts) {
+		// first find the closed won opportunities
+		List<Order> ordList = new List<Order>();
+		List<Id> dwellingIds = new List<Id>();
+		for (SalesAppointment sa: appts.salesAppts) {
+			if (sa.opptyContainer.oppty.StageName.equals('Closed Won')) {
+				ordList.add(sa.opptyContainer.anOrderContainer.anOrder);
+				dwellingIds.add(sa.account.Id);
+			}
+		}
+		// get some setup information
+		// get record types
+   		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
+		// get store configruation information through the dwellings
+		Map<Id, Account> accountsWithStoresMap = new Map<Id, Account>([select Id, Store_Location__c, Store_Location__r.Active_Store_Configuration__c,
+			Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c, Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c
+			from Account where Id in : dwellingIds]);
+		// now create the tech measure and install work orders for each order
+		List<SVMXC__Service_Order__c> woList = new List<SVMXC__Service_Order__c>();
+		for (Order ord : ordList) {
+			// find the Store config to use for this order
+			Account ac = accountsWithStoresMap.get(ord.AccountId);
+			// build the tech measure work order
+    		SVMXC__Service_Order__c techWO = new SVMXC__Service_Order__c();
+    		techWO.Sold_Order__c = ord.Id;
+    		techWO.RecordType = serviceOrderScheduleRecordType;
+    		techWO.SVMXC__Order_Type__c = 'Tech Measure';
+    		techWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c;
+			// add it to the list
+			woList.add(techWO);
+
+			// build the install work order
+    		SVMXC__Service_Order__c installWO = new SVMXC__Service_Order__c();
+    		installWO.Sold_Order__c = ord.Id;
+    		installWO.RecordType = serviceOrderScheduleRecordType;
+    		installWO.SVMXC__Order_Type__c = 'Install';
+    		installWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c;
+			woList.add(installWO);
+		}
+		if (woList.size() > 0) {
+			// TODO: use Database insert with rollback to catch errors.
+			insert woList;
+		}
+	}
 
 
 	public class Appointments {
 		public List<SalesAppointment> salesAppts;
 		public List<TechMeasureAppointment> tmAppts;
 		public Datetime getApptsCompletedTimeStamp;
-		String[] errors;
+		private String[] errors;
+		public String[] getErrors() { 
+			if (errors == null) { 
+				errors = new String[]{};
+			} 
+			return errors;
+		}
 	}
 
 	public class SalesAppointment{
