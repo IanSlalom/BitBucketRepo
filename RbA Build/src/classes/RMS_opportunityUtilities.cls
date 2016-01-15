@@ -17,7 +17,10 @@ global with sharing class RMS_opportunityUtilities {
 			}
 			opp.StageName = 'Closed Won';
 			update opp;
-			Order ord = [SELECT Id, OpportunityId FROM Order WHERE OpportunityId = :oppId];
+			Order ord;
+			for (Order o : [SELECT Id, OpportunityId FROM Order WHERE OpportunityId = :oppId]){
+				ord = o;
+			}
 			if (ord == null) {
 				return 'noOrderCreated';
 			}

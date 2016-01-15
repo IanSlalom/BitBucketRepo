@@ -21,10 +21,13 @@ public with sharing class RMS_financialTransactionManager {
  	//PAYMENT
 	public void onAfterInsert(list<Payment__c> listNew, map<id,Payment__c> mapNew){
 		createOrUpdateJournalEntry(listNew, mapNew);
+		//TODO:This locking functionality will eventually get moved to a batch process
+		lockPaymentRecords(listNew);
 	}
 
 	public void onAfterUpdate(list<Payment__c> listOld, list<Payment__c> listNew, map<Id, Payment__c> mapOld, map<Id, Payment__c> mapNew){
 		createOrUpdateJournalEntry(listNew, mapNew);
+		lockPaymentRecords(listOld, mapNew);
 	}
 	
 	public void onBeforeDelete(list<Payment__c> listOld, map<Id, Payment__c> mapOld){
@@ -539,8 +542,40 @@ public with sharing class RMS_financialTransactionManager {
 	}//END onAfterInsert Method
 	
 	
-	
-	
+	/***************************************************
+	 Methods to lock records
+	****************************************************/
+	// TODO: Make these completely generic for sObjects?
+	public void lockPaymentRecords(list<Payment__c> listNew){	
+
+	 	List<Payment__c> recordsToLock = new List<Payment__c>();
+
+		// Loop through the list of payments and if it's been set to processed, lock it
+	 	for(Payment__c p : listNew){
+	 		if(p.Processed_Date__c != null){
+		 		recordsToLock.add(p);
+	 		}
+	 	} 
+	 	
+	 	if (recordsToLock.size() > 0) {
+	 		String result = UtilityMethods.lockRecords(recordsToLock);
+	 	}
+	 	
+	}
+
+	public void lockPaymentRecords(list<Payment__c> listOld, map<id,Payment__c> mapNew ){	
+
+	 	List<Payment__c> recordsWithNullProcessedDate = new List<Payment__c>();
+
+		// loop through the old list and if the processed date was null, send it to the lock records to test the new list
+	 	for(Payment__c pOld : listOld){
+	 		if(	pOld.Processed_Date__c == null){
+				recordsWithNullProcessedDate.add(mapNew.get(pOld.id));
+	 		}
+	 	}	
+	 	lockPaymentRecords(recordsWithNullProcessedDate);	
+	}
+
 	/***************************************************
 	 Method to dynamicly change error messages
 	****************************************************/
