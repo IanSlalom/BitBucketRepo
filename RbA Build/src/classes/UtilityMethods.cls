@@ -98,7 +98,7 @@ public with sharing class UtilityMethods {
 	}
 
 	// Method used to lock a list of sObjects
-	public String lockRecords(List<sObject> recordsToLock){
+	public static String lockRecords(List<sObject> recordsToLock){
 		String result;
 		if(recordsToLock == null){
 			result = 'No records received';
