@@ -17,12 +17,28 @@
                 <field>OrderNumber</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Name</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>AccountId</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>BillToContactId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Deposits_Received__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Amount_Due__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Revenue_Recognized__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
