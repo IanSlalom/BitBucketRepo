@@ -177,10 +177,10 @@
             <tab>Labor__c</tab>
         </mapping>
         <mapping>
-            <tab>Purchase_            <tab>Payment__c</tab>
+            <tab>Payment__c</tab>
         </mapping>
         <mapping>
-Order__c</tab>
+            <tab>Purchase_Order__c</tab>
         </mapping>
         <mapping>
             <fieldName>Sold_Order__c</fieldName>
