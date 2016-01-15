@@ -27,6 +27,7 @@
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_mobileAppRequestHelperTest</members>
         <members>RMS_newLaborRedirectExtension</members>
+        <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_opportunityUtilities</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
@@ -54,6 +55,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createWorkOrder</members>
         <members>RMS_newLaborRedirect</members>
+        <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
         <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
