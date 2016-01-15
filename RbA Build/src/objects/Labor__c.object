@@ -200,16 +200,29 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>Store_Location__c</fullName>
+        <fullName>Store_Location_Id__c</fullName>
         <externalId>false</externalId>
-        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location2__r.Name</formula>
+        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location2__r.Id</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Store Location</label>
+        <label>Store Location Id</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Work_Order_Type__c</fullName>

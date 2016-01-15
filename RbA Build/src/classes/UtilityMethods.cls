@@ -32,11 +32,12 @@ public with sharing class UtilityMethods {
 			SVMXC__Order_Type__c = ordType,
 			SVMXC__Company__c = ord.AccountId,
 					
-			SVMXC__Street__c = dwelling.BillingStreet,
-			SVMXC__City__c = dwelling.BillingCity,
-			SVMXC__State__c = dwelling.BillingStateCode,
-			SVMXC__Zip__c = dwelling.BillingPostalCode, 
-			SVMXC__Country__c = dwelling.BillingCountryCode,
+			SVMXC__Street__c = dwelling.ShippingStreet,
+			SVMXC__City__c = dwelling.ShippingCity,
+			SVMXC__State__c = dwelling.ShippingStateCode,
+			SVMXC__Zip__c = dwelling.ShippingPostalCode, 
+			SVMXC__Country__c = dwelling.ShippingCountryCode,
+			SVMXC__Contact__c = Ord.BillToContactId,
 			
 			Municipality__c = munici,
 			

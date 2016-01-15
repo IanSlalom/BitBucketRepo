@@ -37,13 +37,13 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                     Store_Location__c, 
                                                     HOA__c, Historical__c, 
                                                     Building_Permit__c,
-                                                    BillingStreet,
-                                                    BillingCity,
-                                                    BillingState,
-                                                    BillingStateCode,
-                                                    BillingPostalCode, 
-                                                    BillingCountry,
-                                                    BillingCountryCode,
+                                                    ShippingStreet,
+                                                    ShippingCity,
+                                                    ShippingState,
+                                                    ShippingStateCode,
+                                                    ShippingPostalCode, 
+                                                    ShippingCountry,
+                                                    ShippingCountryCode,
                                                     Year_Built__c
                                                 FROM Account Where Id IN : relatedDwellingIds];
             
@@ -110,9 +110,9 @@ public with sharing class RMS_WorkOrderCreationManager {
                         SVMXC__Service_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
                         workOrdersToAdd.add(buildingPermitWorkOrder);
                     }
-                    //CREATE LSWP WORK ORDER IF NO LSWP WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1970
+                    //CREATE LSWP WORK ORDER IF NO LSWP WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1978
                     if(ordIdtoListOfLSWPWOMap.get(ord.id) == null || ordIdtoListOfLSWPWOMap.get(ord.id).size() == 0){
-	                    if(dwelling.Year_Built__c == null || dwelling.Year_Built__c == ''  || Integer.valueof(Dwelling.Year_Built__c) < 1970){
+	                    if(dwelling.Year_Built__c == null || dwelling.Year_Built__c == ''  || Integer.valueof(Dwelling.Year_Built__c) < 1978){
 	                        SVMXC__Service_Order__c LSWPWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, LSWPWORecordType, storeConfig.LSWP_WO_Owner_ID__c, 'LSWP', null );
 	                        workOrdersToAdd.add(LSWPWorkOrder);
 	                    }
@@ -152,13 +152,13 @@ public with sharing class RMS_WorkOrderCreationManager {
                 }  
         } 
         
-        list<Account> relatedAccounts = [SELECT BillingStreet,
-                                                BillingCity,
-                                                BillingState,
-                                                BillingStateCode,
-                                                BillingPostalCode, 
-                                                BillingCountry,
-                                                BillingCountryCode,
+        list<Account> relatedAccounts = [SELECT ShippingStreet,
+                                                ShippingCity,
+                                                ShippingState,
+                                                ShippingStateCode,
+                                                ShippingPostalCode, 
+                                                ShippingCountry,
+                                                ShippingCountryCode,
                                                 Store_Location__c
                                                 
                                                 FROM Account WHERE Id IN :relatedAccountIds];
@@ -224,12 +224,14 @@ public with sharing class RMS_WorkOrderCreationManager {
                     RecordTypeId = serviceOrderVisitRecordTypeId,
                     SVMXC__Order_Type__c = 'Tech Measure',
                     SVMXC__Company__c = ord.AccountId,
-                        
-                    SVMXC__Street__c = relatedDwelling.BillingStreet,
-                    SVMXC__City__c = relatedDwelling.BillingCity,
-                    SVMXC__State__c = relatedDwelling.BillingStateCode,
-                    SVMXC__Zip__c = relatedDwelling.BillingPostalCode, 
-                    SVMXC__Country__c = relatedDwelling.BillingCountryCode,
+                    SVMXC__Contact__c = ord.BillToContactId,
+                    
+                    
+                    SVMXC__Street__c = relatedDwelling.ShippingStreet,
+                    SVMXC__City__c = relatedDwelling.ShippingCity,
+                    SVMXC__State__c = relatedDwelling.ShippingStateCode,
+                    SVMXC__Zip__c = relatedDwelling.ShippingPostalCode, 
+                    SVMXC__Country__c = relatedDwelling.ShippingCountryCode,
     
                     OwnerId = techMeasureQueueId
                 );
@@ -244,11 +246,11 @@ public with sharing class RMS_WorkOrderCreationManager {
                     SVMXC__Order_Type__c = 'Install',
                     SVMXC__Company__c = ord.AccountId,
                     
-                    SVMXC__Street__c = relatedDwelling.BillingStreet,
-                    SVMXC__City__c = relatedDwelling.BillingCity,
-                    SVMXC__State__c = relatedDwelling.BillingStateCode,
-                    SVMXC__Zip__c = relatedDwelling.BillingPostalCode, 
-                    SVMXC__Country__c = relatedDwelling.BillingCountryCode,
+                    SVMXC__Street__c = relatedDwelling.ShippingStreet,
+                    SVMXC__City__c = relatedDwelling.ShippingCity,
+                    SVMXC__State__c = relatedDwelling.ShippingStateCode,
+                    SVMXC__Zip__c = relatedDwelling.ShippingPostalCode, 
+                    SVMXC__Country__c = relatedDwelling.ShippingCountryCode,
                     
                     
                     OwnerId = installQueueId

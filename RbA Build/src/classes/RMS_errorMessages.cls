@@ -65,14 +65,20 @@ public with sharing class RMS_errorMessages {
 	public static final String FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER = '&bull;The financial transaction record of type [Transaction Type] for your store does not have a Debit Account Number.';
 		
 	public static final String PAYMENT_ID_IS_NULL = '&bull;The Payment Id is null.';
-	public static final String STORE_LOCATION_IS_BLANK = '&bull;The Store Location is blank, please this is a required field.';
+	public static final String STORE_LOCATION_IS_BLANK = '&bull;The Store Location is blank, this is a required field.';
+	public static final String ACCOUNT_NUMBER_NULL = '&bull;The Account number is blank, this is a required field.';
 	public static final String ORDER_IS_NULL = '&bull;Please enter an Order before creating a payment record on this order';
 	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;Please enter a Payment Amount before creating a payment record on this order';
 	public static final String CONTACT_IS_NULL = '&bull;Please enter a Contact on the Order before creating a payment record on this order';
-	public static final String PAYMENT_ALREADY_SUBMITTED = '&bull;This payment has already been submitted, so you cannot change it.';
+	public static final String PAYMENT_ALREADY_SUBMITTED = '&bull;This Record has already been submitted, so you cannot change it.';
 	
-	public static final String PAYMENT_ALREADY_SUBMITTED_DELETE = '&bull;This payment has already been submitted, so you cannot delete it.';
+	public static final String ALREADY_SUBMITTED_DELETE = '&bull;This record has already been submitted, so you cannot delete it.';
 	public static final String MULTIPLE_JOURNAL_ENTRIES = '&bull;This payment has more then one journal entry. Please consult your system admin for help resolving this error.';
 	
-	
+	public static final String LABOR_ID_IS_NULL = '&bull;The Order Id is null.';
+	public static final String ORDER_ON_WORK_ORDER_NULL = '&bull;The Order on the related Work Order is null.';
+	public static final String LABOR_AMOUNTS_NULL = '&bull;Both Internal and External Costs are null.';
+	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
+	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount can not be zero or empty on a Misc Reimbursement.';
+
 }

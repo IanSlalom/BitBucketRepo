@@ -90,14 +90,14 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		Schema.DescribeSObjectResult r = SVMXC__Service_Order__c.sObjectType.getDescribe();
 		String workOrderKeyPrefix = r.getKeyPrefix();
 		
-		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber, OpportunityId FROM Order WHERE Id =:ordId ];
+		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber, OpportunityId, BillToContactId FROM Order WHERE Id =:ordId ];
 		
 		list<Account> relatedAccount = [SELECT 	Name,
-												BillingStreet,
-								    			BillingCity,
-								    			BillingState,
-								    			BillingPostalCode, 
-								    			BillingCountry,
+												ShippingStreet,
+								    			ShippingCity,
+								    			ShippingState,
+								    			ShippingPostalCode, 
+								    			ShippingCountry,
 								    			Historical__c,
 								    			HOA__c,
 								    			Building_Permit__c
@@ -115,11 +115,11 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											'&CF'+workOrderFieldIds.Company__c+'='+relatedAccount[0].Name+
 											'&CF'+workOrderFieldIds.Company__c+'_lkid='+relatedAccount[0].Id+
 											
-											'&'+workOrderFieldIds.Street__c+'='+relatedAccount[0].BillingStreet+
-											'&'+workOrderFieldIds.City__c+'='+relatedAccount[0].BillingCity+
-											'&'+workOrderFieldIds.State__c+'='+relatedAccount[0].BillingState+
-											'&'+workOrderFieldIds.Zip__c+'='+relatedAccount[0].BillingPostalCode+
-											'&'+workOrderFieldIds.Country__c+'='+relatedAccount[0].BillingCountry+
+											'&'+workOrderFieldIds.Street__c+'='+relatedAccount[0].ShippingStreet+
+											'&'+workOrderFieldIds.City__c+'='+relatedAccount[0].ShippingCity+
+											'&'+workOrderFieldIds.State__c+'='+relatedAccount[0].ShippingState+
+											'&'+workOrderFieldIds.Zip__c+'='+relatedAccount[0].ShippingPostalCode+
+											'&'+workOrderFieldIds.Country__c+'='+relatedAccount[0].ShippingCountry+
 											'&ent='+workOrderFieldIds.Object_ID__c+
 											'&retURL=%2F'+Ord.Id+
 											'&isdtp=v4';
@@ -130,12 +130,13 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											
 		String endURL =						'&orderId='+Ord.Id+
 											'&accountId='+relatedAccount[0].Id+
-											'&billingStreet='+relatedAccount[0].BillingStreet+
-											'&billingCity='+relatedAccount[0].BillingCity+
-											'&billingState='+relatedAccount[0].BillingState+
-											'&billingPostalCode='+relatedAccount[0].BillingPostalCode+
-											'&billingCountry='+relatedAccount[0].BillingCountry+
+											'&shippingStreet='+relatedAccount[0].ShippingStreet+
+											'&shippingCity='+relatedAccount[0].ShippingCity+
+											'&shippingState='+relatedAccount[0].ShippingState+
+											'&shippingPostalCode='+relatedAccount[0].ShippingPostalCode+
+											'&shippingCountry='+relatedAccount[0].ShippingCountry+
 											'&relatedOpp='+theOrd[0].OpportunityId+
+											'&billToContactId='+theOrd[0].BillToContactId+
 											'&permit='+relatedAccount[0].Building_Permit__c+	
 											'&hoa='+relatedAccount[0].HOA__c+ 
 											'&historical='+relatedAccount[0].Historical__c; 

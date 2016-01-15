@@ -4,17 +4,19 @@ public with sharing class RMS_createWorkOrderController {
 	public string woType {get;set;}
 	public string orderId {get;set;}
 	public string accountId{get;set;}
-	public string billingStreet{get;set;}
-	public string billingCity{get;set;}
-	public string billingState{get;set;}
-	public string billingPostalCode{get;set;}
-	public string billingCountry{get;set;}
+	public string shippingStreet{get;set;}
+	public string shippingCity{get;set;}
+	public string shippingState{get;set;}
+	public string shippingPostalCode{get;set;}
+	public string shippingCountry{get;set;}
 	public string hoa{get;set;}
-	public string historical{get;set;}
+	public string historical{get;set;} 
 	public string permit{get;set;}
 	public string opportunity{get;set;}
 	public string woId{get;set;}
 	public string woName{get;set;}
+	public string billToContactId{get;set;}
+	
 	
 	public string woRTid;
 
@@ -30,11 +32,12 @@ public with sharing class RMS_createWorkOrderController {
 
 		orderId = urlParam.get('orderId');
 		accountId = urlParam.get('accountId');
-		billingStreet = urlParam.get('billingStreet');
-		billingCity = urlParam.get('billingCity');
-		billingPostalCode = urlParam.get('billingPostalCode');
-		billingCountry = urlParam.get('billingCountry');
-		billingState = urlParam.get('billingState');
+		shippingStreet = urlParam.get('shippingStreet');
+		shippingCity = urlParam.get('shippingCity');
+		shippingPostalCode = urlParam.get('shippingPostalCode');
+		shippingCountry = urlParam.get('shippingCountry');
+		shippingState = urlParam.get('shippingState');
+		billToContactId = urlParam.get('billToContactId');
 		woType = urlParam.get('type');
 		
 		opportunity = urlParam.get('relatedOpp');
@@ -70,12 +73,13 @@ public with sharing class RMS_createWorkOrderController {
 	public PageReference save() {
 		wo.Sold_Order__c = orderId;
 		wo.SVMXC__Company__c = accountId;
-		wo.SVMXC__Street__c = billingStreet;
-		wo.SVMXC__City__c = billingCity; 
-		wo.SVMXC__State__c = billingState;
-		wo.SVMXC__Zip__c = billingPostalCode;
-		wo.SVMXC__Country__c = billingCountry;
-		        
+		wo.SVMXC__Street__c = shippingStreet;
+		wo.SVMXC__City__c = shippingCity; 
+		wo.SVMXC__State__c = shippingState;
+		wo.SVMXC__Zip__c = shippingPostalCode;
+		wo.SVMXC__Country__c = shippingCountry;
+		wo.SVMXC__Contact__c = billToContactId;
+		
         if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }
