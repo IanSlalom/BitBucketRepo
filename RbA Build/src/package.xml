@@ -208,6 +208,8 @@
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
+        <members>Payment__c-Deposit Layout</members>
+        <members>Payment__c-Misc Cash Receipt Layout</members>
         <name>Layout</name>
     </types>
     <types>
