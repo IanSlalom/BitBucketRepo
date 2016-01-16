@@ -49,11 +49,25 @@
     <description>Stores financial account numbers used in the journal entries and Baan ERP integration</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account_Label__c</fullName>
+        <description>The account label for GL Accounts</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The account label for GL Accounts</inlineHelpText>
+        <label>Account Label</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
     <fields>
         <fullName>Account_Type__c</fullName>
         <description>Type used to filter which accounts are available for selection.</description>
@@ -253,6 +267,10 @@
                 <fullName>Write Off Acct</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Misc Cash Receipt</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
@@ -298,6 +316,15 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Financial Account Numbers</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account_Label__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Description__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Account_Label__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Description__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Account_Label__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Description__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Account_Label__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Description__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>
