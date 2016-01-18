@@ -106,6 +106,39 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Cancelled_Date__c</fullName>
+        <description>The date the order product was cancelled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the order product was cancelled.</inlineHelpText>
+        <label>Cancelled Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Cancelled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to cancel the Order Product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to cancel the Order Product.</inlineHelpText>
+        <label>Cancelled</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Cancelled_by_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The user who cancelled the order product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The user who cancelled the order product.</inlineHelpText>
+        <label>Cancelled by User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Casing_Location__c</fullName>
         <description>The Casing Location selected for the product.</description>
         <externalId>false</externalId>
@@ -308,6 +341,29 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Detail_Line_Number__c</fullName>
+        <description>The detail line number of the Order Product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The detail line number of the Order Product.</inlineHelpText>
+        <label>Detail Line Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Detail_Line_Process_Date__c</fullName>
+        <description>The process date of the detail line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The process date of the detail line.</inlineHelpText>
+        <label>Detail Line Process Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>The discount (in currency) applied to the purchase order (used for AROs)</description>
         <externalId>false</externalId>
@@ -330,6 +386,16 @@
         <scale>0</scale>
         <trackHistory>false</trackHistory>
         <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dwelling_Room__c</fullName>
+        <externalId>false</externalId>
+        <label>Dwelling Room</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -393,6 +459,26 @@
     <fields>
         <fullName>EndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Entered_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Entered Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extended_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Extended Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Exterior_Color__c</fullName>
@@ -579,6 +665,16 @@
         <label>Gliding Screen</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Alignment__c</fullName>
+        <externalId>false</externalId>
+        <label>Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
@@ -910,6 +1006,84 @@
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
+        <fullName>Lites_High_S1S3__c</fullName>
+        <description>Select the number of grille lites high for sash 1 and sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for sash 1 and sash 3.</inlineHelpText>
+        <label>Lites High S1S3</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S2__c</fullName>
+        <description>Select the number of grille lites high for sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for sash 2.</inlineHelpText>
+        <label>Lites High S2</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S1S3__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S1S3__c * Lites_Wide_S1S3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S1S3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S2__c * Lites_Wide_S2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S1S3__c</fullName>
+        <description>Select the number of grille lites wide for sash 1 and sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for sash 1 and sash 3.</inlineHelpText>
+        <label>Lites Wide S1S3</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S2__c</fullName>
+        <description>Select the number of grille lites wide for sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for sash 2.</inlineHelpText>
+        <label>Lites Wide S2</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Locks_Sash__c</fullName>
         <description>The number of extra locks/sash for this product.</description>
         <externalId>false</externalId>
@@ -934,11 +1108,31 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Miscellaneous_Charge_Parent_Unit_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Miscellaneous Charge Parent Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Mull_Sequence_Mullion__c</fullName>
         <description>The mull sequence mullion selected for this product.</description>
         <externalId>false</externalId>
         <inlineHelpText>The mull sequence mullion selected for this product.</inlineHelpText>
         <label>Mull Sequence Mullion</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NSPR_Number__c</fullName>
+        <externalId>false</externalId>
+        <label>NSPR Number</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -952,6 +1146,16 @@
         <label>NSPR/SPR</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>OrderId</fullName>
@@ -1002,6 +1206,16 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Pocket_Notch__c</fullName>
+        <externalId>false</externalId>
+        <label>Pocket Notch</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Product2Id</fullName>
         <type>Lookup</type>
     </fields>
@@ -1039,6 +1253,18 @@
     </fields>
     <fields>
         <fullName>QuoteLineItemId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Detail_Id__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Quote Detail Id</label>
+        <referenceTo>QuoteLineItem</referenceTo>
+        <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
     </fields>
@@ -1211,6 +1437,22 @@
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Sent to Baan Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Sent to Baan</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>ServiceDate</fullName>

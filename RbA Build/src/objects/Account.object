@@ -435,8 +435,21 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>IsPartner</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>Jigsaw</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Lead_Safe_Work_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if lead safe work practices are required</inlineHelpText>
+        <label>Lead Safe Work Required</label>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Name</fullName>
@@ -669,6 +682,21 @@
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Testing__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(VALUE(Year_Built__c ) &lt;= 1976,1,
+IF(ISBLANK(Year_Built__c ),1,
+0))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Testing</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>TickerSymbol</fullName>
