@@ -184,6 +184,8 @@
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
         <members>Order_Discount__c-Order Discount Layout</members>
+        <members>Payment__c-Deposit Layout</members>
+        <members>Payment__c-Misc Cash Receipt Layout</members>
         <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
@@ -214,8 +216,6 @@
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
-        <members>Payment__c-Deposit Layout</members>
-        <members>Payment__c-Misc Cash Receipt Layout</members>
         <name>Layout</name>
     </types>
     <types>
