@@ -138,7 +138,7 @@
 					</apex:selectList>
 				</apex:pageBlockSectionItem>
 				<apex:pageBlockSectionItem rendered="{!costPurchaseOrder == true}">
-					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}"/> 
+					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}" Application="POVendor"/> 
 				</apex:pageBlockSectionItem>
 			</apex:pageBlockSection> 
 			

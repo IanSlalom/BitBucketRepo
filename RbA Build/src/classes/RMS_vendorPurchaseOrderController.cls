@@ -46,6 +46,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public String glAccount;
 	public String intercompanyAccount;
 	public String errorOccurred {get; set;}	 
+	public String costCenter {get; set;}	 
 
 	// The selected vendor name string
 	public String selectedVendorName
@@ -141,8 +142,60 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
 		set;
 	}
-
-
+	public List<Account> accounts
+	{
+		get
+		{
+//			if ( accounts != null) return accounts;
+			accounts = new List<Account>();
+			for (Account a : [SELECT Id, Name from Account ]) {
+				accounts.add(a);
+			}
+			return accounts;
+		}
+		set;
+	}
+	
+	public List<Contact> contacts
+	{
+		get
+		{
+//			if ( contacts != null) return contacts;
+			contacts = new List<Contact>();
+			for (Contact a : [SELECT Id, AccountId, Name from Contact ]) {
+				contacts.add(a);
+			}
+			return contacts;
+		}
+		set;
+	}
+	
+	public List<Product2> products
+	{
+		get
+		{
+//			if ( accounts != null) return accounts;
+			products = new List<Product2>();
+			for (Product2 p : [SELECT Id, Name from Product2 ]) {
+				products.add(p);
+			}
+			return products;
+		}
+		set;
+	}
+	public List<Cost_Center__c> costCenters
+	{
+		get
+		{
+//			if ( contacts != null) return contacts;
+			costCenters = new List<Cost_Center__c>();
+			for (Cost_Center__c cc : [SELECT Id, Product__c, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
+				costCenters.add(cc);
+			}
+			return costCenters;
+		}
+		set;
+	}
 	// SOQL Filters for the product autocomplete checklist
 	public String productQueries
 	{

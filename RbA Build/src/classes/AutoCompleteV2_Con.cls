@@ -40,6 +40,7 @@ public class AutoCompleteV2_Con {
     public Object cacheField{get;private set;} 
     public String extraQueries{ get; set; }
     public String extraVariables{ get; set; }
+    public String Application{ get; set; }
     
     private Object targetFieldVar;
     
