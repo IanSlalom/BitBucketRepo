@@ -47,6 +47,16 @@
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
+        <fullName>Amount_Financed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Roll up of the Amount Financed</inlineHelpText>
+        <label>Amount Financed</label>
+        <summarizedField>Quote_Financing__c.Amount_Financed__c</summarizedField>
+        <summaryForeignKey>Quote_Financing__c.Related_Quote__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>BillingName</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
@@ -228,17 +238,6 @@
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
-        <fullName>Subtotal__c</fullName>
-        <description>Rollup of the product amounts.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Rollup of the product amounts.</inlineHelpText>
-        <label>Subtotal</label>
-        <summarizedField>QuoteLineItem.TotalPrice</summarizedField>
-        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
-        <summaryOperation>sum</summaryOperation>
-        <type>Summary</type>
-    </fields>
-    <fields>
         <fullName>Tax</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
@@ -332,4 +331,11 @@
         <searchResultsAdditionalFields>GrandTotal</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>DiscountAmtCannotGreaterSubtotal</fullName>
+        <active>true</active>
+        <description>Discount Amount cannot be greater than Subtotal</description>
+        <errorConditionFormula>Discount_Amount__c  &gt;  Subtotal</errorConditionFormula>
+        <errorMessage>Discount Amount cannot be greater than Subtotal.  Please make correct adjustments.</errorMessage>
+    </validationRules>
 </CustomObject>

@@ -91,6 +91,17 @@
     <enableHistory>false</enableHistory>
     <fields>
         <fullName>AccountId</fullName>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>The Account Type must be a Dwelling.</errorMessage>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Dwelling</value>
+            </filterItems>
+            <infoMessage>The Account Type must be a Dwelling.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
@@ -99,6 +110,17 @@
         <fullName>Amount</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <trackTrending>false</trackTrending>
+    </fields>
+    <fields>
+        <fullName>Amount_Financed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Roll up of the Amount Financed</inlineHelpText>
+        <label>Amount Financed</label>
+        <summarizedField>Opportunity_Financing__c.Amount_Financed__c</summarizedField>
+        <summaryForeignKey>Opportunity_Financing__c.Related_Opportunity__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>CampaignId</fullName>
@@ -239,6 +261,11 @@
     <fields>
         <fullName>OwnerId</fullName>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PartnerAccountId</fullName>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -695,6 +722,13 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <validationRules>
+        <fullName>DiscountAmtCannotGreaterSubtotal</fullName>
+        <active>true</active>
+        <description>Discount Amount cannot be greater than Subtotal</description>
+        <errorConditionFormula>Discount_Amount__c  &gt;  Subtotal__c</errorConditionFormula>
+        <errorMessage>Discount Amount cannot be greater than Subtotal.  Please make correct adjustments.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>APXTConga4__Conga_Composer_OAuth</fullName>
         <availability>online</availability>

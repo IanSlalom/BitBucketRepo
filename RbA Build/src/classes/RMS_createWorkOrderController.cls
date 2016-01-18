@@ -78,8 +78,10 @@ public with sharing class RMS_createWorkOrderController {
 		wo.SVMXC__State__c = shippingState;
 		wo.SVMXC__Zip__c = shippingPostalCode;
 		wo.SVMXC__Country__c = shippingCountry;
-		wo.SVMXC__Contact__c = billToContactId;
 		
+		if(billToContactId != null && billToContactId != 'null'){
+			wo.SVMXC__Contact__c = billToContactId;
+		}
         if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }

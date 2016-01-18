@@ -74,6 +74,7 @@
     </types>
     <types>
         <members>Backoffice</members>
+        <members>Backoffice_Admin</members>
         <members>Homeowner_Resolution</members>
         <members>Renewal_by_Andersen</members>
         <name>CustomApplication</name>
@@ -85,6 +86,7 @@
     <types>
         <members>Account</members>
         <members>Activity</members>
+        <members>Asset</members>
         <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
@@ -92,6 +94,7 @@
         <members>Discount__c</members>
         <members>Event</members>
         <members>Field_IDs__c</members>
+        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Configuration__c</members>
         <members>Financial_Transaction__c</members>
@@ -102,10 +105,12 @@
         <members>Municipality__c</members>
         <members>Opportunity</members>
         <members>Opportunity_Discount__c</members>
+        <members>Opportunity_Financing__c</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Code_Lookup__c</members>
         <members>Order_Discount__c</members>
+        <members>Order_Financing__c</members>
         <members>Payment__c</members>
         <members>Pricebook2</members>
         <members>PricebookEntry</members>
@@ -116,6 +121,7 @@
         <members>Quote</members>
         <members>QuoteLineItem</members>
         <members>Quote_Discount__c</members>
+        <members>Quote_Financing__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
         <members>Refund__c</members>
@@ -129,6 +135,7 @@
     </types>
     <types>
         <members>Discount__c</members>
+        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
@@ -178,6 +185,8 @@
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
         <members>Order_Discount__c-Order Discount Layout</members>
+        <members>Payment__c-Deposit Layout</members>
+        <members>Payment__c-Misc Cash Receipt Layout</members>
         <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
@@ -208,8 +217,6 @@
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
-        <members>Payment__c-Deposit Layout</members>
-        <members>Payment__c-Misc Cash Receipt Layout</members>
         <name>Layout</name>
     </types>
     <types>

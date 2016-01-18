@@ -418,6 +418,7 @@ public with sharing class RMS_financialTransactionManager {
 		map<Id, list<Journal_Entry__c>> laborIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
 
 		map<Id, list<Financial_Transaction__c>>  laborIdToLaborFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Internal Labor');
+		map<Id, list<Financial_Transaction__c>>  laborIdToLaborExternalFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'External Labor');
 		map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Misc Reimbursement');
 		
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
@@ -431,18 +432,18 @@ public with sharing class RMS_financialTransactionManager {
 				typeOfLabor = 'LaborMiscReimbursement';
 			}
 			
-			
+			 
 			if(typeOfLabor != null){
 				string errorMessage;
 				if(l.Store_Location__c == null ){ 
 					errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
 				}
-				
+				  
 				errorMessage = checkLaborForErrors(l, errorMessage, typeOfLabor);
 				
 				if(typeOfLabor == 'LaborLabor'){
 					if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
-						errorMessage = checkFinacialTransationForErrors(laborIdToLaborFinacialTransactionList.get(l.id) , errorMessage, 'External Labor');
+						errorMessage = checkFinacialTransationForErrors(laborIdToLaborExternalFinacialTransactionList.get(l.id) , errorMessage, 'External Labor');
 					}else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
 						errorMessage = checkFinacialTransationForErrors(laborIdToLaborFinacialTransactionList.get(l.id) , errorMessage, 'Internal Labor');
 					}
@@ -461,16 +462,20 @@ public with sharing class RMS_financialTransactionManager {
 							);
 							
 							if(typeOfLabor == 'LaborLabor'){
-								newJE.Debit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
-								newJE.Credit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 							
 								if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
 									newJE.Type__c = 'External Labor';
 									newJE.Amount__c = l.External_Labor_Amount__c;
 									newJE.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+									
+									newJE.Debit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
+									newJE.Credit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 								}else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
 									newJE.Type__c = 'Internal Labor';
 									newJe.Amount__c = l.Internal_Cost__c;
+									
+									newJE.Debit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
+									newJE.Credit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 								}
 							}else if(typeOfLabor == 'LaborMiscReimbursement'){
 								newJE.Type__c = 'Misc Reimbursement';
@@ -503,16 +508,20 @@ public with sharing class RMS_financialTransactionManager {
 								je.Order__c = l.Related_Work_Order__r.Sold_Order__c;
 			
 								if(typeOfLabor == 'LaborLabor'){
-									je.Debit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
-									je.Credit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 								
 									if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
 										je.Type__c = 'External Labor';
 										je.Amount__c = l.External_Labor_Amount__c;
 										je.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+										
+										je.Debit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
+										je.Credit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 									}else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
 										je.Type__c = 'Internal Labor';
 										je.Amount__c = l.Internal_Cost__c;
+										
+										je.Debit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
+										je.Credit_General_Ledger_Account__c = laborIdToLaborFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 									}
 								}else if(typeOfLabor == 'LaborMiscReimbursement'){
 									je.Type__c = 'Misc Reimbursement';
