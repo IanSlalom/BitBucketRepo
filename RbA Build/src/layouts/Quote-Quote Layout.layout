@@ -64,6 +64,10 @@
                 <behavior>Readonly</behavior>
                 <field>Total__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Amount_Financed__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -193,6 +197,13 @@
         <fields>Discount_Amount__c</fields>
         <fields>Discount__c.Description__c</fields>
         <relatedList>Quote_Discount__c.Quote__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Finance_Program__c.NAME</fields>
+        <fields>Amount_Financed__c</fields>
+        <relatedList>Quote_Financing__c.Related_Quote__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>QUOTE_DOC.NAME</fields>

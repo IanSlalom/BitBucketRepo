@@ -72,6 +72,7 @@
     </types>
     <types>
         <members>Backoffice</members>
+        <members>Backoffice_Admin</members>
         <members>Homeowner_Resolution</members>
         <members>Renewal_by_Andersen</members>
         <name>CustomApplication</name>
@@ -90,6 +91,7 @@
         <members>Discount__c</members>
         <members>Event</members>
         <members>Field_IDs__c</members>
+        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Configuration__c</members>
         <members>Financial_Transaction__c</members>
@@ -100,10 +102,12 @@
         <members>Municipality__c</members>
         <members>Opportunity</members>
         <members>Opportunity_Discount__c</members>
+        <members>Opportunity_Financing__c</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Code_Lookup__c</members>
         <members>Order_Discount__c</members>
+        <members>Order_Financing__c</members>
         <members>Payment__c</members>
         <members>Pricebook2</members>
         <members>PricebookEntry</members>
@@ -114,6 +118,7 @@
         <members>Quote</members>
         <members>QuoteLineItem</members>
         <members>Quote_Discount__c</members>
+        <members>Quote_Financing__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
         <members>Refund__c</members>
@@ -127,6 +132,7 @@
     </types>
     <types>
         <members>Discount__c</members>
+        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>

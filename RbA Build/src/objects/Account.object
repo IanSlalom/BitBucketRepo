@@ -435,6 +435,10 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>IsPartner</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>Jigsaw</fullName>
         <trackHistory>false</trackHistory>
     </fields>

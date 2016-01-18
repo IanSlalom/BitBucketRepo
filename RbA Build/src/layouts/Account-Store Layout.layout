@@ -162,6 +162,10 @@
         <fields>UPDATEDBY_USER</fields>
         <relatedList>Store_Vendor__c.Store__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Labor__c.Store_Location__c</relatedList>
+    </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

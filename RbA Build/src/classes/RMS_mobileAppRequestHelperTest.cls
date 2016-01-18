@@ -14,7 +14,6 @@ private class RMS_mobileAppRequestHelperTest {
 		
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
-		utilities.setUpConfigs();
 		User u = utilities.createUser(p.id);
         System.runAs(u) {
             // The following code runs as user 'u' 

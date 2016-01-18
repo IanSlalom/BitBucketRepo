@@ -80,6 +80,27 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Amount_Financed__c</fullName>
+        <externalId>false</externalId>
+        <label>Amount Financed</label>
+        <summarizedField>Order_Financing__c.Amount_Financed__c</summarizedField>
+        <summaryForeignKey>Order_Financing__c.Related_Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Amount_due_on_Account__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This is a holding field - need to figure out where this amount will come from.</inlineHelpText>
+        <label>Amount due on Account</label>
+        <length>10</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>BillToContactId</fullName>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
@@ -147,6 +168,30 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Install_Complete_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Installation_Date_Complete__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled over from the associated Sold Order</inlineHelpText>
+        <label>Install Complete Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Install_Crew__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the Install Crew, this will populate from the Install Work Order.
+
+This is a holding field for now.</inlineHelpText>
+        <label>Install Crew</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Install_Order_Status__c</fullName>
         <externalId>false</externalId>
         <label>Install Order Status</label>
@@ -165,6 +210,17 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Installation_Date_Complete__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This will populate from the Install Work Order
+
+This is a holding field for now.</inlineHelpText>
+        <label>Installation Date Complete</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Installation_Date__c</fullName>
         <description>Updated via Process Flow</description>
         <externalId>false</externalId>
@@ -176,6 +232,17 @@
     </fields>
     <fields>
         <fullName>IsReductionOrder</fullName>
+    </fields>
+    <fields>
+        <fullName>Lead_Service_Tech__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This will be pulled from the Work Order</inlineHelpText>
+        <label>Lead Service Tech</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Name</fullName>
@@ -193,6 +260,42 @@
     <fields>
         <fullName>OriginalOrderId</fullName>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Original_Crew__c</fullName>
+        <externalId>false</externalId>
+        <formula>Install_Crew__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled over from the associated Sold Order</inlineHelpText>
+        <label>Original Crew</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original_Stainer__c</fullName>
+        <externalId>false</externalId>
+        <formula>Stainer__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled over from the associated Sold Order</inlineHelpText>
+        <label>Original Stainer</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original_Tech_Measure__c</fullName>
+        <externalId>false</externalId>
+        <formula>Tech_Measure__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled over from the associated Sold Order</inlineHelpText>
+        <label>Original Tech Measure</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>OwnerId</fullName>
@@ -331,6 +434,50 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Service_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Job in Progress</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>???</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_initiated_By__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Initiated By</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>ShipToContactId</fullName>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
@@ -338,6 +485,32 @@
     <fields>
         <fullName>ShippingAddress</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Sold_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>When the Sold Order is Job In Progress, the Service Order must be related to the Sold Order.</inlineHelpText>
+        <label>Sold Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Service Orders</relationshipLabel>
+        <relationshipName>Sold_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stainer__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This will populate from the Paint/Stain Work Order
+
+This is a holding field for now.</inlineHelpText>
+        <label>Stainer</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Store_Location2__c</fullName>
@@ -383,6 +556,19 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Tech_Measure__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>this will popluate from the Tech Measure Work Order.
+
+Holding Field for now.</inlineHelpText>
+        <label>Tech Measure</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>TotalAmount</fullName>
     </fields>
     <fields>
@@ -392,6 +578,53 @@
         </picklist>
         <trackHistory>true</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Type_image__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE( RecordTypeId , 
+&quot;0123B000000Ci1R&quot;, IMAGE (&quot;resource/ServiceOrder&quot;,&quot;Service Order&quot;), 
+&quot;Install&quot;, IMAGE(&quot;resource/InstallText&quot;,&quot;Install&quot;), 
+&quot;Service&quot;, IMAGE(&quot;resource/ServiceText&quot;,&quot;Service&quot;),
+&quot;HOA&quot;, IMAGE(&quot;resource/HOAText&quot;,&quot;HOA&quot;),
+&quot;Historical&quot;, IMAGE(&quot;resource/HistoricalText&quot;,&quot;Historical&quot;),
+&quot;Building Permit&quot;, IMAGE(&quot;resource/BuildingPermitText&quot;,&quot;Building Permit&quot;),
+&quot;LSWP&quot;, IMAGE(&quot;resource/LSWP&quot;,&quot;LSWP&quot;),
+&quot;Paint/Stain&quot;, IMAGE(&quot;resource/PaintStainText&quot;,&quot;Paint/Stain&quot;),
+NULL)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Warranty_Date_Accepted__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Warranty was accepted</inlineHelpText>
+        <label>Warranty Date Accepted</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Warranty_Date_Submitted__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Warrant was submitted.</inlineHelpText>
+        <label>Warranty Date Submitted</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Warranty_Reimbursement_Amount__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Reimbursement Amount</inlineHelpText>
+        <label>Warranty Reimbursement Amount</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
     </fields>
     <listViews>
         <fullName>Activated_Orders</fullName>
@@ -550,6 +783,7 @@
     <recordTypes>
         <fullName>ARO_Record_Type</fullName>
         <active>true</active>
+        <description>ARO Orders</description>
         <label>ARO Record Type</label>
         <picklistValues>
             <picklist>Install_Order_Status__c</picklist>
@@ -609,6 +843,36 @@
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>%3F%3F%3F</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job in Progress</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_initiated_By__c</picklist>
+            <values>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Status</picklist>
             <values>
                 <fullName>Activated</fullName>
@@ -627,6 +891,7 @@
     <recordTypes>
         <fullName>CORO_Record_Type</fullName>
         <active>true</active>
+        <description>CORO Orders</description>
         <label>CORO Record Type</label>
         <picklistValues>
             <picklist>Install_Order_Status__c</picklist>
@@ -690,6 +955,36 @@
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>%3F%3F%3F</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job in Progress</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_initiated_By__c</picklist>
+            <values>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Status</picklist>
             <values>
                 <fullName>Activated</fullName>
@@ -701,6 +996,166 @@
             </values>
             <values>
                 <fullName>Draft</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>CORO_Service</fullName>
+        <active>true</active>
+        <description>CORO Service Records</description>
+        <label>CORO Service</label>
+        <picklistValues>
+            <picklist>Install_Order_Status__c</picklist>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Failed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Change Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Deferred</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance Funding</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA%2FHistorical Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Measure Summary</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>%3F%3F%3F</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job in Progress</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_initiated_By__c</picklist>
+            <values>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Activated</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Call Back</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Draft</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JIP to be Scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Product Ordered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service to be Scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spring Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>To Be Ordered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Warranty Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Warranty Submitted</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -731,6 +1186,13 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>Private</sharingModel>
+    <validationRules>
+        <fullName>DiscountAmtCannotGreaterRetailSubtotal</fullName>
+        <active>true</active>
+        <description>Discount Amount cannot be greater than Retails Subtotal</description>
+        <errorConditionFormula>Discount_Amount__c  &gt;  Retail_Subtotal__c</errorConditionFormula>
+        <errorMessage>Discount Amount cannot be greater than Retail Subtotal.  Please make correct adjustments.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>Add_Product</fullName>
         <availability>online</availability>

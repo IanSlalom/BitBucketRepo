@@ -144,13 +144,13 @@
             <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:outputText value="" />
+            <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
             <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
             <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
          	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:outputText value="" />
+            <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
 
             <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'}"/>
 
