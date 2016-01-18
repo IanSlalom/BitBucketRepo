@@ -170,10 +170,14 @@
     <tab>standard-Order</tab>
     <tab>SVMXC__Service_Order__c</tab>
     <tab>Purchase_Order__c</tab>
+    <tab>Payment__c</tab>
     <tab>Labor__c</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
+        </mapping>
+        <mapping>
+            <tab>Payment__c</tab>
         </mapping>
         <mapping>
             <tab>Purchase_Order__c</tab>

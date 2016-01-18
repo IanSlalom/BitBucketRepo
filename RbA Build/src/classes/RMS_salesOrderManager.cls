@@ -1,218 +1,215 @@
+/*
+ *@class	RMS_salesOrderManager
+ *@brief	class used to create orders from quotes
+ *@author  Anthony Strafaccia (Slalom.ADS)
+ *@author  Mark Wochnick (Slalom.MAW)
+ *@version	2015/12/21  Slalom.MAW
+ *@copyright  (c)2015 Slalom.  All Rights Reserved.	Unauthorized use is prohibited.
+ */
+
 public with sharing class RMS_salesOrderManager {
 
-	 public void createSalesOrderOnOpportunityClosedWon(List<Opportunity> listOld, List<Opportunity> listNew, Map<Id, Opportunity> mapOld, Map<Id, Opportunity> mapNew){
+	/* @method: createSalesOrderOnOpportunityClosedWon(List<Opportunity> listOld, List<Opportunity> listNew, Map<Id, Opportunity> mapOld, Map<Id, Opportunity> mapNew)
+	 * @param: List<Opportunity> listOld
+	 * @param: List<Opportunity> listNew
+	 * @param: Map<Id, Opportunity> mapOld
+	 * @param: Map<Id, Opportunity> mapNew
+	 * @return: void
+	 */
+	 public void createSalesOrderOnOpportunityClosedWon(List<Opportunity> listOld, 
+		List<Opportunity> listNew, 
+		Map<Id, Opportunity> mapOld, 
+		Map<Id, Opportunity> mapNew) {
+
 	 	system.debug('****** Inside RMS_salesOrderManager/createSalesOrderOnOpportunityClosedWon');
 	 	
-	 	
 	 	//CREATE AND POPULATE LIST OF ONLY OPPORTUNITIES THAT HAVE BEEN CLOSED/WON AND HAVE A SYNCED QUOTE TO PREFORM LOGIC ON
-	 	list<Opportunity> closedWonOpportunities = new list<Opportunity>();
-	 	list<Id> closedWonOpportunitiesIds = new list<Id>();
+	 	List<Opportunity> closedWonOpportunities = new List<Opportunity>();
+	 	List<Id> closedWonOpportunitiesIds = new List<Id>();
 
-	 	
 	 	for(Opportunity opp : listNew){
-	 		if(	opp.IsWon == true  &&  mapOld.get(opp.id).IsWon != true  &&  opp.SyncedQuoteId != null ){
+	 		System.Debug('**********opp=' +opp);
+	 		System.Debug('**********opp.isWon=' +opp.isWon);
+//	 		System.Debug('**********mapOld.get(opp.id).IsWon=' +mapOld.get(opp.id).IsWon);
+	 		if(	opp.IsWon == true  &&  !mapOld.get(opp.id).IsWon){
 		 		closedWonOpportunitiesIds.add(opp.id);
 	 		}
 	 	}
-		//QUERY FOR ADDITIONAL FIELDS NOT PASSED BY TRIGGER
-		closedWonOpportunities = [SELECT 	id,
-											AccountId,
-											Store_Location__r.id,
-											OwnerId,
-											Description,
-											SyncedQuoteId,
-											Pricebook2Id,
-											Account.BillingStreet,
-											Account.BillingCity,
-											Account.BillingStateCode,
-											Account.BillingPostalCode, 
-											Account.BillingCountryCode,
-											CloseDate
-											
-								FROM Opportunity WHERE Id IN :closedWonOpportunitiesIds];	
-		
-		//CREATE MAP OF OPPORTUNITYID TO OPPORTUNITYCONTACTROLE LIST TO BE USED TO ASSIGN ORDER BILL TO CONTACT
-		list<OpportunityContactRole> relatedOpportunityContactRole = [SELECT Id, IsPrimary, OpportunityId, ContactId, Contact.LastName FROM OpportunityContactRole WHERE OpportunityId IN :closedWonOpportunitiesIds];
-		map<id, list<OpportunityContactRole>> oppIdToListofOpportunityContactRoleMap = new map<id, list<OpportunityContactRole>>();
-		for(OpportunityContactRole ocr : relatedOpportunityContactRole){
-	 		if(oppIdToListofOpportunityContactRoleMap.containsKey(ocr.OpportunityId)){
-				oppIdToListofOpportunityContactRoleMap.get(ocr.OpportunityId).add(ocr);
-			}else{
-				oppIdToListofOpportunityContactRoleMap.put(ocr.OpportunityId, new list<OpportunityContactRole>{ocr});
-			}	
-	 	}
-	 	
-	 	//CREATE MAP OF OPPORTUNITYID TO Opportunity_Discount__c LIST TO BE USED TO BUILD OrderDiscountS
-		list<Opportunity_Discount__c > relatedOpportunityDiscount = [SELECT Status__c, Discount__c, Discount_Amount__c, Opportunity__c  FROM Opportunity_Discount__c WHERE Opportunity__c IN :closedWonOpportunitiesIds];
-		map<id, list<Opportunity_Discount__c>> oppIdToListofOpportunityDiscountMap = new map<id, list<Opportunity_Discount__c>>();
-		
-		for(Opportunity_Discount__c oppD : relatedOpportunityDiscount){
-	 		if(oppIdToListofOpportunityDiscountMap.containsKey(oppD.Opportunity__c)){
-				oppIdToListofOpportunityDiscountMap.get(oppD.Opportunity__c).add(oppD);
-			}else{
-				oppIdToListofOpportunityDiscountMap.put(oppD.Opportunity__c, new list<Opportunity_Discount__c>{oppD});
-			}	
-	 	}
-		 
-		
-	 	system.debug('****** closedWonOpportunities.size(): '+closedWonOpportunities.size());
-	 	if(closedWonOpportunities.size() > 0){
-		 	//DYNAMICLY QUERY FOR ALL OPPORTUNITYLINEITEM FIELDS
-	    	SObjectType OLIx = Schema.getGlobalDescribe().get('OpportunityLineItem');
-			map<String,Schema.SObjectField> OLIFieldsMap = OLIx.getDescribe().fields.getMap();
-		    
-		    String oliQuery = 'SELECT ';
-		    
-			for(String oliField : OLIFieldsMap.KeySet()){
-				oliQuery = oliQuery + oliField + ', ';
-		    }
-		     
-		    oliQuery = oliQuery.substring(0,oliQuery.length()-2);
-		    oliQuery = oliQuery + ' FROM OpportunityLineItem WHERE OpportunityId IN :closedWonOpportunities';
-		 	list<OpportunityLineItem> relatedOLI= Database.query(oliQuery);
-		 	
-		 	
-		 	//CREATE A MAP OF OPPORTUNITY ID TO LIST OF OPPORTUNITYLINEITEMS
-		 	map<Id, list<OpportunityLineItem>> opportunityIdToOLIListMap = new map<Id, list<OpportunityLineItem>>();
-		 	for(OpportunityLineItem oli : relatedOLI){
-		 		if(opportunityIdToOLIListMap.containsKey(oli.OpportunityId)){
-					opportunityIdToOLIListMap.get(oli.OpportunityId).add(oli);
-				}else{
-					opportunityIdToOLIListMap.put(oli.OpportunityId, new list<OpportunityLineItem>{oli});
-				}	
-		 		
-		 	}
-		 	
-		 	//CREATE A MAP OF ORDER ITEM FIELD NAMES
-		 	SObjectType OrderItemx = Schema.getGlobalDescribe().get('OrderItem');
-			map<String,Schema.SObjectField> OrderItemFieldsMapReadOnly = OrderItemx.getDescribe().fields.getMap();
-			map<String,Schema.SObjectField> OrderItemFieldsMap = OrderItemFieldsMapReadOnly.Clone();
-			
-		 	//LOOP THROUGH ALL ORDERITEM FIELDS AND CHECK IF THERE IS A FIELD WITH SAME NAME
-		 	for(String OrderItemField : OrderItemFieldsMap.KeySet()){
-		 		Boolean matchMade = false;
-		 		for(String oliField : OLIFieldsMap.KeySet()){
-		 			//IF FIELD MATCHES IN NAME THEN SET MATCH MADE TO TRUE AND BREAK
-		 			if(oliField == OrderItemField){
-		 				matchMade = true;
-		 				break;
-		 			}
-		 		}
-		 		//AFTER LOOP IF NO MATCHES FOUND THEN REMOVE ORDERITEMFIELD
-		 		if(matchMade == false){
-		 			OrderItemFieldsMap.remove(OrderItemField);
-		 		}
-		 		
-		 			OrderItemFieldsMap.remove('isdeleted');
-		 			OrderItemFieldsMap.remove('listprice');
-		 			OrderItemFieldsMap.remove('id');
-		 			OrderItemFieldsMap.remove('createdate');
-		 	}
-		 	
-		 	
-		 	
-		 	
-		 	list<Order> ordersToAdd = new list<Order>();
-			list<sObject> orderItemsToAdd = new list<sObject>();
-		 	list<Order_Discount__c> orderDiscountsToAdd = new list<Order_Discount__c>();
-		 	
-		 	map<id, Order> opportunityIdToOrderMap = new map<id, Order>();
-		 	
-		 	for(Opportunity opp : closedWonOpportunities){
-				
-				//DECIDE WHO IS PRIMARY CONTACT
-				OpportunityContactRole primaryContactRole;
-				Boolean foundPrimary = false;
-				if(oppIdToListofOpportunityContactRoleMap.get(opp.id) != null){
-					for(OpportunityContactRole contactRole : oppIdToListofOpportunityContactRoleMap.get(opp.id)){
-						if(contactRole.IsPrimary == true){
-							primaryContactRole = contactRole;
-							foundPrimary = true;
-							break;
-						}
-					}
-					if(foundPrimary == false){
-						primaryContactRole = oppIdToListofOpportunityContactRoleMap.get(opp.id)[0];
-					}
+		// only do the following if we have closed won opportunities
+		System.debug('$$$$$$$$$$$$$$$$$$$$ RMS_salesOrderManager.createSalesOrderOnOpportunityClosedWon: closed opp count = ' + closedWonOpportunitiesIds.size());
+		if (closedWonOpportunitiesIds.size() > 0) {
+			// get the quotes, quote line items, quote discounts of the sold quote and the primary contact for each close won opportunity
+			List<Quote> soldQuoteList = [select Id, OpportunityId, Pricebook2Id, isSold__c, Name,
+				Opportunity.AccountId, Opportunity.Store_Location__c, Opportunity.OwnerId, Opportunity.Account.BillingStreet,
+				Opportunity.Account.BillingCity, Opportunity.Account.BillingStateCode, Opportunity.Account.BillingPostalCode, 
+				Opportunity.Account.BillingCountryCode,	Opportunity.Description, Opportunity.CloseDate, Opportunity.Pricebook2Id
+				from Quote where isSold__c = true and OpportunityId in :closedWonOpportunitiesIds];
+
+			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Quote__c,
+				Quote__r.OpportunityId 
+				from Quote_Discount__c where Quote__c in :soldQuoteList];
+
+		 	//Dynamicaly query for all QuoteLineItem fields
+	    	SObjectType qliType = Schema.getGlobalDescribe().get('QuoteLineItem');
+			Map<String,Schema.SObjectField> qliFieldsMap = qliType.getDescribe().fields.getMap();
+
+			// build the query string		    
+			String qliQuery = 'SELECT ';
+			// add the qli fields
+			for(String qliField : qliFieldsMap.KeySet()){
+				qliQuery = qliQuery + qliField + ', ';
+			}
+			// add other needed fields 
+			qliQuery = qliQuery + 'Quote.OpportunityId';
+			// add the from and where clause
+			qliQuery = qliQuery + ' FROM QuoteLineItem WHERE QuoteId in :soldQuoteList';
+			// run the query
+		 	List<QuoteLineItem> qliList= Database.query(qliQuery);
+
+			List<OpportunityContactRole> primaryContacts = [select Id, ContactId, OpportunityId, Contact.FirstName, Contact.LastName, isPrimary
+				from OpportunityContactRole where OpportunityId in :closedWonOpportunitiesIds and isPrimary = true];
+
+			// create the orders from the quotes
+			List<Order> newOrders = createOrders(soldQuoteList, primaryContacts);
+			if (newOrders.size() > 0) {
+				insert newOrders;
+
+				// create the order line items from the quote line items
+				List<OrderItem> oiList = createOrderItems(qliList, newOrders, qliFieldsMap);
+				if (oiList.size() > 0) {
+System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
+					insert oiList;
 				}
-				
-				
-				Id primaryContactId;
-				String orderName;
-				if(primaryContactRole != null){
-					primaryContactId = primaryContactRole.ContactId;
-					orderName = primaryContactRole.Contact.LastName + ' - ';
+
+				// create the order discounts from the quote discounts
+				List<Order_Discount__c> odList = createOrderDiscounts(qdList, newOrders);
+				if (odList.size() > 0) {
+					insert odList;
 				}
-				orderName = orderName + opp.Account.BillingStreet + ' - ' + opp.CloseDate;
-				
-				
-				//CREATE ORDER
-				Order ord = new Order(	
-										Name = orderName,
-										OpportunityId = opp.id, 
-										AccountId = opp.AccountId, 
-										Store_Location2__c = opp.Store_Location__r.id,
-										OwnerId = opp.OwnerId,
-										Description = opp.Description,
-										QuoteId = opp.SyncedQuoteId,
-										Pricebook2Id = opp.Pricebook2Id,
-										BillingStreet = opp.Account.BillingStreet,
-										BillingCity = opp.Account.BillingCity,
-										BillingStateCode = opp.Account.BillingStateCode,
-										BillingPostalCode = opp.Account.BillingPostalCode, 
-										BillingCountryCode = opp.Account.BillingCountryCode,
-										Status = 'Draft',
-										EffectiveDate = opp.CloseDate,
-										BillToContactId = primaryContactId
-										);
-				ordersToAdd.add(ord);
-				opportunityIdToOrderMap.put(opp.id, ord);
-		 	}
-		 	
-		 	insert ordersToAdd;
-		
-			
-		 	for(Opportunity opp : closedWonOpportunities){
-				//FOR EACH OPPORTUNITYLINEITEM CREATE A ORDERLINE ITEM
-				for(OpportunityLineItem oli : opportunityIdToOLIListMap.get(opp.id)){
-					
-					//CREATE NEW SOBJECT ORDER
-					sObject orderItem = Schema.getGlobalDescribe().get('OrderItem').newSObject();
-					
-					orderItem.put('OrderId', opportunityIdToOrderMap.get(opp.id).id );
-					orderItem.put('PricebookEntryId', oli.get('PricebookEntryId') );
-					
-					for(String orderItemField : OrderItemFieldsMap.keySet()){
-						if(OrderItemFieldsMap.get(orderItemField).getDescribe().isUpdateable()){
-							orderItem.put(orderItemField , oli.get(orderItemField) );
-						}
-					}
-					
-					orderItemsToAdd.add(orderItem);
-				}
-				
-				//FOR EACH OPPORTUNITY DISCOUNT CREATE AN ORDER DISCOUNT
-				if(oppIdToListofOpportunityDiscountMap.get(opp.id) != null){
-			 		for(Opportunity_Discount__c oppDiscount : oppIdToListofOpportunityDiscountMap.get(opp.id)){
-			 			Order_Discount__c orderDiscount = new Order_Discount__c(
-	 																			Discount__c = oppDiscount.Discount__c,
-	 																			Discount_Amount__c = oppDiscount.Discount_Amount__c,
-	 																			Status__c = oppDiscount.Status__c,
-	 																			Order__c = opportunityIdToOrderMap.get(opp.id).id
-	 																			);
-	 					orderDiscountsToAdd.add(orderDiscount);													
-			 		}
-				}
-		 	}//END OF closedWonOpportunities LOOP
-			
-			//CAST SOBJECT LIST TO ORDERITEM LIST FOR INSERT
-			list<OrderItem> orderItemsToAdd2 = orderItemsToAdd;
-			insert orderItemsToAdd2;
-			insert orderDiscountsToAdd;
-			
-			
-	 	}//END OF closedWonOpportunities.size() > 0 IF
+			}
+		}
 	 }// END OF createSalesOrderOnOpportunityClosedWon METHOD
+
+	/* @method: createOrders(List<Quote> quoteList)
+	 * @param: List<Quote> quoteList - list of Quote used as a source for the Orders
+	 * @param: List<OpportunityContactRole> primaryContacts - list of Primary Contacts used for populate order fields
+	 * @return: List<Order> a list of Order that are ready to be inserted
+	 */
+	public List<Order> createOrders(List<Quote> quoteList, List<OpportunityContactRole> primaryContacts){
+		List<Order> newOrders = new List<Order> ();
+		for (Quote qt : quoteList) {
+			Order ord = new Order();
+			ord.OpportunityId = qt.OpportunityId;
+			ord.AccountId = qt.Opportunity.AccountId;
+			ord.Store_Location2__c = qt.Opportunity.Store_Location__c;
+			ord.OwnerId = qt.Opportunity.OwnerId;
+			ord.Description = qt.Opportunity.Description;
+			ord.QuoteId = qt.Id;
+			ord.Pricebook2Id = qt.Opportunity.Pricebook2Id;
+			ord.BillingStreet = qt.Opportunity.Account.BillingStreet;
+			ord.BillingCity = qt.Opportunity.Account.BillingCity;
+			ord.BillingStateCode = qt.Opportunity.Account.BillingStateCode;
+			ord.BillingPostalCode = qt.Opportunity.Account.BillingPostalCode;
+			ord.BillingCountryCode = qt.Opportunity.Account.BillingCountryCode;
+			ord.Status = 'Draft';
+			ord.EffectiveDate = qt.Opportunity.CloseDate;
+			// spin through the primary contacts and assign the name and primary contact
+			for (OpportunityContactRole ocr : primaryContacts) {
+				if (ocr.OpportunityId == qt.OpportunityId) {
+					// we have a match
+					ord.BillToContactId = ocr.ContactId;
+					ord.Name = ocr.Contact.LastName + ' - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate.format();
+					break;
+				}
+			}
+			// set the name if the primary contact is not found for some reason
+			if (ord.Name == null) {
+				ord.Name = 'No Primary Contact - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate.format();
+			}
+			// add the order to the list
+			newOrders.add(ord);
+		}
+		return newOrders;
+	}
+
+	/* @method: createOrderItems(List<QuoteLineItem> qliList, List<Order> theOrders)
+	 * @param: List<QuoteLineItem> qliList - list of QuoteLineItems used as a source for the OrderItems
+	 * @param: List<Order> theOrders - orders to link the Order Discounts to
+	 * @param: Map<String,Schema.SObjectField> qliFieldsMapRO
+	 * @return: List<OrderItem> a list of OrderItems that are ready to be inserted
+	 */
+	public List<OrderItem> createOrderItems(List<QuoteLineItem> qliList, List<Order> theOrders, Map<String,Schema.SObjectField> qliFieldsMapRO) {
+		// since the field map is read only we need to clone it so we can remove the standard fields that can't be copied by name
+		Map<String,Schema.SObjectField> qliFieldsMap = qliFieldsMapRO.clone();
+		// remove the standard fields from the qli field mapping that can't be copied
+		qliFieldsMap.remove('Id');
+		qliFieldsMap.remove('isDeleted');
+		qliFieldsMap.remove('ListPrice');
+		qliFieldsMap.remove('CreateDate');
+
+		// lets get the OrderLineItem fields for dynamic assignment
+ 		SObjectType oiType = Schema.getGlobalDescribe().get('OrderItem');
+		Map<String,Schema.SObjectField> oiFieldsMap = oiType.getDescribe().fields.getMap();
+
+		List<OrderItem> oiList = new List<OrderItem> ();
+		// generate the OrderItems from the QuoteLineItems
+		for (QuoteLineItem qli : qliList) {
+			OrderItem oi = new OrderItem();
+			// populate fields not include in dynamic setup
+			oi.QuoteLineItemId = qli.Id;
+			oi.PricebookEntryId = qli.PricebookEntryId;
+
+			//populate the dyanmic fields
+			for(String qliField : qliFieldsMap.keySet()) {
+				SObjectField oiField = oiFieldsMap.get(qliField);
+				if (oiField != null) {
+					// we found the field can we update?
+					if (oiField.getDescribe().isUpdateable()) {
+						// yes check if the value is null
+						if (qli.get(qliField) != null) {
+							// its not null set the value
+							oi.put(oiField, qli.get(qliField));
+						}
+					}
+				}
+			}
+			//assign the correct order to the order item
+			for (Order ord : theOrders) {
+				if (ord.QuoteId == qli.QuoteId) {
+					oi.OrderId = ord.Id;
+					break;
+				}
+			}
+			// add the new order item to the list to be returned
+			oiList.add(oi);		
+		}
+		return oiList;
+	}
+
+	/* @method: createOrderDiscounts(List<Quote_Discount__c> qdList, List<Order> theOrders)
+	 * @param: List<Quote_Discount__c> qdList - list of Quote Discounts used as a source for the Order Discounts
+	 * @param: List<Order> theOrders - orders to link the Order Discounts to
+	 * @return: List<Order_Discount__c> a list of Order Discounts that are ready to be inserted
+	 */
+	public List<Order_Discount__c> createOrderDiscounts(List<Quote_Discount__c> qdList, List<Order> theOrders) {
+		List<Order_Discount__c> odList = new List<Order_Discount__c> ();
+		for (Quote_Discount__c qd : qdList) {
+			Order_Discount__c od = new Order_Discount__c();
+			od.Discount__c = qd.Discount__c;
+			od.Discount_Amount__c = qd.Discount_Amount__c;
+			//assign the correct order to the order discount
+			for (Order ord : theOrders) {
+				if (ord.QuoteId == qd.Quote__c) {
+					od.Order__c = ord.Id;
+					break;
+				}
+			}
+			// add the new order discount to the list to be returned
+			odList.add(od);		
+		}
+		return odList;
+	}
+
 	  
 	 
 }//EOF
