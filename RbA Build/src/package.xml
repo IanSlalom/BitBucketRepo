@@ -86,6 +86,7 @@
     <types>
         <members>Account</members>
         <members>Activity</members>
+        <members>Asset</members>
         <members>Back_Office_Check__c</members>
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
