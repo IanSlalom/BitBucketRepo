@@ -42,6 +42,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public list<Account> vendorsOnOrder = new list<Account>();
 	public String newProduct { get; set; }
 	public String lineItemToCancel { get; set; }
+	public String lineItemToReceive { get; set; }
+	public Decimal quantityReceived { get; set; }
+	public Date dateReceived { get; set; }
 	public Id storeId { get; set; }
 	public String glAccount;
 	public String intercompanyAccount;
@@ -335,7 +338,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			//GET THE ORDER ITEMS
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
 										Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
-										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c
+										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c,
+										Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity_Received__c,
+										Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
+										Total_Retail_Price__c, Pricebookentry.Product2.Family,
+										Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId
 										FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
 		}
 
@@ -529,9 +536,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			oi.Intercompany_AP_Account__c = intercompanyAccount;
 			orderItemsToUpdateList.add(oi);
 		}
+		
 
 		try{
 			// upsert the order line items
+			orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
 			update orderItemsToUpdateList;
 		} catch (Exception e){
 			System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
@@ -617,6 +626,65 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
 		pageRef.setRedirect(true);
 		return pageRef;
+
+	}
+
+	/*******************************************************
+					receiveLineItems method
+	*******************************************************/
+	public List<OrderItem> receiveLineItems(List<OrderItem> itemsToReceive) {
+		system.debug('*****Receiving a line item');
+
+		Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
+		List<Asset> finalAssetsToReceive = new List<Asset>();
+		List<OrderItem> finalOrderItems = new List<OrderItem>();
+		for (OrderItem oi : itemsToReceive) {
+			// If the date or quantity received is null just add the order ite
+			if (oi.Date_Received__c == null || oi.Quantity_To_Receive__c == null) {
+				finalOrderItems.add(oi);
+				continue;
+			}
+
+			Asset productAsset = (oi.Installed_Product_Asset__c != null) ? oi.Installed_Product_Asset__r	:
+										new Asset(
+											Quantity 			= oi.Quantity,
+											AccountId			= oi.Order.AccountId,
+											ContactId			= oi.Order.BillToContactId,
+											SerialNumber		= oi.Variant_Number__c,
+											Price				= oi.Total_Retail_Price__c,
+											Product2Id			= oi.Pricebookentry.Product2Id,
+//											ProductDescription	= oi.Description,
+//											ProductFamily		= oi.Pricebookentry.Product2.Family,
+//											ProductCode			= oi.Pricebookentry.Product2.ProductCode,
+											PurchaseDate		= oi.Order.EffectiveDate,
+											Name				= oi.Pricebookentry.Product2.Name,
+											Sold_Order__c		= oi.OrderId,
+											RecordTypeId		= UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
+										);
+			productAsset.Quantity_Received__c =  (productAsset.Quantity_Received__c == null) 
+													? 	oi.Quantity_To_Receive__c 
+													:	oi.Quantity_To_Receive__c + productAsset.Quantity_Received__c;
+			productAsset.Date_Received__c = oi.Date_Received__c;
+			productAsset.Status = 	(oi.Quantity == productAsset.Quantity_Received__c) ? 'Received' :
+									(oi.Quantity > productAsset.Quantity_Received__c) ? 'Partially Received' :
+									(oi.Quantity < productAsset.Quantity_Received__c) ? 'Over Received' : '';
+			finalAssetsToReceive.add(productAsset);
+			orderToAssetMap.put(oi.Id, productAsset);
+			
+		}
+		upsert finalAssetsToReceive;
+		
+		if (orderToAssetMap.size() > 0) {
+			for (OrderItem oi : itemsToReceive) {
+				
+				oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+				oi.Quantity_To_Receive__c = null;
+				oi.Date_Received__c = null;
+				finalOrderItems.add(oi);
+			}
+			
+		}
+		return finalOrderItems;
 
 	}
 
@@ -758,6 +826,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		public OrderItem orderItem {get; set;}
 		public Account account {get; set;}
 		public Product2 product {get; set;}
+		public decimal quantityReceived {get; set;}
+		public date dateReceived {get; set;}
 		
 		public OrderItemWrapper(OrderItem oi, Account a, Product2 p) {
 			orderItem = oi;
