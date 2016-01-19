@@ -71,6 +71,17 @@
         <fullName>AccountNumber</fullName>
     </fields>
     <fields>
+        <fullName>Account_Manager__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Account Manager</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>ActivatedById</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
@@ -102,6 +113,16 @@
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Amount_Paid__c</fullName>
+        <externalId>false</externalId>
+        <label>Amount Paid</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Amount_due_on_Account__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>This is a holding field - need to figure out where this amount will come from.</inlineHelpText>
@@ -113,6 +134,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Balance_Due__c</fullName>
+        <externalId>false</externalId>
+        <label>Balance Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>BillToContactId</fullName>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
@@ -120,6 +151,14 @@
     <fields>
         <fullName>BillingAddress</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Billing_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Billing Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>CompanyAuthorizedById</fullName>
@@ -149,6 +188,34 @@
     <fields>
         <fullName>CustomerAuthorizedDate</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Customer_Service_Manager__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Customer Service Manager</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Date_Cancelled__c</fullName>
+        <externalId>false</externalId>
+        <label>Date Cancelled</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Sat_Survey_Run__c</fullName>
+        <description>Date_Sat_Survey_Run</description>
+        <externalId>false</externalId>
+        <label>Date Sat Survey Run</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>Deposits_Received__c</fullName>
@@ -190,6 +257,14 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Financed_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Financed Order</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Install_Complete_Date__c</fullName>
         <externalId>false</externalId>
         <formula>Installation_Date_Complete__c</formula>
@@ -208,6 +283,24 @@
 This is a holding field for now.</inlineHelpText>
         <label>Install Crew</label>
         <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Day_of_Appmt__c</fullName>
+        <externalId>false</externalId>
+        <label>Install Day of Appmt</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Install_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Install Notes</label>
+        <length>255</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
@@ -253,7 +346,33 @@ This is a holding field for now.</inlineHelpText>
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Invoice_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>IsReductionOrder</fullName>
+    </fields>
+    <fields>
+        <fullName>Job_Close_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Job Close Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Lead_Safe_Work_Practices_Reqd__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Lead Safe Work Practices Reqd</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Lead_Service_Tech__c</fullName>
@@ -265,6 +384,40 @@ This is a holding field for now.</inlineHelpText>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Stainer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Lead Stainer</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Orders2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Lead_Tech_Measure__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Lead Tech Measure</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Orders3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Misc_Amount__c</fullName>
+        <description>The sum of all discounts applied.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sum of all discounts applied.</inlineHelpText>
+        <label>Misc Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Name</fullName>
@@ -325,6 +478,16 @@ This is a holding field for now.</inlineHelpText>
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Permit_Cost__c</fullName>
+        <externalId>false</externalId>
+        <label>Permit Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Permit_Status__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Populated from the Process Builder from the Order.</inlineHelpText>
@@ -366,6 +529,14 @@ This is a holding field for now.</inlineHelpText>
     <fields>
         <fullName>PoNumber</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Post_Install_Call__c</fullName>
+        <externalId>false</externalId>
+        <label>Post Install Call</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>QuoteId</fullName>
@@ -410,6 +581,14 @@ This is a holding field for now.</inlineHelpText>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Reinstall_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Reinstall Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
         <externalId>false</externalId>
         <label>Renovate Right Booklet Signed Date</label>
@@ -423,6 +602,14 @@ This is a holding field for now.</inlineHelpText>
         <summaryOperation>max</summaryOperation>
         <trackHistory>false</trackHistory>
         <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Renovation_Record_Keeping__c</fullName>
+        <externalId>false</externalId>
+        <label>Renovation Record Keeping</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>Retail_Subtotal__c</fullName>
@@ -454,6 +641,48 @@ This is a holding field for now.</inlineHelpText>
         <scale>2</scale>
         <trackHistory>false</trackHistory>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Revenue_Post_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Revenue_Post_Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Revenue_Recognition_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Revenue Recognition Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Revenue_Recognized__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>This flag is set whenever revenue is recognized for the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This flag is set whenever revenue is recognized for the order.</inlineHelpText>
+        <label>Revenue Recognized</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Sent to Baan Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Sent to Baan</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Service_Type__c</fullName>
@@ -567,6 +796,24 @@ This is a holding field for now.</inlineHelpText>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Survey_Sent__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Survey Sent</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tax_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Tax Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Tech_Measure_Date__c</fullName>
@@ -1144,7 +1391,7 @@ NULL)</formula>
                 <fullName>JIP to be Scheduled</fullName>
                 <default>false</default>
             </values>
-            <values> 
+            <values>
                 <fullName>Product Ordered</fullName>
                 <default>false</default>
             </values>

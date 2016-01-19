@@ -238,6 +238,17 @@
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
+        <fullName>Subtotal__c</fullName>
+        <description>Rollup of the product amounts.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Rollup of the product amounts.</inlineHelpText>
+        <label>Subtotal</label>
+        <summarizedField>QuoteLineItem.TotalPrice</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>Tax</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
