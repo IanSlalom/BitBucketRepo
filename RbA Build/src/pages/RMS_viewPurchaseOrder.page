@@ -102,8 +102,10 @@ function prepareList(parent,child,isSubselectOptional){
 //                var abc = j$('#x-panel-bwrap').val();
 //                var abc = j$(".select2-chosen");$( "#myDivId" ).val()
 //var $element = j$('.select2-chosen').html();
-var $element = j$('.select2-chosen').text();
-alert($element);
+//var $element = j$('.select2-chosen').text();
+//parentValue = $element;
+//alert($element);
+//alert(parent);
 
 
 //              var myVar  = j$('#select2-chosen').text();
@@ -191,11 +193,11 @@ alert($element);
 
                 </apex:pageBlockTable>
 
-            <apex:pageBlockSection id="mytable" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
-                <apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
+            <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
+                <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
 
- 		 <!--                   <apex:column >
-        <select id="productList" size="1" html-data-jsid="productList">    
+ <!--		                    <apex:column >
+          <select id="productList" size="1" html-data-jsid="productList">    
             <option value="">-Select-</option>             
             <apex:repeat value="{!products}" var="pro">                     
                 <option value="{!pro.Id}">{!pro.Name}</option>
@@ -212,14 +214,42 @@ alert($element);
                     </apex:column>-->
                     <apex:column >
                         <apex:facet name="header">{!productText}</apex:facet> 
-                            <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/> 
-                    <apex:outputText value="{!newProduct}"/>
+<!--                              <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>--> 
+					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
+						<apex:selectOptions value="{!productItems}"/>
+						<apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
+					</apex:selectList>
+
+<!--  						        <select id="productList" size="1" html-data-jsid="productList" value="{!newProduct}">    
+            						<option  >-Select-</option>             
+            							<apex:repeat value="{!products}" var="pro">                     
+                							<option value="{!pro.Id}">{!pro.Name}</option>
+            							</apex:repeat>                 
+        				</select>-->
+ <!--         				<apex:selectList size="1" value="{!myOrder.DeliveryMethod__c}" >
+<apex:selectOption itemValue="" itemLabel="-- None --" />
+<apex:repeat value="{!deliveryMethods}" var="item">
+<apex:selectOption itemValue="{!item}" itemLabel="{!item}" />
+</apex:repeat>
+</apex:selectList>-->
+        				            
+<!--                     <apex:outputText value="{!newProduct}"/> -->
                     </apex:column>
                     <apex:column rendered="{!costPurchaseOrder == true}">
 <!--                        <apex:facet name="header">GL Account</apex:facet> 
                             <apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  />
 -->                     <apex:facet name="header">Cost Center</apex:facet> 
-                            <apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  />
+<!--                              <apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  /> -->
+					<apex:selectList value="{!costCenter}" label="costCenter" size="1" id="costCenterlist">
+						<apex:selectOptions value="{!costCenterItems}"/>
+					</apex:selectList>
+
+
+<!--  							<select id="costCenterList" size="1" value="{!costCenter}">                 
+     							<apex:repeat value="{!costCenters}" var="cos">                     
+          						<option class="child_{!cos.Product__c}" value="{!cos.Cost_Center__c}">{!cos.Cost_Center__r.Name}</option>
+      							</apex:repeat>                 
+  							</select> -->
                     </apex:column>
                     <apex:column >
                         <apex:facet name="header">{!productText} Description</apex:facet> 
