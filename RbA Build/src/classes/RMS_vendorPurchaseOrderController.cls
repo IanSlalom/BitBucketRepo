@@ -60,8 +60,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		get
 		{   
 		List<SelectOption> pickListItems = new List<SelectOption>();
+		pickListItems.add(new SelectOption('', '-- Select --'));
 		
-		for (Product2 p : [SELECT Id, Name from Product2] ) {
+		for (Product2 p : [SELECT Id, Name from Product2 WHERE Id IN: VendorProducts  ] ) {
 			pickListItems.add(new SelectOption(p.Id, p.Name));
 		}			   
 		return pickListItems;
@@ -373,7 +374,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
 				orderItemIdToOrderItemMap.put(oi.id, oi);
 			}
+			System.Debug('**********************relatedProduct2IDList=' +relatedProduct2IDList);
+			System.Debug('**********************orderItemIdToOrderItemMap=' +orderItemIdToOrderItemMap);
 			relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
+			System.Debug('**********************relatedProducts=' +relatedProducts);
 				
 			//USING PRODUCTS GET LIST OF ALL VENDORS
 			for(Product2 p : relatedProducts){
@@ -552,7 +556,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
 			OrderItem oi = oiw.orderItem;
 			oi.Purchase_Order__c = po.id;
-			oi.GL_Account__c = glAccount;
+//			oi.GL_Account__c = glAccount;
 //			oi.Intercompany_AP_Account__c = intercompanyAccount;
 			orderItemsToUpdateList.add(oi);
 		}
@@ -656,6 +660,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public void updateCostCenters() {
 		System.Debug('***************newProduct=' +newProduct);
 		List<SelectOption> pickListItems = new List<SelectOption>();
+		pickListItems.add(new SelectOption('', '-- Select --'));
 
 		for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name, Cost_Center__r.Account_Label__c  from Cost_Center__c WHERE Product__c =: newProduct ]) {
 			costCenters.add(cc);
