@@ -139,10 +139,11 @@
 				var theurl =	'/apex/RMS_createActionsWOrkOrder?';
 					theurl = 	theurl+'orderId={!orderId}&';
 					theurl = 	theurl+'accountId={!accountId}&';
-					theurl = 	theurl+'billingStreet={!billingStreet}&';
-					theurl = 	theurl+'billingCity={!billingCity}&';
-					theurl = 	theurl+'billingPostalCode={!billingPostalCode}&';
-					theurl = 	theurl+'billingCountry={!billingCountry}&';
+					theurl = 	theurl+'shippingStreet={!shippingStreet}&';
+					theurl = 	theurl+'shippingCity={!shippingCity}&';
+					theurl = 	theurl+'shippingPostalCode={!shippingPostalCode}&';
+					theurl = 	theurl+'shippingCountry={!shippingCountry}&';
+					theurl =  	theurl+'billToContactId={!billToContactId}&';
 					
 					theurl = 	theurl+'retURL=%2F{!orderId}';
 					
@@ -152,10 +153,11 @@
 					location.href=	'/apex/RMS_createActionsWOrkOrder?'+
 									'orderId={!orderId}&'+
 									'accountId={!accountId}&'+
-									'billingStreet={!billingStreet}&'+
-									'billingCity={!billingCity}&'+
-									'billingPostalCode={!billingPostalCode}&'+
-									'billingCountry={!billingCountry}';
+									'shippingStreet={!shippingStreet}&'+
+									'shippingCity={!shippingCity}&'+
+									'shippingPostalCode={!shippingPostalCode}&'+
+									'shippingCountry={!shippingCountry}'+
+									'billToContactId={!billToContactId}';
 			}
 		}
 		function  getOrderId() 

@@ -161,6 +161,26 @@ Name,
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Product_Image__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE( Master_Product__r.Name_Part_Number__c, 
+&quot;Casement Window&quot;, IMAGE (&quot;resource/CasementWindowS1&quot;,&quot;Casement Window&quot;), 
+&quot;Install&quot;, IMAGE(&quot;resource/InstallText&quot;,&quot;Install&quot;), 
+&quot;Service&quot;, IMAGE(&quot;resource/ServiceText&quot;,&quot;Service&quot;),
+&quot;HOA&quot;, IMAGE(&quot;resource/HOAText&quot;,&quot;HOA&quot;),
+&quot;Historical&quot;, IMAGE(&quot;resource/HistoricalText&quot;,&quot;Historical&quot;),
+&quot;Building Permit&quot;, IMAGE(&quot;resource/BuildingPermitText&quot;,&quot;Building Permit&quot;),
+&quot;LSWP&quot;, IMAGE(&quot;resource/LSWP&quot;,&quot;LSWP&quot;),
+&quot;Paint/Stain&quot;, IMAGE(&quot;resource/PaintStainText&quot;,&quot;Paint/Stain&quot;),
+NULL)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Image</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Product_Type__c</fullName>
         <externalId>false</externalId>
         <label>Product Type</label>
@@ -602,6 +622,161 @@ Name,
         <fullName>Master_Product</fullName>
         <active>true</active>
         <label>Master Product</label>
+        <picklistValues>
+            <picklist>Color__c</picklist>
+            <values>
+                <fullName>Beige</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>White</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yellow</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Family</picklist>
+            <values>
+                <fullName>Awning Windows</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>None</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Product_Type__c</picklist>
+            <values>
+                <fullName>Bay Bow</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>FF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>IF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Line__c</picklist>
+            <values>
+                <fullName>Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Desktop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Laptop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Network</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Server</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solution</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Type__c</picklist>
+            <values>
+                <fullName>Consumable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wearable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Tracking__c</picklist>
+            <values>
+                <fullName>Lot%2FBatch Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Non-Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Serialized</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Unit_Of_Measure__c</picklist>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dozen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Gallon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kilogram</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Liter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pounds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ton</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Service_Product</fullName>
+        <active>true</active>
+        <description>Holds related Service Products</description>
+        <label>Service Product</label>
         <picklistValues>
             <picklist>Color__c</picklist>
             <values>

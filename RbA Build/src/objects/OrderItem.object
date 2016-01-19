@@ -74,6 +74,24 @@
         <fullName>AvailableQuantity</fullName>
     </fields>
     <fields>
+        <fullName>Billable_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Billable Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Billing Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
         <fullName>Breather_Tubes__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Checked if Breather Tubes are needed.</description>
@@ -173,6 +191,28 @@
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Charge_Cost_To__c</fullName>
+        <externalId>false</externalId>
+        <label>Charge Cost To:</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Manufacturer - Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Local - Remake</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer - Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Checkrail_Style__c</fullName>
@@ -335,6 +375,68 @@
         <trackHistory>false</trackHistory>
         <type>LongTextArea</type>
         <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Defect_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>Defect Code</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bowed/Warped/Twisted/Bent</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Broken</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cracked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dented</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color/Finish</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fillet Bead</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gouged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hard Operating</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Imperfection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hour Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rattle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M &amp; T</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NEED TO ADD ADDTIONAL VALUES</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Description</fullName>
@@ -894,6 +996,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Installed_Product_Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Installed Product Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Intercompany_AP_Account__c</fullName>
         <description>The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP.</description>
         <externalId>false</externalId>
@@ -1096,6 +1210,72 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>MTO_Source_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>MTO Source Code</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Astraga/Interlock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Balancer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stop Covers</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>GBG</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Exterior Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sash (Rails and Stiles)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Interior Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Liner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Screen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Specialty Window Trim/EJ/Casing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ALL VALUES ENTERED FROM PIVOTAL</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Mfg_Mull_Sequence__c</fullName>
         <description>The manufacturing mull sequence selected for this product.</description>
         <externalId>false</externalId>
@@ -1216,6 +1396,150 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Primary_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Primary Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Goodwill</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Management</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Order Entry</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Staining</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Warehouse</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Problem_Component__c</fullName>
+        <externalId>false</externalId>
+        <label>Problem Component</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grille Exterior</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grille Interior</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Astrage/Interlock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Weatherstip</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mull Component</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Overfit Flange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sash</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Screen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Speciality Window Trim/Extension Jamb/Casing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Blancer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bay/Bow Compenents (Specify)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brickmold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Liner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Door Compnent (Specify)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stop Cover (PW)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ALL VALUES ENTERED FROM PIVOTAL</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Product2Id</fullName>
         <type>Lookup</type>
     </fields>
@@ -1248,6 +1572,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Quanity_Ordered__c</fullName>
+        <externalId>false</externalId>
+        <label>Quanity Ordered</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Quantity</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -1257,12 +1592,34 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Quote_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Quote Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Quote_Detail_Id__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Quote Detail Id</label>
         <referenceTo>QuoteLineItem</referenceTo>
         <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Replacement_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Replacement Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Replacement Product</relationshipLabel>
         <relationshipName>Order_Products</relationshipName>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -1439,6 +1796,355 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Secondary_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Secondary Reason</label>
+        <picklist>
+            <controllingField>Primary_Reason__c</controllingField>
+            <picklistValues>
+                <fullName>Application</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Blinds/Shutters</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Building Material</fullName>
+                <controllingFieldValues>Warehouse</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Carbon Monoxide Detector</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Caulking</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Change Order</fullName>
+                <controllingFieldValues>Order Entry</controllingFieldValues>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Check Rail</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Clean-Up</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color Mismatch</fullName>
+                <controllingFieldValues>Staining</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Condensation</fullName>
+                <controllingFieldValues>Homeowner</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Satisfaction</fullName>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Damage</fullName>
+                <controllingFieldValues>Staining</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Damage Product</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dark Market</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Data Entry</fullName>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+                <controllingFieldValues>Order Entry</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Discontinued Vendor</fullName>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Egress</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>General Manager</fullName>
+                <controllingFieldValues>Management</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Glass Type</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grille Pattern</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grille Pattern Alignment</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grille Type</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Handing</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hardware</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Incomplete Load</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <controllingFieldValues>Service</controllingFieldValues>
+                <controllingFieldValues>Warehouse</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installation Manager</fullName>
+                <controllingFieldValues>Management</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Interior Trim</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Math Error</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Non-Fitting Unit</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Operation</fullName>
+                <controllingFieldValues>Homeowner</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Operations Manger</fullName>
+                <controllingFieldValues>Management</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Order Entry</fullName>
+                <controllingFieldValues>Service</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Out of Warranty</fullName>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Process Error</fullName>
+                <controllingFieldValues>Order Entry</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Product Damage</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <controllingFieldValues>Warehouse</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Product Question</fullName>
+                <controllingFieldValues>Homeowner</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Property Damage</fullName>
+                <controllingFieldValues>Service</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quality</fullName>
+                <controllingFieldValues>Staining</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quality Workmanship</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rot Repair</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales Manager</fullName>
+                <controllingFieldValues>Management</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sash Ratio</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Screens</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Security Wires</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service Manager</fullName>
+                <controllingFieldValues>Management</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shims</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sill Angle</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Site Materials</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Smoke Detectors</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stain/Paint Expectation</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Technician Damage</fullName>
+                <controllingFieldValues>Service</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Technician Error</fullName>
+                <controllingFieldValues>Service</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tempered Glass</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Transposition</fullName>
+                <controllingFieldValues>Tech Measure</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unit Type</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Verification</fullName>
+                <controllingFieldValues>Order Entry</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Warp</fullName>
+                <controllingFieldValues>Installation</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wrong Expectations</fullName>
+                <controllingFieldValues>Sales</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Select_Manufacturer__c</fullName>
+        <externalId>false</externalId>
+        <label>Select Manufacturer</label>
+        <picklist>
+            <controllingField>Charge_Cost_To__c</controllingField>
+            <picklistValues>
+                <fullName>Andersen</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bayworld</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMCO</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RbA</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ADD ADDITIONAL IF NEEDED</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Sent_to_Baan_Date__c</fullName>
         <externalId>false</externalId>
         <label>Sent to Baan Date</label>
@@ -1457,6 +2163,143 @@
     <fields>
         <fullName>ServiceDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Service_Procedure_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Procedure Code</label>
+        <picklist>
+            <picklistValues>
+                <fullName>100 Unit: Caulking, Silicone, VTV, Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>105 Unit Fibrex: Chip/Crack/Surface Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>110 Unit: Repalce/Reinstall Frame or Unit (Actual Time Spent)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>115 Unit: Clean Unit (Requires Description)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>120 Unit: Lubrication</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>125 Screen: Wing Blade or Grommet Fit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>130 Screen: Modify or rescreen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>135 Screen: Reqplacement</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NEED TO ADD ADDITIONAL VALUES</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Note__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Product Note</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Service_Sympton__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Sympton</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bowed/Warped/Twisted/Bent</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Corrosion</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Broken</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Height Too Tall</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stress Cracked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Height To Short</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dented</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sagging</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color/Finish</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Weidth To Wide</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Water Leakage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Width Too Narrow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fillet Bead/Caulking/Silicone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bay/Bow Failure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gouged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NEED TO ADD IN ADDITIONAL VALUES</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, this product was created from a Service Order.</inlineHelpText>
+        <label>Service</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Sill_Angle__c</fullName>
@@ -1698,6 +2541,24 @@
         <scale>2</scale>
         <trackHistory>false</trackHistory>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Remake</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replacement</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>UnitPrice</fullName>

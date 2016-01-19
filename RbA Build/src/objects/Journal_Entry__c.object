@@ -64,6 +64,16 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Baan_Business_Partner_Number__c</fullName>
+        <externalId>false</externalId>
+        <label>Baan Business Partner Number</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Credit_General_Ledger_Account__c</fullName>
         <externalId>false</externalId>
         <label>Credit General Ledger Account</label>
@@ -118,6 +128,18 @@
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Labor__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Labor</label>
+        <referenceTo>Labor__c</referenceTo>
+        <relationshipLabel>Journal Entries</relationshipLabel>
+        <relationshipName>Journal_Entries</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Order__c</fullName>
@@ -178,6 +200,14 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Revenue Recognition</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Misc Sub-Payment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Misc Cash Receipt</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>

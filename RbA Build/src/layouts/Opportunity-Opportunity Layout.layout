@@ -46,6 +46,10 @@
                 <behavior>Readonly</behavior>
                 <field>Total__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Amount_Financed__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -198,6 +202,7 @@
         <fields>ORDERS.EFFECTIVE_DATE</fields>
         <fields>CONTRACT.CONTRACT_NUMBER</fields>
         <fields>ORDERS.TOTAL_AMOUNT</fields>
+        <fields>ORDER.RECORDTYPE</fields>
         <relatedList>RelatedOrderList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -236,6 +241,10 @@
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedOpportunityHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Opportunity_Financing__c.Related_Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

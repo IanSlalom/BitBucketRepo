@@ -28,6 +28,9 @@ public with sharing class RMS_salesOrderManager {
 	 	List<Id> closedWonOpportunitiesIds = new List<Id>();
 
 	 	for(Opportunity opp : listNew){
+	 		System.Debug('**********opp=' +opp);
+	 		System.Debug('**********opp.isWon=' +opp.isWon);
+//	 		System.Debug('**********mapOld.get(opp.id).IsWon=' +mapOld.get(opp.id).IsWon);
 	 		if(	opp.IsWon == true  &&  !mapOld.get(opp.id).IsWon){
 		 		closedWonOpportunitiesIds.add(opp.id);
 	 		}
@@ -115,13 +118,13 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 				if (ocr.OpportunityId == qt.OpportunityId) {
 					// we have a match
 					ord.BillToContactId = ocr.ContactId;
-					ord.Name = ocr.Contact.LastName + ' - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate;
+					ord.Name = ocr.Contact.LastName + ' - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate.format();
 					break;
 				}
 			}
 			// set the name if the primary contact is not found for some reason
 			if (ord.Name == null) {
-				ord.Name = 'No Primary Contact - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate;
+				ord.Name = 'No Primary Contact - ' + ord.BillingStreet + ' - ' + ord.EffectiveDate.format();
 			}
 			// add the order to the list
 			newOrders.add(ord);

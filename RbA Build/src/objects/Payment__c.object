@@ -30,7 +30,9 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <type>Default</type>
+        <content>RMS_newPaymentRedirect</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>SaveEdit</actionName>
@@ -91,6 +93,36 @@
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the GL Account for this payment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the GL Account for this payment.</inlineHelpText>
+        <label>GL Account</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>GL Account must be linked to this payment&apos;s Store Location and must be a Misc Cash Receipt account.</errorMessage>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Location__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Financial_Account_Number__c.Account_Type__c</field>
+                <operation>equals</operation>
+                <value>Misc Cash Receipt</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Payments</relationshipLabel>
+        <relationshipName>Payments</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Number__c</fullName>
@@ -240,7 +272,7 @@
     <recordTypes>
         <fullName>Deposit</fullName>
         <active>true</active>
-        <description>Deposit record type</description>
+        <description>The record type for capturing deposits/final payments.</description>
         <label>Deposit</label>
         <picklistValues>
             <picklist>Payment_Method__c</picklist>
@@ -254,6 +286,34 @@
             </values>
             <values>
                 <fullName>Credit Card</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Type__c</picklist>
+            <values>
+                <fullName>Deposit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Payment</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Misc_Cash_Receipt</fullName>
+        <active>true</active>
+        <description>The record type for miscellaneous cash receipts not associated with an order.</description>
+        <label>Misc Cash Receipt</label>
+        <picklistValues>
+            <picklist>Payment_Method__c</picklist>
+            <values>
+                <fullName>Cash</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Check</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

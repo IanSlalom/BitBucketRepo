@@ -32,11 +32,12 @@ public with sharing class UtilityMethods {
 			SVMXC__Order_Type__c = ordType,
 			SVMXC__Company__c = ord.AccountId,
 					
-			SVMXC__Street__c = dwelling.BillingStreet,
-			SVMXC__City__c = dwelling.BillingCity,
-			SVMXC__State__c = dwelling.BillingStateCode,
-			SVMXC__Zip__c = dwelling.BillingPostalCode, 
-			SVMXC__Country__c = dwelling.BillingCountryCode,
+			SVMXC__Street__c = dwelling.ShippingStreet,
+			SVMXC__City__c = dwelling.ShippingCity,
+			SVMXC__State__c = dwelling.ShippingStateCode,
+			SVMXC__Zip__c = dwelling.ShippingPostalCode, 
+			SVMXC__Country__c = dwelling.ShippingCountryCode,
+			SVMXC__Contact__c = Ord.BillToContactId,
 			
 			Municipality__c = munici,
 			
@@ -95,5 +96,36 @@ public with sharing class UtilityMethods {
 		}
 		return accountNumberMap;
 	}
-    
+
+	// Method used to lock a list of sObjects
+	public static String lockRecords(List<sObject> recordsToLock){
+		String result;
+		if(recordsToLock == null){
+			result = 'No records received';
+			return result;
+		}
+		// Lock the sObjects
+		Approval.LockResult[] lrList = Approval.lock(recordsToLock, false);
+	
+		result = 'Records successfully locked';
+	
+		// Iterate through each returned result
+		for(Approval.LockResult lr : lrList) {
+    		if (lr.isSuccess()) {
+        		// Operation was successful, so get the ID of the record that was processed
+        		System.debug('Successfully locked account with ID: ' + lr.getId());
+
+	    	}
+    		else {
+        		// Operation failed, so get all errors                
+        		for(Database.Error err : lr.getErrors()) {
+            		System.debug('The following error has occurred.');                    
+            		System.debug(err.getStatusCode() + ': ' + err.getMessage());
+           	 		System.debug('Account fields that affected this error: ' + err.getFields());
+        		}
+				result = 'One or more records could not be locked';
+   			}
+		}
+		return result;
+	}
 }
