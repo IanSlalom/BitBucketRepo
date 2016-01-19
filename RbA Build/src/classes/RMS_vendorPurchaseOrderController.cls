@@ -192,7 +192,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		{
 //			if ( contacts != null) return contacts;
 			costCenters = new List<Cost_Center__c>();
-			for (Cost_Center__c cc : [SELECT Id, Product__c, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
+			for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
 				costCenters.add(cc);
 			}
 			return costCenters;
