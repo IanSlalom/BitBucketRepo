@@ -82,6 +82,20 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Original_Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The link to the original asset in the case where this product has replaced another one.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The link to the original asset in the case where this product has replaced another one.</inlineHelpText>
+        <label>Original Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Replacement Assets</relationshipLabel>
+        <relationshipName>OriginalAssets</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>OwnerId</fullName>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
@@ -201,6 +215,18 @@
     <fields>
         <fullName>UsageEndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Variant_Number__c</fullName>
+        <description>The variant number for this asset.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The variant number for this asset.</inlineHelpText>
+        <label>Variant Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <listViews>
         <fullName>AllAssets</fullName>
