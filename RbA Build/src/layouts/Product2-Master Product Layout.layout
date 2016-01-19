@@ -43,6 +43,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Account_Number__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Inventoried_Item__c</field>
             </layoutItems>
             <layoutItems>
