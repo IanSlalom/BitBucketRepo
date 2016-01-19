@@ -91,6 +91,7 @@
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
         <members>Contact_History__c</members>
+        <members>Cost_Center__c</members>
         <members>Discount__c</members>
         <members>Event</members>
         <members>Field_IDs__c</members>
@@ -154,6 +155,7 @@
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
         <members>AccountContactRole-Account Contact Role Layout</members>
+        <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
@@ -162,6 +164,7 @@
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
         <members>Contact_History__c-Associated Contact Layout</members>
+        <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
