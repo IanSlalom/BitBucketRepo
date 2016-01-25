@@ -62,8 +62,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		List<SelectOption> pickListItems = new List<SelectOption>();
 		pickListItems.add(new SelectOption('', '-- Select --'));
 		
-		for (Product2 p : [SELECT Id, Name from Product2 WHERE Id IN: VendorProducts  ] ) {
-			pickListItems.add(new SelectOption(p.Id, p.Name));
+		for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c from Product2 WHERE Id IN: VendorProducts
+															AND IsActive = true  ] ) {
+			if ((costPurchaseOrder &&  p.Cost_PO__c) || (!costPurchaseOrder &&  p.Product_PO__c))													
+				pickListItems.add(new SelectOption(p.Id, p.Name));
 		}			   
 		return pickListItems;
 		} 
@@ -228,8 +230,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			if (selectedVendor == null) return null;
 
 			// If this is a cost PO, only return non-inventoried items, otherwise return inventoried items
-			productQueries = (costPurchaseOrder) ? 	'Inventoried_Item__c = false ' :
-															'Inventoried_Item__c = true ';
+			productQueries = (costPurchaseOrder) ? 	'Cost_PO__c = true ' :
+															'Product_PO__c = true ';
 
 			// Only return active products with a particular vendor (see productFilter2)
 			productQueries += ' AND IsActive = true AND Vendor__c = ';
