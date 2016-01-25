@@ -69,6 +69,15 @@
         <fullName>Finance_Program__c</fullName>
         <externalId>false</externalId>
         <label>Finance Program</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Finance_Program__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
         <referenceTo>Finance_Program__c</referenceTo>
         <relationshipLabel>Quote Financing</relationshipLabel>
         <relationshipName>Quote_Financing</relationshipName>

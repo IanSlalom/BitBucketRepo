@@ -70,6 +70,15 @@
         <fullName>Finance_Program__c</fullName>
         <externalId>false</externalId>
         <label>Finance Program</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Finance_Program__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
         <referenceTo>Finance_Program__c</referenceTo>
         <relationshipLabel>Order Financing</relationshipLabel>
         <relationshipName>Order_Financing</relationshipName>
