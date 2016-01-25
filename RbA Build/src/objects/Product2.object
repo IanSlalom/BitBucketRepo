@@ -79,6 +79,16 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Cost_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a cost PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a cost PO.</inlineHelpText>
+        <label>Cost PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Description</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -193,6 +203,16 @@ NULL)</formula>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a product PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a product PO.</inlineHelpText>
+        <label>Product PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Product_Type__c</fullName>
@@ -428,6 +448,16 @@ NULL)</formula>
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a service PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a service PO.</inlineHelpText>
+        <label>Service PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>UI_Maximum__c</fullName>
