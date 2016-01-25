@@ -351,7 +351,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if (String.isNotBlank(orderId)) {
 
 			//GET THE ORDER
-			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c, Store_Location2__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c  FROM Order WHERE Id = :orderId];
+			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c, Store_Location2__r.Active_Store_Configuration__r.Location_Number__c FROM Order WHERE Id = :orderId];
 			storeLocation = relatedOrder.Store_Location2__r;
 			storeLocationNumber = relatedOrder.Store_Location2__r.Active_Store_Configuration__r.Location_Number__c;
 			po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
