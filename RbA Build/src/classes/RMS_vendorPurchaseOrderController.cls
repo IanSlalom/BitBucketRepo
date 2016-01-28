@@ -273,8 +273,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if (String.isNotBlank(orderId)) {
 
 			//GET THE ORDER
-			relatedOrder = [SELECT Id, Name, Store_Location2__r.Store_Abbreviation__c, Store_Location__c  FROM Order WHERE Id = :orderId];
-			storeLocation = relatedOrder.Store_Location2__r;
+			relatedOrder = [SELECT Id, Name, Store_Location__r.Store_Abbreviation__c, Store_Location__c FROM Order WHERE Id = :orderId];
+			
+			storeLocation = relatedOrder.Store_Location__r;
 
 			po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
 			po.Store_Location__c = storeLocation.Id;
@@ -405,14 +406,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				Account renewal = [SELECT Id FROM Account WHERE Name = 'RbA'];
 				String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
 				Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
-				costPOOrder.Store_Location2__c = storeLocation.Id;
+				costPOOrder.Store_Location__c = storeLocation.Id;
 
 				// For Cost POs, pulls the current user's store location and recovers the abbreviation
 /*				String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
 				if (String.isNotBlank(storeLocationName)) {
 					Account storeLocation = [SELECT Id, Store_Abbreviation__c FROM Account WHERE Name =: storeLocationName];
 					if (storeLocation != null) {
-						costPOOrder.Store_Location2__c = storeLocation.Id;
+						costPOOrder.Store_Location__c = storeLocation.Id;
 						po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
 						po.Store_Location__c = storeLocation.Id;
 					}

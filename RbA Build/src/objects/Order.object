@@ -1144,7 +1144,7 @@ NULL)</formula>
                 <fullName>JIP to be Scheduled</fullName>
                 <default>false</default>
             </values>
-            <values> 
+            <values>
                 <fullName>Product Ordered</fullName>
                 <default>false</default>
             </values>
