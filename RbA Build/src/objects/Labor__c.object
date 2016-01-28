@@ -189,7 +189,7 @@
     <fields>
         <fullName>Standard_Hourly_Rate__c</fullName>
         <externalId>false</externalId>
-        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location2__r.Active_Store_Configuration__r.Standard_Hourly_Rate__c</formula>
+        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location__r.Active_Store_Configuration__r.Standard_Hourly_Rate__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Standard Hourly Rate</label>
         <precision>18</precision>
@@ -202,7 +202,7 @@
     <fields>
         <fullName>Store_Location_Id__c</fullName>
         <externalId>false</externalId>
-        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location2__r.Id</formula>
+        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location__r.Id</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Store Location Id</label>
         <required>false</required>

@@ -1656,6 +1656,16 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>HW_Finish_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>If the hardware style is entered, then the hardware finish is required to be entered.</inlineHelpText>
+        <label>HW Finish Required</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Handing__c</fullName>
         <description>Select which handing options should be available for this product on the configuration page.</description>
         <externalId>false</externalId>
@@ -1757,93 +1767,6 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Dark Bronze</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Hardware_Finish_Color_Control__c</fullName>
-        <description>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Hardware Finish/Color</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>true</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Hardware_Finish_Color__c</fullName>
-        <description>Select the hardware finish/color that should be made available for selection in the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select the hardware finish/color that should be made available for selection in the product configuration page.</inlineHelpText>
-        <label>Hardware Finish/Color</label>
-        <picklist>
-            <picklistValues>
-                <fullName>White</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Canvas</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Stone</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Dark Bronze</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Bright Brass</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Antique Brass</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Polished Chrome</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Brushed Chrome</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Oil Rubbed Bronze</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Distressed Bronze</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Distressed Nickel</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Satin Nickel</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2019,6 +1942,93 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Height_Backdown_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Height Backdown Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Height_Backdown_Inches__c</fullName>
+        <externalId>false</externalId>
+        <label>Height Backdown Inches</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Height_Fraction_Control__c</fullName>
         <description>Controls whether Height Fraction is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -2061,6 +2071,156 @@
             <picklistValues>
                 <fullName>Required</fullName>
                 <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Height_to_Width_Cap_Fractions_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Height to Width Cap Fractions (Height)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Height_to_Width_Cap_Fractions_Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Height to Width Cap Fractions (Width)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
         </picklist>
@@ -2146,6 +2306,93 @@
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Int_Color_Max_Height_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Int Color Max Height Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Int_Color_Max_Height_Inches__c</fullName>
+        <externalId>false</externalId>
+        <label>Int Color Max Height Inches</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Int_Color_Max_Width_Fractions__c</fullName>
@@ -3139,6 +3386,81 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Max_Height_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Max Height Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Max_Height__c</fullName>
         <description>The maximum height for the makeability exception rules.</description>
         <externalId>false</externalId>
@@ -3151,6 +3473,81 @@
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Width_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Max Width Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Max_Width__c</fullName>
@@ -3270,6 +3667,81 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Min_Height_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Min Height Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Min_Height__c</fullName>
         <description>The minimum height for the makeability exception rules.</description>
         <externalId>false</externalId>
@@ -3284,6 +3756,81 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Min_Width_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Min Width Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Min_Width__c</fullName>
         <description>The minimum width for the makeability exception rules.</description>
         <externalId>false</externalId>
@@ -3296,6 +3843,81 @@
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Minimum_Leg_Height_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Minimum Leg Height Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Minimum_Leg_Height__c</fullName>
@@ -4575,6 +5197,18 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Tempered_Square_Ft_Max__c</fullName>
+        <externalId>false</externalId>
+        <label>Tempered Square Ft Max</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Unit_Id_Control__c</fullName>
         <description>Controls whether Unit (Floor Plan) Id is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -4664,6 +5298,93 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Width_Backdown_Fractions__c</fullName>
+        <externalId>false</externalId>
+        <label>Width Backdown Fractions</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Width_Backdown_Inches__c</fullName>
+        <externalId>false</externalId>
+        <label>Width Backdown Inches</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Width_Fraction_Control__c</fullName>
         <description>Controls whether Width Fraction is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -4706,6 +5427,156 @@
             <picklistValues>
                 <fullName>Required</fullName>
                 <default>true</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Width_to_Height_Cap_Fractions_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Width to Height Cap Fractions (Height)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Width_to_Height_Cap_Fractions_Width__c</fullName>
+        <externalId>false</externalId>
+        <label>Width to Height Cap Fractions (Width)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Even</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1/2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3/4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13/16</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7/8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>15/16</fullName>
+                <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
         </picklist>

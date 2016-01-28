@@ -67,6 +67,37 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Accounts_Receivable_Contact_Title__c</fullName>
+        <externalId>false</externalId>
+        <label>Accounts Receivable Contact Title</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Accounts_Receivable_Contact__c</fullName>
+        <externalId>false</externalId>
+        <label>Accounts Receivable Contact</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Accounts_Receivable_Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Accounts Receivable Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
         <fullName>Active_Financial_Configuration__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>The currently active financial configuration</description>
@@ -101,6 +132,37 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Contractor_LIcense_2__c</fullName>
+        <externalId>false</externalId>
+        <label>Contractor LIcense 2</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contractor_License_1__c</fullName>
+        <externalId>false</externalId>
+        <label>Contractor License 1</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fax__c</fullName>
+        <externalId>false</externalId>
+        <label>Fax</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
         <fullName>HOA_Work_Order_Queue_Id__c</fullName>
         <externalId>false</externalId>
         <label>HOA Work Order Queue Id</label>
@@ -132,6 +194,60 @@
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Location_Address__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Location Address</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Location_City__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Location City</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Location_State__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Location State</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Location_Zip__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Location Zip</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Notes_or_Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Invoice Notes or Comments</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
     </fields>
     <fields>
         <fullName>LSWP_WO_Owner_ID__c</fullName>
@@ -372,6 +488,19 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Location_Number__c</fullName>
+        <description>Enter the location number for this store.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the location number for this store.</inlineHelpText>
+        <label>Location Number</label>
+        <length>3</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Material_Contact__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -405,6 +534,80 @@
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Remit_to_Address__c</fullName>
+        <externalId>false</externalId>
+        <label>Remit to Address</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Remit_to_City__c</fullName>
+        <externalId>false</externalId>
+        <label>Remit to City</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Remit_to_Company_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Remit to Company Name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Remit_to_State__c</fullName>
+        <externalId>false</externalId>
+        <label>Remit to State</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Remit_to_Zip__c</fullName>
+        <externalId>false</externalId>
+        <label>Remit to Zip</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
     </fields>
     <fields>
         <fullName>Service_Work_Order_Queue_ID__c</fullName>
