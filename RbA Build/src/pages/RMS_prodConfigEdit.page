@@ -114,14 +114,21 @@
         </apex:pageBlockButtons>            
 
         <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
-					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/> 
-            <apex:inputField value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="specialtyShape" />
-                  <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
+        <apex:pageBlockSectionItem >	
+        	<apex:outputLabel value="Product" style="font-weight:bold"/>
+					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}" Application="prodConfig" html-data-jsid="product"  /> 
+		</apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >	
+        	<apex:outputLabel for="specialtyShape" value="Specialty Shape" style="font-weight:bold"/>
+            <apex:inputField value="{!OrderItem.Specialty_Shape__c}" id="specialtyShape" html-data-jsid="specialtyWindow" />
+		</apex:pageBlockSectionItem>
         </apex:pageBlockSection>
+        <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
+
 
         <apex:pageBlockSection title="" columns="1" rendered="{!productSelected}">
             <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" />
-            <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" />
+            <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!masterProduct.Name=='Specialty Window'}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
 
@@ -505,6 +512,7 @@
         glazing(3);
         frameType();
         specialOptions();
+        specialtyWindow();
     });
     
     
@@ -797,6 +805,19 @@
             j$("input[data-jsid='tempered3']").prop('checked',false);
             j$("div[data-jsid='specialOptions']").hide();
         }
+    }
+
+    function specialtyWindow(){
+			var $element = j$('.select2-chosen').text();
+
+            if($element == 'Specialty Window'){
+                j$("select[data-jsid='specialtyWindow']").show();
+				j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").show();
+            }else{
+                j$("select[data-jsid='specialtyWindow']").val(null);
+                j$("select[data-jsid='specialtyWindow']").hide();
+				j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").hide();
+            } 
     }
 
     </script>

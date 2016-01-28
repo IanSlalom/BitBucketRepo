@@ -56,6 +56,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Date_Received__c</fullName>
+        <description>The last date all or part of this asset was received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date all or part of this asset was received.</inlineHelpText>
+        <label>Date Received</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Description</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -70,6 +80,20 @@
     <fields>
         <fullName>Name</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Original_Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The link to the original asset in the case where this product has replaced another one.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The link to the original asset in the case where this product has replaced another one.</inlineHelpText>
+        <label>Original Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Replacement Assets</relationshipLabel>
+        <relationshipName>OriginalAssets</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>OwnerId</fullName>
@@ -115,6 +139,19 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Quantity_Received__c</fullName>
+        <description>The number of items received</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of items received</inlineHelpText>
+        <label>Quantity Received</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>SerialNumber</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -154,14 +191,64 @@
                 <fullName>Obsolete</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partially Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Over Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replaced</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Assets</relationshipLabel>
+        <relationshipName>Assets</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Unit_Wholesale_Cost__c</fullName>
+        <externalId>false</externalId>
+        <label>Unit Wholesale Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>UsageEndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Variant_Number__c</fullName>
+        <description>The variant number for this asset.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The variant number for this asset.</inlineHelpText>
+        <label>Variant Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <listViews>
         <fullName>AllAssets</fullName>
@@ -185,11 +272,27 @@
                 <default>false</default>
             </values>
             <values>
+                <fullName>Over Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partially Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Purchased</fullName>
                 <default>false</default>
             </values>
             <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Registered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Replaced</fullName>
                 <default>false</default>
             </values>
             <values>
