@@ -66,13 +66,13 @@
     </types>
     <types>
         <members>AccountTrigger</members>
-        <members>AssetTrigg</members>
+        <members>AssetTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <name>ApexTrigger</name>
-    </types>
+    </types> 
     <types>
         <members>Backoffice</members>
         <members>Backoffice_Admin</members>
