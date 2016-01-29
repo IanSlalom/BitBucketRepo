@@ -49,11 +49,25 @@
     <description>Junction between the financial account number (of type cost center) and products.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Cost_Center_Number__c</fullName>
+        <description>The cost center value</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The cost center value</inlineHelpText>
+        <label>Cost Center Number</label>
+        <length>3</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
     <fields>
         <fullName>Cost_Center__c</fullName>
         <description>The cost center (stored in the financial account numbers as type &apos;Cost Center&apos;)</description>
@@ -105,6 +119,11 @@
         <type>Lookup</type>
     </fields>
     <label>Cost Center</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <displayFormat>CC-{000000}</displayFormat>
         <label>Cost Center Name</label>
@@ -112,6 +131,18 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Cost Centers</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Cost_Center__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Product__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Cost_Center__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Product__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Cost_Center__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Product__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Cost_Center__c</searchFilterFields>
+        <searchFilterFields>Product__c</searchFilterFields>
+        <searchResultsAdditionalFields>Cost_Center__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Product__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

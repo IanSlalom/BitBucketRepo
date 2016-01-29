@@ -81,4 +81,10 @@ public with sharing class RMS_errorMessages {
 	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
 	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount can not be zero or empty on a Misc Reimbursement.';
 
+	/*******************************************************
+					Payment Errors
+	*******************************************************/
+	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
+	public static final String STORE_LOCATION_IS_BLANK_USER = 'Your user record must be associated with a store location before creating a misc reimbursement.';
+
 }

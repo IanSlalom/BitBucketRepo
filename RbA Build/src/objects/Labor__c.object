@@ -81,6 +81,21 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Cost_Center__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The cost center selected for the misc. reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The cost center selected for the misc. reimbursement</inlineHelpText>
+        <label>Cost Center</label>
+        <referenceTo>Cost_Center__c</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Date_Applied__c</fullName>
         <externalId>false</externalId>
         <label>Date Applied</label>
@@ -171,6 +186,36 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The product selected for the misc reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The product selected for the misc reimbursement</inlineHelpText>
+        <label>Product</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Item must be active and have the misc. reimbursement checkbox selected.</errorMessage>
+            <filterItems>
+                <field>Product2.IsActive</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <filterItems>
+                <field>Product2.Misc_Reimbursement__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Related_Work_Order__c</fullName>
@@ -264,4 +309,12 @@
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>External_Installers_Only</fullName>
+        <active>true</active>
+        <description>This validation rule requires that an external installer be selected for misc. reimbursements.</description>
+        <errorConditionFormula>AND(RecordType.DeveloperName = &apos;Misc_Reimbursement&apos;,  ISBLANK(Installer__r.ContactId))</errorConditionFormula>
+        <errorDisplayField>Installer__c</errorDisplayField>
+        <errorMessage>Only external contractors can be selected for misc. reimbursements.</errorMessage>
+    </validationRules>
 </CustomObject>
