@@ -78,6 +78,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Scheduled_Installation_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Age__c</field>
             </layoutItems>
             <layoutItems>

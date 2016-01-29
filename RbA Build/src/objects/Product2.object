@@ -43,6 +43,20 @@
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <enableFeeds>false</enableFeeds>
     <fields>
+        <fullName>Account_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The account and subaccount for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The account and subaccount for the product.</inlineHelpText>
+        <label>Account Number</label>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Products</relationshipLabel>
+        <relationshipName>Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Color__c</fullName>
         <externalId>false</externalId>
         <label>Color</label>
@@ -65,6 +79,16 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Cost_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a cost PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a cost PO.</inlineHelpText>
+        <label>Cost PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Description</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -77,6 +101,18 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Awning Windows</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Material</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trim</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lumber</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -204,6 +240,16 @@ NULL)</formula>
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a product PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a product PO.</inlineHelpText>
+        <label>Product PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Product_Type__c</fullName>
@@ -441,6 +487,16 @@ NULL)</formula>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Service_PO__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this product should be available from a service PO.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this product should be available from a service PO.</inlineHelpText>
+        <label>Service PO</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>UI_Maximum__c</fullName>
         <externalId>false</externalId>
         <label>UI Maximum</label>
@@ -461,6 +517,78 @@ NULL)</formula>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Units__c</fullName>
+        <description>Units that construction materials can be purchased in</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please pick the unit for this product</inlineHelpText>
+        <label>Units</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bag</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Occurrence</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Opening</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Sq. Ft.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Storm Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Single</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Units__c</fullName>

@@ -36,7 +36,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		//HANDLERS AND MANAGERS
 	    RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
 	    RMS_backOfficeChecklistManager backOfficeCheckListManager = new RMS_backOfficeChecklistManager();
-	     
+	    RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
 	        
 		// Before Insert
 		/*
@@ -65,11 +65,9 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		} 
 		
 		// After Update
-		/*
 		else if(Trigger.isUpdate && Trigger.isAfter){
-		    handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		    financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-		*/
 		            
 		//After Delete
 		/*
