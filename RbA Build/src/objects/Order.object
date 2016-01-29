@@ -661,9 +661,11 @@ This is a holding field for now.</inlineHelpText>
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Revenue_Recognition_Date__c</fullName>
+        <fullName>Revenue_Recognized_Date__c</fullName>
+        <description>The date revenue was recognized for this order.</description>
         <externalId>false</externalId>
-        <label>Revenue Recognition Date</label>
+        <inlineHelpText>The date revenue was recognized for this order.</inlineHelpText>
+        <label>Revenue Recognized Date</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Date</type>
@@ -1515,7 +1517,7 @@ NULL)</formula>
         <fullName>Revenue_Recognition_Validation</fullName>
         <active>true</active>
         <errorConditionFormula>AND(
-NOT(ISBLANK(Revenue_Recognition_Date__c)),
+NOT(ISBLANK(Revenue_Recognized_Date__c)),
 NOT(OR(
 ISPICKVAL(Status, &apos;Job In Progress&apos;), 
 ISPICKVAL(Status, &apos;Job Close&apos;)
@@ -1615,7 +1617,7 @@ if(x == &apos;OK&apos;){
 
   var o = new sforce.SObject(&apos;Order&apos;);
   o.id = &quot;{!Order.Id}&quot;;
-  o.Revenue_Recognition_Date__c = new Date();
+  o.Revenue_Recognized_Date__c = new Date();
   var result = sforce.connection.update([o]);
 
   if(result[0].getBoolean(&quot;success&quot;))

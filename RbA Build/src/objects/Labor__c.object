@@ -81,21 +81,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Cost_Center__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The cost center selected for the misc. reimbursement</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The cost center selected for the misc. reimbursement</inlineHelpText>
-        <label>Cost Center</label>
-        <referenceTo>Cost_Center__c</referenceTo>
-        <relationshipLabel>Labor</relationshipLabel>
-        <relationshipName>Labor</relationshipName>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Date_Applied__c</fullName>
         <externalId>false</externalId>
         <label>Date Applied</label>
@@ -124,6 +109,49 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account_Name__c</fullName>
+        <description>The GL Account name</description>
+        <externalId>false</externalId>
+        <formula>GL_Account__r.Account_Label__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The GL Account name</inlineHelpText>
+        <label>GL Account Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the GL Account for this reimbursement.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the GL Account for this reimbursement.</inlineHelpText>
+        <label>GL Account</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Location__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Financial_Account_Number__c.Account_Type__c</field>
+                <operation>equals</operation>
+                <value>Misc Reimbursement</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Misc Reimbursement</relationshipLabel>
+        <relationshipName>Misc_Reimbursement</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Hours_Applied__c</fullName>
@@ -186,36 +214,6 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Product__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The product selected for the misc reimbursement</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The product selected for the misc reimbursement</inlineHelpText>
-        <label>Product</label>
-        <lookupFilter>
-            <active>true</active>
-            <errorMessage>Item must be active and have the misc. reimbursement checkbox selected.</errorMessage>
-            <filterItems>
-                <field>Product2.IsActive</field>
-                <operation>equals</operation>
-                <value>True</value>
-            </filterItems>
-            <filterItems>
-                <field>Product2.Misc_Reimbursement__c</field>
-                <operation>equals</operation>
-                <value>True</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
-        <referenceTo>Product2</referenceTo>
-        <relationshipLabel>Labor</relationshipLabel>
-        <relationshipName>Labor</relationshipName>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Related_Work_Order__c</fullName>

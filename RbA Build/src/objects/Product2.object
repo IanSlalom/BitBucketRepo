@@ -135,16 +135,6 @@
         <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Misc_Reimbursement__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Check to cause this item to be available from the misc reimbursement page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Check to cause this item to be available from the misc reimbursement page.</inlineHelpText>
-        <label>Misc Reimbursement</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Name</fullName>
         <trackHistory>false</trackHistory>
     </fields>

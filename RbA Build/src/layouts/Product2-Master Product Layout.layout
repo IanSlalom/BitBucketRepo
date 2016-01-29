@@ -70,10 +70,6 @@
                 <behavior>Edit</behavior>
                 <field>Service_PO__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Misc_Reimbursement__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -145,10 +141,6 @@
         <fields>UPDATEDBY_USER</fields>
         <fields>LAST_UPDATE</fields>
         <relatedList>Vendor_Product__c.Product__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Labor__c.Product__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

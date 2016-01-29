@@ -109,6 +109,20 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>GL_Account_Name__c</fullName>
+        <description>The GL Account Name</description>
+        <externalId>false</externalId>
+        <formula>GL_Account__r.Account_Label__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The GL Account Name</inlineHelpText>
+        <label>GL Account Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>GL_Account__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>Select the GL Account for this payment.</description>
