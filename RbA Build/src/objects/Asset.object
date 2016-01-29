@@ -102,6 +102,18 @@
                 <fullName>Awning Windows</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Material</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trim</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lumber</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <type>Picklist</type>

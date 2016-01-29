@@ -265,6 +265,16 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>HOS_Survey_Link__c</fullName>
+        <externalId>false</externalId>
+        <label>HOS Survey Link</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Install_Complete_Date__c</fullName>
         <externalId>false</externalId>
         <formula>Installation_Date_Complete__c</formula>
@@ -422,6 +432,16 @@ This is a holding field for now.</inlineHelpText>
     <fields>
         <fullName>Name</fullName>
         <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Offsite_Storage__c</fullName>
+        <externalId>false</externalId>
+        <label>Offsite Storage</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>OpportunityId</fullName>
@@ -863,6 +883,16 @@ Holding Field for now.</inlineHelpText>
 NULL)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Unique_Job_Identifier__c</fullName>
+        <externalId>false</externalId>
+        <label>Unique Job Identifier</label>
+        <length>11</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>

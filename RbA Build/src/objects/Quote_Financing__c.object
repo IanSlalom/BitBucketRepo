@@ -93,6 +93,20 @@
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
     <label>Quote Financing</label>
     <nameField>
         <displayFormat>QuoteFinancing-{00}</displayFormat>

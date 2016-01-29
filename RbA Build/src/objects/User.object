@@ -152,219 +152,223 @@
         <label>Store Location</label>
         <picklist>
             <picklistValues>
-                <fullName>110 - Marshall, MN</fullName>
+                <fullName>0003 - West, TX</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>125 - Duluth-Superior, WI</fullName>
+                <fullName>0060 - Rochester, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>175 - Alberta Lea, MN</fullName>
+                <fullName>0066 - Mankato, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>3 - West, TX</fullName>
+                <fullName>0077 - Roseville, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>440 - Virginia Beach, VA</fullName>
+                <fullName>0080 - Chicago</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>442 - Charlotte, NC</fullName>
+                <fullName>0085 - Balitmore, MD</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>465 - Central, VA</fullName>
+                <fullName>0086 - Pittsburgh, PA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>535 - NJ-NY Metro</fullName>
+                <fullName>0090 - Knoxville, TN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>580 - Northeastern, WI</fullName>
+                <fullName>0092 - Detroit, MI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>590 - Central, WI</fullName>
+                <fullName>0093 - Cleveland, OH</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>600 - Sioux Falls, SD</fullName>
+                <fullName>0096 - Boston, MA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>60 - Rochester, MN</fullName>
+                <fullName>0097 - Capitol (Washington DC, VA)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>620 - Siren, WI</fullName>
+                <fullName>0110 - Marshall, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>621 - Grand Forks, ND</fullName>
+                <fullName>0125 - Duluth-Superior, WI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>622 - Brainerd, MN</fullName>
+                <fullName>0175 - Alberta Lea, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>623 - Iron Range, MN</fullName>
+                <fullName>0440 - Virginia Beach, VA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>624 - Eastern IA</fullName>
+                <fullName>0442 - Charlotte, NC</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>625 - Chippewa Valley, WI</fullName>
+                <fullName>0465 - Central, VA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>665 - San Antonio, TX</fullName>
+                <fullName>0535 - NJ-NY Metro</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>66 - Mankato, MN</fullName>
+                <fullName>0580 - Northeastern, WI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>710 - Westchester, NY</fullName>
+                <fullName>0590 - Central, WI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>725 - Fargo, ND</fullName>
+                <fullName>0600 - Sioux Falls, SD</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>726 - Bismark, ND</fullName>
+                <fullName>0620 - Siren, WI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>727 - St. Cloud, MN</fullName>
+                <fullName>0621 - Grand Forks, ND</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>730 - Autsin, TX</fullName>
+                <fullName>0622 - Brainerd, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>731 - Houston, TX</fullName>
+                <fullName>0623 - Iron Range, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>732 - Dallas-Fort Worth, TX</fullName>
+                <fullName>0624 - Eastern IA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>735 - Central, NC</fullName>
+                <fullName>0625 - Chippewa Valley, WI</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>760 - Central, PA</fullName>
+                <fullName>0665 - San Antonio, TX</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>770 - Eastern, NY</fullName>
+                <fullName>0710 - Westchester, NY</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>790 - Knoxville, TN</fullName>
+                <fullName>0725 - Fargo, ND</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>791 - Nashville, TN</fullName>
+                <fullName>0726 - Bismark, ND</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>800 - Long Island, NY</fullName>
+                <fullName>0727 - St. Cloud, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>80 - Chicago</fullName>
+                <fullName>0730 - Autsin, TX</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>810 - Central, NY</fullName>
+                <fullName>0731 - Houston, TX</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>830 - Philadelphia, PA</fullName>
+                <fullName>0732 - Dallas-Fort Worth, TX</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>850 - Wstern, NY</fullName>
+                <fullName>0735 - Central, NC</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>855 - Anchoorage, AK</fullName>
+                <fullName>0760 - Central, PA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>85 - Balitmore, MD</fullName>
+                <fullName>0770 - Eastern, NY</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>864 - Portland, ME</fullName>
+                <fullName>0791 - Nashville, TN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>86 - Pittsburgh, PA</fullName>
+                <fullName>0800 - Long Island, NY</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>875 - Northeast PA</fullName>
+                <fullName>0810 - Central, NY</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>905 - Southern New England</fullName>
+                <fullName>0830 - Philadelphia, PA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>915 - Oklahoma City, OK</fullName>
+                <fullName>0850 - Western, NY</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>916 - Tulsa, OK</fullName>
+                <fullName>0855 - Anchoorage, AK</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>92 - Detroit, MI</fullName>
+                <fullName>0864 - Portland, ME</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>930 - Atlanta, GA</fullName>
+                <fullName>0875 - Northeast PA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>93 - Cleveland, OH</fullName>
+                <fullName>0905 - Southern New England</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>947 - Colorado Springs, CO</fullName>
+                <fullName>0915 - Oklahoma City, OK</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>948 - Fort Collins, CO</fullName>
+                <fullName>0916 - Tulsa, OK</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>960 - Greater ME</fullName>
+                <fullName>0930 - Atlanta, GA</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>965 - Chattanooga, TN</fullName>
+                <fullName>0947 - Colorado Springs, CO</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>96 - Boston, MA</fullName>
+                <fullName>0948 - Fort Collins, CO</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>97 - Capitol (Washington DC, VA)</fullName>
+                <fullName>0960 - Greater ME</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0965 - Chattanooga, TN</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -423,8 +427,31 @@
         <columns>CORE.USER_ROLE.NAME</columns>
         <columns>CORE.USERS.ACTIVE</columns>
         <columns>CORE.PROFILE.NAME</columns>
+        <columns>Pivotal_Id__c</columns>
+        <columns>Enabled_User_Id__c</columns>
         <filterScope>Everything</filterScope>
         <label>All Users</label>
+    </listViews>
+    <listViews>
+        <fullName>Partner_Users</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>CORE.USERS.USERNAME</columns>
+        <columns>CORE.USERS.LAST_LOGIN</columns>
+        <columns>CORE.USER_ROLE.NAME</columns>
+        <columns>CORE.USERS.ACTIVE</columns>
+        <columns>CORE.PROFILE.NAME</columns>
+        <columns>MANAGER</columns>
+        <columns>SALES.CONTACT.NAME</columns>
+        <columns>Pivotal_Id__c</columns>
+        <columns>Store_Location__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CORE.USERS.IS_PARTNER</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>Partner Users</label>
     </listViews>
     <searchLayouts>
         <lookupDialogsAdditionalFields>FULL_NAME</lookupDialogsAdditionalFields>
