@@ -72,7 +72,7 @@
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <name>ApexTrigger</name>
-    </types> 
+    </types>
     <types>
         <members>Backoffice</members>
         <members>Backoffice_Admin</members>
