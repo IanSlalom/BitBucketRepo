@@ -66,6 +66,7 @@
     </types>
     <types>
         <members>AccountTrigger</members>
+        <members>AssetTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
@@ -91,6 +92,7 @@
         <members>Back_Office_Checklist_Configuration__c</members>
         <members>Contact</members>
         <members>Contact_History__c</members>
+        <members>Cost_Center__c</members>
         <members>Discount__c</members>
         <members>Event</members>
         <members>Field_IDs__c</members>
@@ -156,6 +158,7 @@
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
         <members>AccountContactRole-Account Contact Role Layout</members>
+        <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
@@ -164,7 +167,9 @@
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
         <members>Contact_History__c-Associated Contact Layout</members>
+        <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
+        <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
@@ -184,10 +189,12 @@
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
         <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
+        <members>Opportunity_Financing__c-Opportunity Financing Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
         <members>Order_Discount__c-Order Discount Layout</members>
+        <members>Order_Financing__c-Order Financing Layout</members>
         <members>Payment__c-Deposit Layout</members>
         <members>Payment__c-Misc Cash Receipt Layout</members>
         <members>Payment__c-Payment Layout</members>
@@ -207,6 +214,7 @@
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
+        <members>Quote_Financing__c-Quote Financing Layout</members>
         <members>Refund__c-Refund Layout</members>
         <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
         <members>SVMXC__Service_Order__c-LSWP Work Order Layout</members>

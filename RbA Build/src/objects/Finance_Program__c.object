@@ -96,11 +96,13 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Retail_Location__c</fullName>
+        <fullName>Store_Location__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the store this financing program is related to.</description>
         <externalId>false</externalId>
-        <label>Retail Location</label>
-        <referenceTo>Store_Configuration__c</referenceTo>
+        <inlineHelpText>Select the store this financing program is related to.</inlineHelpText>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
         <relationshipLabel>Finance Programs</relationshipLabel>
         <relationshipName>Finance_Programs</relationshipName>
         <required>false</required>

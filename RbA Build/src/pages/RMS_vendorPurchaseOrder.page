@@ -138,7 +138,7 @@
 					</apex:selectList>
 				</apex:pageBlockSectionItem>
 				<apex:pageBlockSectionItem rendered="{!costPurchaseOrder == true}">
-					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}"/> 
+					<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}" Application="POVendor"/> 
 				</apex:pageBlockSectionItem>
 			</apex:pageBlockSection> 
 			
@@ -215,7 +215,19 @@
 							<apex:inputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
 							<apex:outputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
 					</apex:column>
-				</apex:pageBlockTable>
+					<apex:column style="width:25px" rendered="{!((costPurchaseOrder == false) && (status == 'con' || status == 'rbacon')) }">
+						<apex:facet name="header">Qty Received</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Received__c}" />
+					</apex:column>
+					<apex:column style="width:25px" rendered="{!((costPurchaseOrder == false) && (status == 'con' || status == 'rbacon')) }">
+						<apex:facet name="header">Qty To Receive</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Quantity_to_Receive__c}" />
+					</apex:column>
+					<apex:column style="width:25px" rendered="{!((costPurchaseOrder == false) && (status == 'con' || status == 'rbacon')) }">
+						<apex:facet name="header">Date Received</apex:facet> 
+							<apex:inputField value="{!oiw.orderItem.Date_Received__c}" />
+					</apex:column>
+			</apex:pageBlockTable>
 					
 			</apex:outputPanel>
 			

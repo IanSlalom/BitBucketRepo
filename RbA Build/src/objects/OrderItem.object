@@ -377,6 +377,16 @@
         <visibleLines>5</visibleLines>
     </fields>
     <fields>
+        <fullName>Date_Received__c</fullName>
+        <description>The last date all or part of this order product was received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date all or part of this order product was received.</inlineHelpText>
+        <label>Date Received</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Defect_Code__c</fullName>
         <externalId>false</externalId>
         <label>Defect Code</label>
@@ -767,6 +777,16 @@
         <label>Gliding Screen</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Alignment__c</fullName>
+        <externalId>false</externalId>
+        <label>Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
@@ -1575,6 +1595,19 @@
     <fields>
         <fullName>Quantity</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Quantity_to_Receive__c</fullName>
+        <description>Used to receive a quantity of order items.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity_Received__c</inlineHelpText>
+        <label>Quantity to Receive</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>QuoteLineItemId</fullName>
@@ -2590,7 +2623,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>box</fullName>
+                <fullName>Box</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>

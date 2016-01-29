@@ -144,6 +144,8 @@ public with sharing class RMS_WorkOrderCreationManager {
         list<id> relatedOpportunityIds = new list<id>();
         
         for(Order o : listNew){
+        	System.Debug('****************o.AccountId=' +o.AccountId);
+        	System.Debug('****************o.Accountname=' +o.Account.Name);
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
             	system.debug('****** order: '+o);
@@ -159,8 +161,10 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                 ShippingPostalCode, 
                                                 ShippingCountry,
                                                 ShippingCountryCode,
-                                                Store_Location__c
+                                                Store_Location__c,
+                                                Name
                                                 
+//                                                FROM Account WHERE Id IN :relatedAccountIds AND Name != 'RbA'];
                                                 FROM Account WHERE Id IN :relatedAccountIds];
         map<id, Account> accountIdToAccountMap = new map<id, Account>();        
         list<id> dwellingStoreLocationIds = new list<id>();
@@ -210,7 +214,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
-    
+    			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c) == null){
                     ord.addError('Store Configuation has not been created.');
                 }

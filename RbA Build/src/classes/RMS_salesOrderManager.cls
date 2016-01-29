@@ -116,7 +116,7 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 			Order ord = new Order();
 			ord.OpportunityId = qt.OpportunityId;
 			ord.AccountId = qt.Opportunity.AccountId;
-			ord.Store_Location2__c = qt.Opportunity.Store_Location__c;
+			ord.Store_Location__c = qt.Opportunity.Store_Location__c;
 			ord.OwnerId = qt.Opportunity.OwnerId;
 			ord.Description = qt.Opportunity.Description;
 			ord.QuoteId = qt.Id;
