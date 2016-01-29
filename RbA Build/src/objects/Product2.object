@@ -115,18 +115,6 @@
                 <fullName>Lumber</fullName>
                 <default>false</default>
             </picklistValues>
-            <picklistValues>
-                <fullName>Material</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Trim</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Lumber</fullName>
-                <default>false</default>
-            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
@@ -517,78 +505,6 @@ NULL)</formula>
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Units__c</fullName>
-        <description>Units that construction materials can be purchased in</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Please pick the unit for this product</inlineHelpText>
-        <label>Units</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Bag</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Box</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Can</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Each</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Foot</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Roll</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Tube</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Each Grille</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Each Occurrence</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Per Window</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Per Unit</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Per Opening</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Per Sq. Ft.</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Per Storm Window</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Single</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Units__c</fullName>

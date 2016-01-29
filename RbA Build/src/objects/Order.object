@@ -437,20 +437,11 @@ This is a holding field for now.</inlineHelpText>
     <fields>
         <fullName>Offsite_Storage__c</fullName>
         <externalId>false</externalId>
-<<<<<<< HEAD
-        <label>Offsite Storage</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-=======
         <inlineHelpText>Location of where the Job Folder is located offsite.</inlineHelpText>
         <label>Offsite Storage</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>TextArea</type>
->>>>>>> refs/heads/master
     </fields>
     <fields>
         <fullName>OpportunityId</fullName>
