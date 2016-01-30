@@ -1527,12 +1527,6 @@ ISPICKVAL(Status, &apos;Job Close&apos;)
         <errorDisplayField>Status</errorDisplayField>
         <errorMessage>The order must have a status of Job In Progress or Job Close to recognize revenue.</errorMessage>
     </validationRules>
-    <validationRules>
-        <fullName>tgest</fullName>
-        <active>true</active>
-        <errorConditionFormula>AND(BillingCity == null, BillingStreet == null, BillingCountry == null)</errorConditionFormula>
-        <errorMessage>test</errorMessage>
-    </validationRules>
     <webLinks>
         <fullName>Add_Product</fullName>
         <availability>online</availability>
