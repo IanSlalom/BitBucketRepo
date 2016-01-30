@@ -796,6 +796,15 @@ This is a holding field for now.</inlineHelpText>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Store Location</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Store</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Account</referenceTo>
         <relationshipLabel>Orders (Store Location)</relationshipLabel>
         <relationshipName>Orders1</relationshipName>
@@ -876,6 +885,7 @@ NULL)</formula>
     </fields>
     <fields>
         <fullName>Unique_Job_Identifier__c</fullName>
+        <caseSensitive>false</caseSensitive>
         <externalId>false</externalId>
         <label>Unique Job Identifier</label>
         <length>11</length>

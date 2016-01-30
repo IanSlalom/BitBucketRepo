@@ -320,7 +320,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 	 */
     public Map<Id, Order> queryOrders(List<Id> opptyIds){
 		Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
-			Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location2__c, Tech_Measure_Date__c
+			Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c
 			from Order where OpportunityId in :opptyIds and isDeleted = false]);
 
 		return orderMap;
