@@ -785,29 +785,6 @@ This is a holding field for now.</inlineHelpText>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Store_Location2__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The store that is related to this order</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The store that is related to this order</inlineHelpText>
-        <label>Store Location</label>
-        <lookupFilter>
-            <active>false</active>
-            <filterItems>
-                <field>Account.RecordType.DeveloperName</field>
-                <operation>equals</operation>
-                <value>Store</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
-        <referenceTo>Account</referenceTo>
-        <relationshipLabel>Orders</relationshipLabel>
-        <relationshipName>Orders</relationshipName>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Store_Location__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>This order is related to this store location.</description>
