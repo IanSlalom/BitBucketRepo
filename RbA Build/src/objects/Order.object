@@ -93,9 +93,8 @@
     <fields>
         <fullName>Amount_Due__c</fullName>
         <externalId>false</externalId>
-        <formula>Retail_Total__c - Deposits_Received__c - Amount_Financed__c</formula>
+        <formula>Retail_Total__c - Deposits_Received__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <inlineHelpText>Retail Total - Deposits Received - Amount Financed</inlineHelpText>
         <label>Amount Due</label>
         <precision>18</precision>
         <required>false</required>
@@ -671,16 +670,10 @@ This is a holding field for now.</inlineHelpText>
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Revenue_Recognition_Date__c</fullName>
-        <externalId>false</externalId>
-        <label>Revenue Recognition Date</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Date</type>
-    </fields>
-    <fields>
         <fullName>Revenue_Recognized_Date__c</fullName>
+        <description>The date revenue was recognized for this order.</description>
         <externalId>false</externalId>
+        <inlineHelpText>The date revenue was recognized for this order.</inlineHelpText>
         <label>Revenue Recognized Date</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -792,9 +785,34 @@ This is a holding field for now.</inlineHelpText>
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Store_Location2__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The store that is related to this order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store that is related to this order</inlineHelpText>
+        <label>Store Location</label>
+        <lookupFilter>
+            <active>false</active>
+            <filterItems>
+                <field>Account.RecordType.DeveloperName</field>
+                <operation>equals</operation>
+                <value>Store</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Orders</relationshipLabel>
+        <relationshipName>Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Store_Location__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
+        <description>This order is related to this store location.</description>
         <externalId>false</externalId>
+        <inlineHelpText>This order is related to this store location.</inlineHelpText>
         <label>Store Location</label>
         <lookupFilter>
             <active>true</active>
@@ -1282,7 +1300,7 @@ NULL)</formula>
         <picklistValues>
             <picklist>Status</picklist>
             <values>
-                <fullName>Activated</fullName>
+                <fullName>Cancellation in Progress</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -1291,6 +1309,42 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Draft</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Install Needed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Install Scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Close</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job in Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Released</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ready to Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure Needed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure Scheduled</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -1488,6 +1542,20 @@ NULL)</formula>
         <errorConditionFormula>Discount_Amount__c  &gt;  Retail_Subtotal__c</errorConditionFormula>
         <errorMessage>Discount Amount cannot be greater than Retail Subtotal.  Please make correct adjustments.</errorMessage>
     </validationRules>
+    <validationRules>
+        <fullName>Revenue_Recognition_Validation</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(
+NOT(ISBLANK(Revenue_Recognized_Date__c)),
+NOT(OR(
+ISPICKVAL(Status, &apos;Job In Progress&apos;), 
+ISPICKVAL(Status, &apos;Job Close&apos;)
+))
+
+)</errorConditionFormula>
+        <errorDisplayField>Status</errorDisplayField>
+        <errorMessage>The order must have a status of Job In Progress or Job Close to recognize revenue.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>Add_Product</fullName>
         <availability>online</availability>
@@ -1583,5 +1651,39 @@ NULL)</formula>
         <protected>false</protected>
         <requireRowSelection>true</requireRowSelection>
         <url>true</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Rec_Revenue</fullName>
+        <availability>online</availability>
+        <description>Click the button to recognize revenue</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Rec Revenue</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/apex.js&quot;)}
+
+var x;
+if (confirm(&quot;Are you sure you want to recognize revenue on this order?&quot;) == true) {
+  x = &quot;OK&quot;;
+} else {
+  x = &quot;Cancel&quot;;
+}
+if(x == &apos;OK&apos;){
+
+  var o = new sforce.SObject(&apos;Order&apos;);
+  o.id = &quot;{!Order.Id}&quot;;
+  o.Revenue_Recognized_Date__c = new Date();
+  var result = sforce.connection.update([o]);
+
+  if(result[0].getBoolean(&quot;success&quot;))
+  {
+    window.location.reload();
+  }
+  else{
+    alert(&apos;Error: &apos;+ result[0].errors.message);
+  }
+}</url>
     </webLinks>
 </CustomObject>

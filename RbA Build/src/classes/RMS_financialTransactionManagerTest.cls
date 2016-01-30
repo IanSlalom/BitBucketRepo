@@ -576,6 +576,8 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
 		insert finacialAccountNumber2;
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert glAccount1;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'Deposit',
@@ -587,7 +589,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
 												Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today(),
-												Account_Number__c = '12345',
+												GL_Account__c = glAccount1.Id,
 												Store_Location__c = store1.id,
 												RecordTypeId = paymentMiscCashReceiptRecordTypeId,
 												Payment_Type__c = 'Mis Cash payment'

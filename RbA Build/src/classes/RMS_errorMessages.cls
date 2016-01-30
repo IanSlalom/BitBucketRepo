@@ -49,12 +49,12 @@ public with sharing class RMS_errorMessages {
  	public static final String LOCK_MIN_HEIGHT = '&bull; You must select at least [enteredValue] locks when the height is greater than [requiredValue] inches.';
  	public static final String INTERIOR_COLOR_MAX_WIDTH = '&bull; The width cannot be more than [enteredValue] when the Interior Color is set to [requiredValue].';
  	public static final String INTERIOR_COLOR_MAX_HEIGHT = '&bull; The height cannot be more than [enteredValue] when the Interior Color is set to [requiredValue].';
- 	  	
+ 	 	
 	public static final String PRODUCT_CONFIG_NOT_FOUND = '&bull; A suitable product configuration for this product could not be found based on the information you entered. Please contact your Administrator for help in resolving this issue.';
 	public static final String ORDER_NOT_FOUND = '&bull; The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = '&bull; Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = '&bull; Sorry, you cannot edit product line items on an activated order.';
-	
+
 	public static final String HARDWARE_FINISH_BLANK = '&bull;For this product, if you enter a hardware style, you must also enter a hardware finish.';
 	public static final String TEMPERED_GLASS_REQUIRED = '&bull;Units of this size require Tempered Glass. Please select the "Tempered Glass" checkbox and try again.';
 	/*******************************************************
@@ -83,7 +83,7 @@ public with sharing class RMS_errorMessages {
 	public static final String LABOR_AMOUNTS_NULL = '&bull;Both Internal and External Costs are null.';
 	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
 	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount can not be zero or empty on a Misc Reimbursement.';
-	
+
 	public static final String ASSET_ID_IS_NULL = '&bull;The Asset Id is null.';
 	public static final String MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED = '&bull;The Asset you are trying to edit has more than one unsubmitted Journal Entry. Please consult your system admin for help resolving this error.';
 	public static final String NEGATIVE_FINACIAL_TRANSACTION = '&bull;This change is not permitted because it would result in a financial transaction with a negative amount.';
@@ -96,5 +96,11 @@ public with sharing class RMS_errorMessages {
 	public static final String NO_RELATED_DEPOSIT_JOURNAL_ENTRY = '&bull;This Order Has no related Journal Entries with deposit type.';
 	public static final String REVENUE_ALREADY_RECOGNIZED = '&bull;This revenue has already been recognized and submitted for this order and you cannot change it.';
 	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You can not change the Revenue Recognized Date to another date, you must first clear it.';					
-	
+
+	/*******************************************************
+					Payment Errors
+	*******************************************************/
+	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
+	public static final String STORE_LOCATION_IS_BLANK_USER = 'Your user record must be associated with a store location before creating a misc reimbursement.';
+
 }

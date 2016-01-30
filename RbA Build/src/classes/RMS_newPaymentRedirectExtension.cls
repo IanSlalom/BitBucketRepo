@@ -45,8 +45,39 @@ public with sharing class RMS_newPaymentRedirectExtension {
 		// If there is an order, redirect to deposit, otherwise redirect to misc cash receipt
 		if (thePayment.Order__c == null) {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Misc_Cash_Receipt'));
-		} else {
-        	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Deposit'));			
+			String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+			if (String.isBlank(storeLocationName)) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
+				return null;
+			}
+			
+			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {
+        			// TODO:   This parameter will need to be updated after pushing to build and production
+         			m.put('CF00N3B000000On7g', thisStore.Name);	
+         			m.put('CF00N3B000000On7g_lkid', thisStore.Id);	
+			}
+			
+			if (m.get('CF00N3B000000On7g') == null) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
+				return null;
+			}
+			
+
+
+		} 
+		else {
+        	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Deposit'));
+        	for (Order theOrder : [SELECT Store_Location__r.Name, Store_Location__c FROM Order WHERE Id =: thePayment.Order__c]) {
+        		if (theOrder.Store_Location__c == null) {
+					ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_PAYMENT)); //
+					return null;
+        		} 
+        		else {
+        			// TODO:   This parameter will need to be updated after pushing to build and production
+         			m.put('CF00N3B000000On23', theOrder.Store_Location__r.Name);	
+         			m.put('CF00N3B000000On23_lkid', theOrder.Store_Location__c);	
+        		}
+        	}		
 		}
         m.put('nooverride', '1');
         return p;

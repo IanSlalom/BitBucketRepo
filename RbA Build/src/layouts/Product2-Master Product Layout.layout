@@ -142,6 +142,11 @@
         <fields>LAST_UPDATE</fields>
         <relatedList>Vendor_Product__c.Product__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Cost_Center__c</fields>
+        <relatedList>Cost_Center__c.Product__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
