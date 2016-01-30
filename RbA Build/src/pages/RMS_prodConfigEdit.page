@@ -188,7 +188,7 @@
                 <apex:selectOptions value="{!checkrailStyleItems}"/>
             </apex:selectList>
             <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'}"/>
-            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled'}" html-disabled="true"/>
+            <apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled'}" /> <!-- html-disabled="true" -->
             <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c != 'Disabled'}">
                 <apex:selectOptions value="{!mullSequenceMullionItems}"/>
             </apex:selectList>
@@ -277,10 +277,10 @@
             </apex:selectList>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Grille Style" columns="2" rendered="{!prodConfig.mpc != null}">
-        	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" disabled="true">
+        	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')"> <!--  disabled="true" -->
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'}" html-readonly="true"/>
+            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'}" /> <!-- html-readonly="true" -->
             <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille"/>
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'}"/>
             <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'}"/>
