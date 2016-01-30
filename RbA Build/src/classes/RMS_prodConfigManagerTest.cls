@@ -91,7 +91,7 @@ private class RMS_prodConfigManagerTest {
 		Order order1 = new Order(	Name='Sold Order 1', 
 									AccountId = dwelling.id, 
 									EffectiveDate= Date.Today(), 
-									Store_Location2__c = store.Id,
+									Store_Location__c = store.Id,
 									Opportunity = opp1, 									
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()

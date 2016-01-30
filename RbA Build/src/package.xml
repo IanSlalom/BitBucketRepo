@@ -66,6 +66,7 @@
     </types>
     <types>
         <members>AccountTrigger</members>
+        <members>AssetTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
@@ -101,6 +102,7 @@
         <members>Financial_Transaction__c</members>
         <members>Journal_Entry__c</members>
         <members>Labor__c</members>
+        <members>Misc_Pricing_Config__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
@@ -140,6 +142,7 @@
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
+        <members>Misc_Pricing_Config__c</members>
         <members>Municipality__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
@@ -176,6 +179,7 @@
         <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Labor__c-Labor Layout</members>
         <members>Labor__c-Misc Reimbursement Layout</members>
+        <members>Misc_Pricing_Config__c-Misc Pricing Config Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -198,7 +202,9 @@
         <members>PricebookEntry-Price Book Entry Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
+        <members>Product2-Construction Materials</members>
         <members>Product2-Master Product Layout</members>
+        <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Purchase_Order__c-Cost Purchase Order Layout</members>

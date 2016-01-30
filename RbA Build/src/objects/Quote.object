@@ -279,6 +279,19 @@
         <trackFeedHistory>false</trackFeedHistory>
         <type>Checkbox</type>
     </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
     <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
     <recordTypes>
         <fullName>Quote_Record_Type</fullName>

@@ -44,10 +44,6 @@
                 <field>Miscellaneous_Charge_Parent_Unit_Id__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Grille_Alignment__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Lites_High_Wide_Total_S1S3__c</field>
             </layoutItems>
@@ -627,6 +623,22 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Wide_Bar__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_High_S1S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_Wide_S1S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_High_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_Wide_S2__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>

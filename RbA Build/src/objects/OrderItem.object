@@ -779,16 +779,6 @@
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Grille_Alignment__c</fullName>
-        <externalId>false</externalId>
-        <label>Grille Alignment</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
         <description>Select the grille pattern for Sash 1.</description>
         <externalId>false</externalId>

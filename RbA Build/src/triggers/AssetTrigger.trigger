@@ -1,25 +1,24 @@
 /*******************************************************//**
 
-@trigger PaymentTrigger
+@trigger AssetTrigger
 
 @brief	trigger framework to secure order of operation
 
 @author  Anthony Strafaccia (Slalom.ADS)
 
-@version	2015-12/25  Slalom.ADS
+@version	2016-1/7  Slalom.ADS
 	Created.
 
-@see		PaymentTriggerTest
+@see		AssetTriggerTest
 
-@copyright  (c)2015 Slalom.  All Rights Reserved.
+@copyright  (c)2016 Slalom.  All Rights Reserved.
 			Unauthorized use is prohibited.
 
 ***********************************************************/
 
-trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete, 
-										after update, before delete, before insert, before update) {
-	
-	//GET ALL RMS SETTINGS CUSTOM SETTINGS
+trigger AssetTrigger on Asset (after delete, after insert, after undelete, 
+									after update, before delete, before insert, before update) {
+//GET ALL RMS SETTINGS CUSTOM SETTINGS
 	map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 	
 	//CHECK IF DATA LOADING PROFILE	
@@ -32,9 +31,9 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 	}
 	//IF NOT DATA LOADING PROFILE RUN LOGIC
 	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
+		
 		//HANDLERS AND MANAGERS
 		RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
-//		List<SObject> orders = new List<SObject>();
 	        
 		// Before Insert
 		/*
@@ -50,40 +49,34 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		 */
 
 		// Before Delete
-		//else 
+		//else  
 		if(Trigger.isDelete && Trigger.isBefore){
-		    financialTransactionManager.onBeforeDeletePayment(Trigger.old, Trigger.oldMap);
+		    financialTransactionManager.onBeforeDeleteAsset(Trigger.old, Trigger.oldMap);
 		}
 
 		// After Insert
 		else if(Trigger.isInsert && Trigger.isAfter){
-			financialTransactionManager.onAfterInsertPayment(Trigger.new, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			financialTransactionManager.onAfterInsertAsset(Trigger.new, Trigger.newMap);
 		} 
 		 
-		// After Update
+		// After Update 
 		else if(Trigger.isUpdate && Trigger.isAfter){
-		    financialTransactionManager.onAfterUpdatePayment(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+		    financialTransactionManager.onAfterUpdateAsset(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
 		
 		            
 		//After Delete
-		
+		/*
 		else if(Trigger.isDelete && Trigger.isAfter){
-//		    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+		    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
 		}
-		
+		*/
 		
 		// After Undelete 
-		
+		/*
 		else if(Trigger.isUnDelete){
-//		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
 		}
-//		update orders;		
-
+		*/
 	}
-
 }

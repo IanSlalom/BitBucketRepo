@@ -38,7 +38,7 @@ public with sharing class RMS_salesOrderManager {
 		// only do the following if we have closed won opportunities
 		System.debug('$$$$$$$$$$$$$$$$$$$$ RMS_salesOrderManager.createSalesOrderOnOpportunityClosedWon: closed opp count = ' + closedWonOpportunitiesIds.size());
 		if (closedWonOpportunitiesIds.size() > 0) {
-			// get the quotes, quote line items, quote discounts of the sold quote and the primary contact for each close won opportunity
+			// get the quotes, quote line items, quote discounts, quote financing of the sold quote and the primary contact for each close won opportunity
 			List<Quote> soldQuoteList = [select Id, OpportunityId, Pricebook2Id, isSold__c, Name,
 				Opportunity.AccountId, Opportunity.Store_Location__c, Opportunity.OwnerId, Opportunity.Account.BillingStreet,
 				Opportunity.Account.BillingCity, Opportunity.Account.BillingStateCode, Opportunity.Account.BillingPostalCode, 
@@ -48,6 +48,11 @@ public with sharing class RMS_salesOrderManager {
 			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Quote__c,
 				Quote__r.OpportunityId 
 				from Quote_Discount__c where Quote__c in :soldQuoteList];
+
+			// get the quote financing
+			List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Finance_Program__c, Related_Quote__c,
+				Related_Quote__r.OpportunityId
+				from Quote_Financing__c where Related_Quote__c in :soldQuoteList];
 
 		 	//Dynamicaly query for all QuoteLineItem fields
 	    	SObjectType qliType = Schema.getGlobalDescribe().get('QuoteLineItem');
@@ -82,9 +87,19 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 				}
 
 				// create the order discounts from the quote discounts
-				List<Order_Discount__c> odList = createOrderDiscounts(qdList, newOrders);
-				if (odList.size() > 0) {
-					insert odList;
+				if (qdList.size() > 0) {
+					List<Order_Discount__c> odList = createOrderDiscounts(qdList, newOrders);
+					if (odList.size() > 0) {
+						insert odList;
+					}
+				}
+
+				// create the order finanicing from the quote financing
+				if (qfList.size() > 0) {
+					List<Order_Financing__c> ofList = createOrderFinancing(qfList, newOrders);
+					if (ofList.size() > 0) {
+						insert ofList;
+					}
 				}
 			}
 		}
@@ -101,7 +116,7 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 			Order ord = new Order();
 			ord.OpportunityId = qt.OpportunityId;
 			ord.AccountId = qt.Opportunity.AccountId;
-			ord.Store_Location2__c = qt.Opportunity.Store_Location__c;
+			ord.Store_Location__c = qt.Opportunity.Store_Location__c;
 			ord.OwnerId = qt.Opportunity.OwnerId;
 			ord.Description = qt.Opportunity.Description;
 			ord.QuoteId = qt.Id;
@@ -210,6 +225,27 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 		return odList;
 	}
 
-	  
-	 
-}//EOF
+	/* @method: createOrderDiscounts(List<Quote_Financing__c> qfList, List<Order> theOrders)
+	 * @param: List<Quote_Financing__c> qdList - list of Quote Financing used as a source for the Order Financing
+	 * @param: List<Order> theOrders - orders to link the Order Financing to
+	 * @return: List<Order_Financing__c> a list of Order Financing that are ready to be inserted
+	 */
+	public List<Order_Financing__c> createOrderFinancing(List<Quote_Financing__c> qfList, List<Order> theOrders) {
+		List<Order_Financing__c> ofList = new List<Order_Financing__c> ();
+		for (Quote_Financing__c qf : qfList) {
+			Order_Financing__c ordf = new Order_Financing__c();
+			ordf.Amount_Financed__c = qf.Amount_Financed__c;
+			ordf.Finance_Program__c = qf.Finance_Program__c;
+			//assign the correct order to the order discount
+			for (Order ord : theOrders) {
+				if (ord.QuoteId == qf.Related_Quote__c) {
+					ordf.Related_Order__c = ord.Id;
+					break;
+				}
+			}
+			// add the new order financing to the list to be returned
+			ofList.add(ordf);		
+		}
+		return ofList;
+	}	 
+}

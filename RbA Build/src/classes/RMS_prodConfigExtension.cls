@@ -85,10 +85,10 @@ public class RMS_prodConfigExtension {
 		{   
 			if (storeLocationId != null) return storeLocationId;
 			
-			Order relatedOrder = [SELECT Id, Name, Store_Location2__c  FROM Order WHERE Id = :orderId];
+			Order relatedOrder = [SELECT Id, Name, Store_Location__c  FROM Order WHERE Id = :orderId];
 
 //			for (Order o : [SELECT Store_Location__c FROM Order WHERE Id =: orderId]) {
-				storeLocationId = relatedOrder.Store_Location2__c;
+				storeLocationId = relatedOrder.Store_Location__c;
 //			}
 			
 			if (storeLocationId == null)

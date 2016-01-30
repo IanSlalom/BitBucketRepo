@@ -103,6 +103,18 @@
                 <fullName>Awning Windows</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Material</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trim</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lumber</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
@@ -121,6 +133,19 @@
     <fields>
         <fullName>IsActive</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Length__c</fullName>
+        <description>Length in feet</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Length in feet</inlineHelpText>
+        <label>Length</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Master_Product__c</fullName>
@@ -482,6 +507,78 @@ NULL)</formula>
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Units__c</fullName>
+        <description>Units that construction materials can be purchased in</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please pick the unit for this product</inlineHelpText>
+        <label>Units</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bag</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Occurrence</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Opening</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Sq. Ft.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Storm Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Single</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Vendor__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -661,6 +758,227 @@ NULL)</formula>
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Units__c</picklist>
+            <values>
+                <fullName>Bag</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Construction_Materials</fullName>
+        <active>true</active>
+        <description>Stock and Non Stock Construction Materials</description>
+        <label>Construction Materials</label>
+        <picklistValues>
+            <picklist>Color__c</picklist>
+            <values>
+                <fullName>Beige</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>White</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yellow</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Family</picklist>
+            <values>
+                <fullName>Lumber</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Material</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trim</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Product_Type__c</picklist>
+            <values>
+                <fullName>Bay Bow</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>FF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>IF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Line__c</picklist>
+            <values>
+                <fullName>Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Desktop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Laptop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Network</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Server</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solution</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Type__c</picklist>
+            <values>
+                <fullName>Consumable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wearable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Tracking__c</picklist>
+            <values>
+                <fullName>Lot%2FBatch Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Non-Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Serialized</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Unit_Of_Measure__c</picklist>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dozen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Gallon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kilogram</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Liter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pounds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ton</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Units__c</picklist>
+            <values>
+                <fullName>Bag</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Master_Product</fullName>
@@ -812,6 +1130,227 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Ton</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Units__c</picklist>
+            <values>
+                <fullName>Bag</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Misc_Job_and_Unit_Charges</fullName>
+        <active>true</active>
+        <description>Miscellaneous charges for units and jobs</description>
+        <label>Misc Job and Unit Charges</label>
+        <picklistValues>
+            <picklist>Color__c</picklist>
+            <values>
+                <fullName>Beige</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>White</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yellow</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Family</picklist>
+            <values>
+                <fullName>None</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Product_Type__c</picklist>
+            <values>
+                <fullName>Bay Bow</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>FF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>IF</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Line__c</picklist>
+            <values>
+                <fullName>Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Desktop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Laptop</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Network</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Server</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solution</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Product_Type__c</picklist>
+            <values>
+                <fullName>Consumable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wearable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Tracking__c</picklist>
+            <values>
+                <fullName>Lot%2FBatch Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Non-Tracked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Serialized</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>SVMXC__Unit_Of_Measure__c</picklist>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dozen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Gallon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kilogram</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Liter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pounds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ton</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Units__c</picklist>
+            <values>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each Grille</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each Occurrence</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Per Opening</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Per Sq%2E Ft%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Per Storm Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Per Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Per Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Single</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -970,6 +1509,37 @@ NULL)</formula>
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Units__c</picklist>
+            <values>
+                <fullName>Bag</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <searchLayouts>
         <customTabListAdditionalFields>PRODUCT2.NAME</customTabListAdditionalFields>
@@ -988,4 +1558,12 @@ NULL)</formula>
         <searchResultsAdditionalFields>PRODUCT2.DESCRIPTION</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>PRODUCT2.FAMILY</searchResultsAdditionalFields>
     </searchLayouts>
+    <validationRules>
+        <fullName>Length_Required</fullName>
+        <active>true</active>
+        <description>if the product is a construction material and its units is foot then the length field is required</description>
+        <errorConditionFormula>IF( RecordType.DeveloperName  = &apos;Construction_Materials&apos; ,  IF( TEXT(Units__c) = &apos;Foot&apos;, ISBLANK(Length__c), false) , false)</errorConditionFormula>
+        <errorDisplayField>Length__c</errorDisplayField>
+        <errorMessage>Length is required when Units is &apos;Foot&apos;</errorMessage>
+    </validationRules>
 </CustomObject>

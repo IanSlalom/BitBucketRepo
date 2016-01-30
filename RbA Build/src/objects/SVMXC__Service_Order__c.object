@@ -59,8 +59,11 @@
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
         <fullName>Age__c</fullName>
+        <description>If Installation Date is Blank, default to Today - Rennovate Right Date otherwise use Installation Date.</description>
         <externalId>false</externalId>
-        <formula>Sold_Order__r.Installation_Date__c  - Renovate_Right_Booklet_Signed_Date__c</formula>
+        <formula>IF(
+ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Signed_Date__c, Sold_Order__r.Installation_Date__c  - Renovate_Right_Booklet_Signed_Date__c)</formula>
+        <inlineHelpText>Sold_Order__r.Installation_Date__c  - Renovate_Right_Booklet_Signed_Date__c</inlineHelpText>
         <label>Age</label>
         <precision>18</precision>
         <required>false</required>
@@ -175,18 +178,6 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Contractor_Email__c</fullName>
-        <externalId>false</externalId>
-        <formula>Vendor__r.Email__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Contractor Email</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Date_Received__c</fullName>
@@ -4186,6 +4177,16 @@ NULL)</formula>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Vendor_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Vendor Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Vendor__c</fullName>

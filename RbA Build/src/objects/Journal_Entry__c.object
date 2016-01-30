@@ -64,6 +64,18 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Journal Entries</relationshipLabel>
+        <relationshipName>Journal_Entries</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Baan_Business_Partner_Number__c</fullName>
         <externalId>false</externalId>
         <label>Baan Business Partner Number</label>

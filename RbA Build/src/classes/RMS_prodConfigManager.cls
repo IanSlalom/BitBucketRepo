@@ -99,13 +99,17 @@ public with sharing class RMS_prodConfigManager {
 		// Check for minimum width makeability 
 		if (masterProductConfig.Min_Width__c != null) {
 			
-			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c))  < masterProductConfig.Min_Width__c) {
+			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c))  < (masterProductConfig.Min_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Min_Width_Fractions__c))){
 				
 				String enteredValue = String.ValueOf(orderLineItem.Width_Inches__c);
 				if(orderLineItem.Width_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Width_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Min_Width__c);
+				if(masterProductConfig.Min_Width_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Min_Width_Fractions__c);
+				}
+				
 				errorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_BELOW_MIN, enteredValue, requiredValue);
 			
 			}
@@ -113,13 +117,16 @@ public with sharing class RMS_prodConfigManager {
 		
 		// Check for minimum height makeability 
 		if (masterProductConfig.Min_Height__c != null) {
-			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < masterProductConfig.Min_Height__c) {
+			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < (masterProductConfig.Min_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Min_Height_Fractions__c))) {
 				
 				String enteredValue = String.ValueOf(orderLineItem.Height_Inches__c);
 				if(orderLineItem.Height_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Height_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Min_Height__c);
+				if(masterProductConfig.Min_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Min_Height_Fractions__c);
+				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_BELOW_MIN, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -128,13 +135,16 @@ public with sharing class RMS_prodConfigManager {
 		}
 		// Check for maximum width makeability 
 		if (masterProductConfig.Max_Width__c != null) {
-			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Max_Width__c) {
+			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Max_Width_Fractions__c))) {
 				
 				String enteredValue = String.ValueOf(orderLineItem.Width_Inches__c);
 				if(orderLineItem.Width_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Width_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Max_Width__c);
+				if(masterProductConfig.Max_Width_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Max_Width_Fractions__c);
+				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_ABOVE_MAX, enteredValue, requiredValue);
 
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -143,13 +153,16 @@ public with sharing class RMS_prodConfigManager {
 		}
 		// Check for maximum height makeability 
 		if (masterProductConfig.Max_Height__c != null) {
-			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Max_Height__c) {
+			if ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Max_Height_Fractions__c))) {
 				
 				String enteredValue = String.ValueOf(orderLineItem.Height_Inches__c);
 				if(orderLineItem.Height_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Height_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Max_Height__c);
+				if(masterProductConfig.Max_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Max_Height_Fractions__c);
+				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_ABOVE_MAX, enteredValue, requiredValue);
 		
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -172,8 +185,8 @@ public with sharing class RMS_prodConfigManager {
 
 		// Check for height to width cap
 		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
-			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Height__c) &&
-				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Height_to_Width_Cap_Width__c)) 
+			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Height__c))) &&
+				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Width__c))) ) 
 			{	
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.HEIGHT_TO_WIDTH_CAP : errorMessage + '<BR>' + RMS_errorMessages.HEIGHT_TO_WIDTH_CAP;
 			}
@@ -181,8 +194,8 @@ public with sharing class RMS_prodConfigManager {
 
 		// Check for width to height cap
 		if (masterProductConfig.Width_to_Height_Cap_Width__c != null && masterProductConfig.Width_to_Height_Cap_Height__c != null) {
-			if (((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > masterProductConfig.Width_to_Height_Cap_Width__c) &&
-				 ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > masterProductConfig.Width_to_Height_Cap_Height__c))
+			if (((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Width_to_Height_Cap_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Width_to_Height_Cap_Fractions_Width__c))  )&&
+				 ((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Width_to_Height_Cap_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Width_to_Height_Cap_Fractions_Height__c))   ))
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '<BR>' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
@@ -195,7 +208,7 @@ public with sharing class RMS_prodConfigManager {
 			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
 			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
 			
-			if(((leftLeg - rightleg).abs()) < ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height__c)){
+			if(((leftLeg - rightleg).abs()) < ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height__c )){
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.PEAK_HEIGHT : errorMessage + '<BR>' + RMS_errorMessages.PEAK_HEIGHT;
 			}
 		}
@@ -268,25 +281,31 @@ public with sharing class RMS_prodConfigManager {
 			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
 			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
 			
-			if(leftLeg < masterProductConfig.Minimum_Leg_Height__c ){
+			if(leftLeg < (masterProductConfig.Minimum_Leg_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Minimum_Leg_Height_Fractions__c)) ){
 				
 				String enteredValue = String.ValueOf(orderLineItem.Left_Leg_Inches__c);
 				if(orderLineItem.Left_Leg_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Left_Leg_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Minimum_Leg_Height__c);
+				if(masterProductConfig.Minimum_Leg_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Minimum_Leg_Height_Fractions__c);
+				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.MINIMUM_LEG_HEIGHT_LEFT, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
 			
 			
-			if(rightLeg < masterProductConfig.Minimum_Leg_Height__c){
+			if(rightLeg < masterProductConfig.Minimum_Leg_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Minimum_Leg_Height_Fractions__c)){
 				String enteredValue = String.ValueOf(orderLineItem.Right_Leg_Inches__c);
 				if(orderLineItem.Right_Leg_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Right_Leg_Fraction__c);
 				}
 				String requiredValue = String.ValueOf(masterProductConfig.Minimum_Leg_Height__c);
+				if(masterProductConfig.Minimum_Leg_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Minimum_Leg_Height_Fractions__c);
+				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.MINIMUM_LEG_HEIGHT_RIGHT, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -458,6 +477,51 @@ public with sharing class RMS_prodConfigManager {
 				}
 			}	
 		}
+		
+		//Interior Color Max height
+		if(masterProductConfig.Int_Color_Max_Height_Inches__c != null ){
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			Decimal intColorMaxHeightInches = masterProductConfig.Int_Color_Max_Height_Inches__c + UtilityMethods.calculateFraction(masterProductConfig.Int_Color_Max_Height_Fractions__c);
+			
+			if(heightInches > intColorMaxHeightInches){
+				List<String> intColors = masterProductConfig.Int_Color_Max__c.split(';');
+				
+				for(String c : intColors){
+					if(c == orderLineItem.Interior_Color__c){
+						String enteredValue = String.ValueOf(masterProductConfig.Int_Color_Max_Height_Inches__c);
+						if(masterProductConfig.Lock_Min_Height_Fractions__c != null){
+							enteredValue = enteredValue+' '+String.ValueOf(masterProductConfig.Int_Color_Max_Height_Fractions__c);
+						}
+						String requiredValue = String.ValueOf(c);
+						String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.INTERIOR_COLOR_MAX_HEIGHT, enteredValue, requiredValue);
+						errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						break;
+					}
+					
+				}
+			}	
+		}
+		
+		//HW Finish Required
+		if(masterProductConfig.HW_Finish_Required__c == true){
+			if(orderLineItem.Hardware_Style__c != null && orderLineItem.Hardware_Style__c != '' && (orderLineItem.Hardware_Finish__c == null || orderLineItem.Hardware_Finish__c == '')){
+				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HARDWARE_FINISH_BLANK, null, null);
+				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+			}
+		}
+		
+		//Tempered Glass Test
+		if(orderLineItem.Tempered_S1__c == false && masterProductConfig.Tempered_Square_Ft_Max__c != null && masterProductConfig.Height_Backdown_Inches__c != null && masterProductConfig.Width_Backdown_Inches__c != null){
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			
+			Decimal heightBackdownInches = masterProductConfig.Height_Backdown_Inches__c + UtilityMethods.calculateFraction(masterProductConfig.Height_Backdown_Fractions__c);
+			Decimal widthBackdownInches = masterProductConfig.Width_Backdown_Inches__c + UtilityMethods.calculateFraction(masterProductConfig.Width_Backdown_Fractions__c);
+ 
+			if(((heightInches-heightBackdownInches)*(widthInches-widthBackdownInches)/144) > masterProductConfig.Tempered_Square_Ft_Max__c){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.TEMPERED_GLASS_REQUIRED : errorMessage + '<BR>' + RMS_errorMessages.TEMPERED_GLASS_REQUIRED;	
+			}	
+		} 
 		
 		
 		return errorMessage;
