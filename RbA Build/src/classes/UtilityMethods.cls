@@ -153,4 +153,54 @@ public with sharing class UtilityMethods {
 		}
 		return result;
 	}
+
+	// Method used to check if a record is locked
+	public static String checkLockedByStatus(List<sObject> listNew, List<sObject> listOld, map<id, sObject> mapNew, map<id, sObject> mapOld, String objectType){
+		String result = 'No records locked';
+		
+		Map<String, List<String>> lockedFieldMap;
+
+		if(listNew == null){
+			result = 'No records received';
+			return result;
+		}
+
+		if (objectType == 'Order') {
+			// pulls the map of fields that should be locked by status from the Constants class
+			lockedFieldMap = Constants.lockedOrderFieldMap;
+		}
+		List<sObject> recordsToCheck = listNew;
+	
+		for(SObject recordToCheck : recordsToCheck){
+			String dynamicErrorMessage;
+			String	errorMessage;
+
+			// Retrieve	the old Status from the record, not the new (in case it changed)		
+			String status = (string)(mapOld.get(recordToCheck.id)).get('Status');
+
+			// Pull the locked fields from the map and loop through them
+			for (String lockedField : lockedFieldMap.get(status)) {
+
+				// Check if the locked field has changed
+				if ((mapOld.get(recordToCheck.id)).get(lockedField) != (mapNew.get(recordToCheck.id)).get(lockedField))
+				{
+					dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FIELD_IS_LOCKED, '[field]', lockedField);
+					errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+					recordToCheck.addError(errorMessage, FALSE);
+					result = 'At least one record containted a field that was locked';
+				}
+			}
+		}
+		return result;
+	}	
+
+	/***************************************************
+	 Method to dynamically change error messages
+	****************************************************/
+  	public static string fillInErrorRuleValues(String errorMessage, String targetValue, String replacementValue){
+		errorMessage = errorMessage.replace(targetValue, '<b>('+replacementValue+')</b>');
+		errorMessage = errorMessage.replace('null', '');
+		
+		return errorMessage;
+	} 
 }

@@ -107,6 +107,7 @@ public with sharing class RMS_errorMessages {
 					Misc Errors
 	*******************************************************/
 	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
+	public static final String FIELD_IS_LOCKED = '&bull;The [field] field can not be changed in the current status.';
 
 
 }
