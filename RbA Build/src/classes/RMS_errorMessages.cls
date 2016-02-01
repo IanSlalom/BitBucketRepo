@@ -103,4 +103,10 @@ public with sharing class RMS_errorMessages {
 	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
 	public static final String STORE_LOCATION_IS_BLANK_USER = 'Your user record must be associated with a store location before creating a misc reimbursement.';
 
+	/*******************************************************
+					Misc Errors
+	*******************************************************/
+	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
+
+
 }

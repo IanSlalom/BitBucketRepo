@@ -128,4 +128,29 @@ public with sharing class UtilityMethods {
 		}
 		return result;
 	}
+	
+	// Method used to check if a record is locked
+	public static String checkLocked(List<sObject> listNew, List<sObject> listOld, map<id, sObject> mapNew, map<id, sObject> mapOld, String triggerType){
+		String result = 'No records locked';
+
+		List<sObject> recordsToCheck = (triggerType == 'Delete') ? listOld : listNew;
+
+		if(recordsToCheck == null){
+			result = 'No records received';
+			System.Debug(result);
+			return result;
+		}
+	
+		for(SObject recordToCheck : recordsToCheck){
+
+			// if it's a delete trigger, just check the old trigger, otherwise check old and new			
+			boolean locked = (triggerType == 'Delete') ? (boolean)(mapOld.get(recordToCheck.id)).get('Locked__c') :
+							((boolean)(mapOld.get(recordToCheck.id)).get('Locked__c') && (boolean)(mapNew.get(recordToCheck.id)).get('Locked__c'));
+			if (locked) {
+				recordToCheck.addError(RMS_errorMessages.RECORD_IS_LOCKED, FALSE);
+				result = 'At least one record was locked';
+			}
+		}
+		return result;
+	}
 }
