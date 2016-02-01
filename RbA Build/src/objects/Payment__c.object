@@ -153,6 +153,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Locked__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>A system field used to lock the record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A system field used to lock the record.</inlineHelpText>
+        <label>Locked</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Order__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>The payment record is related to this order.</description>
