@@ -12,6 +12,7 @@ public with sharing class Constants {
 			'BillingStreet', 
 			'BillingCity',
 			'BillingState',
+			'BillingStateCode',
 			'BillingPostalCode',
 			'OpportunityId',
 			'RecordTypeId',
@@ -20,6 +21,7 @@ public with sharing class Constants {
 			'ShippingStreet', 
 			'ShippingCity',
 			'ShippingState',
+			'ShippingStateCode',
 			'ShippingPostalCode',
 			'Store_Location__c'
 		}
