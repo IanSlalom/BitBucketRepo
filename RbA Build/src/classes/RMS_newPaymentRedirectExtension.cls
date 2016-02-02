@@ -74,8 +74,8 @@ public with sharing class RMS_newPaymentRedirectExtension {
         		} 
         		else {
         			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N3B000000On23', theOrder.Store_Location__r.Name);	
-         			m.put('CF00N3B000000On23_lkid', theOrder.Store_Location__c);	
+         			m.put('CF00N3B000000On7g', theOrder.Store_Location__r.Name);	
+         			m.put('CF00N3B000000On7g_lkid', theOrder.Store_Location__c);	
         		}
         	}		
 		}

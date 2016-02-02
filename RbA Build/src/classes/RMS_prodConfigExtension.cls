@@ -33,6 +33,7 @@ public class RMS_prodConfigExtension {
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
+	public String ordStat {get; set;}	// order status 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -41,7 +42,7 @@ public class RMS_prodConfigExtension {
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
-			
+		ordStat = 'dft';			
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
 			newOrderItem = true;
@@ -51,7 +52,7 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
-				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
@@ -59,6 +60,8 @@ public class RMS_prodConfigExtension {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
 					}
+					// retrieves an abbreviated status name for use in the vf page
+					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 				}
 		}
 	}

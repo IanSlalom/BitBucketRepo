@@ -178,8 +178,10 @@ public with sharing class UtilityMethods {
 			// Retrieve	the old Status from the record, not the new (in case it changed)		
 			String status = (string)(mapOld.get(recordToCheck.id)).get('Status');
 
+			List<String> lockedFields = lockedFieldMap.get(status);
+			if (lockedFields == null) continue;
 			// Pull the locked fields from the map and loop through them
-			for (String lockedField : lockedFieldMap.get(status)) {
+			for (String lockedField : lockedFields) {
 
 				// Check if the locked field has changed
 				if ((mapOld.get(recordToCheck.id)).get(lockedField) != (mapNew.get(recordToCheck.id)).get(lockedField))
