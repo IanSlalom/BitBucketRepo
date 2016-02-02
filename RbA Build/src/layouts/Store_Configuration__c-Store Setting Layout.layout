@@ -278,10 +278,6 @@
         <fields>UPDATEDBY_USER</fields>
         <relatedList>Financial_Account_Number__c.Store_Configuration__c</relatedList>
     </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Finance_Program__c.Retail_Location__c</relatedList>
-    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
