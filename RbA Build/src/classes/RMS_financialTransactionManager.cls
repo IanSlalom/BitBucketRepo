@@ -22,12 +22,12 @@ public with sharing class RMS_financialTransactionManager {
 	public void onAfterInsertPayment(list<Payment__c> listNew, map<id,Payment__c> mapNew){
 		createOrUpdateJournalEntryPayment(listNew, mapNew);
 		//TODO:This locking functionality will eventually get moved to a batch process
-		lockPaymentRecords(listNew);
+//		lockPaymentRecords(listNew);
 	}
 
 	public void onAfterUpdatePayment(list<Payment__c> listOld, list<Payment__c> listNew, map<Id, Payment__c> mapOld, map<Id, Payment__c> mapNew){
 		createOrUpdateJournalEntryPayment(listNew, mapNew);
-		lockPaymentRecords(listOld, mapNew);
+//		lockPaymentRecords(listOld, mapNew);
 	}
 	
 	public void onBeforeDeletePayment(list<Payment__c> listOld, map<Id, Payment__c> mapOld){
