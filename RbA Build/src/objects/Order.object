@@ -162,12 +162,12 @@
     </fields>
     <fields>
         <fullName>CompanyAuthorizedById</fullName>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
         <type>Lookup</type>
     </fields>
     <fields>
         <fullName>CompanyAuthorizedDate</fullName>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
     </fields>
     <fields>
         <fullName>ContractEndDate</fullName>
@@ -182,12 +182,12 @@
     </fields>
     <fields>
         <fullName>CustomerAuthorizedById</fullName>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
         <type>Lookup</type>
     </fields>
     <fields>
         <fullName>CustomerAuthorizedDate</fullName>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
     </fields>
     <fields>
         <fullName>Customer_Service_Manager__c</fullName>
