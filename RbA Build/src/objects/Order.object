@@ -144,6 +144,19 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Bay_Bow_Rollup__c</fullName>
+        <description>The rollup of the number of bay / bow products on this order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The rollup of the number of bay / bow products on this order.</inlineHelpText>
+        <label>Bay Bow</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>BillToContactId</fullName>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
@@ -249,12 +262,51 @@
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Door_Rollup__c</fullName>
+        <description>Rollup of the quantity of doors on the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Rollup of the quantity of doors on the order.</inlineHelpText>
+        <label>Door Rollup</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>EffectiveDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
         <fullName>EndDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Entry_Door_Rollup__c</fullName>
+        <description>The rollup of the number of entry door products on this order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The rollup of the number of entry door products on this order.</inlineHelpText>
+        <label>Entry Door</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FF_Rollup__c</fullName>
+        <description>Rollup of the quantity of full frame windows on the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Rollup of the quantity of full frame windows on the order.</inlineHelpText>
+        <label>FF</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Financed_Order__c</fullName>
@@ -272,6 +324,19 @@
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IF_Rollup__c</fullName>
+        <description>Rollup of the quantity of insert frame windows on the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Rollup of the quantity of insert frame windows on the order.</inlineHelpText>
+        <label>IF</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -375,6 +440,21 @@ This is a holding field for now.</inlineHelpText>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Jobs__c</fullName>
+        <description>This is a reporting field that is simply set to 1 for the number of jobs. This is needed to count up the number of jobs</description>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>This is a reporting field that is simply set to 1 for the number of jobs. This is needed to count up the number of jobs</inlineHelpText>
+        <label>Jobs</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Lead_Safe_Work_Practices_Reqd__c</fullName>
@@ -706,6 +786,19 @@ This is a holding field for now.</inlineHelpText>
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Series_2_Rollup__c</fullName>
+        <description>The rollup of the number of series 2 products on this order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The rollup of the number of series 2 products on this order.</inlineHelpText>
+        <label>Series 2</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Service_Type__c</fullName>
         <externalId>false</externalId>
         <label>Service Type</label>
@@ -791,15 +884,6 @@ This is a holding field for now.</inlineHelpText>
         <externalId>false</externalId>
         <inlineHelpText>This order is related to this store location.</inlineHelpText>
         <label>Store Location</label>
-        <lookupFilter>
-            <active>true</active>
-            <filterItems>
-                <field>Account.RecordTypeId</field>
-                <operation>equals</operation>
-                <value>Store</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
         <referenceTo>Account</referenceTo>
         <relationshipLabel>Orders (Store Location)</relationshipLabel>
         <relationshipName>Orders1</relationshipName>
