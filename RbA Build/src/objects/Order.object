@@ -676,7 +676,7 @@ This is a holding field for now.</inlineHelpText>
         <inlineHelpText>The date revenue was recognized for this order.</inlineHelpText>
         <label>Revenue Recognized Date</label>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <type>Date</type>
     </fields>
     <fields>
