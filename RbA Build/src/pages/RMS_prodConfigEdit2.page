@@ -1,0 +1,1514 @@
+<apex:page standardController="OrderItem" extensions="RMS_prodConfigExtension">
+<apex:includeScript value="{!$Resource.jquery}" />
+<apex:includeScript value="/support/console/33.0/integration.js"/>
+
+<apex:form id="page-form" >
+<script>
+    var j$ = jQuery.noConflict();
+
+        //The callback function that closeTab will call once it's got the ID for its tab
+        var callCloseTab= function callCloseTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+
+        function closeTab() {
+
+            if(sforce.console.isInConsole()) {
+                sforce.console.refreshPrimaryTabById( primaryTabId, false,
+                    function()
+                    {
+                        if ( subTabId ) sforce.console.closeTab( subTabId );
+                    }
+                );
+                return false;
+            }
+            else {
+                location.href='/{!OrderItem.OrderId}'; 
+            }
+
+        
+        };
+
+        function openNewSubTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            sforce.console.refreshPrimaryTabById( primaryTabId, false);
+            sforce.console.openSubtab
+            (   /*  Enclosing Primary Tab Id    */  primaryTabId,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Id of Subtab to override    */  subTabId,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }
+
+        function openNewPrimaryTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            //  otherwise open the new subtab
+            sforce.console.openPrimaryTab
+            (   /*  Enclosing Primary Tab Id    */  null,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }   
+        function openSavedOI()
+        {
+            var errorOccurred = '{!errorOccurred}';
+            var oiId = '{!oiId}';
+            if (errorOccurred == 'false') {
+                if(sforce.console.isInConsole()) {
+                    openNewSubTab( '/' +oiId +'?isdtp=vw');
+                    closeTab();
+                }
+                else {
+                    location.href='/' +oiId;
+                }
+            }
+        }
+
+        function openNewOI(orderId, priceBookId)
+        {
+            var errorOccurred = '{!errorOccurred}';
+            if (errorOccurred == 'false') {
+                if(sforce.console.isInConsole()) {
+                    openNewSubTab( '/apex/RMS_prodConfigEdit?isdtp=vw&oid=' +orderId +'&pid=' +priceBookId, 'New Order Item' );
+                    closeTab();
+                }
+                else {
+                    location.href='/apex/RMS_prodConfigEdit?oid=' +orderId +'&pid=' +priceBookId;
+                }
+            }
+        }
+//  function  getOrderId()
+//  {
+//      return document.getElementById( 'OrderId' ).innerHTML;
+//  }
+
+
+</script>
+ 
+  <apex:pageMessages escape="false" />
+    <div id="OrderId" style="display:none;">{!orderId}</div>    
+    <apex:pageBlock title="Select Product" mode="edit" id="EnterProductBlock" rendered="{!!orderActivated}">
+        <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
+            <apex:commandButton action="{!enterProduct}" value="Enter" />
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+        </apex:pageBlockButtons>            
+
+        <apex:pageBlockSection title="" columns="1" rendered="{!!productSelected}">
+        <apex:pageBlockSectionItem >    
+            <apex:outputLabel value="Product" style="font-weight:bold"/>
+                    <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!masterProductId}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}" Application="prodConfig" html-data-jsid="product"  /> 
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+            <apex:outputLabel for="specialtyShape" value="Specialty Shape" style="font-weight:bold"/>
+            <apex:inputField value="{!OrderItem.Specialty_Shape__c}" id="specialtyShape" html-data-jsid="specialtyWindow" />
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:inputHidden value="{!OrderItem.PricebookEntryId}" id="hiddenId"/>
+
+
+        <apex:pageBlockSection title="" columns="1" rendered="{!productSelected}">
+            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" />
+            <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!masterProduct.Name=='Specialty Window'}"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+
+    <apex:actionRegion >
+    <apex:pageBlock title="Unit Configuration" id="ConfigureProductBlock" rendered="{!productSelected}"> 
+        <apex:actionStatus id="save-status"  onstop="openSavedOI();return false"/>
+        <apex:actionStatus id="save-new-status"  onstop="openNewOI('{!orderId}','{!priceBookId}');return false"/>
+
+          <apex:pageBlockButtons location="bottom">
+            <apex:commandButton action="{!saveProduct}" value="Save" status="save-status" rerender="page-form"/>
+            <apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+       </apex:pageBlockButtons>
+<!--         <outputPanel title="My Panel" columns="4" rendered="{!prodConfig.mpc != null}">
+               <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled'}"/>
+            <apex:inputText value="{!OrderItem.Room__c}" label="Room" id="room" required="{!prodConfig.mpc.Room_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Room_Control__c != 'Disabled'}"/>
+            <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'}"/>
+            <apex:outputField value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesOutputWidth"/> 
+            <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!measurementFractionItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
+            <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
+            <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
+            <apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!measurementFractionItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
+
+            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'}"/>
+
+            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'}"/>
+            <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Fraction_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!measurementFractionItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Fraction_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!measurementFractionItems}"/>
+            </apex:selectList>
+        
+        </outputPanel> -->
+		<apex:pageBlockSection title="Enter Measurements" columns="6" rendered="{!prodConfig.mpc != null}">
+
+			<!--------    Row 1 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 1 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity"/>   
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputText value="{!OrderItem.Room__c}" label="Room" id="room" required="{!prodConfig.mpc.Room_Control__c == 'Required'}" rendered="false"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+				<apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+				<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Frame_Type_Control__c != 'Disabled'}" html-data-jsid="frameType" onChange="callRule('frameType')">
+           	    	<apex:selectOptions value="{!frameTypeItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'}" html-data-jsid="fibrexLTrim"/>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 2 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+		
+			<!--------    Row 2 Fields --------->
+			<apex:pageBlockSectionItem >
+            	<apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Control__c != 'Disabled'}" html-data-jsid="exteriorTrim">
+                	<apex:selectOptions value="{!exteriorTrimItems}"/>
+            	</apex:selectList>			
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Checkrail_Style_Control__c != 'Disabled'}" html-data-jsid="checkrailStyle">
+                	<apex:selectOptions value="{!checkrailStyleItems}"/>
+            	</apex:selectList>			
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Fraction_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!measurementFractionItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+        		<apex:pageBlockSectionItem >    
+            		<apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'}"/>
+        		</apex:pageBlockSectionItem>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!measurementFractionItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 3 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 3 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Fraction_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!measurementFractionItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+	            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Fraction_Control__c != 'Disabled'}">
+    	            <apex:selectOptions value="{!measurementFractionItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 4 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 4 Fields --------->
+			<apex:pageBlockSectionItem >
+            <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sill_Angle_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sillAngleItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Ratio_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!sashRatioItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!mullSequenceMullionItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+              <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" html-data-jsid="exteriorColor" onChange="callRule('exteriorColor')" required="{!prodConfig.mpc.Exterior_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Color_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!exteriorColorItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" onChange="callRule('interiorColor')" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Color_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!interiorColorItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 5 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 5"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 5 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing1" onChange="callRule('glazing1')">
+            		<apex:selectOptions value="{!glazingItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPattern1" onChange="callRule('applyToAllGlassCheck')">
+                	<apex:selectOptions value="{!GlassPatternItems}"/>
+                </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered {!sashFieldName}" required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered1" onChange="callRule('applyToAllGlassCheck')"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Glazing_S2__c}" label="Glazing S2" size="1" id="glazing2"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing2" onChange="callRule('glazing2')">
+            		<apex:selectOptions value="{!glazingItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:selectList value="{!OrderItem.Glass_Pattern_S2__c}" label="Glass Pattern S2" size="1" id="glassPattern2"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPattern2">
+                	<apex:selectOptions value="{!GlassPatternItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Tempered_S2__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered2" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered2" />
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 6 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 6"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 6 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Lifts_Pulls__c}" label="Lifts/Pulls" size="1" id="liftsPulls" required="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Lifts_Pulls_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!liftsPullsItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Locks_Sash__c}" label="Locks/Sash" size="1" id="locksSash" required="{!prodConfig.mpc.Locks_Sash_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Locks_Sash_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!locksSashItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+	            <apex:selectList value="{!OrderItem.Finger_Lifts__c}" label="Finger Lifts" size="1" id="fingerLifts" required="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Finger_Lifts_Control__c != 'Disabled'}">
+    	            <apex:selectOptions value="{!fingerLiftItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Sash_Operation_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!sashOperationItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 7 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 7"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 7 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Option_Control__c != 'Disabled'}" disabled="{!ordStat == 'rel'}">
+                	<apex:selectOptions value="{!hardwareOptionItems}"/>
+            	</apex:selectList>			
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+       		     <apex:selectList value="{!OrderItem.Hardware_Style__c}" label="Hardware Style" size="1" id="hardwareStyle"  required="{!prodConfig.mpc.Hardware_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Style_Control__c != 'Disabled'}">
+        	        <apex:selectOptions value="{!hardwareStyleItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+	            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish_Control__c != 'Disabled'}" html-data-jsid="hardwareFinish">
+    	            <apex:selectOptions value="{!hardwareFinishItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+	            <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Type_Control__c != 'Disabled'}">
+    	            <apex:selectOptions value="{!screenTypeItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+	            <apex:selectList value="{!OrderItem.Screen_Vaneer_Type__c}" label="Vaneer Type" size="1" id="screenVaneerType" html-data-jsid="screenVaneerType" required="{!prodConfig.mpc.Screen_Vaneer_Type_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Vaneer_Type_Control__c != 'Disabled'}">
+    	            <apex:selectOptions value="{!screenVaneerTypeItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 8 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 8"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 8 Fields --------->
+			<apex:pageBlockSectionItem >    
+	            <apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Style_Control__c != 'Disabled'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')">
+	                <apex:selectOptions value="{!grilleStyleItems}"/>
+	            </apex:selectList>
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+                    <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern {!sashFieldName}" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')">
+                        <apex:selectOptions value="{!grillePatternItems}"/>
+                   </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+	            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+	            <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+
+
+
+			<!--------    Row 9 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 9"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 9 Fields --------->
+			<apex:pageBlockSectionItem >    
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="colonialGrilleLightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide1" onChange="callRule('applyToAllGrillesCheck')">
+                	<apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                </apex:selectList>            
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="colonialGrilleLightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh1" onChange="callRule('applyToAllGrillesCheck')">
+                	<apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details {!sashFieldName}" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails1" onChange="callRule('applyToAllGrillesCheck')"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+	            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+	            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 10 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 10"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 10 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Trim_Control__c != 'Disabled'}" html-data-jsid="interiorTrim">
+                	<apex:selectOptions value="{!interiorTrimItems}"/>
+            	</apex:selectList>
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.EJ_Thickness__c}" label="EJ Thickness" size="1" id="EJThickness"   required="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Thickness_Control__c != 'Disabled'}">
+                <apex:selectOptions value="{!EJThicknessItems}"/>
+            </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.EJ_Wall_Depth__c}" label="EJ Wall Depth" size="1" id="EJWallDepth"   required="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Wall_Depth_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!EJWallDepthItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+ 	        	<apex:selectList value="{!OrderItem.EJ_Species__c}" label="EJ Species" size="1" id="EJSpecies"   required="{!prodConfig.mpc.EJ_Species_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Species_Control__c != 'Disabled'}">
+   	             <apex:selectOptions value="{!EJSpeciesItems}"/>
+    	    	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:selectList value="{!OrderItem.EJ_Color__c}" label="EJ Color" size="1" id="EJColor"   required="{!prodConfig.mpc.EJ_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Color_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!EJColorItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 11 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 11"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 11 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Casing_Profile__c}" label="Casing Profile" size="1" id="casingProfile"   required="{!prodConfig.mpc.Casing_Profile_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Profile_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!casingProfileItems}"/>
+            	</apex:selectList>
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Casing_Species__c}" label="Casing Species" size="1" id="casingSpecies"   required="{!prodConfig.mpc.Casing_Species_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Species_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!casingSpeciesItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Casing_Location__c}" label="Casing Location" size="1" id="casingLocation"   required="{!prodConfig.mpc.Casing_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Casing_Location_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!casingLocationItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Location_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!brickmouldLocationItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+ 	           <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Drip_Cap_Pieces__c}" label="Drip Cap Pieces" size="1" id="dripCapPieces" required="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!dripCapPiecesItems}"/>
+            	</apex:selectList>			
+            </apex:pageBlockSectionItem>
+
+			<!--------    Row 12 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 12"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+
+			<!--------    Row 12 Fields --------->
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!stormWindowItems}"/>
+            	</apex:selectList>
+            </apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:selectList value="{!OrderItem.Storm_Window_Style__c}" label="Storm Window Style" size="1" id="stormWindowStyle" required="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Style_Control__c != 'Disabled'}">
+                	<apex:selectOptions value="{!stormWindowStyleItems}"/>
+            	</apex:selectList>
+        	</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            	<apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Required'}" id="breathertubes0" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c != 'Disabled'}"/>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >    
+            </apex:pageBlockSectionItem>
+
+		</apex:pageBlockSection>
+
+        <hr></hr>
+        <apex:outputPanel rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}">
+            <apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
+            <apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')"/>
+        </apex:outputPanel>
+
+        <apex:pageBlockSection title="Special Options" columns="6" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
+
+			<!--------    Row 1 Labels --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 1 Fields --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" html-data-jsid="screenColor">
+    	            <apex:selectOptions value="{!screenColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+            	<apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" html-data-jsid="hardwareColor">
+                	<apex:selectOptions value="{!hardwareColorItems}"/>
+	            </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+    	        <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" html-data-jsid="extGrilleColor">
+        	        <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
+            	</apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" html-data-jsid="intGrilleColor">
+    	            <apex:selectOptions value="{!interiorGrilleColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" html-data-jsid="stormWindowColor">
+    	            <apex:selectOptions value="{!stormWindowColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+ 	        	<apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" html-data-jsid="exteriorTrimColor">
+    	            <apex:selectOptions value="{!exteriorTrimColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 2 Labels --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+				<apex:outputLabel value="Label 2"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 2 Fields --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" html-data-jsid="jambLinerColor">
+    	            <apex:selectOptions value="{!jambLinerColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" html-data-jsid="installTrackLocation">
+    	            <apex:selectOptions value="{!installTrackLocationItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+ 			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" html-data-jsid="installHolesLocation"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+	            <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" html-data-jsid="interiorSashColor" >
+    	            <apex:selectOptions value="{!interiorSashColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+ 	           <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled'}" html-data-jsid="astragalColor">
+    	            <apex:selectOptions value="{!astragalColorItems}"/>
+        	    </apex:selectList>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 3 Labels --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 3 Fields --------->
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+                <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing3" onChange="callRule('glazing3')">
+                    <apex:selectOptions value="{!glazingItems}"/>
+                </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+                 <apex:selectList value="{!OrderItem.Glass_Pattern_S3__c}" label="Glass Pattern S3" size="1" id="glassPattern3"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPattern3">
+                    <apex:selectOptions value="{!GlassPatternItems}"/>
+                </apex:selectList>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+                <apex:inputField value="{!OrderItem.Tempered_S3__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered3" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:16%" labelStyle="width:16%">
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem dataStyle="width:20%" labelStyle="width:20%">
+			</apex:pageBlockSectionItem>
+
+		</apex:pageBlockSection>
+
+
+        <apex:pageBlockSection title="Order Information" columns="3">
+
+			<!--------    Row 1 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 1 Fields --------->
+			<apex:pageBlockSectionItem >
+	            <apex:outputField value="{!OrderItem.Order.Name}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Variant_Number__c}"  rendered="{!prodConfig.mpc != null}"/>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 2 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 2 Fields --------->
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.UnitPrice}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null}"/>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 3 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 3 Fields --------->
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled' && prodConfig.mpc != null}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+            	<apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled' && prodConfig.mpc != null}"/>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 4 Labels --------->
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<!--------    Row 4 Fields --------->
+			<apex:pageBlockSectionItem >
+            <apex:inputField value="{!OrderItem.Description}"/>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+jjj
+<!--  
+        <apex:pageBlockSection title="Enter Measurements" columns="4" rendered="{!prodConfig.mpc != null}">
+        <apex:pageBlockSectionItem >    
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+            <apex:outputField value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesOutputWidth"/> 
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+            <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+            <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+         </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+            <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
+         </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >    
+        </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>  
+
+        <apex:pageBlockSection title="Frame Options" columns="6" rendered="{!prodConfig.mpc != null}">
+       </apex:pageBlockSection>
+
+        <apex:tabPanel switchType="client" selectedTab="AllSashesW" id="sashPanelW" rendered="{!(prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}">
+            <apex:tab label="{!sashTabName}" name="sash1w" id="sash1w" >
+                <apex:pageBlockSection title="Glazing" columns="1">
+                    <apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Glass__c}" label="Apply to All" id="applyToAllGlass" html-data-jsid="applyToAllGlass" onChange="callRule('applyToAllGlassCheck')" />
+                </apex:pageBlockSection>
+            </apex:tab>
+            <apex:tab label="Sash 2" name="sash2w" id="sash2w">
+                <apex:pageBlockSection title="Glazing" columns="1">
+                </apex:pageBlockSection>
+            </apex:tab>
+        </apex:tabPanel>
+  
+        <apex:pageBlockSection title="Glazing" columns="1" rendered="{!(prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3') && prodConfig.mpc != null}">
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Screens" columns="2" rendered="{!prodConfig.mpc != null}">
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Finishes" columns="2" rendered="{!prodConfig.mpc != null}">
+
+
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Hardware" columns="6" rendered="{!prodConfig.mpc != null}">
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+
+        </apex:pageBlockSectionItem>
+
+        <apex:pageBlockSectionItem >
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+        </apex:pageBlockSectionItem>
+
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+                    <apex:outputLabel value=""></apex:outputLabel>        
+         </apex:pageBlockSectionItem>
+
+
+        <apex:pageBlockSectionItem >
+         </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+        <apex:pageBlockSection title="Grille Style" columns="2" rendered="{!prodConfig.mpc != null}">
+        </apex:pageBlockSection>
+
+        <apex:tabPanel switchType="client" selectedTab="AllSashesG" id="sashPanelG" rendered="{!(prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}" html-data-jsid="sashGrilleTabPanel" >
+            <apex:tab label="{!sashTabName}" name="sash1" id="sash1" rendered="true">
+                <apex:pageBlockSection title="Grille Pattern" columns="1">
+                <apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Grilles__c}" label="Apply to All" id="applyToAllGrilles" html-data-jsid="applyToAllGrilles" onChange="callRule('applyToAllGrillesCheck')" />
+              </apex:pageBlockSection>
+            </apex:tab>
+            <apex:tab label="Sash 2" name="sash2" id="sash2">
+                <apex:pageBlockSection title="Grille Pattern" columns="1">
+                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
+                        <apex:selectOptions value="{!grillePatternItems}"/>
+                   </apex:selectList>
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="colonialGrilleLightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide2">
+                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                  </apex:selectList>
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="colonialGrilleLightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh2">
+                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                   </apex:selectList>
+                       <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails2"/>
+              </apex:pageBlockSection>
+            </apex:tab>
+        </apex:tabPanel>
+        <apex:pageBlockSection title="Grille Pattern" columns="1" rendered="{!(prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3') && prodConfig.mpc != null}" html-data-jsid="GrillePatternSection">
+            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern" size="1" id="grillePattern0" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern0" onChange="callRule('grillePattern0')">
+               <apex:selectOptions value="{!grillePatternItems}"/>
+                   </apex:selectList>
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S1__c}" label="Grille Lites Wide" size="1" id="colonialGrilleLightsWide0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide0">
+                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                  </apex:selectList>
+                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S1__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh0" >
+                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                   </apex:selectList>
+                       <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" cols="50" rows="5" id="customGrilleDetails0" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails0" />
+         </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Trim & Casing" columns="2" rendered="{!prodConfig.mpc != null}">
+
+
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2" rendered="{!prodConfig.mpc != null}">
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Storm Windows" columns="2" rendered="{!prodConfig.mpc != null}">
+
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection id="jobCostDetailsSection" title="Additional Job Cost Details" columns="2" collapsible="true" rendered="{!prodConfig.mpc != null}">
+        </apex:pageBlockSection>-->
+
+   
+
+
+    </apex:pageBlock>
+    <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
+    </apex:actionRegion>
+
+</apex:form>
+<script type ="text/javascript">
+    var j$ = jQuery.noConflict();
+
+        var primaryTabId = null;
+        var subTabId = null;
+        var previousOnload  = window.onload;
+
+        window.onload = function()
+        {
+        
+            //  perform the previously registered 'onload' function, if any
+            if ( previousOnload ) previousOnload();
+
+            //  get the id's of both the primary tab and this subtab
+            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
+
+            //  set the title of this subtab
+            sforce.console.setTabTitle( '{!OrderItem.Id}' ? '* {!OrderItem.PricebookEntry.Product2.Name}' : 'Add New Product' );
+
+        };
+
+        
+
+
+    // Custom dynamic defaulting / picklists for makeability 
+    j$( document ).ready(function() {
+        startUpDefaults();
+        exteriorColor('Sandtone');
+        exteriorColor('Terratone');
+        exteriorColor('Dark Bronze');
+        screenType();
+        grilleStyle();
+        grillePattern(0);
+        grillePattern(1);
+        grillePattern(2);
+        grillePattern(3);
+        interiorColor('White');
+        interiorColor('Dark Bronze');
+        glazing(0);
+        glazing(1);
+        glazing(2);
+        glazing(3);
+        frameType();
+        specialOptions();
+        specialtyWindow();
+    });
+    
+    
+    function callRule(ruleName){
+        if(ruleName == 'exteriorColor'){
+            exteriorColor('Sandtone');
+            exteriorColor('Terratone');
+            exteriorColor('Dark Bronze');
+        }else if(ruleName == 'screenType'){
+            screenType();
+        }else if(ruleName == 'grilleStyle'){
+            grilleStyle();
+        }else if(ruleName == 'grillePattern0'){
+            grillePattern(0);
+        }else if(ruleName == 'grillePattern1'){
+            grillePattern(1);
+        }else if(ruleName == 'grillePattern2'){
+            grillePattern(2);
+        }else if(ruleName == 'interiorColor'){
+            interiorColor('White');
+            interiorColor('Dark Bronze');
+        }else if(ruleName == 'glazing0'){
+            glazing(0);
+        }else if(ruleName == 'glazing1'){
+            glazing(1);
+        }else if(ruleName == 'glazing2'){
+            glazing(2);
+        }else if(ruleName == 'glazing3'){
+            glazing(3);
+        }else if(ruleName == 'frameType'){
+            frameType();
+        }else if(ruleName == 'applyToAllGrillesCheck'){
+            applyToAllGrillesCheck();
+        }else if(ruleName == 'applyToAllGlassCheck'){
+            applyToAllGlassCheck();
+        }else if(ruleName == 'specialOptions'){
+            specialOptions();
+        }
+    }       
+        
+    function startUpDefaults(){
+        if(j$("select[data-jsid='screenType']").val() == ''){
+            j$("select[data-jsid='screenType']").val('Fiberglass');
+        }
+    }
+    
+    function exteriorColor(color){
+        if(j$("select[data-jsid='exteriorColor']").val() != color){
+            j$("select[data-jsid='interiorColor'] option[value=\'"+color+"\']").remove();
+            
+        }else{
+            j$("select[data-jsid='interiorColor'] option:last").after(j$('<option value=\''+color+'\'>'+color+'</option>').attr('selected', true));
+        }
+        
+        if(j$("select[data-jsid='exteriorColor']").val() == 'White'){
+            j$("select[data-jsid='interiorColor']").val('White')
+        }else if(j$("select[data-jsid='exteriorColor']").val() == 'Canvas'){
+            j$("select[data-jsid='interiorColor']").val('Canvas')
+        } 
+        
+        callRule('interiorColor');
+    
+    }
+    
+    function screenType(){
+        if(j$("select[data-jsid='screenType']").val() == 'TruScene (Wood Vaneer)'){
+            j$("select[data-jsid='screenVaneerType']").show();
+            j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").show();
+        }else{
+            j$("select[data-jsid='screenVaneerType']").val(null);
+            j$("select[data-jsid='screenVaneerType']").hide();
+            j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").hide();
+        }
+    }
+    
+    
+    function grilleStyle(){ 
+        if(j$("select[data-jsid='grilleStyle']").val() == 'No Grilles'){
+            j$("select[data-jsid='grillePattern0']").val(null);
+            j$("select[data-jsid='grillePattern0']").hide();
+            j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern1']").val(null);
+            j$("select[data-jsid='grillePattern1']").hide();
+            j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern2']").val(null);
+            j$("select[data-jsid='grillePattern2']").hide();
+            j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
+            
+            j$("input[data-jsid='wideBar']").attr('checked',false);
+            j$("input[data-jsid='wideBar']").hide();
+            j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").hide()
+            j$("table[data-jsid='sashGrilleTabPanel']").hide();
+            
+            
+        }else{
+            j$("select[data-jsid='grillePattern0']").show();
+            j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern1']").show();
+            j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern2']").show();
+            j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").show();
+            j$("input[data-jsid='wideBar']").show();
+            j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
+            j$("table[data-jsid='sashGrilleTabPanel']").show();
+        }
+        
+        if(j$("select[data-jsid='grilleStyle']").val()  ==   'No Grilles' ||
+            j$("select[data-jsid='grilleStyle']").val() ==   'Grilles Between Glass' ||
+            j$("select[data-jsid='grilleStyle']").val() ==   'Interior Wood Only'){
+                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
+                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
+                j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").hide()
+        }else{
+            j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
+            j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").show()
+            
+        }
+        grillePattern(0);
+        grillePattern(1);
+        grillePattern(2);
+        grillePattern(3);
+    }
+
+    function grillePattern(sashnumber){
+          if (sashnumber == '1') {
+             applyToAllGrillesCheck();
+          }
+
+        if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
+            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").show();
+            j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").show();
+            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").show();
+            j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").show();
+        }else{
+            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").val(null);
+            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").hide();
+            j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").hide();
+
+            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").val(null);
+            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").hide();
+            j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").hide();
+        }
+        if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Custom'){
+            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").show();
+            j$("label[for='"+j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").attr("name")+"']").show();
+        }else{
+            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").val(null);
+            j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").hide();
+            j$("label[for='"+j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").attr("name")+"']").hide();
+        }
+    }
+
+    function applyToAllGrillesCheck(){
+        // If the apply to all checkbox is checked, call the apply to all method
+        var applyToAllCheck = j$("input[data-jsid='applyToAllGrilles']").prop('checked');
+        if( applyToAllCheck == true){
+            applyToAllGrilles();
+        }
+    }
+
+    function applyToAllGrilles(){
+        var grillePattern1 = j$("select[data-jsid='grillePattern1']").val();
+        var colonialGrilleLightsWide1 = j$("select[data-jsid='colonialGrilleLightsWide1']").val();
+        var colonialGrilleLightsHigh1 = j$("select[data-jsid='colonialGrilleLightsHigh1']").val();
+        var customGrilleDetails1 = j$("textarea[data-jsid='customGrilleDetails1']").val();
+           j$("select[data-jsid='grillePattern2']").val(grillePattern1);
+           j$("select[data-jsid='colonialGrilleLightsWide2']").val(colonialGrilleLightsWide1);
+           j$("select[data-jsid='colonialGrilleLightsHigh2']").val(colonialGrilleLightsHigh1);
+           j$("textarea[data-jsid='customGrilleDetails2']").val(customGrilleDetails1);
+        grillePattern(2);
+    }    
+    function interiorColor(color){
+        if(j$("select[data-jsid='interiorColor']").val() == color){
+            j$("select[data-jsid='hardwareColor']").val(color);
+        }else if(j$("select[data-jsid='interiorColor']").val() == ''){
+            j$("select[data-jsid='hardwareColor']").val('Stone')
+        }
+    }
+
+    function glazing(sashnumber){
+          if (sashnumber == '1') {
+             applyToAllGlassCheck();
+          }
+          
+          if(j$("select[data-jsid=glazing" +sashnumber +"]").val() == 'High Performance SmartSun w/ HeatLock'){
+              j$("select[data-jsid=glassPattern" +sashnumber +"]").val(null);
+              j$("select[data-jsid=glassPattern" +sashnumber +"]").hide();
+              j$("label[for='"+j$("select[data-jsid=glassPattern" +sashnumber +"]").attr("id")+"']").hide();
+          }else{
+              j$("select[data-jsid=glassPattern" +sashnumber +"]").show();
+                j$("label[for='"+j$("select[data-jsid=glassPattern" +sashnumber +"]").attr("id")+"']").show();
+          }
+          
+    }
+    
+    function applyToAllGlassCheck(){
+        // If the apply to all checkbox is checked, call the apply to all method
+        var applyToAllCheck = j$("input[data-jsid='applyToAllGlass']").prop('checked');
+        if( applyToAllCheck == true){
+            applyToAllGlass();
+        }
+    }
+
+    function applyToAllGlass(){
+        var glazing1 = j$("select[data-jsid='glazing1']").val();
+        var glassPattern1 = j$("select[data-jsid='glassPattern1']").val();
+        var tempered1 = j$("input[data-jsid='tempered1']").prop('checked');
+           j$("select[data-jsid='glazing2']").val(glazing1);
+           j$("select[data-jsid='glassPattern2']").val(glassPattern1);
+           j$("input[data-jsid='tempered2']").prop('checked',tempered1);
+        glazing(2);
+    }          
+        
+        function frameType(){
+            if(j$("select[data-jsid='frameType']").val() == 'Full-Frame'){
+                j$.each(j$("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+                    if(j$(this).val() != 'Brickmold - Picture Frame' &&  j$(this).val() !='Brickmould - Traditional'){
+                       j$(this).hide();
+                    }else{
+                        j$(this).show();
+                    }
+                }); 
+                if(j$("select[data-jsid='exteriorTrim']").val() != 'Brickmold - Picture Frame' &&  j$("select[data-jsid='exteriorTrim']").val() !='Brickmould - Traditional' ){
+                   j$("select[data-jsid='exteriorTrim']").val('');
+                }
+            }else if(j$("select[data-jsid='frameType']").val() == 'Flat Sill Insert'){
+                j$.each(j$("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+                    if(j$(this).val() != 'Overfit Brickmould' &&  j$(this).val() !='Overfit Chamfered Edge' &&  j$(this).val() !='Overfit Flange'){
+                        j$(this).hide();
+                    }else{
+                        j$(this).show();
+                    }
+                });
+                if(j$("select[data-jsid='exteriorTrim']").val() != 'Overfit Brickmould' &&  j$("select[data-jsid='exteriorTrim']").val() !='Overfit Chamfered Edge' &&  j$("select[data-jsid='exteriorTrim']").val() != 'Overfit Flange' ){
+                    j$("select[data-jsid='exteriorTrim']").val('');
+                }   
+            }else{
+                j$.each(j$("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
+                        j$(this).show();
+                });
+            }
+            
+            if(j$("select[data-jsid='frameType']").val() == 'Slope Sill Insert'){
+                j$("select[data-jsid='exteriorTrim']").val(null);
+                j$("select[data-jsid='exteriorTrim']").hide();
+                j$("label[for='"+j$("select[data-jsid='exteriorTrim']").attr("id")+"']").hide();
+            }else{
+                j$("select[data-jsid='exteriorTrim']").show();
+                j$("label[for='"+j$("select[data-jsid='exteriorTrim']").attr("id")+"']").show();
+            } 
+
+            if(j$("select[data-jsid='frameType']").val() == 'Insert Frame'){
+                j$("input[data-jsid='fibrexLTrim']").show();
+                j$("span:has(label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"'])").show()
+                
+                j$("select[data-jsid='interiorTrim']").show();
+                j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").show();
+            }else{
+                j$("input[data-jsid='fibrexLTrim']").attr('checked',false);
+                j$("input[data-jsid='fibrexLTrim']").hide();
+                j$("span:has(label[for='"+j$("input[data-jsid='fibrexLTrim']").attr("id")+"'])").hide()
+            
+                
+
+                j$("select[data-jsid='interiorTrim']").val('');
+                j$("select[data-jsid='interiorTrim']").hide();
+                j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
+            } 
+        }
+        
+    function specialOptions(){
+        // If the specialOptions checkbox is checked, display the special options section
+        var specialOptionsCheck = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
+        if( specialOptionsCheck == true){
+            j$("div[data-jsid='specialOptions']").show();
+        }else{
+            j$("select[data-jsid='screenColor']").val(null);
+            j$("select[data-jsid='hardwareColor']").val(null);
+            j$("select[data-jsid='extGrilleColor']").val(null);
+            j$("select[data-jsid='intGrilleColor']").val(null);
+            j$("select[data-jsid='stormWindowColor']").val(null);
+            j$("select[data-jsid='exteriorTrimColor']").val(null);
+            j$("select[data-jsid='jambLinerColor']").val(null);
+            j$("select[data-jsid='interiorSashColor']").val(null);
+            j$("select[data-jsid='astragalColor']").val(null);
+            j$("select[data-jsid='installTrackLocation']").val(null);
+            j$("input[data-jsid='installHolesLocation']").val(null);
+            j$("select[data-jsid='glazing3']").val(null);
+            j$("select[data-jsid='glassPattern3']").val(null);
+            j$("input[data-jsid='tempered3']").prop('checked',false);
+            j$("div[data-jsid='specialOptions']").hide();
+        }
+    }
+
+    function specialtyWindow(){
+            var $element = j$('.select2-chosen').text();
+
+            if($element == 'Specialty Window'){
+                j$("select[data-jsid='specialtyWindow']").show();
+                j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").show();
+            }else{
+                j$("select[data-jsid='specialtyWindow']").val(null);
+                j$("select[data-jsid='specialtyWindow']").hide();
+                j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").hide();
+            } 
+    }
+
+    </script>
+</apex:page>
