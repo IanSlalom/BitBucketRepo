@@ -27,95 +27,89 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-*    Author : avidev9@gmail.com
-*    CreatedDate : 6-Oct-2013
-*    Class Name : AutoCompleteV2_Con
+*	Author : avidev9@gmail.com
+*	CreatedDate : 6-Oct-2013
+*	Class Name : AutoCompleteV2_Con
 **/
 public class AutoCompleteV2_Con {
 
-    public String labelFieldVar{ get; set; }
-    public String valueFieldVar{ get; set; }
-    public String sObjVal{get;set;}
-    public Integer randomJsIden{get;set;}
-    public Object cacheField{get;private set;} 
-    public String extraQueries{ get; set; }
-    public String extraVariables{ get; set; }
-    public String Application{ get; set; }
-    
-    private Object targetFieldVar;
-    
-    public AutoCompleteV2_Con(){
-        randomJsIden = getRandomNumber(1000000);
-        sObjVal='Account';
-        labelFieldVar='Name';
-        valueFieldVar='Id';
-    }
-    
-    /*Dummy setter Method*/
-    public void setCacheField(Object cacheField){}
-    
-    public void setTargetFieldVar(Object targetFieldVar){
-        
-        if(targetFieldVar != this.targetFieldVar){
-            cacheField = getCacheFieldValue(targetFieldVar);
-            this.targetFieldVar = targetFieldVar;
-           
-        }
-        
-    }
-    
-    public Object getTargetFieldVar(){
-        return targetFieldVar;
-    }
-    
-    private Object getCacheFieldValue(Object targetFieldVar){
-        Object retVal = targetFieldVar;
+	public String labelFieldVar{ get; set; }
+	public String valueFieldVar{ get; set; }
+	public String sObjVal{get;set;}
+	public Integer randomJsIden{get;set;}
+	public Object cacheField{get;private set;} 
+	public String extraQueries{ get; set; }
+	public String extraVariables{ get; set; }
+	public String Application{ get; set; }
+	
+	private Object targetFieldVar;
+	
+	public AutoCompleteV2_Con(){
+		randomJsIden = getRandomNumber(1000000);
+		sObjVal='Account';
+		labelFieldVar='Name';
+		valueFieldVar='Id';
+	}
+	
+	/*Dummy setter Method*/
+	public void setCacheField(Object cacheField){}
+	
+	public void setTargetFieldVar(Object targetFieldVar){
+		
+		if(targetFieldVar != this.targetFieldVar){
+			cacheField = getCacheFieldValue(targetFieldVar);
+			this.targetFieldVar = targetFieldVar;
+		   
+		}
+		
+	}
+	
+	public Object getTargetFieldVar(){
+		return targetFieldVar;
+	}
+	
+	private Object getCacheFieldValue(Object targetFieldVar){
+		Object retVal = targetFieldVar;
 
-        if(targetFieldVar!=null){
-            for(sObject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+valueFieldVar+' =:targetFieldVar')){
-                retVal = sObj.get(labelFieldVar);
-                break;
-            }
-        }
-        
-        return retVal;
-    }
+		if(targetFieldVar!=null){
+			for(sObject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+valueFieldVar+' =:targetFieldVar')){
+				retVal = sObj.get(labelFieldVar);
+				break;
+			}
+		}
+		
+		return retVal;
+	}
 
-    
-    /*
-    *Random number generator to change the js function name if multiple components us
-    ***/
-    private Integer getRandomNumber(Integer size){
-        Double d = Math.random() * size;
-        return d.intValue(); 
-    }
-    
-    /*
-    *This method queries data according to the passed parameters
-    ***/
-    @RemoteAction
-    public static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param, String extraQueries, String extraVariables){
-       
-        List<AutoCompleteData> AutoCompleteDatas = new List<AutoCompleteData>();
-        param = String.escapeSingleQuotes(param);
-        
+	
+	/*
+	*Random number generator to change the js function name if multiple components us
+	***/
+	private Integer getRandomNumber(Integer size){
+		Double d = Math.random() * size;
+		return d.intValue(); 
+	}
+	
+	/*
+	*This method queries data according to the passed parameters
+	***/
+	@RemoteAction
+	public static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param, String extraQueries, String extraVariables){
+  		System.Debug('***************Entered Autocomplete getData method');
+	   
+		List<AutoCompleteData> AutoCompleteDatas = new List<AutoCompleteData>();
+		param = String.escapeSingleQuotes(param);
+		
  		String extraSOQL = '';
  		integer cnt = 0;
  		
- 		if (extraQueries != null && extraVariables != null) {
- 					System.Debug('************extraQueries=' +extraQueries);
- 					System.Debug('************extraVariables=' +extraVariables);
-	        List<String> extraQueriesList = extraQueries.split(';');
-    	    List<String> extraVariablesList = extraVariables.split(';');
- 					System.Debug('************extraVariablesList=' +extraVariablesList);
- 					System.Debug('************extraQueriesList=' +extraQueriesList);
+ 		if (extraQueries != null && extraVariables != null && extraQueries != '' && extraVariables != '') {
+			List<String> extraQueriesList = extraQueries.split(';');
+			List<String> extraVariablesList = extraVariables.split(';');
  			for (String extraQuery : extraQueriesList) {
 				Set<Id> accountIds;
- 				if (extraQuery.contains('IN') )			{
+ 				if (extraQuery.contains('IN') )	{
  					List<String> stringIds = new List<String>();
- 					System.Debug('************extraVariablesList[cnt]=' +extraVariablesList[cnt]);
- 					System.Debug('************String.isNotBlank(extraVariablesList[cnt])=' +String.isNotBlank(extraVariablesList[cnt]));
- 					
  					if (String.isNotBlank(extraVariablesList[cnt]))
  						stringIds = extraVariablesList[cnt].split(',');
  	 				extraSOQL = ' AND ' +extraQuery + 'stringIds';
@@ -126,23 +120,23 @@ public class AutoCompleteV2_Con {
  			}
  		}
  		System.Debug('***************query=' +'SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+labelFieldVar+' LIKE \'%'+param+'%\'' +extraSOQL);
-        for( Sobject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+labelFieldVar+' LIKE \'%'+param+'%\'' +extraSOQL)){
-            AutoCompleteDatas.add(new AutoCompleteData(sObj.get(valueFieldVar),sObj.get(labelFieldVar)));
-        }
-        
-        return AutoCompleteDatas;
-        
-    }
-    
-    public class AutoCompleteData{
-        public String id;
-        public String text;
-        
-        public AutoCompleteData(Object id, Object text){
-            this.id = String.valueOf(id);
-            this.text = String.valueOf(text);
-        }
-    }
+		for( Sobject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+sObjVal+' WHERE '+labelFieldVar+' LIKE \'%'+param+'%\'' +extraSOQL)){
+			AutoCompleteDatas.add(new AutoCompleteData(sObj.get(valueFieldVar),sObj.get(labelFieldVar)));
+		}
+		
+		return AutoCompleteDatas;
+		
+	}
+	
+	public class AutoCompleteData{
+		public String id;
+		public String text;
+		
+		public AutoCompleteData(Object id, Object text){
+			this.id = String.valueOf(id);
+			this.text = String.valueOf(text);
+		}
+	}
 
-    
+	
 }
