@@ -81,7 +81,7 @@ private class RMS_prodConfigManagerTest {
 		insert product2;
 
 
-		Opportunity opp1 = utility.createOpportunity(account1.id, 'Closed - Won');
+		Opportunity opp1 = utility.createOpportunity(dwelling.id, 'Closed - Won');
 		insert opp1;
 		
 		PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product2.id);		
