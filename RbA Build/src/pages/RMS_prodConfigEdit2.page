@@ -901,7 +901,7 @@
 		</apex:pageBlockSection>
 
 
-        <apex:pageBlockSection title="Order Information" columns="3">
+        <apex:pageBlockSection title="Order Information" columns="6">
 
 			<!--------    Row 1 Labels --------->
 			<apex:pageBlockSectionItem >
@@ -912,6 +912,12 @@
 			</apex:pageBlockSectionItem>
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
 			</apex:pageBlockSectionItem>
 
 			<!--------    Row 1 Fields --------->
@@ -927,6 +933,13 @@
             	<apex:inputField value="{!OrderItem.Variant_Number__c}"  rendered="{!prodConfig.mpc != null}"/>
 			</apex:pageBlockSectionItem>
 
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
 			<!--------    Row 2 Labels --------->
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 1"></apex:outputLabel>
@@ -936,6 +949,12 @@
 			</apex:pageBlockSectionItem>
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 1"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
 			</apex:pageBlockSectionItem>
 
 			<!--------    Row 2 Fields --------->
@@ -951,6 +970,13 @@
             	<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null}"/>
 			</apex:pageBlockSectionItem>
 
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
 			<!--------    Row 3 Labels --------->
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 3"></apex:outputLabel>
@@ -960,6 +986,13 @@
 			</apex:pageBlockSectionItem>
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 3"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
 			</apex:pageBlockSectionItem>
 
 			<!--------    Row 3 Fields --------->
@@ -974,6 +1007,13 @@
             	<apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}"  required="{!prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled' && prodConfig.mpc != null}"/>
 			</apex:pageBlockSectionItem>
 
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+
 			<!--------    Row 4 Labels --------->
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 4"></apex:outputLabel>
@@ -983,6 +1023,13 @@
 			</apex:pageBlockSectionItem>
 			<apex:pageBlockSectionItem >
 				<apex:outputLabel value="Label 4"></apex:outputLabel>
+			</apex:pageBlockSectionItem>
+
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
 			</apex:pageBlockSectionItem>
 
 			<!--------    Row 4 Fields --------->
@@ -996,161 +1043,14 @@
 			<apex:pageBlockSectionItem >
 			</apex:pageBlockSectionItem>
 
-        </apex:pageBlockSection>
-jjj
-<!--  
-        <apex:pageBlockSection title="Enter Measurements" columns="4" rendered="{!prodConfig.mpc != null}">
-        <apex:pageBlockSectionItem >    
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-            <apex:outputField value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesOutputWidth"/> 
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-            <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-            <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-         </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-            <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
-         </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >    
-        </apex:pageBlockSectionItem>
-
-        </apex:pageBlockSection>  
-
-        <apex:pageBlockSection title="Frame Options" columns="6" rendered="{!prodConfig.mpc != null}">
-       </apex:pageBlockSection>
-
-        <apex:tabPanel switchType="client" selectedTab="AllSashesW" id="sashPanelW" rendered="{!(prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}">
-            <apex:tab label="{!sashTabName}" name="sash1w" id="sash1w" >
-                <apex:pageBlockSection title="Glazing" columns="1">
-                    <apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Glass__c}" label="Apply to All" id="applyToAllGlass" html-data-jsid="applyToAllGlass" onChange="callRule('applyToAllGlassCheck')" />
-                </apex:pageBlockSection>
-            </apex:tab>
-            <apex:tab label="Sash 2" name="sash2w" id="sash2w">
-                <apex:pageBlockSection title="Glazing" columns="1">
-                </apex:pageBlockSection>
-            </apex:tab>
-        </apex:tabPanel>
-  
-        <apex:pageBlockSection title="Glazing" columns="1" rendered="{!(prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3') && prodConfig.mpc != null}">
-        </apex:pageBlockSection>
-        <apex:pageBlockSection title="Screens" columns="2" rendered="{!prodConfig.mpc != null}">
-        </apex:pageBlockSection>
-
-        <apex:pageBlockSection title="Finishes" columns="2" rendered="{!prodConfig.mpc != null}">
-
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+			</apex:pageBlockSectionItem>
 
         </apex:pageBlockSection>
-        <apex:pageBlockSection title="Hardware" columns="6" rendered="{!prodConfig.mpc != null}">
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >
-
-        </apex:pageBlockSectionItem>
-
-        <apex:pageBlockSectionItem >
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >
-
-        </apex:pageBlockSectionItem>
-        <apex:pageBlockSectionItem >
-        </apex:pageBlockSectionItem>
-
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value="Label 1"></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-         <apex:pageBlockSectionItem >
-                    <apex:outputLabel value=""></apex:outputLabel>        
-         </apex:pageBlockSectionItem>
-
-
-        <apex:pageBlockSectionItem >
-         </apex:pageBlockSectionItem>
-       </apex:pageBlockSection>
-        <apex:pageBlockSection title="Grille Style" columns="2" rendered="{!prodConfig.mpc != null}">
-        </apex:pageBlockSection>
-
-        <apex:tabPanel switchType="client" selectedTab="AllSashesG" id="sashPanelG" rendered="{!(prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}" html-data-jsid="sashGrilleTabPanel" >
-            <apex:tab label="{!sashTabName}" name="sash1" id="sash1" rendered="true">
-                <apex:pageBlockSection title="Grille Pattern" columns="1">
-                <apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Grilles__c}" label="Apply to All" id="applyToAllGrilles" html-data-jsid="applyToAllGrilles" onChange="callRule('applyToAllGrillesCheck')" />
-              </apex:pageBlockSection>
-            </apex:tab>
-            <apex:tab label="Sash 2" name="sash2" id="sash2">
-                <apex:pageBlockSection title="Grille Pattern" columns="1">
-                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
-                        <apex:selectOptions value="{!grillePatternItems}"/>
-                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="colonialGrilleLightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide2">
-                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
-                  </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="colonialGrilleLightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh2">
-                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
-                   </apex:selectList>
-                       <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails2"/>
-              </apex:pageBlockSection>
-            </apex:tab>
-        </apex:tabPanel>
-        <apex:pageBlockSection title="Grille Pattern" columns="1" rendered="{!(prodConfig.mpc.Number_of_Sashes__c != '2' && prodConfig.mpc.Number_of_Sashes__c != '3') && prodConfig.mpc != null}" html-data-jsid="GrillePatternSection">
-            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern" size="1" id="grillePattern0" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern0" onChange="callRule('grillePattern0')">
-               <apex:selectOptions value="{!grillePatternItems}"/>
-                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S1__c}" label="Grille Lites Wide" size="1" id="colonialGrilleLightsWide0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide0">
-                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
-                  </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S1__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh0" >
-                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
-                   </apex:selectList>
-                       <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" cols="50" rows="5" id="customGrilleDetails0" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails0" />
-         </apex:pageBlockSection>
-
-        <apex:pageBlockSection title="Trim & Casing" columns="2" rendered="{!prodConfig.mpc != null}">
-
-
-        </apex:pageBlockSection>
-        <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2" rendered="{!prodConfig.mpc != null}">
-
-        </apex:pageBlockSection>
-
-        <apex:pageBlockSection title="Storm Windows" columns="2" rendered="{!prodConfig.mpc != null}">
-
-        </apex:pageBlockSection>
-
-        <apex:pageBlockSection id="jobCostDetailsSection" title="Additional Job Cost Details" columns="2" collapsible="true" rendered="{!prodConfig.mpc != null}">
-        </apex:pageBlockSection>-->
-
-   
-
 
     </apex:pageBlock>
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
