@@ -34,19 +34,6 @@
         <fullName>IsActive</fullName>
     </fields>
     <fields>
-        <fullName>Misc_Pricing_Config__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The pricing configuration for stock, non-stock and miscellaneous unit and job charges</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The pricing configuration for stock, non-stock and miscellaneous unit and job charges</inlineHelpText>
-        <label>Misc Pricing Config</label>
-        <referenceTo>Misc_Pricing_Config__c</referenceTo>
-        <relationshipLabel>Price Book Entries</relationshipLabel>
-        <relationshipName>Price_Book_Entries</relationshipName>
-        <required>false</required>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Pricebook2Id</fullName>
         <type>Lookup</type>
     </fields>
