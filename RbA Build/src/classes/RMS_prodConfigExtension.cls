@@ -396,27 +396,27 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Colonial Grille Lights Wide Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLitesWideItems;
-	public List<SelectOption> colonialGrilleLitesWideItems{
+	/******* Grille Lights Wide Items Items  *****************/
+	private static transient List<SelectOption> lLitesWideItems;
+	public List<SelectOption> litesWideItems{
 		get
 		{   
-			if (lColonialGrilleLitesWideItems== null) {
-				lColonialGrilleLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_Wide__c);
+			if (lLitesWideItems== null) {
+				lLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_Wide__c);
 			}			   
-			return lColonialGrilleLitesWideItems;
+			return lLitesWideItems;
 		}
 	}
 
-	/******* Colonial Grille Lights High Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLitesHighItems;
-	public List<SelectOption> colonialGrilleLitesHighItems{
+	/******* Grille Lights High Items Items  *****************/
+	private static transient List<SelectOption> lLitesHighItems;
+	public List<SelectOption> litesHighItems{
 		get
 		{   
-			if (lColonialGrilleLitesHighItems== null) {
-				lColonialGrilleLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_High__c);
+			if (lLitesHighItems== null) {
+				lLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_High__c);
 			}			   
-			return lColonialGrilleLitesHighItems;
+			return lLitesHighItems;
 		}
 	}
 
@@ -1032,12 +1032,12 @@ public class RMS_prodConfigExtension {
 			oI.Grille_Pattern_S3__c = null;
 		}
 		if(newProdConfig.Grille_Lites_Control__c == 'Disabled') {
-			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
-			oI.Colonial_Grille_Lites_High_S1__c = null;	
-			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
-			oI.Colonial_Grille_Lites_High_S2__c = null;	
-			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
-			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Lites_Wide_S1__c = null;	
+			oI.Lites_High_S1__c = null;	
+			oI.Lites_Wide_S2__c = null;	
+			oI.Lites_High_S2__c = null;	
+			oI.Lites_Wide_S3__c = null;	
+			oI.Lites_High_S3__c = null;	
 		}
 		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled') {
 			oI.Custom_Grille_Details_S1__c	= null;
@@ -1063,8 +1063,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == null){
 			oI.Grille_Pattern_S1__c = null;
-			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
-			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Lites_Wide_S1__c = null;	
+			oI.Lites_High_S1__c = null;	
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Glazing_S1__c = null;	
 			oI.Glass_Pattern_S1__c = null; 
@@ -1073,8 +1073,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1'){
 			oI.Grille_Pattern_S2__c = null;
-			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
-			oI.Colonial_Grille_Lites_High_S2__c = null;	
+			oI.Lites_Wide_S2__c = null;	
+			oI.Lites_High_S2__c = null;	
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Glazing_S2__c = null;	
 			oI.Glass_Pattern_S2__c = null; 
@@ -1083,8 +1083,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = 1 or 2, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2'){
 			oI.Grille_Pattern_S3__c = null;
-			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
-			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Lites_Wide_S3__c = null;	
+			oI.Lites_High_S3__c = null;	
 			oI.Custom_Grille_Details_S3__c	= null;
 			oI.Glazing_S3__c = null;	
 			oI.Glass_Pattern_S3__c = null; 

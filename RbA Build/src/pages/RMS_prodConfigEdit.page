@@ -293,11 +293,11 @@
                     <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern {!sashFieldName}" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')">
                         <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="colonialGrilleLightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide1" onChange="callRule('applyToAllGrillesCheck')">
-                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsWide1" onChange="callRule('applyToAllGrillesCheck')">
+                        <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="colonialGrilleLightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh1" onChange="callRule('applyToAllGrillesCheck')">
-                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsHigh1" onChange="callRule('applyToAllGrillesCheck')">
+                        <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
                    <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details {!sashFieldName}" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails1" onChange="callRule('applyToAllGrillesCheck')"/>
                 <apex:inputField value="{!OrderItem.Apply_to_All_Sashes_Grilles__c}" label="Apply to All" id="applyToAllGrilles" html-data-jsid="applyToAllGrilles" onChange="callRule('applyToAllGrillesCheck')" />
@@ -308,11 +308,11 @@
                     <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
                         <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="colonialGrilleLightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide2">
-                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsWide2">
+                        <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="colonialGrilleLightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh2">
-                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsHigh2">
+                        <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
                        <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails2"/>
               </apex:pageBlockSection>
@@ -322,11 +322,11 @@
             <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern" size="1" id="grillePattern0" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Pattern_Control__c != 'Disabled'}" html-data-jsid="grillePattern0" onChange="callRule('grillePattern0')">
                <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_Wide_S1__c}" label="Grille Lites Wide" size="1" id="colonialGrilleLightsWide0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsWide0">
-                        <apex:selectOptions value="{!colonialGrilleLitesWideItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide" size="1" id="lightsWide0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsWide0">
+                        <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Colonial_Grille_Lites_High_S1__c}" label="Grille Lites High" size="1" id="colonialGrilleLightsHigh0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="colonialGrilleLightsHigh0" >
-                        <apex:selectOptions value="{!colonialGrilleLitesHighItems}"/>
+                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High" size="1" id="lightsHigh0"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Grille_Lites_Control__c != 'Disabled'}" html-data-jsid="lightsHigh0" >
+                        <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
                        <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" cols="50" rows="5" id="customGrilleDetails0" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'}" html-data-jsid="customGrilleDetails0" />
          </apex:pageBlockSection>
@@ -642,18 +642,18 @@
 		  }
 
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
-            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").show();
-			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").show();
-            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").show();
-			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").show();
+            j$("select[data-jsid=lightsWide" +sashnumber +"]").show();
+			j$("label[for='"+j$("select[data-jsid=lightsWide" +sashnumber +"]").attr("id")+"']").show();
+            j$("select[data-jsid=lightsHigh" +sashnumber +"]").show();
+			j$("label[for='"+j$("select[data-jsid=lightsHigh" +sashnumber +"]").attr("id")+"']").show();
         }else{
-            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").val(null);
-            j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").hide();
-			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsWide" +sashnumber +"]").attr("id")+"']").hide();
+            j$("select[data-jsid=lightsWide" +sashnumber +"]").val(null);
+            j$("select[data-jsid=lightsWide" +sashnumber +"]").hide();
+			j$("label[for='"+j$("select[data-jsid=lightsWide" +sashnumber +"]").attr("id")+"']").hide();
 
-            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").val(null);
-            j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").hide();
-			j$("label[for='"+j$("select[data-jsid=colonialGrilleLightsHigh" +sashnumber +"]").attr("id")+"']").hide();
+            j$("select[data-jsid=lightsHigh" +sashnumber +"]").val(null);
+            j$("select[data-jsid=lightsHigh" +sashnumber +"]").hide();
+			j$("label[for='"+j$("select[data-jsid=lightsHigh" +sashnumber +"]").attr("id")+"']").hide();
         }
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Custom'){
             j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").show();
@@ -675,12 +675,12 @@
 
     function applyToAllGrilles(){
    		var grillePattern1 = j$("select[data-jsid='grillePattern1']").val();
-   		var colonialGrilleLightsWide1 = j$("select[data-jsid='colonialGrilleLightsWide1']").val();
-   		var colonialGrilleLightsHigh1 = j$("select[data-jsid='colonialGrilleLightsHigh1']").val();
+   		var lightsWide1 = j$("select[data-jsid='lightsWide1']").val();
+   		var lightsHigh1 = j$("select[data-jsid='lightsHigh1']").val();
    		var customGrilleDetails1 = j$("textarea[data-jsid='customGrilleDetails1']").val();
            j$("select[data-jsid='grillePattern2']").val(grillePattern1);
-           j$("select[data-jsid='colonialGrilleLightsWide2']").val(colonialGrilleLightsWide1);
-           j$("select[data-jsid='colonialGrilleLightsHigh2']").val(colonialGrilleLightsHigh1);
+           j$("select[data-jsid='lightsWide2']").val(lightsWide1);
+           j$("select[data-jsid='lightsHigh2']").val(lightsHigh1);
            j$("textarea[data-jsid='customGrilleDetails2']").val(customGrilleDetails1);
        	grillePattern(2);
 	}    

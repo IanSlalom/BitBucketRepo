@@ -196,8 +196,8 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Glass_Pattern__c = 'GP1; GP2';
 		prodConfig.Grille_Style__c = 'GS1; GS2';
 		prodConfig.Grille_Patterns__c = 'GP1; GP2';
-		prodConfig.Colonial_Grille_Lites_Wide__c = '1; 2';
-		prodConfig.Colonial_Grille_Lites_High__c = '1; 2';
+		prodConfig.Lites_Wide__c = '1; 2';
+		prodConfig.Lites_High__c = '1; 2';
 		prodConfig.Exterior_Trim__c = '1; 2';
 		prodConfig.Frame_Type__c = 'FT1; FT2';
 		prodConfig.Checkrail_Style__c = 'CR1; CR2';
@@ -280,12 +280,12 @@ private class RMS_prodConfigExtensionTest {
 		System.AssertEquals(3, grillePattItems.size());
 
 		// Verify the grille lites wide picklist items
-		List<SelectOption> colonialGriLitesWideItems = ext.colonialGrilleLitesWideItems;
-		System.AssertEquals(3, colonialGriLitesWideItems.size());
+		List<SelectOption> litesWideItems = ext.litesWideItems;
+		System.AssertEquals(3, litesWideItems.size());
 
 		// Verify the grille lites high picklist items
-		List<SelectOption> colonialGriLitesHighItems = ext.colonialGrilleLitesHighItems;
-		System.AssertEquals(3, colonialGriLitesHighItems.size());
+		List<SelectOption> litesHighItems = ext.litesHighItems;
+		System.AssertEquals(3, litesHighItems.size());
 
 		// Verify the exterior trim picklist items
 		List<SelectOption> exteriorTrmItems = ext.exteriorTrimItems;
