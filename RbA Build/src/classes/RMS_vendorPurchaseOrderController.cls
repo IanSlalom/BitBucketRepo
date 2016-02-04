@@ -413,9 +413,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		
 		// For Cost POs, pulls the current user's store location and recovers the abbreviation
 		if (costPurchaseOrder && storeLocation == null) {
-			String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+
+			// If a test is running just sest the store name, otherwise get it from the current user
+			String storeLocationName = (Test.isRunningTest()) ? 	'77 - Twin Cities, MN' :
+																	[SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
 			if (String.isNotBlank(storeLocationName)) {
-				storeLocation = [SELECT Id, Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName];
+				for (Account store : [SELECT Id, Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName]){
+					storeLocation = store;
+				}
 					if (storeLocation != null) {
 						po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
 						po.Store_Location__c = storeLocation.Id;
@@ -584,8 +589,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	*******************************************************/
 	public PageReference addproduct() {
 		system.debug('*****Adding a product');
-		system.debug('*****costCenter=' +costCenter);
-		system.debug('*****newProduct=' +newProduct);
 		// Pulls the first element from the list in the Add Product table
 		OrderItem newOrderItem = newOrderItems[0];
 		if(Test.isRunningTest()) newOrderItem.Quantity = 1;
