@@ -530,74 +530,6 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
-        <fullName>Colonial_Grille_Lites_High__c</fullName>
-        <description>Select the number of colonial grille lites high that should be made available for selection in the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select the number of colonial grille lites high that should be made available for selection in the product configuration page.</inlineHelpText>
-        <label>Colonial Grille Lites High</label>
-        <picklist>
-            <picklistValues>
-                <fullName>1</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>2</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>5</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Colonial_Grille_Lites_Wide__c</fullName>
-        <description>Select the number of colonial grille lites wide that should be made available for selection in the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select the number of colonial grille lites wide that should be made available for selection in the product configuration page.</inlineHelpText>
-        <label>Colonial Grille Lites Wide</label>
-        <picklist>
-            <picklistValues>
-                <fullName>1</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>2</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>5</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
         <fullName>Corrosion_Resistant_Control__c</fullName>
         <description>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -1802,6 +1734,93 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Hardware_Finish_Color_Control__c</fullName>
+        <description>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Controls whether Hardware Finish/Color is required, enabled, or disabled for this product configuration.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>Select the hardware finish/color that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the hardware finish/color that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Hardware Finish/Color</label>
+        <picklist>
+            <picklistValues>
+                <fullName>White</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canvas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dark Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bright Brass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Antique Brass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Polished Chrome</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brushed Chrome</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Oil Rubbed Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Distressed Bronze</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Distressed Nickel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Satin Nickel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Hardware_Finish_Control__c</fullName>
         <description>Controls whether Hardware Finish is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -2910,6 +2929,90 @@
             </picklistValues>
             <picklistValues>
                 <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Lites_High__c</fullName>
+        <description>Select the number of grille lites high that should be made available for selection in the product configuration page</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of  grille lites high that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Lites High</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide__c</fullName>
+        <description>Select the number of grille lites wide that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Lites Wide</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>

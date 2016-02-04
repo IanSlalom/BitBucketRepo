@@ -128,6 +128,7 @@
         <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Finance_Program__c</members>
         <members>Store_Vendor__c</members>
         <members>User</members>
         <members>Vendor_Product__c</members>
@@ -221,6 +222,7 @@
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>

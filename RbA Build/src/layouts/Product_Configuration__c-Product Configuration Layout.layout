@@ -460,14 +460,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_Wide__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_High__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Lites_Wide__c</field>
             </layoutItems>
             <layoutItems>
