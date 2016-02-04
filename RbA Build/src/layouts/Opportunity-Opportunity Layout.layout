@@ -40,15 +40,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Discount_Amount__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
                 <field>Total__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Amount_Financed__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -178,16 +170,6 @@
         <relatedList>RelatedLineItemList</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Discount__c.NAME</fields>
-        <fields>Discount__c.Promotion_Start__c</fields>
-        <fields>Discount__c.Promotion_End__c</fields>
-        <fields>Discount__c.Active__c</fields>
-        <fields>Discount_Amount__c</fields>
-        <fields>Discount__c.Description__c</fields>
-        <relatedList>Opportunity_Discount__c.Opportunity__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>QUOTE.QUOTENUMBER</fields>
         <fields>QUOTE.NAME</fields>
         <fields>Date__c</fields>
@@ -241,10 +223,6 @@
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedOpportunityHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Opportunity_Financing__c.Related_Opportunity__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

@@ -30,10 +30,6 @@
                 <behavior>Edit</behavior>
                 <field>Pricing_Configuration__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Misc_Pricing_Config__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

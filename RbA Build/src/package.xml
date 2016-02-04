@@ -102,13 +102,10 @@
         <members>Financial_Transaction__c</members>
         <members>Journal_Entry__c</members>
         <members>Labor__c</members>
-        <members>Misc_Pricing_Config__c</members>
         <members>Municipality_Contact__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Opportunity</members>
-        <members>Opportunity_Discount__c</members>
-        <members>Opportunity_Financing__c</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Code_Lookup__c</members>
@@ -131,6 +128,7 @@
         <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Finance_Program__c</members>
         <members>Store_Vendor__c</members>
         <members>User</members>
         <members>Vendor_Product__c</members>
@@ -142,7 +140,6 @@
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
-        <members>Misc_Pricing_Config__c</members>
         <members>Municipality__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
@@ -179,7 +176,6 @@
         <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Labor__c-Labor Layout</members>
         <members>Labor__c-Misc Reimbursement Layout</members>
-        <members>Misc_Pricing_Config__c-Misc Pricing Config Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -188,8 +184,6 @@
         <members>Municipality__c-Permit Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
-        <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
-        <members>Opportunity_Financing__c-Opportunity Financing Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
@@ -200,6 +194,7 @@
         <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
+        <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
@@ -227,6 +222,7 @@
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>

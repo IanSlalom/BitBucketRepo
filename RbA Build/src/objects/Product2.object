@@ -103,18 +103,6 @@
                 <fullName>Awning Windows</fullName>
                 <default>false</default>
             </picklistValues>
-            <picklistValues>
-                <fullName>Material</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Trim</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Lumber</fullName>
-                <default>false</default>
-            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>
@@ -266,6 +254,68 @@ NULL)</formula>
             </picklistValues>
             <picklistValues>
                 <fullName>Entry Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Report_Grouping__c</fullName>
+        <externalId>false</externalId>
+        <label>Report Grouping</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AW Patio Doors</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Door Component</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>CoE AW Patio Doors</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Storm Door Accessory</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brass Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Door Side Light</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Door Transom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Window</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -663,176 +713,21 @@ NULL)</formula>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>SVMXC__Product_Line__c</picklist>
+            <picklist>Report_Grouping__c</picklist>
             <values>
-                <fullName>Accessory</fullName>
+                <fullName>AW Patio Doors</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Desktop</fullName>
+                <fullName>Brass Hardware</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Laptop</fullName>
+                <fullName>CoE AW Patio Doors</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Network</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Server</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Software</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Solution</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Storage</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>SVMXC__Product_Type__c</picklist>
-            <values>
-                <fullName>Consumable</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Wearable</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>SVMXC__Tracking__c</picklist>
-            <values>
-                <fullName>Lot%2FBatch Tracked</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Non-Tracked</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Serialized</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>SVMXC__Unit_Of_Measure__c</picklist>
-            <values>
-                <fullName>Box</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Dozen</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Each</fullName>
-                <default>true</default>
-            </values>
-            <values>
-                <fullName>Gallon</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Kilogram</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Liter</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pounds</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Ton</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Units__c</picklist>
-            <values>
-                <fullName>Bag</fullName>
-                <default>true</default>
-            </values>
-            <values>
-                <fullName>Box</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Can</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Each</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Foot</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Roll</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Tube</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <recordTypes>
-        <fullName>Construction_Materials</fullName>
-        <active>true</active>
-        <description>Stock and Non Stock Construction Materials</description>
-        <label>Construction Materials</label>
-        <picklistValues>
-            <picklist>Color__c</picklist>
-            <values>
-                <fullName>Beige</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>White</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Yellow</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Family</picklist>
-            <values>
-                <fullName>Lumber</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Material</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Trim</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Product_Type__c</picklist>
-            <values>
-                <fullName>Bay Bow</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Door</fullName>
+                <fullName>Door Component</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -840,15 +735,35 @@ NULL)</formula>
                 <default>false</default>
             </values>
             <values>
-                <fullName>FF</fullName>
+                <fullName>Entry Door Side Light</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>IF</fullName>
+                <fullName>Entry Door Transom</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Series2</fullName>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -952,7 +867,7 @@ NULL)</formula>
             <picklist>Units__c</picklist>
             <values>
                 <fullName>Bag</fullName>
-                <default>false</default>
+                <default>true</default>
             </values>
             <values>
                 <fullName>Box</fullName>
@@ -1034,6 +949,61 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Report_Grouping__c</picklist>
+            <values>
+                <fullName>AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Brass Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>CoE AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door Component</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Side Light</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Transom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -1216,6 +1186,61 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Report_Grouping__c</picklist>
+            <values>
+                <fullName>AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Brass Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>CoE AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door Component</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Side Light</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Transom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -1410,6 +1435,61 @@ NULL)</formula>
             </values>
             <values>
                 <fullName>Series2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Report_Grouping__c</picklist>
+            <values>
+                <fullName>AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Brass Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>CoE AW Patio Doors</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door Component</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Side Light</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Transom</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Software</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm Door Accessory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

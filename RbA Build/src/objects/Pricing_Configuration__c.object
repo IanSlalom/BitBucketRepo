@@ -346,6 +346,40 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Forms_Displayed_On__c</fullName>
+        <description>List of forms that this pricing line item will display on. Used by the mobile applications - could also be used internally for Miscellaneous Job and Unit Charges</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Pick the forms this pricing line item will display on</inlineHelpText>
+        <label>Forms Displayed On</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paint &amp; Stain Production Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
         <fullName>Full_Divided_Light__c</fullName>
         <description>Grille Style Options: Add for full divided light (FDL) -- price per Sash</description>
         <externalId>false</externalId>
@@ -539,6 +573,30 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Quantity_Formula_Description__c</fullName>
+        <description>Descriptive text that explains how the quantity for the Miscellaneous Job and Unit Charge is calculated</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Descriptive text that explains how the quantity for the Miscellaneous Job and Unit Charge is calculated</inlineHelpText>
+        <label>Quantity Formula Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Formula__c</fullName>
+        <description>The formula for calculating the quantity for this Miscellaneous Job and Unit Charge</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The formula for calculating the quantity for this Miscellaneous Job and Unit Charge</inlineHelpText>
+        <label>Quantity Formula</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Screen_Special_Color_Combination__c</fullName>
         <description>Insect Screen Options: Add for special color combination</description>
         <externalId>false</externalId>
@@ -693,6 +751,65 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Pricing Configurations</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Misc_Job_and_Unit_Charges</fullName>
+        <active>true</active>
+        <description>Pricing configuration for Miscellaneous Job and Unit Charges</description>
+        <label>Misc Job and Unit Charges</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Product_Pricing_Configuration</fullName>
+        <active>true</active>
+        <description>Pricing Configuration for Window and Door products</description>
+        <label>Product Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

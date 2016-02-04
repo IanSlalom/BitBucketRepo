@@ -460,11 +460,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_Wide__c</field>
+                <field>Lites_Wide__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Colonial_Grille_Lites_High__c</field>
+                <field>Lites_High__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -933,7 +933,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000RI7h</masterLabel>
+        <masterLabel>00h3B000000Muu6</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

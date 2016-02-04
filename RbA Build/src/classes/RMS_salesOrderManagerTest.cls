@@ -70,13 +70,6 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
@@ -229,13 +222,6 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
@@ -305,13 +291,6 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
