@@ -33,7 +33,7 @@ public with sharing class RMS_MunicipalityMatchManager {
         
         //FOR LOOP TO REMOVE NON-DWELLING RECORD TYPE AND NULL ZIP CODE OR CITY BY ADDING TO NEW LIST
         for(Account acct : listNew){
-        	if(acct.RecordTypeId == dwellingAccountRecordType && acct.BillingPostalCode != null && acct.BillingCity != null){
+        	if(acct.RecordTypeId == dwellingAccountRecordType && acct.ShippingPostalCode != null && acct.ShippingCity != null){
         		storeLocationIds.add(acct.Store_Location__c);
         		dwellingList.add(acct);
         	}
@@ -79,7 +79,7 @@ public with sharing class RMS_MunicipalityMatchManager {
 	        		list<Municipality_Match__c> relatedMatches = storeIDtoListOfMatchMap.get(dwelling.Store_Location__c);
 	        		
 	        		for(Municipality_Match__c mm : relatedMatches){
-	        			if(	mm.Zip_Code__c == dwelling.BillingPostalCode && mm.City_Township__c.toUpperCase() == dwelling.BillingCity.toUpperCase()){
+	        			if(	mm.Zip_Code__c == dwelling.ShippingPostalCode && mm.City_Township__c.toUpperCase() == dwelling.ShippingCity.toUpperCase()){
 	        				
 	        				//IF MATCHED ZIP&CITY THEN ASSIGN BUILDING PERMIT MUNICIPALITY TO DWELLING AND BREAK LOOP
 	        				dwelling.Building_Permit__c = mm.Agency_Name__c;

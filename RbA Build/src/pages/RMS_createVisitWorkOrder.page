@@ -1,4 +1,4 @@
-<apex:page standardController="SVMXC__Service_Order__c" extensions="RMS_createWorkOrderController" docType="html-5.0">
+<apex:page standardController="RbA_Work_Order__c" extensions="RMS_createWorkOrderController" docType="html-5.0">
 	
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
@@ -15,7 +15,7 @@
 				
 
 			<apex:pageBlockSection title="Select a type" columns="1"  > 
-				<apex:inputField value="{!SVMXC__Service_Order__c.SVMXC__Order_Type__c}" />
+				<apex:inputField value="{!RbA_Work_Order__c.Order_Type__c}" />
 			</apex:pageBlockSection> 
 		</apex:pageBlock>
 	</apex:form>
@@ -36,7 +36,7 @@
 			sforce.console.getEnclosingTabId		( function( result ) { subTabId	 = result.id; } );
 
 			//  set the title of this subtab
-			sforce.console.setTabTitle( '{!SVMXC__Service_Order__c.Id}' ? '* {!SVMXC__Service_Order__c.Name}' : 'New Work Order' );
+			sforce.console.setTabTitle( '{!RbA_Work_Order__c.Id}' ? '* {!RbA_Work_Order__c.Name}' : 'New Work Order' );
 			console.log(subTabId);
 		};
 		

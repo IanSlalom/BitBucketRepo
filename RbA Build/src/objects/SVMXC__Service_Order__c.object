@@ -63,7 +63,7 @@
         <externalId>false</externalId>
         <formula>IF(
 ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Signed_Date__c, Sold_Order__r.Installation_Date__c  - Renovate_Right_Booklet_Signed_Date__c)</formula>
-        <inlineHelpText>Sold_Order__r.Installation_Date__c  - Renovate_Right_Booklet_Signed_Date__c</inlineHelpText>
+        <inlineHelpText>If Installation Date is Blank, default to Today - Rennovate Right Date otherwise use Installation Date.</inlineHelpText>
         <label>Age</label>
         <precision>18</precision>
         <required>false</required>

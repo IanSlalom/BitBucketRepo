@@ -597,6 +597,61 @@ public with sharing class RMS_financialTransactionManagerTest {
 	}
 	
 	
+	
+	static testmethod void positiveCreateDepositFinalPayment(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+		testMethods.setUpConfigs();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling1.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store1.Id,
+									Opportunity = opp1, 									
+									Status ='Draft',
+									BillToContactId = contact1.id, 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+		
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Final Payment',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Id paymentDepositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
+		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
+												Payment_Amount__c = 100,
+												Payment_Date__c = Date.Today(),
+												Account_Number__c = '12345',
+												Store_Location__c = store1.id,
+												RecordTypeId = paymentDepositRecordTypeId,
+												Payment_Type__c = 'Final Payment'
+												);
+		insert payment1;
+		payment1.Payment_Amount__c = 10;
+		update payment1;
+		delete payment1;
+	}
+	/* NEEDS COMMUNITIES ACTIVATED
 	static testmethod void positiveCreateAndEditLaborLaborExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
@@ -629,8 +684,73 @@ public with sharing class RMS_financialTransactionManagerTest {
 								);
 		insert order1;
 		
-		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
-		SVMXC__Service_Order__c workOrder1 = new SVMXC__Service_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = order1.id 
+															                    );
+		insert workOrder1;
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Internal Labor',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
+		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
+												Hours_Applied__c = 1,
+												//Standard_Hourly_Rate__c=100,
+												External_Labor_Amount__c = 100,
+												Store_Location__c = store1.id,
+												Date_Applied__c = Date.Today()
+												);
+		insert labor1;
+		
+		labor1.Hours_Applied__c = 2;
+		
+		update labor1;
+		
+	}
+	*/
+	
+	static testmethod void positiveCreateAndEditLaborLaborInternal(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+		testMethods.setUpConfigs();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling1.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store1.Id,
+									Opportunity = opp1, 									
+									Status ='Draft',
+									BillToContactId = contact1.id, 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
 															                Sold_Order__c = order1.id 
 															                    );
 		insert workOrder1;
@@ -658,15 +778,222 @@ public with sharing class RMS_financialTransactionManagerTest {
 		labor1.Hours_Applied__c = 2;
 		
 		update labor1;
-		
+		delete labor1;
 	}
 
+	/* need communities
+	static testmethod void positiveCreateAndEditMiscReimbursementExternal(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+		testMethods.setUpConfigs();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling1.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store1.Id,
+									Opportunity = opp1, 									
+									Status ='Draft',
+									BillToContactId = contact1.id, 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = order1.id 
+															                    );
+		insert workOrder1;
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Misc Reimbursement',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Id laborMiscReimbursementRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Reimbursement', 'Labor__c');
+		
+		Account account1 = testMethods.createDwellingAccount('account1');
+		account1.Store_Location__c = store1.id;
+		account1.Baan_Business_Partner_Number__c = '12345';
+		insert account1;
+		
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+		User installer = testMethods.createUser(p.id);
+		installer.AccountId = account1.id;
+		insert installer;
+
+		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
+												Hours_Applied__c = 1,
+												RecordTypeId = laborMiscReimbursementRecordTypeId,
+												//Standard_Hourly_Rate__c=100,
+												External_Labor_Amount__c = 100,
+												Store_Location__c = store1.id,
+												Date_Applied__c = Date.Today(),
+												Installer__c = installer.id
+												);
+		insert labor1;
+		
+		labor1.Hours_Applied__c = 2;
+		
+		update labor1;
+		
+	}
+	
+	*/
+	
+
+	static testmethod void positiveCreateAsset(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+		testMethods.setUpConfigs();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling1.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store1.Id,
+									Opportunity = opp1, 									
+									Status ='Draft',
+									BillToContactId = contact1.id, 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = order1.id 
+															                    );
+		insert workOrder1;
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Received',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Id assetInstalledProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
+		
+		Account account1 = testMethods.createDwellingAccount('account1');
+		account1.Store_Location__c = store1.id;
+		account1.Baan_Business_Partner_Number__c = '12345';
+		insert account1;
+	
+		Asset asset1 = new Asset(	Unit_Wholesale_Cost__c = 100,
+									Quantity = 10,
+									Sold_Order__c = order1.id,
+									RecordTypeId = assetInstalledProductsRecordTypeId,
+									Store_Location__c = store1.id,
+									Name = 'asset1',
+									AccountId = dwelling1.id,
+									ContactId = contact1.id
+		);
+		
+
+		insert asset1;
+		
+		asset1.Quantity = 2;
+		
+		update asset1;
+		delete asset1;
+	}
 	
 	
-	
-	
-	
-	
+	static testmethod void positiveCreateAndEditOrder(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+		testMethods.setUpConfigs();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		Id orderCORORecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling1.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store1.Id,
+									Opportunity = opp1, 									
+									Status ='Draft',
+									BillToContactId = contact1.id, 
+									Pricebook2Id = Test.getStandardPricebookId(),
+									RecordTypeId = orderCORORecordTypeRecordTypeId,
+									Revenue_Recognized_Date__c = null
+								);
+		insert order1;
+		
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = order1.id 
+															                    );
+		insert workOrder1;
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Internal Labor',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		order1.Revenue_Recognized_Date__c = Date.Today();
+		update order1;
+		delete order1;
+	}
 	
 	
 	

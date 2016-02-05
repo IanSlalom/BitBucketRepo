@@ -113,13 +113,13 @@ public with sharing class RMS_mobileAppRequestHelper {
 		}
 
 		// get the work orders
-		List<SVMXC__Service_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Company__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from SVMXC__Service_Order__c where isDeleted = false and Id in :workOrderIdList];
+		List<RbA_Work_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Account__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from RbA_Work_Order__c where isDeleted = false and Id in :workOrderIdList];
 
 		// opportunity ids
 		// account ids
 		List<Id> opportunityIds = new List<Id>();
 		List<Id> accountIds = new List<Id>();
-		for (SVMXC__Service_Order__c wo : workOrderList) {
+		for (RbA_Work_Order__c wo : workOrderList) {
 			opportunityIds.add(wo.Sold_Order__r.OpportunityId);
 			accountIds.add(wo.Sold_Order__r.Opportunity.AccountId);
 		}
@@ -157,7 +157,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 			TechMeasureAppointment tma = new TechMeasureAppointment();
 			tma.event = e;
 			// find and assign the workOrder
-			for (SVMXC__Service_Order__c wo : workOrderList) {
+			for (RbA_Work_Order__c wo : workOrderList) {
 				if (wo.Id == e.WhatId) {
 					tma.workOrder = wo;
 					break;
@@ -467,12 +467,12 @@ public with sharing class RMS_mobileAppRequestHelper {
     		//update ord;
     		
     		
-    		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Schedule'];
+    		RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND Name = 'Schedule'];
     		//CREATE WORK ORDER (TECH MEASURE)
-    		SVMXC__Service_Order__c techWO = new SVMXC__Service_Order__c(
+    		RbA_Work_Order__c techWO = new RbA_Work_Order__c(
     			Sold_Order__c = ord.id,
     			RecordType = serviceOrderScheduleRecordType,
-    			SVMXC__Order_Type__c = 'Tech Measure',
+    			Order_Type__c = 'Tech Measure',
     			OwnerId = storeConfig[0].Tech_Measure_Work_Order_Queue_Id__c
     		);
     		 	
@@ -486,10 +486,10 @@ public with sharing class RMS_mobileAppRequestHelper {
     		
     		
     		//CREATE WORK ORDER (INSTALL)
-    		SVMXC__Service_Order__c installWO = new SVMXC__Service_Order__c(
+    		RbA_Work_Order__c installWO = new RbA_Work_Order__c(
     			Sold_Order__c = ord.id, 
     			RecordType =  serviceOrderScheduleRecordType,
-    			SVMXC__Order_Type__c = 'Install',
+    			Order_Type__c = 'Install',
     			OwnerId = storeConfig[0].Install_Work_Order_Queue_Id__c
     		);
     		insert installWO;
@@ -516,7 +516,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     
 	public class TechMeasureAppointment{
 		public Event event {get; set;}
-   		public SVMXC__Service_Order__c workOrder {get; set;}
+   		public RbA_Work_Order__c workOrder {get; set;}
    		public Account account {get; set;}
         public List<Contact> contactList {get; set;}
 		public OpportunityContainer opptyContainer {get; set;}

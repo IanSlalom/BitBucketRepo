@@ -42,36 +42,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public list<Account> vendorsOnOrder = new list<Account>();
 	public String newProduct { get; set; }
 	public String lineItemToCancel { get; set; }
-	public String lineItemToReceive { get; set; }
-	public Decimal quantityReceived { get; set; }
-	public Date dateReceived { get; set; }
 	public Id storeId { get; set; }
 	public String glAccount;
 	public String intercompanyAccount;
-	public String productAccountNumber;	 
-	public String costCenter {get; set;}	 
-	public String storeLocationNumber;
 	public String errorOccurred {get; set;}	 
-
-	/******* Set up Measurement Fraction Items  *****************/
-	private static transient List<SelectOption> lproductItems;
-
-	public  List<SelectOption> productItems {
-		get
-		{   
-		List<SelectOption> pickListItems = new List<SelectOption>();
-		pickListItems.add(new SelectOption('', '-- Select --'));
-		
-		for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c from Product2 WHERE Id IN: VendorProducts
-															AND IsActive = true  ] ) {
-			if ((costPurchaseOrder &&  p.Cost_PO__c) || (!costPurchaseOrder &&  p.Product_PO__c))													
-				pickListItems.add(new SelectOption(p.Id, p.Name));
-		}			   
-		return pickListItems;
-		} 
-		set;
-	}
-	public  List<SelectOption> costCenterItems { get; set; }	
 
 	// The selected vendor name string
 	public String selectedVendorName
@@ -167,60 +141,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
 		set;
 	}
-	public List<Account> accounts
-	{
-		get
-		{
-//			if ( accounts != null) return accounts;
-			accounts = new List<Account>();
-			for (Account a : [SELECT Id, Name from Account ]) {
-				accounts.add(a);
-			}
-			return accounts;
-		}
-		set;
-	}
-	
-	public List<Contact> contacts
-	{
-		get
-		{
-//			if ( contacts != null) return contacts;
-			contacts = new List<Contact>();
-			for (Contact a : [SELECT Id, AccountId, Name from Contact ]) {
-				contacts.add(a);
-			}
-			return contacts;
-		}
-		set;
-	}
-	
-	public List<Product2> products
-	{
-		get
-		{
-//			if ( accounts != null) return accounts;
-			products = new List<Product2>();
-			for (Product2 p : [SELECT Id, Name from Product2 ]) {
-				products.add(p);
-			}
-			return products;
-		}
-		set;
-	}
-	public List<Cost_Center__c> costCenters
-	{
-		get
-		{
-//			if ( contacts != null) return contacts;
-			costCenters = new List<Cost_Center__c>();
-			for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
-				costCenters.add(cc);
-			}
-			return costCenters;
-		}
-		set;
-	}
+
+
 	// SOQL Filters for the product autocomplete checklist
 	public String productQueries
 	{
@@ -230,8 +152,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			if (selectedVendor == null) return null;
 
 			// If this is a cost PO, only return non-inventoried items, otherwise return inventoried items
-			productQueries = (costPurchaseOrder) ? 	'Cost_PO__c = true ' :
-															'Product_PO__c = true ';
+			productQueries = (costPurchaseOrder) ? 	'Inventoried_Item__c = false ' :
+															'Inventoried_Item__c = true ';
 
 			// Only return active products with a particular vendor (see productFilter2)
 			productQueries += ' AND IsActive = true AND Vendor__c = ';
@@ -354,18 +276,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			relatedOrder = [SELECT Id, Name, Store_Location__r.Store_Abbreviation__c, Store_Location__c FROM Order WHERE Id = :orderId];
 			
 			storeLocation = relatedOrder.Store_Location__r;
-			storeLocationNumber = relatedOrder.Store_Location2__r.Active_Store_Configuration__r.Location_Number__c;
+
 			po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
 			po.Store_Location__c = storeLocation.Id;
 
 			//GET THE ORDER ITEMS
 			relatedOrderItems =[Select 	Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
 										Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
-										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c,
-										Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity_Received__c,
-										Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
-										Total_Retail_Price__c, Pricebookentry.Product2.Family,
-										Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId
+										Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c
 										FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
 		}
 
@@ -377,10 +295,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
 				orderItemIdToOrderItemMap.put(oi.id, oi);
 			}
-			System.Debug('**********************relatedProduct2IDList=' +relatedProduct2IDList);
-			System.Debug('**********************orderItemIdToOrderItemMap=' +orderItemIdToOrderItemMap);
 			relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
-			System.Debug('**********************relatedProducts=' +relatedProducts);
 				
 			//USING PRODUCTS GET LIST OF ALL VENDORS
 			for(Product2 p : relatedProducts){
@@ -415,11 +330,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		if (costPurchaseOrder && storeLocation == null) {
 			String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
 			if (String.isNotBlank(storeLocationName)) {
-				storeLocation = [SELECT Id, Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName];
+				storeLocation = [SELECT Id, Store_Abbreviation__c FROM Account WHERE Name =: storeLocationName];
 					if (storeLocation != null) {
 						po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
 						po.Store_Location__c = storeLocation.Id;
-						storeLocationNumber = storeLocation.Active_Store_Configuration__r.Location_Number__c;
 					}
 					else {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -528,11 +442,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 										UtilityMethods.retrieveRecordTypeId('Product_Purchase_Order','Purchase_Order__c');
 
 			// checks that the gl and intercompany accounts are available
-//			if (!costPurchaseOrder) {
-//				if (checkAccountNumbers(po.Store_Location__c))
-//					return null;
+			if (!costPurchaseOrder) {
+				if (checkAccountNumbers(po.Store_Location__c))
+					return null;
 			}								
-//		}
+		}
 		// check for received status errors
 		if (checkReceived())
 			return null;
@@ -559,15 +473,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
 			OrderItem oi = oiw.orderItem;
 			oi.Purchase_Order__c = po.id;
-//			oi.GL_Account__c = glAccount;
-//			oi.Intercompany_AP_Account__c = intercompanyAccount;
+			oi.GL_Account__c = glAccount;
+			oi.Intercompany_AP_Account__c = intercompanyAccount;
 			orderItemsToUpdateList.add(oi);
 		}
-		
 
 		try{
 			// upsert the order line items
-			orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
 			update orderItemsToUpdateList;
 		} catch (Exception e){
 			System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
@@ -584,8 +496,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	*******************************************************/
 	public PageReference addproduct() {
 		system.debug('*****Adding a product');
-		system.debug('*****costCenter=' +costCenter);
-		system.debug('*****newProduct=' +newProduct);
+		
 		// Pulls the first element from the list in the Add Product table
 		OrderItem newOrderItem = newOrderItems[0];
 		if(Test.isRunningTest()) newOrderItem.Quantity = 1;
@@ -602,21 +513,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// Set the order, purchase order, and pricebookentry fields
 		newOrderItem.OrderId = orderId;
 		newOrderItem.Purchase_Order__c = po.id;
-		for (PricebookEntry pbe : [SELECT Id, Product2.Account_Number__r.Name FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
+		for (PricebookEntry pbe : [SELECT Id FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
 			newOrderItem.PricebookEntryId = pbe.Id; 
-			productAccountNumber = pbe.Product2.Account_Number__r.Name;
 		}
 
 		// checks that the gl and intercompany accounts are available
-//		if (!costPurchaseOrder) {
-//			if (checkAccountNumbers(po.Store_Location__c))
-//				return null;
-//		}
-		glAccount = productAccountNumber + storeLocationNumber + costCenter;
+		if (!costPurchaseOrder) {
+			if (checkAccountNumbers(po.Store_Location__c))
+				return null;
+		}
 
-		System.Debug('*************glAccount=' +glAccount);
 		newOrderItem.GL_Account__c = glAccount;
-//		newOrderItem.Intercompany_AP_Account__c = intercompanyAccount;
+		newOrderItem.Intercompany_AP_Account__c = intercompanyAccount;
 
 		// If the pricebookentry cannot be found - add an error and return null
 		if(newOrderItem.PricebookEntryId == null){
@@ -657,78 +565,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
 		pageRef.setRedirect(true);
 		return pageRef;
-
-	}
-
-	public void updateCostCenters() {
-		System.Debug('***************newProduct=' +newProduct);
-		List<SelectOption> pickListItems = new List<SelectOption>();
-		pickListItems.add(new SelectOption('', '-- Select --'));
-
-		for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name, Cost_Center__r.Account_Label__c  from Cost_Center__c WHERE Product__c =: newProduct ]) {
-			costCenters.add(cc);
-			string label = (cc.Cost_Center__r.Account_Label__c == null) ? '' : cc.Cost_Center__r.Account_Label__c;
-			pickListItems.add(new SelectOption(cc.Cost_Center__r.Name, cc.Cost_Center__r.Name + ' - ' + label));
-		}
-		
-		costCenterItems =  pickListItems;
-	}
-	/*******************************************************
-					receiveLineItems method
-	*******************************************************/
-	public List<OrderItem> receiveLineItems(List<OrderItem> itemsToReceive) {
-		system.debug('*****Receiving a line item');
-
-		Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
-		List<Asset> finalAssetsToReceive = new List<Asset>();
-		List<OrderItem> finalOrderItems = new List<OrderItem>();
-		for (OrderItem oi : itemsToReceive) {
-			// If the date or quantity received is null just add the order ite
-			if (oi.Date_Received__c == null || oi.Quantity_To_Receive__c == null) {
-				finalOrderItems.add(oi);
-				continue;
-			}
-
-			Asset productAsset = (oi.Installed_Product_Asset__c != null) ? oi.Installed_Product_Asset__r	:
-										new Asset(
-											Quantity 			= oi.Quantity,
-											AccountId			= oi.Order.AccountId,
-											ContactId			= oi.Order.BillToContactId,
-											SerialNumber		= oi.Variant_Number__c,
-											Price				= oi.Total_Retail_Price__c,
-											Product2Id			= oi.Pricebookentry.Product2Id,
-//											ProductDescription	= oi.Description,
-//											ProductFamily		= oi.Pricebookentry.Product2.Family,
-//											ProductCode			= oi.Pricebookentry.Product2.ProductCode,
-											PurchaseDate		= oi.Order.EffectiveDate,
-											Name				= oi.Pricebookentry.Product2.Name,
-											Sold_Order__c		= oi.OrderId,
-											RecordTypeId		= UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
-										);
-			productAsset.Quantity_Received__c =  (productAsset.Quantity_Received__c == null) 
-													? 	oi.Quantity_To_Receive__c 
-													:	oi.Quantity_To_Receive__c + productAsset.Quantity_Received__c;
-			productAsset.Date_Received__c = oi.Date_Received__c;
-			productAsset.Status = 	(oi.Quantity == productAsset.Quantity_Received__c) ? 'Received' :
-									(oi.Quantity > productAsset.Quantity_Received__c) ? 'Partially Received' :
-									(oi.Quantity < productAsset.Quantity_Received__c) ? 'Over Received' : '';
-			finalAssetsToReceive.add(productAsset);
-			orderToAssetMap.put(oi.Id, productAsset);
-			
-		}
-		upsert finalAssetsToReceive;
-		
-		if (orderToAssetMap.size() > 0) {
-			for (OrderItem oi : itemsToReceive) {
-				
-				oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
-				oi.Quantity_To_Receive__c = null;
-				oi.Date_Received__c = null;
-				finalOrderItems.add(oi);
-			}
-			
-		}
-		return finalOrderItems;
 
 	}
 
@@ -831,7 +667,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 					checkAccountNumbers() method
 	*******************************************************/
 	// Method to ensure that it's ok to change the status to received
-/*	public boolean checkAccountNumbers(Id storeLocationId) {
+	public boolean checkAccountNumbers(Id storeLocationId) {
 		system.debug('*****Checking the account numbers');
 		
 		// If the store location Id is blank, add an error message and return true
@@ -861,7 +697,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 		// The account numbers have been retrieved successfully, so return false
 		return false;						   
-	}*/
+	}
 
 	/*******************************************************
 					OrderItemWrapper Class
@@ -870,8 +706,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		public OrderItem orderItem {get; set;}
 		public Account account {get; set;}
 		public Product2 product {get; set;}
-		public decimal quantityReceived {get; set;}
-		public date dateReceived {get; set;}
 		
 		public OrderItemWrapper(OrderItem oi, Account a, Product2 p) {
 			orderItem = oi;

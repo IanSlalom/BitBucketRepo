@@ -8,4 +8,5 @@
     <tab>standard-Account</tab>
     <tab>standard-report</tab>
     <tab>Finance_Program__c</tab>
+    <tab>RbA_Work_Order__c</tab>
 </CustomApplication>

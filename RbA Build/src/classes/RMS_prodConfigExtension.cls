@@ -124,8 +124,7 @@ public class RMS_prodConfigExtension {
 		{
 			if ( vendorProducts != null) return vendorProducts;
 			vendorProducts = new Set<Id>();
-			// Find products related to the vendor of type Product PO
-			for (Vendor_Product__c vp : [SELECT Product__c, Product__r.Product_PO__c from Vendor_Product__c Where Vendor__c IN : storeVendors AND Product__c != null AND Product__r.Product_PO__c = true]) {
+			for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c IN : storeVendors AND Product__c != null]) {
 				vendorProducts.add(vp.Product__c);
 			}
 			return vendorProducts;
@@ -922,8 +921,8 @@ public class RMS_prodConfigExtension {
 		} 
 		if (childProduct != null)
 			prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
-
-		if (orderLineItem.unitPrice == null)orderLineItem.unitPrice = 0; 	
+		
+		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if (newOrderItem) {
 			orderLineItem.PriceBookEntryId = priceBookEntryId;
 			System.Debug('**********************orderLineItemFinal=' +orderLineItem);

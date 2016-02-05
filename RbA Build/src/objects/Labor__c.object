@@ -176,11 +176,10 @@
         <fullName>Related_Work_Order__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
-        <inlineHelpText>Related Work Order</inlineHelpText>
         <label>Related Work Order</label>
-        <referenceTo>SVMXC__Service_Order__c</referenceTo>
+        <referenceTo>RbA_Work_Order__c</referenceTo>
         <relationshipLabel>Labor</relationshipLabel>
-        <relationshipName>Labor</relationshipName>
+        <relationshipName>Labor1</relationshipName>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
@@ -227,7 +226,7 @@
     <fields>
         <fullName>Work_Order_Type__c</fullName>
         <externalId>false</externalId>
-        <formula>Text( Related_Work_Order__r.SVMXC__Order_Type__c )</formula>
+        <formula>Text( Related_Work_Order__r.Order_Type__c )</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Work Order Type</label>
         <required>false</required>

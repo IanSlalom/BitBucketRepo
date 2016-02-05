@@ -1,249 +1,193 @@
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
+	
+	<apex:includeScript value="{!$Resource.jquery}" />
+	<apex:includeScript value="/support/console/33.0/integration.js"/>
 
-        
-    <apex:includeScript value="{!$Resource.jquery}" />
-    <apex:includeScript value="/support/console/33.0/integration.js"/>
-    <script type="text/javascript">
-        var j$ = jQuery.noConflict();
+	<apex:pageMessages /> 
 
-        var primaryTabId = null;
-        var subTabId = null;
-        var previousOnload  = window.onload;
-        var warningType;
+	<apex:form >
+		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!edit}" value="Edit"/>
+				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+				<apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false" rendered="{! status == 'rbanew'}"/>
+				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order" oncomplete="confirmationWindow('cancelPO');return false"/>			
+			</apex:pageBlockButtons>			
+	
+			<div id="OrderId" style="display:none;">{!orderId}</div>	
+			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}" onComplete="closeTab();return false"/>
+			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" onComplete="closeTab();return false"/>
+			 
+			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
+				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
+			</apex:pageBlockSection> 
 
-        window.onload = function()
-        {
-        
-            //  perform the previously registered 'onload' function, if any
-            if ( previousOnload ) previousOnload();
-
-            //  get the id's of both the primary tab and this subtab
-            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
-            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
-
-            //  set the title of this subtab
-            sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );
-
-            j$(function() {        
-                prepareList('productList','costCenterList', false);
-            });
-        };
-
-        //The callback function that closeTab will call once it's got the ID for its tab
-        var callCloseTab= function callCloseTab(result) {
-            sforce.console.closeTab(result.id);
-        };
-
-        function closeTab() {
-            if(sforce.console.isInConsole()) {
-                sforce.console.refreshPrimaryTabById( primaryTabId, false,
-                    function()
-                    {
-                        if ( subTabId ) sforce.console.closeTab( subTabId );
-                    }
-                );
-                return false;
-            }
-            else {
-                location.href='/{!Purchase_Order__c.Order__c}'; 
-            }
-
-        };
-
-        function confirmationWindow(warningType)
-        {
-            // Select the correct warning message depending on the button warning type
-            var warningMessage;
-            if (warningType == 'releasePO') {
-                warningMessage = "Are you sure you want to release this purchase order?";
-            } else if (warningType == 'cancelPO') {
-                warningMessage = "Are you sure you want to cancel this purchase order?";
-            }
-            else if (warningType == 'cancelLineItem') {
-                warningMessage = "Are you sure you want to cancel this order line item?";
-            }
-
-            // Present the warning message
-            var confirmation = confirm(warningMessage);
-
-            // If they confirm, run the correct method depending on the warning type
-            if(confirmation) {
-                if (warningType == 'releasePO') {
-                    releasePurchaseOrder();
-                } else if (warningType == 'cancelPO') {
-                    cancelPurchaseOrder();
-                }
-                else if (warningType == 'cancelLineItem') {
-                    cancelLineItem();
-                }
-            }
-        }
-function prepareList(parent,child,isSubselectOptional){
-          j$("body").append("<select style='display:none' id='"+parent+child+"'></select>");
-          j$('#'+parent+child).html(j$("#"+child+" option"));
-          j$('#'+child).html("<option> — </option>");
-          j$('#'+parent).change(function(){
-//              var parentValue = j$('#'+parent).attr('value');
-//                alert (j$("select[data-jsid=parent]").val());
-              var parentValue = j$("select[html-data-jsid='productList']").val();
-//              var parentValue = j$('#'+parent).attr('value');
-//               alert (parentValue);
- //             alert (j$("select[data-jsid='accountList2']").val());
- //             var accountList2 = j$("select[data-jsid='accountList2']").val();
-//              j$('#'+child).html(j$("#"+parent+child+" .child_"+parentValue).clone());
-//              alert(j$("#"+parentValue+child+" .child_"+parentValue));
-//              j$('#'+child).html(j$("#"+parentValue+child+" .child_"+parentValue).clone());
- //             if(isSubselectOptional) j$('#'+child).prepend("<option> — Select — </option>");
-
-//             var parentValue = j$('select#'+parent).attr('value');
-//              var myVar = j$("#span").find('.select2-chosen').val();
-//              var myVar  = j$('#select2-chosen').text();    
-//                var abc = j$(this).closest('.x-panel x-border-panel').attr('id');
-//                var abc = j$('#x-panel-bwrap').val();
-//                var abc = j$(".select2-chosen");$( "#myDivId" ).val()
-//var $element = j$('.select2-chosen').html();
-//var $element = j$('.select2-chosen').text();
-//parentValue = $element;
-//alert($element);
-//alert(parent);
-
-
-//              var myVar  = j$('#select2-chosen').text();
-//                alert('abc' +abc);
-
-
-//             alert(parentValue);
-             j$('#'+child).html(j$("select#"+parent+child+" .child_"+parentValue).clone());
-             if(isSubselectOptional) j$('select#'+child).prepend("<option> — Select — </option>");
-
-          });
-     }
-    </script>
-    <apex:pageMessages /> 
-
-    <apex:form >
-        <apex:pageBlock title="View {!pageTitle} Purchase Order" >
-            <apex:pageBlockButtons location="both">
-                <apex:commandButton action="{!edit}" value="Edit"/>
-                <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-                <apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false" rendered="{! status == 'rbanew'}"/>
-                <apex:commandButton action="{!confirm}" value="Cancel Purchase Order" oncomplete="confirmationWindow('cancelPO');return false"/>            
-            </apex:pageBlockButtons>            
-    
-            <div id="OrderId" style="display:none;">{!orderId}</div>    
-            <apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}" onComplete="closeTab();return false"/>
-            <apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" onComplete="closeTab();return false"/>
-
-            <apex:pageBlockSection title="Select a Vendor" columns="1"> 
-                <apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
-            </apex:pageBlockSection> 
-
-            <apex:outputPanel id="PurchaseOrderFields">
-                <apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
-                    
-                    <apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" />
-                    <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
-                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
-<!--                    <apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
+			<apex:outputPanel id="PurchaseOrderFields">
+				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+					
+					<apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" />
+					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+					 <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
+<!--  					<apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
 -->
-                    <apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
-                    
-                    <apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
-                    <apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
-                    <apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />                    
-<!--                    <apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
--->                 <apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
-                    <apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
-                    <apex:outputText value=""/>
-                    <apex:outputField value="{!Purchase_Order__c.Total__c}" label="Total" id="total"/>
-                
-                    <apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
-                    <apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
-                    
-                    <apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
-        
-                </apex:pageBlockSection>
-                <apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
-                
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
-                    <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
-                    <apex:column style="width:200px" value="{!oiw.orderItem.Description}"/>
-                    <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
-                    <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
-                    <apex:column style="width:100px" value="{!oiw.orderItem.UnitPrice}"/>
-                    <apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
-                    <apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
-                    <!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
-                    <apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
-                    <apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
-                    <apex:column style="width:50px" rendered="{!((costPurchaseOrder == false) && (status == 'con' || status == 'rbacon')) }">
-						<apex:facet name="header">Qty Received</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Received__c}" />
-                    </apex:column>
-                    
-                    <apex:column style="width:50px"> 
-                        <apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
-                            <apex:param name="lineItemToCancel"
-                                value="{!oiw.orderItem.Id}"
-                                assignTo="{!lineItemToCancel}"/>
-                        </apex:commandLink>
-                    </apex:column>
-             
+					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
+					
+					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
+					<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
+					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />					
+<!--  					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
+-->					<apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
+					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
+					<apex:outputText value=""/>
+					<apex:outputField value="{!Purchase_Order__c.Total__c}" label="Total" id="total"/>
+				
+					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
+					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
+					
+					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
+		
+				</apex:pageBlockSection>
+				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
+				
+				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
+					<apex:column style="width:200px" value="{!oiw.orderItem.Description}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
+					<apex:column style="width:100px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
+					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
+					
+					<apex:column style="width:50px"> 
+						<apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
+							<apex:param name="lineItemToCancel"
+								value="{!oiw.orderItem.Id}"
+								assignTo="{!lineItemToCancel}"/>
+						</apex:commandLink>
+					</apex:column>
+			 
 
-                </apex:pageBlockTable>
-            <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
-                <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
+				</apex:pageBlockTable>
 
+			<apex:pageBlockSection id="mytable" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
+				<apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
+					<apex:column >
+						<apex:facet name="header">{!productText}</apex:facet> 
+							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/> 
+					</apex:column>
+					<apex:column rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">GL Account</apex:facet> 
+							<apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  />
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">{!productText} Description</apex:facet> 
+							<apex:inputField value="{!noi.Description}" style="width:300px"  />
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">Quantity</apex:facet> 
+							<apex:inputField value="{!noi.Quantity}" style="width:50px" required="false"/>
+					</apex:column>
+					<apex:column rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">Unit of Measure</apex:facet> 
+							<apex:inputField value="{!noi.Unit_of_Measure__c}" style="width:75px" required="false"/>
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">Retail Price</apex:facet> 
+							<apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
+					</apex:column>
+				</apex:pageBlockTable>				  
+				<apex:commandButton action="{!addProduct}" value="Add {!productText}"/>
+			</apex:pageBlockSection> 
 
-                    <apex:column >
-                        <apex:facet name="header">{!productText}</apex:facet> 
-<!--                              <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>--> 
-					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
-						<apex:selectOptions value="{!productItems}"/>
-						<apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
-					</apex:selectList>
+			</apex:outputPanel>	
+			<apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
+				<apex:pageBlockSection title="System Information" columns="2"> 
+					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
+					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+				</apex:pageBlockSection>
 
-                    </apex:column>
-                    <apex:column rendered="{!costPurchaseOrder == true}">
-                     <apex:facet name="header">Cost Center</apex:facet> 
-					<apex:selectList value="{!costCenter}" label="costCenter" size="1" id="costCenterlist">
-						<apex:selectOptions value="{!costCenterItems}"/>
-					</apex:selectList>
-                    </apex:column>
-                    <apex:column >
-                        <apex:facet name="header">{!productText} Description</apex:facet> 
-                            <apex:inputField value="{!noi.Description}" style="width:300px"  />
-                    </apex:column>
-                    <apex:column >
-                        <apex:facet name="header">Quantity</apex:facet> 
-                            <apex:inputField value="{!noi.Quantity}" style="width:50px" required="false"/>
-                    </apex:column>
-                    <apex:column rendered="{!costPurchaseOrder == true}">
-                        <apex:facet name="header">Unit of Measure</apex:facet> 
-                            <apex:inputField value="{!noi.Unit_of_Measure__c}" style="width:75px" required="false"/>
-                    </apex:column>
-                    <apex:column >
-                        <apex:facet name="header">Retail Price</apex:facet> 
-                            <apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
-                    </apex:column>
-                </apex:pageBlockTable>                
-                <apex:commandButton action="{!addProduct}" value="Add {!productText}"/>
-            </apex:pageBlockSection> 
+			</apex:outputPanel>	
 
-            </apex:outputPanel> 
-            <apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
-                <apex:pageBlockSection title="System Information" columns="2"> 
-                    <apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
-                    <apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
-                </apex:pageBlockSection>
+		</apex:pageBlock>
+		
+	</apex:form>
+	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+	<script type="text/javascript">
+		var j$ = jQuery.noConflict();
 
-            </apex:outputPanel> 
+		var primaryTabId = null;
+		var subTabId = null;
+		var previousOnload  = window.onload;
+		var warningType;
 
-        </apex:pageBlock>
-        
-    </apex:form>
-    <apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+		window.onload = function()
+		{
+		
+			//  perform the previously registered 'onload' function, if any
+			if ( previousOnload ) previousOnload();
 
-    
+			//  get the id's of both the primary tab and this subtab
+			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+			sforce.console.getEnclosingTabId		( function( result ) { subTabId  = result.id; } );
+
+			//  set the title of this subtab
+			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );
+
+		};
+
+		//The callback function that closeTab will call once it's got the ID for its tab
+		var callCloseTab= function callCloseTab(result) {
+			sforce.console.closeTab(result.id);
+		};
+
+		function closeTab() {
+			if(sforce.console.isInConsole()) {
+				sforce.console.refreshPrimaryTabById( primaryTabId, false,
+					function()
+					{
+						if ( subTabId ) sforce.console.closeTab( subTabId );
+					}
+				);
+				return false;
+			}
+			else {
+				location.href='/{!Purchase_Order__c.Order__c}'; 
+			}
+
+		};
+
+		function confirmationWindow(warningType)
+		{
+			// Select the correct warning message depending on the button warning type
+			var warningMessage;
+			if (warningType == 'releasePO') {
+				warningMessage = "Are you sure you want to release this purchase order?";
+			} else if (warningType == 'cancelPO') {
+				warningMessage = "Are you sure you want to cancel this purchase order?";
+			}
+			else if (warningType == 'cancelLineItem') {
+				warningMessage = "Are you sure you want to cancel this order line item?";
+			}
+
+			// Present the warning message
+			var confirmation = confirm(warningMessage);
+
+			// If they confirm, run the correct method depending on the warning type
+			if(confirmation) {
+				if (warningType == 'releasePO') {
+					releasePurchaseOrder();
+				} else if (warningType == 'cancelPO') {
+					cancelPurchaseOrder();
+				}
+				else if (warningType == 'cancelLineItem') {
+					cancelLineItem();
+				}
+			}
+		}
+
+	</script>
 </apex:page>

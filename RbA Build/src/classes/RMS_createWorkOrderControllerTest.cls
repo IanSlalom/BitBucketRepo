@@ -23,8 +23,8 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		Opportunity opp1 = new Opportunity(Name='Opp1', AccountId=newDwelling.id, StageName = 'New', CloseDate = Date.today().addYears(1) );
 		insert opp1;
 		
-		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
-		SVMXC__Service_Order__c workOrder = new SVMXC__Service_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId  
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId  
 															                    );
 		
 		String actionUrl = '/apex/RMS_createActionsWorkOrder?'+

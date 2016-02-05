@@ -3,6 +3,9 @@
     <doesSendEmailToMembers>false</doesSendEmailToMembers>
     <name>Schedule - Tech - TwinCity</name>
     <queueSobject>
+        <sobjectType>RbA_Work_Order__c</sobjectType>
+    </queueSobject>
+    <queueSobject>
         <sobjectType>SVMXC__Service_Order__c</sobjectType>
     </queueSobject>
 </Queue>
