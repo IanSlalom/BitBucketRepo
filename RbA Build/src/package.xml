@@ -29,7 +29,6 @@
         <members>RMS_newLaborRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
-        <members>RMS_newPaymentRedirectExtensionTeste</members>
         <members>RMS_opportunityUtilities</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
