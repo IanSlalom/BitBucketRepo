@@ -131,7 +131,6 @@
         <members>RMS_Settings__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Refund__c</members>
-        <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
@@ -223,15 +222,7 @@
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>RbA_Work_Order__c-Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
-        <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-LSWP Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Lead Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Paint %2F Stain Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Scheduled Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
-        <members>Screen_Configuration__c-Screen Configuration Layout</members>
+       <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
