@@ -30,6 +30,8 @@ public with sharing class RMS_newPaymentRedirectExtension {
 			this.thePayment = new Payment__c(); 
 	}
 
+	public String testStoreLocation;
+
 	/******* redirect method  *****************/
 	public PageReference redirect() {
 
@@ -45,7 +47,12 @@ public with sharing class RMS_newPaymentRedirectExtension {
 		// If there is an order, redirect to deposit, otherwise redirect to misc cash receipt
 		if (thePayment.Order__c == null) {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Misc_Cash_Receipt'));
-			String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+
+			// If a test is running just set the store name, otherwise get it from the current user
+			String storeLocationName = (Test.isRunningTest()) ? 	testStoreLocation :
+																	[SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+
+
 			if (String.isBlank(storeLocationName)) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
 				return null;
