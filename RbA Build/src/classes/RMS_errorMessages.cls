@@ -98,9 +98,10 @@ public with sharing class RMS_errorMessages {
 	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You can not change the Revenue Recognized Date to another date, you must first clear it.';					
 
 	/*******************************************************
-					Payment Errors
+					Redirect Errors
 	*******************************************************/
 	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
+	public static final String STORE_LOCATION_IS_BLANK_LABOR = 'The Store Location must be entered on the Work Order before creating a labor record.';
 	public static final String STORE_LOCATION_IS_BLANK_USER = 'Your user record must be associated with a store location before creating a misc reimbursement.';
 
 	/*******************************************************

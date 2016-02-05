@@ -27,6 +27,7 @@
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_mobileAppRequestHelperTest</members>
         <members>RMS_newLaborRedirectExtension</members>
+        <members>RMS_newLaborRedirectExtensionTest</members>
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
