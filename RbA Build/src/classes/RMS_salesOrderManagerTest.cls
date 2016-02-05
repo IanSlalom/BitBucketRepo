@@ -46,10 +46,7 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
+				
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
 		
@@ -125,10 +122,7 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
+				
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
 		
@@ -198,9 +192,6 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
 		
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
@@ -276,9 +267,6 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
 		
 		OpportunityLineItem oli = utilities.createOpportunityLineItem(opp.id, pricebookEntry1.id);
 		insert oli;
