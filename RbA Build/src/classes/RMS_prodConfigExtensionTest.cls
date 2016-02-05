@@ -42,11 +42,7 @@ private class RMS_prodConfigExtensionTest {
 		dwelling.Store_Location__c = store.Id;
 		insert dwelling;
 	
-		Product_Configuration__c prodConfig= new Product_Configuration__c(
-			Name='Product Config'
-		);
-		
-		insert prodConfig;
+
 
 		Pricing_Configuration__c pricingConfig= new Pricing_Configuration__c(
 			Name='Pricing Config'
@@ -61,11 +57,18 @@ private class RMS_prodConfigExtensionTest {
 		Product2 product1 = new Product2(
 			Name='Master Product',
 			Vendor__c = account1.id,
-			RecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Master_Product'),
-			Product_Configuration__c = prodConfig.Id
+			RecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Master_Product')
+//			Product_Configuration__c = prodConfig.Id
 		);
 		
 		insert product1;
+
+		Product_Configuration__c prodConfig= new Product_Configuration__c(
+			Name='Product Config',
+			Product__c = product1.Id
+		);
+		
+		insert prodConfig;
 
 		Product2 product2 = new Product2(
 			Name='Child Product',
@@ -79,10 +82,10 @@ private class RMS_prodConfigExtensionTest {
 		
 		insert product2;
 
-		Opportunity opp1 = utility.createOpportunity(account1.id, 'Closed - Won');
+		Opportunity opp1 = utility.createOpportunity(dwelling.id, 'Closed - Won');
 		insert opp1;
 		
-		PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product2.id);		
+		PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product1.id);		
 		pricebookEntry1.Pricing_Configuration__c = pricingConfig.Id;
 		insert pricebookEntry1;
 		
@@ -118,7 +121,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension customController  = new RMS_prodConfigExtension(stdController);
 				
 	
-		OrderItem oi2 = [SELECT Id from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi2 = [SELECT Id, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef2 = Page.RMS_prodConfigEdit;
@@ -145,7 +148,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -161,13 +164,14 @@ private class RMS_prodConfigExtensionTest {
 		Product2 masterProd = ext.masterProduct;
 		System.AssertEquals('Master Product', masterProd.Name);
 
+		System.Debug('*************masterProdId=' +masterProdId);
 		// Verify the master prod config
 		Product_Configuration__c masterProdConfig = ext.masterProductConfig;
-		System.AssertEquals(masterProd.Product_Configuration__c, masterProdConfig.Id);
+		System.Assert(masterProdConfig.Id != null);
 
 		// Verify the prod config wrapper
 		RMS_prodConfigManager.productConfigWrapper prodConfig = ext.prodConfig;
-		System.Assert(prodConfig != null);
+		System.Assert(ext.prodConfig != null);
 
 		// Verify the child prod
 		Product2 childProd = ext.childProduct;
@@ -187,7 +191,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id,PricebookEntryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 		Product_Configuration__c prodConfig = [SELECT Id from Product_Configuration__c where Name = 'Product Config'];
 		prodConfig.Measurement_Fractions__c = '1/2;3/4';
 		prodConfig.Exterior_Color__c = 'White; Red';
@@ -196,8 +200,8 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Glass_Pattern__c = 'GP1; GP2';
 		prodConfig.Grille_Style__c = 'GS1; GS2';
 		prodConfig.Grille_Patterns__c = 'GP1; GP2';
-		prodConfig.Colonial_Grille_Lites_Wide__c = '1; 2';
-		prodConfig.Colonial_Grille_Lites_High__c = '1; 2';
+		prodConfig.Lites_Wide__c = '1; 2';
+		prodConfig.Lites_High__c = '1; 2';
 		prodConfig.Exterior_Trim__c = '1; 2';
 		prodConfig.Frame_Type__c = 'FT1; FT2';
 		prodConfig.Checkrail_Style__c = 'CR1; CR2';
@@ -280,12 +284,12 @@ private class RMS_prodConfigExtensionTest {
 		System.AssertEquals(3, grillePattItems.size());
 
 		// Verify the grille lites wide picklist items
-		List<SelectOption> colonialGriLitesWideItems = ext.colonialGrilleLitesWideItems;
-		System.AssertEquals(3, colonialGriLitesWideItems.size());
+		List<SelectOption> litesWideItems = ext.litesWideItems;
+		System.AssertEquals(3, litesWideItems.size());
 
 		// Verify the grille lites high picklist items
-		List<SelectOption> colonialGriLitesHighItems = ext.colonialGrilleLitesHighItems;
-		System.AssertEquals(3, colonialGriLitesHighItems.size());
+		List<SelectOption> litesHighItems = ext.litesHighItems;
+		System.AssertEquals(3, litesHighItems.size());
 
 		// Verify the exterior trim picklist items
 		List<SelectOption> exteriorTrmItems = ext.exteriorTrimItems;
@@ -443,7 +447,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id, PricebookEntryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -481,9 +485,9 @@ private class RMS_prodConfigExtensionTest {
 		
 		pageReference newPage = ext.enterProduct();
 		pageReference savePage = ext.saveProduct();
-		System.Assert(savePage != null);
+		System.Assert(ext.errorOccurred == 'true');
 
-		OrderItem oi2 = [SELECT Id, PricebookEntryId, Width_Inches__c, Height_Inches__c from OrderItem where Order.Id =: soldOrder.Id limit 1];
+		OrderItem oi2 = [SELECT Id, PricebookEntryId, Width_Inches__c, Height_Inches__c, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id limit 1];
 		oi2.Width_Inches__c = 19;
 		oi2.Height_Inches__c = 19;
 		update oi2;
@@ -495,7 +499,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension ext2 = new RMS_prodConfigExtension(stdController2);
 		pageReference newPage2 = ext2.enterProduct();
 		pageReference savePage2 = ext2.saveProduct();
-		System.Assert(savePage2 != null);
+		System.Assert(ext.errorOccurred == 'true');
 
 		
 	}

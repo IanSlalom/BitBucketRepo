@@ -128,4 +128,81 @@ public with sharing class UtilityMethods {
 		}
 		return result;
 	}
+	
+	// Method used to check if a record is locked
+	public static String checkLocked(List<sObject> listNew, List<sObject> listOld, map<id, sObject> mapNew, map<id, sObject> mapOld, String triggerType){
+		String result = 'No records locked';
+
+		List<sObject> recordsToCheck = (triggerType == 'Delete') ? listOld : listNew;
+
+		if(recordsToCheck == null){
+			result = 'No records received';
+			System.Debug(result);
+			return result;
+		}
+	
+		for(SObject recordToCheck : recordsToCheck){
+
+			// if it's a delete trigger, just check the old trigger, otherwise check old and new			
+			boolean locked = (triggerType == 'Delete') ? (boolean)(mapOld.get(recordToCheck.id)).get('Locked__c') :
+							((boolean)(mapOld.get(recordToCheck.id)).get('Locked__c') && (boolean)(mapNew.get(recordToCheck.id)).get('Locked__c'));
+			if (locked) {
+				recordToCheck.addError(RMS_errorMessages.RECORD_IS_LOCKED, FALSE);
+				result = 'At least one record was locked';
+			}
+		}
+		return result;
+	}
+
+	// Method used to check if a record is locked
+	public static String checkLockedByStatus(List<sObject> listNew, List<sObject> listOld, map<id, sObject> mapNew, map<id, sObject> mapOld, String objectType){
+		String result = 'No records locked';
+		
+		Map<String, List<String>> lockedFieldMap;
+
+		if(listNew == null){
+			result = 'No records received';
+			return result;
+		}
+
+		if (objectType == 'Order') {
+			// pulls the map of fields that should be locked by status from the Constants class
+			lockedFieldMap = Constants.lockedOrderFieldMap;
+		}
+		List<sObject> recordsToCheck = listNew;
+	
+		for(SObject recordToCheck : recordsToCheck){
+			String dynamicErrorMessage;
+			String	errorMessage;
+
+			// Retrieve	the old Status from the record, not the new (in case it changed)		
+			String status = (string)(mapOld.get(recordToCheck.id)).get('Status');
+
+			List<String> lockedFields = lockedFieldMap.get(status);
+			if (lockedFields == null) continue;
+			// Pull the locked fields from the map and loop through them
+			for (String lockedField : lockedFields) {
+
+				// Check if the locked field has changed
+				if ((mapOld.get(recordToCheck.id)).get(lockedField) != (mapNew.get(recordToCheck.id)).get(lockedField))
+				{
+					dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FIELD_IS_LOCKED, '[field]', lockedField);
+					errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+					recordToCheck.addError(errorMessage, FALSE);
+					result = 'At least one record containted a field that was locked';
+				}
+			}
+		}
+		return result;
+	}	
+
+	/***************************************************
+	 Method to dynamically change error messages
+	****************************************************/
+  	public static string fillInErrorRuleValues(String errorMessage, String targetValue, String replacementValue){
+		errorMessage = errorMessage.replace(targetValue, '<b>('+replacementValue+')</b>');
+		errorMessage = errorMessage.replace('null', '');
+		
+		return errorMessage;
+	} 
 }

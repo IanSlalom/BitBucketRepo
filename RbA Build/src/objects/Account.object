@@ -162,15 +162,16 @@
     </fields>
     <fields>
         <fullName>Baan_Business_Partner_Number__c</fullName>
-        <description>The vendor account&apos;s baan business partner number</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The vendor account&apos;s baan business partner number</inlineHelpText>
+        <caseSensitive>true</caseSensitive>
+        <description>The vendor and contractor account&apos;s baan business partner number</description>
+        <externalId>true</externalId>
+        <inlineHelpText>The vendor and contractor account&apos;s baan business partner number</inlineHelpText>
         <label>Baan Business Partner Number</label>
-        <length>100</length>
+        <length>20</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
-        <unique>false</unique>
+        <unique>true</unique>
     </fields>
     <fields>
         <fullName>BillingAddress</fullName>
@@ -878,6 +879,9 @@ IF(ISBLANK(Year_Built__c ),1,
         <columns>ACCOUNT.PHONE1</columns>
         <columns>ACCOUNT.TYPE</columns>
         <columns>CORE.USERS.ALIAS</columns>
+        <columns>ACCOUNT.CREATED_DATE</columns>
+        <columns>ACCOUNT.LAST_UPDATE</columns>
+        <columns>UPDATEDBY_USER.ALIAS</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>ACCOUNT.RECORDTYPE</field>

@@ -85,11 +85,24 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Retail_Location__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <fullName>Pivotal_Id__c</fullName>
         <externalId>false</externalId>
-        <label>Retail Location</label>
-        <referenceTo>Store_Configuration__c</referenceTo>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the store this financing program is related to.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the store this financing program is related to.</inlineHelpText>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
         <relationshipLabel>Finance Programs</relationshipLabel>
         <relationshipName>Finance_Programs</relationshipName>
         <required>false</required>

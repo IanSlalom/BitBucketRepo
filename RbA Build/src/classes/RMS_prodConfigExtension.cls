@@ -33,6 +33,7 @@ public class RMS_prodConfigExtension {
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
+	public String ordStat {get; set;}	// order status 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -41,7 +42,7 @@ public class RMS_prodConfigExtension {
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
-			
+		ordStat = 'dft';			
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
 			newOrderItem = true;
@@ -51,7 +52,7 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
-				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status From OrderItem WHERE Id =: orderLineItem.Id]) {
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
@@ -59,6 +60,8 @@ public class RMS_prodConfigExtension {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
 					}
+					// retrieves an abbreviated status name for use in the vf page
+					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 				}
 		}
 	}
@@ -211,6 +214,7 @@ public class RMS_prodConfigExtension {
 													' WHERE Product__c = \'' + masterProductId + '\''+
 													specialtyShapeString+
 													' LIMIT 1';
+ 			System.Debug('***************prodconfigquery=' +query);
  
 			// Retrieve all fields from the Product_Configuration__c object in a query
 			List<Product_Configuration__c> resultConfigs = Database.query(query);
@@ -395,27 +399,27 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Colonial Grille Lights Wide Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLitesWideItems;
-	public List<SelectOption> colonialGrilleLitesWideItems{
+	/******* Grille Lights Wide Items Items  *****************/
+	private static transient List<SelectOption> lLitesWideItems;
+	public List<SelectOption> litesWideItems{
 		get
 		{   
-			if (lColonialGrilleLitesWideItems== null) {
-				lColonialGrilleLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_Wide__c);
+			if (lLitesWideItems== null) {
+				lLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_Wide__c);
 			}			   
-			return lColonialGrilleLitesWideItems;
+			return lLitesWideItems;
 		}
 	}
 
-	/******* Colonial Grille Lights High Items Items  *****************/
-	private static transient List<SelectOption> lColonialGrilleLitesHighItems;
-	public List<SelectOption> colonialGrilleLitesHighItems{
+	/******* Grille Lights High Items Items  *****************/
+	private static transient List<SelectOption> lLitesHighItems;
+	public List<SelectOption> litesHighItems{
 		get
 		{   
-			if (lColonialGrilleLitesHighItems== null) {
-				lColonialGrilleLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Colonial_Grille_Lites_High__c);
+			if (lLitesHighItems== null) {
+				lLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_High__c);
 			}			   
-			return lColonialGrilleLitesHighItems;
+			return lLitesHighItems;
 		}
 	}
 
@@ -1031,12 +1035,12 @@ public class RMS_prodConfigExtension {
 			oI.Grille_Pattern_S3__c = null;
 		}
 		if(newProdConfig.Grille_Lites_Control__c == 'Disabled') {
-			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
-			oI.Colonial_Grille_Lites_High_S1__c = null;	
-			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
-			oI.Colonial_Grille_Lites_High_S2__c = null;	
-			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
-			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Lites_Wide_S1__c = null;	
+			oI.Lites_High_S1__c = null;	
+			oI.Lites_Wide_S2__c = null;	
+			oI.Lites_High_S2__c = null;	
+			oI.Lites_Wide_S3__c = null;	
+			oI.Lites_High_S3__c = null;	
 		}
 		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled') {
 			oI.Custom_Grille_Details_S1__c	= null;
@@ -1062,8 +1066,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == null){
 			oI.Grille_Pattern_S1__c = null;
-			oI.Colonial_Grille_Lites_Wide_S1__c = null;	
-			oI.Colonial_Grille_Lites_High_S1__c = null;	
+			oI.Lites_Wide_S1__c = null;	
+			oI.Lites_High_S1__c = null;	
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Glazing_S1__c = null;	
 			oI.Glass_Pattern_S1__c = null; 
@@ -1072,8 +1076,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = 1, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1'){
 			oI.Grille_Pattern_S2__c = null;
-			oI.Colonial_Grille_Lites_Wide_S2__c = null;	
-			oI.Colonial_Grille_Lites_High_S2__c = null;	
+			oI.Lites_Wide_S2__c = null;	
+			oI.Lites_High_S2__c = null;	
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Glazing_S2__c = null;	
 			oI.Glass_Pattern_S2__c = null; 
@@ -1082,8 +1086,8 @@ public class RMS_prodConfigExtension {
 		//If Prod Config -> Number of Sashes = 1 or 2, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2'){
 			oI.Grille_Pattern_S3__c = null;
-			oI.Colonial_Grille_Lites_Wide_S3__c = null;	
-			oI.Colonial_Grille_Lites_High_S3__c = null;	
+			oI.Lites_Wide_S3__c = null;	
+			oI.Lites_High_S3__c = null;	
 			oI.Custom_Grille_Details_S3__c	= null;
 			oI.Glazing_S3__c = null;	
 			oI.Glass_Pattern_S3__c = null; 

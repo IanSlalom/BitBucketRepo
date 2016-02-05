@@ -63,7 +63,7 @@
         <inlineHelpText>Check date used for the reimbursement</inlineHelpText>
         <label>Check Date</label>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
     </fields>
@@ -75,7 +75,7 @@
         <label>Check Number</label>
         <length>255</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -85,7 +85,7 @@
         <externalId>false</externalId>
         <label>Date Applied</label>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
     </fields>
@@ -94,7 +94,7 @@
         <externalId>false</externalId>
         <label>Description</label>
         <length>2000</length>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>50</visibleLines>
@@ -106,9 +106,52 @@
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account_Name__c</fullName>
+        <description>The GL Account name</description>
+        <externalId>false</externalId>
+        <formula>GL_Account__r.Account_Label__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The GL Account name</inlineHelpText>
+        <label>GL Account Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the GL Account for this reimbursement.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the GL Account for this reimbursement.</inlineHelpText>
+        <label>GL Account</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Location__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Financial_Account_Number__c.Account_Type__c</field>
+                <operation>equals</operation>
+                <value>Misc Reimbursement</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Misc Reimbursement</relationshipLabel>
+        <relationshipName>Misc_Reimbursement</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Hours_Applied__c</fullName>
@@ -118,7 +161,7 @@
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -131,7 +174,7 @@
         <label>Installer Account Number</label>
         <length>255</length>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -145,7 +188,7 @@
         <referenceTo>User</referenceTo>
         <relationshipName>Labor</relationshipName>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -168,7 +211,7 @@
         <externalId>false</externalId>
         <inlineHelpText>Has Labor been completed?</inlineHelpText>
         <label>Labor Complete</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
@@ -181,7 +224,7 @@
         <relationshipLabel>Labor</relationshipLabel>
         <relationshipName>Labor1</relationshipName>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -219,7 +262,7 @@
         <relationshipLabel>Labor</relationshipLabel>
         <relationshipName>Labor</relationshipName>
         <required>false</required>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -244,11 +287,11 @@
     <nameField>
         <displayFormat>Labor Record # - {00}</displayFormat>
         <label>Labor Record #</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Labor</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <recordTypes>
         <fullName>Labor</fullName>
         <active>true</active>
@@ -263,4 +306,12 @@
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>External_Installers_Only</fullName>
+        <active>true</active>
+        <description>This validation rule requires that an external installer be selected for misc. reimbursements.</description>
+        <errorConditionFormula>AND(RecordType.DeveloperName = &apos;Misc_Reimbursement&apos;,  ISBLANK(Installer__r.ContactId))</errorConditionFormula>
+        <errorDisplayField>Installer__c</errorDisplayField>
+        <errorMessage>Only external contractors can be selected for misc. reimbursements.</errorMessage>
+    </validationRules>
 </CustomObject>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <customButtons>Add_Product</customButtons>
+    <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
     <excludeButtons>Clone</excludeButtons>
@@ -29,6 +29,7 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Type_image__c</field>
+<<<<<<< HEAD
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -37,6 +38,8 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Revenue_Recognized_Date__c</field>
+=======
+>>>>>>> refs/heads/master
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -92,12 +95,12 @@
                 <field>Retail_Total__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Amount_Financed__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Deposits_Received__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Amount_Financed__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -152,6 +155,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>ActivatedById</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Revenue_Recognized_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -228,6 +235,16 @@
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
+        <detailHeading>false</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Custom Links</label>
+        <layoutColumns/>
+        <layoutColumns/>
+        <layoutColumns/>
+        <style>CustomLinks</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Visit Work Orders</label>
@@ -257,16 +274,6 @@
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>false</editHeading>
-        <label>Custom Links</label>
-        <layoutColumns/>
-        <layoutColumns/>
-        <layoutColumns/>
-        <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
         <fields>Product2</fields>
@@ -371,7 +378,7 @@
         <summaryLayoutItems>
             <field>Status</field>
             <posX>1</posX>
-            <posY>0</posY>
+            <posY>1</posY>
         </summaryLayoutItems>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
     </summaryLayout>

@@ -224,6 +224,7 @@ public with sharing class TestUtilityMethods {
 	public Quote createQuote(Id oppId, Id pricebook2Id){
     	Quote testQuote = new Quote(
     		Name='testQuote',
+    		isSold__c = true,
     		OpportunityId = oppId,
     		Pricebook2Id = pricebook2Id
     	);
@@ -355,7 +356,89 @@ public with sharing class TestUtilityMethods {
  		insert ocr1;
  	}
  	
+	public void createOrderTestRecords(){
+		
+		TestUtilityMethods utility = new TestUtilityMethods();
+		
+		utility.setUpConfigs();
+		
+		Account account1 = utility.createVendorAccount('Vendor Account 1 ');
+		insert account1;
 
+		Account account2 = new Account(	Name = 'RbA',
+										AccountNumber = '1234567890',
+										Phone = '(763) 555-2000'
+									);
+		insert account2;
+
+		Account dwelling = utility.createDwellingAccount('Dwelling Account');
+
+		Account store = [SELECT Id from Account Where Name = '77 - Twin Cities, MN'];
+		dwelling.Store_Location__c = store.Id;
+		insert dwelling;
+	
+
+
+		Pricing_Configuration__c pricingConfig= new Pricing_Configuration__c(
+			Name='Pricing Config'
+		);
+		
+		insert pricingConfig;
+
+		
+//		Pricebook2 pricebook1 =  utility.createPricebook2Name('Standard Price Book');
+//		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Master Product',
+			Vendor__c = account1.id,
+			RecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Master_Product')
+//			Product_Configuration__c = prodConfig.Id
+		);
+		
+		insert product1;
+
+		Product_Configuration__c prodConfig= new Product_Configuration__c(
+			Name='Product Config',
+			Product__c = product1.Id
+		);
+		
+		insert prodConfig;
+
+		Product2 product2 = new Product2(
+			Name='Child Product',
+			Vendor__c = account1.id,
+			UI_Minimum__c = 0,
+			UI_Maximum__c = 40,
+			
+			Master_Product__c = product1.Id,
+			RecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Child_Product')
+		);
+		
+		insert product2;
+
+		Opportunity opp1 = utility.createOpportunity(dwelling.id, 'Closed - Won');
+		insert opp1;
+		
+		PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product1.id);		
+		pricebookEntry1.Pricing_Configuration__c = pricingConfig.Id;
+		insert pricebookEntry1;
+		
+		Order order1 = new Order(	Name='Sold Order 1', 
+									AccountId = dwelling.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store.Id,
+									Opportunity = opp1, 									
+									Status ='Draft', 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
+		insert orderItem1;		
+		System.Debug('***************Test.getStandardPricebookId()=' +Test.getStandardPricebookId());
+//		System.Debug('***************pricebook1=' +pricebook1.Id);
+	}
  	
  /*
 Tech Measure Appointment

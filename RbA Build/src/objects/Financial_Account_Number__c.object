@@ -271,6 +271,10 @@
                 <fullName>Misc Cash Receipt</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Misc Reimbursement</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>false</trackHistory>

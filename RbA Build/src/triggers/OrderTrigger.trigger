@@ -47,6 +47,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 		//  Before Update
 		
 		if(Trigger.isUpdate && Trigger.isBefore){
+			UtilityMethods.checkLockedByStatus(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Order');
 			workOrderCreationManager.createWorkOrderOnOrderActivation(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
 		  

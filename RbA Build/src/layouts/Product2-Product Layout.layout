@@ -31,6 +31,10 @@
                 <behavior>Edit</behavior>
                 <field>Product_Configuration__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Report_Grouping__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

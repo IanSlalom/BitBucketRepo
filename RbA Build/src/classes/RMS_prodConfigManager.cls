@@ -637,4 +637,26 @@ public with sharing class RMS_prodConfigManager {
 		
 		return errorMessage;
 	}
+
+	/*******************************************************
+					getOrderStatus methods
+	*******************************************************/	
+	//Method for error messages to make them dynamic
+	public static string getOrderStatus(String orderStatus){
+
+		return 
+		(	orderStatus == 'Draft') 					?	'drf'	:
+		(	orderStatus == 'Tech Measure Needed') 		?	'act'	:
+		(	orderStatus == 'Tech Measure Scheduled') 	?	'act'	:
+		(	orderStatus == 'Ready to Order') 			?	'act'	:
+		(	orderStatus == 'Order Released') 			?	'rel'	:
+		(	orderStatus == 'Install Needed') 			?	'rel'	:
+		(	orderStatus == 'Install Scheduled') 		?	'rel'	:
+		(	orderStatus == 'Job in Progress') 			?	'rel'	:
+		(	orderStatus == 'Job Close')		 			?	'clo'	:
+		(	orderStatus == 'On Hold')		 			?	'clo'	:
+		(	orderStatus == 'Cancellation in Progress')	?	'clo'	:
+		(	orderStatus == 'Cancelled')					?	'clo'	: 
+															'drf';
+	}
 }

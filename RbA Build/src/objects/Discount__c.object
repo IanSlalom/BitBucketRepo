@@ -77,6 +77,17 @@
         <type>TextArea</type>
     </fields>
     <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Promotion_End__c</fullName>
         <description>The end date of this discount or promotion</description>
         <externalId>false</externalId>

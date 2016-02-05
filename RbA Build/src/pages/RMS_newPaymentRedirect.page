@@ -1,5 +1,6 @@
 <apex:page standardController="Payment__c" extensions="RMS_newPaymentRedirectExtension" action="{!redirect}">
     <apex:outputField value="{!Payment__c.Order__c}" rendered="false"/>
+    <apex:outputField value="{!Payment__c.Store_Location__c}" rendered="false"/>
     <apex:pageBlock title="Payment Entry" mode="edit" id="PaymentEntryBlock">
         <apex:pageMessages />
     </apex:pageBlock>

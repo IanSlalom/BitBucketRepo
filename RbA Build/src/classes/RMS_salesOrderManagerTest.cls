@@ -46,10 +46,7 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
+				
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
 		
@@ -70,13 +67,6 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
@@ -132,10 +122,7 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
-		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
+				
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
 		
@@ -206,9 +193,6 @@ public with sharing class RMS_salesOrderManagerTest {
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
 		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
 		Contact contact1 = utilities.createContact(account1.id, '1');
 		insert contact1;
 		
@@ -229,13 +213,6 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
@@ -291,9 +268,6 @@ public with sharing class RMS_salesOrderManagerTest {
 		Quote quote = utilities.createQuote(opp.id,Test.getStandardPricebookId());
 		insert quote;
 		
-		opp.SyncedQuoteId = quote.id;
-		update opp;
-		
 		OpportunityLineItem oli = utilities.createOpportunityLineItem(opp.id, pricebookEntry1.id);
 		insert oli;
 		
@@ -305,19 +279,12 @@ public with sharing class RMS_salesOrderManagerTest {
 													);
 		insert discount1;
 				
-		Opportunity_Discount__c oppDiscount1 = new Opportunity_Discount__c(	Status__c = 'Applied', 
-																			Discount__c = discount1.id, 
-																			Discount_Amount__c = 1, 
-																			Opportunity__c = opp.id
-																			);
-		insert oppDiscount1;
-		
 		opp.StageName = 'Closed Won';
 		update opp;
 		
 		list<Order> orders = [SELECT Id FROM Order WHERE OpportunityId = :opp.id];
 		
-		System.assertEquals(orders.size(), 1);
+		System.assertEquals(1, orders.size());
 		
 	}
 	

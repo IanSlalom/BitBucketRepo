@@ -27,7 +27,9 @@
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_mobileAppRequestHelperTest</members>
         <members>RMS_newLaborRedirectExtension</members>
+        <members>RMS_newLaborRedirectExtensionTest</members>
         <members>RMS_newPaymentRedirectExtension</members>
+        <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
         <members>RMS_priceCalcSlimAPIController</members>
         <members>RMS_priceCalcSlimAPILogic</members>
@@ -109,8 +111,6 @@
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Opportunity</members>
-        <members>Opportunity_Discount__c</members>
-        <members>Opportunity_Financing__c</members>
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Code_Lookup__c</members>
@@ -134,6 +134,7 @@
         <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Finance_Program__c</members>
         <members>Store_Vendor__c</members>
         <members>User</members>
         <members>Vendor_Product__c</members>
@@ -189,8 +190,6 @@
         <members>Municipality__c-Permit Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
-        <members>Opportunity_Discount__c-Opportunity Discount Layout</members>
-        <members>Opportunity_Financing__c-Opportunity Financing Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
@@ -201,9 +200,12 @@
         <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
         <members>PricebookEntry-Price Book Entry Layout</members>
+        <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
+        <members>Product2-Construction Materials</members>
         <members>Product2-Master Product Layout</members>
+        <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Purchase_Order__c-Cost Purchase Order Layout</members>
@@ -232,6 +234,7 @@
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>

@@ -22,12 +22,12 @@ public with sharing class RMS_financialTransactionManager {
 	public void onAfterInsertPayment(list<Payment__c> listNew, map<id,Payment__c> mapNew){
 		createOrUpdateJournalEntryPayment(listNew, mapNew);
 		//TODO:This locking functionality will eventually get moved to a batch process
-		lockPaymentRecords(listNew);
+//		lockPaymentRecords(listNew);
 	}
 
 	public void onAfterUpdatePayment(list<Payment__c> listOld, list<Payment__c> listNew, map<Id, Payment__c> mapOld, map<Id, Payment__c> mapNew){
 		createOrUpdateJournalEntryPayment(listNew, mapNew);
-		lockPaymentRecords(listOld, mapNew);
+//		lockPaymentRecords(listOld, mapNew);
 	}
 	
 	public void onBeforeDeletePayment(list<Payment__c> listOld, map<Id, Payment__c> mapOld){
@@ -128,7 +128,7 @@ public with sharing class RMS_financialTransactionManager {
 													Order__r.Store_Location__c,
 													RecordTypeId,
 													Store_Location__c,
-													Account_Number__c
+													GL_Account__r.Name
 													
 													FROM Payment__c WHERE Id IN :mapNew.keyset()];		
 		
@@ -192,7 +192,7 @@ public with sharing class RMS_financialTransactionManager {
 						}else if(typeOfPayment == 'MiscCashReceipt'){
 							newJE.Type__c = 'Misc Cash Receipt';
 							newJE.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-							newJE.Credit_General_Ledger_Account__c = p.Account_Number__c;			
+							newJE.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
 						}
 						
 						journalEntriesToUpsert.add(newJE);
@@ -231,7 +231,7 @@ public with sharing class RMS_financialTransactionManager {
 							}else if(typeOfPayment == 'MiscCashReceipt'){
 								je.Type__c = 'Misc Cash Receipt';
 								je.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-								je.Credit_General_Ledger_Account__c = p.Account_Number__c;			
+								je.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
 							}
 
 							journalEntriesToUpsert.add(je);
@@ -907,7 +907,7 @@ public with sharing class RMS_financialTransactionManager {
 			dynamicErrorMessage = RMS_errorMessages.ORDER_IS_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
-		if(payment.Account_Number__c == null && typeOfPayment == 'MiscCashReceipt'){
+		if(payment.GL_Account__r.Name == null && typeOfPayment == 'MiscCashReceipt'){
 			errorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
 		}
 		if(payment.Order__r.BillToContactId == null && typeOfPayment != 'MiscCashReceipt'){

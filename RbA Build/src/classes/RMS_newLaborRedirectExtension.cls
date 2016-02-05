@@ -30,6 +30,8 @@ public with sharing class RMS_newLaborRedirectExtension {
 			this.theLabor = new Labor__c(); 
 	}
 
+	public String testStoreLocation;
+
 	/******* redirect method  *****************/
 	public PageReference redirect() {
 
@@ -45,8 +47,42 @@ public with sharing class RMS_newLaborRedirectExtension {
 		// If there is a work order, redirect to labor, otherwise redirect to misc reimbursement
 		if (theLabor.Related_Work_Order__c == null) {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Labor__c', 'Misc_Reimbursement'));
+
+			// If a test is running just set the store name, otherwise get it from the current user
+			String storeLocationName = (Test.isRunningTest()) ? 	testStoreLocation :
+																	[SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+
+
+			if (String.isBlank(storeLocationName)) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
+				return null;
+			}
+			
+			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {
+        			// TODO:   This parameter will need to be updated after pushing to build and production
+         			m.put('CF00N3B000000On7g', thisStore.Name);	
+         			m.put('CF00N3B000000On7g_lkid', thisStore.Id);	
+			}
+			
+			if (m.get('CF00N3B000000On7g') == null) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
+				return null;
+			}
+
 		} else {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Labor__c', 'Labor'));			
+
+/*        	for (SVMXC__Service_Order__c theWorkOrder : [SELECT Sold_Order__r.Store_Location__r.Name, Sold_Order__r.Store_Location__c FROM SVMXC__Service_Order__c WHERE Id =: theLabor.Related_Work_Order__c]) {
+        		if (theWorkOrder.Sold_Order__r.Store_Location__c == null) {
+					ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_LABOR)); //
+					return null;
+        		} 
+        		else {
+        			// TODO:   This parameter will need to be updated after pushing to build and production
+         			m.put('CF00N3B000000On7g', theWorkOrder.Sold_Order__r.Store_Location__r.Name);	
+         			m.put('CF00N3B000000On7g_lkid', theWorkOrder.Sold_Order__r.Store_Location__c);	
+        		}
+        	}		*/
 		}
         m.put('nooverride', '1');
         return p;

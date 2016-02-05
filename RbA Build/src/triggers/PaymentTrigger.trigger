@@ -43,15 +43,18 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		}
 		*/
 		//  Before Update
-		/*
+		
 		if(Trigger.isUpdate && Trigger.isBefore){
-			financialTransactionManager.onBeforeUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		//	List<Payment__c> newList = (List<Payment__c>)Trigger.new;
+			
+			UtilityMethods.checkLocked(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Update');
 		}
-		 */
+		 
 
 		// Before Delete
 		//else 
 		if(Trigger.isDelete && Trigger.isBefore){
+			UtilityMethods.checkLocked(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Delete');
 		    financialTransactionManager.onBeforeDeletePayment(Trigger.old, Trigger.oldMap);
 		}
 

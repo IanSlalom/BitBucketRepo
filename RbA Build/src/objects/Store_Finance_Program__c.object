@@ -46,61 +46,63 @@
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Junction object between Finance Programs and Opportunity.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableReports>true</enableReports>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>Amount_Financed__c</fullName>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
         <externalId>false</externalId>
-        <label>Amount Financed</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackHistory>true</trackHistory>
+        <label>Active</label>
         <trackTrending>false</trackTrending>
-        <type>Currency</type>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Finance_Program__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Finance Program</label>
         <referenceTo>Finance_Program__c</referenceTo>
-        <relationshipLabel>Opportunity Financing</relationshipLabel>
-        <relationshipName>Opportunity_Financing</relationshipName>
-        <relationshipOrder>0</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>true</trackHistory>
+        <relationshipLabel>Store Finance Programs</relationshipLabel>
+        <relationshipName>Store_Finance_Programs</relationshipName>
+        <required>false</required>
         <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+        <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Related_Opportunity__c</fullName>
+        <fullName>Pivotal_Id__c</fullName>
         <externalId>false</externalId>
-        <label>Related Opportunity</label>
-        <referenceTo>Opportunity</referenceTo>
-        <relationshipLabel>Opportunity Financing</relationshipLabel>
-        <relationshipName>Opportunity_Financing</relationshipName>
-        <relationshipOrder>1</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>true</trackHistory>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
         <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
-    <label>Opportunity Financing</label>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Select the store this financing program is related to.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the store this financing program is related to.</inlineHelpText>
+        <label>Store Location</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Store Finance Programs</relationshipLabel>
+        <relationshipName>Store_Finance_Programs</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>Store Finance Program</label>
     <nameField>
-        <displayFormat>OppFinancing-{00}</displayFormat>
-        <label>Opportunity Financing Record #</label>
-        <trackHistory>true</trackHistory>
-        <type>AutoNumber</type>
+        <label>Store Finance Program Name</label>
+        <type>Text</type>
     </nameField>
-    <pluralLabel>Opportunity Financing</pluralLabel>
+    <pluralLabel>Store Finance Programs</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ControlledByParent</sharingModel>
+    <sharingModel>ReadWrite</sharingModel>
 </CustomObject>
