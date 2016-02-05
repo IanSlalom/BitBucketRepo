@@ -30,7 +30,7 @@ public with sharing class RMS_salesOrderManager {
 	 	for(Opportunity opp : listNew){
 	 		System.Debug('**********opp=' +opp);
 	 		System.Debug('**********opp.isWon=' +opp.isWon);
-//	 		System.Debug('**********mapOld.get(opp.id).IsWon=' +mapOld.get(opp.id).IsWon);
+	 		System.Debug('**********mapOld.get(opp.id).IsWon=' +mapOld.get(opp.id).IsWon);
 	 		if(	opp.IsWon == true  &&  !mapOld.get(opp.id).IsWon){
 		 		closedWonOpportunitiesIds.add(opp.id);
 	 		}

@@ -296,7 +296,7 @@ public with sharing class RMS_salesOrderManagerTest {
 		
 		list<Order> orders = [SELECT Id FROM Order WHERE OpportunityId = :opp.id];
 		
-		System.assertEquals(orders.size(), 1);
+		System.assertEquals(1, orders.size());
 		
 	}
 	

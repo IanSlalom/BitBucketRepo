@@ -224,6 +224,7 @@ public with sharing class TestUtilityMethods {
 	public Quote createQuote(Id oppId, Id pricebook2Id){
     	Quote testQuote = new Quote(
     		Name='testQuote',
+    		isSold__c = true,
     		OpportunityId = oppId,
     		Pricebook2Id = pricebook2Id
     	);
