@@ -215,6 +215,7 @@ public class RMS_prodConfigExtension {
 													' WHERE Product__c = \'' + masterProductId + '\''+
 													specialtyShapeString+
 													' LIMIT 1';
+ 			System.Debug('***************prodconfigquery=' +query);
  
 			// Retrieve all fields from the Product_Configuration__c object in a query
 			List<Product_Configuration__c> resultConfigs = Database.query(query);
