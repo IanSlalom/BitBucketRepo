@@ -127,29 +127,13 @@
     <fields>
         <fullName>GL_Account__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
-        <description>Select the GL Account for this reimbursement.</description>
         <externalId>false</externalId>
-        <inlineHelpText>Select the GL Account for this reimbursement.</inlineHelpText>
         <label>GL Account</label>
-        <lookupFilter>
-            <active>true</active>
-            <filterItems>
-                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
-                <operation>equals</operation>
-                <valueField>$Source.Store_Location__c</valueField>
-            </filterItems>
-            <filterItems>
-                <field>Financial_Account_Number__c.Account_Type__c</field>
-                <operation>equals</operation>
-                <value>Misc Reimbursement</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
         <referenceTo>Financial_Account_Number__c</referenceTo>
-        <relationshipLabel>Misc Reimbursement</relationshipLabel>
-        <relationshipName>Misc_Reimbursement</relationshipName>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
         <required>false</required>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>

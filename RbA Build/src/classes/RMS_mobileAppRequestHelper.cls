@@ -113,7 +113,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
 
     // get the work orders
-    List<RbA_Work_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Company__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from RbA_Work_Order__c where isDeleted = false and Id in :workOrderIdList];
+    List<RbA_Work_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Account__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from RbA_Work_Order__c where isDeleted = false and Id in :workOrderIdList];
 
     // opportunity ids
     // account ids

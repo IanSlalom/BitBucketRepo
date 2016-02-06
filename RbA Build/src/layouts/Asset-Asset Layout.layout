@@ -23,7 +23,6 @@
                 <behavior>Edit</behavior>
                 <field>ContactId</field>
             </layoutItems>
-<<<<<<< HEAD
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SerialNumber</field>
@@ -52,20 +51,15 @@
                 <behavior>Edit</behavior>
                 <field>Original_Order_Product__c</field>
             </layoutItems>
-=======
->>>>>>> refs/heads/master
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Status</field>
-<<<<<<< HEAD
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sold_Order__c</field>
-=======
->>>>>>> refs/heads/master
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -75,13 +69,6 @@
                 <behavior>Edit</behavior>
                 <field>InstallDate</field>
             </layoutItems>
-<<<<<<< HEAD
-=======
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Quantity</field>
-            </layoutItems>
->>>>>>> refs/heads/master
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -89,40 +76,6 @@
         <customLabel>false</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-<<<<<<< HEAD
-=======
-        <label>Detailed Information</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Sold_Order__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Variant_Number__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Store_Location__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Original_Asset__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Unit_Wholesale_Cost__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>false</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
->>>>>>> refs/heads/master
         <label>Description Information</label>
         <layoutColumns>
             <layoutItems>
@@ -171,29 +124,18 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>Product2</fields>
-        <fields>Quantity</fields>
-        <fields>UnitPrice</fields>
-        <fields>ListPrice</fields>
-        <fields>TotalPrice</fields>
-        <fields>Service__c</fields>
-        <relatedList>OrderItem.Installed_Product_Asset__c</relatedList>
+        <fields>CASES.CASE_NUMBER</fields>
+        <fields>NAME</fields>
+        <fields>CASES.SUBJECT</fields>
+        <fields>CASES.PRIORITY</fields>
+        <fields>CASES.CREATED_DATE</fields>
+        <fields>CASES.STATUS</fields>
+        <fields>OWNER_NAME</fields>
+        <relatedList>RelatedCaseList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Debit_General_Ledger_Account__c</fields>
-        <fields>Credit_General_Ledger_Account__c</fields>
-        <fields>Date__c</fields>
-        <fields>Amount__c</fields>
         <relatedList>Journal_Entry__c.Asset__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-<<<<<<< HEAD
-        <fields>NAME</fields>
-        <relatedList>Journal_Entry__c.Asset__c</relatedList>
-=======
-        <relatedList>RelatedEntityHistoryList</relatedList>
->>>>>>> refs/heads/master
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <relatedObjects>ContactId</relatedObjects>

@@ -225,6 +225,78 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Colonial_Grille_Lites_High_S1__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 1.</inlineHelpText>
+        <label>Colonial Grille Lites High S1</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_High_S2__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 2</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 2.</inlineHelpText>
+        <label>Colonial Grille Lites High S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_High_S3__c</fullName>
+        <description>Select the number of grille lites high for colonial grille pattern on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for colonial grille pattern on sash 3.</inlineHelpText>
+        <label>Colonial Grille Lites High S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S1__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 1.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S1</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S2__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 2.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide_S3__c</fullName>
+        <description>Select the number of grille lites wide for colonial grille pattern on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for colonial grille pattern on sash 3.</inlineHelpText>
+        <label>Colonial Grille Lites Wide S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Commission_Amount__c</fullName>
         <description>IF(  ISPICKVAL(Order.Status, &apos;Activated&apos;)  ,  Quantity * UnitPrice , 0)</description>
         <externalId>false</externalId>
@@ -705,6 +777,16 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Grille_Alignment__c</fullName>
+        <externalId>false</externalId>
+        <label>Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Grille_Pattern_S1__c</fullName>
         <description>Select the grille pattern for Sash 1.</description>
         <externalId>false</externalId>
@@ -1046,6 +1128,19 @@
         <fullName>ListPrice</fullName>
     </fields>
     <fields>
+        <fullName>Lites_High_S1S3__c</fullName>
+        <description>Select the number of grille lites high for sash 1 and sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high for sash 1 and sash 3.</inlineHelpText>
+        <label>Lites High S1S3</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Lites_High_S1__c</fullName>
         <description>Select the number of grille lites high on sash 1.</description>
         <externalId>false</externalId>
@@ -1085,6 +1180,19 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Lites_High_Wide_Total_S1S3__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S1S3__c * Lites_Wide_S1S3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S1S3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Lites_High_Wide_Total_S1__c</fullName>
         <externalId>false</externalId>
         <formula>Lites_High_S1__c * Lites_Wide_S1__c</formula>
@@ -1117,6 +1225,19 @@
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Lites High Wide Total S3</label>
         <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S1S3__c</fullName>
+        <description>Select the number of grille lites wide for sash 1 and sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide for sash 1 and sash 3.</inlineHelpText>
+        <label>Lites Wide S1S3</label>
+        <precision>1</precision>
         <required>false</required>
         <scale>0</scale>
         <trackHistory>false</trackHistory>

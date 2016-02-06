@@ -222,7 +222,7 @@
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>RbA_Work_Order__c-Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
-       <members>Screen_Configuration__c-Screen Configuration Layout</members>
+        <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>

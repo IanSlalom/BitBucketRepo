@@ -23,7 +23,6 @@
                 <behavior>Edit</behavior>
                 <field>Installer__c</field>
             </layoutItems>
-<<<<<<< HEAD
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Installer_Account_Number__c</field>
@@ -40,25 +39,15 @@
                 <behavior>Edit</behavior>
                 <field>Related_Work_Order__c</field>
             </layoutItems>
-=======
->>>>>>> refs/heads/master
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>GL_Account__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>RecordTypeId</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Store_Location__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>GL_Account__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>GL_Account_Name__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -76,11 +65,11 @@
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Check_Number__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Check_Date__c</field>
             </layoutItems>
         </layoutColumns>
@@ -93,7 +82,7 @@
         <label>Description</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>Description__c</field>
             </layoutItems>
         </layoutColumns>
@@ -152,14 +141,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Date__c</fields>
-        <fields>Debit_General_Ledger_Account__c</fields>
-        <fields>Credit_General_Ledger_Account__c</fields>
-        <fields>Amount__c</fields>
         <relatedList>Journal_Entry__c.Labor__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

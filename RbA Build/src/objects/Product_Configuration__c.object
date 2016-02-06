@@ -530,6 +530,74 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Colonial_Grille_Lites_High__c</fullName>
+        <description>Select the number of colonial grille lites high that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of colonial grille lites high that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Colonial Grille Lites High</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Colonial_Grille_Lites_Wide__c</fullName>
+        <description>Select the number of colonial grille lites wide that should be made available for selection in the product configuration page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of colonial grille lites wide that should be made available for selection in the product configuration page.</inlineHelpText>
+        <label>Colonial Grille Lites Wide</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
         <fullName>Corrosion_Resistant_Control__c</fullName>
         <description>Controls whether Corrosion Resistant Hardware is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>

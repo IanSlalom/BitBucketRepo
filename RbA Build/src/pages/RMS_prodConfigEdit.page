@@ -808,8 +808,8 @@
             j$("div[data-jsid='specialOptions']").hide();
         }
     }
-    
- 	function specialtyWindow(){
+
+    function specialtyWindow(){
 			var $element = j$('.select2-chosen').text();
 
             if($element == 'Specialty Window'){
@@ -821,7 +821,6 @@
 				j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").hide();
             } 
     }
-    
     function disableFields() {
 		var ordStat = '{!ordStat}';
 		if (ordStat == 'rel') {

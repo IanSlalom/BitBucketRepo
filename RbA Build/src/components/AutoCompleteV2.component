@@ -56,6 +56,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <apex:attribute name="extraVariablesAttribute"
         description="Additional variables passed to filter the results"
         type="String" required="false" assignTo="{!extraVariables}"/>
+    <apex:attribute name="Application"
+        description="How the autocomplete is being used."
+        type="String" />
 
     <!--Required js files-->
     <apex:outputPanel rendered="{!importJquery}">
@@ -145,7 +148,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                              query.callback( data);                           
                          }
                          else{
-                              alert('Invalid Field/Object API Name : '+event.message);
+                              alert('Invalid Field/Object API Name : '+event.message); 
                          }
                         
                      }, 
@@ -156,7 +159,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
            
     </script>
     
-    <apex:inputText style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" />
+      <apex:inputText style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" rendered="{!Application!='prodConfig'}"/>
+    <apex:inputText id="autoInputText" style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" html-data-jsid="product" onChange="specialtyWindow()" rendered="{!Application=='prodConfig'}"/>
  
     <apex:outputPanel id="hiddenPanel">
         <apex:inputText value="{!targetField}" id="hiddenField"
