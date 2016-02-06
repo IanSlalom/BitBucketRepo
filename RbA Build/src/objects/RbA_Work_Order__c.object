@@ -1069,28 +1069,9 @@ NULL)</formula>
     </fields>
     <label>RbA Work Order</label>
     <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
-    <listViews>
         <fullName>All_RbA</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
-    </listViews>
-    <listViews>
-        <fullName>All_Work_Orders</fullName>
-        <columns>NAME</columns>
-        <columns>Type_image__c</columns>
-        <columns>Order_Type__c</columns>
-        <columns>Municipality__c</columns>
-        <columns>Product__c</columns>
-        <columns>LAST_UPDATE</columns>
-        <columns>Work_Order_Status__c</columns>
-        <columns>City__c</columns>
-        <columns>Scheduled_Date_Time__c</columns>
-        <filterScope>Everything</filterScope>
-        <label>All Open Work Orders</label>
     </listViews>
     <listViews>
         <fullName>All_Work_Orders_RbA</fullName>
@@ -1107,20 +1088,6 @@ NULL)</formula>
         <label>All Open Work Orders</label>
     </listViews>
     <listViews>
-        <fullName>Building_Permits</fullName>
-        <columns>OBJECT_ID</columns>
-        <columns>NAME</columns>
-        <columns>Work_Order_Status__c</columns>
-        <columns>Work_Order_Scheduling_Status__c</columns>
-        <filterScope>Everything</filterScope>
-        <filters>
-            <field>RECORDTYPE</field>
-            <operation>equals</operation>
-            <value>RbA_Work_Order__c.Permit</value>
-        </filters>
-        <label>Building Permits</label>
-    </listViews>
-    <listViews>
         <fullName>Building_Permits_RbA</fullName>
         <columns>OBJECT_ID</columns>
         <columns>NAME</columns>
@@ -1135,18 +1102,6 @@ NULL)</formula>
         <label>Building Permits</label>
     </listViews>
     <listViews>
-        <fullName>HOA</fullName>
-        <columns>NAME</columns>
-        <columns>Municipality__c</columns>
-        <filterScope>Everything</filterScope>
-        <filters>
-            <field>Order_Type__c</field>
-            <operation>equals</operation>
-            <value>HOA</value>
-        </filters>
-        <label>HOA</label>
-    </listViews>
-    <listViews>
         <fullName>HOA_RbA</fullName>
         <columns>NAME</columns>
         <columns>Municipality__c</columns>
@@ -1157,23 +1112,6 @@ NULL)</formula>
             <value>HOA</value>
         </filters>
         <label>HOA</label>
-    </listViews>
-    <listViews>
-        <fullName>Paint_Stain</fullName>
-        <columns>NAME</columns>
-        <columns>Work_Order_Status__c</columns>
-        <columns>Vendor__c</columns>
-        <columns>Vendor_Contact__c</columns>
-        <columns>Request_sent_to_Paint_Stain_Vendor__c</columns>
-        <columns>Paint_Stain_Invoice_Attached__c</columns>
-        <columns>Paint_Stain_Order_Attached_to_Order__c</columns>
-        <filterScope>Everything</filterScope>
-        <filters>
-            <field>RECORDTYPE</field>
-            <operation>equals</operation>
-            <value>RbA_Work_Order__c.Paint_Stain</value>
-        </filters>
-        <label>Paint/Stain</label>
     </listViews>
     <listViews>
         <fullName>Paint_Stain_RbA</fullName>
@@ -1193,22 +1131,10 @@ NULL)</formula>
         <label>Paint/Stain</label>
     </listViews>
     <listViews>
-        <fullName>Schedule_Install_TwinCity_RbA_Work_Order</fullName>
-        <filterScope>Queue</filterScope>
-        <label>Schedule - Install - TwinCity</label>
-        <queue>Schedule_Install_TwinCity</queue>
-    </listViews>
-    <listViews>
         <fullName>Schedule_Install_TwinCity_Work_Order_RbA</fullName>
         <filterScope>Queue</filterScope>
         <label>Schedule - Install - TwinCity</label>
         <queue>Schedule_Install_TwinCity</queue>
-    </listViews>
-    <listViews>
-        <fullName>Schedule_Permit_TwinCity_RbA_Work_Order</fullName>
-        <filterScope>Queue</filterScope>
-        <label>Schedule Permit TwinCity</label>
-        <queue>Schedule_Permit_TwinCity</queue>
     </listViews>
     <listViews>
         <fullName>Schedule_Permit_TwinCity_Work_Order_RbA</fullName>
@@ -1217,22 +1143,10 @@ NULL)</formula>
         <queue>Schedule_Permit_TwinCity</queue>
     </listViews>
     <listViews>
-        <fullName>Schedule_Tech_TwinCity_RbA_Work_Order</fullName>
-        <filterScope>Queue</filterScope>
-        <label>Schedule - Tech - TwinCity</label>
-        <queue>Schedule_Tech_TwinCity</queue>
-    </listViews>
-    <listViews>
         <fullName>Schedule_Tech_TwinCity_Work_Order_RbA</fullName>
         <filterScope>Queue</filterScope>
         <label>Schedule - Tech - TwinCity</label>
         <queue>Schedule_Tech_TwinCity</queue>
-    </listViews>
-    <listViews>
-        <fullName>Unassigned_Twin_City_RbA_Work_Order</fullName>
-        <filterScope>Queue</filterScope>
-        <label>Unassigned - Twin City</label>
-        <queue>Unassigned_Twin_City</queue>
     </listViews>
     <listViews>
         <fullName>Unassigned_Twin_City_Work_Order_RbA</fullName>
