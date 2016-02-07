@@ -31,9 +31,7 @@
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
-        <members>RMS_priceCalcSlimAPIController</members>
-        <members>RMS_priceCalcSlimAPILogic</members>
-        <members>RMS_priceCalcSlimAPILogicTest</members>
+       
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -58,7 +56,6 @@
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createVisitWorkOrder</members>
-        <members>RMS_createWorkOrder</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
@@ -232,13 +229,9 @@
         <name>Layout</name>
     </types>
     <types>
-        <members>Schedule_Install_TwinCity</members>
-        <members>Schedule_Permit_TwinCity</members>
-        <members>Schedule_Tech_TwinCity</members>
-        <members>Unassigned_Order_TwinCity</members>
-        <members>Unassigned_Twin_City</members>
+       
         <name>Queue</name>
-    </types>
+    </types> 
     <types>
         <members>*</members>
         <name>StaticResource</name>
