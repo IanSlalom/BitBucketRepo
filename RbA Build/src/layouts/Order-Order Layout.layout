@@ -282,12 +282,8 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Discount__c.NAME</fields>
-        <fields>Discount__c.Promotion_Start__c</fields>
-        <fields>Discount__c.Promotion_End__c</fields>
-        <fields>Discount__c.Active__c</fields>
+        <fields>Store_Discount__c.NAME</fields>
         <fields>Discount_Amount__c</fields>
-        <fields>Discount__c.Description__c</fields>
         <fields>Status__c</fields>
         <relatedList>Order_Discount__c.Order__c</relatedList>
     </relatedLists>
@@ -313,7 +309,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Finance_Program__c.NAME</fields>
+        <fields>Store_Finance_Program__c.NAME</fields>
         <fields>Amount_Financed__c</fields>
         <relatedList>Order_Financing__c.Related_Order__c</relatedList>
     </relatedLists>

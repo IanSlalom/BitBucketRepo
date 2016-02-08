@@ -86,20 +86,6 @@
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Finance_Program__c</fullName>
-        <externalId>false</externalId>
-        <label>Finance Program</label>
-        <referenceTo>Finance_Program__c</referenceTo>
-        <relationshipLabel>Quote Financing</relationshipLabel>
-        <relationshipName>Quote_Financing</relationshipName>
-        <relationshipOrder>0</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>true</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
-    </fields>
-    <fields>
         <fullName>Program_Rate__c</fullName>
         <externalId>false</externalId>
         <label>Program Rate</label>
@@ -117,7 +103,7 @@
         <referenceTo>Quote</referenceTo>
         <relationshipLabel>Quote Financing</relationshipLabel>
         <relationshipName>Quote_Financing</relationshipName>
-        <relationshipOrder>1</relationshipOrder>
+        <relationshipOrder>0</relationshipOrder>
         <reparentableMasterDetail>false</reparentableMasterDetail>
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
@@ -125,17 +111,27 @@
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>Store_Finance_Program_del__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <fullName>Store_Finance_Program__c</fullName>
         <externalId>false</externalId>
         <label>Store Finance Program</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Store_Finance_Program__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
         <referenceTo>Store_Finance_Program__c</referenceTo>
         <relationshipLabel>Quote Financing</relationshipLabel>
         <relationshipName>Quote_Financing_del</relationshipName>
-        <required>false</required>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>Lookup</type>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
         <fullName>rSuite_Id__c</fullName>

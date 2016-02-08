@@ -46,10 +46,11 @@
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junctions object to assign discounts to a store through the store configuration</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>false</enableHistory>
+    <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
@@ -58,49 +59,47 @@
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
         <label>Active</label>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Finance_Program__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
+        <fullName>Discount__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <description>a discount to link to a store</description>
         <externalId>false</externalId>
-        <label>Finance Program</label>
-        <referenceTo>Finance_Program__c</referenceTo>
-        <relationshipLabel>Store Finance Programs</relationshipLabel>
-        <relationshipName>Store_Finance_Programs</relationshipName>
-        <required>false</required>
+        <inlineHelpText>a discount to link to a store</inlineHelpText>
+        <label>Discount</label>
+        <referenceTo>Discount__c</referenceTo>
+        <relationshipLabel>Store Discounts</relationshipLabel>
+        <relationshipName>Store_Discounts</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Pivotal_Id__c</fullName>
-        <externalId>false</externalId>
-        <label>Pivotal Id</label>
-        <length>255</length>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Store_Configuration__c</fullName>
         <deleteConstraint>Restrict</deleteConstraint>
+        <description>The configuration of a store to that the discount will be enabled for</description>
         <externalId>false</externalId>
+        <inlineHelpText>The configuration of a store to that the discount will be enabled for</inlineHelpText>
         <label>Store Configuration</label>
         <referenceTo>Store_Configuration__c</referenceTo>
-        <relationshipLabel>Store Finance Programs</relationshipLabel>
-        <relationshipName>Store_Finance_Programs</relationshipName>
-        <required>false</required>
+        <relationshipLabel>Store Discounts</relationshipLabel>
+        <relationshipName>Store_Discounts</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
-    <label>Store Finance Program</label>
+    <label>Store Discount</label>
     <nameField>
-        <label>Store Finance Program Name</label>
+        <label>Store Discount Name</label>
+        <trackHistory>false</trackHistory>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Store Finance Programs</pluralLabel>
+    <pluralLabel>Store Discounts</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

@@ -622,6 +622,16 @@ This is a holding field for now.</inlineHelpText>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>PoDate</fullName>
         <trackHistory>true</trackHistory>
     </fields>

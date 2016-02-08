@@ -8,10 +8,6 @@
         <label>Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>Finance_Program__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Amount_Financed__c</field>
             </layoutItems>
@@ -26,6 +22,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Expiration_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Store_Finance_Program__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

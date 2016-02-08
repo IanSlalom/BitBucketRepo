@@ -78,9 +78,16 @@ private class RMS_cancelOrderExtensionTest {
 		insert orderItem1;		
 
 		Discount__c discount1 = new Discount__c(Name = 'my discount');
-		insert discount1;		
+		insert discount1;
 
-		Order_Discount__c orderDiscount1 = new Order_Discount__c(Order__c = Order1.id, Discount__c = discount1.Id, Discount_Amount__c = 50 );
+		Account myStore = [select Id, Active_Store_Configuration__c from Account where Name = '77 - Twin Cities, MN' Limit 1];
+		Store_Discount__c storeDiscount1 = new Store_Discount__c();
+		storeDiscount1.Discount__c = discount1.Id;
+		storeDiscount1.Store_Configuration__c = myStore.Active_Store_Configuration__c;
+		storeDiscount1.Active__c = true;
+		insert storeDiscount1;		
+
+		Order_Discount__c orderDiscount1 = new Order_Discount__c(Order__c = Order1.id, Store_Discount__c = storeDiscount1.Id, Discount_Amount__c = 50 );
 		insert orderDiscount1;		
 
 	}

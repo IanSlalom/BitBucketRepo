@@ -72,7 +72,7 @@
         <fullName>Discount_Description__c</fullName>
         <description>The description of the discount</description>
         <externalId>false</externalId>
-        <formula>Discount__r.Description__c</formula>
+        <formula>Store_Discount__r.Discount__r.Description__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The description of the discount</inlineHelpText>
         <label>Discount Description</label>
@@ -83,31 +83,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Discount__c</fullName>
-        <description>The discount linked to this discount applied junction.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The discount linked to this discount applied junction.</inlineHelpText>
-        <label>Discount</label>
-        <lookupFilter>
-            <active>true</active>
-            <filterItems>
-                <field>Discount__c.Active__c</field>
-                <operation>equals</operation>
-                <value>True</value>
-            </filterItems>
-            <isOptional>true</isOptional>
-        </lookupFilter>
-        <referenceTo>Discount__c</referenceTo>
-        <relationshipLabel>Order Discounts</relationshipLabel>
-        <relationshipName>Discount_Applied</relationshipName>
-        <relationshipOrder>0</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
-    </fields>
-    <fields>
         <fullName>Order__c</fullName>
         <description>The discount is applied to this order</description>
         <externalId>false</externalId>
@@ -115,7 +90,7 @@
         <label>Order</label>
         <referenceTo>Order</referenceTo>
         <relationshipName>Discount_Applied</relationshipName>
-        <relationshipOrder>1</relationshipOrder>
+        <relationshipOrder>0</relationshipOrder>
         <reparentableMasterDetail>true</reparentableMasterDetail>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
@@ -144,10 +119,33 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Store_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Store Discount</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Store_Discount__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Store_Discount__c</referenceTo>
+        <relationshipLabel>Order Discounts</relationshipLabel>
+        <relationshipName>Order_Discounts</relationshipName>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
         <fullName>Store_Location__c</fullName>
         <description>The discount&apos;s store location</description>
         <externalId>false</externalId>
-        <formula>Discount__r.Store_Location__r.Name</formula>
+        <formula>Store_Discount__r.Store_Configuration__r.Store__r.Name</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The discount&apos;s store location</inlineHelpText>
         <label>Store Location</label>

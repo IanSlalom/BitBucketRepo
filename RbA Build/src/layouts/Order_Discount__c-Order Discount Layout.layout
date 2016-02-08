@@ -16,11 +16,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Discount__c</field>
+                <field>Order__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Order__c</field>
+                <field>Store_Discount__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

@@ -42,12 +42,12 @@ public with sharing class RMS_salesOrderManager {
 				Opportunity.Account.BillingCountryCode,	Opportunity.Description, Opportunity.CloseDate, Opportunity.Pricebook2Id
 				from Quote where isSold__c = true and OpportunityId in :closedWonOpportunitiesIds];
 
-			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Quote__c,
+			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c,
 				Quote__r.OpportunityId 
 				from Quote_Discount__c where Quote__c in :soldQuoteList];
 
 			// get the quote financing
-			List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Finance_Program__c, Related_Quote__c,
+			List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c,
 				Related_Quote__r.OpportunityId
 				from Quote_Financing__c where Related_Quote__c in :soldQuoteList];
 
@@ -207,7 +207,7 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 		List<Order_Discount__c> odList = new List<Order_Discount__c> ();
 		for (Quote_Discount__c qd : qdList) {
 			Order_Discount__c od = new Order_Discount__c();
-			od.Discount__c = qd.Discount__c;
+			od.Store_Discount__c = qd.Store_Discount__c;
 			od.Discount_Amount__c = qd.Discount_Amount__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {
@@ -232,7 +232,7 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 		for (Quote_Financing__c qf : qfList) {
 			Order_Financing__c ordf = new Order_Financing__c();
 			ordf.Amount_Financed__c = qf.Amount_Financed__c;
-			ordf.Finance_Program__c = qf.Finance_Program__c;
+			ordf.Store_Finance_Program__c = qf.Store_Finance_Program__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {
 				if (ord.QuoteId == qf.Related_Quote__c) {
