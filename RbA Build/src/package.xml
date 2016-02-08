@@ -44,6 +44,7 @@
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
+        <members>UtilityMethodsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
