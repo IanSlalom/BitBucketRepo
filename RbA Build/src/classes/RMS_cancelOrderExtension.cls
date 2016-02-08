@@ -77,8 +77,8 @@ public with sharing class RMS_cancelOrderExtension {
 		try{
 			// upsert all of the cancelled order items, pos, and the order
 			upsert purchaseOrdersToCancel;  
-			upsert orderItemsToCancel; 
 			upsert discountsToCancel; 
+			upsert orderItemsToCancel; 
 			upsert theOrder;
 		} catch (Exception e){
 			// TODO: Add comment here

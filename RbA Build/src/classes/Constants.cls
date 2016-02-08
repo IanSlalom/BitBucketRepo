@@ -24,6 +24,10 @@ public with sharing class Constants {
 			'ShippingStateCode',
 			'ShippingPostalCode',
 			'Store_Location__c'
+		},
+		'TestClass'=>new String[]
+		{	'Name'
+
 		}
 	};
 
