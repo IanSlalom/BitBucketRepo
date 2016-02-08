@@ -555,11 +555,15 @@ public with sharing class RMS_prodConfigManager {
 
 		// Check if we have the necessary Ids to retrieve the pricebookentry and return the wrapper unchanged if so
 		if (childProductId == null) return theWrapper;
-
-		PricebookEntry pBookEntry = [SELECT Id, Pricing_Configuration__c FROM PricebookEntry
+		PricebookEntry pBookEntry;
+		
+		for (PricebookEntry pBookE : [SELECT Id, Pricing_Configuration__c FROM PricebookEntry
 																	WHERE 	PriceBook2Id =: priceBookId AND
 																			Product2Id =:	childProductId
-																	LIMIT 1 ];
+																	LIMIT 1 ]) {
+																		
+			pBookEntry = pBookE;
+		}
 		
 		// If the child product's pricebook entry cannot be found, return the wrapper unchanged
 		if (pBookEntry == null) return theWrapper;
