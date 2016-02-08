@@ -1,7 +1,7 @@
 public with sharing class RMS_viewRelatedWorkOrdersController {
 	
-	public list<SVMXC__Service_Order__c> workOrdersList = new list<SVMXC__Service_Order__c>();
-	public list<SVMXC__Service_Order__c> getWorkOrders() {
+	public list<RbA_Work_Order__c> workOrdersList = new list<RbA_Work_Order__c>();
+	public list<RbA_Work_Order__c> getWorkOrders() {
         return workOrdersList;
     }
 	public string getView(){
@@ -38,14 +38,14 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		strurl = strurl.split('apex/')[1];
 		baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
 		//TODO: use utility methods
-		//list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Visit'];
-    	//list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'SVMXC__Service_Order__c' AND Name = 'Actions'];
+		//list<RecordType> serviceOrderVisitRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND Name = 'Visit'];
+    	//list<RecordType> serviceOrderActionsRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND Name = 'Actions'];
     	
-    	serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
-    	serviceOrderActionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
-    	serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
-    	serviceOrderLSWPRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
-    	serviceOrderPaintStainRecordTypeId = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');
+    	serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+    	serviceOrderActionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Actions', 'RbA_Work_Order__c');
+    	serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
+    	serviceOrderLSWPRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
+    	serviceOrderPaintStainRecordTypeId = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'RbA_Work_Order__c');
     	
     	
     	
@@ -56,16 +56,15 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     	String woQuery=	'SELECT id, '+ 
     					'Name, '+ 
     					'Sold_Order__c, '+
-    					'SVMXC__Work_Order_Scheduling_Status__c, '+
+    					'Work_Order_Scheduling_Status__c, '+
     					'Type_image__c, '+
-    					'SVMXC__Scheduled_Date_Time__c, '+
-    					'SVMXC__Group_Member__c, '+
-    					'SVMXC__Order_Status__c, '+
+    					'Scheduled_Date_Time__c, '+
+    					'Work_Order_Status__c, '+
     					'Owner.Name, '+
-    					'SVMXC__Order_Type__c, '+
+    					'Order_Type__c, '+
     					'CreatedDate '+
     					
-    					'FROM SVMXC__Service_Order__c WHERE Sold_Order__c =: ordId';
+    					'FROM RbA_Work_Order__c WHERE Sold_Order__c =: ordId';
 		
 		if(strurl.Contains('Visit')){
 			//String visitRecordType = serviceOrderVisitRecordType[0].id;
@@ -87,7 +86,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		
 		
 		//building strings to use as URL for create new Workorder
-		Schema.DescribeSObjectResult r = SVMXC__Service_Order__c.sObjectType.getDescribe();
+		Schema.DescribeSObjectResult r = RbA_Work_Order__c.sObjectType.getDescribe();
 		String workOrderKeyPrefix = r.getKeyPrefix();
 		
 		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber, OpportunityId, BillToContactId FROM Order WHERE Id =:ordId ];
@@ -112,8 +111,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 											'CF'+workOrderFieldIds.Sold_Order__c+'='+theOrd[0].OrderNumber+
 											'&CF'+workOrderFieldIds.Sold_Order__c+'_lkid='+Ord.Id+
 											
-											'&CF'+workOrderFieldIds.Company__c+'='+relatedAccount[0].Name+
-											'&CF'+workOrderFieldIds.Company__c+'_lkid='+relatedAccount[0].Id+
+											'&CF'+workOrderFieldIds.Account__c+'='+relatedAccount[0].Name+
+											'&CF'+workOrderFieldIds.Account__c+'_lkid='+relatedAccount[0].Id+
 											
 											'&'+workOrderFieldIds.Street__c+'='+relatedAccount[0].ShippingStreet+
 											'&'+workOrderFieldIds.City__c+'='+relatedAccount[0].ShippingCity+

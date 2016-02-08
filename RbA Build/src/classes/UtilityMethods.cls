@@ -25,19 +25,19 @@ public with sharing class UtilityMethods {
 	public static Map<String,Id> masterRTList = new Map<String,Id>();
 
 	
-	public static SVMXC__Service_Order__c buildWorkOrder(Account dwelling, Order ord, Id rtID, Id ownerId, String ordType, Id munici ){
-		SVMXC__Service_Order__c wo = new SVMXC__Service_Order__c(
+	public static RbA_Work_Order__c buildWorkOrder(Account dwelling, Order ord, Id rtID, Id ownerId, String ordType, Id munici ){
+		RbA_Work_Order__c wo = new RbA_Work_Order__c(
 			Sold_Order__c = ord.id,
 			RecordTypeId = rtID,
-			SVMXC__Order_Type__c = ordType,
-			SVMXC__Company__c = ord.AccountId,
+			Order_Type__c = ordType,
+			Account__c = ord.AccountId,
 					
-			SVMXC__Street__c = dwelling.ShippingStreet,
-			SVMXC__City__c = dwelling.ShippingCity,
-			SVMXC__State__c = dwelling.ShippingStateCode,
-			SVMXC__Zip__c = dwelling.ShippingPostalCode, 
-			SVMXC__Country__c = dwelling.ShippingCountryCode,
-			SVMXC__Contact__c = Ord.BillToContactId,
+			Street__c = dwelling.ShippingStreet,
+			City__c = dwelling.ShippingCity,
+			State__c = dwelling.ShippingStateCode,
+			Zip__c = dwelling.ShippingPostalCode, 
+			Country__c = dwelling.ShippingCountryCode,
+			Contact__c = Ord.BillToContactId,
 			
 			Municipality__c = munici,
 			

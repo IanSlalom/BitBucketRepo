@@ -127,12 +127,12 @@ private class RMS_mobileAppRequestHelperTest {
 		
     	Group Install_Work_Order_Queue = utilities.createQueue('Install_Work_Order_Queue');
 		insert Install_Work_Order_Queue;
-		QueueSobject Install_Work_Order_Link = utilities.createQueueSobject(Install_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Install_Work_Order_Link = utilities.createQueueSobject(Install_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Install_Work_Order_Link;
 		
 		Group Tech_Measure_Work_Order_Queue = utilities.createQueue('Tech_Measure_Work_Order');
 		insert Tech_Measure_Work_Order_Queue;
-		QueueSobject Tech_Measure_Work_Order_Link = utilities.createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Tech_Measure_Work_Order_Link = utilities.createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Tech_Measure_Work_Order_Link;
 		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(

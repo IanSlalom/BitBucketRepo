@@ -56,26 +56,26 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             
             //RETREVING RECORD TYPES USED IN WORK ORDER CREATION
-            Id permitWORecordType = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
-            Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
-            Id LSWPWORecordType = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
+            Id permitWORecordType = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
+            Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'RbA_Work_Order__c');
+            Id LSWPWORecordType = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
             
             
             
             //BUILDING MAP OF ORD ID TO LIST OF LSWP WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
-            map<id, list<SVMXC__Service_Order__c>> ordIdtoListOfLSWPWOMap = new map<id, list<SVMXC__Service_Order__c>>();
-            list<SVMXC__Service_Order__c> relatedLSWPWorkOrders = [SELECT id, Sold_Order__c, RecordTypeId FROM SVMXC__Service_Order__c WHERE Sold_Order__c IN :activatedOrderId AND RecordTypeId = :LSWPWORecordType];
+            map<id, list<RbA_Work_Order__c>> ordIdtoListOfLSWPWOMap = new map<id, list<RbA_Work_Order__c>>();
+            list<RbA_Work_Order__c> relatedLSWPWorkOrders = [SELECT id, Sold_Order__c, RecordTypeId FROM RbA_Work_Order__c WHERE Sold_Order__c IN :activatedOrderId AND RecordTypeId = :LSWPWORecordType];
 
-            for(SVMXC__Service_Order__c wo : relatedLSWPWorkOrders){
+            for(RbA_Work_Order__c wo : relatedLSWPWorkOrders){
                 if(ordIdtoListOfLSWPWOMap.containsKey(wo.Sold_Order__c)){
                     ordIdtoListOfLSWPWOMap.get(wo.Sold_Order__c).add(wo);
                 }else{
-                    ordIdtoListOfLSWPWOMap.put(wo.Sold_Order__c, new list<SVMXC__Service_Order__c>{wo});
+                    ordIdtoListOfLSWPWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
                 }
             }
  
             //LIST OF ORDERS TO INSERT AFTER FOR LOOP
-            list<SVMXC__Service_Order__c> workOrdersToAdd = new list<SVMXC__Service_Order__c>();
+            list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
             
             //LOOP THROUGH ACTIVATED ORDERS AND CREATE WORK ORDERS
             for(Order ord : activatedOrders){
@@ -95,25 +95,25 @@ public with sharing class RMS_WorkOrderCreationManager {
                 
                     //CREATE HOA WORK ORDER IF DWELLING HAS HOA POPULATED
                     if(dwelling.HOA__c != null){
-                        SVMXC__Service_Order__c hoaWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.HOA_Work_Order_Queue_Id__c, 'HOA',  dwelling.HOA__c);
+                        RbA_Work_Order__c hoaWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.HOA_Work_Order_Queue_Id__c, 'HOA',  dwelling.HOA__c);
                         workOrdersToAdd.add(hoaWorkOrder);
                     }
                     
                     //CREATE HISTORICAL WORK ORDER IF DWELLING HAS HISTORICAL POPULATED
                     if(dwelling.Historical__c != null){
-                        SVMXC__Service_Order__c historicalWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Historical_Work_Order_Queue_Id__c, 'Historical', dwelling.Historical__c );
+                        RbA_Work_Order__c historicalWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Historical_Work_Order_Queue_Id__c, 'Historical', dwelling.Historical__c );
                         workOrdersToAdd.add(historicalWorkOrder);
                     }
                     
                     //CREATE PERMIT WORK ORDER IF DWELLING HAS BUILDING PERMIT POPULATED
                     if(dwelling.Building_Permit__c != null){
-                        SVMXC__Service_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
+                        RbA_Work_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
                         workOrdersToAdd.add(buildingPermitWorkOrder);
                     }
                     //CREATE LSWP WORK ORDER IF NO LSWP WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1978
                     if(ordIdtoListOfLSWPWOMap.get(ord.id) == null || ordIdtoListOfLSWPWOMap.get(ord.id).size() == 0){
 	                    if(dwelling.Year_Built__c == null || dwelling.Year_Built__c == ''  || Integer.valueof(Dwelling.Year_Built__c) < 1978){
-	                        SVMXC__Service_Order__c LSWPWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, LSWPWORecordType, storeConfig.LSWP_WO_Owner_ID__c, 'LSWP', null );
+	                        RbA_Work_Order__c LSWPWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, LSWPWORecordType, storeConfig.LSWP_WO_Owner_ID__c, 'LSWP', null );
 	                        workOrdersToAdd.add(LSWPWorkOrder);
 	                    }
                     }
@@ -136,16 +136,14 @@ public with sharing class RMS_WorkOrderCreationManager {
     public void createWorkOrderOnOrderCreation(List<Order> listNew, Map<Id, Order> mapNew){
         system.debug('******INSIDE RMS_WorkOrderCreationManager/createWorkOrderOnOrderCreation');
         
-        list<SVMXC__Service_Order__c> workOrdersToAdd = new list<SVMXC__Service_Order__c>();
-        Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+        list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
+        Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         
         
         list<Id> relatedAccountIds = new list<Id>();
         list<id> relatedOpportunityIds = new list<id>();
         
         for(Order o : listNew){
-        	System.Debug('****************o.AccountId=' +o.AccountId);
-        	System.Debug('****************o.Accountname=' +o.Account.Name);
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
             	system.debug('****** order: '+o);
@@ -161,10 +159,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                 ShippingPostalCode, 
                                                 ShippingCountry,
                                                 ShippingCountryCode,
-                                                Store_Location__c,
-                                                Name
+                                                Store_Location__c
                                                 
-//                                                FROM Account WHERE Id IN :relatedAccountIds AND Name != 'RbA'];
                                                 FROM Account WHERE Id IN :relatedAccountIds];
         map<id, Account> accountIdToAccountMap = new map<id, Account>();        
         list<id> dwellingStoreLocationIds = new list<id>();
@@ -174,21 +170,21 @@ public with sharing class RMS_WorkOrderCreationManager {
         }
         
         //IF ANY RELATED OPPS EXIST THEN QUERY FOR TECH MEASURE WORK ORDERS ON THEM
-        map<id, list<SVMXC__Service_Order__c>> oppIdtoListOfTechMeasureWOMap = new map<id, list<SVMXC__Service_Order__c>>();
+        map<id, list<RbA_Work_Order__c>> oppIdtoListOfTechMeasureWOMap = new map<id, list<RbA_Work_Order__c>>();
         if(relatedOpportunityIds.size() > 0){
-            list<SVMXC__Service_Order__c> relatedTechMeasureWorkOrders = [SELECT    Id,  
+            list<RbA_Work_Order__c> relatedTechMeasureWorkOrders = [SELECT    Id,  
                                                                                     Opportunity__c
-                                                                    FROM SVMXC__Service_Order__c 
+                                                                    FROM RbA_Work_Order__c 
                                                                     WHERE Opportunity__c IN : relatedOpportunityIds
-                                                                    AND SVMXC__Order_Type__c = 'Tech Measure'];
+                                                                    AND Order_Type__c = 'Tech Measure'];
        
             //BUILDING MAP OF OPP ID TO LIST OF WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
             
-            for(SVMXC__Service_Order__c wo : relatedTechMeasureWorkOrders){
+            for(RbA_Work_Order__c wo : relatedTechMeasureWorkOrders){
                 if(oppIdtoListOfTechMeasureWOMap.containsKey(wo.Opportunity__c)){
                     oppIdtoListOfTechMeasureWOMap.get(wo.Opportunity__c).add(wo);
                 }else{
-                    oppIdtoListOfTechMeasureWOMap.put(wo.Opportunity__c, new list<SVMXC__Service_Order__c>{wo});
+                    oppIdtoListOfTechMeasureWOMap.put(wo.Opportunity__c, new list<RbA_Work_Order__c>{wo});
                 }
             }
                 
@@ -204,9 +200,9 @@ public with sharing class RMS_WorkOrderCreationManager {
             system.debug('****** ord ' + ord);
             if(ord.OpportunityId != null && oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId) != null){
                 
-	            list<SVMXC__Service_Order__c> techMeasureWorkOrders = oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId);
+	            list<RbA_Work_Order__c> techMeasureWorkOrders = oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId);
 	            
-	            for(SVMXC__Service_Order__c wo : techMeasureWorkOrders){
+	            for(RbA_Work_Order__c wo : techMeasureWorkOrders){
 	                wo.Sold_Order__c = ord.id;
 	                workOrdersToAdd.add(wo);
 	            }
@@ -214,7 +210,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
-    			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
+    
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c) == null){
                     ord.addError('Store Configuation has not been created.');
                 }
@@ -223,19 +219,19 @@ public with sharing class RMS_WorkOrderCreationManager {
                 Id techMeasureQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c;
                 
                 //CREATE WORK ORDER (TECH MEASURE)
-                SVMXC__Service_Order__c techWO = new SVMXC__Service_Order__c(
+                RbA_Work_Order__c techWO = new RbA_Work_Order__c(
                     Sold_Order__c = ord.id,
                     RecordTypeId = serviceOrderVisitRecordTypeId,
-                    SVMXC__Order_Type__c = 'Tech Measure',
-                    SVMXC__Company__c = ord.AccountId,
-                    SVMXC__Contact__c = ord.BillToContactId,
+                    Order_Type__c = 'Tech Measure',
+                    Account__c = ord.AccountId,
+                    Contact__c = ord.BillToContactId,
                     
                     
-                    SVMXC__Street__c = relatedDwelling.ShippingStreet,
-                    SVMXC__City__c = relatedDwelling.ShippingCity,
-                    SVMXC__State__c = relatedDwelling.ShippingStateCode,
-                    SVMXC__Zip__c = relatedDwelling.ShippingPostalCode, 
-                    SVMXC__Country__c = relatedDwelling.ShippingCountryCode,
+                    Street__c = relatedDwelling.ShippingStreet,
+                    City__c = relatedDwelling.ShippingCity,
+                    State__c = relatedDwelling.ShippingStateCode,
+                    Zip__c = relatedDwelling.ShippingPostalCode, 
+                    Country__c = relatedDwelling.ShippingCountryCode,
     
                     OwnerId = techMeasureQueueId
                 );
@@ -244,17 +240,17 @@ public with sharing class RMS_WorkOrderCreationManager {
                 /*
                 //TODO: Remove if not used
                 //CREATE WORK ORDER (INSTALL)
-                SVMXC__Service_Order__c installWO = new SVMXC__Service_Order__c(
+                RbA_Work_Order__c installWO = new RbA_Work_Order__c(
                     Sold_Order__c = ord.id, 
                     RecordTypeId =  serviceOrderVisitRecordTypeId,
-                    SVMXC__Order_Type__c = 'Install',
-                    SVMXC__Company__c = ord.AccountId,
+                    Order_Type__c = 'Install',
+                    Account__c = ord.AccountId,
                     
-                    SVMXC__Street__c = relatedDwelling.ShippingStreet,
-                    SVMXC__City__c = relatedDwelling.ShippingCity,
-                    SVMXC__State__c = relatedDwelling.ShippingStateCode,
-                    SVMXC__Zip__c = relatedDwelling.ShippingPostalCode, 
-                    SVMXC__Country__c = relatedDwelling.ShippingCountryCode,
+                    Street__c = relatedDwelling.ShippingStreet,
+                    City__c = relatedDwelling.ShippingCity,
+                    State__c = relatedDwelling.ShippingStateCode,
+                    Zip__c = relatedDwelling.ShippingPostalCode, 
+                    Country__c = relatedDwelling.ShippingCountryCode,
                     
                     
                     OwnerId = installQueueId

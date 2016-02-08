@@ -43,27 +43,27 @@ public with sharing class TestUtilityMethods {
 		
     	Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
 		insert Install_Work_Order_Queue;
-		QueueSobject Install_Work_Order_Link = createQueueSobject(Install_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Install_Work_Order_Link = createQueueSobject(Install_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Install_Work_Order_Link;
 		
 		Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
 		insert Tech_Measure_Work_Order_Queue;
-		QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Tech_Measure_Work_Order_Link;
 		
 		Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
 		insert Permit_Work_Order_Queue;
-		QueueSobject Permit_Work_Order_Link = createQueueSobject(Permit_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Permit_Work_Order_Link = createQueueSobject(Permit_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Permit_Work_Order_Link;
 		
 		Group Action_Work_Order_Queue = createQueue('Action_Work_Order');
 		insert Action_Work_Order_Queue;
-		QueueSobject Action_Work_Order_Link = createQueueSobject(Action_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject Action_Work_Order_Link = createQueueSobject(Action_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert Action_Work_Order_Link;
 		
 		Group LSWP_Work_Order_Queue = createQueue('LSWP_Work_Order');
 		insert LSWP_Work_Order_Queue;
-		QueueSobject LSWP_Work_Order_Link = createQueueSobject(LSWP_Work_Order_Queue.id ,'SVMXC__Service_Order__c');
+		QueueSobject LSWP_Work_Order_Link = createQueueSobject(LSWP_Work_Order_Queue.id ,'RbA_Work_Order__c');
 		insert LSWP_Work_Order_Link;
 		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(
@@ -337,10 +337,10 @@ public with sharing class TestUtilityMethods {
 		update opp1;
 		
 		
-		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
-		SVMXC__Service_Order__c techWorkOrder = new SVMXC__Service_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c techWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
 															                Opportunity__c = opp1.id,
-															                SVMXC__Order_Type__c = 'Tech Measure'  
+															                Order_Type__c = 'Tech Measure'  
 															                    );
     	insert techWorkOrder;
 		
@@ -349,7 +349,7 @@ public with sharing class TestUtilityMethods {
 		
 		Order ord1 = [SELECT Id FROM Order WHERE OpportunityId = :opp1.id][0];
 		
-		List<SVMXC__Service_Order__c> workOrder = [SELECT Id FROM SVMXC__Service_Order__c  WHERE Opportunity__c = :opp1.id AND Sold_Order__c = :ord1.id];
+		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp1.id AND Sold_Order__c = :ord1.id];
 		
 		Event event1 = new Event(WhatId = workOrder[0].id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60);
  		insert event1;

@@ -7,7 +7,7 @@
 @author  Anthony Strafaccia (Slalom.ADS)
 
 @version	2015-12/24  Slalom.ADS
-	Created.
+	Created. 
 
 @see		RMS_financialTransactionManagerTest
 
@@ -177,9 +177,7 @@ public with sharing class RMS_financialTransactionManager {
 							Payment__c = p.id,
 							Order__c = p.Order__c,
 							Amount__c = p.Payment_Amount__c,
-							Customer__c = p.Order__r.BillToContactId, 
-							Debit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name
-							);
+							Customer__c = p.Order__r.BillToContactId);
 						
 						if(typeOfPayment == 'DepositDeposit'){
 							newJE.Type__c = 'Deposit';

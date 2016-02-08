@@ -28,7 +28,6 @@ private class RMS_newLaborRedirectExtensionTest {
 
 		Labor__c l = new Labor__c();
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
-//		SVMXC__Service_Order__c theWorkOrder = new SVMXC__Service_Order__c(Sold_Order__c = soldOrder.Id);
 //		insert theWorkOrder; 
 
 //		l.Related_Work_Order__c = theWorkOrder.Id;

@@ -4,9 +4,4 @@
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
     <label>RMS_viewRelatedWorkOrdersActions</label>
-    <packageVersions>
-        <majorNumber>15</majorNumber>
-        <minorNumber>50000</minorNumber>
-        <namespace>SVMXC</namespace>
-    </packageVersions>
 </ApexPage>

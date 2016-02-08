@@ -127,29 +127,13 @@
     <fields>
         <fullName>GL_Account__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
-        <description>Select the GL Account for this reimbursement.</description>
         <externalId>false</externalId>
-        <inlineHelpText>Select the GL Account for this reimbursement.</inlineHelpText>
         <label>GL Account</label>
-        <lookupFilter>
-            <active>true</active>
-            <filterItems>
-                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
-                <operation>equals</operation>
-                <valueField>$Source.Store_Location__c</valueField>
-            </filterItems>
-            <filterItems>
-                <field>Financial_Account_Number__c.Account_Type__c</field>
-                <operation>equals</operation>
-                <value>Misc Reimbursement</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
         <referenceTo>Financial_Account_Number__c</referenceTo>
-        <relationshipLabel>Misc Reimbursement</relationshipLabel>
-        <relationshipName>Misc_Reimbursement</relationshipName>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
         <required>false</required>
-        <trackHistory>true</trackHistory>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -219,11 +203,10 @@
         <fullName>Related_Work_Order__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
-        <inlineHelpText>Related Work Order</inlineHelpText>
         <label>Related Work Order</label>
-        <referenceTo>SVMXC__Service_Order__c</referenceTo>
+        <referenceTo>RbA_Work_Order__c</referenceTo>
         <relationshipLabel>Labor</relationshipLabel>
-        <relationshipName>Labor</relationshipName>
+        <relationshipName>Labor1</relationshipName>
         <required>false</required>
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
@@ -270,7 +253,7 @@
     <fields>
         <fullName>Work_Order_Type__c</fullName>
         <externalId>false</externalId>
-        <formula>Text( Related_Work_Order__r.SVMXC__Order_Type__c )</formula>
+        <formula>Text( Related_Work_Order__r.Order_Type__c )</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Work Order Type</label>
         <required>false</required>

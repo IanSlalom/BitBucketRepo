@@ -29,9 +29,9 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		Opportunity opp1 = new Opportunity(Name='Opp1', AccountId=newDwelling.id, StageName = 'New', CloseDate = Date.today().addYears(1) );
 		
 		//CREATE A WORKORDER ON OPP
-		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
-		SVMXC__Service_Order__c workOrderOnOpp = new SVMXC__Service_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId,  
-																				SVMXC__Order_Type__c = 'Tech Measure',
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrderOnOpp = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId,  
+																				Order_Type__c = 'Tech Measure',
 															                    Opportunity__c = opp1.id
 															                    );
 		
@@ -46,7 +46,7 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		
 		
 		//CHECK NO WORK ORDERS CREATED AND MOVED WORK ORDER THAT IS ON OPP TO ORDER
-		list<SVMXC__Service_Order__c> workOrdersOnOrder = [SELECT Id, Opportunity__c FROM SVMXC__Service_Order__c WHERE Sold_Order__c = :ord1.id];
+		list<RbA_Work_Order__c> workOrdersOnOrder = [SELECT Id, Opportunity__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord1.id];
 		
 		System.assertEquals(workOrdersOnOrder.size() , 1);
 		System.assertEquals(workOrdersOnOrder[0].Opportunity__c, opp1.id);
@@ -89,7 +89,7 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		insert ord1;
 
 		//CHECK NO WORK ORDERS CREATED AND MOVED WORK ORDER THAT IS ON OPP TO ORDER
-		list<SVMXC__Service_Order__c> workOrdersOnOrder = [SELECT Id, Sold_Order__c FROM SVMXC__Service_Order__c WHERE Sold_Order__c = :ord1.id];
+		list<RbA_Work_Order__c> workOrdersOnOrder = [SELECT Id, Sold_Order__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord1.id];
 		
 		System.assertEquals(workOrdersOnOrder.size() , 1);
 		System.assertEquals(workOrdersOnOrder[0].Sold_Order__c, ord1.id);
@@ -163,12 +163,12 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		OrderItem orderItem1 = new OrderItem(OrderId = ord2.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
 		insert orderItem1;	
 
-		list<SVMXC__Service_Order__c> relatedWorkOrders = [SELECT id, SVMXC__Order_Type__c FROM SVMXC__Service_Order__c WHERE Sold_Order__c = :ord2.id];
+		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id, Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
 		system.debug('ads remove relatedWorkOrders1: '+relatedWorkOrders);
 		ord2.Status = 'Activated';
 		update ord2;
 		
-		relatedWorkOrders = [SELECT id, SVMXC__Order_Type__c FROM SVMXC__Service_Order__c WHERE Sold_Order__c = :ord2.id];
+		relatedWorkOrders = [SELECT id, Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
 		System.assertEquals(5, relatedWorkOrders.size());
 		
 		ord2.Status = 'Draft';

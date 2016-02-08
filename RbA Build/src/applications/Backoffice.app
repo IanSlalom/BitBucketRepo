@@ -168,10 +168,10 @@
     <tab>standard-Contact</tab>
     <tab>standard-Opportunity</tab>
     <tab>standard-Order</tab>
-    <tab>SVMXC__Service_Order__c</tab>
     <tab>Purchase_Order__c</tab>
     <tab>Payment__c</tab>
     <tab>Labor__c</tab>
+    <tab>RbA_Work_Order__c</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
@@ -183,8 +183,7 @@
             <tab>Purchase_Order__c</tab>
         </mapping>
         <mapping>
-            <fieldName>Sold_Order__c</fieldName>
-            <tab>SVMXC__Service_Order__c</tab>
+            <tab>RbA_Work_Order__c</tab>
         </mapping>
         <mapping>
             <tab>standard-Account</tab>

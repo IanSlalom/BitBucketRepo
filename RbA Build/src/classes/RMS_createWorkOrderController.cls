@@ -22,12 +22,12 @@ public with sharing class RMS_createWorkOrderController {
 
 /******* Set up Standard Controller for Purchase_Order__c  *****************/
 	private Apexpages.StandardController standardController;
-	private final SVMXC__Service_Order__c wo;
+	private final RbA_Work_Order__c wo;
 	
 	
 	//Constructor
 	public RMS_createWorkOrderController(ApexPages.StandardController stdController) {
-		this.wo = (SVMXC__Service_Order__c)stdController.getRecord();
+		this.wo = (RbA_Work_Order__c)stdController.getRecord();
 		map<string, string> urlParam = ApexPages.currentPage().getParameters();
 
 		orderId = urlParam.get('orderId');
@@ -49,19 +49,19 @@ public with sharing class RMS_createWorkOrderController {
 		woName = wo.Name;
 		
 		if(woType == 'visit'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'SVMXC__Service_Order__c');
+			woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 			wo.RecordTypeId = woRTid;
 		}else if(woType == 'actions'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('Actions', 'SVMXC__Service_Order__c');
+			woRTid = UtilityMethods.retrieveRecordTypeId('Actions', 'RbA_Work_Order__c');
 			wo.RecordTypeId  = woRTid;
 		}else if(woType == 'lswp'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('LSWP', 'SVMXC__Service_Order__c');
+			woRTid = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
 			wo.RecordTypeId = woRTid;
 		}else if(woType == 'paintStain'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'SVMXC__Service_Order__c');
+			woRTid = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'RbA_Work_Order__c');
 			wo.RecordTypeId = woRTid; 
 		}else if(woType == 'permit'){
-			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'SVMXC__Service_Order__c');
+			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
 			wo.RecordTypeId = woRTid;
 			if(permit != null && permit != '' && permit != 'null'){
 				wo.Municipality__c = permit;
@@ -72,22 +72,22 @@ public with sharing class RMS_createWorkOrderController {
 
 	public PageReference save() {
 		wo.Sold_Order__c = orderId;
-		wo.SVMXC__Company__c = accountId;
-		wo.SVMXC__Street__c = shippingStreet;
-		wo.SVMXC__City__c = shippingCity; 
-		wo.SVMXC__State__c = shippingState;
-		wo.SVMXC__Zip__c = shippingPostalCode;
-		wo.SVMXC__Country__c = shippingCountry;
+		wo.Account__c = accountId;
+		wo.Street__c = shippingStreet;
+		wo.City__c = shippingCity; 
+		wo.State__c = shippingState;
+		wo.Zip__c = shippingPostalCode;
+		wo.Country__c = shippingCountry;
 		
 		if(billToContactId != null && billToContactId != 'null'){
-			wo.SVMXC__Contact__c = billToContactId;
+			wo.Contact__c = billToContactId;
 		}
         if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }
-		if(hoa != null && hoa != '' && hoa != 'null' && wo.SVMXC__Order_Type__c == 'HOA' ){
+		if(hoa != null && hoa != '' && hoa != 'null' && wo.Order_Type__c == 'HOA' ){
 			wo.Municipality__c = hoa;
-		}else if(historical != null && historical != '' && historical != 'null' && wo.SVMXC__Order_Type__c == 'Historical'){
+		}else if(historical != null && historical != '' && historical != 'null' && wo.Order_Type__c == 'Historical'){
 			wo.Municipality__c = historical;
 		}
 		

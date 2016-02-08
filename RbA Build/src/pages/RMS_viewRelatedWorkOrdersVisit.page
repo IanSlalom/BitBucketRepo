@@ -97,10 +97,9 @@
 			<apex:column headerValue="">  
 				<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
 			</apex:column>
-	        <apex:column value="{!wo.SVMXC__Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
-	        <apex:column value="{!wo.SVMXC__Work_Order_Scheduling_Status__c}"/>
-	        <apex:column value="{!wo.SVMXC__Scheduled_Date_Time__c}"/>
-	        <apex:column value="{!wo.SVMXC__Group_Member__c}"/>
+	        <apex:column value="{!wo.Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
+	        <apex:column value="{!wo.Work_Order_Scheduling_Status__c}"/>
+	        <apex:column value="{!wo.Scheduled_Date_Time__c}"/>
 	        <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
 		</apex:pageBlockTable>
 		

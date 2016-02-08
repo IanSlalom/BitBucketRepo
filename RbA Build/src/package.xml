@@ -31,6 +31,7 @@
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
+       
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -56,7 +57,6 @@
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createVisitWorkOrder</members>
-        <members>RMS_createWorkOrder</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
@@ -127,8 +127,8 @@
         <members>Quote_Financing__c</members>
         <members>RMS_Queue_Settings__c</members>
         <members>RMS_Settings__c</members>
+        <members>RbA_Work_Order__c</members>
         <members>Refund__c</members>
-        <members>SVMXC__Service_Order__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
@@ -213,15 +213,13 @@
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>Quote_Financing__c-Quote Financing Layout</members>
+        <members>RbA_Work_Order__c-Action Work Order Layout</members>
+        <members>RbA_Work_Order__c-LSWP Work Order Layout</members>
+        <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
+        <members>RbA_Work_Order__c-Permit Work Order Layout</members>
+        <members>RbA_Work_Order__c-Visit Work Order Layout</members>
+        <members>RbA_Work_Order__c-Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
-        <members>SVMXC__Service_Order__c-Action Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-LSWP Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Lead Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Misc Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Paint %2F Stain Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Permit Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Scheduled Work Order Layout</members>
-        <members>SVMXC__Service_Order__c-Visit Work Order Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
@@ -232,13 +230,9 @@
         <name>Layout</name>
     </types>
     <types>
-        <members>Schedule_Install_TwinCity</members>
-        <members>Schedule_Permit_TwinCity</members>
-        <members>Schedule_Tech_TwinCity</members>
-        <members>Unassigned_Order_TwinCity</members>
-        <members>Unassigned_Twin_City</members>
+       
         <name>Queue</name>
-    </types>
+    </types> 
     <types>
         <members>*</members>
         <name>StaticResource</name>

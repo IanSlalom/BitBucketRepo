@@ -96,6 +96,19 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Retail_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Retail Location</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>Finance Programs</relationshipLabel>
+        <relationshipName>Finance_Programs</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Store_Location__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <description>Select the store this financing program is related to.</description>
