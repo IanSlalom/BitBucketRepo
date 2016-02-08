@@ -81,6 +81,8 @@ public with sharing class TestUtilityMethods {
         	
         	);
     	insert storeConfig;
+    	store1.Active_Store_Configuration__c = storeConfig.Id;
+    	update store1;
 		
 		
 		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(

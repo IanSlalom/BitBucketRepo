@@ -12,10 +12,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Store_Location__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Finance_Program__c</field>
             </layoutItems>
             <layoutItems>
@@ -25,6 +21,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Store_Configuration__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -68,7 +68,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Quote_Financing__c.Store_Finance_Program_del__c</relatedList>
+        <relatedList>Quote_Financing__c.Store_Finance_Program__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

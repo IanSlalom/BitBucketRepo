@@ -120,10 +120,6 @@
         <relatedList>Opportunity.Store_Location__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Store_Finance_Program__c.Store_Location__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <excludeButtons>NewCase</excludeButtons>
         <fields>CASES.CASE_NUMBER</fields>
         <fields>CASES.STATUS</fields>
