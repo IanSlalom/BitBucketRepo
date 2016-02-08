@@ -38,8 +38,13 @@ private class RMS_cancelOrderExtensionTest {
 									);
 		insert myAccount2;
 
+		Account dwelling = utility.createDwellingAccount('Dwelling Account');
+
+		Account store = [SELECT Id from Account Where Name = '77 - Twin Cities, MN'];
+		dwelling.Store_Location__c = store.Id;
+		insert dwelling;
 		
-		Opportunity opp1 = utility.createOpportunity(myAccount1.id, 'Closed - Won');
+		Opportunity opp1 = utility.createOpportunity(dwelling.id, 'Closed - Won');
 		insert opp1;
 		
 		Pricebook2 pricebook1 =  utility.createPricebook2Name('Standard Price Book');
@@ -57,8 +62,9 @@ private class RMS_cancelOrderExtensionTest {
 		insert pricebookEntry1;
 		
 		Order order1 = new Order(	Name='Sold Order 1', 
-									AccountId = myAccount1.id, 
+									AccountId = dwelling.id, 
 									EffectiveDate= Date.Today(), 
+									Store_Location__c = store.Id,
 									Opportunity = opp1, 
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()
