@@ -1131,10 +1131,28 @@ NULL)</formula>
         <label>Paint/Stain</label>
     </listViews>
     <listViews>
+        <fullName>Schedule_Install_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule - Install - TwinCity</label>
+        <queue>Schedule_Install_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
         <fullName>Schedule_Install_TwinCity_Work_Order_RbA</fullName>
         <filterScope>Queue</filterScope>
         <label>Schedule - Install - TwinCity</label>
         <queue>Schedule_Install_TwinCity</queue>
+    </listViews>
+    <listViews>
+        <fullName>Schedule_Permit_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule Permit TwinCity</label>
+        <queue>Schedule_Permit_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
     </listViews>
     <listViews>
         <fullName>Schedule_Permit_TwinCity_Work_Order_RbA</fullName>
@@ -1143,10 +1161,37 @@ NULL)</formula>
         <queue>Schedule_Permit_TwinCity</queue>
     </listViews>
     <listViews>
+        <fullName>Schedule_Tech_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule - Tech - TwinCity</label>
+        <queue>Schedule_Tech_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
         <fullName>Schedule_Tech_TwinCity_Work_Order_RbA</fullName>
         <filterScope>Queue</filterScope>
         <label>Schedule - Tech - TwinCity</label>
         <queue>Schedule_Tech_TwinCity</queue>
+    </listViews>
+    <listViews>
+        <fullName>Unassigned_Order_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned Order - TwinCity</label>
+        <queue>Unassigned_Order_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Unassigned_Twin_City_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned - Twin City</label>
+        <queue>Unassigned_Twin_City</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
     </listViews>
     <listViews>
         <fullName>Unassigned_Twin_City_Work_Order_RbA</fullName>
