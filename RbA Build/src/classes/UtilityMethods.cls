@@ -29,7 +29,7 @@ public with sharing class UtilityMethods {
 		RbA_Work_Order__c wo = new RbA_Work_Order__c(
 			Sold_Order__c = ord.id,
 			RecordTypeId = rtID,
-			Order_Type__c = ordType,
+			Work_Order_Type__c = ordType,
 			Account__c = ord.AccountId,
 					
 			Street__c = dwelling.ShippingStreet,

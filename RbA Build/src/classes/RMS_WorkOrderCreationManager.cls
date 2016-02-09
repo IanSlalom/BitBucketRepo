@@ -87,7 +87,7 @@ public with sharing class RMS_WorkOrderCreationManager {
                 if(dwelling.Store_Location__c == null){ 
                     ord.addError('Store has not been set on dwelling.');
                 }else if(accountIdtoStoreConfigMap.get(dwelling.Store_Location__c) == null){
-                    ord.addError('Store Configuation has not been created.');
+                    ord.addError('Store Configuration   has not been created.');
                 }else{
                     
                     //GET STORE CONFIG FROM MAP
@@ -176,7 +176,7 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                                                     Opportunity__c
                                                                     FROM RbA_Work_Order__c 
                                                                     WHERE Opportunity__c IN : relatedOpportunityIds
-                                                                    AND Order_Type__c = 'Tech Measure'];
+                                                                    AND Work_Order_Type__c = 'Tech Measure'];
        
             //BUILDING MAP OF OPP ID TO LIST OF WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
             
@@ -213,7 +213,7 @@ public with sharing class RMS_WorkOrderCreationManager {
     
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c) == null){
                     ord.addError('Store Configuation has not been created.');
-                }
+                } 
                 
                 Id installQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Install_Work_Order_Queue_Id__c;
                 Id techMeasureQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c;
@@ -222,7 +222,7 @@ public with sharing class RMS_WorkOrderCreationManager {
                 RbA_Work_Order__c techWO = new RbA_Work_Order__c(
                     Sold_Order__c = ord.id,
                     RecordTypeId = serviceOrderVisitRecordTypeId,
-                    Order_Type__c = 'Tech Measure',
+                    Work_Order_Type__c = 'Tech Measure',
                     Account__c = ord.AccountId,
                     Contact__c = ord.BillToContactId,
                     
@@ -243,7 +243,7 @@ public with sharing class RMS_WorkOrderCreationManager {
                 RbA_Work_Order__c installWO = new RbA_Work_Order__c(
                     Sold_Order__c = ord.id, 
                     RecordTypeId =  serviceOrderVisitRecordTypeId,
-                    Order_Type__c = 'Install',
+                    Work_Order_Type__c = 'Install',
                     Account__c = ord.AccountId,
                     
                     Street__c = relatedDwelling.ShippingStreet,
@@ -269,6 +269,19 @@ public with sharing class RMS_WorkOrderCreationManager {
            
     }// END OF createWorkOrderOnOrderCreation METHOD
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/************************************************************
             createInstallWorkOrderOnTechMeasureComplete
     *************************************************************/
@@ -288,7 +301,7 @@ public with sharing class RMS_WorkOrderCreationManager {
 													Sold_Order__r.OpportunityId,
 													
 								                    RecordTypeId,
-								                    Order_Type__c,
+								                    Work_Order_Type__c,
 								                    Account__c,
 								                    Account__r.Store_Location__c,
 								                    
@@ -305,7 +318,7 @@ public with sharing class RMS_WorkOrderCreationManager {
 		
 		
 		for(RbA_Work_Order__c wo : extraFieldsList){
-      		if(wo.Order_Type__c != null && wo.Order_Type__c == 'Tech Measure'){
+      		if(wo.Work_Order_Type__c != null && wo.Work_Order_Type__c == 'Tech Measure'){
 	      		if(mapOld.get(wo.id).Work_Order_Scheduling_Status__c != 'Complete' && mapNew.get(wo.id).Work_Order_Scheduling_Status__c == 'Complete'){
 	      			completeWorkOrders.add(wo);
 	      			relatedOrderIdList.add(wo.Sold_Order__c);
@@ -324,7 +337,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
 
 		//GET RELATED WORK ORDERS ON SAME ORDER AND MAP THEM
-		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT Id, Sold_Order__c, Order_Type__c  FROM RbA_Work_Order__c Where Sold_Order__c IN :relatedOrderIdList];
+		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT Id, Sold_Order__c, Work_Order_Type__c  FROM RbA_Work_Order__c Where Sold_Order__c IN :relatedOrderIdList];
 		
 		map<id, list<RbA_Work_Order__c>> orderIdToListWorkOrdersMap = new map<id, list<RbA_Work_Order__c>>();
 		for(RbA_Work_Order__c wo : relatedWorkOrders){
@@ -344,7 +357,7 @@ public with sharing class RMS_WorkOrderCreationManager {
   			boolean alreadyHaveInstall = false;
       		if(orderIdToListWorkOrdersMap.get(wo.Sold_Order__c) != null && orderIdToListWorkOrdersMap.get(wo.Sold_Order__c).size() > 0 ){
       			for(RbA_Work_Order__c relatedWO : orderIdToListWorkOrdersMap.get(wo.Sold_Order__c)){
-      				if(relatedWO.Order_Type__c == 'Install'){
+      				if(relatedWO.Work_Order_Type__c == 'Install'){
       					alreadyHaveInstall = true;
       					break;
       				} 
@@ -353,16 +366,23 @@ public with sharing class RMS_WorkOrderCreationManager {
   			if(alreadyHaveInstall == false){
   				system.debug('ads accountIdtoStoreConfigMap: '+accountIdtoStoreConfigMap);
           		system.debug('ads wo.Account__c: '+wo.Account__r.Store_Location__c);
-          
-  				if(accountIdtoStoreConfigMap.get(wo.Account__r.Store_Location__c) == null){
-		            mapNew.get(wo.id).addError('Store Configuation has not been created.');
-		        }else{
+          	
+          	
+          		if(wo.Account__c == null){ 
+                    mapNew.get(wo.id).addError('Dwelling must be set to complete Tech Measure.');
+          		}else if(wo.Account__r.Store_Location__c == null){
+		            mapNew.get(wo.id).addError('Store Location must be set on related Dwelling');
+                }else if(accountIdtoStoreConfigMap.get(wo.Account__r.Store_Location__c) == null){
+                    mapNew.get(wo.id).addError('Store Configuration has not been created for the related Dwellings Store.');
+                }
+ 
+		        else{
 	  				Id installQueueId = accountIdtoStoreConfigMap.get(wo.Account__r.Store_Location__c).Install_Work_Order_Queue_Id__c;
 	  				
 	  				RbA_Work_Order__c installWO = new RbA_Work_Order__c(
 	                    Sold_Order__c = wo.Sold_Order__c, 
 	                    RecordTypeId =  visitWORecordType,
-	                    Order_Type__c = 'Install',
+	                    Work_Order_Type__c = 'Install',
 	                    Account__c = wo.Account__c,
 	                    
 	                    Street__c = wo.Street__c,
