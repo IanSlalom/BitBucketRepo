@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>AccountTriggerHandler</members>
-        <members>AccountTriggerHandlerTest</members>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
         <members>Constants</members>
@@ -18,6 +16,7 @@
         <members>RMS_cancelOrderExtension</members>
         <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>
+        <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_errorMessages</members>
@@ -31,6 +30,7 @@
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
+        <members>RMS_opportunityUtilitiesTest</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -232,7 +232,7 @@
         <name>Layout</name>
     </types>
     <types>
-     <members>Schedule_Install_TwinCity</members>
+        <members>Schedule_Install_TwinCity</members>
         <members>Schedule_Permit_TwinCity</members>
         <members>Schedule_Tech_TwinCity</members>
         <members>Unassigned_Order_TwinCity</members>
