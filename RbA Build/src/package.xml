@@ -150,6 +150,7 @@
         <members>Pricing_Configuration__c</members>
         <members>Product_Configuration__c</members>
         <members>Purchase_Order__c</members>
+        <members>RbA_Work_Order__c</members>
         <members>Store_Configuration__c</members>
         <name>CustomTab</name>
     </types>
@@ -233,7 +234,7 @@
         <name>Layout</name>
     </types>
     <types>
-     <members>Schedule_Install_TwinCity</members>
+        <members>Schedule_Install_TwinCity</members>
         <members>Schedule_Permit_TwinCity</members>
         <members>Schedule_Tech_TwinCity</members>
         <members>Unassigned_Order_TwinCity</members>
