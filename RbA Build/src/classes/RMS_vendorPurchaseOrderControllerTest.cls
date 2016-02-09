@@ -123,6 +123,12 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.selectedPricebook = 'vendor';
 		customController.status = 'vendor';
 		customController.poId = 'vendor';
+
+  		customController.lineItemToCancel = 'lineitem';
+  		customController.lineItemToReceive = 'lineitem';
+  		customController.quantityReceived = 1;
+  		customController.dateReceived = System.today();
+  		Id myId = customController.storeId;
 	
 		//public variables used in both new and edit PO
 		customController.relatedOrder = new Order();
@@ -132,9 +138,46 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.vendorIdList = new list<Id>();
 		customController.vendorsOnOrder = new list<Account>();
 		customController.newProduct ='new product';
-
+		
 		//Test that the newOrderItems list is initialized with one item
 		System.AssertEquals(1, customController.newOrderItems.size());
+
+
+		// TODO: Add Assert
+		List<SelectOption> productItems = customController.productItems;
+
+		// TODO: Add Assert
+		String vendorQueries = customController.vendorQueries;
+
+		// TODO: Add Assert
+		String vendorVariables = customController.vendorVariables;
+
+		// TODO: Add Assert
+		String productQueries = customController.productQueries;
+
+		// TODO: Add Assert
+		String productVariables = customController.productVariables;
+
+		// TODO: Add Assert
+		Set<Id> vendorProducts = customController.vendorProducts;
+
+		// TODO: Add Assert
+		List<Account> accounts = customController.accounts;
+
+		// TODO: Add Assert
+		List<Contact> contacts = customController.contacts;
+
+		// TODO: Add Assert
+		List<Product2> products = customController.products;
+
+		// TODO: Add Assert
+		List<Cost_Center__c> costCenters = customController.costCenters;
+
+		// TODO: Add Assert
+		String pageTitle = customController.pageTitle;
+
+		// TODO: Add Assert
+		String productText = customController.productText;
 
 		// Test SOQL Filters for autocomplete is correct
 //		System.AssertEquals(' AND RecordTypeId = ', customController.vendorFilter);
@@ -275,10 +318,66 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 
 		// Methods without data set
+		// TODO: Add Asserts
 		customController.cancel();
 		customController.confirm();
 		customController.releasePurchaseOrder();
+		customController.cancelPurchaseOrder();
 		customController.checkReceived();
+		customController.updateCostCenters();
+		
+	}
+
+	/*******************************************************
+					cancelLineItemTest
+	*******************************************************/
+	static testmethod void cancelLineItemTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+		
+		
+		customController.lineItemToCancel = soldOrderItem.Id;
+
+		PageReference newPageRef = customController.cancelLineItem();
+	}
+
+	/*******************************************************
+					cancelLineItemTest
+	*******************************************************/
+	static testmethod void receiveLineItems(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id, Pricebookentry.Product2.Name, Order.Store_Location__c, Order.AccountId, Order.EffectiveDate, Order.BillToContactId FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		List<OrderItem> orderItemsToReceive = new List<OrderItem>(); 
+
+		soldOrderItem.Date_Received__c = System.today();
+		soldOrderItem.Quantity_To_Receive__c = 1;
+		soldOrderItem.Unit_Wholesale_Cost__c = 100;
+		update soldOrderItem;
+//		orderItemsToReceive.add(soldOrderItem);	
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+		
+		// TODO: Add system asserts		
+		customController.receiveLineItems(orderItemsToReceive);
 
 	}
 }

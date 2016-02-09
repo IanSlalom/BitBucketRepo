@@ -125,8 +125,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       if ( vendorVariables != null ) return vendorVariables;
       vendorVariables = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
       String joinedString = '';
-      for (Id s : storeVendors) {
-        joinedString += (joinedString==''?'':',')+s;
+      if (storeVendors != null) {
+      	for (Id s : storeVendors) {
+        	joinedString += (joinedString==''?'':',')+s;
+      	}
       }
       if (String.isBlank(joinedString)) joinedString = 'empty';
       vendorVariables += ';' +joinedString;
@@ -499,21 +501,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
-        // For Cost POs, pulls the current user's store location and recovers the abbreviation
-/*        String storeLocationName =  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
-        if (String.isNotBlank(storeLocationName)) {
-          Account storeLocation = [SELECT Id, Store_Abbreviation__c FROM Account WHERE Name =: storeLocationName];
-          if (storeLocation != null) {
-            costPOOrder.Store_Location__c = storeLocation.Id;
-            po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
-            po.Store_Location__c = storeLocation.Id;
-          }
-          else {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
-            return null;
-            
-          }
-        }*/
         try{
           // Inserts the dummy Order as a parent for the cost PO
           insert costPOOrder;
@@ -651,10 +638,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
   *******************************************************/
   public PageReference cancelLineItem() {
     system.debug('*****Cancelling a line item');
-    system.debug('*****test=' +lineItemToCancel);
     
-    OrderItem itemToCancel = [SELECT Id, Status__c From OrderItem Where Id =: lineItemToCancel];
-    itemToCancel.Status__c = 'Cancelled';
+    OrderItem itemToCancel;
+    for (OrderItem theItemToCancel : [SELECT Id, Status__c From OrderItem Where Id =: lineItemToCancel]) {
+    	itemToCancel = theItemToCancel;
+    	itemToCancel.Status__c = 'Cancelled';
+    }
     upsert itemToCancel;
     // Directs the browser back to the same page to view the purchase order
     PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
@@ -706,6 +695,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       PurchaseDate    = oi.Order.EffectiveDate,
                       Name        = oi.Pricebookentry.Product2.Name,
                       Sold_Order__c    = oi.OrderId,
+                      Store_Location__c = oi.Order.Store_Location__c,
+                      Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
                       RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
                     );
       productAsset.Quantity_Received__c =  (productAsset.Quantity_Received__c == null) 
