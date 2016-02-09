@@ -43,7 +43,7 @@
     <!-- Shows deploying code & running tests for code in directory -->
     <target name="deployCode">
       <!-- Upload the contents of the "codepkg" directory, running the tests for just 1 class -->
-      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" runAllTests="false" pollWaitMillis="20000" maxPoll="100">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" runAllTests="true" pollWaitMillis="20000" maxPoll="100">
       </sf:deploy>
     </target>
 
@@ -61,7 +61,7 @@
     <!-- Shows deploying code, running all tests, and running tests (1 of which fails), and logging. -->
     <target name="deployCodeFailingTest">
       <!-- Upload the contents of the "codepkg" package, running all tests -->
-      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="codepkg" runAllTests="false" logType="Debugonly" pollWaitMillis="20000" maxPoll="100"/>
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="codepkg" runAllTests="true" logType="Debugonly" pollWaitMillis="20000" maxPoll="100"/>
     </target>
 
     <!-- Shows check only; never actually saves to the server -->
