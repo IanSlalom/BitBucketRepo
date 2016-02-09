@@ -31,7 +31,7 @@ private class RMS_newPaymentRedirectExtensionTest {
 		p.Order__c = soldOrder.Id;
 
 
-		PageReference pageRef = Page.RMS_prodConfigRedirect;
+		PageReference pageRef = Page.RMS_newPaymentRedirect;
 		Test.setCurrentPage(pageRef);
 
 		ApexPages.StandardController stdController = new ApexPages.StandardController(p);
@@ -59,7 +59,7 @@ private class RMS_newPaymentRedirectExtensionTest {
 
 		Payment__c p = new Payment__c();
 
-		PageReference pageRef = Page.RMS_prodConfigRedirect;
+		PageReference pageRef = Page.RMS_newPaymentRedirect;
 		Test.setCurrentPage(pageRef);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(p);
 		RMS_newPaymentRedirectExtension customController  = new RMS_newPaymentRedirectExtension(stdController);

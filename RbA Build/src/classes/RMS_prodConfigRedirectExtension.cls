@@ -31,18 +31,13 @@ public with sharing class RMS_prodConfigRedirectExtension {
 	
 	public RMS_prodConfigRedirectExtension(ApexPages.StandardController stdController) {
 		this.theOrder = (Order)stdController.getRecord();
-		if (this.theOrder == null)
-			this.theOrder = new Order(); 
+		if (this.theOrder == null)  this.theOrder = new Order(); 
 	}
 
 	/******* redirect method  *****************/
 	public PageReference redirect() {
 		if (theOrder.Id == null) {
 			 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_NOT_FOUND));
-			 return null;
-		}
-		if (theOrder.Status == 'Activated') {
-			 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_NEW));
 			 return null;
 		}
 		PageReference p = new PageReference('/apex/rms_ProdConfigEdit?oid=' +theOrder.Id +'&pid=' +theOrder.Pricebook2Id);
