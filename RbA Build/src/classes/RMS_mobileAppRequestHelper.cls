@@ -231,9 +231,9 @@ public with sharing class RMS_mobileAppRequestHelper {
       Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Unit_Id__c, Wide_Bar__c, rSuite_Id__c
       from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false];
     // get the quote discounts
-    List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
+    List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
     // get the quote financing
-    List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Finance_Program__c, Related_Quote__c, rSuite_Id__c from Quote_Financing__c where Related_Quote__c in :quoteMap.keySet() and isDeleted = false];
+    List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c, rSuite_Id__c from Quote_Financing__c where Related_Quote__c in :quoteMap.keySet() and isDeleted = false];
     // build the quote containers
     List<QuoteContainer> qcList = new List<QuoteContainer>();
     for (Quote q : quoteMap.values()) {
@@ -339,7 +339,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @return: List<Order_Discount__c>
    */
     public List<Order_Discount__c> queryOrderDiscounts(Set<Id> orderIds){
-    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
+    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
     return odList;
   }
 

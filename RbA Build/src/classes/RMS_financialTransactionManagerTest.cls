@@ -550,7 +550,10 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
-		
+
+		store1.Active_Store_Configuration__c = storeConfig1.Id;
+		update store1;
+				
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
@@ -576,23 +579,22 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
 		insert finacialAccountNumber2;
-		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3', Account_Type__c = 'Misc Cash Receipt');
 		insert glAccount1;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Deposit',
+																						Transaction_Type__c = 'Misc Cash Receipt',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
 		
-		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Sub_Payment', 'Payment__c');
+		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
 												Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today(),
 												GL_Account__c = glAccount1.Id,
 												Store_Location__c = store1.id,
-												RecordTypeId = paymentMiscCashReceiptRecordTypeId,
-												Payment_Type__c = 'Mis Cash payment'
+												RecordTypeId = paymentMiscCashReceiptRecordTypeId
 												);
 		insert payment1;
 
@@ -942,7 +944,8 @@ public with sharing class RMS_financialTransactionManagerTest {
 	
 	static testmethod void positiveCreateAndEditOrder(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
-		testMethods.setUpConfigs();
+
+		testMethods.createOrderTestRecords();
 		
 		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
@@ -962,23 +965,18 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert opp1;
 		Id orderCORORecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
 		
-		Order order1 = new Order(	Name='Sold Order 1', 
-									AccountId = dwelling1.id, 
-									EffectiveDate= Date.Today(), 
-									Store_Location__c = store1.Id,
-									Opportunity = opp1, 									
-									Status ='Draft',
-									BillToContactId = contact1.id, 
-									Pricebook2Id = Test.getStandardPricebookId(),
-									RecordTypeId = orderCORORecordTypeRecordTypeId,
-									Revenue_Recognized_Date__c = null
-								);
-		insert order1;
-		
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+
+
+		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
+		soldOrder.Revenue_Recognized_Date__c = null;
+		soldOrder.Status = 'Job Close';
+		update soldOrder;
 		
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
-															                Sold_Order__c = order1.id 
+															                Sold_Order__c = soldOrder.id 
 															                    );
 		insert workOrder1;
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
@@ -992,9 +990,9 @@ public with sharing class RMS_financialTransactionManagerTest {
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
 		
-		order1.Revenue_Recognized_Date__c = Date.Today();
-		update order1;
-		delete order1;
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		update soldOrder;
+//		delete soldOrder; cannot delete activated order
 	}
 	
 	

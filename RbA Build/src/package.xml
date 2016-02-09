@@ -44,6 +44,7 @@
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
+        <members>UtilityMethodsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -130,6 +131,7 @@
         <members>Refund__c</members>
         <members>Screen_Configuration__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Discount__c</members>
         <members>Store_Finance_Program__c</members>
         <members>Store_Vendor__c</members>
         <members>User</members>
@@ -222,11 +224,20 @@
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
+        <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
         <name>Layout</name>
+    </types>
+    <types>
+     <members>Schedule_Install_TwinCity</members>
+        <members>Schedule_Permit_TwinCity</members>
+        <members>Schedule_Tech_TwinCity</members>
+        <members>Unassigned_Order_TwinCity</members>
+        <members>Unassigned_Twin_City</members>
+        <name>Queue</name>
     </types>
     <types>
         <members>*</members>

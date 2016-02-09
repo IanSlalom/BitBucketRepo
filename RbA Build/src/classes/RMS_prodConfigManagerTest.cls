@@ -408,4 +408,298 @@ private class RMS_prodConfigManagerTest {
 		System.Assert(returnMessage.contains(RMS_errorMessages.HEIGHT_TO_WIDTH_CAP));
 		System.Assert(returnMessage.contains(RMS_errorMessages.WIDTH_TO_HEIGHT_CAP));
 	}
+
+	/*******************************************************
+					checkMakeabilityTestPeakHeight
+	*******************************************************/
+	static testmethod void checkMakeabilityTestPeakHeight(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Peak_Height__c = 0.8;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Left_Leg_Inches__c = 80;
+		soldOrderItem.Left_Leg_Fraction__c = '5/16';
+		soldOrderItem.Right_Leg_Inches__c = 80;
+		soldOrderItem.Right_Leg_Fraction__c = '5/16';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityspecWidthtoHeight
+	*******************************************************/
+	static testmethod void checkMakeabilityspecWidthtoHeight(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Specialty_Width_to_Height_Ratio_Max__c = 0.8;
+		prodConfig.Specialty_Width_to_Height_Ratio_Min__c = 2.5;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 60;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 30;
+		
+		soldOrderItem.Height_Fraction__c = '15/16';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityBrickMouldSlopeTest
+	*******************************************************/
+	static testmethod void checkMakeabilityBrickMouldSlopeTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+		childProd.Name = 'Double-Hung';
+		update childProd;
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Specialty_Width_to_Height_Ratio_Max__c = 0.8;
+		prodConfig.Specialty_Width_to_Height_Ratio_Min__c = 0.1;
+		
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Frame_Type__c = 'Insert Frame';
+		soldOrderItem.Sill_Angle__c = 'FS';
+		soldOrderItem.Exterior_Trim__c = 'Brickmould - Picture Frame';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityScreenConfigTest
+	*******************************************************/
+	static testmethod void checkMakeabilityScreenConfigTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Min_Width__c = 10;
+		
+		Screen_Configuration__c sc = new Screen_Configuration__c(Product_Configuration__c = prodConfig.Id, Max_Width_Inches__c = 20, Max_Height_Inches__c = 20);
+		insert sc;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityLockMaxTest
+	*******************************************************/
+	static testmethod void checkMakeabilityLockMaxTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Lock_Max_Width_Inches__c = 60;
+		prodConfig.Lock_Max_Width_Locks__c = '1';
+		prodConfig.Lock_Max_Height_Inches__c = 60;
+		prodConfig.Lock_Max_Height_Locks__c = '1';
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Locks_Sash__c = '2';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityLockMinTest
+	*******************************************************/
+	static testmethod void checkMakeabilityLockMinTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Lock_Min_Width_Inches__c = 50;
+		prodConfig.Lock_Min_Width_Locks__c = '2';
+		prodConfig.Lock_Min_Height_Inches__c = 50;
+		prodConfig.Lock_Min_Height_Locks__c = '2';
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Locks_Sash__c = '1';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityMaxColorTest
+	*******************************************************/
+	static testmethod void checkMakeabilityMaxColorTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Int_Color_Max_Width_Inches__c = 50;
+		prodConfig.Int_Color_Max__c = 'White';
+		prodConfig.Int_Color_Max_Height_Inches__c = 50;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Interior_Color__c = 'White';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityHWFinishRequiredTest
+	*******************************************************/
+	static testmethod void checkMakeabilityHWFinishRequiredTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.HW_Finish_Required__c = true;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 59;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Hardware_Style__c = 'trad';
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					checkMakeabilityTemperedTest
+	*******************************************************/
+	static testmethod void checkMakeabilityTemperedTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Tempered_Square_Ft_Max__c = 100;
+		prodConfig.Height_Backdown_Inches__c = 2;
+		prodConfig.Width_Backdown_Inches__c = 2;
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 90;
+		soldOrderItem.Width_Fraction__c = '15/16';
+		soldOrderItem.Height_Inches__c = 90;
+		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Tempered_S1__c = false;
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// TODO: Asserts
+	}
+
+	/*******************************************************
+					getOrderStatusTest
+	*******************************************************/
+	static testmethod void getOrderStatusTest(){
+
+		String status = RMS_prodConfigManager.getOrderStatus('nothing');
+		System.AssertEquals('drf', status);
+	}
+
+	
 }

@@ -160,6 +160,22 @@ private class RMS_prodConfigExtensionTest {
 		String masterProdId = ext.masterProductId;
 		System.Assert(masterProdId != null);
 
+		// Verify the store location id
+		String storeLocId = ext.storeLocationId;
+		System.Assert(storeLocId != null);
+
+		// TODO: Add Assert
+		Set<Id> storeVendors = ext.storeVendors;
+
+		// TODO: Add Assert
+		Set<Id> vendorProducts = ext.vendorProducts;
+
+		// TODO: Add Assert
+		String productQueries = ext.productQueries;
+
+		// TODO: Add Assert
+		String productVariables = ext.productVariables;
+
 		// Verify the master prod
 		Product2 masterProd = ext.masterProduct;
 		System.AssertEquals('Master Product', masterProd.Name);
@@ -180,10 +196,20 @@ private class RMS_prodConfigExtensionTest {
 		// Verify the master prod item options
 		List<SelectOption> masterProductItems = ext.masterProductItems;		
 		System.Assert(!masterProductItems.isEmpty());
+
+		// TODO: Add Assert
+		Id priceBookEntryId  = ext.priceBookEntryId;
+
+		// TODO: Add Assert
+		String sashTabName  = ext.sashTabName;
+
+		// TODO: Add Assert
+		String sashFieldName  = ext.sashFieldName;
+	
 	}
 
 	/*******************************************************
-					Product Property Tests
+					PicklistOptionTest
 	*******************************************************/
 	static testmethod void PicklistOptionTest(){
 		createTestRecords();
@@ -238,6 +264,8 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Storm_Window__c = 'SW1; SW2';
 		prodConfig.Storm_Window_Style__c = 'SWS1; SWS2';
 		prodConfig.Install_Track_Location__c = 'L1; L2';
+		prodConfig.Finger_Lifts__c = 'F1; F2';
+		prodConfig.Sash_Ratio__c = 'S1; S2';
 		
 		update prodConfig;
 
@@ -248,8 +276,16 @@ private class RMS_prodConfigExtensionTest {
 		ApexPages.currentPage().getParameters().put('id',priceBookId);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(oi);
 		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
-		ext.enterProduct();
 
+		// properties
+		boolean orderActivated = ext.orderActivated;
+		String oiId = ext.oiId;
+		String exteriorColor = ext.exteriorColor; 
+		String interiorColor = ext.interiorColor; 
+		String inputWidth = ext.inputWidth;
+		String inputHeight = ext.inputHeight;
+
+		ext.enterProduct();
 		
 		// Verify the master product picklist items
 		List<SelectOption> masterProdItems = ext.masterProductItems;
@@ -435,6 +471,13 @@ private class RMS_prodConfigExtensionTest {
 		List<SelectOption> installTrackLocationItems = ext.installTrackLocationItems;
 		System.AssertEquals(3, installTrackLocationItems.size());
 
+		// Verify the fingerLiftItems
+		List<SelectOption> fingerLiftItems = ext.fingerLiftItems;
+		System.AssertEquals(3, fingerLiftItems.size());
+
+		// Verify the sashRatioItems
+		List<SelectOption> sashRatioItems = ext.sashRatioItems;
+		System.AssertEquals(3, sashRatioItems.size());
 
 	}
 
@@ -471,7 +514,7 @@ private class RMS_prodConfigExtensionTest {
 		PricebookEntry pBookEntry = [SELECT Id FROM PricebookEntry WHERE Pricing_Configuration__c != null limit 1];
 		Product2 masterProd = [SELECT Id FROM Product2 WHERE Name = 'Master Product' limit 1];
 	
-		OrderItem oi = new OrderItem(OrderId = soldOrder.Id, Width_Inches__c = 19, Height_Inches__c = 19);
+		OrderItem oi = new OrderItem(OrderId = soldOrder.Id, Width_Inches__c = 19, Height_Inches__c = 19, Quantity = 0);
 		
 		// Set up controller with order line id, order, and pricebook only for a new product
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -490,6 +533,7 @@ private class RMS_prodConfigExtensionTest {
 		OrderItem oi2 = [SELECT Id, PricebookEntryId, Width_Inches__c, Height_Inches__c, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id limit 1];
 		oi2.Width_Inches__c = 19;
 		oi2.Height_Inches__c = 19;
+		oi2.Quantity = 1;
 		update oi2;
 
 		// Set up controller with order line id only for existing products
@@ -503,5 +547,99 @@ private class RMS_prodConfigExtensionTest {
 
 		
 	}
+
+	/*******************************************************
+					Cancel Test
+	*******************************************************/
+	static testmethod void CancelTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+	
+		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+
+		// Set up controller with order line id only
+		PageReference pageRef = Page.RMS_prodConfigEdit;
+		Test.setCurrentPage(pageRef);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(oi);
+		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
+		
+		pageReference newPage = ext.cancel();
+		
+	}
+
+
+	/*******************************************************
+					clearNonSelectableValuesTest
+	*******************************************************/
+	static testmethod void clearNonSelectableValuesTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+	
+		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+		Product_Configuration__c prodConfig = [SELECT Id from Product_Configuration__c where Name = 'Product Config'];
+		prodConfig.Measurement_Fractions__c = '1/2;3/4';
+		prodConfig.Exterior_Color__c = 'White; Red';
+		prodConfig.Interior_Color__c = 'White; Red';
+		prodConfig.Glazing__c = 'Glaze1; Glaze2';
+		prodConfig.Glass_Pattern__c = 'GP1; GP2';
+		prodConfig.Grille_Style__c = 'GS1; GS2';
+		prodConfig.Grille_Patterns__c = 'GP1; GP2';
+		prodConfig.Lites_Wide__c = '1; 2';
+		prodConfig.Lites_High__c = '1; 2';
+		prodConfig.Exterior_Trim__c = '1; 2';
+		prodConfig.Frame_Type__c = 'FT1; FT2';
+		prodConfig.Checkrail_Style__c = 'CR1; CR2';
+		prodConfig.Interior_Trim__c = 'TR1; TR2';
+		prodConfig.Handing__c = 'HO1; HO2';
+		prodConfig.Hardware_Finish__c = 'HF1; HF2';
+		prodConfig.Hardware_Color__c = 'HC1; HC2';
+		prodConfig.Hardware_Style__c = 'HS1; HS2';
+		prodConfig.Hardware_Option__c = 'HO1; HO2';
+		prodConfig.Lifts_Pulls__c = '1; 2';
+		prodConfig.Locks_Sash__c = '1; 2';
+		prodConfig.Screen_Type__c = 'ST1; ST2';
+		prodConfig.Screen_Vaneer_Type__c = 'SV1; SV2';
+		prodConfig.Sill_Angle__c = '1; 2';
+		prodConfig.Mull_Sequence_Mullion__c = 'a; b';
+		prodConfig.Sash_Operation__c = 'SO1; SO2';
+		prodConfig.EJ_Thickness__c = 'EJ1; EJ2';
+		prodConfig.EJ_Wall_Depth__c = 'DP1; DP2';
+		prodConfig.EJ_Species__c = 'EJS1; EJS2';
+		prodConfig.EJ_Color__c = 'White; Red';
+		prodConfig.Casing_Profile__c = 'P1; P2';
+		prodConfig.Casing_Species__c = 'S1; S2';
+		prodConfig.Casing_Location__c = 'L1; L2';
+		prodConfig.Brickmould_Location__c = 'B1; B2';
+		prodConfig.Drip_Cap_Pieces__c = 'D1; D2';
+		prodConfig.Screen_Color__c = 'Red; White';
+		prodConfig.Exterior_Grille_Color__c = 'Red; White';
+		prodConfig.Interior_Grille_Color__c = 'Red; White';
+		prodConfig.Storm_Window_Color__c = 'Red; White';
+		prodConfig.Exterior_Trim_Color__c = 'Red; White';
+		prodConfig.Jamb_Liner_Color__c = 'Red; White';
+		prodConfig.Interior_Sash_Color__c = 'Red; White';
+		prodConfig.Astragal__c = 'Red; White';
+		prodConfig.Storm_Window__c = 'SW1; SW2';
+		prodConfig.Storm_Window_Style__c = 'SWS1; SWS2';
+		prodConfig.Install_Track_Location__c = 'L1; L2';
+		prodConfig.Finger_Lifts__c = 'F1; F2';
+		prodConfig.Sash_Ratio__c = 'S1; S2'; 
+		
+		update prodConfig;
+
+		// Set up controller with order line id only
+		PageReference pageRef = Page.RMS_prodConfigEdit;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('oid',soldOrder.id);
+		ApexPages.currentPage().getParameters().put('id',priceBookId);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(oi);
+		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
+		
+		OrderItem myorderItem =  RMS_prodConfigExtension.clearNonSelectableValues(oi, prodConfig);
+	}	
 
 }

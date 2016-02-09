@@ -81,6 +81,9 @@ public with sharing class TestUtilityMethods {
         	
         	);
     	insert storeConfig;
+
+    	store1.Active_Store_Configuration__c = storeConfig.Id;
+    	update store1;
 		
 		
 		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
@@ -377,7 +380,8 @@ public with sharing class TestUtilityMethods {
 		dwelling.Store_Location__c = store.Id;
 		insert dwelling;
 	
-
+		Contact contact = new Contact(LastName = 'Jones', AccountId = dwelling.Id);
+		insert contact;
 
 		Pricing_Configuration__c pricingConfig= new Pricing_Configuration__c(
 			Name='Pricing Config'
@@ -428,6 +432,7 @@ public with sharing class TestUtilityMethods {
 									AccountId = dwelling.id, 
 									EffectiveDate= Date.Today(), 
 									Store_Location__c = store.Id,
+									BillToContactId = contact.Id,
 									Opportunity = opp1, 									
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()
@@ -438,6 +443,9 @@ public with sharing class TestUtilityMethods {
 		insert orderItem1;		
 		System.Debug('***************Test.getStandardPricebookId()=' +Test.getStandardPricebookId());
 //		System.Debug('***************pricebook1=' +pricebook1.Id);
+
+
+
 	}
  	
  /*

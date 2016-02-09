@@ -1029,12 +1029,12 @@ public class RMS_prodConfigExtension {
 		}
 
 		//If any of the glass/grille controls are disabled, clear the corresponding Sash 1 fields:
-		if(newProdConfig.Grille_Pattern_Control__c == 'Disabled') {
+		if(newProdConfig.Grille_Pattern_Control__c == 'Disabled' || newProdConfig.Grille_Pattern_Control__c == null) {
 			oI.Grille_Pattern_S1__c = null;
 			oI.Grille_Pattern_S2__c = null;
 			oI.Grille_Pattern_S3__c = null;
 		}
-		if(newProdConfig.Grille_Lites_Control__c == 'Disabled') {
+		if(newProdConfig.Grille_Lites_Control__c == 'Disabled' || newProdConfig.Grille_Lites_Control__c == null) {
 			oI.Lites_Wide_S1__c = null;	
 			oI.Lites_High_S1__c = null;	
 			oI.Lites_Wide_S2__c = null;	
@@ -1042,22 +1042,22 @@ public class RMS_prodConfigExtension {
 			oI.Lites_Wide_S3__c = null;	
 			oI.Lites_High_S3__c = null;	
 		}
-		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled') {
+		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled' || newProdConfig.Custom_Grille_Details_Control__c == null) {
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Custom_Grille_Details_S3__c	= null;
 		}
-		if(newProdConfig.Glazing_Control__c == 'Disabled') {
+		if(newProdConfig.Glazing_Control__c == 'Disabled' || newProdConfig.Glazing_Control__c == null) {
 			oI.Glazing_S1__c = null;	
 			oI.Glazing_S2__c = null;	
 			oI.Glazing_S3__c = null;	
 		}
-		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled') {
+		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled' || newProdConfig.Glass_Pattern_Control__c == null) {
 			oI.Glass_Pattern_S1__c = null; 
 			oI.Glass_Pattern_S2__c = null; 
 			oI.Glass_Pattern_S3__c = null; 
 		}
-		if(newProdConfig.Tempered_Control__c == 'Disabled') {
+		if(newProdConfig.Tempered_Control__c == 'Disabled' || newProdConfig.Tempered_Control__c == null) {
 			oI.Tempered_S1__c = false;
 			oI.Tempered_S2__c = false;
 			oI.Tempered_S3__c = false;
