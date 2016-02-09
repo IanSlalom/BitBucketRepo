@@ -85,9 +85,9 @@ public with sharing class RMS_createWorkOrderController {
         if(opportunity != null && opportunity != '' && opportunity != 'null'){
             wo.Opportunity__c = opportunity;
         }
-		if(hoa != null && hoa != '' && hoa != 'null' && wo.Order_Type__c == 'HOA' ){
+		if(hoa != null && hoa != '' && hoa != 'null' && wo.Work_Order_Type__c == 'HOA' ){
 			wo.Municipality__c = hoa;
-		}else if(historical != null && historical != '' && historical != 'null' && wo.Order_Type__c == 'Historical'){
+		}else if(historical != null && historical != '' && historical != 'null' && wo.Work_Order_Type__c == 'Historical'){
 			wo.Municipality__c = historical;
 		}
 		

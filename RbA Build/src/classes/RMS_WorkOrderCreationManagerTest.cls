@@ -31,7 +31,7 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		//CREATE A WORKORDER ON OPP
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 		RbA_Work_Order__c workOrderOnOpp = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId,  
-																				Order_Type__c = 'Tech Measure',
+																				Work_Order_Type__c = 'Tech Measure',
 															                    Opportunity__c = opp1.id
 															                    );
 		
@@ -163,12 +163,12 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 		OrderItem orderItem1 = new OrderItem(OrderId = ord2.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
 		insert orderItem1;	
 
-		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id, Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
+		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id, Work_Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
 		system.debug('ads remove relatedWorkOrders1: '+relatedWorkOrders);
 		ord2.Status = 'Activated';
 		update ord2;
 		
-		relatedWorkOrders = [SELECT id, Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
+		relatedWorkOrders = [SELECT id, Work_Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
 		System.assertEquals(5, relatedWorkOrders.size());
 		
 		ord2.Status = 'Draft';

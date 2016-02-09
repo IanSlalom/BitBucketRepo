@@ -391,7 +391,7 @@ public with sharing class TestUtilityMethods {
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 		RbA_Work_Order__c techWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
 															                Opportunity__c = opp1.id,
-															                Order_Type__c = 'Tech Measure'  
+															                Work_Order_Type__c = 'Tech Measure'  
 															                    );
     	insert techWorkOrder;
 		

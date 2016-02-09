@@ -50,6 +50,18 @@ public with sharing class RMS_financialTransactionManagerTest {
 												);
 		insert payment1;
 		
+		RMS_financialTransactionManager FTmanager = new RMS_financialTransactionManager();
+		
+		list<Payment__c> listNew = new list<Payment__c>();
+		map<id,Payment__c> mapNew = new map<id,Payment__c>();
+		
+		listNew.add(payment1);
+		mapNew.put(payment1.id, payment1);
+		
+		FTmanager.lockPaymentRecords(listNew);
+		FTmanager.lockPaymentRecords(listNew, mapNew);
+		
+
 		/*
 		try{
 			throw new anException('An exception should have been thrown by the trigger but was not.'); // 1. If we get to this line it means an error was not added and the test class should throw an exception here. 2. MyException class extends Exception.
@@ -60,59 +72,8 @@ public with sharing class RMS_financialTransactionManagerTest {
 		} 
 		*/
 	}
-	/*
-	static testmethod void positiveCreateFinalPayment(){
-		TestUtilityMethods testMethods = new TestUtilityMethods();
-		testMethods.setUpConfigs();
-		
-		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
-		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
-		
-		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
-		dwelling1.Store_Location__c = store1.id;
-		insert dwelling1;
-		
-		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
-		insert contact1;
-		
-		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
-		insert opp1;
-		
-		Order order1 = new Order(	Name='Sold Order 1', 
-									AccountId = dwelling1.id, 
-									EffectiveDate= Date.Today(), 
-									Store_Location__c = store1.Id,
-									Opportunity = opp1, 									
-									Status ='Draft',
-									BillToContactId = contact1.id, 
-									Pricebook2Id = Test.getStandardPricebookId()
-								);
-		insert order1;
-		
-		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
-		insert finacialAccountNumber1;
-		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
-		insert finacialAccountNumber2;
-		
-		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Final Payment',
-																						Debit_Account_Number__c = finacialAccountNumber1.id,
-																						Credit_Account_Number__c = finacialAccountNumber2.id);
-		insert finacialTransaction1;
-		
-		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
-		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
-												RecordTypeId = paymentDespositRecordTypeId,
-												Payment_Type__c = 'Final Payment',
-												Store_Location__c = store1.id,
-												Payment_Amount__c = 100,
-												Payment_Date__c = Date.Today()
-												);
-		insert payment1;
-		
-	}
-	*/
-		
+	
+	
 	static testmethod void positiveEdit(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
@@ -550,7 +511,10 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
-		
+
+		store1.Active_Store_Configuration__c = storeConfig1.Id;
+		update store1;
+				
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
@@ -576,23 +540,22 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
 		insert finacialAccountNumber2;
-		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3', Account_Type__c = 'Misc Cash Receipt');
 		insert glAccount1;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Deposit',
+																						Transaction_Type__c = 'Misc Cash Receipt',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
 		
-		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Sub_Payment', 'Payment__c');
+		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
 												Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today(),
 												GL_Account__c = glAccount1.Id,
 												Store_Location__c = store1.id,
-												RecordTypeId = paymentMiscCashReceiptRecordTypeId,
-												Payment_Type__c = 'Mis Cash payment'
+												RecordTypeId = paymentMiscCashReceiptRecordTypeId
 												);
 		insert payment1;
 
@@ -653,7 +616,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		update payment1;
 		delete payment1;
 	}
-	/* NEEDS COMMUNITIES ACTIVATED
+	/* NEEDS COMMUNITIES ACTIVATED */
 	static testmethod void positiveCreateAndEditLaborLaborExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
@@ -697,19 +660,67 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Internal Labor',
+																						Transaction_Type__c = 'External Labor',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
 		
+
+		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
+       
+      	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
+		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
+		
+		User portalAccountOwner1 = new User(
+			UserRoleId = portalRole.Id,
+			ProfileId = profile1.Id,
+			Username = System.now().millisecond() + 'test2@test.com',
+		   	Alias = 'batman',
+			Email='bruce.wayne@wayneenterprises.com',
+			EmailEncodingKey='UTF-8',
+			Firstname='Bruce',
+			Lastname='Wayne',
+			LanguageLocaleKey='en_US',
+			LocaleSidKey='en_US',
+			TimeZoneSidKey='America/Chicago'
+		);
+		insert portalAccountOwner1;
+       
+        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
+        insert communityUserAccount; 
+       
+        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
+        insert communityContact;  
+                  
+        User communityUser = new User(	Alias = 'test123', 
+										Email = 'test123@noemail.com',
+		               					EmailEncodingKey ='UTF-8', 
+		               					FirstName = 'first',
+		               					LastName='Testing', 
+		               					LanguageLocaleKey='en_US',
+		                				LocaleSidKey='en_US', 
+		                				ProfileID = partnerProfileId,
+		                				Country = 'United States',
+		                				IsActive = true,
+						                ContactId = communityContact.Id,
+						                TimeZoneSidKey = 'America/Los_Angeles', 
+						                Username = 'tester@noemail.com',  
+						                PortalRole = 'Worker',
+						                CommunityNickname = 'financialTest'
+						                );
+       
+        insert communityUser;
+ 
+		
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-												Hours_Applied__c = 1,
-												//Standard_Hourly_Rate__c=100,
-												External_Labor_Amount__c = 100,
-												Store_Location__c = store1.id,
-												Date_Applied__c = Date.Today()
-												);
+										Hours_Applied__c = 1,
+										//Standard_Hourly_Rate__c=100,
+										External_Labor_Amount__c = 100,
+										Store_Location__c = store1.id,
+										Date_Applied__c = Date.Today(),
+										Installer__c = communityUser.id
+										);
 		insert labor1;
 		
 		labor1.Hours_Applied__c = 2;
@@ -717,7 +728,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		update labor1;
 		
 	}
-	*/
+	
 	
 	static testmethod void positiveCreateAndEditLaborLaborInternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
@@ -783,7 +794,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		delete labor1;
 	}
 
-	/* need communities
+
 	static testmethod void positiveCreateAndEditMiscReimbursementExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
@@ -835,15 +846,53 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		Id laborMiscReimbursementRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Reimbursement', 'Labor__c');
 		
-		Account account1 = testMethods.createDwellingAccount('account1');
-		account1.Store_Location__c = store1.id;
-		account1.Baan_Business_Partner_Number__c = '12345';
-		insert account1;
+			
+
+		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
+       
+      	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
+		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
 		
-		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
-		User installer = testMethods.createUser(p.id);
-		installer.AccountId = account1.id;
-		insert installer;
+		User portalAccountOwner1 = new User(
+			UserRoleId = portalRole.Id,
+			ProfileId = profile1.Id,
+			Username = System.now().millisecond() + 'test2@test.com',
+		   	Alias = 'batman',
+			Email='bruce.wayne@wayneenterprises.com',
+			EmailEncodingKey='UTF-8',
+			Firstname='Bruce',
+			Lastname='Wayne',
+			LanguageLocaleKey='en_US',
+			LocaleSidKey='en_US',
+			TimeZoneSidKey='America/Chicago'
+		);
+		insert portalAccountOwner1;
+       
+        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
+        insert communityUserAccount; 
+       
+        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
+        insert communityContact;  
+                  
+        User communityUser = new User(	Alias = 'test123', 
+										Email = 'test123@noemail.com',
+		               					EmailEncodingKey ='UTF-8', 
+		               					FirstName = 'first',
+		               					LastName='Testing', 
+		               					LanguageLocaleKey='en_US',
+		                				LocaleSidKey='en_US', 
+		                				ProfileID = partnerProfileId,
+		                				Country = 'United States',
+		                				IsActive = true,
+						                ContactId = communityContact.Id,
+						                TimeZoneSidKey = 'America/Los_Angeles', 
+						                Username = 'tester@noemail.com',  
+						                PortalRole = 'Worker',
+						                CommunityNickname = 'financialTest'
+						                );
+       
+        insert communityUser;
+ 
 
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
 												Hours_Applied__c = 1,
@@ -852,7 +901,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 												External_Labor_Amount__c = 100,
 												Store_Location__c = store1.id,
 												Date_Applied__c = Date.Today(),
-												Installer__c = installer.id
+												Installer__c = communityUser.id
 												);
 		insert labor1;
 		
@@ -861,8 +910,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		update labor1;
 		
 	}
-	
-	*/
+
 	
 
 	static testmethod void positiveCreateAsset(){
@@ -936,13 +984,29 @@ public with sharing class RMS_financialTransactionManagerTest {
 		asset1.Quantity = 2;
 		
 		update asset1;
+		
+		List<Journal_Entry__c> JEList = [SELECT Id, Sent_to_BaanERP__c FROM Journal_Entry__c];
+		
+		for(Journal_Entry__c je : JEList){
+			je.Sent_to_BaanERP__c = true;
+		}
+		update JEList;
+		
+		asset1.Quantity = 3;
+		update asset1;
+		
+		for(Journal_Entry__c je : JEList){
+			je.Sent_to_BaanERP__c = false;
+		}
+		update JEList;
 		delete asset1;
 	}
 	
 	
 	static testmethod void positiveCreateAndEditOrder(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
-		testMethods.setUpConfigs();
+
+		testMethods.createOrderTestRecords();
 		
 		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
@@ -962,23 +1026,18 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert opp1;
 		Id orderCORORecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
 		
-		Order order1 = new Order(	Name='Sold Order 1', 
-									AccountId = dwelling1.id, 
-									EffectiveDate= Date.Today(), 
-									Store_Location__c = store1.Id,
-									Opportunity = opp1, 									
-									Status ='Draft',
-									BillToContactId = contact1.id, 
-									Pricebook2Id = Test.getStandardPricebookId(),
-									RecordTypeId = orderCORORecordTypeRecordTypeId,
-									Revenue_Recognized_Date__c = null
-								);
-		insert order1;
-		
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+
+
+		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
+		soldOrder.Revenue_Recognized_Date__c = null;
+		soldOrder.Status = 'Job Close';
+		update soldOrder;
 		
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
-															                Sold_Order__c = order1.id 
+															                Sold_Order__c = soldOrder.id 
 															                    );
 		insert workOrder1;
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
@@ -987,15 +1046,51 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Internal Labor',
+																						Transaction_Type__c = 'Rev Recognized - Deposit',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
 		
-		order1.Revenue_Recognized_Date__c = Date.Today();
-		update order1;
-		delete order1;
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert finacialAccountNumber3;
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		insert finacialAccountNumber4;
+		
+		Financial_Transaction__c finacialTransactionLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Labor',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransactionLabor;
+		
+		Financial_Account_Number__c finacialAccountNumber5 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '5');
+		insert finacialAccountNumber5;
+		Financial_Account_Number__c finacialAccountNumber6 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '6');
+		insert finacialAccountNumber6;
+		
+		Financial_Transaction__c finacialTransaction2 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		insert finacialTransaction2;
+		
+		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
+		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
+												RecordTypeId = paymentDespositRecordTypeId,
+												Payment_Type__c = 'Deposit',
+												Store_Location__c = store1.id,
+												Payment_Amount__c = 100,
+												Payment_Date__c = Date.Today()
+												);
+		insert payment1;
+		
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		update soldOrder;
+		
+		//order1.Status = 'Job In Progress'; 
+		//order1.Revenue_Recognized_Date__c = Date.Today();
+		
 	}
+	
 	
 	
 	
