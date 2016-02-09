@@ -31,7 +31,6 @@
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
-       
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -73,6 +72,7 @@
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
+        <members>RbAWorkOrderTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -228,10 +228,6 @@
         <members>Vendor_Product__c-Vendor Product Layout</members>
         <name>Layout</name>
     </types>
-    <types>
-       
-        <name>Queue</name>
-    </types> 
     <types>
         <members>*</members>
         <name>StaticResource</name>

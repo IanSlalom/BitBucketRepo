@@ -31,9 +31,9 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
             map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
-        
-            //QUERY FOR FIELDS ON DWELLING TO POPULATE WORK ORDER
-            list<Account> relatedDwelling = [SELECT Id,  
+        	
+        	//QUERY FOR FIELDS ON DWELLING TO POPULATE WORK ORDER
+            list<Account> relatedDwelling = [SELECT Id,   
                                                     Store_Location__c, 
                                                     HOA__c, Historical__c, 
                                                     Building_Permit__c,
@@ -269,6 +269,119 @@ public with sharing class RMS_WorkOrderCreationManager {
            
     }// END OF createWorkOrderOnOrderCreation METHOD
 
+	/************************************************************
+            createInstallWorkOrderOnTechMeasureComplete
+    *************************************************************/
+    public void createInstallWorkOrderOnTechMeasureComplete(List<RbA_Work_Order__c> listOld, List<RbA_Work_Order__c> listNew, Map<Id, RbA_Work_Order__c> mapOld, Map<Id, RbA_Work_Order__c> mapNew){
+		system.debug('**** RMS_WorkOrderCreationManager/createInstallWorkOrderOnTechMeasureComplete');
+		Id visitWORecordType = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+	  	       
+		list<RbA_Work_Order__c> workOrdersToInsert = new list<RbA_Work_Order__c>();
+		list<RbA_Work_Order__c> completeWorkOrders = new list<RbA_Work_Order__c>();
+		list<id> relatedDwellingIds = new list<id>();
+		list<Id> relatedOrderIdList = new list<id>();
+		list<id> dwellingStoreLocationIds = new list<id>();
+		
+		list<RbA_Work_Order__c> extraFieldsList = [SELECT 	id,
+													Sold_Order__c, 
+								                    Sold_Order__r.BillToContactId,
+													Sold_Order__r.OpportunityId,
+													
+								                    RecordTypeId,
+								                    Order_Type__c,
+								                    Account__c,
+								                    Account__r.Store_Location__c,
+								                    
+								                    Street__c,
+								                    City__c,
+								                    State__c,
+								                    Zip__c, 
+								                    Country__c,
+								                    OwnerId,
+								                    
+								                    Work_Order_Scheduling_Status__c
+								                    
+													FROM RbA_Work_Order__c WHERE Id IN :mapNew.keyset()];		
+		
+		
+		for(RbA_Work_Order__c wo : extraFieldsList){
+      		if(wo.Order_Type__c != null && wo.Order_Type__c == 'Tech Measure'){
+	      		if(mapOld.get(wo.id).Work_Order_Scheduling_Status__c != 'Complete' && mapNew.get(wo.id).Work_Order_Scheduling_Status__c == 'Complete'){
+	      			completeWorkOrders.add(wo);
+	      			relatedOrderIdList.add(wo.Sold_Order__c);
+	      			relatedDwellingIds.add(wo.Account__c);
+	      		}
+      		}
+		}
+		
+		system.debug('**** relatedOrderIdList: '+relatedOrderIdList);
+		system.debug('**** completeWorkOrders: '+completeWorkOrders);
+		system.debug('**** relatedDwellingIds: '+relatedDwellingIds);
+		//GET RELATED DWELLINGS AND ASSIGN TO MAP
+		for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
+                dwellingStoreLocationIds.add(dwelling.Store_Location__c);
+        }
+        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
 
+		//GET RELATED WORK ORDERS ON SAME ORDER AND MAP THEM
+		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT Id, Sold_Order__c, Order_Type__c  FROM RbA_Work_Order__c Where Sold_Order__c IN :relatedOrderIdList];
+		
+		map<id, list<RbA_Work_Order__c>> orderIdToListWorkOrdersMap = new map<id, list<RbA_Work_Order__c>>();
+		for(RbA_Work_Order__c wo : relatedWorkOrders){
+		   if(orderIdToListWorkOrdersMap.containsKey(wo.Sold_Order__c)){
+                orderIdToListWorkOrdersMap.get(wo.Sold_Order__c).add(wo);
+            }else{ 
+                orderIdToListWorkOrdersMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
+            }
+		}
+		   
+      	
+      	for(RbA_Work_Order__c wo : completeWorkOrders){
+      		system.debug('ads orderIdToListWorkOrdersMap: '+orderIdToListWorkOrdersMap);
+      		system.debug('ads wo.Sold_Order__c: '+wo.Sold_Order__c);
+      		
+      		system.debug('ads orderIdToListWorkOrdersMap.get(wo.Sold_Order__c): '+orderIdToListWorkOrdersMap.get(wo.Sold_Order__c));
+  			boolean alreadyHaveInstall = false;
+      		if(orderIdToListWorkOrdersMap.get(wo.Sold_Order__c) != null && orderIdToListWorkOrdersMap.get(wo.Sold_Order__c).size() > 0 ){
+      			for(RbA_Work_Order__c relatedWO : orderIdToListWorkOrdersMap.get(wo.Sold_Order__c)){
+      				if(relatedWO.Order_Type__c == 'Install'){
+      					alreadyHaveInstall = true;
+      					break;
+      				} 
+      			}
+      		}//end of check for null related	
+  			if(alreadyHaveInstall == false){
+  				system.debug('ads accountIdtoStoreConfigMap: '+accountIdtoStoreConfigMap);
+          		system.debug('ads wo.Account__c: '+wo.Account__r.Store_Location__c);
+          
+  				if(accountIdtoStoreConfigMap.get(wo.Account__r.Store_Location__c) == null){
+		            mapNew.get(wo.id).addError('Store Configuation has not been created.');
+		        }else{
+	  				Id installQueueId = accountIdtoStoreConfigMap.get(wo.Account__r.Store_Location__c).Install_Work_Order_Queue_Id__c;
+	  				
+	  				RbA_Work_Order__c installWO = new RbA_Work_Order__c(
+	                    Sold_Order__c = wo.Sold_Order__c, 
+	                    RecordTypeId =  visitWORecordType,
+	                    Order_Type__c = 'Install',
+	                    Account__c = wo.Account__c,
+	                    
+	                    Street__c = wo.Street__c,
+	                    City__c = wo.City__c,
+	                    State__c = wo.State__c,
+	                    Zip__c = wo.Zip__c, 
+	                    Country__c = wo.Country__c,
+						
+						Contact__c = wo.Sold_Order__r.BillToContactId,
+						Opportunity__c = wo.Sold_Order__r.OpportunityId,
+	                    OwnerId = installQueueId
+	                ); 
+	                workOrdersToInsert.add(installWO);
+  				}
+  			}// end of alreadyHaveInstall if
+      		
+      	}//end of loop of compleatedWorkOrders
+		system.debug('**** workOrdersToInsert: '+workOrdersToInsert);
+        insert workOrdersToInsert; 
+    }//end of createInstallWorkOrderOnTechMeasureComplete method
 
 }// EOF
