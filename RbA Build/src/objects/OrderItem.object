@@ -320,55 +320,263 @@
         <label>Defect Code</label>
         <picklist>
             <picklistValues>
-                <fullName>Bowed/Warped/Twisted/Bent</fullName>
+                <fullName>A - Bowed/Warped/Twisted/Bent</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Broken</fullName>
+                <fullName>B - Broken</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Cracked</fullName>
+                <fullName>C - Cracked</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Dented</fullName>
+                <fullName>D - Dented</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Color/Finish</fullName>
+                <fullName>E - Color/Finish</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Fillet Bead</fullName>
+                <fullName>F - Fillet Bead</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Gouged</fullName>
+                <fullName>G - Gouged</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Hard Operating</fullName>
+                <fullName>H - Hard Operating</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Imperfection</fullName>
+                <fullName>I - Imperfection</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Hour Glass</fullName>
+                <fullName>J - Hour Glass</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Rattle</fullName>
+                <fullName>K - Rattle</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>M &amp; T</fullName>
+                <fullName>L - M &amp; T</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>NEED TO ADD ADDTIONAL VALUES</fullName>
+                <fullName>M - Missing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>N - Seal Failure/Collapsed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O - Gaps</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>P - Wavy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Q - Out of Square/Collapsed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>R - Ripped/Torn</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S - Scratched</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>T - Too Weak</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>U - Too Strong</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>V - Compressed Weatherstrip</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>W - Weld</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>X - Excess Silcone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Y - Containment Between Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Z - Delaminating/Falling Off</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AA - Height Too Tall</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>BB - Height Too Short</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>CC - Width Too Wide</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>DD - Width Too Narrow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EE - Bay Window Failure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>FF - Stripped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>GG - Not Fabricated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HH - Leaking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>II - Stress Crack</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M1 - Manufacturing-Wrong Item Shipped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M2 - Manufacturing-Wrong Color</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M3 - Manufacturing-Wrong Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M4 - Manufacturing-Wrong Label</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M5 - Manufacturing-Wrong Style</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M6 - Manufacturing-Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M7 - Manufacturing-Wrong Grille Pattern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RD1 - R &amp; D Replacement/Testing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S1 - Baan Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S2 - Pivotal Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S3 - Retail Systems Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O1 - Order Entry-Wrong Size</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O2 - Order Entry-Wrong Color</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O3 - Order Entry-Wrong Grilles</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O4 - Order Entry-Component Selection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O5 - Order Entry-Missed Reorder Requirements</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O6 - Order Entry-Wrong Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O7 - Order Entry-Bill of Meaterial Selection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O8 - Order Entry-Handing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A1 - Retailer-Homeowner Changed Mind</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A2 - Retailer-Ordering Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A3 - Retailer-Damaged at Install</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A4 - Retailer-Homeowner Damaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A5 - Retailer-Measurement Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A6 - Retailer-Damaged in Warehouse</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A7 - Retailer-Service Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A8 - Retailer-Lost</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A9 - Retailer-Sales Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A10 - Retailer-Display/Sales Sample</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A11 - Retailer - Out of Warranty (Homeowner NEED ENDING VALUE)</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -1192,59 +1400,55 @@
         <label>MTO Source Code</label>
         <picklist>
             <picklistValues>
-                <fullName>Astraga/Interlock</fullName>
+                <fullName>A - Astraga/Interlock</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Balancer</fullName>
+                <fullName>B - Balancer</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Stop Covers</fullName>
+                <fullName>C - Stop Covers</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>GBG</fullName>
+                <fullName>D - GBG</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Exterior Grille</fullName>
+                <fullName>E - Exterior Grille</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Frame</fullName>
+                <fullName>F - Frame</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Glass</fullName>
+                <fullName>G - Glass</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Sash (Rails and Stiles)</fullName>
+                <fullName>H - Sash (Rails and Stiles)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Interior Grille</fullName>
+                <fullName>I - Interior Grille</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Liner</fullName>
+                <fullName>L - Liner</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Screen</fullName>
+                <fullName>S - Screen</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Specialty Window Trim/EJ/Casing</fullName>
+                <fullName>T - Specialty Window Trim/EJ/Casing</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Unit</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>ALL VALUES ENTERED FROM PIVOTAL</fullName>
+                <fullName>U - Unit</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -1377,44 +1581,80 @@
         <externalId>false</externalId>
         <label>Primary Reason</label>
         <picklist>
+            <controllingField>Charge_Cost_To__c</controllingField>
             <picklistValues>
                 <fullName>Goodwill</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Installation</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Management</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Order Entry</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Sales</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Service</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Staining</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Tech Measure</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Warehouse</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>Homeowner</fullName>
+                <controllingFieldValues>Local - Remake</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Andersen Logistics</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bayworld</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMCO</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other Vendor</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Renewal by Andersen</fullName>
+                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2099,42 +2339,6 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Select_Manufacturer__c</fullName>
-        <externalId>false</externalId>
-        <label>Select Manufacturer</label>
-        <picklist>
-            <controllingField>Charge_Cost_To__c</controllingField>
-            <picklistValues>
-                <fullName>Andersen</fullName>
-                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Bayworld</fullName>
-                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>EMCO</fullName>
-                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>RbA</fullName>
-                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>ADD ADDITIONAL IF NEEDED</fullName>
-                <controllingFieldValues>Manufacturer - Replace</controllingFieldValues>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackHistory>false</trackHistory>
-        <type>Picklist</type>
-    </fields>
-    <fields>
         <fullName>Sent_to_Baan_Date__c</fullName>
         <externalId>false</externalId>
         <label>Sent to Baan Date</label>
@@ -2192,7 +2396,127 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>NEED TO ADD ADDITIONAL VALUES</fullName>
+                <fullName>140 Grille: Repair or Replace Perminantly Applied Int. Or Ext.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>150 Hardware: Operator Adjust or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>155 Hardware: Hing Modify or Replace (casement Window)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>160 Hardware: Shimming or Adjusting</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>165 Hardware: Handle, Lift, Pull Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>170 Hardware: Lock Strike, Modify or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>175 Hardware: Lock Bar Repair or Replace (Casement Window)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>180 Hardware: Lock, Keeper, Modify or Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>185 Hardware: Balance Modify or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>190 Hardware: Balance Pivot Pin, Shoes Replace (Vintage DH)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>195 Sash: Modify or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>200 Sash: Glide Shoes Replace (Gliding Product)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>205 Sash: Fillet Bead Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>210 Sash: Bumpers, Limiters Repair or Replace (DB &amp; GW Products)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>215 Sash: Bracket, Snuggers Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>220 Wash Assist, Tilt Wash: Repair and Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>225 Plugs, Foam Pads: Repair and Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>230 Covers: Repair and Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>235 Weatherstrip: Add or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>240 Glass: Replacement (PW Product)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>245 Brickmould, Trim Piece, Overfit: Reattach or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>250 Frame, Jamb Liner, Head Liner: Modify or Replace (DB Product)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>255 Astragal, Interlock: Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>260 Stop, Spring, Liner: Repair or Replace (DB and DH Products)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>265 Welds, Corners: Trim or Paint</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>270 Patio Door: Screen Adjust or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>275 Patio Door: Interlock Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>280 Patio Door: Panel Repair or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>285 Patio Door: Lock Adjust or Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>290 Storm Door: Repair or Replace Component</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>555 Misc: Assesement Reimbursement Only - Special Trip Req Prior to Service</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
