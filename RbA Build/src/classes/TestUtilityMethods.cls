@@ -96,6 +96,57 @@ public with sharing class TestUtilityMethods {
 		
 		
 	}
+
+	public void setUpConfigsMark(){
+		//Creating RMS_Settings__c
+    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
+		insert customSetting1;
+		
+		//Creating RMS_Queue_Settings__c
+		Group Order_Queue = createQueue('Order_Queue');
+		insert Order_Queue;
+    	Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
+		insert Install_Work_Order_Queue;
+		Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
+		insert Tech_Measure_Work_Order_Queue;
+		Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
+		insert Permit_Work_Order_Queue;
+		Group Action_Work_Order_Queue = createQueue('Action_Work_Order');
+		insert Action_Work_Order_Queue;
+		Group LSWP_Work_Order_Queue = createQueue('LSWP_Work_Order');
+		insert LSWP_Work_Order_Queue;
+
+		Account store1 = createStoreAccount('77 - Twin Cities, MN');
+		insert store1;
+		
+    	Store_Configuration__c storeConfig = new Store_Configuration__c(
+    		Store__c = store1.id,
+        	Order_Queue_Id__c = Order_Queue.id,
+    		Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
+        	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
+        	//Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
+        	//Action_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+        	
+        	Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
+        	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+        	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+        	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id
+        	
+        	);
+    	insert storeConfig;
+
+    	store1.Active_Store_Configuration__c = storeConfig.Id;
+    	update store1;
+		
+		
+		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
+			Store_Configuration__c = storeConfig.id,
+			Contract_Signed__c = true,
+			Lien_Rights_Signed__c = true
+			);
+		insert backOfficeChecklist1;
+		
+	}
 	
 	
 	
@@ -154,7 +205,7 @@ public with sharing class TestUtilityMethods {
     		Username = 'apextest@test.com', 
     		Email = 'test@test.com', 
     		Alias = 'test', 
-    		CommunityNickname = 'test', 
+    		CommunityNickname = 'test' + String.valueOf(System.currentTimeMillis()),
     		TimeZoneSidKey = 'America/Mexico_City', 
     		LocaleSidKey = 'en_US', 
     		EmailEncodingKey= 'UTF-8', 
@@ -266,7 +317,6 @@ public with sharing class TestUtilityMethods {
 	}
  	
  	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder){
- 		setUpConfigs();
  		Account dwelling1 = createDwellingAccount('1');
  		insert dwelling1;
  		
@@ -280,13 +330,13 @@ public with sharing class TestUtilityMethods {
  		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
  		insert opp1;
  		
- 		Event event1 = new Event(WhatId = opp1.id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60);
+ 		Event event1 = new Event(WhatId = opp1.id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60, Type = 'Sales Appointment');
  		insert event1;
  		
  		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
  		insert ocr1;
  		
- 		if(createWithOrder = true){
+ 		if(createWithOrder){
 	 		
 	 		Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
 			insert quote1;
