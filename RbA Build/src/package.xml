@@ -74,6 +74,7 @@
         <members>OpportunityTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
+        <members>RbAWorkOrderTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -232,7 +233,7 @@
         <name>Layout</name>
     </types>
     <types>
-        <members>Schedule_Install_TwinCity</members>
+     <members>Schedule_Install_TwinCity</members>
         <members>Schedule_Permit_TwinCity</members>
         <members>Schedule_Tech_TwinCity</members>
         <members>Unassigned_Order_TwinCity</members>

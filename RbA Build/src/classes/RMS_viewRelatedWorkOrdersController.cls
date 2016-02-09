@@ -61,7 +61,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     					'Scheduled_Date_Time__c, '+
     					'Work_Order_Status__c, '+
     					'Owner.Name, '+
-    					'Order_Type__c, '+
+    					'Work_Order_Type__c, '+
     					'CreatedDate '+
     					
     					'FROM RbA_Work_Order__c WHERE Sold_Order__c =: ordId';

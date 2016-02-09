@@ -102,7 +102,7 @@
 				<apex:column headerValue="">  
 					<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
 				</apex:column>
-		        <apex:column value="{!wo.Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.Order_Type__c != 'LSWP','notRed', 'red')}" />
+		        <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandBold  {!IF(wo.Work_Order_Type__c != 'LSWP','notRed', 'red')}" />
 		        <apex:column value="{!wo.Work_Order_Status__c}"/>
 		        <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
 		        <apex:column value="{!wo.CreatedDate}"/>

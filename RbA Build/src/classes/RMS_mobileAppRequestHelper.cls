@@ -598,7 +598,7 @@ public with sharing class RMS_mobileAppRequestHelper {
         RbA_Work_Order__c techWO = new RbA_Work_Order__c();
         techWO.Sold_Order__c = ord.Id;
         techWO.RecordType = serviceOrderScheduleRecordType;
-        techWO.Order_Type__c = 'Tech Measure';
+        techWO.Work_Order_Type__c = 'Tech Measure';
         techWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c;
       // add it to the list
       woList.add(techWO);
@@ -607,7 +607,7 @@ public with sharing class RMS_mobileAppRequestHelper {
         RbA_Work_Order__c installWO = new RbA_Work_Order__c();
         installWO.Sold_Order__c = ord.Id;
         installWO.RecordType = serviceOrderScheduleRecordType;
-        installWO.Order_Type__c = 'Install';
+        installWO.Work_Order_Type__c = 'Install';
         installWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c;
       woList.add(installWO);
     }
