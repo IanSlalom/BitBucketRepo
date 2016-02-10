@@ -253,7 +253,7 @@
     <fields>
         <fullName>Work_Order_Type__c</fullName>
         <externalId>false</externalId>
-        <formula>Text( Related_Work_Order__r.Order_Type__c )</formula>
+        <formula>Text( Related_Work_Order__r.Work_Order_Type__c )</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Work Order Type</label>
         <required>false</required>
