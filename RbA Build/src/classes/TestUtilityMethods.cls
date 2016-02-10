@@ -360,7 +360,6 @@ public with sharing class TestUtilityMethods {
  	}
  	
  	public void createTMAppt(Id userId, Datetime apptStartDateTime){
- 		setUpConfigs();
  		Account dwelling1 = createDwellingAccount('1');
  		insert dwelling1;
  		
@@ -372,6 +371,7 @@ public with sharing class TestUtilityMethods {
  		insert contact1;
  		
  		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
+		opp1.OwnerId = userId;
  		insert opp1;
  		
  		Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
@@ -403,7 +403,7 @@ public with sharing class TestUtilityMethods {
 		
 		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp1.id AND Sold_Order__c = :ord1.id];
 		
-		Event event1 = new Event(WhatId = workOrder[0].id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60);
+		Event event1 = new Event(WhatId = workOrder[0].id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60, Type = 'Tech Measure');
  		insert event1;
 		
 		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');

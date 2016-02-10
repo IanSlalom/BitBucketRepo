@@ -125,6 +125,7 @@ System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 			ord.BillingCountryCode = qt.Opportunity.Account.BillingCountryCode;
 			ord.Status = 'Draft';
 			ord.EffectiveDate = qt.Opportunity.CloseDate;
+			ord.RecordTypeId = UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type');
 			// spin through the primary contacts and assign the name and primary contact
 			for (OpportunityContactRole ocr : primaryContacts) {
 				if (ocr.OpportunityId == qt.OpportunityId) {
