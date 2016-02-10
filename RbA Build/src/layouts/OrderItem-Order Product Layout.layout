@@ -853,7 +853,6 @@
     <multilineLayoutFields>OrderId</multilineLayoutFields>
     <multilineLayoutFields>Description</multilineLayoutFields>
     <multilineLayoutFields>TotalPrice</multilineLayoutFields>
-    <multilineLayoutFields>Select_Manufacturer__c</multilineLayoutFields>
     <relatedLists>
         <fields>ASSET.NAME</fields>
         <fields>ASSET.SERIAL_NUMBER</fields>
