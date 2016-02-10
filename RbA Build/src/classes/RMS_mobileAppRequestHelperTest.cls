@@ -28,7 +28,7 @@ private class RMS_mobileAppRequestHelperTest {
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 //			String jsonResult = mHelper.findAppointments(u.Id, newApptTime.addDays(-1));
 			Test.stopTest();
-			System.debug('###################################### ' + jsonResult);
+//			System.debug('###################################### ' + jsonResult);
 //			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
 	}
