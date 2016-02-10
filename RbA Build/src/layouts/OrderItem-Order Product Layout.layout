@@ -89,10 +89,6 @@
                 <field>Charge_Cost_To__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>Select_Manufacturer__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Primary_Reason__c</field>
             </layoutItems>

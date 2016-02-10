@@ -104,7 +104,6 @@
         <fields>NAME</fields>
         <fields>CREATEDBY_USER</fields>
         <fields>Order__c</fields>
-        <fields>Date__c</fields>
         <fields>Total__c</fields>
         <fields>Status__c</fields>
         <relatedList>Purchase_Order__c.Vendor__c</relatedList>
