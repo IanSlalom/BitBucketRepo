@@ -328,6 +328,7 @@ public with sharing class TestUtilityMethods {
  		insert contact1;
  		
  		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
+ 		opp1.OwnerId = userId;
  		insert opp1;
  		
  		Event event1 = new Event(WhatId = opp1.id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60, Type = 'Sales Appointment');
