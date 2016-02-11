@@ -61,6 +61,7 @@
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
+        <members>RMS_prodConfigEdit2</members>
         <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewPurchaseOrder</members>
@@ -209,10 +210,6 @@
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
-        <members>Purchase_Order__c-Cost Purchase Order Layout</members>
-        <members>Purchase_Order__c-Product Purchase Order Layout</members>
-        <members>Purchase_Order__c-Purchase Order Layout</members>
-        <members>Purchase_Order__c-RbA Purchase Order Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
