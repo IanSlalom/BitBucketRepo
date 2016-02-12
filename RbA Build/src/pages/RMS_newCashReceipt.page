@@ -1,0 +1,14 @@
+<apex:page standardController="Payment__c" recordSetVar="payments" extensions="RMS_newCashReceiptExtension" action="{!redirect}">
+	<apex:pageBlock title="Payment Entry" mode="edit" id="PaymentEntryBlock">
+		<apex:pageMessages />
+		<apex:pageBlockTable value="{!selected}" var="pay">
+			<apex:column >
+				<apex:outputField value="{!pay.Order__c}" rendered="false"/>
+			</apex:column>
+			<apex:column >
+				<apex:outputField value="{!pay.Store_Location__c}" rendered="false"/>
+			</apex:column>
+	</apex:pageBlockTable>
+
+    </apex:pageBlock>
+</apex:page>
