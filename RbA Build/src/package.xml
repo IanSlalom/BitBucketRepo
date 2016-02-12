@@ -26,6 +26,7 @@
         <members>RMS_mobileAppAPIControllerTest</members>
         <members>RMS_mobileAppRequestHelper</members>
         <members>RMS_mobileAppRequestHelperTest</members>
+        <members>RMS_newCashReceiptExtension</members>
         <members>RMS_newLaborRedirectExtension</members>
         <members>RMS_newLaborRedirectExtensionTest</members>
         <members>RMS_newPaymentRedirectExtension</members>
@@ -58,6 +59,7 @@
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createVisitWorkOrder</members>
+        <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
