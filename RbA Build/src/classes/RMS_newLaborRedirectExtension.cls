@@ -60,11 +60,11 @@ public with sharing class RMS_newLaborRedirectExtension {
 			
 			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {
         			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N3B000000On7g', thisStore.Name);	
-         			m.put('CF00N3B000000On7g_lkid', thisStore.Id);	
+         			m.put('CF00N6100000Br7TE', thisStore.Name);	
+         			m.put('CF00N6100000Br7TE_lkid', thisStore.Id);	
 			}
 			
-			if (m.get('CF00N3B000000On7g') == null) {
+			if (m.get('CF00N6100000Br7TE') == null) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
 				return null;
 			}

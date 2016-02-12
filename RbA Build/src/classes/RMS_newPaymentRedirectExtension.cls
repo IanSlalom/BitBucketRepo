@@ -60,11 +60,11 @@ public with sharing class RMS_newPaymentRedirectExtension {
 			
 			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {
         			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N3B000000On7g', thisStore.Name);	
-         			m.put('CF00N3B000000On7g_lkid', thisStore.Id);	
+         			m.put('CF00N6100000Br7Y0', thisStore.Name);	
+         			m.put('CF00N6100000Br7Y0_lkid', thisStore.Id);	
 			}
 			
-			if (m.get('CF00N3B000000On7g') == null) {
+			if (m.get('CF00N6100000Br7Y0') == null) {
 				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_USER)); //
 				return null;
 			}
@@ -81,8 +81,8 @@ public with sharing class RMS_newPaymentRedirectExtension {
         		} 
         		else {
         			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N3B000000On7g', theOrder.Store_Location__r.Name);	
-         			m.put('CF00N3B000000On7g_lkid', theOrder.Store_Location__c);	
+         			m.put('CF00N6100000Br7Y0', theOrder.Store_Location__r.Name);	
+         			m.put('CF00N6100000Br7Y0_lkid', theOrder.Store_Location__c);	
         		}
         	}		
 		}
