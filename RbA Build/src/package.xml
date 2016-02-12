@@ -89,10 +89,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>CustomLabels</members>
-        <name>CustomLabels</name>
-    </types>
-    <types>
         <members>Account</members>
         <members>Activity</members>
         <members>Asset</members>
