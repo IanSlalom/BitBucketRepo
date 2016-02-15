@@ -162,16 +162,13 @@
         <members>Account-Dwelling Layout</members>
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
-        <members>AccountContactRole-Account Contact Role Layout</members>
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
-        <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
-        <members>Contact_History__c-Associated Contact Layout</members>
         <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
@@ -188,8 +185,6 @@
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
         <members>Municipality__c-HOA%2FHistorical Layout</members>
-        <members>Municipality__c-Municipality Layout</members>
-        <members>Municipality__c-Permit Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
         <members>Order-Order Layout</members>
@@ -199,9 +194,7 @@
         <members>Order_Financing__c-Order Financing Layout</members>
         <members>Payment__c-Deposit Layout</members>
         <members>Payment__c-Misc Cash Receipt Layout</members>
-        <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
-        <members>PricebookEntry-Price Book Entry Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
@@ -219,7 +212,6 @@
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
-        <members>RbA_Work_Order__c-Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>
