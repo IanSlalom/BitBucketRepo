@@ -88,9 +88,8 @@
 	
 	<apex:pageBlock >
 	
-	<apex:form >
+	<apex:form rendered="{!IF(Order.StatusCode == 'A','true', 'false')}">
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
-
 	</apex:form>
 		
 		<apex:pageBlockTable id="workOrderTable" title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">

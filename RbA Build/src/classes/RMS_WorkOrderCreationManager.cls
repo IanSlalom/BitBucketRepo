@@ -62,16 +62,40 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             
             
-            //BUILDING MAP OF ORD ID TO LIST OF LSWP WORK ORDERS TO USE WHILE LOOPING THROUGH ORDERS
+            //BUILDING MAPS OF ORDER ID TO LIST OF WORK ORDERS BASED ON WO TYPE TO USE WHILE LOOPING THROUGH ORDERS
             map<id, list<RbA_Work_Order__c>> ordIdtoListOfLSWPWOMap = new map<id, list<RbA_Work_Order__c>>();
-            list<RbA_Work_Order__c> relatedLSWPWorkOrders = [SELECT id, Sold_Order__c, RecordTypeId FROM RbA_Work_Order__c WHERE Sold_Order__c IN :activatedOrderId AND RecordTypeId = :LSWPWORecordType];
+            map<id, list<RbA_Work_Order__c>> ordIdtoListOfHOAWOMap = new map<id, list<RbA_Work_Order__c>>();
+            map<id, list<RbA_Work_Order__c>> ordIdtoListOfBuildingPermitWOMap = new map<id, list<RbA_Work_Order__c>>();
+            map<id, list<RbA_Work_Order__c>> ordIdtoListOfHistoricalWOMap = new map<id, list<RbA_Work_Order__c>>();
+            list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id, Sold_Order__c, Work_Order_Type__c, RecordTypeId FROM RbA_Work_Order__c WHERE Sold_Order__c IN :activatedOrderId];
 
-            for(RbA_Work_Order__c wo : relatedLSWPWorkOrders){
-                if(ordIdtoListOfLSWPWOMap.containsKey(wo.Sold_Order__c)){
-                    ordIdtoListOfLSWPWOMap.get(wo.Sold_Order__c).add(wo);
-                }else{
-                    ordIdtoListOfLSWPWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
-                }
+            for(RbA_Work_Order__c wo : relatedWorkOrders){
+            	if(wo.Work_Order_Type__c == 'LSWP'){
+	                if(ordIdtoListOfLSWPWOMap.containsKey(wo.Sold_Order__c)){
+	                    ordIdtoListOfLSWPWOMap.get(wo.Sold_Order__c).add(wo);
+	                }else{
+	                    ordIdtoListOfLSWPWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
+	                }
+            	}else if(wo.Work_Order_Type__c == 'HOA'){
+	                if(ordIdtoListOfHOAWOMap.containsKey(wo.Sold_Order__c)){
+	                    ordIdtoListOfHOAWOMap.get(wo.Sold_Order__c).add(wo);
+	                }else{
+	                    ordIdtoListOfHOAWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
+	                }
+            	}else if(wo.Work_Order_Type__c == 'Building Permit'){
+	                if(ordIdtoListOfBuildingPermitWOMap.containsKey(wo.Sold_Order__c)){
+	                    ordIdtoListOfBuildingPermitWOMap.get(wo.Sold_Order__c).add(wo);
+	                }else{
+	                    ordIdtoListOfBuildingPermitWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
+	                }
+            	}else if(wo.Work_Order_Type__c == 'Historical'){
+	                if(ordIdtoListOfHistoricalWOMap.containsKey(wo.Sold_Order__c)){
+	                    ordIdtoListOfHistoricalWOMap.get(wo.Sold_Order__c).add(wo);
+	                }else{
+	                    ordIdtoListOfHistoricalWOMap.put(wo.Sold_Order__c, new list<RbA_Work_Order__c>{wo});
+	                }
+            	}
+ 
             }
  
             //LIST OF ORDERS TO INSERT AFTER FOR LOOP
@@ -94,21 +118,25 @@ public with sharing class RMS_WorkOrderCreationManager {
                     storeConfig = accountIdtoStoreConfigMap.get(dwelling.Store_Location__c);
                 
                     //CREATE HOA WORK ORDER IF DWELLING HAS HOA POPULATED
-                    if(dwelling.HOA__c != null){
-                        RbA_Work_Order__c hoaWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.HOA_Work_Order_Queue_Id__c, 'HOA',  dwelling.HOA__c);
-                        workOrdersToAdd.add(hoaWorkOrder);
+                    if(ordIdtoListOfHOAWOMap.get(ord.id) == null || ordIdtoListOfHOAWOMap.get(ord.id).size() == 0){
+	                    if(dwelling.HOA__c != null){
+	                        RbA_Work_Order__c hoaWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.HOA_Work_Order_Queue_Id__c, 'HOA',  dwelling.HOA__c);
+	                        workOrdersToAdd.add(hoaWorkOrder);
+	                    }
                     }
-                    
                     //CREATE HISTORICAL WORK ORDER IF DWELLING HAS HISTORICAL POPULATED
-                    if(dwelling.Historical__c != null){
-                        RbA_Work_Order__c historicalWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Historical_Work_Order_Queue_Id__c, 'Historical', dwelling.Historical__c );
-                        workOrdersToAdd.add(historicalWorkOrder);
-                    }
-                    
+					if(ordIdtoListOfHistoricalWOMap.get(ord.id) == null || ordIdtoListOfHistoricalWOMap.get(ord.id).size() == 0){                   
+	                    if(dwelling.Historical__c != null){
+	                        RbA_Work_Order__c historicalWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, actionWORecordType, storeConfig.Historical_Work_Order_Queue_Id__c, 'Historical', dwelling.Historical__c );
+	                        workOrdersToAdd.add(historicalWorkOrder);
+	                    }
+					}
                     //CREATE PERMIT WORK ORDER IF DWELLING HAS BUILDING PERMIT POPULATED
-                    if(dwelling.Building_Permit__c != null){
-                        RbA_Work_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
-                        workOrdersToAdd.add(buildingPermitWorkOrder);
+                    if(ordIdtoListOfBuildingPermitWOMap.get(ord.id) == null || ordIdtoListOfBuildingPermitWOMap.get(ord.id).size() == 0){
+	                    if(dwelling.Building_Permit__c != null){
+	                        RbA_Work_Order__c buildingPermitWorkOrder = UtilityMethods.buildWorkOrder(dwelling, ord, permitWORecordType, storeConfig.Building_Permit_Work_Order_Queue_Id__c, 'Building Permit', dwelling.Building_Permit__c );
+	                        workOrdersToAdd.add(buildingPermitWorkOrder);
+	                    }
                     }
                     //CREATE LSWP WORK ORDER IF NO LSWP WORK ORDER BU DWELLING Year_Built__c IS NULL OR BEFORE  1978
                     if(ordIdtoListOfLSWPWOMap.get(ord.id) == null || ordIdtoListOfLSWPWOMap.get(ord.id).size() == 0){
