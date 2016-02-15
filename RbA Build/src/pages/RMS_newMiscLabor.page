@@ -1,0 +1,10 @@
+<apex:page standardController="Labor__c" recordSetVar="labors" extensions="RMS_newMiscLaborExtension" action="{!redirect}">
+	<apex:pageBlock title="Labor Entry" mode="edit" id="LaborEntryBlock">
+		<apex:pageMessages />
+		<apex:pageBlockTable value="{!selected}" var="labor">
+			<apex:column >
+				<apex:outputField value="{!labor.Related_Work_Order__c}" rendered="false"/>
+			</apex:column>
+		</apex:pageBlockTable>
+	</apex:pageBlock>
+</apex:page>

@@ -29,6 +29,7 @@
         <members>RMS_newCashReceiptExtension</members>
         <members>RMS_newLaborRedirectExtension</members>
         <members>RMS_newLaborRedirectExtensionTest</members>
+        <members>RMS_newMiscLaborExtension</members>
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
@@ -61,6 +62,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
+        <members>RMS_newMiscLabor</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
         <members>RMS_prodConfigEdit2</members>
