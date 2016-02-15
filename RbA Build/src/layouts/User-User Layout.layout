@@ -31,6 +31,10 @@
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Canvass_Market__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
@@ -54,6 +58,7 @@
     <relatedObjects>CallCenterId</relatedObjects>
     <relatedObjects>ProfilePhotoId</relatedObjects>
     <relatedObjects>WorkspaceId</relatedObjects>
+    <relatedObjects>BannerPhotoId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>

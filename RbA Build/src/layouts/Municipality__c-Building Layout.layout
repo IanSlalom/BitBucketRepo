@@ -73,10 +73,6 @@
                 <behavior>Edit</behavior>
                 <field>Building_Application_Type__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Egress_Required__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -102,6 +98,10 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Enabled_ID__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>LastModifiedById</field>
@@ -158,6 +158,7 @@
         <relatedList>RelatedNoteList</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>ACCOUNT.NAME</fields>
         <fields>ACCOUNT.ADDRESS1_CITY</fields>
         <fields>ACCOUNT.PHONE1</fields>
@@ -171,6 +172,7 @@
         <relatedList>Account.Historical__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>ACCOUNT.NAME</fields>
         <fields>ACCOUNT.ADDRESS1_CITY</fields>
         <fields>ACCOUNT.PHONE1</fields>
@@ -185,7 +187,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000REPH</masterLabel>
+        <masterLabel>00h61000002WhAo</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
