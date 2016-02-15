@@ -91,57 +91,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Account</members>
-        <members>Activity</members>
-        <members>Asset</members>
-        <members>Back_Office_Check__c</members>
-        <members>Back_Office_Checklist_Configuration__c</members>
-        <members>Contact</members>
-        <members>Contact_History__c</members>
-        <members>Cost_Center__c</members>
-        <members>Discount__c</members>
-        <members>Event</members>
-        <members>Field_IDs__c</members>
-        <members>Finance_Program__c</members>
-        <members>Financial_Account_Number__c</members>
-        <members>Financial_Configuration__c</members>
-        <members>Financial_Transaction__c</members>
-        <members>Journal_Entry__c</members>
-        <members>Labor__c</members>
-        <members>Municipality_Contact__c</members>
-        <members>Municipality_Match__c</members>
-        <members>Municipality__c</members>
-        <members>Opportunity</members>
-        <members>Order</members>
-        <members>OrderItem</members>
-        <members>Order_Code_Lookup__c</members>
-        <members>Order_Discount__c</members>
-        <members>Order_Financing__c</members>
-        <members>Payment__c</members>
-        <members>Pricebook2</members>
-        <members>PricebookEntry</members>
-        <members>Pricing_Configuration__c</members>
-        <members>Product2</members>
-        <members>Product_Configuration__c</members>
-        <members>Purchase_Order__c</members>
-        <members>Quote</members>
-        <members>QuoteLineItem</members>
-        <members>Quote_Discount__c</members>
-        <members>Quote_Financing__c</members>
-        <members>RMS_Queue_Settings__c</members>
-        <members>RMS_Settings__c</members>
-        <members>RbA_Work_Order__c</members>
-        <members>Refund__c</members>
-        <members>Screen_Configuration__c</members>
-        <members>Store_Configuration__c</members>
-        <members>Store_Discount__c</members>
-        <members>Store_Finance_Program__c</members>
-        <members>Store_Vendor__c</members>
-        <members>User</members>
-        <members>Vendor_Product__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>Discount__c</members>
         <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
