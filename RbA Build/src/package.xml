@@ -118,6 +118,7 @@
         <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
+        <members>Contact_History__c-Associated Contact Layout</members>
         <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
