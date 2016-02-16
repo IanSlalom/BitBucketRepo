@@ -11,6 +11,16 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Update_Finance_Program_Name</fullName>
+        <description>Puts the finance program name in a text field to make it searchable from order financing</description>
+        <field>Finance_Program_Name__c</field>
+        <formula>Finance_Program__r.Name</formula>
+        <name>Update Finance Program Name</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Update_Plan_Number</fullName>
         <description>Updates the plan number from the finance plan to the store financing record. (to make it searchable)</description>
         <field>Plan_Number__c</field>
@@ -24,6 +34,10 @@
         <fullName>Store Finance Program Updated</fullName>
         <actions>
             <name>Update_Finance_Company</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Finance_Program_Name</name>
             <type>FieldUpdate</type>
         </actions>
         <actions>
