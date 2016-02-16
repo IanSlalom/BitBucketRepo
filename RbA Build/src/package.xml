@@ -29,6 +29,7 @@
         <members>RMS_newCashReceiptExtension</members>
         <members>RMS_newLaborRedirectExtension</members>
         <members>RMS_newLaborRedirectExtensionTest</members>
+        <members>RMS_newMiscLaborExtension</members>
         <members>RMS_newPaymentRedirectExtension</members>
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
@@ -61,6 +62,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
+        <members>RMS_newMiscLabor</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
         <members>RMS_prodConfigEdit2</members>
@@ -89,57 +91,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Account</members>
-        <members>Activity</members>
-        <members>Asset</members>
-        <members>Back_Office_Check__c</members>
-        <members>Back_Office_Checklist_Configuration__c</members>
-        <members>Contact</members>
-        <members>Contact_History__c</members>
-        <members>Cost_Center__c</members>
-        <members>Discount__c</members>
-        <members>Event</members>
-        <members>Field_IDs__c</members>
-        <members>Finance_Program__c</members>
-        <members>Financial_Account_Number__c</members>
-        <members>Financial_Configuration__c</members>
-        <members>Financial_Transaction__c</members>
-        <members>Journal_Entry__c</members>
-        <members>Labor__c</members>
-        <members>Municipality_Contact__c</members>
-        <members>Municipality_Match__c</members>
-        <members>Municipality__c</members>
-        <members>Opportunity</members>
-        <members>Order</members>
-        <members>OrderItem</members>
-        <members>Order_Code_Lookup__c</members>
-        <members>Order_Discount__c</members>
-        <members>Order_Financing__c</members>
-        <members>Payment__c</members>
-        <members>Pricebook2</members>
-        <members>PricebookEntry</members>
-        <members>Pricing_Configuration__c</members>
-        <members>Product2</members>
-        <members>Product_Configuration__c</members>
-        <members>Purchase_Order__c</members>
-        <members>Quote</members>
-        <members>QuoteLineItem</members>
-        <members>Quote_Discount__c</members>
-        <members>Quote_Financing__c</members>
-        <members>RMS_Queue_Settings__c</members>
-        <members>RMS_Settings__c</members>
-        <members>RbA_Work_Order__c</members>
-        <members>Refund__c</members>
-        <members>Screen_Configuration__c</members>
-        <members>Store_Configuration__c</members>
-        <members>Store_Discount__c</members>
-        <members>Store_Finance_Program__c</members>
-        <members>Store_Vendor__c</members>
-        <members>User</members>
-        <members>Vendor_Product__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>Discount__c</members>
         <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
@@ -160,16 +111,13 @@
         <members>Account-Dwelling Layout</members>
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
-        <members>AccountContactRole-Account Contact Role Layout</members>
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
-        <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Configuration Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
         <members>Contact-Vendor Contact Layout</members>
-        <members>Contact_History__c-Associated Contact Layout</members>
         <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
@@ -186,8 +134,6 @@
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
         <members>Municipality__c-HOA%2FHistorical Layout</members>
-        <members>Municipality__c-Municipality Layout</members>
-        <members>Municipality__c-Permit Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
         <members>Order-Order Layout</members>
@@ -197,9 +143,7 @@
         <members>Order_Financing__c-Order Financing Layout</members>
         <members>Payment__c-Deposit Layout</members>
         <members>Payment__c-Misc Cash Receipt Layout</members>
-        <members>Payment__c-Payment Layout</members>
         <members>Pricebook2-Price Book Layout</members>
-        <members>PricebookEntry-Price Book Entry Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
@@ -217,7 +161,6 @@
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
-        <members>RbA_Work_Order__c-Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Store_Configuration__c-Store Configuration Layout</members>

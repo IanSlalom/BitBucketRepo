@@ -135,7 +135,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.relatedOrderItems = new List<OrderItem>();
 		customController.relatedProduct2IDList = new list<Id>();
 		customController.relatedProducts = new List<Product2>();
-		customController.vendorIdList = new list<Id>();
 		customController.vendorsOnOrder = new list<Account>();
 		customController.newProduct ='new product';
 		
@@ -238,9 +237,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		// set the selected vendor to the vendor account id
 		customController.selectedVendor = vendorAccount.Id;
 
-		// add the gl account numbers
-		customController.glAccount = '1234';
-		customController.intercompanyAccount = '1234';
 		
 		// Save with a vendor, 
 		customController.save();	

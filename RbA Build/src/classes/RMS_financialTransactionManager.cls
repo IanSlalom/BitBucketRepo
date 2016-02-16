@@ -975,11 +975,12 @@ public with sharing class RMS_financialTransactionManager {
 			dynamicErrorMessage = RMS_errorMessages.QUANTITY_IS_ZERO;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
-		
-		if(asset.Sold_Order__r.BillToContactId == null){
+		// Turned this off temporarily. Not sure if we need to do this check or not
+		// Cost POs will not have a contact		
+/*		if(asset.Sold_Order__r.BillToContactId == null){
 			dynamicErrorMessage = RMS_errorMessages.BILL_TO_CONTACT_ON_ORDER_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-		}
+		}*/
 		if(asset.Sold_Order__r.Store_Location__c == null){
 			dynamicErrorMessage = RMS_errorMessages.STORE_LOCATION_ON_ORDER_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;

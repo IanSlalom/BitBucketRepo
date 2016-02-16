@@ -18,6 +18,10 @@
                 <field>OrderNumber</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Name</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>AccountId</field>
             </layoutItems>

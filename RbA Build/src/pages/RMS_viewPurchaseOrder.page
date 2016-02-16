@@ -2,7 +2,122 @@
 	
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
 
+        var primaryTabId = null;
+        var subTabId = null;
+        var previousOnload  = window.onload;
+        var warningType;
+
+        window.onload = function()
+        {
+        
+            //  perform the previously registered 'onload' function, if any
+            if ( previousOnload ) previousOnload();
+
+            //  get the id's of both the primary tab and this subtab
+            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
+
+            //  set the title of this subtab
+            sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );
+
+            j$(function() {        
+                prepareList('productList','costCenterList', false);
+            });
+        };
+
+        //The callback function that closeTab will call once it's got the ID for its tab
+        var callCloseTab= function callCloseTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+
+        function closeTab() {
+            if(sforce.console.isInConsole()) {
+                sforce.console.refreshPrimaryTabById( primaryTabId, false,
+                    function()
+                    {
+                        if ( subTabId ) sforce.console.closeTab( subTabId );
+                    }
+                );
+                return false;
+            }
+            else {
+                location.href='/{!Purchase_Order__c.Order__c}'; 
+            }
+
+        };
+
+        function confirmationWindow(warningType)
+        {
+            // Select the correct warning message depending on the button warning type
+            var warningMessage;
+            if (warningType == 'releasePO') {
+                warningMessage = "Are you sure you want to release this purchase order?";
+            } else if (warningType == 'cancelPO') {
+                warningMessage = "Are you sure you want to cancel this purchase order?";
+            }
+            else if (warningType == 'cancelLineItem') {
+                warningMessage = "Are you sure you want to cancel this order line item?";
+            }
+
+            // Present the warning message
+            var confirmation = confirm(warningMessage);
+
+            // If they confirm, run the correct method depending on the warning type
+            if(confirmation) {
+                if (warningType == 'releasePO') {
+                    releasePurchaseOrder();
+                } else if (warningType == 'cancelPO') {
+                    cancelPurchaseOrder();
+                }
+                else if (warningType == 'cancelLineItem') {
+                    cancelLineItem();
+                }
+            }
+        }
+function prepareList(parent,child,isSubselectOptional){
+          j$("body").append("<select style='display:none' id='"+parent+child+"'></select>");
+          j$('#'+parent+child).html(j$("#"+child+" option"));
+          j$('#'+child).html("<option> — </option>");
+          j$('#'+parent).change(function(){
+//              var parentValue = j$('#'+parent).attr('value');
+//                alert (j$("select[data-jsid=parent]").val());
+              var parentValue = j$("select[html-data-jsid='productList']").val();
+//              var parentValue = j$('#'+parent).attr('value');
+//               alert (parentValue);
+ //             alert (j$("select[data-jsid='accountList2']").val());
+ //             var accountList2 = j$("select[data-jsid='accountList2']").val();
+//              j$('#'+child).html(j$("#"+parent+child+" .child_"+parentValue).clone());
+//              alert(j$("#"+parentValue+child+" .child_"+parentValue));
+//              j$('#'+child).html(j$("#"+parentValue+child+" .child_"+parentValue).clone());
+ //             if(isSubselectOptional) j$('#'+child).prepend("<option> — Select — </option>");
+
+//             var parentValue = j$('select#'+parent).attr('value');
+//              var myVar = j$("#span").find('.select2-chosen').val();
+//              var myVar  = j$('#select2-chosen').text();    
+//                var abc = j$(this).closest('.x-panel x-border-panel').attr('id');
+//                var abc = j$('#x-panel-bwrap').val();
+//                var abc = j$(".select2-chosen");$( "#myDivId" ).val()
+//var $element = j$('.select2-chosen').html();
+//var $element = j$('.select2-chosen').text();
+//parentValue = $element;
+//alert($element);
+//alert(parent);
+
+
+//              var myVar  = j$('#select2-chosen').text();
+//                alert('abc' +abc);
+
+
+//             alert(parentValue);
+             j$('#'+child).html(j$("select#"+parent+child+" .child_"+parentValue).clone());
+             if(isSubselectOptional) j$('select#'+child).prepend("<option> — Select — </option>");
+
+          });
+     }
+    </script>
 	<apex:pageMessages /> 
 
 	<apex:form >
@@ -61,6 +176,10 @@
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
+                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
+						<apex:facet name="header">Qty Received</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
+                    </apex:column>
 					
 					<apex:column style="width:50px"> 
 						<apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
@@ -72,16 +191,24 @@
 			 
 
 				</apex:pageBlockTable>
+            <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
+                <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
 
-			<apex:pageBlockSection id="mytable" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
-				<apex:pageBlockTable title="Add {!productText}" value="{!newOrderItems}" var="noi">
+
 					<apex:column >
 						<apex:facet name="header">{!productText}</apex:facet> 
-							<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/> 
+<!--                              <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>--> 
+					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
+						<apex:selectOptions value="{!productItems}"/>
+						<apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
+					</apex:selectList>
+
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">GL Account</apex:facet> 
-							<apex:inputField value="{!noi.GL_Account__c}" style="width:100px"  />
+                     <apex:facet name="header">Cost Center</apex:facet> 
+					<apex:selectList value="{!costCenter}" label="costCenter" size="1" id="costCenterlist">
+						<apex:selectOptions value="{!costCenterItems}"/>
+					</apex:selectList>
 					</apex:column>
 					<apex:column >
 						<apex:facet name="header">{!productText} Description</apex:facet> 
@@ -116,78 +243,6 @@
 		
 	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
-	<script type="text/javascript">
-		var j$ = jQuery.noConflict();
 
-		var primaryTabId = null;
-		var subTabId = null;
-		var previousOnload  = window.onload;
-		var warningType;
 
-		window.onload = function()
-		{
-		
-			//  perform the previously registered 'onload' function, if any
-			if ( previousOnload ) previousOnload();
-
-			//  get the id's of both the primary tab and this subtab
-			sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
-			sforce.console.getEnclosingTabId		( function( result ) { subTabId  = result.id; } );
-
-			//  set the title of this subtab
-			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '{!Purchase_Order__c.Name}' : 'New Purchase Order' );
-
-		};
-
-		//The callback function that closeTab will call once it's got the ID for its tab
-		var callCloseTab= function callCloseTab(result) {
-			sforce.console.closeTab(result.id);
-		};
-
-		function closeTab() {
-			if(sforce.console.isInConsole()) {
-				sforce.console.refreshPrimaryTabById( primaryTabId, false,
-					function()
-					{
-						if ( subTabId ) sforce.console.closeTab( subTabId );
-					}
-				);
-				return false;
-			}
-			else {
-				location.href='/{!Purchase_Order__c.Order__c}'; 
-			}
-
-		};
-
-		function confirmationWindow(warningType)
-		{
-			// Select the correct warning message depending on the button warning type
-			var warningMessage;
-			if (warningType == 'releasePO') {
-				warningMessage = "Are you sure you want to release this purchase order?";
-			} else if (warningType == 'cancelPO') {
-				warningMessage = "Are you sure you want to cancel this purchase order?";
-			}
-			else if (warningType == 'cancelLineItem') {
-				warningMessage = "Are you sure you want to cancel this order line item?";
-			}
-
-			// Present the warning message
-			var confirmation = confirm(warningMessage);
-
-			// If they confirm, run the correct method depending on the warning type
-			if(confirmation) {
-				if (warningType == 'releasePO') {
-					releasePurchaseOrder();
-				} else if (warningType == 'cancelPO') {
-					cancelPurchaseOrder();
-				}
-				else if (warningType == 'cancelLineItem') {
-					cancelLineItem();
-				}
-			}
-		}
-
-	</script>
 </apex:page>

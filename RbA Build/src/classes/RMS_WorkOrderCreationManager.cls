@@ -44,7 +44,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                     ShippingPostalCode, 
                                                     ShippingCountry,
                                                     ShippingCountryCode,
-                                                    Year_Built__c
+                                                    Year_Built__c,
+                                                    Name
                                                 FROM Account Where Id IN : relatedDwellingIds];
             
             //BUILDING MAP OF ID TO DWELLING TO USE WHILE LOOPING THROUGH ORDERS
@@ -187,7 +188,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                 ShippingPostalCode, 
                                                 ShippingCountry,
                                                 ShippingCountryCode,
-                                                Store_Location__c
+                                                Store_Location__c,
+                                                Name
                                                 
                                                 FROM Account WHERE Id IN :relatedAccountIds];
         map<id, Account> accountIdToAccountMap = new map<id, Account>();        
@@ -238,7 +240,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
-    
+    			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c) == null){
                     ord.addError('Store Configuation has not been created.');
                 } 
