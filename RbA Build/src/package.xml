@@ -103,6 +103,7 @@
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Store_Configuration__c</members>
+        <members>Store_Finance_Program__c</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -189,6 +190,8 @@
         <members>Discount__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
+        <members>Order_Financing__c</members>
+        <members>Store_Finance_Program__c</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>
