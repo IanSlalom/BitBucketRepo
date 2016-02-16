@@ -741,6 +741,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
+			if(oi.Unit_Wholesale_Cost__c == null) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+				  return null;
+			}
+
       		productAsset.Quantity =  (productAsset.Quantity == null) 
                           ?   oi.Quantity_To_Receive__c 
                           :  oi.Quantity_To_Receive__c + productAsset.Quantity;
@@ -800,9 +805,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
       }
 //    }
-    System.Debug('**************partialReceived=' +partialReceived);
-    System.Debug('**************allReceived=' +allReceived);
-    System.Debug('**************noneReceived=' +noneReceived);
     receiveStatus = 	(partialReceived)				?	'Partially Received'	:
     					(allReceived && noneReceived)	?	'Partially Received'	:
     					(allReceived)					?	'Received'				:
