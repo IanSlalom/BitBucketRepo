@@ -83,7 +83,7 @@
         <fields>NAME</fields>
         <fields>Order.NAME</fields>
         <fields>Amount_Financed__c</fields>
-        <fields>Program_Fee2__c</fields>
+        <fields>Program_Fee__c</fields>
         <relatedList>Order_Financing__c.Store_Finance_Program__c</relatedList>
     </relatedLists>
     <relatedLists>
