@@ -50,7 +50,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public String productAccountNumber;   
   public String costCenter {get; set;}   
   public String storeLocationNumber;
+  public String orderStatus {get; set;}   
+  public String receiveStatus {get; set;}   
   public String errorOccurred {get; set;}   
+  public boolean overReceivingAllowed {get; set;}   
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -329,21 +332,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
     else {
       newPurchaseOrder = false;
       
-      Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name From Purchase_Order__c Where ID =:po.id];
+      Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name,Vendor__r.Over_Receiving_Allowed__c From Purchase_Order__c Where ID =:po.id];
       orderId = po1.Order__c;
       costPurchaseOrder = (po.RecordTypeId == UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')) ? true : false;
 
       selectedVendor = po1.Vendor__c;
       selectedVendorName = po1.Vendor__r.Name;
+      overReceivingAllowed = po1.Vendor__r.Over_Receiving_Allowed__c;
       
       selectedPricebook = po1.Order__r.Pricebook2Id;
       
-      status =  (this.po.Status__c == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
-            (this.po.Status__c == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
-            (this.po.Status__c == 'Confirmed' && selectedVendorName != 'RbA')  ?  'con'    :
-            (this.po.Status__c == 'Confirmed' && selectedVendorName == 'RbA')  ?  'rbacon'  :
-            (this.po.Status__c == 'Rejected')                  ?  'rej'    :
-            (this.po.Status__c == 'Cancelled')                  ?  'can'    :
+      orderStatus = this.po.Status__c;
+      status =  (orderStatus == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
+            (orderStatus == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
+            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName != 'RbA')  ?  'con'    :
+            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName == 'RbA')  ?  'rbacon'  :
+            (orderStatus == 'Rejected')                  ?  'rej'    :
+            (orderStatus == 'Cancelled')                  ?  'can'    :
+            (orderStatus == 'Received')                  ?  'rec'    :
             (selectedVendorName == 'RbA')                    ?  'rbanew'  :
                                                 'new';
     }
@@ -363,10 +369,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
       relatedOrderItems =[Select   Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
                     Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
                     Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c,
-                    Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity_Received__c,
+                    Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity,
                     Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family,
-                    Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId
+                    Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
+                    Order.Store_Location__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
     }
 
@@ -439,7 +446,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
   *******************************************************/
   public List<OrderItemWrapper> getOrderItemWrappersByVendor(){
     orderItemWrapperByVendor.clear();
-    
+ 
+ 	System.Debug('*********orderItemWrapperList=' +orderItemWrapperList);   
     for(OrderItemWrapper oiw : orderItemWrapperList){
       system.debug('ADS oiw: '+oiw);
       if(oiw.account != null && oiw.account.id == selectedVendor && vendorProducts.contains(oiw.product.id) ){
@@ -553,14 +561,27 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     
 
-    try{
+ //   try{
       // upsert the order line items
+      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
       orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
+      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
+	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
+	  	return null;
+	  }
+      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
       update orderItemsToUpdateList;
-    } catch (Exception e){
-      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
-    }
+
+	  // If the po status has changed update it
+      if (String.isNotBlank(receiveStatus)) {
+      	orderStatus = receiveStatus;
+      	po.Status__c = orderStatus;
+      	update po;
+      }
+//    } catch (Exception e){
+//      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
+//      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
+ //   }
 
     errorOccurred = 'false';
     return null;
@@ -683,28 +704,28 @@ public with sharing class RMS_vendorPurchaseOrderController {
   *******************************************************/
   public List<OrderItem> receiveLineItems(List<OrderItem> itemsToReceive) {
     system.debug('*****Receiving a line item');
-
     Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
     List<Asset> finalAssetsToReceive = new List<Asset>();
     List<OrderItem> finalOrderItems = new List<OrderItem>();
-    for (OrderItem oi : itemsToReceive) {
-      // If the date or quantity received is null just add the order ite
-      if (oi.Date_Received__c == null || oi.Quantity_To_Receive__c == null) {
-        finalOrderItems.add(oi);
-        continue;
-      }
+	for (OrderItem oi : itemsToReceive) {
+		// If the date or quantity received is null just add the order ite
+//		if (oi.Date_Received__c == null || oi.Quantity_To_Receive__c == null) {
+//			if (oi.Installed_Product_Asset__c == null)
+//				receiveStatus = 'Partially Received';
+//			else if(oi.)
+//			finalOrderItems.add(oi);
+			
+//			continue;
+//		}
 
-      Asset productAsset = (oi.Installed_Product_Asset__c != null) ? oi.Installed_Product_Asset__r  :
-                    new Asset(
-                      Quantity       = oi.Quantity,
+      Asset productAsset;
+      if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
+      			productAsset = new Asset(
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
                       Price        = oi.Total_Retail_Price__c,
                       Product2Id      = oi.Pricebookentry.Product2Id,
-//                      ProductDescription  = oi.Description,
-//                      ProductFamily    = oi.Pricebookentry.Product2.Family,
-//                      ProductCode      = oi.Pricebookentry.Product2.ProductCode,
                       PurchaseDate    = oi.Order.EffectiveDate,
                       Name        = oi.Pricebookentry.Product2.Name,
                       Sold_Order__c    = oi.OrderId,
@@ -712,29 +733,83 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
                       RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
                     );
-      productAsset.Quantity_Received__c =  (productAsset.Quantity_Received__c == null) 
+      } 
+      else if (oi.Installed_Product_Asset__c != null){
+      	productAsset = [SELECT Id, Quantity FROM Asset WHERE Id =: oi.Installed_Product_Asset__c];
+      }
+      if ((oi.Date_Received__c != null && oi.Quantity_To_Receive__c == null) ||
+      	 (oi.Date_Received__c == null && oi.Quantity_To_Receive__c != null))
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.REC_DATE_QUANTITY_REQUIRED));
+        return null;
+      }
+      if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
+      		productAsset.Quantity =  (productAsset.Quantity == null) 
                           ?   oi.Quantity_To_Receive__c 
-                          :  oi.Quantity_To_Receive__c + productAsset.Quantity_Received__c;
-      productAsset.Date_Received__c = oi.Date_Received__c;
-      productAsset.Status =   (oi.Quantity == productAsset.Quantity_Received__c) ? 'Received' :
-                  (oi.Quantity > productAsset.Quantity_Received__c) ? 'Partially Received' :
-                  (oi.Quantity < productAsset.Quantity_Received__c) ? 'Over Received' : '';
-      finalAssetsToReceive.add(productAsset);
-      orderToAssetMap.put(oi.Id, productAsset);
+                          :  oi.Quantity_To_Receive__c + productAsset.Quantity;
+             
+      		productAsset.Date_Received__c = oi.Date_Received__c;
+      		
+                  																		
+			if ((productAsset.Quantity > oi.Quantity && !overReceivingAllowed)) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.OVERRECEIVING_NOT_ALLOWED));
+				  return null;
+			}
+
+      		finalAssetsToReceive.add(productAsset);
+
+ //     		if (receiveStatus == 'Partially Received') continue;
+      		productAsset.Status =   (productAsset.Quantity >= oi.Quantity ) ? 'Received' :
+      																			'Partially Received';
+      }
+      	if (productAsset != null)
+      		orderToAssetMap.put(oi.Id, productAsset);
       
     }
+    
+    // If the receive status is not null (something has been received), then change the order status
+//    if (receiveStatus != null) orderStatus = receiveStatus;
     upsert finalAssetsToReceive;
     
-    if (orderToAssetMap.size() > 0) {
+    boolean noneReceived = false;
+    boolean partialReceived = false;
+    boolean allReceived = false;
+    
+
+//    if (orderToAssetMap.size() > 0) {
       for (OrderItem oi : itemsToReceive) {
-        
-        oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+		if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
+        	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+		}
         oi.Quantity_To_Receive__c = null;
         oi.Date_Received__c = null;
         finalOrderItems.add(oi);
+
+		if (oi.Installed_Product_Asset__c == null) {
+			noneReceived = true;
+			continue;
+		} 
+		if (orderToAssetMap.get(oi.Id).Quantity == null) {
+			noneReceived = true;
+			continue;			
+		}
+		if (orderToAssetMap.get(oi.Id).Quantity < oi.Quantity) {
+			partialReceived = true;
+			continue;
+		}
+		if (orderToAssetMap.get(oi.Id).Quantity >= oi.Quantity) {
+			allReceived = true;
+			continue;	
+		}
       }
-      
-    }
+//    }
+    System.Debug('**************partialReceived=' +partialReceived);
+    System.Debug('**************allReceived=' +allReceived);
+    System.Debug('**************noneReceived=' +noneReceived);
+    receiveStatus = 	(partialReceived)				?	'Partially Received'	:
+    					(allReceived && noneReceived)	?	'Partially Received'	:
+    					(allReceived)					?	'Received'				:
+    														'';
     return finalOrderItems;
 
   }

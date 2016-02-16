@@ -19,6 +19,8 @@ public with sharing class RMS_errorMessages {
 	public static final String COST_CENTER_NUMBER_NOT_FOUND = 'The cost center number was not entered. Please try again.';
 	public static final String PRODUCT_ACCOUNT_NUMBER_NOT_FOUND = 'The product account number could not be found for that product. Please contact your system admin for help.';
 	public static final String STORE_LOCATION_NUMBER_NOT_FOUND = 'The store location number could not be found for your store. Please contact your system admin for help.';
+	public static final String OVERRECEIVING_NOT_ALLOWED = 'Receiving more than the quantity ordered is not allowed for this vendor. Please try again';
+	public static final String REC_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to receive an item. Please try again';
 
 
 	/*******************************************************
@@ -90,7 +92,7 @@ public with sharing class RMS_errorMessages {
 	public static final String ASSET_ID_IS_NULL = '&bull;The Asset Id is null.';
 	public static final String MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED = '&bull;The Asset you are trying to edit has more than one unsubmitted Journal Entry. Please consult your system admin for help resolving this error.';
 	public static final String NEGATIVE_FINACIAL_TRANSACTION = '&bull;This change is not permitted because it would result in a financial transaction with a negative amount.';
-	public static final String BILL_TO_CONTACT_ON_ORDER_NULL = '&bull;The \'Bill to Cntact\' field on the related order is null.';
+	public static final String BILL_TO_CONTACT_ON_ORDER_NULL = '&bull;The \'Bill to Contact\' field on the related order is null.';
 	public static final String STORE_LOCATION_ON_ORDER_NULL = '&bull;The \'Store Location\' field on the related order is null.';
 	public static final String QUANTITY_IS_ZERO = '&bull;The Asset Quantity can not be zero.';
 	
