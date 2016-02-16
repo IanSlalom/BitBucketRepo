@@ -44,7 +44,11 @@ public with sharing class UtilityMethods {
 			OwnerId = ownerId
 			
 		);
-    	
+		
+		if(ord.OpportunityId != null){
+    		wo.Opportunity__c = ord.OpportunityId;
+		} 
+		
     	return wo;
     	 
     }
