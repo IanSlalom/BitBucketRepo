@@ -60,7 +60,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             Id actionWORecordType = UtilityMethods.retrieveRecordTypeId('Actions', 'RbA_Work_Order__c');
             Id LSWPWORecordType = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
             
-            
+             
             
             //BUILDING MAPS OF ORDER ID TO LIST OF WORK ORDERS BASED ON WO TYPE TO USE WHILE LOOPING THROUGH ORDERS
             map<id, list<RbA_Work_Order__c>> ordIdtoListOfLSWPWOMap = new map<id, list<RbA_Work_Order__c>>();
@@ -214,9 +214,9 @@ public with sharing class RMS_WorkOrderCreationManager {
                 }else{
                     oppIdtoListOfTechMeasureWOMap.put(wo.Opportunity__c, new list<RbA_Work_Order__c>{wo});
                 }
-            }
+            } 
                 
-                
+                 
         }   
         
         //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
@@ -253,7 +253,7 @@ public with sharing class RMS_WorkOrderCreationManager {
                     Work_Order_Type__c = 'Tech Measure',
                     Account__c = ord.AccountId,
                     Contact__c = ord.BillToContactId,
-                    
+                    Opportunity__c = ord.OpportunityId,
                     
                     Street__c = relatedDwelling.ShippingStreet,
                     City__c = relatedDwelling.ShippingCity,
