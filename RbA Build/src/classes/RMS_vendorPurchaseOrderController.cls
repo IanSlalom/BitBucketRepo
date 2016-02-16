@@ -38,7 +38,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public List<OrderItem> relatedOrderItems = new List<OrderItem>();
   public list<Id> relatedProduct2IDList = new list<Id>();
   public List<Product2> relatedProducts = new List<Product2>();
-  public list<Id> vendorIdList = new list<Id>();
   public list<Account> vendorsOnOrder = new list<Account>();
   public String newProduct { get; set; }
   public String lineItemToCancel { get; set; }
@@ -46,7 +45,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public Decimal quantityReceived { get; set; }
   public Date dateReceived { get; set; }
   public Id storeId { get; set; }
-  public String glAccount;
+//  public String glAccount;
   public String intercompanyAccount;
   public String productAccountNumber;   
   public String costCenter {get; set;}   
@@ -379,20 +378,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
       }
-      System.Debug('**********************relatedProduct2IDList=' +relatedProduct2IDList);
-      System.Debug('**********************orderItemIdToOrderItemMap=' +orderItemIdToOrderItemMap);
       relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
-      System.Debug('**********************relatedProducts=' +relatedProducts);
         
       //USING PRODUCTS GET LIST OF ALL VENDORS
       for(Product2 p : relatedProducts){
-        vendorIdList.add(p.Vendor__c);
         productIdToProductMap.put(p.id, p);
       }
 
-      System.Debug('**********************vendorIdList=' +vendorIdList);
-      System.Debug('**********************storeVendors=' +storeVendors);
-      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :vendorIdList AND Id IN :storeVendors];
+      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
       for(Account a : vendorsOnOrder){
         accountIdToAccountMap.put(a.id, a);
       }
@@ -400,7 +393,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       //USING MAPS TO CREATE WRAPPERS
       for(OrderItem oi : relatedOrderItems){
         Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-        Account account = accountIdToAccountMap.get(product2.Vendor__c);
+        Account account = accountIdToAccountMap.get(selectedVendor);
         OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
           
         orderItemWrapperList.add(OIW);
@@ -496,7 +489,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
         // May need to change this. Currently finds the RbA account and standard
         // pricebook and creates an Order and links it to the Cost PO
-        Account renewal = [SELECT Id FROM Account WHERE Name = 'RbA'];
+        Account renewal = new Account();
+        for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
+        	renewal = ren;
+        }
         String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
         Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
@@ -532,14 +528,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // update the subtotal and upsert the PO
     updateSubTotal();     
 
-    try{
+//    try{
       // upsert the purchase order
       upsert po;
-    } catch (Exception e){
-      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
-      return null;
-    }
+//    } catch (Exception e){
+//      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
+//      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+//      return null;
+//    }
 
     System.Debug('**********poid=' +poId);
     // Used for redirecting to the view page from javascript
@@ -597,15 +593,32 @@ public with sharing class RMS_vendorPurchaseOrderController {
       productAccountNumber = pbe.Product2.Account_Number__r.Name;
     }
 
-    // checks that the gl and intercompany accounts are available
-//    if (!costPurchaseOrder) {
-//      if (checkAccountNumbers(po.Store_Location__c))
-//        return null;
-//    }
-    glAccount = productAccountNumber + storeLocationNumber + costCenter;
+    // If the pricebookentry cannot be found - add an error and return null
+    if(newOrderItem.PricebookEntryId == null){
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRICEBOOK_ENTRY_NOT_FOUND));
+      return null;
+    }
+    
+    // For cost POs ensures that all three pieces of the GL Account number are availabe
+    if (costPurchaseOrder) {
+      if (costCenter == '' || costCenter == null) {
+	      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.COST_CENTER_NUMBER_NOT_FOUND));
+    	  return null;	
+      }
+      if (productAccountNumber == '' || productAccountNumber == null) {
+	      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PRODUCT_ACCOUNT_NUMBER_NOT_FOUND));
+    	  return null;	
+      }
+      if (storeLocationNumber == '' || storeLocationNumber == null) {
+	      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.STORE_LOCATION_NUMBER_NOT_FOUND));
+    	  return null;	
+      }
 
-    System.Debug('*************glAccount=' +glAccount);
-    newOrderItem.GL_Account__c = glAccount;
+    	newOrderItem.GL_Account__c = productAccountNumber + storeLocationNumber + costCenter;
+
+    }
+    
+
 //    newOrderItem.Intercompany_AP_Account__c = intercompanyAccount;
 
     // If the pricebookentry cannot be found - add an error and return null

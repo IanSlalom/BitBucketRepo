@@ -16,6 +16,9 @@ public with sharing class RMS_errorMessages {
 	public static final String STORE_LOCATION_BLANK = 'The order is not associated with a store location. Please add the store location and try again.';
 	public static final String INVENTORY_GL_ACCOUNT_NOT_FOUND = 'The inventory GL account number could not be found. Please contact your system admin for help.';
 	public static final String INTERCOMPANY_AP_ACCOUNT_NOT_FOUND = 'The intercompany AP account number could not be found. Please contact your system admin for help.';
+	public static final String COST_CENTER_NUMBER_NOT_FOUND = 'The cost center number was not entered. Please try again.';
+	public static final String PRODUCT_ACCOUNT_NUMBER_NOT_FOUND = 'The product account number could not be found for that product. Please contact your system admin for help.';
+	public static final String STORE_LOCATION_NUMBER_NOT_FOUND = 'The store location number could not be found for your store. Please contact your system admin for help.';
 
 
 	/*******************************************************
