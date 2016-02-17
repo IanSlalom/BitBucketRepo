@@ -170,24 +170,22 @@ public with sharing class RMS_financialTransactionManager {
 			
 			if(typeOfPayment != null){
 				string errorMessage;
+				if(typeOfPayment == 'DepositDeposit'){
+					errorMessage = checkFinacialTransationForErrors(paymentIdToDepositFinacialTransactionList.get(p.id) , errorMessage, p.Payment_Type__c);
+				}else if(typeOfPayment == 'DepositFinalPayment'){
+					errorMessage = checkFinacialTransationForErrors(paymentIdToFinalPaymentFinacialTransactionList.get(p.id) , errorMessage, p.Payment_Type__c);
+				}else if(typeOfPayment == 'MiscCashReceipt'){
+					errorMessage = checkFinacialTransationForErrors(paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id) , errorMessage, 'Misc Cash Receipt');
+				}
 				
-				if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
-					
-					if(typeOfPayment == 'DepositDeposit'){
-						errorMessage = checkFinacialTransationForErrors(paymentIdToDepositFinacialTransactionList.get(p.id) , errorMessage, p.Payment_Type__c);
-					}else if(typeOfPayment == 'DepositFinalPayment'){
-						errorMessage = checkFinacialTransationForErrors(paymentIdToFinalPaymentFinacialTransactionList.get(p.id) , errorMessage, p.Payment_Type__c);
-					}else if(typeOfPayment == 'MiscCashReceipt'){
-						errorMessage = checkFinacialTransationForErrors(paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id) , errorMessage, 'Misc Cash Receipt');
-					}
-					
-					errorMessage = checkPaymentForErrors(p, errorMessage, typeOfPayment);
-					 
-					 
-					system.debug('ads p: '+p);
-					system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
-					 
-					if(errorMessage == null || errorMessage == ''){
+				errorMessage = checkPaymentForErrors(p, errorMessage, typeOfPayment);
+				
+				if(errorMessage == null || errorMessage == ''){
+					if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
+ 
+						system.debug('ads p: '+p);
+						system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
+						 
 						Journal_Entry__c newJE = new Journal_Entry__c(
 							Date__c = Datetime.Now(),
 							Payment__c = p.id,
@@ -213,52 +211,51 @@ public with sharing class RMS_financialTransactionManager {
 						
 						journalEntriesToUpsert.add(newJE);
 					}else{
-						//there is an error message
-						mapNew.get(p.id).addError(errorMessage, FALSE);
-					}
-				}else{
-					//there is a related journal entry
-					if(paymentIdToJournalEntryMap.get(p.id).size() == 1){
-						Journal_Entry__c je = paymentIdToJournalEntryMap.get(p.id)[0];
-						if(je.Sent_to_BaanERP__c == true){
-							//Journal Entry already sent to BaanERP, throw error
-							//String 
-							errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
-							mapNew.get(p.id).addError(errorMessage, FALSE);
-						}else{
-							//Journal Entry NOT sent to BaanERP, update Journal Entry
-							system.debug('ads inside not sent to Baan: '+ je);
-							je.Date__c = Datetime.Now();
-							je.Payment__c = p.id;
-							je.Order__c = p.Order__c;
-							je.Amount__c = p.Payment_Amount__c;
-							je.Customer__c = p.Order__r.BillToContactId;
-							
-							if(typeOfPayment == 'DepositDeposit'){
-								je.Type__c = 'Deposit';
-								je.Debit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-								je.Credit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Credit_Account_Number__r.Name;
-							
-							}else if(typeOfPayment == 'DepositFinalPayment'){
-								je.Type__c = 'Final Payment';
-								je.Debit_General_Ledger_Account__c = paymentIdToFinalPaymentFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-								je.Credit_General_Ledger_Account__c = paymentIdToFinalPaymentFinacialTransactionList.get(p.id)[0].Credit_Account_Number__r.Name;
-							
-							}else if(typeOfPayment == 'MiscCashReceipt'){
-								je.Type__c = 'Misc Cash Receipt';
-								je.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-								je.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
+						//there is a related journal entry
+						if(paymentIdToJournalEntryMap.get(p.id).size() == 1){
+							Journal_Entry__c je = paymentIdToJournalEntryMap.get(p.id)[0];
+							if(je.Sent_to_BaanERP__c == true){
+								//Journal Entry already sent to BaanERP, throw error
+								//String 
+								errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
+								mapNew.get(p.id).addError(errorMessage, FALSE);
+							}else{
+								//Journal Entry NOT sent to BaanERP, update Journal Entry
+								system.debug('ads inside not sent to Baan: '+ je);
+								je.Date__c = Datetime.Now();
+								je.Payment__c = p.id;
+								je.Order__c = p.Order__c;
+								je.Amount__c = p.Payment_Amount__c;
+								je.Customer__c = p.Order__r.BillToContactId;
+								
+								if(typeOfPayment == 'DepositDeposit'){
+									je.Type__c = 'Deposit';
+									je.Debit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
+									je.Credit_General_Ledger_Account__c = paymentIdToDepositFinacialTransactionList.get(p.id)[0].Credit_Account_Number__r.Name;
+								
+								}else if(typeOfPayment == 'DepositFinalPayment'){
+									je.Type__c = 'Final Payment';
+									je.Debit_General_Ledger_Account__c = paymentIdToFinalPaymentFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
+									je.Credit_General_Ledger_Account__c = paymentIdToFinalPaymentFinacialTransactionList.get(p.id)[0].Credit_Account_Number__r.Name;
+								
+								}else if(typeOfPayment == 'MiscCashReceipt'){
+									je.Type__c = 'Misc Cash Receipt';
+									je.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
+									je.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
+								}
+	 
+								journalEntriesToUpsert.add(je);
 							}
- 
-							journalEntriesToUpsert.add(je);
-						}
-						
-					}//end if only one journal entery
-				}//end of if there is related journal entery
-					
+							
+						}//end if only one journal entery
+					}//end of if there is related journal entry
+				}else{
+						//there is an error message
+						mapNew.get(p.id).addError(errorMessage, FALSE); 
+				}
 			}//END IF typeOfPayment == null
 		}//END OF PAYMENT FOR LOOP
-		system.debug('ads journalEntriesToUpsert: '+journalEntriesToUpsert); 
+		system.debug('ads journalEntriesToUpsert: '+journalEntriesToUpsert);  
 		upsert journalEntriesToUpsert;
 	}//END createOrUpdateJournalEntryPayment Method
 	
