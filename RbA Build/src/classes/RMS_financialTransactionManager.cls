@@ -69,6 +69,22 @@ public with sharing class RMS_financialTransactionManager {
 	public void onBeforeDeleteOrder(list<Order> listOld, map<Id, Order> mapOld){
 		allowDeleteOrNot(listOld, mapOld);
 	}
+	
+	//REFUND
+	/*
+	public void onAfterInsertAsset(list<Refund__c> listNew, map<id,Refund__c> mapNew){
+		createOrUpdateJournalEntryRefund(listNew, mapNew, null, 'insert');
+	}
+	
+	public void onAfterUpdateOrder(list<Refund__c> listOld, list<Refund__c> listNew, map<Id, Refund__c> mapOld, map<Id, Refund__c> mapNew){
+		createJournalEntryRefund(listNew, mapNew, mapOld);
+	}
+	
+	public void onBeforeDeleteOrder(list<Refund__c> listOld, map<Id, Refund__c> mapOld){
+		allowDeleteOrNot(listOld, mapOld);
+	}
+	
+	*/
 
 	/***************************************************
 	 Method to check if payment records can be deleted
@@ -136,7 +152,7 @@ public with sharing class RMS_financialTransactionManager {
 		map<Id, list<Financial_Transaction__c>>  paymentIdToDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Deposit');
 		map<Id, list<Financial_Transaction__c>>  paymentIdToFinalPaymentFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Final Payment');
 		map<Id, list<Financial_Transaction__c>>  paymentIdToMiscCashReceiptFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Misc Cash Receipt');
-		
+	
 		system.debug('ads paymentIdToMiscCashReceiptFinacialTransactionList: '+paymentIdToMiscCashReceiptFinacialTransactionList);
 		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
@@ -168,8 +184,8 @@ public with sharing class RMS_financialTransactionManager {
 					errorMessage = checkPaymentForErrors(p, errorMessage, typeOfPayment);
 					 
 					 
-					 system.debug('ads p: '+p);
-					 system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
+					system.debug('ads p: '+p);
+					system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
 					 
 					if(errorMessage == null || errorMessage == ''){
 						Journal_Entry__c newJE = new Journal_Entry__c(
@@ -233,7 +249,7 @@ public with sharing class RMS_financialTransactionManager {
 								je.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
 								je.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
 							}
-
+ 
 							journalEntriesToUpsert.add(je);
 						}
 						
@@ -748,6 +764,45 @@ public with sharing class RMS_financialTransactionManager {
 
 
 
+	
+	/***************************************************
+	 Method to create Journal Entry for REFUND
+	****************************************************/
+	/*
+	public void createOrUpdateJournalEntryRefund(list<Refund__c> listNew, map<id, Refund__c> mapNew, map<id, Refund__c> mapOld, String typeOfCall){
+		list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
+		list<Refund__c> extraFieldsList = [SELECT 	id,
+													Amount__c,
+													Date__c,
+													Description__c,
+													Order__c,
+													Order__r.Revenue_Recognized_Date__c,
+													Reason__c,
+													Refund_Method__c,
+													CreatedById,
+													Name,
+													RecordTypeId
+													
+													FROM Refund__c WHERE Id IN :mapNew.keyset()];		
+	
+		map<Id, list<Journal_Entry__c>> laborIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
+		map<Id, list<Financial_Transaction__c>>  refundIdToDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Deposit');
+		
+		for(Refund__c ref : extraFieldsList){
+			if(ref.Revenue_Recognized_Date__c == null){
+				
+			}//END OF REV RECOGNIZED DATE == NULL
+			else if(Revenue_Recognized_Date__c != null){
+				
+			}//END OF REV RECOGNIZED DATE != NULL
+			
+		}//END OF REFUND LOOP
+	}	
+	
+	
+	
+	*/
+
 	/***************************************************
 	 Method to link object Id to a list of Journal_Entry__c
 	****************************************************/
@@ -848,13 +903,14 @@ public with sharing class RMS_financialTransactionManager {
 		}
 		 
 		map<id, list<Financial_Transaction__c>> paymentIdToListFinancialTransaction = new map<id, list<Financial_Transaction__c>>();
-//			if(String.ValueOf(objectList[0].getSObjectType()) == 'Payment__c'){
 		for(SObject o : objectList){
 			paymentIdToListFinancialTransaction.put(o.id, storeIdToListFinancialTransaction.get((Id)o.get('Store_Location__c')));
 		}
 		system.debug('ads paymentIdToListFinancialTransaction: '+paymentIdToListFinancialTransaction);
 		return paymentIdToListFinancialTransaction;
 	}
+	
+
 		
 	/***************************************************
 	 Method to run error checks against the Finacial Transaction Object

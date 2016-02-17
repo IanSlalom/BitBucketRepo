@@ -81,6 +81,7 @@
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <members>RbAWorkOrderTrigger</members>
+        <members>RefundTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
