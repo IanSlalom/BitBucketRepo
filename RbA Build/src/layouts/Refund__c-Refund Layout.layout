@@ -8,7 +8,10 @@
         <editHeading>true</editHeading>
         <label>Information</label>
         <layoutColumns>
-           
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Order__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Name</field>
