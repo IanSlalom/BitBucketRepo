@@ -536,14 +536,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // update the subtotal and upsert the PO
     updateSubTotal();     
 
-//    try{
+    try{
       // upsert the purchase order
       upsert po;
-//    } catch (Exception e){
-//      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
-//      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
-//      return null;
-//    }
+    } catch (Exception e){
+      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+      return null;
+    }
 
     System.Debug('**********poid=' +poId);
     // Used for redirecting to the view page from javascript
@@ -561,15 +561,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     
 
- //   try{
+    try{
       // upsert the order line items
-      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
       orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
-      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
 	  }
-      System.Debug('**************orderItemsToUpdateList=' +orderItemsToUpdateList);
       update orderItemsToUpdateList;
 
 	  // If the po status has changed update it
@@ -578,10 +575,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       	po.Status__c = orderStatus;
       	update po;
       }
-//    } catch (Exception e){
-//      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
-//      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
- //   }
+    } catch (Exception e){
+      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
+    }
 
     errorOccurred = 'false';
     return null;
@@ -744,6 +741,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
+			if(oi.Unit_Wholesale_Cost__c == null) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+				  return null;
+			}
+
       		productAsset.Quantity =  (productAsset.Quantity == null) 
                           ?   oi.Quantity_To_Receive__c 
                           :  oi.Quantity_To_Receive__c + productAsset.Quantity;
@@ -803,9 +805,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		}
       }
 //    }
-    System.Debug('**************partialReceived=' +partialReceived);
-    System.Debug('**************allReceived=' +allReceived);
-    System.Debug('**************noneReceived=' +noneReceived);
     receiveStatus = 	(partialReceived)				?	'Partially Received'	:
     					(allReceived && noneReceived)	?	'Partially Received'	:
     					(allReceived)					?	'Received'				:

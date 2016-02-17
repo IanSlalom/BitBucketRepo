@@ -34,7 +34,7 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 	else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
 		//HANDLERS AND MANAGERS
 		RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
-//		List<SObject> orders = new List<SObject>();
+		List<SObject> orders = new List<SObject>();
 	        
 		// Before Insert
 		/*
@@ -61,13 +61,13 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		// After Insert
 		else if(Trigger.isInsert && Trigger.isAfter){
 			financialTransactionManager.onAfterInsertPayment(Trigger.new, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		} 
 		 
 		// After Update
 		else if(Trigger.isUpdate && Trigger.isAfter){
 		    financialTransactionManager.onAfterUpdatePayment(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		}
 		
 		            
@@ -75,7 +75,7 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		
 		else if(Trigger.isDelete && Trigger.isAfter){
 //		    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
 		}
 		
 		
@@ -83,9 +83,9 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		
 		else if(Trigger.isUnDelete){
 //		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
-//			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		}
-//		update orders;		
+		update orders;		
 
 	}
 
