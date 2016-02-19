@@ -13,6 +13,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Original_Order_Product__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Product2Id</field>
             </layoutItems>
             <layoutItems>
@@ -26,10 +30,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SerialNumber</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Create_SO__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -46,10 +46,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Price</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Original_Order_Product__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -124,14 +120,12 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>CASES.CASE_NUMBER</fields>
-        <fields>NAME</fields>
-        <fields>CASES.SUBJECT</fields>
-        <fields>CASES.PRIORITY</fields>
-        <fields>CASES.CREATED_DATE</fields>
-        <fields>CASES.STATUS</fields>
-        <fields>OWNER_NAME</fields>
-        <relatedList>RelatedCaseList</relatedList>
+        <fields>Product2</fields>
+        <fields>Quantity</fields>
+        <fields>UnitPrice</fields>
+        <fields>ListPrice</fields>
+        <fields>TotalPrice</fields>
+        <relatedList>OrderItem.Installed_Product_Asset__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

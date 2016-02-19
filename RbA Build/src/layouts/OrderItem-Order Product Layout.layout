@@ -40,7 +40,12 @@
                 <field>Miscellaneous_Charge_Parent_Unit_Id__c</field>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>OrderItemNumber</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -106,10 +111,6 @@
         <editHeading>true</editHeading>
         <label>** SERVICE ORDERING INFORMATION **</label>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Replacement_Product__c</field>
-            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Quanity_Ordered__c</field>

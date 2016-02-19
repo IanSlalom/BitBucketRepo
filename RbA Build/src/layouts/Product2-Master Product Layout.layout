@@ -119,6 +119,12 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <fields>PRODUCT2.NAME</fields>
+        <fields>PRODUCT2.CUSTOMER_PRODUCT_ID</fields>
+        <fields>PRODUCT2.DESCRIPTION</fields>
+        <relatedList>Product2.Master_Product__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <relatedList>RelatedStandardPriceList</relatedList>
     </relatedLists>
     <relatedLists>
