@@ -135,6 +135,10 @@
                 <behavior>Readonly</behavior>
                 <field>CreatedById</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>rSuite_Id__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -186,6 +190,7 @@
         <fields>QUOTE_LI.QUANTITY</fields>
         <fields>QUOTE_LI.SUBTOTAL</fields>
         <fields>QUOTE_LI.TOTAL_PRICE</fields>
+        <fields>Product_Type__c</fields>
         <relatedList>RelatedQuoteLineItemList</relatedList>
     </relatedLists>
     <relatedLists>
