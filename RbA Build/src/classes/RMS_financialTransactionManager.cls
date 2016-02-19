@@ -71,20 +71,18 @@ public with sharing class RMS_financialTransactionManager {
 	}
 	
 	//REFUND
-	/*
 	public void onAfterInsertAsset(list<Refund__c> listNew, map<id,Refund__c> mapNew){
 		createOrUpdateJournalEntryRefund(listNew, mapNew, null, 'insert');
 	}
 	
 	public void onAfterUpdateOrder(list<Refund__c> listOld, list<Refund__c> listNew, map<Id, Refund__c> mapOld, map<Id, Refund__c> mapNew){
-		createJournalEntryRefund(listNew, mapNew, mapOld);
+		createOrUpdateJournalEntryRefund(listNew, mapNew, mapOld, 'update');
 	}
 	
 	public void onBeforeDeleteOrder(list<Refund__c> listOld, map<Id, Refund__c> mapOld){
 		allowDeleteOrNot(listOld, mapOld);
 	}
-	
-	*/
+
 
 	/***************************************************
 	 Method to check if payment records can be deleted
@@ -100,10 +98,10 @@ public with sharing class RMS_financialTransactionManager {
 		for(SObject o : listOld){
 			if(objectIdToJournalEntryMap.get(o.id) == null || objectIdToJournalEntryMap.get(o.id).size() == 0){
 				continue;
-			}else if(objectIdToJournalEntryMap.get(o.id).size() > 1 && (soType == 'Payment__c' || soType == 'Labor__c')){
+			}else if(objectIdToJournalEntryMap.get(o.id).size() > 1 && (soType == 'Payment__c' || soType == 'Labor__c' || soType == 'Refund__c')){
 				errorMessage = RMS_errorMessages.MULTIPLE_JOURNAL_ENTRIES;
 				o.addError(errorMessage, FALSE);
-			}else if(objectIdToJournalEntryMap.get(o.id).size() == 1 && (soType == 'Payment__c' || soType == 'Labor__c')){
+			}else if(objectIdToJournalEntryMap.get(o.id).size() == 1 && (soType == 'Payment__c' || soType == 'Labor__c' || soType == 'Refund__c')){
 				if(objectIdToJournalEntryMap.get(o.id)[0].Sent_to_BaanERP__c == false){
 					journalEntriesToDelete.add(objectIdToJournalEntryMap.get(o.id)[0]);
 				}else{
@@ -765,7 +763,7 @@ public with sharing class RMS_financialTransactionManager {
 	/***************************************************
 	 Method to create Journal Entry for REFUND
 	****************************************************/
-	/*
+	
 	public void createOrUpdateJournalEntryRefund(list<Refund__c> listNew, map<id, Refund__c> mapNew, map<id, Refund__c> mapOld, String typeOfCall){
 		list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
 		list<Refund__c> extraFieldsList = [SELECT 	id,
@@ -774,31 +772,103 @@ public with sharing class RMS_financialTransactionManager {
 													Description__c,
 													Order__c,
 													Order__r.Revenue_Recognized_Date__c,
+													Order__r.BillToContactId,
 													Reason__c,
 													Refund_Method__c,
 													CreatedById,
 													Name,
-													RecordTypeId
+													Store_Location__c
 													
 													FROM Refund__c WHERE Id IN :mapNew.keyset()];		
 	
-		map<Id, list<Journal_Entry__c>> laborIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
+		map<Id, list<Journal_Entry__c>> refundIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
 		map<Id, list<Financial_Transaction__c>>  refundIdToDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Deposit');
+		map<Id, list<Financial_Transaction__c>>  refundIdToFinalPaymentFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Final Payment');
 		
 		for(Refund__c ref : extraFieldsList){
-			if(ref.Revenue_Recognized_Date__c == null){
-				
-			}//END OF REV RECOGNIZED DATE == NULL
-			else if(Revenue_Recognized_Date__c != null){
-				
-			}//END OF REV RECOGNIZED DATE != NULL
+			String refundType;
+			if(ref.Order__r.Revenue_Recognized_Date__c == null){
+				refundType = 'deposit';
+			}else if(ref.Order__r.Revenue_Recognized_Date__c != null){
+				refundType = 'finalPayment';
+			}
+			
+			string errorMessage;
+			if(refundType == 'deposit'){
+				errorMessage = checkFinacialTransationForErrors(refundIdToDepositFinacialTransactionList.get(ref.id) , errorMessage, 'Deposit');
+			}else if(refundType == 'finalPayment'){
+				errorMessage = checkFinacialTransationForErrors(refundIdToFinalPaymentFinacialTransactionList.get(ref.id) , errorMessage, 'Final Payment');
+			}
+			errorMessage = checkRefundForErrors(ref, errorMessage, refundType);
+
+			if(errorMessage == null || errorMessage == ''){
+				//IF THERE ARE NO RELATED JOURNAL ENTRY
+				if(refundIdToJournalEntryMap.get(ref.id) == null || refundIdToJournalEntryMap.get(ref.id).size() == 0 ){
+		             
+		            Journal_Entry__c newJE = new Journal_Entry__c(
+					Date__c = Datetime.Now(),
+					Refund__c = ref.id,
+					Order__c = ref.Order__c,
+					Amount__c = ref.Amount__c,
+					Customer__c = ref.Order__r.BillToContactId);
+	            	 
+	 
+		            if(refundType == 'deposit'){
+		              newJE.Type__c = 'Refund - Payment';
+		              newJE.Debit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
+		              newJE.Credit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
+		              
+		            }else if(refundType == 'finalPayment'){
+		              newJE.Type__c = 'Refund - Final Payment';
+		              newJE.Debit_General_Ledger_Account__c = refundIdToFinalPaymentFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
+		              newJE.Credit_General_Ledger_Account__c = refundIdToFinalPaymentFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
+		            }
+		            
+		            journalEntriesToUpsert.add(newJE);
+				}else
+					//there is a related journal entry
+					if(refundIdToJournalEntryMap.get(ref.id).size() == 1){
+						Journal_Entry__c je = refundIdToJournalEntryMap.get(ref.id)[0];
+		  					if(je.Sent_to_BaanERP__c == true){
+						    //Journal Entry already sent to BaanERP, throw error
+						    errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
+						    mapNew.get(ref.id).addError(errorMessage, FALSE);
+						}else{
+							//Journal Entry NOT sent to BaanERP, update Journal Entry
+							je.Date__c = Datetime.Now();
+							je.Refund__c = ref.id;
+							je.Order__c = ref.Order__c;
+							je.Amount__c = ref.Amount__c;
+							je.Customer__c = ref.Order__r.BillToContactId;
+							
+							if(refundType == 'deposit'){
+								je.Type__c = 'Refund - Payment';
+								je.Debit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
+								je.Credit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
+				            }else if(refundType == 'finalPayment'){
+				            	je.Type__c = 'Refund - Final Payment';
+								je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
+								je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
+				            }
+	                		journalEntriesToUpsert.add(je);
+	  					}//END ELSE NOT SENT TO BaanERP
+					}//END IF THERE 1 RELATED JOURNAL ENTRY
+				//IF MORE THAN ONE JOURNAL ENTRY
+				else if(refundIdToJournalEntryMap.get(ref.id).size() != null && refundIdToJournalEntryMap.get(ref.id).size() > 1){
+					errorMessage = RMS_errorMessages.MULTIPLE_JOURNAL_ENTRIES;
+					mapNew.get(ref.id).addError(errorMessage, FALSE);
+				}
+			}//END IF ERROR MESSAGES NULL
+			else{
+            //there is an error message
+            mapNew.get(ref.id).addError(errorMessage, FALSE); 
+			}
+			upsert journalEntriesToUpsert;
 			
 		}//END OF REFUND LOOP
 	}	
 	
-	
-	
-	*/
+
 
 	/***************************************************
 	 Method to link object Id to a list of Journal_Entry__c
@@ -813,6 +883,7 @@ public with sharing class RMS_financialTransactionManager {
 																Labor__c,
 																Asset__c,
 																Order__c,
+																Refund__c,
 																Sent_to_BaanERP__c,
 																Type__c,
 																Customer__c,
@@ -821,7 +892,8 @@ public with sharing class RMS_financialTransactionManager {
 																FROM Journal_Entry__c WHERE Payment__c IN :idList 
 																						OR Labor__c IN :idList 
 																						OR Asset__c IN :idList 
-																						OR Order__c IN :IdList];
+																						OR Order__c IN :IdList
+																						OR Refund__c IN :IdList];
 		system.debug('Method:linkJournalEntries relatedJournalEntries: '+relatedJournalEntries);														
 		map<Id, list<Journal_Entry__c>> idToJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
 		if(String.ValueOf(objectList[0].getSObjectType()) == 'Payment__c'){
@@ -858,6 +930,15 @@ public with sharing class RMS_financialTransactionManager {
 				}
 				else{
 					idToJournalEntryMap.put(je.Order__c, new list<Journal_Entry__c>{je});
+				}
+			}
+		}else if(String.ValueOf(objectList[0].getSObjectType()) == 'Refund__c'){
+			for(Journal_Entry__c je : relatedJournalEntries){
+				if(idToJournalEntryMap.containsKey(je.Refund__c) ){
+					idToJournalEntryMap.get(je.Refund__c).add(je);
+				}
+				else{
+					idToJournalEntryMap.put(je.Refund__c, new list<Journal_Entry__c>{je});
 				}
 			}
 		}
@@ -1043,7 +1124,9 @@ public with sharing class RMS_financialTransactionManager {
 	}
 	
 	
-
+	/***************************************************
+	 Method to run error checks against the ORDER Journal Entry
+	****************************************************/
 	public String checkOrderJEForErrors(Journal_Entry__c je, string errorMessage, string typeOfJE){
 		
 		String dynamicErrorMessage;
@@ -1068,6 +1151,38 @@ public with sharing class RMS_financialTransactionManager {
 			}
 		}
 		
+		return errorMessage;		
+	}
+	
+	
+	/***************************************************
+	 Method to run error checks against the REFUND Object
+	****************************************************/
+	public String checkRefundForErrors(Refund__c ref, string errorMessage, string typeOfJE){
+		
+		String dynamicErrorMessage;
+		
+		if(ref.id == null){ 
+			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_REFUND_FIELD_NULL, '[field]', 'Id');
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		if(ref.Order__c == null){
+			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_REFUND_FIELD_NULL, '[field]', 'Order');
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		if(ref.Amount__c == null){
+			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_REFUND_FIELD_NULL, '[field]', 'Amount');
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		if(ref.Store_Location__c == null){
+			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_REFUND_FIELD_NULL, '[field]', 'Store Location');
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		if(ref.Order__r.BillToContactId == null){
+			dynamicErrorMessage = RMS_errorMessages.CONTACT_IS_NULL;
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+
 		return errorMessage;		
 	}
 	

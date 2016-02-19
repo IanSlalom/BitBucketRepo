@@ -103,8 +103,9 @@ public with sharing class RMS_errorMessages {
 	public static final String REVENUE_ALREADY_RECOGNIZED = '&bull;This revenue has already been recognized and submitted for this order and you cannot change it.';
 	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You can not change the Revenue Recognized Date to another date, you must first clear it.';					
 
+	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	/*******************************************************
-					Redirect Errors
+					Redirect Errors 
 	*******************************************************/
 	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
 	public static final String STORE_LOCATION_IS_BLANK_LABOR = 'The Store Location must be entered on the Work Order before creating a labor record.';

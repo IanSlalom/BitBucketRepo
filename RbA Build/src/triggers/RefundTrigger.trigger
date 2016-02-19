@@ -51,24 +51,25 @@ trigger RefundTrigger on Refund__c (after delete, after insert, after undelete,
 	
 		// Before Delete
 		/*
-		else if(Trigger.isDelete && Trigger.isBefore){
-		    handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
-		}
+		else 
 		*/
+		if(Trigger.isDelete && Trigger.isBefore){
+		    financialTransactionManager.onBeforeDeleteOrder(Trigger.old, Trigger.oldMap);
+		}
 		
 		// After Insert
-		/*
+		
 		else if(Trigger.isInsert && Trigger.isAfter){
-			handler.OnAfterInsert(Trigger.new, Trigger.newMap);
+			financialTransactionManager.onAfterInsertAsset(Trigger.new, Trigger.newMap);
 		}
-		*/
+		
 		 
 		// After Update
-		/*
+		
 		else if(Trigger.isUpdate && Trigger.isAfter){
-		    handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+		    financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 		}
-		*/
+		
 		            
 		//After Delete
 		/*
