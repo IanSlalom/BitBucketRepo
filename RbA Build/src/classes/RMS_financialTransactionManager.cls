@@ -1062,8 +1062,7 @@ public with sharing class RMS_financialTransactionManager {
 		if(payment.GL_Account__r.Name == null && typeOfPayment == 'MiscCashReceipt'){
 			dynamicErrorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-		}
-		if(payment.GL_Account__r.Name.length() <= 3 && typeOfPayment == 'MiscCashReceipt'){
+		}else if(payment.GL_Account__r.Name.length() <= 3 && typeOfPayment == 'MiscCashReceipt'){
 			dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
