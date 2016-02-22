@@ -1062,7 +1062,7 @@ public with sharing class RMS_financialTransactionManager {
 		if(payment.GL_Account__r.Name == null && typeOfPayment == 'MiscCashReceipt'){
 			dynamicErrorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-		}else if(payment.GL_Account__r.Name.length() <= 3 && typeOfPayment == 'MiscCashReceipt'){
+		}else if(typeOfPayment == 'MiscCashReceipt' && payment.GL_Account__r.Name != null && payment.GL_Account__r.Name.length() <= 3 ){
 			dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
@@ -1104,7 +1104,7 @@ public with sharing class RMS_financialTransactionManager {
 		if(labor.GL_Account__r.Name == null && typeOfLabor == 'LaborMiscReimbursement'){
 			dynamicErrorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-		}else if(labor.GL_Account__r.Name.length() <= 3 && typeOfLabor == 'LaborMiscReimbursement'){
+		}else if(typeOfLabor == 'LaborMiscReimbursement' && labor.GL_Account__r.Name != null && labor.GL_Account__r.Name.length() <= 3){
 			dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
