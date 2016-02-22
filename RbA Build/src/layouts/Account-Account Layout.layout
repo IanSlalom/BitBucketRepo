@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComAccountInsights</excludeButtons>
-    <excludeButtons>DataDotComClean</excludeButtons>
-    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <excludeButtons>DisableCustomerPortalAccount</excludeButtons>
     <excludeButtons>DisablePartnerPortalAccount</excludeButtons>
     <excludeButtons>IncludeOffline</excludeButtons>
@@ -29,6 +26,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Baan_Business_Partner_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -136,22 +137,7 @@
             <quickActionName>Account.Task</quickActionName>
         </quickActionListItems>
         <quickActionListItems>
-            <quickActionName>Account.Contact</quickActionName>
-        </quickActionListItems>
-        <quickActionListItems>
             <quickActionName>Account.Log_a_Call</quickActionName>
-        </quickActionListItems>
-        <quickActionListItems>
-            <quickActionName>Account.Note</quickActionName>
-        </quickActionListItems>
-        <quickActionListItems>
-            <quickActionName>Account.Opportunity</quickActionName>
-        </quickActionListItems>
-        <quickActionListItems>
-            <quickActionName>Account.Child_Account</quickActionName>
-        </quickActionListItems>
-        <quickActionListItems>
-            <quickActionName>Account.Case</quickActionName>
         </quickActionListItems>
         <quickActionListItems>
             <quickActionName>FeedItem.LinkPost</quickActionName>

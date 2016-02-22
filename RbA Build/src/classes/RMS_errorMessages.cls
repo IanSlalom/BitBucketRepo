@@ -80,7 +80,10 @@ public with sharing class RMS_errorMessages {
 	public static final String PAYMENT_AMOUNT_IS_NULL = '&bull;Please enter a Payment Amount before creating a payment record on this order';
 	public static final String CONTACT_IS_NULL = '&bull;Please enter a Contact on the Order before creating a payment record on this order';
 	public static final String PAYMENT_ALREADY_SUBMITTED = '&bull;This Record has already been submitted, so you cannot change it.';
-	
+	public static final String LOCATION_ID_IS_NULL = '&bull;Location Number is null in the related store configuration. Please contact and administrator to resolve the issue';
+	public static final String GLA_NUMBER_NULL = '&bull;The GLA Account must not be blank';
+	public static final String GLA_NUMBER_THREE_OR_LESS = '&bull;The GLA Account must be longer than 3 characters.';
+	 
 	public static final String ALREADY_SUBMITTED_DELETE = '&bull;This record has already been submitted, so you cannot delete it.';
 	public static final String MULTIPLE_JOURNAL_ENTRIES = '&bull;This payment has more then one journal entry. Please consult your system admin for help resolving this error.';
 	

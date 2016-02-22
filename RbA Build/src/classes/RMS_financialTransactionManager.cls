@@ -150,7 +150,12 @@ public with sharing class RMS_financialTransactionManager {
 		map<Id, list<Financial_Transaction__c>>  paymentIdToDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Deposit');
 		map<Id, list<Financial_Transaction__c>>  paymentIdToFinalPaymentFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Final Payment');
 		map<Id, list<Financial_Transaction__c>>  paymentIdToMiscCashReceiptFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Misc Cash Receipt');
-	
+		map<Id, String> paymentIdToMiscCashReceiptCreditGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
+		
+		/*********************************************************
+		Building new misc cash receipt finacial transaction list map
+		************************************************************/
+		
 		system.debug('ads paymentIdToMiscCashReceiptFinacialTransactionList: '+paymentIdToMiscCashReceiptFinacialTransactionList);
 		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
@@ -163,7 +168,7 @@ public with sharing class RMS_financialTransactionManager {
 				typeOfPayment = 'DepositFinalPayment';
 			}else if( p.RecordTypeId == paymentMiscCashReceiptRecordTypeId){
 				typeOfPayment = 'MiscCashReceipt';
-			} 
+			}
 			
 			
 			if(typeOfPayment != null){
@@ -179,6 +184,7 @@ public with sharing class RMS_financialTransactionManager {
 				errorMessage = checkPaymentForErrors(p, errorMessage, typeOfPayment);
 				
 				if(errorMessage == null || errorMessage == ''){
+					
 					if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
  
 						system.debug('ads p: '+p);
@@ -204,7 +210,7 @@ public with sharing class RMS_financialTransactionManager {
 						}else if(typeOfPayment == 'MiscCashReceipt'){
 							newJE.Type__c = 'Misc Cash Receipt';
 							newJE.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-							newJE.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
+							newJE.Credit_General_Ledger_Account__c = paymentIdToMiscCashReceiptCreditGLAmap.get(p.id);			
 						}
 						
 						journalEntriesToUpsert.add(newJE);
@@ -239,7 +245,7 @@ public with sharing class RMS_financialTransactionManager {
 								}else if(typeOfPayment == 'MiscCashReceipt'){
 									je.Type__c = 'Misc Cash Receipt';
 									je.Debit_General_Ledger_Account__c = paymentIdToMiscCashReceiptFinacialTransactionList.get(p.id)[0].Debit_Account_Number__r.Name;
-									je.Credit_General_Ledger_Account__c = p.GL_Account__r.Name;			
+									je.Credit_General_Ledger_Account__c = paymentIdToMiscCashReceiptCreditGLAmap.get(p.id);			
 								}
 	 
 								journalEntriesToUpsert.add(je);
@@ -273,6 +279,8 @@ public with sharing class RMS_financialTransactionManager {
 													Installer__c,
 													Installer__r.Account.Baan_Business_Partner_Number__c,
 													Installer_Account_Number__c,
+													GL_Account__c,
+													GL_Account__r.Name,
 													Internal_Cost__c,
 													Labor_Complete__c,
 													Related_Work_Order__c,
@@ -292,6 +300,7 @@ public with sharing class RMS_financialTransactionManager {
 		map<Id, list<Financial_Transaction__c>>  laborIdToLaborFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Internal Labor');
 		map<Id, list<Financial_Transaction__c>>  laborIdToLaborExternalFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'External Labor');
 		map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Misc Reimbursement');
+		map<Id, String> laborIdToMiscReimbursementGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
 		
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Id laborMiscReimbursementRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Reimbursement', 'Labor__c');
@@ -354,7 +363,7 @@ public with sharing class RMS_financialTransactionManager {
 								newJE.Amount__c = l.External_Labor_Amount__c;
 								newJE.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
 								
-								newJE.Debit_General_Ledger_Account__c = l.Installer_Account_Number__c;
+								newJE.Debit_General_Ledger_Account__c = laborIdToMiscReimbursementGLAmap.get(l.id);
 								newJE.Credit_General_Ledger_Account__c = laborIdToMiscReimbursementFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
 							}
 						
@@ -610,10 +619,15 @@ public with sharing class RMS_financialTransactionManager {
 							list<Journal_Entry__c> relatedExternalLaborJE = new list<Journal_Entry__c>();
 							list<Journal_Entry__c> relatedRevRecognizedDepositJE = new list<Journal_Entry__c>();
 							list<Journal_Entry__c> relatedRevRecognizedExternalLaborJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedRefundDepositJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedInternalLaborJE = new list<Journal_Entry__c>();
+							
 							
 							//CHECK JOURNAL ENTRY OF TYPE Rev Recognized - Deposit DOESN'T EXIST
 							Boolean alreadyHasJEofTypeRevRecDeposit = false;
 							Boolean alreadyHasJEofTypeRevRecLabor = false;
+							
+							
 							for(Journal_Entry__c je : orderIdToJournalEntryMap.get(o.id)){
 								if(je.Type__c == 'Rev Recognized - Deposit'){
 									alreadyHasJEofTypeRevRecDeposit = true;	
@@ -629,6 +643,10 @@ public with sharing class RMS_financialTransactionManager {
 								if(je.Type__c == 'External Labor'){
 									relatedExternalLaborJE.add(je);
 								}
+								if(je.Type__c == 'Refund - Deposit'){
+									relatedRefundDepositJE.add(je);
+								}
+								
 							}
 							system.debug('Method:createJournalEntryOrder relatedDespoitJE: '+relatedDespoitJE);
 							system.debug('Method:createJournalEntryOrder alreadyHasJEofTypeRevRecDeposit: '+alreadyHasJEofTypeRevRecDeposit);
@@ -1002,17 +1020,17 @@ public with sharing class RMS_financialTransactionManager {
 			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.EXTRA_FINACIAL_TRANSACTION_RECORDS, '[Transaction Type]', objectType);
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		//CHECK IF NO FINACIAL TRANSACTION RECORDS
-		}else if(ftList == null || ftList.size() == 0 ){
+		}else if((ftList == null || ftList.size() == 0)){
 			dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.NO_FINACIAL_TRANSACTION_RECORDS, '[Transaction Type]', objectType);
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}else{
 			//CHECK IF CREDIT ACCOUNT NUMBER IS NULL
-			if(ftList[0].Credit_Account_Number__c == null && objectType != 'Misc Cash Receipt' && objectType != 'Misc Reimbursement'){
+			if(objectType != 'Misc Cash Receipt' && objectType != 'Misc Reimbursement' && ftList[0].Credit_Account_Number__c == null ){
 				dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_CREDIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
 			//CHECK IF DEBIT ACCOUNT NUMBER IS NULL
-			if(ftList[0].Debit_Account_Number__c == null ){
+			if(objectType != 'Misc Cash Receipt' && ftList[0].Debit_Account_Number__c == null ){
 				dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
@@ -1042,7 +1060,12 @@ public with sharing class RMS_financialTransactionManager {
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
 		if(payment.GL_Account__r.Name == null && typeOfPayment == 'MiscCashReceipt'){
-			errorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
+			dynamicErrorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		if(payment.GL_Account__r.Name.length() <= 3 && typeOfPayment == 'MiscCashReceipt'){
+			dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
 		if(payment.Order__r.BillToContactId == null && typeOfPayment != 'MiscCashReceipt'){
 			dynamicErrorMessage = RMS_errorMessages.CONTACT_IS_NULL;
@@ -1079,6 +1102,14 @@ public with sharing class RMS_financialTransactionManager {
 			dynamicErrorMessage = RMS_errorMessages.INSTALLER_HAS_NO_BAAN_NUMBER;
 			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 		}
+		if(labor.GL_Account__r.Name == null && typeOfLabor == 'LaborMiscReimbursement'){
+			dynamicErrorMessage = RMS_errorMessages.ACCOUNT_NUMBER_NULL;
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}else if(labor.GL_Account__r.Name.length() <= 3 && typeOfLabor == 'LaborMiscReimbursement'){
+			dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
+			errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+		}
+		
 		return errorMessage;		
 	}
 	
@@ -1230,5 +1261,58 @@ public with sharing class RMS_financialTransactionManager {
 		
 		return errorMessage;
 	} 
+	/***************************************************
+	 Method to dynamicly create account number from GL Account number and Location Numkber
+	****************************************************/
+	public map<Id, string> linkMiscPaymentAccountNumbers(list<SObject> objectList, map<id, SObject> mapNew){
+		map<Id, string> mapToReturn = new map<Id, string>();
+		list<id> storeLocationIdList = new list<id>();
+		for(SObject theObject : objectList){  
+			storeLocationIdList.add((id)theObject.get('Store_Location__c'));
+		}
+		map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeLocationIdList);
+		
+		for(SObject theObject : objectList){
+			String GLAccount;
+			if(String.ValueOf(objectList[0].getSObjectType()) == 'Payment__c'){
+				Payment__c payment = (Payment__c)theObject;
+				GLAccount = payment.GL_Account__r.Name;
+			
+			}else if(String.ValueOf(objectList[0].getSObjectType()) == 'Labor__c'){
+				Labor__c labor = (Labor__c)theObject;
+				GLAccount = labor.GL_Account__r.Name;
+	
+			}
+			if(GLAccount == null || GLAccount.length() <= 3){
+				break;
+			}
+			string locationNumber;
+			if(storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
+				mapNew.get(theObject.id).addError(RMS_errorMessages.LOCATION_ID_IS_NULL, FALSE);
+			}else{
+				locationNumber = storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c;
+			}
+			
+			integer glLength = GLAccount.length();
+			
+			string glFirstSection = GLAccount.substring(0, glLength-3);
+			string glSecondSection =GLAccount.substring(glLength-3);
+			string newCode = glFirstSection+locationNumber+glSecondSection;
+			mapToReturn.put((id)theObject.get('Id'), newCode);
+		}
+		return mapToReturn;
+	}
+
+	/*
+	public class miscPaymentAccountNumbers{
+		public string debitAccountNumber {get; set;}
+        public string creditAccountNumber {get; set;}
+		
+		public miscPaymentAccountNumbers(string debitNumber, string creditNumber){
+			debitAccountNumber = debitNumber;
+			creditAccountNumber = creditNumber;
+		}
+	}
+	*/
 	
 }
