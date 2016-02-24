@@ -146,6 +146,9 @@
         <fields>Cost_Center__c</fields>
         <relatedList>Cost_Center__c.Product__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

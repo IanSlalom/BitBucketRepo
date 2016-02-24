@@ -132,6 +132,9 @@
         <fields>Credit_General_Ledger_Account__c</fields>
         <relatedList>Journal_Entry__c.Payment__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

@@ -448,6 +448,9 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
     <multilineLayoutFields>Product2Id</multilineLayoutFields>
     <multilineLayoutFields>ListPrice</multilineLayoutFields>
     <multilineLayoutFields>UnitPrice</multilineLayoutFields>
