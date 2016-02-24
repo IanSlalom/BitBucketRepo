@@ -358,13 +358,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if (String.isNotBlank(orderId)) {
 
       //GET THE ORDER
-      relatedOrder = [SELECT Id, Name, Store_Location__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId];
+//      relatedOrder = [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId];
       
-      storeLocation = relatedOrder.Store_Location__r;
-      storeLocationNumber = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
-      po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
-      po.Store_Location__c = storeLocation.Id;
+//      storeLocation = relatedOrder.Store_Location__r;
+//      storeLocationNumber = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
+//      po.Store_Abbreviation__c = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c;
+//      po.Store_Location__c = storeLocation.Id;
 
+	  User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+
+      // If a test is running just set the user's abbreviation, otherwise get it from the current user
+      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
+      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
+      							:	currentUser.User_Abbreviation__c;
+
+      for (Order thisOrder : [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId]){
+			String storeAbbreviation;
+          	relatedOrder = thisOrder;
+            if (thisOrder.Store_Location__c != null) {
+		        storeLocation = thisOrder.Store_Location__r;
+				if (thisOrder.Store_Location__r.Active_Store_Configuration__c != null) {
+					po.Store_Location__c = thisOrder.Store_Location__r.Id;
+					storeAbbreviation = thisOrder.Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c;
+            		storeLocationNumber = thisOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
+				}
+            }
+          	// concatanate the store abbreviation and user abbreviation
+            po.Store_Abbreviation__c = (storeAbbreviation != null) ?
+										storeAbbreviation + userAbbreviation : 
+										'X' + userAbbreviation;
+			
+        		
+      		
+      }
+
+	  if (storeLocation == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+      }
       //GET THE ORDER ITEMS
       relatedOrderItems =[Select   Id, OrderItemNumber, Pricebookentry.Product2Id, UnitPrice, 
                     Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
@@ -377,6 +407,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
     }
 
+	System.Debug('************relatedOrderItems=' +relatedOrderItems);
     // If there are related order items
     if (relatedOrderItems != null) {
 
@@ -392,19 +423,36 @@ public with sharing class RMS_vendorPurchaseOrderController {
         productIdToProductMap.put(p.id, p);
       }
 
+
       list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
       for(Account a : vendorsOnOrder){
         accountIdToAccountMap.put(a.id, a);
+      }
+	  // Create a map of product Ids to their list of vendors
+      Map<Id, List<Account>> productVendorMap = new Map<Id, List<Account>>();
+      for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c from Vendor_Product__c Where Product__c IN :relatedProduct2IDList]) {
+		if (productVendorMap.containsKey(vp.Product__c)) {
+			List<Account> vendors = productVendorMap.get(vp.Product__c);
+			vendors.add(accountIdToAccountMap.get(vp.Vendor__c));
+			productVendorMap.put(vp.Product__c, vendors);
+		}
+		else {
+			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
+			productVendorMap.put(vp.Product__c, vendors);			
+		}
       }
         
       //USING MAPS TO CREATE WRAPPERS
       for(OrderItem oi : relatedOrderItems){
         Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-        Account account = accountIdToAccountMap.get(selectedVendor);
-        OrderItemWrapper OIW = new OrderItemWrapper(oi, account, product2);
+		for (Account vendor : productVendorMap.get(product2.Id)) {
+//        	--Account account = accountIdToAccountMap.get(selectedVendor);
+        	OrderItemWrapper OIW = new OrderItemWrapper(oi, vendor, product2);
           
-        orderItemWrapperList.add(OIW);
+        	orderItemWrapperList.add(OIW);
+		}
       }
+	System.Debug('************orderItemWrapperList=' +orderItemWrapperList);
 
       //BUILD SELECT LIST FOR CHOOSING VENDOR
       availableVendors.add(new SelectOption('','Please Select'));
@@ -416,23 +464,37 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // For Cost POs, pulls the current user's store location and recovers the abbreviation
     if (costPurchaseOrder && storeLocation == null) {
 
-      // If a test is running just sest the store name, otherwise get it from the current user
-      String storeLocationName = (Test.isRunningTest()) ?   '77 - Twin Cities, MN' :
-                                  [SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+	  User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+
+      // If a test is running just set the store name, otherwise get it from the current user
+      String storeLocationName = (Test.isRunningTest()) ?   '77 - Twin Cities, MN' 
+      														: currentUser.Store_Location__c;
+
+      // If a test is running just set the user's abbreviation, otherwise get it from the current user
+      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
+      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
+      							:	currentUser.User_Abbreviation__c;
+
       if (String.isNotBlank(storeLocationName)) {
-        for (Account store : [SELECT Id, Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName]){
-          storeLocation = store;
-        }
-          if (storeLocation != null) {
-            po.Store_Abbreviation__c = storeLocation.Store_Abbreviation__c;
+        for (Account store : [SELECT Id, Active_Store_Configuration__c, Active_Store_Configuration__r.Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName]){
+			String storeAbbreviation;
+          	storeLocation = store;
             po.Store_Location__c = storeLocation.Id;
-            storeLocationNumber = storeLocation.Active_Store_Configuration__r.Location_Number__c;
-          }
-          else {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
-            
-          }
+			if (store.Active_Store_Configuration__c != null) {
+				storeAbbreviation = store.Active_Store_Configuration__r.Store_Abbreviation__c;
+            	storeLocationNumber = storeLocation.Active_Store_Configuration__r.Location_Number__c;
+			}
+
+          	// concatanate the store abbreviation and user abbreviation
+            po.Store_Abbreviation__c = (storeAbbreviation != null) ?
+											storeAbbreviation + userAbbreviation : 
+											'X' + userAbbreviation;
+			
         }
+		if (storeLocation == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+        }
+      }
     }
 
   }//end of constructor
