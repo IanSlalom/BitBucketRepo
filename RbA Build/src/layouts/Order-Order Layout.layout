@@ -215,6 +215,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Amount_Refunded__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Amount_Financed__c</field>
             </layoutItems>
             <layoutItems>
