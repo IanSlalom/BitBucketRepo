@@ -17,6 +17,10 @@
                 <behavior>Edit</behavior>
                 <field>Location_Number__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Store_Abbreviation__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
