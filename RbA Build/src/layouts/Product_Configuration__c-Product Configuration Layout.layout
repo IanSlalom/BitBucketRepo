@@ -908,7 +908,7 @@
         <fields>Max_Height_Fraction__c</fields>
         <relatedList>Screen_Configuration__c.Product_Configuration__c</relatedList>
     </relatedLists>
-     <relatedLists>
+    <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

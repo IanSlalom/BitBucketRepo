@@ -581,17 +581,38 @@ public with sharing class RMS_financialTransactionManager {
 		list<Order> extraFieldsList = [SELECT 		id,
 													RecordTypeId,
 													Revenue_Recognized_Date__c,
-													Store_Location__c
+													Store_Location__c,
+													Retail_Subtotal__c,
+													Retail_Total__c,
+													Discount_Amount__c,
+													Finance_Program_Fees__c
 													
 													FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId = :orderCORORecordTypeRecordTypeId];		
 		
-		map<Id, list<Journal_Entry__c>> orderIdToJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
+		map<Id, list<Journal_Entry__c>> orderIdToJournalEntryMap = new map<Id, list<Journal_Entry__c>>(); 
 		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedDepositFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
 		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedLaborFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedRefundDepositFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedInternalLaborFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedGrossSalesFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedDiscountFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedARFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedFinanceFeesFinacialTransactionList = new map<Id, list<Financial_Transaction__c>>();
+		
 		if(extraFieldsList.size() > 0){
 			orderIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
 			orderIdToRevRecognizedDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Deposit');
 			orderIdToRevRecognizedLaborFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Labor');
+			
+			orderIdToRevRecognizedRefundDepositFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Refund Deposit');
+			orderIdToRevRecognizedInternalLaborFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Internal Labor');
+			
+			orderIdToRevRecognizedGrossSalesFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Gross Sales');
+			orderIdToRevRecognizedDiscountFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Discount');
+			orderIdToRevRecognizedARFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - AR');
+			orderIdToRevRecognizedFinanceFeesFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Rev Recognized - Finance Fees');
+			
 			
 		}
 		
@@ -612,6 +633,15 @@ public with sharing class RMS_financialTransactionManager {
 					system.debug('Method:createJournalEntryOrder orderIdToRevRecognizedDepositFinacialTransactionList: '+orderIdToRevRecognizedDepositFinacialTransactionList);
 					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedDepositFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Deposit');
 					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedLaborFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Labor');
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedRefundDepositFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Refund Deposit');
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedInternalLaborFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Internal Labor');
+					
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedGrossSalesFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Gross Sales');
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedDiscountFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Discount');
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedARFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - AR');
+					errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedFinanceFeesFinacialTransactionList.get(o.id) , errorMessage, 'Rev Recognized - Finance Fees');
+					
+					
 					
 					if(orderIdToJournalEntryMap.get(o.id) != null && orderIdToJournalEntryMap.get(o.id).size() != 0 ){		
 						if(errorMessage == null || errorMessage == ''){
@@ -619,35 +649,79 @@ public with sharing class RMS_financialTransactionManager {
 							list<Journal_Entry__c> relatedExternalLaborJE = new list<Journal_Entry__c>();
 							list<Journal_Entry__c> relatedRevRecognizedDepositJE = new list<Journal_Entry__c>();
 							list<Journal_Entry__c> relatedRevRecognizedExternalLaborJE = new list<Journal_Entry__c>();
+							
 							list<Journal_Entry__c> relatedRefundDepositJE = new list<Journal_Entry__c>();
 							list<Journal_Entry__c> relatedInternalLaborJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedRevRecognizedRefundDepositJE = new list<Journal_Entry__c>();
+							
+							list<Journal_Entry__c> relatedRevRecognizedGrossSalesJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedRevRecognizedDiscountJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedRevRecognizedARJE = new list<Journal_Entry__c>();
+							list<Journal_Entry__c> relatedRevRecognizedFinanceFeesJE = new list<Journal_Entry__c>();
 							
 							
 							//CHECK JOURNAL ENTRY OF TYPE Rev Recognized - Deposit DOESN'T EXIST
 							Boolean alreadyHasJEofTypeRevRecDeposit = false;
 							Boolean alreadyHasJEofTypeRevRecLabor = false;
+							Boolean alreadyHasJEofTypeRevRecRefundDeposit = false;
+							Boolean alreadyHasJEofTypeRevRecInternalLabor = false;
 							
+							Boolean alreadyHasJEofTypeRevRecGrossSales = false;
+							Boolean alreadyHasJEofTypeRevRecDiscount = false;
+							Boolean alreadyHasJEofTypeRevRecAR = false;
+							Boolean alreadyHasJEofTypeRevRecFinanceFees = false;
 							
 							for(Journal_Entry__c je : orderIdToJournalEntryMap.get(o.id)){
 								if(je.Type__c == 'Rev Recognized - Deposit'){
 									alreadyHasJEofTypeRevRecDeposit = true;	
 									relatedRevRecognizedDepositJE.add(je);
 								}
+								if(je.Type__c == 'Deposit'){
+									relatedDespoitJE.add(je);
+								}
+
 								if(je.Type__c == 'Rev Recognized - Labor'){
 									alreadyHasJEofTypeRevRecLabor = true;	
 									relatedRevRecognizedExternalLaborJE.add(je);
 								}
-								if(je.Type__c == 'Deposit'){
-									relatedDespoitJE.add(je);
-								}
 								if(je.Type__c == 'External Labor'){
 									relatedExternalLaborJE.add(je);
+								}
+								
+								if(je.Type__c == 'Rev Recognized - Refund Deposit'){
+									alreadyHasJEofTypeRevRecRefundDeposit = true;	
+									relatedRevRecognizedRefundDepositJE.add(je);
 								}
 								if(je.Type__c == 'Refund - Deposit'){
 									relatedRefundDepositJE.add(je);
 								}
+								if(je.Type__c == 'Rev Recognized - Internal Labor'){
+									alreadyHasJEofTypeRevRecInternalLabor = true;	
+									relatedRevRecognizedRefundDepositJE.add(je);
+								}
+								if(je.Type__c == 'Internal Labor'){
+									relatedRefundDepositJE.add(je);
+								}
 								
+							
+								if(je.Type__c == 'Rev Recognized - Gross Sales'){
+									alreadyHasJEofTypeRevRecGrossSales = true;	
+									relatedRevRecognizedGrossSalesJE.add(je);
+								}
+								if(je.Type__c == 'Rev Recognized - Discount'){
+									alreadyHasJEofTypeRevRecDiscount = true;	
+									relatedRevRecognizedDiscountJE.add(je);
+								}
+								if(je.Type__c == 'Rev Recognized - AR'){
+									alreadyHasJEofTypeRevRecAR = true;	
+									relatedRevRecognizedARJE.add(je);
+								}
+								if(je.Type__c == 'Rev Recognized - Finance Fees'){
+									alreadyHasJEofTypeRevRecFinanceFees = true;	
+									relatedRevRecognizedFinanceFeesJE.add(je);
+								}
 							}
+							
 							system.debug('Method:createJournalEntryOrder relatedDespoitJE: '+relatedDespoitJE);
 							system.debug('Method:createJournalEntryOrder alreadyHasJEofTypeRevRecDeposit: '+alreadyHasJEofTypeRevRecDeposit);
 							if(alreadyHasJEofTypeRevRecDeposit == false && relatedDespoitJE.size() > 0){
@@ -684,7 +758,43 @@ public with sharing class RMS_financialTransactionManager {
 							}
 							//does not have related JE records of type Revenue Recived labor
 							if(alreadyHasJEofTypeRevRecLabor == false && relatedExternalLaborJE.size() > 0){
-							for(Journal_Entry__c je : relatedExternalLaborJE){
+								for(Journal_Entry__c je : relatedExternalLaborJE){
+									errorMessage = checkOrderJEForErrors(je, errorMessage, 'internalLabor');
+									if(errorMessage == null){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - Internal Labor',
+											Labor__c = je.Labor__c,
+											Order__c = je.Order__c,
+											Amount__c = je.Amount__c,
+											Baan_Business_Partner_Number__c = je.Baan_Business_Partner_Number__c,
+											
+											Debit_General_Ledger_Account__c = orderIdToRevRecognizedInternalLaborFinacialTransactionList.get(o.id)[0].Debit_Account_Number__r.Name,
+											Credit_General_Ledger_Account__c = orderIdToRevRecognizedInternalLaborFinacialTransactionList.get(o.id)[0].Credit_Account_Number__r.Name
+										);
+										
+										journalEntriesToUpsert.add(newJE);
+									
+									}else{
+										break;
+									}
+								}//END relatedDespoitJE LOOP
+
+							}
+							//has records Revenue Recived labor
+							else if(alreadyHasJEofTypeRevRecLabor == true && relatedRevRecognizedRefundDepositJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}
+							
+							//does not have related JE records of type Revenue Recived labor
+							if(alreadyHasJEofTypeRevRecInternalLabor == false && relatedInternalLaborJE.size() > 0){
+								for(Journal_Entry__c je : relatedExternalLaborJE){
 									errorMessage = checkOrderJEForErrors(je, errorMessage, 'labor');
 									if(errorMessage == null){
 										Journal_Entry__c newJE = new Journal_Entry__c(
@@ -710,7 +820,44 @@ public with sharing class RMS_financialTransactionManager {
 
 							}
 							//has records Revenue Recived labor
-							else if(alreadyHasJEofTypeRevRecLabor == true && relatedRevRecognizedExternalLaborJE.size() > 0){
+							else if(alreadyHasJEofTypeRevRecLabor == true && relatedRevRecognizedRefundDepositJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}	
+										
+							
+							//does not have related JE records of type Rev Recognized - Refund Deposit
+							if(alreadyHasJEofTypeRevRecRefundDeposit == false && relatedRefundDepositJE.size() > 0){
+								for(Journal_Entry__c je : relatedRefundDepositJE){
+									errorMessage = checkOrderJEForErrors(je, errorMessage, 'refundDeposit');
+									if(errorMessage == null){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - Refund Deposit',
+											Refund__c = je.Refund__c,
+											Order__c = je.Order__c,
+											Amount__c = je.Amount__c,
+											Customer__c = je.Customer__c,
+											
+											Debit_General_Ledger_Account__c = orderIdToRevRecognizedRefundDepositFinacialTransactionList.get(o.id)[0].Credit_Account_Number__r.Name,
+											Credit_General_Ledger_Account__c = orderIdToRevRecognizedRefundDepositFinacialTransactionList.get(o.id)[0].Debit_Account_Number__r.Name
+										);
+										
+										journalEntriesToUpsert.add(newJE);
+									
+									}else{
+										break;
+									}
+								}//END relatedRefundDespoitJE LOOP
+
+							}// END of if no related Rev Recognized - Refund Deposits
+							//has records Rev Recognized - Refund Deposit
+							else if(alreadyHasJEofTypeRevRecRefundDeposit == true && relatedRevRecognizedExternalLaborJE.size() > 0){
 								for(Journal_Entry__c je: relatedRevRecognizedExternalLaborJE){
 									if(je.Sent_to_BaanERP__c == true){
 										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
@@ -718,6 +865,129 @@ public with sharing class RMS_financialTransactionManager {
 									}
 								}
 							}
+							
+						
+							//does not have related JE records of type Rev Recognized - Gross Sales
+							if(alreadyHasJEofTypeRevRecGrossSales == false){
+								if(o.Retail_Subtotal__c == null){
+									errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.RETAIL_SUBTOTAL_ON_ORDER_NULL : errorMessage + '<BR>' + RMS_errorMessages.RETAIL_SUBTOTAL_ON_ORDER_NULL;
+								}
+								if(errorMessage == null){
+									if(o.Retail_Subtotal__c > 0){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - Gross Sales',
+											Order__c = o.id,
+											Amount__c = o.Retail_Subtotal__c,
+														
+											Debit_General_Ledger_Account__c = null,
+											Credit_General_Ledger_Account__c = orderIdToRevRecognizedGrossSalesFinacialTransactionList.get(o.id)[0].Credit_Account_Number__r.Name
+										);
+										journalEntriesToUpsert.add(newJE);
+									}
+								}else{
+									break;
+								} 
+							}// END of if no related Rev Recognized - Gross Sales
+							//has records Rev Recognized - Gross Sales
+							else if(alreadyHasJEofTypeRevRecRefundDeposit == true && relatedRevRecognizedGrossSalesJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedGrossSalesJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}
+							
+							
+							//does not have related JE records of type Rev Recognized - Discount
+							if(alreadyHasJEofTypeRevRecDiscount == false){
+								if(errorMessage == null){
+									if(o.Discount_Amount__c > 0){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - Discount',
+											Order__c = o.id,
+											Amount__c = o.Discount_Amount__c,
+														
+											Debit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFinacialTransactionList.get(o.id)[0].Debit_Account_Number__r.Name,
+											Credit_General_Ledger_Account__c = null
+										);
+										journalEntriesToUpsert.add(newJE);
+									}
+								}else{
+									break;
+								} 
+							}// END of if no related Rev Recognized - Discount
+							//has records Rev Recognized - Discount
+							else if(alreadyHasJEofTypeRevRecRefundDeposit == true && relatedRevRecognizedDiscountJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedDiscountJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}
+
+
+							//does not have related JE records of type Rev Recognized - AR
+							if(alreadyHasJEofTypeRevRecAR == false){
+								if(errorMessage == null){
+									if(o.Retail_Total__c > 0){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - AR',
+											Order__c = o.id,
+											Amount__c = o.Retail_Total__c,
+														
+											Debit_General_Ledger_Account__c = orderIdToRevRecognizedARFinacialTransactionList.get(o.id)[0].Debit_Account_Number__r.Name,
+											Credit_General_Ledger_Account__c = null
+										);
+										journalEntriesToUpsert.add(newJE);
+									}
+								}else{
+									break;
+								} 
+							}// END of if no related Rev Recognized - AR
+							//has records Rev Recognized - AR
+							else if(alreadyHasJEofTypeRevRecRefundDeposit == true && relatedRevRecognizedARJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedARJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}
+							
+							//does not have related JE records of type Rev Recognized - Finance Fees
+							if(alreadyHasJEofTypeRevRecFinanceFees == false){
+								if(errorMessage == null){
+									if(o.Finance_Program_Fees__c > 0){
+										Journal_Entry__c newJE = new Journal_Entry__c(
+											Date__c = Datetime.Now(),
+											Type__c = 'Rev Recognized - Finance Fees',
+											Order__c = o.id,
+											Amount__c = o.Finance_Program_Fees__c,
+														
+											Debit_General_Ledger_Account__c = orderIdToRevRecognizedFinanceFeesFinacialTransactionList.get(o.id)[0].Debit_Account_Number__r.Name,
+											Credit_General_Ledger_Account__c = null
+										);
+										journalEntriesToUpsert.add(newJE);
+									}
+								}else{
+									break;
+								} 
+							}// END of if no related Rev Recognized - Finance Fees
+							//has records Rev Recognized - Finance Fees
+							else if(alreadyHasJEofTypeRevRecRefundDeposit == true && relatedRevRecognizedFinanceFeesJE.size() > 0){
+								for(Journal_Entry__c je: relatedRevRecognizedFinanceFeesJE){
+									if(je.Sent_to_BaanERP__c == true){
+										mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+										break;
+									}
+								}
+							}
+
 							
 							if(errorMessage == null || errorMessage == ''){
 								upsert journalEntriesToUpsert;
@@ -736,22 +1006,51 @@ public with sharing class RMS_financialTransactionManager {
 				else if(mapOld.get(o.id).Revenue_Recognized_Date__c != null && mapNew.get(o.id).Revenue_Recognized_Date__c == null){
 					list<Journal_Entry__c> relatedRevRecognizedDepositJEToDelete = new list<Journal_Entry__c>();
 					list<Journal_Entry__c> relatedRevRecognizedLaborJEToDelete = new list<Journal_Entry__c>();
+					list<Journal_Entry__c> relatedRevRecognizedRefundDepositJEToDelete = new list<Journal_Entry__c>();
+					list<Journal_Entry__c> relatedRevRecognizedInternalLaborJEToDelete = new list<Journal_Entry__c>();
+
+					list<Journal_Entry__c> relatedRevRecognizedGrossSalesJEToDelete = new list<Journal_Entry__c>();
+					list<Journal_Entry__c> relatedRevRecognizedDiscountJEToDelete = new list<Journal_Entry__c>();
+					list<Journal_Entry__c> relatedRevRecognizedARToDelete = new list<Journal_Entry__c>();
+					list<Journal_Entry__c> relatedRevRecognizedFinanceFeesJEToDelete = new list<Journal_Entry__c>();
+					
 					Boolean sentToBaanERP = false;
 					
 					for(Journal_Entry__c je : orderIdToJournalEntryMap.get(o.id)){
 						if(je.Type__c == 'Rev Recognized - Deposit' && je.Sent_to_BaanERP__c == true){
-								sentToBaanERP = true;
-								break;
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Labor' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Internal Labor' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Refund Deposit' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Gross Sales' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Discount' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - AR' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
+						}else if(je.Type__c == 'Rev Recognized - Finance Fees' && je.Sent_to_BaanERP__c == true){
+								sentToBaanERP = true; break;
 						}
-						else if(je.Type__c == 'Rev Recognized - Labor' && je.Sent_to_BaanERP__c == true){
-								sentToBaanERP = true;
-								break;
-						}
+						
 						else if(je.Type__c == 'Rev Recognized - Deposit' && je.Sent_to_BaanERP__c == false){
 							relatedRevRecognizedDepositJEToDelete.add(je);
-						}
-						else if(je.Type__c == 'Rev Recognized - Labor' && je.Sent_to_BaanERP__c == false){
+						}else if(je.Type__c == 'Rev Recognized - Labor' && je.Sent_to_BaanERP__c == false){
 							relatedRevRecognizedLaborJEToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - Internal Labor' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedInternalLaborJEToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - Refund Deposit' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedRefundDepositJEToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - Gross Sales' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedGrossSalesJEToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - Discount' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedDiscountJEToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - AR' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedARToDelete.add(je);
+						}else if(je.Type__c == 'Rev Recognized - Finance Fees' && je.Sent_to_BaanERP__c == false){
+							relatedRevRecognizedFinanceFeesJEToDelete.add(je);
 						}
 					}
 						
@@ -763,6 +1062,25 @@ public with sharing class RMS_financialTransactionManager {
 						}
 						if(relatedRevRecognizedLaborJEToDelete.size() > 0){
 							delete relatedRevRecognizedLaborJEToDelete;
+						}
+						if(relatedRevRecognizedInternalLaborJEToDelete.size() > 0){
+							delete relatedRevRecognizedInternalLaborJEToDelete;
+						}
+						if(relatedRevRecognizedRefundDepositJEToDelete.size() > 0){
+							delete relatedRevRecognizedRefundDepositJEToDelete;
+						}
+						
+						if(relatedRevRecognizedGrossSalesJEToDelete.size() > 0){
+							delete relatedRevRecognizedGrossSalesJEToDelete;
+						}
+						if(relatedRevRecognizedDiscountJEToDelete.size() > 0){
+							delete relatedRevRecognizedDiscountJEToDelete;
+						}
+						if(relatedRevRecognizedARToDelete.size() > 0){
+							delete relatedRevRecognizedARToDelete;
+						}
+						if(relatedRevRecognizedFinanceFeesJEToDelete.size() > 0){
+							delete relatedRevRecognizedFinanceFeesJEToDelete;
 						}
 						
 					}
@@ -776,7 +1094,7 @@ public with sharing class RMS_financialTransactionManager {
 	}//END createJournalEntryOrder Method
 
 
-
+ 
 	
 	/***************************************************
 	 Method to create Journal Entry for REFUND
@@ -832,7 +1150,7 @@ public with sharing class RMS_financialTransactionManager {
 	            	 
 	 
 		            if(refundType == 'deposit'){
-		              newJE.Type__c = 'Refund - Payment';
+		              newJE.Type__c = 'Refund - Deposit';
 		              newJE.Debit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
 		              newJE.Credit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
 		              
@@ -860,7 +1178,7 @@ public with sharing class RMS_financialTransactionManager {
 							je.Customer__c = ref.Order__r.BillToContactId;
 							
 							if(refundType == 'deposit'){
-								je.Type__c = 'Refund - Payment';
+								je.Type__c = 'Refund - Deposit';
 								je.Debit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Credit_Account_Number__r.Name;
 								je.Credit_General_Ledger_Account__c = refundIdToDepositFinacialTransactionList.get(ref.id)[0].Debit_Account_Number__r.Name;
 				            }else if(refundType == 'finalPayment'){
@@ -1170,12 +1488,12 @@ public with sharing class RMS_financialTransactionManager {
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
 		}
-		if(typeOfJE == 'labor'){
+		if(typeOfJE == 'labor' || typeOfJE == 'internallabor'){
 			if(je.Amount__c == null){
 				dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_LABOR, '[field]', 'Amount');
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
-			if(je.Baan_Business_Partner_Number__c == null){
+			if(je.Baan_Business_Partner_Number__c == null && typeOfJE == 'labor'){
 				dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_LABOR, '[field]', 'Baan Business Partner Id');
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}

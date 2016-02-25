@@ -98,6 +98,7 @@ public with sharing class RMS_errorMessages {
 	public static final String NEGATIVE_FINACIAL_TRANSACTION = '&bull;This change is not permitted because it would result in a financial transaction with a negative amount.';
 	public static final String BILL_TO_CONTACT_ON_ORDER_NULL = '&bull;The \'Bill to Contact\' field on the related order is null.';
 	public static final String STORE_LOCATION_ON_ORDER_NULL = '&bull;The \'Store Location\' field on the related order is null.';
+	public static final String RETAIL_SUBTOTAL_ON_ORDER_NULL = '&bull;The \'Retail Subtotal\' field on the related order is null.';
 	public static final String QUANTITY_IS_ZERO = '&bull;The Asset Quantity can not be zero.';
 	
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_DEPOSIT = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Deposits. Please contact your system admin for assistance';

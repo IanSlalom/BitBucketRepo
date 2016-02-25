@@ -3,6 +3,7 @@
     <customButtons>Add_Product</customButtons>
     <customButtons>Cancel_Order</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
+    <customButtons>Conga_Composer_Install_Packet</customButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>ReduceOrder</excludeButtons>
     <excludeButtons>Share</excludeButtons>
