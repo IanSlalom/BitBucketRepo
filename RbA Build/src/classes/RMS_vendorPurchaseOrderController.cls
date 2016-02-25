@@ -371,6 +371,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
+      String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
       for (Order thisOrder : [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId]){
 			String storeAbbreviation;
@@ -383,10 +384,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
             		storeLocationNumber = thisOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
 				}
             }
+            if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = (storeAbbreviation != null) ?
-										storeAbbreviation + userAbbreviation : 
-										'X' + userAbbreviation;
+            po.Store_Abbreviation__c = typeAbbreviation + storeAbbreviation + userAbbreviation;
 			
         		
       		
@@ -474,6 +474,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
+      String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
       if (String.isNotBlank(storeLocationName)) {
         for (Account store : [SELECT Id, Active_Store_Configuration__c, Active_Store_Configuration__r.Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName]){
@@ -485,11 +486,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	storeLocationNumber = storeLocation.Active_Store_Configuration__r.Location_Number__c;
 			}
 
+            if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = (storeAbbreviation != null) ?
-											storeAbbreviation + userAbbreviation : 
-											'X' + userAbbreviation;
-			
+            po.Store_Abbreviation__c = typeAbbreviation + storeAbbreviation + userAbbreviation;			
         }
 		if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -498,6 +497,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
 
   }//end of constructor
+
+
+
+
+
+
   
   public List<SelectOption> getAvailableVendors() {
     return availableVendors;
