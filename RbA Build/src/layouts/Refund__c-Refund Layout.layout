@@ -30,6 +30,10 @@
                 <behavior>Required</behavior>
                 <field>Date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Refund_Method__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -39,12 +43,7 @@
         <editHeading>true</editHeading>
         <label>Refund Information</label>
         <layoutColumns/>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Refund_Method__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
