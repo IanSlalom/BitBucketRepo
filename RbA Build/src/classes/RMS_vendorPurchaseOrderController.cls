@@ -386,7 +386,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
             }
             if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = typeAbbreviation + storeAbbreviation + userAbbreviation;
+            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
 			
         		
       		
@@ -488,7 +488,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
             if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = typeAbbreviation + storeAbbreviation + userAbbreviation;			
+            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
+
         }
 		if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
