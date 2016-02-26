@@ -319,7 +319,6 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Reason__c</fields>
         <fields>Amount__c</fields>
         <fields>Date__c</fields>
         <relatedList>Refund__c.Order__c</relatedList>
