@@ -225,6 +225,10 @@
                 <behavior>Readonly</behavior>
                 <field>Finance_Program_Fees__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Non_Sufficient_Funds__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -319,6 +323,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Reason__c</fields>
         <fields>Amount__c</fields>
         <fields>Date__c</fields>
         <relatedList>Refund__c.Order__c</relatedList>
