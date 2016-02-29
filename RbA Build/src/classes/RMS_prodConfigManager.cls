@@ -183,8 +183,23 @@ public with sharing class RMS_prodConfigManager {
 			}
 		}
 
+		// Check for minimum united inches 
+		if (masterProductConfig.United_Inch_Minimum__c != null) {
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			if ((heightInches + widthInches) < masterProductConfig.United_Inch_Minimum__c) {
+				
+				String enteredValue = String.ValueOf(heightInches + widthInches);
+				String requiredValue = String.ValueOf(masterProductConfig.United_Inch_Minimum__c);
+				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.UNITED_INCH_BELOW_MIN, enteredValue, requiredValue);
+
+				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+				system.debug(errorMessage);
+			}
+		}
+
 		// Check for height to width cap
-		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
+/*		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
 			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Height__c))) &&
 				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Width__c))) ) 
 			{	
@@ -199,7 +214,7 @@ public with sharing class RMS_prodConfigManager {
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '<BR>' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
-		}
+		} */
 
 		// Check for peak height
 		if(masterProductConfig.Peak_Height__c != null && orderLineItem.Width_Inches__c != null){
@@ -368,7 +383,96 @@ public with sharing class RMS_prodConfigManager {
 				}
 			}
 		}
-		
+
+		//Sash Configuration
+		List<Sash_Configuration__c> relatedSashConfigurations = [SELECT Sash_Ratio__c,
+																		Sash_Operation__c
+																		FROM Sash_Configuration__c
+																		WHERE Product_Configuration__c = :masterProductConfig.Id];
+
+		if(!relatedSashConfigurations.isEmpty()){
+			for(Sash_Configuration__c sc : relatedSashConfigurations){
+				Set<String> validSashOps = new Set<String>(sc.Sash_Operation__c.split(';'));
+				if(orderLineItem.Sash_Ratio__c == sc.Sash_Ratio__c){		
+					if(!validSashOps.containsAll(orderLineItem.Sash_Operation__c.split(';'))){
+						errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.SASH_RATIO_OPERATION : errorMessage + '<BR>' + RMS_errorMessages.SASH_RATIO_OPERATION;	
+					}
+				}
+			}
+		}
+
+		//EJ Color Configuration
+		List<EJ_Color_Configuration__C> relatedEJColorConfigurations = [SELECT 	EJ_Color__c,
+																				EJ_Species__c
+																				FROM EJ_Color_Configuration__c
+																				WHERE Product_Configuration__c = :masterProductConfig.Id];
+
+		Boolean EJColorConfigValid = true;
+
+		if(relatedEJColorConfigurations !=null && !relatedEJColorConfigurations.isEmpty()){
+			for(EJ_Color_Configuration__c ejc : relatedEJColorConfigurations){
+				Set<String> validEJColors = new Set<String>(ejc.EJ_Color__c.split(';'));
+				if(orderLineItem.EJ_Species__c== ejc.EJ_Species__c){		
+					if(!validEJColors.containsAll(orderLineItem.EJ_Color__c.split(';'))){
+						errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.EJ_SPECIES_COLOR : errorMessage + '<BR>' + RMS_errorMessages.EJ_SPECIES_COLOR;	
+					}
+				}
+			}
+		}
+
+		//Specialty Grille Configuration
+		List<Specialty_Grille_Configuration__c> relatedGrilleConfigurations = [SELECT 	Grille_Pattern__c,
+																						Grille_Style__c,
+																						Hubs__c,
+																						Lites_High__c,
+																						Lites_Wide__c,
+																						Product_Configuration__c,
+																						Specialty_Shape__c,
+																						Spokes__c 
+																						FROM Specialty_Grille_Configuration__c
+																						WHERE Product_Configuration__c =: masterProductConfig.Id
+																						AND Grille_Pattern__c =: orderLineItem.Grille_Pattern_S1__c
+																						AND Grille_Style__c =: orderLineItem.Grille_Style__c
+																						AND Specialty_Shape__c =: orderLineItem.Specialty_Shape__c];
+		if(orderLineItem.Grille_Pattern_S1__c != null && orderLineItem.Grille_Style__c != null && orderLineItem.Specialty_Shape__c != null){
+			if(relatedGrilleConfigurations.isEmpty()){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_STYLE_SHAPE_PATTERN : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_STYLE_SHAPE_PATTERN;	
+			}else{
+				if(orderLineItem.Lites_High_S1__c != null && orderLineItem.Lites_Wide_S1__c != null){
+					Boolean validLites = false;
+					for(Specialty_Grille_Configuration__c grilleConfig : relatedGrilleConfigurations){
+						if(orderLineItem.Lites_High_S1__c == grilleConfig.Lites_High__c && orderLineItem.Lites_Wide_S1__c == grilleConfig.Lites_Wide__c){
+							validLites = true;
+						}
+					}
+					if(!validLites){
+						errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_LITES : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_LITES;	
+
+					}
+				}
+				if(orderLineItem.Hubs__c != null && orderLineItem.Spokes__c != null){
+					Boolean validHubs = false;
+					Integer hubs = 0;
+					Integer spokes = 0;
+					if(orderLineItem.Hubs__c != null && orderLineItem.Hubs__c.isNumeric()){
+						hubs = Integer.valueOf(orderLineItem.Hubs__c);
+					}
+					if(orderLineItem.Spokes__c != null && orderLineItem.Spokes__c.isNumeric()){
+						spokes = Integer.valueOf(orderLineItem.Spokes__c);
+					}
+					for(Specialty_Grille_Configuration__c grilleConfig : relatedGrilleConfigurations){
+						if(hubs == grilleConfig.Hubs__c && spokes == grilleConfig.Spokes__c){
+							validHubs = true;
+						}
+					}
+					if(!validHubs){
+						errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_HUBS_SPOKES : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_HUBS_SPOKES;	
+
+					}
+				}
+			}
+		} 
+
 		//LOCK_MAX_WIDTH
 		if(masterProductConfig.Lock_Max_Width_Inches__c != null ){
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
