@@ -22,6 +22,7 @@ global with sharing class RMS_mobileAppAPIController {
 	@HttpGet
     global static void doGet() {
 		try {
+//TODO: add api versioning
 			RestRequest req = RestContext.request;
 			String temp = req.requestURI.substringAfter('/');
 			temp = temp.substringAfter('/');

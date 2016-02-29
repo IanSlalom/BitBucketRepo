@@ -10,6 +10,12 @@
 
 public with sharing class RMS_mobileAppRequestHelper {
 
+	private static final String SHARED_FIELDS = '';
+	private static final String QLI_ONLY_FIELDS = '';
+	private static final String OLI_ONLY_FIELDS = '';
+	private static final String QLI_WHERE_CLAUSE = '';
+	private static final String OLI_WHERE_CLAUSE = '';
+
   /* @method: findAppointments(Id userId)
    * @param: Id userId - user who the appointements are assigned to
    * @param: Datatime afterTimestamp
@@ -208,28 +214,51 @@ public with sharing class RMS_mobileAppRequestHelper {
     Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity> ([SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, Pricebook2Id, Window_Problems__c, rSuite_Id__c FROM Opportunity WHERE Id IN :oppIds]);
 
     // get the quotes
-    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name,   isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
+    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
     // get the quote line items
     List<QuoteLineItem> qliList = [SELECT Id, Description, LineNumber, ListPrice, PricebookEntryId, Quantity, QuoteId, Subtotal, TotalPrice, UnitPrice, 
-      Astragal__c, Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, Casing_Location__c, Casing_Profile__c, Casing_Species__c,
-      Checkrail_Style__c, 
-//      Colonial_Grille_Lites_High_S1__c, Colonial_Grille_Lites_High_S2__c, Colonial_Grille_Lites_High_S3__c, 
-//      Colonial_Grille_Lites_Wide_S1__c, Colonial_Grille_Lites_Wide_S2__c, Colonial_Grille_Lites_Wide_S3__c, 
-      Corrosion_Resistant_Hardware__c, Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c,
-      Drip_Cap_Pieces__c, EJ_Color__c, EJ_Frame__c, 
-      EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, Exterior_Trim_Color__c, 
-      Fibrex_L_Trim__c, Finger_Lifts__c, Frame_Type__c, Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, Glazing_S1__c, Glazing_S2__c, 
-      Glazing_S3__c, Gliding_Screen__c, Grille_Pattern__c,
-//      Grille_Pattern_S1__c, Grille_Pattern_S2__c, Grille_Pattern_S3__c,
-      Grille_Style__c, Handing__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Option__c, Hardware_Style__c, Hubs__c, 
-      Insect_Screen_Style__c, Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, Lifts_Pulls__c, 
-      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, 
-      Locks_Sash__c, Permanently_Applied_Interior_Wood_Grille__c, Sales_Height_Inches__c, 
-      Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-      Screen_Color__c, Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c, 
-      Spokes__c, Tax_Credit_Qualified__c, 
-      Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Unit_Id__c, Wide_Bar__c, rSuite_Id__c
-      from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false];
+	  // custom fields shared with order lines
+      Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, 
+	  Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
+	  Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, Corrosion_Resistant_Hardware__c, 
+	  Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c,
+      Drip_Cap_Pieces__c, 
+//	  Dwelling_Room__c,
+	  EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, 
+	  Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, Exterior_Trim_Color__c, 
+      Fibrex_L_Trim__c, Finger_Lifts__c, Floor__c, Frame_Type__c,
+	  Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, 
+	  Grille_Alignment__c, Grille_Pattern__c, Grille_Style__c, 
+	  Handing__c, Handle_Type__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, Hardware_Option__c, Hardware_Style__c, Hubs__c, 
+      Insect_Screen_Style__c, Install_Holes_Location__c, Install_Track_Location__c,
+	  Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
+	  Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c,
+      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, Locks_Sash__c, 
+	  Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, 
+	  Notes__c,
+//	  Parent_Unit__c, 
+	  Part_of_Bay__c, Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Pocket_Notch__c, Product_Class__c,
+	  Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, 
+//	  Room_Description__c,
+	  Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
+      Screen_Color__c, Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c, Special_Options__c, Specialty_Shape__c, Spokes__c,
+	  Storm_Window__c, Storm_Window_Color__c, Storm_Window_Style__c, SW_Grille_Alignment__c,
+      Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, 
+	  Unit_Id__c, 
+	  Wide_Bar__c,
+	  // quote line item only fields
+	  rSuite_Id__c
+      from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false order by Unit_Id__c, Product_Class__c];
+/*      from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false and Product_Class__c = :Constants.MASTER_PRODUCT_RECORD_TYPE_NAME];
+    List<QuoteLineItem> mcQLIList = [SELECT Id, Description, LineNumber, ListPrice, PricebookEntryId, Quantity, QuoteId, Subtotal, TotalPrice, UnitPrice, 
+	  Notes__c, Product_Class__c, Unit_Id__c
+	  from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false and 
+	  (Product_Class__c = :Constants.MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME or Product_Class__c = :Constants.CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME)];
+	// combine the lists
+	qliList.addAll(mcQLIList);
+*/
+
+
     // get the quote discounts
     List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
     // get the quote financing
@@ -347,30 +376,57 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @param: List<Id> orderIds
    * @return: List<OrderItem>
    */
+//TODO: Dynamic query builing - sharing the fields between Order line items and quote line items to reduce maintenance
     public List<OrderItem> queryOrderItems(Set<Id> orderIds){
+	// first get the window products
     List<OrderItem> oiList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
-      Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
-      Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, 
-//      Colonial_Grille_Lites_High_S1__c, Colonial_Grille_Lites_High_S2__c, Colonial_Grille_Lites_High_S3__c, 
-//      Colonial_Grille_Lites_Wide_S1__c, Colonial_Grille_Lites_Wide_S2__c, Colonial_Grille_Lites_Wide_S3__c, 
-      Corrosion_Resistant_Hardware__c, Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c, Drip_Cap_Pieces__c, 
-      EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, 
-      Exterior_Trim_Color__c, Fibrex_L_Trim__c, Finger_Lifts__c, Frame_Type__c, Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, 
-      Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, Grille_Pattern__c, 
-//      Grille_Pattern_S1__c, Grille_Pattern_S2__c, Grille_Pattern_S3__c, 
-      Grille_Style__c, Handing__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, 
-      Hardware_Option__c, Hardware_Style__c, Height_Inches__c, Height_Fraction__c, Hubs__c, Insect_Screen_Style__c, Install_Holes_Location__c, 
-      Install_Track_Location__c, Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
-      Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c, 
-      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, 
-      Locks_Sash__c, Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, NSPR__c, Part_of_Bay__c, 
-      Part_of_Bow__c, Permanently_Applied_Interior_Wood_Grille__c, Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, Room_Description__c, 
-      Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-      Screen_Color__c,Screen_Type__c, Screen_Size__c, Screen_Vaneer_Type__c, 
-      Sill_Angle__c, Special_Options__c, Spokes__c, Storm_Window__c, Storm_Window_Color__c, 
-      Storm_Window_Style__c, SW_Grille_Alignment__c, Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, Total_Retail_Price__c, 
-      Total_Wholesale_Cost__c, Unit_Id__c, Variant_Number__c, Unit_Wholesale_Cost__c, Wide_Bar__c, Width_Fraction__c, Width_Inches__c
-      from OrderItem where OrderId in :orderIds and isDeleted = false];
+	  // custom fields shared with quote
+      Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, 
+	  Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
+	  Cancelled__c, Cancelled_Date__c,
+	  Casing_Location__c, Casing_Profile__c, Casing_Species__c, Charge_Cost_To__c, Checkrail_Style__c, Corrosion_Resistant_Hardware__c, 
+	  Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c,
+      Drip_Cap_Pieces__c, 
+//	  Dwelling_Room__c,
+	  EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, 
+	  Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, Exterior_Trim_Color__c, 
+      Fibrex_L_Trim__c, Finger_Lifts__c, Floor__c, Frame_Type__c,
+	  Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, 
+	  Grille_Alignment__c, Grille_Pattern__c, Grille_Style__c, 
+	  Handing__c, Handle_Type__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, Hardware_Option__c, Hardware_Style__c, Hubs__c, 
+      Insect_Screen_Style__c, Install_Holes_Location__c, Install_Track_Location__c,
+	  Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
+	  Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c,
+      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, Locks_Sash__c, 
+	  Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, 
+	  Notes__c,
+//	  Parent_Unit__c, 
+	  Part_of_Bay__c, Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Pocket_Notch__c, Product_Class__c,
+	  Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, 
+//	  Room_Description__c,
+	  Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
+      Screen_Color__c, Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c, Special_Options__c, Specialty_Shape__c, Spokes__c,
+	  Storm_Window__c, Storm_Window_Color__c, Storm_Window_Style__c, SW_Grille_Alignment__c,
+      Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, 
+	  Unit_Id__c, 
+	  Wide_Bar__c, 
+// order line only fields
+	  Height_Inches__c, Height_Fraction__c, 
+	  NSPR__c, NSPR_Number__c,
+	  Sill_Angle__c,
+	  Variant_Number__c, 
+	  Unit_Wholesale_Cost__c,
+	  Width_Fraction__c, Width_Inches__c
+      from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c];
+/*      from OrderItem where OrderId in :orderIds and isDeleted = false and Product_Class__c = :Constants.MASTER_PRODUCT_RECORD_TYPE_NAME];
+	  // now get the construction materials and misc charges
+	List<OrderItem> mcOIList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
+	  Notes__c, Product_Class__c, Unit_Id__c
+	  from OrderItem where OrderId in :orderIds and isDeleted = false and 
+	  (Product_Class__c = :Constants.MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME or Product_Class__c = :Constants.CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME)];
+	// combine the lists
+	oiList.addAll(mcOIList);
+*/
     return oiList;    
   }
 
@@ -384,6 +440,13 @@ public with sharing class RMS_mobileAppRequestHelper {
     // parse the input JSON string into an Opportunity Container
     Appointments appts = (Appointments)JSON.deserialize(input, Appointments.class);
 
+//TODO: do some validation before saving the results
+// can this opportunity be updated?
+// can the quote be updated?
+// can the order be updated?
+// field level validation?
+// how to report errors to rSuite
+
     // now lets save the quotes to the opportunitiez
     appts = saveQuotes(appts);
     // now lets save the quote line items and discounts to the quotes
@@ -395,7 +458,9 @@ public with sharing class RMS_mobileAppRequestHelper {
     // most everything is updated but we need to add the order details that were generated from any closed won opportunities
     appts = updateAppts(appts);
     // process any closed won opportunities by creating work order activities
+if (appts.getErrors().size() == 0){
     createWorkOrders(appts);
+}
 
     return JSON.serialize(appts);
   }
@@ -584,7 +649,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
     // get some setup information
     // get record types
-       RecordType serviceOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND Name = 'Schedule'];
+       RecordType visitOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'];
     // get store configruation information through the dwellings
     Map<Id, Account> accountsWithStoresMap = new Map<Id, Account>([select Id, Store_Location__c, Store_Location__r.Active_Store_Configuration__c,
       Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c, Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c
@@ -597,7 +662,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       // build the tech measure work order
         RbA_Work_Order__c techWO = new RbA_Work_Order__c();
         techWO.Sold_Order__c = ord.Id;
-        techWO.RecordType = serviceOrderScheduleRecordType;
+        techWO.RecordType = visitOrderScheduleRecordType;
         techWO.Work_Order_Type__c = 'Tech Measure';
         techWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c;
       // add it to the list
@@ -606,7 +671,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       // build the install work order
         RbA_Work_Order__c installWO = new RbA_Work_Order__c();
         installWO.Sold_Order__c = ord.Id;
-        installWO.RecordType = serviceOrderScheduleRecordType;
+        installWO.RecordType = visitOrderScheduleRecordType;
         installWO.Work_Order_Type__c = 'Install';
         installWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c;
       woList.add(installWO);
