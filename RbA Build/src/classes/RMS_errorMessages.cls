@@ -37,6 +37,7 @@ public with sharing class RMS_errorMessages {
 	public static final String WIDTH_ABOVE_MAX = '&bull; The width you entered[enteredValue] is above the maximum[requiredValue] for this product.';
 	public static final String HEIGHT_ABOVE_MAX = '&bull; The height you entered[enteredValue] is above the maximum[requiredValue] for this product.';
 	public static final String UNITED_INCH_ABOVE_MAX = '&bull; The united inch total for the measurements entered[enteredValue] is above the maximum[requiredValue] for this product.';
+	public static final String UNITED_INCH_BELOW_MIN = '&bull; The united inch total for the measurements entered[enteredValue] is below the minimum[requiredValue] for this product.';
 	public static final String HEIGHT_TO_WIDTH_CAP = '&bull; The height and width you entered exceeds the height to width cap.';
 	public static final String WIDTH_TO_HEIGHT_CAP = '&bull; The width and height you entered exceeds the width to height cap.';
 	public static final String PEAK_HEIGHT = '&bull; The left and right leg difference is greater then the width times the product\'s peak height.'; 
@@ -48,7 +49,12 @@ public with sharing class RMS_errorMessages {
 	public static final String BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED = '&bull; The Brickmould exterior trim is not available on Double Hung Insert Frames with Sloped Sills.'; 
  	public static final String SCREEN_WIDTH_MAX = '&bull; The width you entered[enteredValue] is above the maximum[requiredValue] for the type of screen you selected on this product.'; 
  	public static final String SCREEN_HEIGHT_MAX = '&bull; The height you entered[enteredValue] is above the maximum[requiredValue] for the type of screen you selected on this product.'; 
- 	
+ 	public static final String SASH_RATIO_OPERATION = '&bull; The Sash Ratio and Operation combination that you selected is not valid for this product.';
+ 	public static final String EJ_SPECIES_COLOR = '&bull; The EJ Species and Color combination that you selected is not valid for this product.';
+ 	public static final String GRILLE_STYLE_SHAPE_PATTERN = '&bull; This combination of specialty shape, grille pattern, and grille type is not valid. Please try again.';
+ 	public static final String GRILLE_HUBS_SPOKES = '&bull; The combination of Hubs/Spokes are not valid for this specialty shape, grille style, and type.';
+ 	public static final String GRILLE_LITES = '&bull; The combination of Lites High/Wide are not valid for this specialty shape, grille style, and type.';
+
  	public static final String LOCK_MAX_WIDTH = '&bull; You cannot select more than [enteredValue] locks when the width is less than [requiredValue] inches.';
  	public static final String LOCK_MAX_HEIGHT = '&bull; You cannot select more than [enteredValue] locks when the height is less than [requiredValue] inches.';
  	public static final String LOCK_MIN_WIDTH = '&bull; You must select at least [enteredValue] locks when the width is greater than [requiredValue] inches.';
@@ -87,7 +93,7 @@ public with sharing class RMS_errorMessages {
 	public static final String LOCATION_ID_IS_NULL = '&bull;Location Number is null in the related store configuration. Please contact and administrator to resolve the issue';
 	public static final String GLA_NUMBER_NULL = '&bull;The GLA Account must not be blank';
 	public static final String GLA_NUMBER_THREE_OR_LESS = '&bull;The GLA Account must be longer than 3 characters.';
-	 
+	
 	public static final String ALREADY_SUBMITTED_DELETE = '&bull;This record has already been submitted, so you cannot delete it.';
 	public static final String MULTIPLE_JOURNAL_ENTRIES = '&bull;This payment has more then one journal entry. Please consult your system admin for help resolving this error.';
 	
@@ -113,7 +119,7 @@ public with sharing class RMS_errorMessages {
 
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	/*******************************************************
-					Redirect Errors 
+					Redirect Errors
 	*******************************************************/
 	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
 	public static final String STORE_LOCATION_IS_BLANK_LABOR = 'The Store Location must be entered on the Work Order before creating a labor record.';
