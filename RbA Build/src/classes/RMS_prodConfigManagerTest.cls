@@ -378,10 +378,10 @@ private class RMS_prodConfigManagerTest {
 
 		// Set the caps
 		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
-		prodConfig.Width_to_Height_Cap_Height__c = 80;
-		prodConfig.Width_to_Height_Cap_Width__c = 60;
-		prodConfig.Height_to_Width_Cap_Height__c = 80;
-		prodConfig.Height_to_Width_Cap_Width__c = 60;
+//		prodConfig.Width_to_Height_Cap_Height__c = 80;
+//		prodConfig.Width_to_Height_Cap_Width__c = 60;
+//		prodConfig.Height_to_Width_Cap_Height__c = 80;
+//		prodConfig.Height_to_Width_Cap_Width__c = 60;
 
 		// Set the width below the cap and the height above
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
