@@ -1423,7 +1423,7 @@
 	        if(j$("span[data-jsid='productName']").text() == 'Double Hung'){
 	        
        			j$("input[data-jsid='installHolesLocation']").val('6');
-       			if(j$("select[data-jsid='frameType']").val() == "Full-Frame" || (j$("select[data-jsid='exteriorTrim']").val() == null || j$("select[data-jsid='exteriorTrim']").val() == '' )){ 
+       			if(j$("select[data-jsid='frameType']").val() == "Full-Frame" || j$("select[data-jsid='exteriorTrim']").val() != null){ 
 					 j$("select[data-jsid='installTrackLocation']").val('Inside');
 				}else{ 
 					 j$("select[data-jsid='installTrackLocation']").val('Outside');
