@@ -51,23 +51,27 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>United_Inch_Minimum__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>United_Inch_Maximum__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Height_to_Width_Cap_Height__c</field>
+                <field>Extended_Height_to_Width_Height__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Height_to_Width_Cap_Fractions_Height__c</field>
+                <field>Extended_Height_to_Width_Fractions_Ht__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Height_to_Width_Cap_Width__c</field>
+                <field>Extended_Height_to_Width_Width__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Height_to_Width_Cap_Fractions_Width__c</field>
+                <field>Extended_Height_to_Width_Fractions_Wth__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -92,19 +96,19 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Width_to_Height_Cap_Width__c</field>
+                <field>Extended_Width_to_Height_Width__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Width_to_Height_Cap_Fractions_Width__c</field>
+                <field>Extended_Width_to_Height_Fractions_Wth__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Width_to_Height_Cap_Height__c</field>
+                <field>Extended_Width_to_Height_Height__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Width_to_Height_Cap_Fractions_Height__c</field>
+                <field>Extended_Width_to_Height_Fractions_Ht__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -532,6 +536,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>EJ_Species__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>EJ_Color__c</field>
             </layoutItems>
             <layoutItems>
@@ -693,11 +701,19 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Glass_Pattern_Control__c</field>
+                <field>Glass_Pattern_S1_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Glazing_Control__c</field>
+                <field>Glass_Pattern_S2_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S1_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S2_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -819,10 +835,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Special_Options_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Spokes_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -839,7 +851,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Tempered_Control__c</field>
+                <field>Tempered_S1_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S2_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -860,6 +876,73 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Unit_Id_Control__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>Special Option Controls</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Special_Options_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Exterior_Grille_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Exterior_Trim_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hardware_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Install_Holes_Location_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Install_Track_Location_Control__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Interior_Grille_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Interior_Sash_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Jamb_Liner_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Screen_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Storm_Window_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S3_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glass_Pattern_S3_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S3_Control__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -894,12 +977,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>PRODUCT2.NAME</fields>
-        <fields>PRODUCT2.CUSTOMER_PRODUCT_ID</fields>
-        <fields>PRODUCT2.DESCRIPTION</fields>
-        <relatedList>Product2.Product_Configuration__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <fields>Screen_Type__c</fields>
         <fields>Max_Width_Inches__c</fields>
@@ -909,7 +986,27 @@
         <relatedList>Screen_Configuration__c.Product_Configuration__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <relatedList>RelatedEntityHistoryList</relatedList>
+        <fields>NAME</fields>
+        <fields>Sash_Ratio__c</fields>
+        <fields>Sash_Operation__c</fields>
+        <relatedList>Sash_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>EJ_Species__c</fields>
+        <fields>EJ_Color__c</fields>
+        <relatedList>EJ_Color_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Specialty_Shape__c</fields>
+        <fields>Grille_Style__c</fields>
+        <fields>Grille_Pattern__c</fields>
+        <fields>Lites_High__c</fields>
+        <fields>Lites_Wide__c</fields>
+        <fields>Spokes__c</fields>
+        <fields>Hubs__c</fields>
+        <relatedList>Specialty_Grille_Configuration__c.Product_Configuration__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
@@ -917,7 +1014,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000Muu6</masterLabel>
+        <masterLabel>00h61000002WhAu</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
