@@ -190,7 +190,6 @@
         <fields>CONTACT.NAME</fields>
         <fields>ASSET.STATUS</fields>
         <fields>Sold_Order__c</fields>
-        <fields>Create_SO__c</fields>
         <relatedList>RelatedAssetList</relatedList>
     </relatedLists>
     <relatedLists>

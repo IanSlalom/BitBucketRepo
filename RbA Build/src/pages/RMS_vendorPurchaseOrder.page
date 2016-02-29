@@ -193,7 +193,14 @@
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.UnitPrice}"/>
+					<apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">Cost</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+					</apex:column>
+					<apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
+						<apex:facet name="header">Retail Price</apex:facet> 
+							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+					</apex:column>
 					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
 						<apex:facet name="header">Variant</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
@@ -267,6 +274,11 @@
 			sforce.console.setTabTitle( '{!Purchase_Order__c.Id}' ? '* {!Purchase_Order__c.Name}' : 'New Purchase Order' );
 
 		};
+		
+		function setFocusOnLoad() {
+			// Do nothing. This keeps standard Salesforce from giving focus to the first
+			// field so that the calendar widget won't pop up.
+		}
 
 	</script>
 </apex:page>

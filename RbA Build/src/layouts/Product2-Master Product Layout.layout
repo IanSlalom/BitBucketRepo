@@ -119,6 +119,12 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <fields>PRODUCT2.NAME</fields>
+        <fields>PRODUCT2.CUSTOMER_PRODUCT_ID</fields>
+        <fields>PRODUCT2.DESCRIPTION</fields>
+        <relatedList>Product2.Master_Product__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <relatedList>RelatedStandardPriceList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -139,6 +145,9 @@
         <fields>NAME</fields>
         <fields>Cost_Center__c</fields>
         <relatedList>Cost_Center__c.Product__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

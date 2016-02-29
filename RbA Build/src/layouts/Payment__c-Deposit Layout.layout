@@ -15,6 +15,10 @@
                 <behavior>Required</behavior>
                 <field>Order__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Non_Sufficient_Funds__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -59,10 +63,6 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Payment_Type__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Amount_Refunded__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -113,13 +113,6 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Reason__c</fields>
-        <fields>Amount__c</fields>
-        <fields>Date__c</fields>
-        <relatedList>Refund__c.Payment__c</relatedList>
-    </relatedLists>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
