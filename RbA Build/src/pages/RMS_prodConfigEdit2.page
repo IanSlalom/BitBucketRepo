@@ -380,30 +380,30 @@
 
             <!--------    Row 5 Fields --------->
             <apex:pageBlockSectionItem >    
-                <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing1" onChange="callRule('glazing1')">
+                <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_S1_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_S1_Control__c != 'Disabled'}" html-data-jsid="glazing1" onChange="callRule('glazing1')">
                     <apex:selectOptions value="{!glazingItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >    
-                <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPattern1" onChange="callRule('applyToAllGlassCheck')">
+                <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_S1_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_S1_Control__c != 'Disabled'}" html-data-jsid="glassPattern1" onChange="callRule('applyToAllGlassCheck')">
                     <apex:selectOptions value="{!GlassPatternItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >    
-                <apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered {!sashFieldName}" required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered1" onChange="callRule('applyToAllGlassCheck')"/>
+                <apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered {!sashFieldName}" required="{!prodConfig.mpc.Tempered_S1_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_S1_Control__c != 'Disabled'}" html-data-jsid="tempered1" onChange="callRule('applyToAllGlassCheck')"/>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >    
-                <apex:selectList value="{!OrderItem.Glazing_S2__c}" label="Glazing S2" size="1" id="glazing2"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled' && (prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}" html-data-jsid="glazing2" onChange="callRule('glazing2')">
+                <apex:selectList value="{!OrderItem.Glazing_S2__c}" label="Glazing S2" size="1" id="glazing2"  required="{!prodConfig.mpc.Glazing_S2_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_S2_Control__c != 'Disabled'}" html-data-jsid="glazing2" onChange="callRule('glazing2')">
                     <apex:selectOptions value="{!glazingItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Glass_Pattern_S2__c}" label="Glass Pattern S2" size="1" id="glassPattern2"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'  && (prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}" html-data-jsid="glassPattern2">
+                <apex:selectList value="{!OrderItem.Glass_Pattern_S2__c}" label="Glass Pattern S2" size="1" id="glassPattern2"  required="{!prodConfig.mpc.Glass_Pattern_S2_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_S2_Control__c != 'Disabled'}" html-data-jsid="glassPattern2">
                     <apex:selectOptions value="{!GlassPatternItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >
-                <apex:inputField value="{!OrderItem.Tempered_S2__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered2" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && (prodConfig.mpc.Number_of_Sashes__c == '2' || prodConfig.mpc.Number_of_Sashes__c == '3') && prodConfig.mpc != null}" html-data-jsid="tempered2" />
+                <apex:inputField value="{!OrderItem.Tempered_S2__c}"  required="{!prodConfig.mpc.Tempered_S2_Control__c == 'Required'}" id="tempered2" rendered="{!prodConfig.mpc.Tempered_S2_Control__c != 'Disabled'}" html-data-jsid="tempered2" />
             </apex:pageBlockSectionItem>
 
             <!--------    Row 6 Labels --------->
@@ -772,37 +772,37 @@
 
             <!--------    Row 1 Fields --------->
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" html-data-jsid="screenColor">
+                <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" required="{!prodConfig.mpc.Screen_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Color_Control__c != 'Disabled'}" html-data-jsid="screenColor">
                     <apex:selectOptions value="{!screenColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" html-data-jsid="hardwareColor">
+                <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" required="{!prodConfig.mpc.Hardware_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Color_Control__c != 'Disabled'}" html-data-jsid="hardwareColor">
                     <apex:selectOptions value="{!hardwareColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" html-data-jsid="extGrilleColor">
+                <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" required="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c != 'Disabled'}" html-data-jsid="extGrilleColor">
                     <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" html-data-jsid="intGrilleColor">
+                <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" required="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c != 'Disabled'}" html-data-jsid="intGrilleColor">
                     <apex:selectOptions value="{!interiorGrilleColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" html-data-jsid="stormWindowColor">
+                <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" required="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c != 'Disabled'}" html-data-jsid="stormWindowColor">
                     <apex:selectOptions value="{!stormWindowColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" html-data-jsid="exteriorTrimColor">
+                <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" required="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c != 'Disabled'}" html-data-jsid="exteriorTrimColor">
                     <apex:selectOptions value="{!exteriorTrimColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
@@ -829,23 +829,23 @@
 
             <!--------    Row 2 Fields --------->
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" html-data-jsid="jambLinerColor">
+                <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" required="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c != 'Disabled'}" html-data-jsid="jambLinerColor">
                     <apex:selectOptions value="{!jambLinerColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" html-data-jsid="installTrackLocation">
+                <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" required="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c != 'Disabled'}" html-data-jsid="installTrackLocation">
                     <apex:selectOptions value="{!installTrackLocationItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" html-data-jsid="installHolesLocation"/>
+                <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" required="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c != 'Disabled'}" html-data-jsid="installHolesLocation"/>
             </apex:pageBlockSectionItem>
 
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" html-data-jsid="interiorSashColor" >
+                <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" required="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c != 'Disabled'}" html-data-jsid="interiorSashColor" >
                     <apex:selectOptions value="{!interiorSashColorItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
@@ -881,17 +881,17 @@
 
             <!--------    Row 3 Fields --------->
             <apex:pageBlockSectionItem >
-                <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  rendered="{!prodConfig.mpc.Glazing_Control__c != 'Disabled'}" html-data-jsid="glazing3" onChange="callRule('glazing3')">
+                <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3" required="{!prodConfig.mpc.Glazing_S3_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glazing_S3_Control__c != 'Disabled'}" html-data-jsid="glazing3" onChange="callRule('glazing3')">
                     <apex:selectOptions value="{!glazingItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >
-                 <apex:selectList value="{!OrderItem.Glass_Pattern_S3__c}" label="Glass Pattern S3" size="1" id="glassPattern3"   rendered="{!prodConfig.mpc.Glass_Pattern_Control__c != 'Disabled'}" html-data-jsid="glassPattern3">
+                 <apex:selectList value="{!OrderItem.Glass_Pattern_S3__c}" label="Glass Pattern S3" size="1" id="glassPattern3" required="{!prodConfig.mpc.Glass_Pattern_S3_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Glass_Pattern_S3_Control__c != 'Disabled'}" html-data-jsid="glassPattern3">
                     <apex:selectOptions value="{!GlassPatternItems}"/>
                 </apex:selectList>
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >
-                <apex:inputField value="{!OrderItem.Tempered_S3__c}"   id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'}" html-data-jsid="tempered3" />
+                <apex:inputField value="{!OrderItem.Tempered_S3__c}"   id="tempered3" required="{!prodConfig.mpc.Tempered_S3_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tempered_S3_Control__c != 'Disabled'}" html-data-jsid="tempered3" />
             </apex:pageBlockSectionItem>
             <apex:pageBlockSectionItem >
             </apex:pageBlockSectionItem>
