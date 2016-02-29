@@ -626,10 +626,25 @@ public with sharing class RMS_prodConfigManager {
 			}	
 		} 
 		
+		if(orderLineItem.Special_Options__c == true){
+			
+		    if(orderLineItem.Screen_Type__c == 'TruScene (Wood Vaneer)' && (orderLineItem.Screen_Color__c != null && orderLineItem.Screen_Color__c != '')){
+		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VANEER : errorMessage + '<BR>' + RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VANEER;	
+		    }
+		    if((orderLineItem.Grille_Style__c == 'No Grilles' || orderLineItem.Grille_Style__c == null) && (orderLineItem.Exterior_Grille_Color__c != null || orderLineItem.Interior_Grille_Color__c != null)){
+		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE;	
+		    }
+			if(orderLineItem.Install_Holes_Location__c == null || orderLineItem.Install_Holes_Location__c == '' || orderLineItem.Install_Track_Location__c == null || orderLineItem.Install_Track_Location__c == ''){
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.TRACK_HOLE_LOCATION_NULL : errorMessage + '<BR>' + RMS_errorMessages.TRACK_HOLE_LOCATION_NULL;	
+			}
+			
+			
+		}
 		
 		return errorMessage;
 	
 	}
+	
 	
 	/*******************************************************
 					findProductConfiguration method

@@ -127,7 +127,7 @@
 
 
         <apex:pageBlockSection title="" columns="1" rendered="{!productSelected}">
-            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" />
+            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" html-data-jsid="productName"/>
             <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!masterProduct.Name=='Specialty Window'}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
@@ -1111,8 +1111,6 @@
         grillePattern(1);
         grillePattern(2);
         grillePattern(3);
-        interiorColor('White');
-        interiorColor('Dark Bronze');
         glazing(0);
         glazing(1);
         glazing(2);
@@ -1395,6 +1393,65 @@
         var specialOptionsCheck = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
         if( specialOptionsCheck == true){
             j$("div[data-jsid='specialOptions']").show();
+            
+            callRule('interiorColor');  
+            
+        	/*j$("select[data-jsid='screenColor']").val(null);*/
+        	j$("select[data-jsid='glazing3']").val(j$("select[data-jsid='glazing1']").val());
+        	j$("select[data-jsid='glassPattern3']").val(j$("select[data-jsid='glassPattern1']").val());
+        	j$("input[data-jsid='tempered3']").prop('checked',j$("input[data-jsid='tempered1']").prop('checked'));
+        	j$("select[data-jsid='exteriorTrimColor']").val(j$("select[data-jsid='exteriorColor']").val());
+        	j$("select[data-jsid='interiorSashColor']").val(j$("select[data-jsid='interiorColor']").val());
+        	
+        	
+        	if( j$("select[data-jsid='grilleStyle']").val() == 'Interior Wood Only' || j$("select[data-jsid='grilleStyle']").val() == 'Full Divided Light'){
+	        	if(j$("select[data-jsid='interiorColor']").val() == 'Stainable Pine'){
+	        		j$("select[data-jsid='intGrilleColor']").val('Maple');
+	        	}else if(	j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        				j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        				j$("select[data-jsid='interiorColor']").val() == 'Terratone'){
+	        		j$("select[data-jsid='intGrilleColor']").val(j$("select[data-jsid='interiorColor']").val());
+	        	}else{
+	        		j$("select[data-jsid='intGrilleColor']").val('Sandtone');
+	        	}
+	        }
+	        
+	        if(j$("select[data-jsid='grilleStyle']").val() != null && j$("select[data-jsid='grilleStyle']").val() != '' && j$("select[data-jsid='grilleStyle']").val() != 'No Grilles'){
+	        	 j$("select[data-jsid='extGrilleColor']").val(j$("select[data-jsid='exteriorColor']").val());
+	        }
+	        
+	        if(j$("span[data-jsid='productName']").text() == 'Double Hung'){
+	        
+       			j$("input[data-jsid='installHolesLocation']").val('6');
+       			if(j$("select[data-jsid='frameType']").val() == "Full-Frame" || j$("select[data-jsid='exteriorTrim']").val() != null){ 
+					 j$("select[data-jsid='installTrackLocation']").val('Inside');
+				}else{ 
+					 j$("select[data-jsid='installTrackLocation']").val('Outside');
+				} 
+	        }
+	        
+	        if( '{!prodConfig.mpc.Screen_Color_Default__c}' == 'Exterior Color'){
+	        	 j$("select[data-jsid='screenColor']").val( j$("select[data-jsid='exteriorColor']").val());
+	        }else if('{!prodConfig.mpc.Screen_Color_Default__c}' == 'Interior Color' &&
+	        			(j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Terratone')){
+        		j$("select[data-jsid='screenColor']").val( j$("select[data-jsid='interiorColor']").val());	
+	        }else{
+	        	j$("select[data-jsid='screenColor']").val('Sandtone');
+	        }
+	        
+	        if( '{!prodConfig.mpc.Storm_Window_Color_Default__c}' == 'Exterior Color'){
+	        	 j$("select[data-jsid='stormWindowColor']").val( j$("select[data-jsid='exteriorColor']").val());
+	        }else if('{!prodConfig.mpc.Storm_Window_Color_Default__c}' == 'Interior Color' &&
+	        			(j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Terratone')){
+        		j$("select[data-jsid='stormWindowColor']").val( j$("select[data-jsid='interiorColor']").val());	
+	        }else{
+	        	j$("select[data-jsid='stormWindowColor']").val('Sandtone');
+	        }
+
         }else{
             j$("select[data-jsid='screenColor']").val(null);
             j$("select[data-jsid='hardwareColor']").val(null);
