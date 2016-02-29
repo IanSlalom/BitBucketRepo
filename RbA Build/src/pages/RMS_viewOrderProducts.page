@@ -99,10 +99,10 @@
 					</apex:commandButton>
 				</apex:column>
 				<apex:column >  
-					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit2?id={!wrapper.OrderItem.Id}','Edit Order Product');return false">Edit</a> 
+					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}','Edit Order Product');return false">Edit</a> 
 				</apex:column>
 				<apex:column headerValue="Product">  
-					<a href="#" onClick="openSubtab('/apex/RMS_prodConfigEdit2?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
+					<a href="#" onClick="openSubtab('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
 				</apex:column>
 		        <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
 		        <apex:column value="{!wrapper.OrderItem.Quantity}"/>
@@ -115,10 +115,10 @@
 					<apex:pageblocksection title="Related Order Items" id="additionalInfo" showheader="true" collapsible="false" columns="1" rendered="{!wrapper.showRelatedItems && wrapper.relatedItems !=null}">
 						<apex:pageBlockTable title="Misc Jobs and Unit Charges" value="{!wrapper.relatedItems}" var="item" style="width:100%;">
 							<apex:column >  
-							<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit2?id={!item.Id}','Edit Order Product');return false">Edit</a> 
+							<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}','Edit Order Product');return false">Edit</a> 
 							</apex:column>
 							<apex:column headerValue="Product">  
-								<a href="#" onClick="openSubtab('/apex/RMS_prodConfigEdit2?id={!item.Id}','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 
+								<a href="#" onClick="openSubtab('/apex/RMS_prodConfigEdit?id={!item.Id}','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 
 							</apex:column>
 		       				<apex:column value="{!item.Purchase_Order__c}"/>
 		      				<apex:column value="{!item.Quantity}"/>

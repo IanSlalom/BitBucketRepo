@@ -65,7 +65,7 @@ public with sharing class RMS_viewOrderProductsController {
             reportId = installMatReport[0].Id;
         }
         reportURL = '/'+reportId+'?pv0='+String.ValueOf(order.Id).substring(0,15)+'&pv1=Construction_Materials';
-        addProductURL = '/apex/rms_ProdConfigEdit2?oid='+order.Id+'&pid='+order.Pricebook2Id;
+        addProductURL = '/apex/rms_ProdConfigEdit?oid='+order.Id+'&pid='+order.Pricebook2Id;
 
     }
 
