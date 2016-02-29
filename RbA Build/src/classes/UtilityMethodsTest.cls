@@ -39,6 +39,15 @@ private class UtilityMethodsTest {
 	}
 
 	/*******************************************************
+	 GetRecordTypeIdsMapForSObjectTest
+	*******************************************************/
+
+	 static testMethod void GetRecordTypeIdsMapForSObjectTest(){
+	 	id masterProductId =  UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');
+	 	system.assert(masterProductId != null);
+	 }
+
+	/*******************************************************
 					buildWorkOrderTest
 	*******************************************************/
 	static testMethod void buildWorkOrderTest() {
