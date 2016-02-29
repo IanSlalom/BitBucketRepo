@@ -1047,21 +1047,6 @@ public class RMS_prodConfigExtension {
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Custom_Grille_Details_S3__c	= null;
 		}
-		if(newProdConfig.Glazing_Control__c == 'Disabled' || newProdConfig.Glazing_Control__c == null) {
-			oI.Glazing_S1__c = null;	
-			oI.Glazing_S2__c = null;	
-			oI.Glazing_S3__c = null;	
-		}
-		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled' || newProdConfig.Glass_Pattern_Control__c == null) {
-			oI.Glass_Pattern_S1__c = null; 
-			oI.Glass_Pattern_S2__c = null; 
-			oI.Glass_Pattern_S3__c = null; 
-		}
-		if(newProdConfig.Tempered_Control__c == 'Disabled' || newProdConfig.Tempered_Control__c == null) {
-			oI.Tempered_S1__c = false;
-			oI.Tempered_S2__c = false;
-			oI.Tempered_S3__c = false;
-		}
 		
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == null){
