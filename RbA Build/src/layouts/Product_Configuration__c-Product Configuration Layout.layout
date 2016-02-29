@@ -617,10 +617,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Astragal_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Brickmould_Applied_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -892,6 +888,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Astragal_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Exterior_Grille_Color_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -909,6 +909,17 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Install_Track_Location_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Screen_Color_Default__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Storm_Window_Color_Default__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
