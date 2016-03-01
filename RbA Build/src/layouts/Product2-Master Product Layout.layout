@@ -67,6 +67,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Stock_Item__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>IsActive</field>
             </layoutItems>
         </layoutColumns>
