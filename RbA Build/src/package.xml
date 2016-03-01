@@ -67,7 +67,6 @@
         <members>RMS_newMiscLabor</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
-        <members>RMS_prodConfigEdit2</members>
         <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewOrderProducts</members>
