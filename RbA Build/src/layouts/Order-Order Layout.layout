@@ -3,7 +3,6 @@
     <customButtons>Add_Product</customButtons>
     <customButtons>Cancel_Order</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
-    <customButtons>Conga_Composer_Install_Packet</customButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>ReduceOrder</excludeButtons>
     <excludeButtons>Share</excludeButtons>
@@ -21,6 +20,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>AccountId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Account_Manager__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

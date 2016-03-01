@@ -190,7 +190,8 @@
         <fields>QUOTE_LI.QUANTITY</fields>
         <fields>QUOTE_LI.SUBTOTAL</fields>
         <fields>QUOTE_LI.TOTAL_PRICE</fields>
-        <fields>Product_Type__c</fields>
+        <fields>Product_Class__c</fields>
+        <fields>Unit_Id__c</fields>
         <relatedList>RelatedQuoteLineItemList</relatedList>
     </relatedLists>
     <relatedLists>
