@@ -34,6 +34,7 @@ public class RMS_prodConfigExtension {
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
 	public String ordStat {get; set;}	// order status 
+	public String mode {get; set;}	// order status 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -43,6 +44,10 @@ public class RMS_prodConfigExtension {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';			
+
+		mode = ApexPages.currentPage().getParameters().get('mode');
+		if (mode == null) mode = 'v';
+		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
 			newOrderItem = true;
