@@ -46,6 +46,8 @@
         <members>RMS_salesOrderManagerTest</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
+        <members>RMS_viewOrderProductsController</members>
+        <members>RMS_viewOrderProductsControllerTests</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>TestUtilityMethods</members>
@@ -67,9 +69,9 @@
         <members>RMS_newMiscLabor</members>
         <members>RMS_newPaymentRedirect</members>
         <members>RMS_prodConfigEdit</members>
-        <members>RMS_prodConfigEdit2</members>
         <members>RMS_prodConfigRedirect</members>
         <members>RMS_vendorPurchaseOrder</members>
+        <members>RMS_viewOrderProducts</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
@@ -125,6 +127,7 @@
         <members>Contact_History__c-Associated Contact Layout</members>
         <members>Cost_Center__c-Cost Center Layout</members>
         <members>Discount__c-Discount Layout</members>
+        <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
@@ -167,8 +170,9 @@
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
+        <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
-        <members>Store_Configuration__c-Store Configuration Layout</members>
+        <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>

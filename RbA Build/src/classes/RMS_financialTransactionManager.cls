@@ -1109,7 +1109,6 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__c,
                                                     Order__r.Revenue_Recognized_Date__c,
                                                     Order__r.BillToContactId,
-                                                    Refund_Method__c,
                                                     CreatedById,
                                                     Name,
                                                     Store_Location__c

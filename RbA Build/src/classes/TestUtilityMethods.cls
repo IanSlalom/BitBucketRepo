@@ -27,6 +27,9 @@ public with sharing class TestUtilityMethods {
 	 
 	
 	public void setUpConfigs(){
+
+		User u = [select Id from User WHERE Id =: UserInfo.getUserId()];
+		system.runAs(u){
 		//Creating RMS_Settings__c
     	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
@@ -92,9 +95,8 @@ public with sharing class TestUtilityMethods {
 			Lien_Rights_Signed__c = true
 			);
 		insert backOfficeChecklist1;
-		
-		
-		
+		}
+			
 	}
 
 	public void setUpConfigsMark(){

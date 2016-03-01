@@ -34,6 +34,7 @@ public class RMS_prodConfigExtension {
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
 	public String ordStat {get; set;}	// order status 
+	public String mode {get; set;}	// order status 
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -43,6 +44,10 @@ public class RMS_prodConfigExtension {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';			
+
+		mode = ApexPages.currentPage().getParameters().get('mode');
+		if (mode == null) mode = 'v';
+		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
 			newOrderItem = true;
@@ -1046,21 +1051,6 @@ public class RMS_prodConfigExtension {
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Custom_Grille_Details_S3__c	= null;
-		}
-		if(newProdConfig.Glazing_Control__c == 'Disabled' || newProdConfig.Glazing_Control__c == null) {
-			oI.Glazing_S1__c = null;	
-			oI.Glazing_S2__c = null;	
-			oI.Glazing_S3__c = null;	
-		}
-		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled' || newProdConfig.Glass_Pattern_Control__c == null) {
-			oI.Glass_Pattern_S1__c = null; 
-			oI.Glass_Pattern_S2__c = null; 
-			oI.Glass_Pattern_S3__c = null; 
-		}
-		if(newProdConfig.Tempered_Control__c == 'Disabled' || newProdConfig.Tempered_Control__c == null) {
-			oI.Tempered_S1__c = false;
-			oI.Tempered_S2__c = false;
-			oI.Tempered_S3__c = false;
 		}
 		
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
