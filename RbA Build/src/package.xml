@@ -172,7 +172,6 @@
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
-        <members>Store_Configuration__c-Store Configuration Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
