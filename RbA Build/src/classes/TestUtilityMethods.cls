@@ -194,7 +194,12 @@ public with sharing class TestUtilityMethods {
             FirstName = x+'Test',
             LastName = x+'Contact',
             Email = x+'test@testing.com',
-            Phone = '(763) 555-0000'
+            Phone = '(763) 555-0000',
+			HomePhone = '(763) 555-1111',
+			MobilePhone = '(763) 555-2222',
+			Salutation = 'Mr.',
+			Comments__c = 'This is a comment.',
+			Preferred_Method_of_Contact__c = 'Mobile Phone'
         );
         return testContact;
     }

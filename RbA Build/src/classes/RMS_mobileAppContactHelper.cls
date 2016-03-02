@@ -33,7 +33,7 @@ public with sharing class RMS_mobileAppContactHelper {
 
 	        //Insert Contact History
 	        if(dtoContact.getErrors().isEmpty()){
-	        	Contact_History__c contactHistoryToInsert = new Contact_History__c(Contact__c = contactToInsert.Id, Dwelling__c = dtoContact.accountId, Type__c ='Current Resident');
+	        	Contact_History__c contactHistoryToInsert = new Contact_History__c(Contact__c = contactToInsert.Id, Dwelling__c = dtoContact.DwellingId, Type__c ='Current Resident');
 	        	sr = Database.insert(contactHistoryToInsert, false);
           		if (!sr.isSuccess()) {              
 	            	for(Database.Error err : sr.getErrors()) {
@@ -53,7 +53,11 @@ public with sharing class RMS_mobileAppContactHelper {
 	            	}
 	          	}		    
 	    	}
-
+			// do we have errors if yes roll it all back
+			if (!dtoContact.getErrors().isEmpty()) {
+		        Database.rollBack(sp);
+				dtoContact.Contact.Id = null;
+			}
 
      	} catch (Exception e) {
 	        // we've got another error
@@ -69,7 +73,7 @@ public with sharing class RMS_mobileAppContactHelper {
 
 	public class DTOContact{
 		public Id OpportunityId{get;set;}
-		public Id AccountId{get;set;}
+		public Id DwellingId{get;set;}
 		public Contact contact{get;set;}
 		private String[] errors;
     	public String[] getErrors() { 
