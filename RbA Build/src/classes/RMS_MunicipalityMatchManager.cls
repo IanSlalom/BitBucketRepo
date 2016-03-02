@@ -57,10 +57,12 @@ public with sharing class RMS_MunicipalityMatchManager {
 		        
 		        //CREATE MAP OF STORE ID TO LIST OF MUNICIPALITY MATCHES
 		        map<id, list<Municipality_Match__c>> storeIDtoListOfMatchMap = new  map<id, list<Municipality_Match__c>>();
+/*
 				Id currentStore = null;
 				List<Municipality_Match__c> tempMatchList = null;
+*/
 				for(Municipality_Match__c muniMatch : permitMunicipalityMatchs){
-
+/*
 					// note that this logic depends on the SOQL having an order by claues
 					if (currentStore != muniMatch.Agency_Name__r.For_Retail_Location__c) {
 						// we need to create put the list into map and create a new list
@@ -71,19 +73,19 @@ public with sharing class RMS_MunicipalityMatchManager {
 						}
 					}
 					tempMatchList.add(muniMatch);
+*/
 
-/*
 					if(storeIDtoListOfMatchMap.containsKey(muniMatch.Agency_Name__r.For_Retail_Location__c)){
 					storeIDtoListOfMatchMap.get(muniMatch.Agency_Name__r.For_Retail_Location__c).add(muniMatch);
 					}else{
 						storeIDtoListOfMatchMap.put(muniMatch.Agency_Name__r.For_Retail_Location__c, new list<Municipality_Match__c>{muniMatch});
 					}
-*/
-				}
 
+				}
+/*
 				// add the last group
 				storeIDtoListOfMatchMap.put(currentStore,tempMatchList);
-		
+*/		
 		        //LOOP THROUGH DWELLINGS TO PREFORM LOGIC OF ASSINGING MUNICIPALITY
 		        for(Account dwelling : dwellingList){
 		        	
