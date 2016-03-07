@@ -47,6 +47,7 @@ public class RMS_prodConfigExtension {
 
 		mode = ApexPages.currentPage().getParameters().get('mode');
 		if (mode == null) mode = 'v';
+		if (mode == 'v') productSelected = true;
 		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {

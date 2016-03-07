@@ -14,7 +14,7 @@
                 <behavior>Edit</behavior>
                 <field>Product_Configuration__c</field>
             </layoutItems>
-            <layoutItems> 
+            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sash_Operation__c</field>
             </layoutItems>

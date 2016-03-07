@@ -33,6 +33,10 @@
                 <behavior>Edit</behavior>
                 <field>BillToContactId</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Material_Application_Pct__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

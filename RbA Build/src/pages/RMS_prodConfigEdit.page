@@ -785,12 +785,6 @@
 
             <!--------    Row 12 Fields --------->
             <apex:pageBlockSectionItem >    
-                <apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Control__c != 'Disabled' && mode == 'e'}">
-                    <apex:selectOptions value="{!stormWindowItems}"/>
-                </apex:selectList>
-                <apex:outputField value="{!OrderItem.Storm_Window__c}" label="Storm Window" id="outstormWindow" rendered="{!prodConfig.mpc.Storm_Window_Control__c != 'Disabled' && mode != 'e'}"/>
-            </apex:pageBlockSectionItem>
-            <apex:pageBlockSectionItem >    
                 <apex:selectList value="{!OrderItem.Storm_Window_Style__c}" label="Storm Window Style" size="1" id="stormWindowStyle" required="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Style_Control__c != 'Disabled' && mode == 'e'}">
                     <apex:selectOptions value="{!stormWindowStyleItems}"/>
                 </apex:selectList>
