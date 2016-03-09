@@ -401,7 +401,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c,
                     Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity,
                     Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
-                    Total_Retail_Price__c, Pricebookentry.Product2.Family,
+                    Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
@@ -627,16 +627,21 @@ public with sharing class RMS_vendorPurchaseOrderController {
 //      oi.Intercompany_AP_Account__c = intercompanyAccount;
       orderItemsToUpdateList.add(oi);
     }
-    
+    System.Debug('**********poTax__c=' +po.Tax__c);
+
 
     try{
       // upsert the order line items
       orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
-	  }
+	  } 
+      System.debug('************orderItemsToUpdateList' + orderItemsToUpdateList);
       update orderItemsToUpdateList;
+      System.debug('************orderItemsToUpdateList2' + orderItemsToUpdateList);
 
+	  List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(orderItemsToUpdateList, po.Subtotal__c, po.Tax__c);    
+	  if (orderItemsToTax != null) update orderItemsToTax;
 	  // If the po status has changed update it
       if (String.isNotBlank(receiveStatus)) {
       	orderStatus = receiveStatus;
@@ -646,6 +651,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     } catch (Exception e){
       System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
+      return null;
     }
 
     errorOccurred = 'false';
@@ -716,9 +722,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
     try{
       // upsert the new order item
       upsert newOrderItem;
+
+      OrderItemWrapper OIW = new OrderItemWrapper(newOrderItem, accountIdToAccountMap.get(selectedVendor), productIdToProductMap.get(newProduct));
+          
+      orderItemWrapperList.add(OIW);
       // update the subtotal calculation after adding a product and update the PO
-      updateSubTotal();     
+      updateSubTotal();
+      System.debug('^^^^^^^^^^^^^^po.Subtotal__c' + po.Subtotal__c);
+
+      
+      // update the taxes on all order items     
+	  List<orderItem> allOrderItems = [SELECT 	Id, Unit_Wholesale_Cost__c, Quantity, Discount_Amount__c, Tax__c 
+										FROM OrderItem 
+										Where Purchase_Order__c =: po.Id];
+
+	  List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(allOrderItems, po.Subtotal__c, po.Tax__c);    
+      System.debug('^^^^^^^^^^^^^^orderItemsToTax' + orderItemsToTax);
+	  if (orderItemsToTax != null) update orderItemsToTax;
+
       upsert po;
+      System.debug('^^^^^^^^^^^^^^po.Subtotal__c2' + po.Subtotal__c);
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_EXCEPTION));
@@ -880,6 +903,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     return finalOrderItems;
 
   }
+
 
   /*******************************************************
           cancel method

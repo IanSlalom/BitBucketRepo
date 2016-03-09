@@ -66,6 +66,7 @@ public with sharing class RMS_errorMessages {
 	public static final String ORDER_NOT_FOUND = '&bull; The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = '&bull; Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = '&bull; Sorry, you cannot edit product line items on an activated order.';
+	public static final String PO_TAX_ISSUE = '&bull; Sorry, there was an issue updating the tax on the order line items. Please contact your system administrator';
 
 	public static final String HARDWARE_FINISH_BLANK = '&bull;For this product, if you enter a hardware style, you must also enter a hardware finish.';
 	public static final String TEMPERED_GLASS_REQUIRED = '&bull;Units of this size require Tempered Glass. Please select the "Tempered Glass" checkbox and try again.';

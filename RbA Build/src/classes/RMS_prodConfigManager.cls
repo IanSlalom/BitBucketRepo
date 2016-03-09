@@ -781,4 +781,33 @@ public with sharing class RMS_prodConfigManager {
 		(	orderStatus == 'Cancelled')					?	'clo'	: 
 															'drf';
 	}
+
+	public static string updateTaxes(Id poId) {
+		String errorMessage = RMS_errorMessages.PO_TAX_ISSUE;	
+		if (poId == null) return errorMessage;
+		List<OrderItem> allOrderItems = new List<OrderItem>();
+		
+		Purchase_Order__c po = [SELECT Id, Subtotal__c, Tax__c FROM Purchase_Order__c WHERE Id =: poId];
+
+		decimal subtotal = 0;
+		for (OrderItem oi : [SELECT 	Id, Unit_Wholesale_Cost__c, Quantity, Discount_Amount__c 
+										FROM OrderItem 
+										Where Purchase_Order__c =: poId])
+		{
+			decimal itemDiscount = (oi.Discount_Amount__c == null) ? 0 : oi.Discount_Amount__c;
+			if (oi.Unit_Wholesale_Cost__c == null || oi.Quantity == null)
+				continue;
+			subtotal = subtotal + ((oi.Unit_Wholesale_Cost__c-itemDiscount)*oi.Quantity);
+			allOrderItems.add(oi);
+		}
+		po.Subtotal__c = subtotal;
+		upsert po;
+
+		List<OrderItem> itemsToUpdate = new List<OrderItem>();
+		itemsToUpdate = UtilityMethods.calculateTaxes(allOrderItems, po.Subtotal__c, po.Tax__c);
+		update itemsToUpdate;
+		
+		return null;
+	}
+
 }
