@@ -167,6 +167,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c =: selectedVendor AND Product__c != null]) {
         vendorProducts.add(vp.Product__c);
       }
+	  System.Debug('*****************vendorProducts=' +vendorProducts);
       return vendorProducts;
     }
     set;
@@ -636,9 +637,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
 	  } 
-      System.debug('************orderItemsToUpdateList' + orderItemsToUpdateList);
       update orderItemsToUpdateList;
-      System.debug('************orderItemsToUpdateList2' + orderItemsToUpdateList);
 
 	  List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(orderItemsToUpdateList, po.Subtotal__c, po.Tax__c);    
 	  if (orderItemsToTax != null) update orderItemsToTax;
@@ -680,9 +679,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // Set the order, purchase order, and pricebookentry fields
     newOrderItem.OrderId = orderId;
     newOrderItem.Purchase_Order__c = po.id;
+	Product2 newProductRecord;
     for (PricebookEntry pbe : [SELECT Id, Product2.Account_Number__r.Name FROM PricebookEntry WHERE Product2Id =: newProduct AND Pricebook2Id =: selectedPricebook]) {
       newOrderItem.PricebookEntryId = pbe.Id; 
       productAccountNumber = pbe.Product2.Account_Number__r.Name;
+      newProductRecord = pbe.Product2;
     }
 
     // If the pricebookentry cannot be found - add an error and return null
@@ -723,13 +724,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
       // upsert the new order item
       upsert newOrderItem;
 
-      OrderItemWrapper OIW = new OrderItemWrapper(newOrderItem, accountIdToAccountMap.get(selectedVendor), productIdToProductMap.get(newProduct));
+      OrderItemWrapper OIW = new OrderItemWrapper(newOrderItem, accountIdToAccountMap.get(selectedVendor), newProductRecord);
+      System.debug('^^^^^^^^^^^^^^productIdToProductMap' + productIdToProductMap);
+      System.debug('^^^^^^^^^^^^^^newProductRecord' + newProductRecord);
+      System.debug('^^^^^^^^^^^^^^OIW' + OIW);
           
       orderItemWrapperList.add(OIW);
       // update the subtotal calculation after adding a product and update the PO
       updateSubTotal();
-      System.debug('^^^^^^^^^^^^^^po.Subtotal__c' + po.Subtotal__c);
-
       
       // update the taxes on all order items     
 	  List<orderItem> allOrderItems = [SELECT 	Id, Unit_Wholesale_Cost__c, Quantity, Discount_Amount__c, Tax__c 
@@ -741,7 +743,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	  if (orderItemsToTax != null) update orderItemsToTax;
 
       upsert po;
-      System.debug('^^^^^^^^^^^^^^po.Subtotal__c2' + po.Subtotal__c);
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_EXCEPTION));
