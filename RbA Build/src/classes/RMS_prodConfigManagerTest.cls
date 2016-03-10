@@ -608,7 +608,111 @@ private class RMS_prodConfigManagerTest {
 		System.assert(returnMessage.contains(RMS_errorMessages.EJ_SPECIES_COLOR));
 	}
 
+	/*******************************************************
+					checkMakeabilityColorConfigTest
+	*******************************************************/
+	static testmethod void checkMakeabilityColorConfigTest(){
+		
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Exterior_Color__c = 'Red';
+		prodConfig.Interior_Color__c = 'White;Black';
+		
+		Color_Configuration__c cc = new Color_Configuration__c(Product_Configuration__c = prodConfig.Id, Exterior_Color__c='Red', Interior_Color__c = 'White');
+		insert cc;
+
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Exterior_Color__c = 'Red';
+		soldOrderItem.Interior_Color__c = 'White';
+		soldOrderItem.Width_Inches__c = 59;
+		soldOrderItem.Height_Inches__c = 59;
+
+		// check the makeability
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.COLOR_EXT_INT));
+
+		soldOrderItem.Interior_Color__c = 'Black';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(RMS_errorMessages.COLOR_EXT_INT));
+	}
 	
+	/*******************************************************
+					checkMakeabilityGrilleControlTest
+	*******************************************************/
+	static testmethod void checkMakeabilityGrilleControlTest(){
+		
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.EJ_Species__c = 'Oak';
+		prodConfig.EJ_Color__c = 'White;Black';
+		
+		Specialty_Grille_Control__c gc = new Specialty_Grille_Control__c(Product_Configuration__c = prodConfig.Id, Grille_Style__c= 'Required', Grille_Pattern__c = 'Colonial',
+																					Specialty_Shape__c = 'Pentagon' ,Hubs__c = 'Required', Spokes__c = 'Required', 
+																					Lites_High__c = 'Required', Lites_Wide__c ='Required');
+		insert gc;
+
+
+		// Set the Grille Style, Grille Pattern, and Specialty Shape
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 14;
+		soldOrderItem.Height_Inches__c = 14;
+		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
+		soldOrderItem.Specialty_Shape__c = 'Pentagon';
+
+
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_SPOKES_REQUIRED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_REQUIRED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_REQUIRED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_WIDE_REQUIRED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_STYLE_REQUIRED));
+		
+		soldOrderItem.Spokes__c = '2';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_SPOKES_REQUIRED));
+
+		soldOrderItem.Hubs__c = '1';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_REQUIRED));
+
+		soldOrderItem.Lites_High_S1__c = 1;
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_REQUIRED));
+
+		soldOrderItem.Lites_Wide_S1__c =2;
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_LITES_WIDE_REQUIRED));
+
+		soldOrderItem.Grille_Style__c = 'Colonial';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_STYLE_REQUIRED));
+
+		gc.Hubs__c = 'Disabled';
+		gc.Spokes__c = 'Disabled';
+		gc.Lites_Wide__c = 'Disabled';
+		gc.Lites_High__c = 'Disabled';
+		gc.Grille_Style__c = 'Disabled';
+		update gc;
+	
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_SPOKES_DISABLED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_DISABLED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_DISABLED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_WIDE_DISABLED));
+		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_STYLE_DISABLED));
+	
+	}
 
 	/*******************************************************
 					checkMakeabilityGrilleConfigTest
@@ -670,6 +774,114 @@ private class RMS_prodConfigManagerTest {
 
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_LITES));
+	
+	}
+
+	/*******************************************************
+					checkMakeabilityGrillePatternConfigTest
+	*******************************************************/
+	static testmethod void checkMakeabilityGrillePatternConfigTest(){
+		
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Min_Width__c = 1;
+		prodConfig.Min_Height__c = 1;
+		
+		Grille_Pattern_Configuration__c gc = new Grille_Pattern_Configuration__c(			Product_Configuration__c = prodConfig.Id,  Grille_Pattern__c = 'Colonial',
+																							Sash_Ratio__c = '1:1', Min_Width_Inches__c = 1,
+																							Min_Width_Fraction__c = '1/2',
+																							Min_Height_Inches__c = 1,
+																							Min_Height_Fraction__c = '1/2');
+		insert gc;
+
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 1;
+		soldOrderItem.Height_Inches__c = 1;
+		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
+		soldOrderItem.Sash_Ratio__c = '1:1';
+
+
+		// check the makeability
+		String requiredHeightString =  String.ValueOf(gc.Min_Height_Inches__c) + ' '+ (gc.Min_Height_Fraction__c == null? '' : String.valueOf(gc.Min_Height_Fraction__c));
+		String heightErrorMessage = RMS_ProdConfigManager.fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_HEIGHT, '', requiredHeightString);
+		String requiredWidthString =  String.ValueOf(gc.Min_Width_Inches__c) + ' '+(gc.Min_Width_Fraction__c == null? '' : String.valueOf(gc.Min_Width_Fraction__c));
+		String widthErrorMessage = RMS_ProdConfigManager.fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_WIDTH, '', requiredWidthString);
+											
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(heightErrorMessage));
+		System.assert(returnMessage.contains(widthErrorMessage));
+
+		soldOrderItem.Width_Fraction__c = '7/8';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(heightErrorMessage));
+		System.assert(!returnMessage.contains(widthErrorMessage));
+
+		soldOrderItem.Height_Fraction__c = '7/8';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(heightErrorMessage));
+		System.assert(!returnMessage.contains(widthErrorMessage));
+	
+	}
+
+	/*******************************************************
+					checkMakeabilityGlazingConfigTest
+	*******************************************************/
+	static testmethod void checkMakeabilityGlazingConfigTest(){
+		
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
+		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
+
+		// Set the caps
+		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
+		prodConfig.Min_Width__c = 1;
+		prodConfig.Min_Height__c = 1;
+		
+		Glazing_Configuration__c gc = new Glazing_Configuration__c(			Product_Configuration__c = prodConfig.Id,  Glazing__c ='High Performance Obscure',
+																							Sash_Ratio__c = '1:1', Max_Width_Inches__c = 1,
+																							Max_Width_Fraction__c = '1/2',
+																							Max_Height_Inches__c = 1,
+																							Max_Height_Fraction__c = '1/2');
+		insert gc;
+
+
+		// Set the width below the cap and the height above
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+		soldOrderItem.Width_Inches__c = 1;
+		soldOrderItem.Height_Inches__c = 1;
+		soldOrderItem.Glazing_S1__c = 'High Performance Obscure';
+		soldOrderItem.Sash_Ratio__c = '1:1';
+
+
+		// check the makeability
+		String requiredHeightString =  String.ValueOf(gc.Max_Height_Inches__c) + ' ' + (gc.Max_Height_Fraction__c == null? '' : String.valueOf(gc.Max_Height_Fraction__c));
+		String heightErrorMessage = RMS_ProdConfigManager.fillInErrorRuleValues(RMS_errorMessages.GLAZING_MAX_HEIGHT, '', requiredHeightString);
+		String requiredWidthString =  String.ValueOf(gc.Max_Width_Inches__c) + ' ' + (gc.Max_Width_Fraction__c == null? '' : String.valueOf(gc.Max_Width_Fraction__c));
+		String widthErrorMessage = RMS_ProdConfigManager.fillInErrorRuleValues(RMS_errorMessages.GLAZING_MAX_WIDTH, '', requiredWidthString);
+											
+		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(heightErrorMessage));
+		System.assert(!returnMessage.contains(widthErrorMessage));
+
+		soldOrderItem.Width_Fraction__c = '7/8';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(!returnMessage.contains(heightErrorMessage));
+		System.assert(returnMessage.contains(widthErrorMessage));
+
+		soldOrderItem.Height_Fraction__c = '7/8';
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		System.assert(returnMessage.contains(heightErrorMessage));
+		System.assert(returnMessage.contains(widthErrorMessage));
 	
 	}
 
