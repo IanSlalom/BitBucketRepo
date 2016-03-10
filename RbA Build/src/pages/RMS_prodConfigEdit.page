@@ -150,8 +150,11 @@
  			    <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" html-data-jsid="quantity"/>   
                 <apex:outputLabel value="Quantity"></apex:outputLabel>
 
- -->    		<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" disabled="{!mode != 'e'}"/>   
-               <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Unit_Id_Control__c == 'Disabled' || mode != 'e'}"/>
+ -->    		
+ 				<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" rendered="{!mode == 'e'}"/>   
+ 				<apex:outputField value="{!OrderItem.Quantity}" label="Quantity" id="outQuantity" rendered="{!mode != 'e'}"/>   
+               <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled' && mode == 'e'}"/>
+               <apex:outputField value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="outunitId" rendered="{!prodConfig.mpc.Unit_Id_Control__c == 'Disabled' || mode != 'e'}"/>
             	<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 	<apex:selectOptions value="{!frameTypeItems}"/>
             	</apex:selectList>               
@@ -164,19 +167,23 @@
      	       <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="checkrailStyle" >
                 	<apex:selectOptions value="{!checkrailStyleItems}"/>
             	</apex:selectList>
-               <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Width_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
+               <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+               <apex:outputField value="{!OrderItem.Width_Inches__c}" label="Width" id="outWidth" rendered="{!prodConfig.mpc.Width_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
                <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Width_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                   <apex:selectOptions value="{!measurementFractionItems}"/>
                </apex:selectList>
-            <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Height_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
-         	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Height_Fraction_Control__c != 'Disabled'}" >
+            <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputField value="{!OrderItem.Height_Inches__c}" label="Height" id="outHeight" rendered="{!prodConfig.mpc.Height_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
+         	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Height_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputField value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="outrightLegInches" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputField value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="outleftLegInches" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
@@ -186,7 +193,8 @@
             <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Disabled'  || mode != 'e'}"  >
                 <apex:selectOptions value="{!sashRatioItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputField value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="outmfgMullSequence" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!mullSequenceMullionItems}"/>
             </apex:selectList>
@@ -275,10 +283,14 @@
                 <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh2">
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-            <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="customGrilleDetails2" />
-            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" disabled="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Disabled'  || mode != 'e'}"  /> <!-- disabled="true" -->
-            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="customGrilleDetails2" />
+            <apex:outputText value="{!OrderItem.Custom_Grille_Details_S2__c}"  id="outcustomGrilleDetails2" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outcustomGrilleDetails2" />
+            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'  && mode == 'e'}"  /> <!-- disabled="true" -->
+            <apex:outputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="outgrilleAlignment" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Disabled'  || mode != 'e'}"  /> <!-- disabled="true" -->
+            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputText value="{!OrderItem.Hubs__c}" label="Hubs" id="outhubs"  rendered="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:outputText value="{!OrderItem.Spokes__c}" label="Spokes" id="outspokes"  rendered="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" />
 
         </apex:pageBlockSection>
 
@@ -419,6 +431,7 @@
 			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
+            <apex:outputField value="{!OrderItem.Tax__c}" />
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
             <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
