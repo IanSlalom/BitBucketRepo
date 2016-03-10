@@ -120,6 +120,7 @@
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
+        <members>Color_Configuration__c-Color Configuration Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
@@ -132,7 +133,9 @@
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
+        <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
         <members>Global-Global Layout</members>
+        <members>Grille_Pattern_Configuration__c-Grille Pattern Configuration Layout</members>
         <members>Journal_Entry__c-Journal Credit Entry Layout</members>
         <members>Journal_Entry__c-Journal Debit Entry Layout</members>
         <members>Journal_Entry__c-Journal Entry Layout</members>
@@ -173,6 +176,7 @@
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
+        <members>Specialty_Grille_Control__c-Specialty Grille Control Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
