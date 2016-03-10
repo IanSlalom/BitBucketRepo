@@ -47,7 +47,7 @@ public class RMS_prodConfigExtension {
 		ordStat = 'dft';			
 		mode = ApexPages.currentPage().getParameters().get('mode');
 		if (mode == null) mode = 'v';
-		if (mode == 'v') productSelected = true;
+//		if (mode == 'v') productSelected = true;
 		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
@@ -69,6 +69,8 @@ public class RMS_prodConfigExtension {
 					}
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
+					enterProduct();
+
 				}
 		}
 	}
