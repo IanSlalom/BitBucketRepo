@@ -166,10 +166,7 @@
         <editHeading>true</editHeading>
         <label>WARRANTY DETAILS</label>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Warranty_Date_Submitted__c</field>
-            </layoutItems>
+          
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Warranty_Date_Accepted__c</field>
