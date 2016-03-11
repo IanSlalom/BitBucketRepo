@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the owner of a purchase order when the estimated ship date has changed.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Purchase Order Ship Date Change</name>
+    <style>none</style>
+    <subject>Purchase Order Delayed - {!Purchase_Order__c.Name}</subject>
+    <type>text</type>
+</EmailTemplate>

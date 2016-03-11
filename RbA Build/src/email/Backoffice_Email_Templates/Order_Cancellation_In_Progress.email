@@ -1,0 +1,4 @@
+The following order has been set to Cancellation in Progress. Please cancel all activities related to this order.
+
+Name: {!Order.Name}
+Link: {!Order.Link}
