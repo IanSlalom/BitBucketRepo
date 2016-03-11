@@ -165,9 +165,6 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>WARRANTY DETAILS</label>
-        <layoutColumns>
-
-        </layoutColumns>
         <layoutColumns/>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
