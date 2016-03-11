@@ -34,6 +34,8 @@ public class RMS_prodConfigExtension {
 	public String interiorColor {get; set;}	 
 	public String errorOccurred {get; set;}	 
 	public String ordStat {get; set;}	// order status 
+	public String mode {get; set;}	// viewing mode
+	public Id poId {get; set;}	// purchase order linked to the order product
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -43,6 +45,10 @@ public class RMS_prodConfigExtension {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';			
+		mode = ApexPages.currentPage().getParameters().get('mode');
+		if (mode == null) mode = 'v';
+//		if (mode == 'v') productSelected = true;
+		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
 		if (newOrderItem) {
 			newOrderItem = true;
@@ -52,16 +58,19 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
-				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c From OrderItem WHERE Id =: orderLineItem.Id]) {
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, Purchase_Order__c From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
+					poId = orderItem.Purchase_Order__c;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
 					}
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
+					enterProduct();
+
 				}
 		}
 	}
@@ -951,6 +960,16 @@ public class RMS_prodConfigExtension {
 				oiId = orderLineItem.Id;  // used to redirect to correct tab 
 			}
 		}	
+
+		// Check to see if the purchase order has changed and calculate
+		// taxes if so
+		if (poId != orderLineItem.Purchase_Order__c) {
+			String errorMessage = RMS_prodConfigManager.updateTaxes(orderLineItem.Purchase_Order__c);
+			if(!String.isBlank(errorMessage)) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, errorMessage));
+				return null;			
+			} 
+		}
 		// Set this flag back to false so we know it's ok to redirect from javascript
 		errorOccurred = 'false';
 		return null;
@@ -1046,21 +1065,6 @@ public class RMS_prodConfigExtension {
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Custom_Grille_Details_S3__c	= null;
-		}
-		if(newProdConfig.Glazing_Control__c == 'Disabled' || newProdConfig.Glazing_Control__c == null) {
-			oI.Glazing_S1__c = null;	
-			oI.Glazing_S2__c = null;	
-			oI.Glazing_S3__c = null;	
-		}
-		if(newProdConfig.Glass_Pattern_Control__c == 'Disabled' || newProdConfig.Glass_Pattern_Control__c == null) {
-			oI.Glass_Pattern_S1__c = null; 
-			oI.Glass_Pattern_S2__c = null; 
-			oI.Glass_Pattern_S3__c = null; 
-		}
-		if(newProdConfig.Tempered_Control__c == 'Disabled' || newProdConfig.Tempered_Control__c == null) {
-			oI.Tempered_S1__c = false;
-			oI.Tempered_S2__c = false;
-			oI.Tempered_S3__c = false;
 		}
 		
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:

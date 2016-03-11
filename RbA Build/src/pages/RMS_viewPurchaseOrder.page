@@ -170,10 +170,6 @@ function prepareList(parent,child,isSubselectOptional){
 					<apex:column style="width:200px" value="{!oiw.orderItem.Description}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
-					<apex:column style="width:100px" rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Cost</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
 					<apex:column style="width:100px" rendered="{!costPurchaseOrder == false}">
 						<apex:facet name="header">Retail Price</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
@@ -235,7 +231,7 @@ function prepareList(parent,child,isSubselectOptional){
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">
 						<apex:facet name="header">Cost</apex:facet> 
-							<apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
+							<apex:inputField value="{!noi.Unit_Wholesale_Cost__c}" style="width:100px" />
 					</apex:column>
 				</apex:pageBlockTable>				  
 				<apex:commandButton action="{!addProduct}" value="Add {!productText}"/>

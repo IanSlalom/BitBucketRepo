@@ -33,7 +33,6 @@ public with sharing class RMS_salesOrderManager {
 	 		}
 	 	}
 		// only do the following if we have closed won opportunities
-		System.debug('$$$$$$$$$$$$$$$$$$$$ RMS_salesOrderManager.createSalesOrderOnOpportunityClosedWon: closed opp count = ' + closedWonOpportunitiesIds.size());
 		if (closedWonOpportunitiesIds.size() > 0) {
 			// get the quotes, quote line items, quote discounts, quote financing of the sold quote and the primary contact for each close won opportunity
 			List<Quote> soldQuoteList = [select Id, OpportunityId, Pricebook2Id, isSold__c, Name,
@@ -79,7 +78,6 @@ public with sharing class RMS_salesOrderManager {
 				// create the order line items from the quote line items
 				List<OrderItem> oiList = createOrderItems(qliList, newOrders, qliFieldsMap);
 				if (oiList.size() > 0) {
-System.debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$: ' + oiList);
 					insert oiList;
 				}
 

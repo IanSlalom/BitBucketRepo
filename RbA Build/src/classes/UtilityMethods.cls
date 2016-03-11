@@ -24,7 +24,56 @@ public with sharing class UtilityMethods {
 	// Persistant variable used by RecordTypeFor()
 	public static Map<String,Id> masterRTList = new Map<String,Id>();
 
-	
+
+
+	//Cache used by GetRecordTypeIdsMapForSObject method
+	private static Map<Schema.SObjectType,Map<String,Id>> rtypesCache = new Map<Schema.SObjectType,Map<String,Id>>();
+
+	// Returns a map of active, user-available RecordType IDs for a given SObjectType,
+	// keyed by each RecordType's unique, unchanging DeveloperName 
+	public static Map<String, Id> GetRecordTypeIdsMapForSObject(Schema.SObjectType token) {
+	    Map<String, Id> mapRecordTypes = rtypesCache.get(token);
+	    //check if cache contains recordtypes for the object requested
+	    if (mapRecordTypes == null) {
+	        mapRecordTypes = new Map<String, Id>();
+	        rtypesCache.put(token,mapRecordTypes);
+	    } else {
+	       return mapRecordTypes;
+	    }
+
+	    // Get the Describe Result
+	    Schema.DescribeSObjectResult obj = token.getDescribe();
+	    // Obtain ALL Active Record Types for the given SObjectType token
+	    // (We will filter out the Record Types that are unavailable
+	    // to the Running User using Schema information)
+	    String soql = 
+	        'SELECT Id, Name, DeveloperName '
+	        + 'FROM RecordType '
+	        + 'WHERE SObjectType = \'' + String.escapeSingleQuotes(obj.getName()) + '\' '
+	        + 'AND IsActive = TRUE';
+	    List<SObject> results;
+	    try {
+	        results = Database.query(soql);
+	    } catch (Exception ex) {
+	        results = new List<SObject>();
+	    }
+
+	    // Obtain the RecordTypeInfos for this SObjectType token
+	    Map<Id,Schema.RecordTypeInfo> recordTypeInfos = obj.getRecordTypeInfosByID();
+
+	    // Loop through all of the Record Types we found,
+	    //      and weed out those that are unavailable to the Running User
+	    for (SObject rt : results) {  
+	        if (recordTypeInfos.get(rt.Id).isAvailable()) {
+	            // This RecordType IS available to the running user,
+	            //      so add it to our map of RecordTypeIds by DeveloperName
+	            mapRecordTypes.put(String.valueOf(rt.get('DeveloperName')),rt.Id);
+	        }
+	    }
+
+	    return mapRecordTypes;
+	}
+		
 	public static RbA_Work_Order__c buildWorkOrder(Account dwelling, Order ord, Id rtID, Id ownerId, String ordType, Id munici ){
 		RbA_Work_Order__c wo = new RbA_Work_Order__c(
 			Sold_Order__c = ord.id,
@@ -44,7 +93,7 @@ public with sharing class UtilityMethods {
 			OwnerId = ownerId
 			
 		);
-		
+    	
 		if(ord.OpportunityId != null){
     		wo.Opportunity__c = ord.OpportunityId;
 		} 
@@ -211,4 +260,56 @@ public with sharing class UtilityMethods {
 		
 		return errorMessage;
 	} 
+
+	/*******************************************************
+          calculateTaxes method - calculates the tax for po line items
+	*******************************************************/
+	public static List<OrderItem> calculateTaxes(List<OrderItem> allOrderItems, decimal poSubtotal, decimal poTax) {
+		System.Debug('*************in method UtilityMethods->calculateTaxes=');
+
+		// If any of the values are null or less than zero, return
+		if (allOrderItems == null || poSubtotal == null || poTax == null) return null;
+		if (allOrderItems.size() <= 0 || poSubtotal <= 0 || poTax <= 0) return null;
+
+		List<OrderItem> itemsToTax = new List<OrderItem>();
+		List<OrderItem> itemsToReturn = new List<OrderItem>();
+
+		// Find only those order items that have a wholesale amount
+		for (orderItem orderItem : allOrderItems) {
+			if (orderItem.Unit_Wholesale_Cost__c != null && orderItem.Unit_Wholesale_Cost__c > 0) {
+				itemsToTax.add(orderItem);
+			}
+		}
+
+		// If the number of items with wholesale cost is null or zero, return
+		if (itemsToTax == null) return null;
+		integer numberOfItems = itemsToTax.size();
+		if (numberOfItems == 0) return null;
+		integer count = 1;
+		decimal taxRemaining = poTax;
+		
+		for (orderItem itemToTax : itemsToTax) {
+
+			// If we have reached the last item, just set it to the tax remaining
+			if (count == numberOfItems) {
+				itemToTax.Tax__c = taxRemaining;
+			} 
+			else {
+				// multiple the total tax times the percentage of this item's 
+				// wholesale cost to the po's subtotal
+				itemToTax.Tax__c = poTax * ((itemToTax.Unit_Wholesale_Cost__c*itemToTax.Quantity) / poSubtotal);
+			}
+			itemsToReturn.add(itemToTax);
+
+			// Increase the loop count and update the tax remaining to be applied
+			count++;
+			taxRemaining = taxRemaining - itemToTax.Tax__c;
+		}
+
+		// If we didn't apply all of the tax, add an error
+		if (taxRemaining != 0)
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'There was a problem calculating the tax per line item. Please contact your administrator.'));
+		return itemsToReturn;
+
+	}
 }

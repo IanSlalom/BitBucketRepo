@@ -13,6 +13,7 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String GET_APPOINTMENTS = 'getAppointments';
 	public static final String RESULT_APPOINTMENTS = 'resultSalesAppointments';
 	public static final String TIME_STAMP_KEY = 'TS';
+	public static final String CREATE_CONTACT = 'createContact';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
@@ -22,6 +23,7 @@ global with sharing class RMS_mobileAppAPIController {
 	@HttpGet
     global static void doGet() {
 		try {
+//TODO: add api versioning
 			RestRequest req = RestContext.request;
 			String temp = req.requestURI.substringAfter('/');
 			temp = temp.substringAfter('/');
@@ -49,7 +51,7 @@ global with sharing class RMS_mobileAppAPIController {
 			}
 		} catch (Exception e) {
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandeld Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doGet: Unhandled exception: ' + e);
 		}
     }
@@ -73,13 +75,17 @@ global with sharing class RMS_mobileAppAPIController {
 				// lets handle the processed result
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
-			} else {
+			} else if (operation.equals(CREATE_CONTACT)){
+				String result = RMS_mobileAppContactHelper.saveNewContact(req.requestBody.toString());
+				RestContext.response.addHeader('Content-Type', 'application/json');
+				RestContext.response.responseBody = Blob.valueOf(result);
+			}else {
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 			}
 		} catch (Exception e) {
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandeld Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doPost: Unhandled exception: ' + e);
 		}
     }
@@ -92,7 +98,7 @@ global with sharing class RMS_mobileAppAPIController {
 			RestContext.response.responseBody = Blob.valueOf('patch');
 		} catch (Exception e) {
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandeld Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doPatch: Unhandled exception: ' + e);
 		}
     }
@@ -105,7 +111,7 @@ global with sharing class RMS_mobileAppAPIController {
 			RestContext.response.responseBody = Blob.valueOf('delete');
 		} catch (Exception e) {
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandeld Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doDelete: Unhandled exception: ' + e);
 		}
     }

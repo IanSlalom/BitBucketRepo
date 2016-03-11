@@ -40,7 +40,7 @@ public with sharing class RMS_prodConfigRedirectExtension {
 			 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_NOT_FOUND));
 			 return null;
 		}
-		PageReference p = new PageReference('/apex/rms_ProdConfigEdit2?oid=' +theOrder.Id +'&pid=' +theOrder.Pricebook2Id);
+		PageReference p = new PageReference('/apex/rms_ProdConfigEdit?oid=' +theOrder.Id +'&pid=' +theOrder.Pricebook2Id);
 		return p;
 	}
 	

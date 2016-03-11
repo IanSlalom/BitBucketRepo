@@ -34,4 +34,29 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
 	}
+
+	static testmethod void testResultSalesAppointments(){
+		
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigsMark();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+		// setup configuration stuff
+//		Datetime existingApptTime = Datetime.newInstance(2016, 1, 10, 8, 0, 0);
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+//		tUtil.createSalesAppt(u.Id, existingApptTime, true);
+		tUtil.createSalesAppt(u.Id, newApptTime, false);
+		tUtil.createTMAppt(u.Id, tmApptTime);
+        System.runAs(u) {
+			Test.startTest();
+        	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
+			String jsonResult = mHelper.resultSalesAppointments(u.Id, '');
+			Test.stopTest();
+			System.debug('###################################### ' + jsonResult);
+			System.assert(jsonResult.startsWith('{"tmAppts":'));
+        }
+	}
 }
