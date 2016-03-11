@@ -122,6 +122,7 @@
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
+        <members>Change_History__c-Change History Layout</members>
         <members>Color_Configuration__c-Color Configuration Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
