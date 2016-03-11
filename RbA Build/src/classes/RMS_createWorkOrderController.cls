@@ -16,7 +16,7 @@ public with sharing class RMS_createWorkOrderController {
 	public string woId{get;set;}
 	public string woName{get;set;}
 	public string billToContactId{get;set;}
-	
+	public string storeId{get;set;}
 	
 	public string woRTid;
 
@@ -31,6 +31,7 @@ public with sharing class RMS_createWorkOrderController {
 		map<string, string> urlParam = ApexPages.currentPage().getParameters();
 
 		orderId = urlParam.get('orderId');
+		storeId = urlParam.get('storeId');
 		accountId = urlParam.get('accountId');
 		shippingStreet = urlParam.get('shippingStreet');
 		shippingCity = urlParam.get('shippingCity');
@@ -47,6 +48,9 @@ public with sharing class RMS_createWorkOrderController {
 		historical = urlParam.get('historical');
 		
 		woName = wo.Name;
+		list<id> storeList = new list<id>{storeId};
+		map<Id, Store_Configuration__c> storeIdToStoreConfigMap = UtilityMethods.mapStoreConfigs(storeList);
+		Store_Configuration__c storeConfig = storeIdToStoreConfigMap.get(storeId);
 		
 		if(woType == 'visit'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
@@ -59,7 +63,11 @@ public with sharing class RMS_createWorkOrderController {
 			wo.RecordTypeId = woRTid;
 		}else if(woType == 'paintStain'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'RbA_Work_Order__c');
-			wo.RecordTypeId = woRTid; 
+			wo.RecordTypeId = woRTid;
+			if(storeConfig != null && storeConfig.Paint_Stain_Vendor_Account__c != null && storeConfig.Paint_Stain_Vendor_Contact__c != null){
+	        	wo.Vendor__c = storeConfig.Paint_Stain_Vendor_Account__c;
+	        	wo.Vendor_Contact__c = storeConfig.Paint_Stain_Vendor_Contact__c;
+        	} 
 		}else if(woType == 'permit'){
 			woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
 			wo.RecordTypeId = woRTid;

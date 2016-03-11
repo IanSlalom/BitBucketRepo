@@ -28,7 +28,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
                 dwellingStoreLocationIds.add(dwelling.Store_Location__c);
             }
-            
+             
             //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
             map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
         	
@@ -167,7 +167,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
         Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
-        
+        Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
         
         list<Id> relatedAccountIds = new list<Id>();
         list<id> relatedOpportunityIds = new list<id>();
@@ -178,7 +178,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             	system.debug('****** order: '+o);
                 if(o.OpportunityId != null){
                     relatedOpportunityIds.add(o.OpportunityId);
-                }  
+                } 
         } 
         
         list<Account> relatedAccounts = [SELECT ShippingStreet,
@@ -237,7 +237,9 @@ public with sharing class RMS_WorkOrderCreationManager {
 	                workOrdersToAdd.add(wo);
 	            }
 	            
-            
+            //CHECK THE RECORD TYPE IS CORO SERVICE, IF IT IS, SKIP LOGIC
+            }else if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+            	continue;
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
     			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue

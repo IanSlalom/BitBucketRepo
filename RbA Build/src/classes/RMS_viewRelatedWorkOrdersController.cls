@@ -89,7 +89,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		Schema.DescribeSObjectResult r = RbA_Work_Order__c.sObjectType.getDescribe();
 		String workOrderKeyPrefix = r.getKeyPrefix();
 		
-		list<Order> theOrd = [SELECT Id, AccountId, OrderNumber, OpportunityId, BillToContactId FROM Order WHERE Id =:ordId ];
+		list<Order> theOrd = [SELECT Id, AccountId, Store_Location__c, OrderNumber, OpportunityId, BillToContactId FROM Order WHERE Id =:ordId ];
 		
 		list<Account> relatedAccount = [SELECT 	Name,
 												ShippingStreet,
@@ -128,6 +128,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		*/					
 											
 		String endURL =						'&orderId='+Ord.Id+
+											'&storeId='+theOrd[0].Store_Location__c+
 											'&accountId='+relatedAccount[0].Id+
 											'&shippingStreet='+relatedAccount[0].ShippingStreet+
 											'&shippingCity='+relatedAccount[0].ShippingCity+

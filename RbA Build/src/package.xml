@@ -9,6 +9,7 @@
         <members>OrderTriggerHandlerTest</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
+        <members>RMS_OrderItemManager</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_backOfficeChecklistManager</members>
@@ -78,6 +79,7 @@
         <members>AssetTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
+        <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <members>RbAWorkOrderTrigger</members>
@@ -139,6 +141,7 @@
         <members>Municipality__c-HOA%2FHistorical Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
+        <members>Order-CORO Service Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>

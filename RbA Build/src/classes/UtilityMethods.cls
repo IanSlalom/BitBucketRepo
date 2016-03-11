@@ -52,7 +52,7 @@ public with sharing class UtilityMethods {
     	return wo;
     	 
     }
-    
+     
 	public static map<Id, Store_Configuration__c> mapStoreConfigs(list<id> storeIds){
     	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
 
@@ -65,7 +65,9 @@ public with sharing class UtilityMethods {
     															Historical_Work_Order_Queue_Id__c,
     															Building_Permit_Work_Order_Queue_Id__c,
     															LSWP_WO_Owner_ID__c,
-    															Location_Number__c
+    															Location_Number__c,
+    															Paint_Stain_Vendor_Account__c,
+    															Paint_Stain_Vendor_Contact__c
     															
     															FROM Store_Configuration__c 
     															WHERE Store__c IN :storeIds
