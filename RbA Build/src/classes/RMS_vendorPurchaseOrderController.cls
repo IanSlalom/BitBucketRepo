@@ -36,6 +36,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   //public variables used in both new and edit PO
   public Order relatedOrder;
   public List<OrderItem> relatedOrderItems = new List<OrderItem>();
+  public Set<Id> unassignedProductIds = new Set<Id>();
   public list<Id> relatedProduct2IDList = new list<Id>();
   public List<Product2> relatedProducts = new List<Product2>();
   public list<Account> vendorsOnOrder = new list<Account>();
@@ -156,6 +157,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     set;
   }
+
+  // The list of vendor records associated with the store
+  public List<Account> storeVendorRecords
+  {
+    get
+    {
+      if ( storeVendorRecords != null) return storeVendorRecords;
+      if (storeVendors == null) return null;
+      storeVendorRecords = new List<Account>();
+      for (Account a : [SELECT Id, Name from Account Where Id IN : storeVendors]) {
+        storeVendorRecords.add(a);
+      }
+      
+
+      return storeVendorRecords;
+    }
+    set;
+  }
+
+
 
   // The set of products ids associated with the selected vendor
   public Set<Id> vendorProducts
@@ -404,29 +425,29 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
-                    Order.Store_Location__c
-                    FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
+                    Order.Store_Location__c, Purchase_Order__c
+                    FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
-	System.Debug('************relatedOrderItems=' +relatedOrderItems);
     // If there are related order items
-    if (relatedOrderItems != null) {
+    if (!relatedOrderItems.isEmpty()) {
+	System.Debug('************relatedOrderItems=' +relatedOrderItems);
 
       //USING ORDER ITEMS GET ALL PRODUCTS
       for(OrderItem oi: relatedOrderItems){
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
+		if (oi.Purchase_Order__c == null) unassignedProductIds.add(oi.Pricebookentry.Product2Id);
       }
       relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
         
-      //USING PRODUCTS GET LIST OF ALL VENDORS
+      //Create a map of the related products
       for(Product2 p : relatedProducts){
         productIdToProductMap.put(p.id, p);
       }
 
-
-      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
-      for(Account a : vendorsOnOrder){
+//      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
+      for(Account a : storeVendorRecords){
         accountIdToAccountMap.put(a.id, a);
       }
 	  // Create a map of product Ids to their list of vendors
@@ -441,8 +462,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
 			productVendorMap.put(vp.Product__c, vendors);			
 		}
+		if(unassignedProductIds.contains(vp.Product__c))
+			vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
       }
         
+	System.Debug('************productVendorMap=' +productVendorMap);
       //USING MAPS TO CREATE WRAPPERS
       for(OrderItem oi : relatedOrderItems){
         Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
@@ -520,7 +544,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     for(OrderItemWrapper oiw : orderItemWrapperList){
       system.debug('ADS oiw: '+oiw);
       if(oiw.account != null && oiw.account.id == selectedVendor && vendorProducts.contains(oiw.product.id) ){
-        orderItemWrapperByVendor.add(oiw);
+		// Only include in the orderitemwrapperbyvendor if this is a new purchase order
+		// and the order item hasn't been assigned to an order
+		if (newPurchaseOrder && oiw.orderItem.Purchase_Order__c == null)
+        	orderItemWrapperByVendor.add(oiw);
+		// Or include if this is an existing purchase order
+		// and the order item has been assigned to the current purchase order
+        else if (!newPurchaseOrder && oiw.orderItem.Purchase_Order__c == po.Id)
+        	orderItemWrapperByVendor.add(oiw);
       }
     }
     system.debug('ADS orderItemsByVendor: '+orderItemWrapperByVendor);

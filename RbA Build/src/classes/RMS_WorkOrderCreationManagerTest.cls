@@ -165,7 +165,7 @@ public with sharing class RMS_WorkOrderCreationManagerTest {
 
 		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id, Work_Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
 		system.debug('ads remove relatedWorkOrders1: '+relatedWorkOrders);
-		ord2.Status = 'Activated';
+		ord2.Status = 'Tech Measure Needed';
 		update ord2;
 		
 		relatedWorkOrders = [SELECT id, Work_Order_Type__c FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord2.id];
