@@ -9,6 +9,7 @@
         <members>OrderTriggerHandlerTest</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
+        <members>RMS_OrderItemManager</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_backOfficeChecklistManager</members>
@@ -82,6 +83,7 @@
         <members>AssetTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
+        <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <members>RbAWorkOrderTrigger</members>
@@ -112,6 +114,12 @@
         <name>CustomTab</name>
     </types>
     <types>
+        <members>Backoffice_Email_Templates</members>
+        <members>Backoffice_Email_Templates/Order_Cancellation_In_Progress</members>
+        <members>Backoffice_Email_Templates/Purchase_Order_Ship_Date_Change</members>
+        <name>EmailTemplate</name>
+    </types>
+    <types>
         <members>Account-Account Layout</members>
         <members>Account-Contractor Layout</members>
         <members>Account-Dwelling Layout</members>
@@ -120,6 +128,8 @@
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
+        <members>Change_History__c-Change History Layout</members>
+        <members>Color_Configuration__c-Color Configuration Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
         <members>Contact-Customer Contact Layout</members>
@@ -132,7 +142,9 @@
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
+        <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
         <members>Global-Global Layout</members>
+        <members>Grille_Pattern_Configuration__c-Grille Pattern Configuration Layout</members>
         <members>Journal_Entry__c-Journal Credit Entry Layout</members>
         <members>Journal_Entry__c-Journal Debit Entry Layout</members>
         <members>Journal_Entry__c-Journal Entry Layout</members>
@@ -144,6 +156,7 @@
         <members>Municipality__c-HOA%2FHistorical Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
+        <members>Order-CORO Service Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
@@ -173,6 +186,7 @@
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
+        <members>Specialty_Grille_Control__c-Specialty Grille Control Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
         <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
@@ -197,6 +211,7 @@
         <members>Discount__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
+        <members>Order</members>
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
         <members>Store_Finance_Program__c</members>

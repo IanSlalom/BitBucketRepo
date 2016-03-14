@@ -118,7 +118,7 @@
 							<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 							</apex:column>
 							<apex:column headerValue="Product">  
-								<a href="#" onClick="openSubtab('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 
+								<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 
 							</apex:column>
 		       				<apex:column value="{!item.Purchase_Order__c}"/>
 		      				<apex:column value="{!item.Quantity}"/>

@@ -1004,9 +1004,46 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Exterior_Color__c</fields>
+        <fields>Interior_Color__c</fields>
+        <relatedList>Color_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
         <fields>EJ_Species__c</fields>
         <fields>EJ_Color__c</fields>
         <relatedList>EJ_Color_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Glazing__c</fields>
+        <fields>Sash_Ratio__c</fields>
+        <fields>Max_Width_Inches__c</fields>
+        <fields>Max_Width_Fraction__c</fields>
+        <fields>Max_Height_Inches__c</fields>
+        <fields>Max_Height_Fraction__c</fields>
+        <relatedList>Glazing_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Grille_Pattern__c</fields>
+        <fields>Sash_Ratio__c</fields>
+        <fields>Min_Width_Inches__c</fields>
+        <fields>Min_Width_Fraction__c</fields>
+        <fields>Min_Height_Inches__c</fields>
+        <fields>Min_Height_Fraction__c</fields>
+        <relatedList>Grille_Pattern_Configuration__c.Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Specialty_Shape__c</fields>
+        <fields>Grille_Pattern__c</fields>
+        <fields>Grille_Style__c</fields>
+        <fields>Lites_Wide__c</fields>
+        <fields>Lites_High__c</fields>
+        <fields>Hubs__c</fields>
+        <fields>Spokes__c</fields>
+        <relatedList>Specialty_Grille_Control__c.Product_Configuration__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

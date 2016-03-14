@@ -1,0 +1,5 @@
+The following purchase order's estimated ship date has changed. Please take any actions if necessary.
+
+Name: {!Purchase_Order__c.Name}
+Estimated Ship Date: {!Purchase_Order__c.Estimated_Ship_Date__c}
+Link: {!Purchase_Order__c.Link}

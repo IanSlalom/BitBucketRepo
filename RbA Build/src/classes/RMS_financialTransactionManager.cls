@@ -438,6 +438,8 @@ public with sharing class RMS_financialTransactionManager {
     public void createOrUpdateJournalEntryAsset(list<Asset> listNew, map<id, Asset> mapNew, map<id, Asset> mapOld, String triggerType ){    
         Id assetInstalledProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
+        list<Journal_Entry__c> journalEntriesToDelete = new list<Journal_Entry__c>();
+        
         list<Asset> extraFieldsList = [SELECT       id,
                                                     Unit_Wholesale_Cost__c,
                                                     Quantity,
@@ -445,40 +447,116 @@ public with sharing class RMS_financialTransactionManager {
                                                     Sold_Order__r.BillToContactId,
                                                     Sold_Order__r.Store_Location__c,
                                                     RecordTypeId,
-                                                    Store_Location__c
+                                                    Store_Location__c,
+                                                    Quantity_Written_Off__c
                                                     
                                                     FROM Asset WHERE Id IN :mapNew.keyset() AND RecordTypeId = :assetInstalledProductsRecordTypeId];        
         
+        
         map<Id, list<Journal_Entry__c>> assetIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
+        system.debug('ads: assetIdToJournalEntryMap: '+assetIdToJournalEntryMap);
+        map<Id, list<Journal_Entry__c>> assetIdToInventoryReceivedJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
+        map<Id, list<Journal_Entry__c>> assetIdToInventoryWriteOffJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
+        
+        for(id assetId : assetIdToJournalEntryMap.keySet()){
+        	for(Journal_Entry__c je : assetIdToJournalEntryMap.get(assetId) ){
+	        	if(je.Type__c == 'Inventory Received'){
+	        		system.debug('ads inside inventory recived loop: '+je);
+        		    if(assetIdToInventoryReceivedJournalEntryMap.containsKey(je.Asset__c) ){
+	                    assetIdToInventoryReceivedJournalEntryMap.get(je.Asset__c).add(je);
+	                }else{
+	                	assetIdToInventoryReceivedJournalEntryMap.put(je.Asset__c, new list<Journal_Entry__c>{je});
+	                }
+	        	}else if(je.Type__c == 'Inventory Write-Off'){
+	        		 if(assetIdToInventoryWriteOffJournalEntryMap.containsKey(je.Asset__c) ){
+	                    assetIdToInventoryWriteOffJournalEntryMap.get(je.Asset__c).add(je);
+	                }else{
+	                	assetIdToInventoryWriteOffJournalEntryMap.put(je.Asset__c, new list<Journal_Entry__c>{je});
+	                }
+	        	}
+        	}
+        }
+        
+         system.debug('ads: assetIdToInventoryReceivedJournalEntryMap: '+assetIdToInventoryReceivedJournalEntryMap);
+          system.debug('ads: assetIdToInventoryWriteOffJournalEntryMap: '+assetIdToInventoryWriteOffJournalEntryMap);
+		
         map<Id, list<Financial_Transaction__c>>  assetIdToInventoryReceivedFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Inventory Received');
+        map<Id, list<Financial_Transaction__c>>  assetIdToInventoryWriteOffFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Inventory Write-Off');
         
         for(Asset a : extraFieldsList){
                 string errorMessage;
+                string assetType;
                 if(a.Store_Location__c == null ){ 
                     errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
                 }
-                    
+				if(	mapOld != null && 
+					mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c){
+						assetType = 'InventoryWriteOff';
+				}else{
+                	assetType = 'InventoryRecived';
+                }
+               
+                system.debug('ads assetType: '+ assetType); 
+               
                 errorMessage = checkAssetForErrors(a, errorMessage);
-                errorMessage = checkFinacialTransationForErrors(assetIdToInventoryReceivedFinacialTransactionList.get(a.id) , errorMessage, 'Inventory Received');
+                
+                if(assetType == 'InventoryRecived'){
+	                errorMessage = checkFinacialTransationForErrors(assetIdToInventoryReceivedFinacialTransactionList.get(a.id) , errorMessage, 'Inventory Received');
+                }else if(assetType == 'InventoryWriteOff'){
+                	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffFinacialTransactionList.get(a.id) , errorMessage, 'Inventory Write-Off');
+                }
+                
+                //IF VALUES ARE NULL THEN SET THEM TO 0
+                
+          		decimal oldQuantity = 0;
+          		if(mapOld != null && mapOld.get(a.id).Quantity != null){
+          			oldQuantity = mapOld.get(a.id).Quantity;
+          		}
+                decimal newQuantity = 0;
+                if(mapNew != null && mapNew.get(a.id).Quantity != null){
+                	newQuantity = mapNew.get(a.id).Quantity;
+                }
+                decimal oldQuantityWrittenOff = 0;
+                if(mapOld != null && mapOld.get(a.id).Quantity_Written_Off__c != null){
+                	oldQuantityWrittenOff = mapOld.get(a.id).Quantity_Written_Off__c;
+                } 
+                decimal newQuantityWrittenOff = 0;
+                if(mapNew != null && mapNew.get(a.id).Quantity_Written_Off__c != null){
+                	newQuantityWrittenOff = mapNew.get(a.id).Quantity_Written_Off__c;
+                }
+               
                 
                 //NO RELATED JOURNAL ENTRIES CREATE JOURNAL
-                if(assetIdToJournalEntryMap.get(a.id) == null || assetIdToJournalEntryMap.get(a.id).size() == 0 ){
+                if( (assetType == 'InventoryRecived' && (assetIdToInventoryReceivedJournalEntryMap.get(a.id) == null || assetIdToInventoryReceivedJournalEntryMap.get(a.id).size() == 0)) 
+                	||
+                	(assetType == 'InventoryWriteOff' && (assetIdToInventoryWriteOffJournalEntryMap.get(a.id) == null || assetIdToInventoryWriteOffJournalEntryMap.get(a.id).size() == 0)) 
+                ){
+                
+                    
                     if(errorMessage == null || errorMessage == ''){
-                        Journal_Entry__c newJE = new Journal_Entry__c(
-                            Date__c = Datetime.Now(),
-                            Type__c = 'Inventory Received',
-                            Asset__c = a.id,
-                            Order__c = a.Sold_Order__c,
-                            Customer__c = a.Sold_Order__r.BillToContactId,
+                        Journal_Entry__c newJE = new Journal_Entry__c();
+                            newJE.Date__c = Datetime.Now();
+                            newJE.Asset__c = a.id;
+                            newJE.Order__c = a.Sold_Order__c;
+                            newJE.Customer__c = a.Sold_Order__r.BillToContactId;
 
-                            Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name,
-                            Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name
-                            );
-                            
-                            
-                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
-                        
-                        
+							if(assetType == 'InventoryRecived'){
+	                            newJE.Type__c = 'Inventory Received';
+	                            newJE.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+	                            newJE.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+	                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+							}else if(assetType == 'InventoryWriteOff'){
+								newJE.Type__c = 'Inventory Write-Off';
+	                            newJE.Debit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+	                            newJE.Credit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+		
+								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
+							}
+							
+							if(newJE.Amount__c < 0){
+                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
+                          	}
+        
                         journalEntriesToUpsert.add(newJE);
                     }else{
                         //there is an error message
@@ -489,13 +567,26 @@ public with sharing class RMS_financialTransactionManager {
                     if(errorMessage == null || errorMessage == ''){
                         list<Journal_Entry__c> jeListSentToBaan = new list<Journal_Entry__c>();
                         list<Journal_Entry__c> jeListNotSentToBaan = new list<Journal_Entry__c>();
-                        for(Journal_Entry__c je : assetIdToJournalEntryMap.get(a.id)){
-                            if(je.Sent_to_BaanERP__c == true){
-                                jeListSentToBaan.add(je);
-                            }else if(je.Sent_to_BaanERP__c == false){
-                                jeListNotSentToBaan.add(je);
-                            }   
+                        if(assetType == 'InventoryRecived'){
+	                        for(Journal_Entry__c je : assetIdToInventoryReceivedJournalEntryMap.get(a.id)){
+	                            if(je.Sent_to_BaanERP__c == true){
+	                                jeListSentToBaan.add(je);
+	                            }else if(je.Sent_to_BaanERP__c == false){
+	                                jeListNotSentToBaan.add(je);
+	                            }   
+	                        }
+                        }else if(assetType == 'InventoryWriteOff'){
+	                        for(Journal_Entry__c je : assetIdToInventoryWriteOffJournalEntryMap.get(a.id)){
+	                            if(je.Sent_to_BaanERP__c == true){
+	                                jeListSentToBaan.add(je);
+	                            }else if(je.Sent_to_BaanERP__c == false){
+	                                jeListNotSentToBaan.add(je);
+	                            }   
+	                        }
                         }
+                        
+                        system.debug('ads jeListSentToBaan: ' + jeListSentToBaan);
+                        system.debug('ads jeListNotSentToBaan: ' + jeListNotSentToBaan);
                         
                         // More than 1 JE not sent to BAAN
                         // Error out
@@ -506,55 +597,106 @@ public with sharing class RMS_financialTransactionManager {
                         // All but 1 JE sent to BAAN
                         // then update that existing journal entry. The amount should be equal to --- 'Old Journal Entry->Amount + ( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
                         else if(jeListNotSentToBaan.size() == 1){
-                            decimal OldQuantity = mapOld.get(a.id).Quantity;
-                            decimal NewQuantity = mapNew.get(a.id).Quantity;
-                             
                             Journal_Entry__c je = jeListNotSentToBaan[0];
                             je.Date__c = Datetime.Now();
-                            je.Type__c = 'Inventory Received';
                             je.Asset__c = a.id;
                             je.Order__c = a.Sold_Order__c;
                             je.Customer__c = a.Sold_Order__r.BillToContactId;
+							
+							if(assetType == 'InventoryRecived'){
+	                            je.Type__c = 'Inventory Received';
+	                            
+	                            if(jeListSentToBaan.size() == 0){
+	                                je.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+		                            je.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+		                            je.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+		                            
+	                            }else{
+	                            	
+	                            	//CHECKING IF JE.AMOUNT SHOULD BE CALCULATED AS A NEGITIVE AMOUNT 
+	                            	system.debug('ads je.Debit_General_Ledger_Account__c: '+je.Debit_General_Ledger_Account__c);
+	                            	system.debug('ads je.Credit_General_Ledger_Account__c: '+je.Credit_General_Ledger_Account__c);
+	                            	if(	je.Debit_General_Ledger_Account__c == assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name && 
+	                            		je.Credit_General_Ledger_Account__c == assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name){
+	                            			system.debug('ads changing to negative amount: '+je.Amount__c);
+	                            			je.Amount__c = je.Amount__c*-1;
+	                            	}
+	                            	
+	                            	
+	                                if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) > 0){
+	                                    je.Amount__c = je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
+	                                    je.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+	                           			je.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+	                            
+	                                }else if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) == 0){
+	                                	journalEntriesToDelete.add(je);
+	                                }else{
+	                                	je.Amount__c = Math.abs(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c));
+	                                    je.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+	                           			je.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+	                            
+	                                }   
+	                            }
+							}
+							else if(assetType == 'InventoryWriteOff'){
+								je.Type__c = 'Inventory Write-Off';
+	                            je.Debit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+	                            je.Credit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+								je.Amount__c = (jeListNotSentToBaan[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
+								
+								if(je.Amount__c < 0){
+	                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
+	                          	}   
+								
+								if(je.Amount__c == 0){
+									journalEntriesToDelete.add(je);
+								}
+							} 
 
-                            je.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
-                            je.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
-                            
-                            if(jeListSentToBaan.size() == 0){
-                                je.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
-                            }else{
-                                //CHECK THAT WOULD NOT RESULT IN NEGATIVE FINACNCIAL TRANSACTION
-                                if(je.Amount__c + ((NewQuantity-OldQuantity) * a.Unit_Wholesale_Cost__c) > 0){
-                                    je.Amount__c = je.Amount__c + ((NewQuantity-OldQuantity) * a.Unit_Wholesale_Cost__c);
-                                }else{
-                                    mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
-                                }   
-                            }
                             journalEntriesToUpsert.add(je);
                         }
                         
                         // All related JE sent to BAAN
                         //then create a new journal entry IF the quantity has changed. The amount should be equal to --- '( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
                         else if(jeListNotSentToBaan.size() == 0){
-                            decimal OldQuantity = mapOld.get(a.id).Quantity;
-                            decimal NewQuantity = mapNew.get(a.id).Quantity;
-                            if(OldQuantity != NewQuantity){
-                                Journal_Entry__c newJE = new Journal_Entry__c(
-                                    Date__c = Datetime.Now(),
-                                    Type__c = 'Inventory Received',
-                                    Asset__c = a.id,
-                                    Order__c = a.Sold_Order__c,
-                                    Customer__c = a.Sold_Order__r.BillToContactId,
-        
-                                    Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name,
-                                    Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name
-                                );
+                        	system.debug('ads old Quantity: '+oldQuantity);
+                            if(oldQuantity != newQuantity || oldQuantityWrittenOff != newQuantityWrittenOff){
+                                Journal_Entry__c newJE = new Journal_Entry__c( );
+        						newJE.Date__c = Datetime.Now();
+	                            newJE.Asset__c = a.id;
+	                            newJE.Order__c = a.Sold_Order__c;
+	                            newJE.Customer__c = a.Sold_Order__r.BillToContactId;
+	        						
+								if(assetType == 'InventoryRecived'){
+		                            newJE.Type__c = 'Inventory Received';
+		                            newJE.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+		                            newJE.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+		                            
+		                       		if(newQuantity > oldQuantity){
+                                    	newJE.Amount__c = (newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c;
+                                    	newJE.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+		                            	newJE.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+		                            
+	                                }else if (newQuantity < oldQuantity){
+	                                    newJE.Amount__c = Math.abs((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
+                                    	newJE.Debit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name; 
+		                            	newJE.Credit_General_Ledger_Account__c = assetIdToInventoryReceivedFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;  
+	                                }
+		                     
+								}else if(assetType == 'InventoryWriteOff'){
+									newJE.Type__c = 'Inventory Write-Off';
+		                            newJE.Debit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Debit_Account_Number__r.Name;
+		                            newJE.Credit_General_Ledger_Account__c = assetIdToInventoryWriteOffFinacialTransactionList.get(a.id)[0].Credit_Account_Number__r.Name;
+									newJE.Amount__c = (mapNew.get(a.id).Quantity_Written_Off__c - mapOld.get(a.id).Quantity_Written_Off__c) * a.Unit_Wholesale_Cost__c;
+								
+	                                //CHECK THAT WOULD NOT RESULT IN NEGATIVE FINACNCIAL TRANSACTION
+									if(newJE.Amount__c < 0){
+		                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
+		                          	}
+								}
+        				 
                                 
-                                //CHECK THAT WOULD NOT RESULT IN NEGATIVE FINACNCIAL TRANSACTION
-                                if(NewQuantity > OldQuantity){
-                                    newJE.Amount__c = (NewQuantity-OldQuantity) * a.Unit_Wholesale_Cost__c;
-                                }else{
-                                    mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
-                                }
+                               
                                 journalEntriesToUpsert.add(newJE);  
                             }
                         }
@@ -567,6 +709,9 @@ public with sharing class RMS_financialTransactionManager {
         }//END OF ASSET FOR LOOP
         system.debug('ads journalEntriesToUpsert: '+journalEntriesToUpsert);
         upsert journalEntriesToUpsert;
+        if(journalEntriesToDelete != null){
+        	delete journalEntriesToDelete;
+        }
     }//END createOrUpdateJournalEntryAsset Method
 
 
@@ -1222,7 +1367,9 @@ public with sharing class RMS_financialTransactionManager {
                                                                 Type__c,
                                                                 Customer__c,
                                                                 Amount__c,
-                                                                Baan_Business_Partner_Number__c
+                                                                Baan_Business_Partner_Number__c,
+                                                                Debit_General_Ledger_Account__c,
+                                                                Credit_General_Ledger_Account__c
                                                                 FROM Journal_Entry__c WHERE Payment__c IN :idList 
                                                                                         OR Labor__c IN :idList 
                                                                                         OR Asset__c IN :idList 
@@ -1321,6 +1468,8 @@ public with sharing class RMS_financialTransactionManager {
         system.debug('ads paymentIdToListFinancialTransaction: '+paymentIdToListFinancialTransaction);
         return paymentIdToListFinancialTransaction;
     }
+    
+  
     
 
         

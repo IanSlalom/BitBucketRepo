@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the owner of an order when an order has been set to cancellation in progress.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Order Cancellation In Progress</name>
+    <style>none</style>
+    <subject>Cancellation in Progress - {!Order.Name}</subject>
+    <type>text</type>
+</EmailTemplate>

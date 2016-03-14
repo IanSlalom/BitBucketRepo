@@ -15,12 +15,12 @@
 ***********************************************************/
 public with sharing class RMS_viewOrderProductsController {
 
-    public final Order order;
+    public final Order ord;
     public Map<Id,OrderItem> orderItems {get;set;}
-    public Map<Id,List<OrderItem>> relatedOrderItems{get;set;} 
     public List<OrderItemWrapper> orderItemWrappers{get;set;}
     public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');
     public Id miscJobId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Misc_Job_and_Unit_Charges');
+    public Id serviceOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Service');
     public String baseURL{get;set;}
     public String reportURL{get;set;}
     public String addProductURL{get;set;}
@@ -28,18 +28,18 @@ public with sharing class RMS_viewOrderProductsController {
 
     public RMS_viewOrderProductsController(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'PriceBook2Id'});
+            stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         }
-        this.order = (Order)stdController.getRecord();
+        this.ord = (Order)stdController.getRecord();
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
                          Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice 
                          from OrderItem 
-                         where OrderId =: order.Id 
+                         where OrderId =: ord.Id 
                          and PricebookEntry.Product2.RecordTypeId =: masterProductId]);
 
-        relatedOrderItems = new Map<Id,List<OrderItem>>();
+        Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
         for(OrderItem oi: [select Id, PricebookEntry.Product2Id,  PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
                          Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c 
                          from OrderItem 
@@ -64,8 +64,13 @@ public with sharing class RMS_viewOrderProductsController {
         if(installMatReport.size()>0){
             reportId = installMatReport[0].Id;
         }
-        reportURL = '/'+reportId+'?pv0='+String.ValueOf(order.Id).substring(0,15)+'&pv1=Construction_Materials';
-        addProductURL = '/apex/rms_ProdConfigEdit?oid='+order.Id+'&pid='+order.Pricebook2Id+'&mode=e';
+        reportURL = '/'+reportId+'?pv0='+String.ValueOf(ord.Id).substring(0,15)+'&pv1=Construction_Materials';
+        if(ord.RecordTypeId == serviceOrderId){
+            addProductURL = '/apex/rms_createServiceOrder2?id=' + ord.Id;
+        }else{
+            addProductURL = '/apex/rms_ProdConfigEdit?oid='+ord.Id+'&pid='+ord.Pricebook2Id +'&mode=e';
+        }
+        
 
     }
 

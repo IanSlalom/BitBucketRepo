@@ -54,6 +54,22 @@ public with sharing class RMS_errorMessages {
  	public static final String GRILLE_STYLE_SHAPE_PATTERN = '&bull; This combination of specialty shape, grille pattern, and grille type is not valid. Please try again.';
  	public static final String GRILLE_HUBS_SPOKES = '&bull; The combination of Hubs/Spokes are not valid for this specialty shape, grille style, and type.';
  	public static final String GRILLE_LITES = '&bull; The combination of Lites High/Wide are not valid for this specialty shape, grille style, and type.';
+ 	public static final String COLOR_EXT_INT = '&bull; The Exterior Color / Interior Color combination that you selected is not valid for this product.';
+ 	public static final String GRILLE_MIN_HEIGHT = '&bull; The height cannot be less than [requiredValue] with that combination of sash ratio / grille pattern.';
+ 	public static final String GRILLE_MIN_WIDTH = '&bull; The width cannot be less than [requiredValue] with that combination of sash ratio / grille pattern.';
+ 	public static final String GLAZING_MAX_HEIGHT = '&bull; The height cannot be more than [requiredValue] with that combination of sash ratio / glazing.';
+ 	public static final String GLAZING_MAX_WIDTH = '&bull; The width cannot be more than [requiredValue] with that combination of sash ratio / glazing.';
+ 	public static final String GRILLE_STYLE_REQUIRED = '&bull; Grille Style is required for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_LITES_HIGH_REQUIRED = '&bull; Lites High is required for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_LITES_WIDE_REQUIRED = '&bull; Lites Wide is required for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_HUBS_REQUIRED = '&bull;  Hubs is required for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_SPOKES_REQUIRED = '&bull; Spokes is required for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_STYLE_DISABLED = '&bull; Grille Style cannot be entered for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_LITES_HIGH_DISABLED = '&bull; Lites High cannot be entered for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_LITES_WIDE_DISABLED = '&bull; Lites Wide cannot be entered for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_HUBS_DISABLED = '&bull;  Hubs cannot be entered for this combination of specialty shape and grille pattern.';
+ 	public static final String GRILLE_SPOKES_DISABLED = '&bull; Spokes cannot be entered for this combination of specialty shape and grille pattern.';
+
 
  	public static final String LOCK_MAX_WIDTH = '&bull; You cannot select more than [enteredValue] locks when the width is less than [requiredValue] inches.';
  	public static final String LOCK_MAX_HEIGHT = '&bull; You cannot select more than [enteredValue] locks when the height is less than [requiredValue] inches.';
@@ -66,6 +82,7 @@ public with sharing class RMS_errorMessages {
 	public static final String ORDER_NOT_FOUND = '&bull; The order was not found. Please go back and try again.';
 	public static final String ORDER_ACTIVATED_NEW = '&bull; Sorry, you cannot add product line items to an activated order.';
 	public static final String ORDER_ACTIVATED_EDIT = '&bull; Sorry, you cannot edit product line items on an activated order.';
+	public static final String PO_TAX_ISSUE = '&bull; Sorry, there was an issue updating the tax on the order line items. Please contact your system administrator';
 
 	public static final String HARDWARE_FINISH_BLANK = '&bull;For this product, if you enter a hardware style, you must also enter a hardware finish.';
 	public static final String TEMPERED_GLASS_REQUIRED = '&bull;Units of this size require Tempered Glass. Please select the "Tempered Glass" checkbox and try again.';

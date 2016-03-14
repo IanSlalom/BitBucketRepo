@@ -101,7 +101,7 @@ public with sharing class UtilityMethods {
     	return wo;
     	 
     }
-    
+     
 	public static map<Id, Store_Configuration__c> mapStoreConfigs(list<id> storeIds){
     	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
 
@@ -114,7 +114,9 @@ public with sharing class UtilityMethods {
     															Historical_Work_Order_Queue_Id__c,
     															Building_Permit_Work_Order_Queue_Id__c,
     															LSWP_WO_Owner_ID__c,
-    															Location_Number__c
+    															Location_Number__c,
+    															Paint_Stain_Vendor_Account__c,
+    															Paint_Stain_Vendor_Contact__c
     															
     															FROM Store_Configuration__c 
     															WHERE Store__c IN :storeIds
@@ -258,4 +260,56 @@ public with sharing class UtilityMethods {
 		
 		return errorMessage;
 	} 
+
+	/*******************************************************
+          calculateTaxes method - calculates the tax for po line items
+	*******************************************************/
+	public static List<OrderItem> calculateTaxes(List<OrderItem> allOrderItems, decimal poSubtotal, decimal poTax) {
+		System.Debug('*************in method UtilityMethods->calculateTaxes=');
+
+		// If any of the values are null or less than zero, return
+		if (allOrderItems == null || poSubtotal == null || poTax == null) return null;
+		if (allOrderItems.size() <= 0 || poSubtotal <= 0 || poTax <= 0) return null;
+
+		List<OrderItem> itemsToTax = new List<OrderItem>();
+		List<OrderItem> itemsToReturn = new List<OrderItem>();
+
+		// Find only those order items that have a wholesale amount
+		for (orderItem orderItem : allOrderItems) {
+			if (orderItem.Unit_Wholesale_Cost__c != null && orderItem.Unit_Wholesale_Cost__c > 0) {
+				itemsToTax.add(orderItem);
+			}
+		}
+
+		// If the number of items with wholesale cost is null or zero, return
+		if (itemsToTax == null) return null;
+		integer numberOfItems = itemsToTax.size();
+		if (numberOfItems == 0) return null;
+		integer count = 1;
+		decimal taxRemaining = poTax;
+		
+		for (orderItem itemToTax : itemsToTax) {
+
+			// If we have reached the last item, just set it to the tax remaining
+			if (count == numberOfItems) {
+				itemToTax.Tax__c = taxRemaining;
+			} 
+			else {
+				// multiple the total tax times the percentage of this item's 
+				// wholesale cost to the po's subtotal
+				itemToTax.Tax__c = poTax * ((itemToTax.Unit_Wholesale_Cost__c*itemToTax.Quantity) / poSubtotal);
+			}
+			itemsToReturn.add(itemToTax);
+
+			// Increase the loop count and update the tax remaining to be applied
+			count++;
+			taxRemaining = taxRemaining - itemToTax.Tax__c;
+		}
+
+		// If we didn't apply all of the tax, add an error
+		if (taxRemaining != 0)
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'There was a problem calculating the tax per line item. Please contact your administrator.'));
+		return itemsToReturn;
+
+	}
 }

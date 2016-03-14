@@ -247,4 +247,24 @@ private class UtilityMethodsTest {
 //		System.AssertEquals('At least one record was locked', result);
 		
 	}
+
+	/*******************************************************
+					calculateTaxesTest
+	*******************************************************/
+	static testMethod void calculateTaxesTest() {
+
+		OrderItem orderItem1 = new OrderItem();
+		OrderItem orderItem2 = new OrderItem(Unit_Wholesale_Cost__c = 100, Quantity = 1);
+		OrderItem orderItem3 = new OrderItem(Unit_Wholesale_Cost__c = 100, Quantity = 2);
+		OrderItem orderItem4 = new OrderItem(Unit_Wholesale_Cost__c = 100, Quantity = 1);
+		List<OrderItem> itemstoSend = new List<OrderItem> { orderItem1, orderItem2, orderItem3, orderItem4 };
+
+		// Calculate taxes for subtotal of 400 and 10 in tax
+		List<OrderItem> returnedItems = UtilityMethods.calculateTaxes(itemstoSend, 400, 10);
+
+		System.AssertEquals(null, orderItem1.Tax__c);				
+		System.AssertEquals(2.5, orderItem2.Tax__c);				
+		System.AssertEquals(5, orderItem3.Tax__c);				
+		System.AssertEquals(2.5, orderItem4.Tax__c);				
+	}
 }
