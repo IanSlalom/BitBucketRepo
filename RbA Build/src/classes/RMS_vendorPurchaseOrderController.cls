@@ -65,10 +65,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     List<SelectOption> pickListItems = new List<SelectOption>();
     pickListItems.add(new SelectOption('', '-- Select --'));
     
-    for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c from Product2 WHERE Id IN: VendorProducts
+    for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c, Service_PO__c from Product2 WHERE Id IN: VendorProducts
                               AND IsActive = true  ] ) {
-      if ((costPurchaseOrder &&  p.Cost_PO__c) || (!costPurchaseOrder &&  p.Product_PO__c))                          
+      if (	(costPurchaseOrder &&  p.Cost_PO__c) || 
+      		(!costPurchaseOrder &&  p.Product_PO__c && !servicePurchaseOrder) ||
+      		(!costPurchaseOrder &&  p.Service_PO__c && servicePurchaseOrder)) 
+      {                         
         pickListItems.add(new SelectOption(p.Id, p.Name));
+      }
     }         
     return pickListItems;
     } 
@@ -293,7 +297,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     {
       if ( pageTitle != null ) return pageTitle;
       pageTitle = (newPurchaseOrder) ? 'Create ' : '';
-      pageTitle += (costPurchaseOrder) ? 'Cost' : 'Product';
+      pageTitle += (costPurchaseOrder) ? 'Cost' :
+      			   (servicePurchaseOrder) ? 'Service' : 
+      				'Product';
       return pageTitle;
     }
     private set;
@@ -319,6 +325,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public Account storeLocation { get; set; }  
   public Boolean newPurchaseOrder {get;set;}
   public Boolean costPurchaseOrder {get;set;}
+  public Boolean servicePurchaseOrder {get;set;}
   
   //public variables to be used in new PO
   public list<SelectOption> availableVendors = new list<SelectOption>();
@@ -345,6 +352,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
+
       newPurchaseOrder = true;
       status = 'new';
       this.po.Status__c = 'New';
@@ -393,9 +401,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
-      String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
-      for (Order thisOrder : [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId]){
+      for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
+      									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
+      									Store_Location__c, RecordTypeId 
+      									FROM Order WHERE Id = :orderId]){
+
+			// Determine if this is a service order
+			if (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) {
+				servicePurchaseOrder = true;
+			}
+			
+			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
+										(servicePurchaseOrder) 	? 'S' : 'P';
+
 			String storeAbbreviation;
           	relatedOrder = thisOrder;
             if (thisOrder.Store_Location__c != null) {
@@ -499,6 +518,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
+
       String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
       if (String.isNotBlank(storeLocationName)) {
@@ -524,12 +544,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
   }//end of constructor
 
-
-
-
-
-
-  
   public List<SelectOption> getAvailableVendors() {
     return availableVendors;
   }
@@ -617,11 +631,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
       po.Order__c = orderId;
       // Sets the PO's record type
-      po.RecordTypeId =  (costPurchaseOrder) ?
-                    UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')    :
-                (selectedVendorName == 'RbA')   ?
-                    UtilityMethods.retrieveRecordTypeId( 'RbA_Purchase_Order','Purchase_Order__c')    :
-                    UtilityMethods.retrieveRecordTypeId('Product_Purchase_Order','Purchase_Order__c');
+      po.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Cost_Purchase_Order') :
+						(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order') :
+						(selectedVendorName == 'RbA')   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
+														  UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Product_Purchase_Order');
 
       // checks that the gl and intercompany accounts are available
 //      if (!costPurchaseOrder) {
