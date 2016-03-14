@@ -14,6 +14,8 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String RESULT_APPOINTMENTS = 'resultSalesAppointments';
 	public static final String TIME_STAMP_KEY = 'TS';
 	public static final String CREATE_CONTACT = 'createContact';
+	public static final String CUSTOMER_JOB_SEARCH = 'customerJobSearch';
+	public static final String GET_SELECTED_SEARCH_RESULTS = 'getSelectedSearchResults';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
@@ -79,6 +81,13 @@ global with sharing class RMS_mobileAppAPIController {
 				String result = RMS_mobileAppContactHelper.saveNewContact(req.requestBody.toString());
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
+			} else if (operation.equals(CUSTOMER_JOB_SEARCH)){
+				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
+				String result = handler.getSelectedSearchResults(req.requestBody.toString());
+				RestContext.response.addHeader('Content-Type', 'application/json');
+				RestContext.response.responseBody = Blob.valueOf(result);
+			} else if (operation.equals(GET_SELECTED_SEARCH_RESULTS)){
+
 			}else {
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);

@@ -10,6 +10,7 @@
 
 public with sharing class RMS_mobileAppRequestHelper {
 
+	public static map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 	private static final String SHARED_FIELDS = '';
 	private static final String QLI_ONLY_FIELDS = '';
 	private static final String OLI_ONLY_FIELDS = '';
@@ -682,6 +683,130 @@ if (appts.getErrors().size() == 0){
     }
   }
 
+  public static String customerSearch(String inputJSON){
+    DTOCustomerSearchResultsContainer container = new DTOCustomerSearchResultsContainer();
+    container.searchResults = new List<DTOCustomerSearchResults>();
+    DTOCustomerSearchParameters dtoSearchParams = (DTOCustomerSearchParameters)JSON.deserialize(inputJSON, DTOCustomerSearchParameters.class);
+
+    try{
+      //All fields used for opportunity query are null
+      if(dtoSearchParams.startDate == null && dtoSearchParams.endDate == null && String.isBlank(dtoSearchParams.address) && String.isBlank(dtoSearchParams.city) && String.isBlank(dtoSearchParams.state)){
+        container.error = RMS_Settings_map.get('rSuite.search.nullParameters.error').Value__c;
+        return JSON.serialize(container);
+      }
+
+      //All fields used for OpportunityContactRole query are null
+      /*if(String.isBlank(dtoSearchParams.firstName) && String.isBlank(dtoSearchParams.lastName) && String.isBlank(dtoSearchParams.email) && String.isBlank(dtoSearchParams.phone)){
+        container.error = RMS_Settings_map.get('rSuite.search.nullParameters.error').Value__c;
+        return JSON.serialize(container);
+      }*/
+
+      String oppQuery = 'SELECT ID FROM Opportunity WHERE ';
+      if(dtoSearchParams.startDate != null){
+        Date startDate = dtoSearchParams.startDate;
+        oppQuery += 'CloseDate >=: startDate AND ';
+      }
+      if(dtoSearchParams.endDate != null){
+        Date endDate = dtoSearchParams.endDate;
+        oppQuery += 'CloseDate <=: endDate AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.address)){
+        String address = '%'+dtoSearchParams.address+'%';
+        //ShippingAddress does not work, addresses can only be filtered using distance expressions, changed to ShippingStreet
+        oppQuery += 'Account.ShippingStreet Like :address AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.city)){
+        String city = '%'+dtoSearchParams.city+'%';
+        oppQuery += 'Account.ShippingCity Like :city AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.state)){
+        String state = '%'+dtoSearchParams.state+'%';
+        oppQuery += 'Account.ShippingStateCode Like :state';
+      }
+      
+      oppQuery = oppQuery.removeEnd('AND');
+      System.debug(oppQuery);
+      List<Opportunity> opportunityResults = (List<Opportunity>)Database.query(oppQuery);
+      system.debug(opportunityResults);
+
+      List<Id> opportunityIds = new List<Id>();
+      for(Opportunity opp: opportunityResults){
+        opportunityIds.add(opp.Id);
+      }
+
+      //ShippingAddress is a complex datatype, using ShippingStreet for response 'address' field for now
+      String contactRoleQuery = 'Select OpportunityId, Opportunity.CloseDate, Opportunity.Account.ShippingAddress, Opportunity.Account.ShippingStreet, '+ 
+                                'Opportunity.Account.ShippingCity, Opportunity.Account.ShippingStateCode, Contact.FirstName,'+
+                                'Contact.LastName, Contact.Email, Contact.Phone FROM OpportunityContactRole WHERE OpportunityID in :opportunityIds AND ';
+
+      if(String.isNotBlank(dtoSearchParams.firstName)){
+        String firstName = '%'+dtoSearchParams.firstName+'%';
+        //ShippingAddress does not work, addresses can only be filtered using distance expressions, changed to ShippingStreet
+        contactRoleQuery += 'Contact.FirstName Like :firstName AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.lastName)){
+        String lastName = '%'+dtoSearchParams.lastName+'%';
+        contactRoleQuery += 'Contact.LastName Like :lastName AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.email)){
+        String email = '%'+dtoSearchParams.email+'%';
+        contactRoleQuery += 'Contact.Email Like :email AND ';
+      }
+      if(String.isNotBlank(dtoSearchParams.phone)){
+        String phone = '%'+dtoSearchParams.phone+'%';
+        contactRoleQuery += 'Contact.Phone Like :phone ';
+      }
+
+      contactRoleQuery = contactRoleQuery.removeEnd('AND');
+      List<OpportunityContactRole> contactRoleResults = Database.query(contactRoleQuery);
+      System.debug(contactRoleResults);
+      
+      if(contactRoleResults.size() > Integer.valueOf(RMS_Settings_map.get('rSuite.search.maxresults').Value__c)){
+        container.error = RMS_Settings_map.get('rSuite.search.tooManyResults.error').Value__c;
+        return JSON.serialize(container);
+      }else{
+        for(OpportunityContactRole cRole: contactRoleResults){
+          DTOCustomerSearchResults resultRecord = new DTOCustomerSearchResults();
+          resultRecord.firstName = cRole.Contact.FirstName;
+          resultRecord.lastName = cRole.Contact.LastName;
+          resultRecord.email = cRole.Contact.Email;
+          resultRecord.phone = cRole.Contact.Phone;
+          resultRecord.address = cRole.Opportunity.Account.ShippingStreet;
+          resultRecord.city = cRole.Opportunity.Account.ShippingCity;
+          resultRecord.opportunityID = cRole.OpportunityId;
+          container.searchResults.add(resultRecord);
+        }
+       
+      }
+    }catch(Exception e){
+      container.error = e.getMessage();
+    }
+    
+    return JSON.serialize(container);
+
+  }
+
+  //Should this method be static like customerSearch?
+  public String getSelectedSearchResults(String inputJSON){
+    
+    try{
+      List<Id> opportunityIds = (List<Id>)JSON.deserialize(inputJSON, List<Id>.class);
+      // get the related events
+      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where WhatId in :opportunityIds];
+      Appointments myAppts = new Appointments();
+
+      // process the sales appointments
+      if (salesEvents.size() > 0) {
+        myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
+      }
+
+      myAppts.getApptsCompletedTimeStamp = Datetime.now();
+      return JSON.serialize(myAppts);
+    } catch (Exception e) {
+      System.debug(LoggingLevel.ERROR, e);
+      return JSON.serialize(e);
+    }
+  }
 
   public class Appointments {
     public List<SalesAppointment> salesAppts;
@@ -734,6 +859,32 @@ if (appts.getErrors().size() == 0){
     public List<QuoteLineItem>  quoteLineItems {get; set;}
     public List<Quote_Discount__c> quoteDiscountList {get; set;}
     public List<Quote_Financing__c> quoteFinancingList {get; set;}
+  }
+
+  public class DTOCustomerSearchParameters{
+    public String firstName {get;set;}
+    public String lastName {get;set;}
+    public String address {get;set;}
+    public String city {get;set;}
+    public String state {get;set;}
+    public String phone {get;set;}
+    public String email {get;set;}
+    public Date startDate {get;set;}
+    public Date endDate {get;set;}
+  }
+
+  public class DTOCustomerSearchResultsContainer{
+    public List<DTOCustomerSearchResults> searchResults{get;set;}
+    public String error{get;set;}
+  }
+  public class DTOCustomerSearchResults{
+    public String firstName {get;set;}
+    public String lastName {get;set;}
+    public String address {get;set;}
+    public String city {get;set;}
+    public String phone {get;set;}
+    public String email {get;set;}
+    public String opportunityID {get;set;}
   }
 
 }
