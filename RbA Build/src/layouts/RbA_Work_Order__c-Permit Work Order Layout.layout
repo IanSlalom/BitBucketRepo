@@ -85,7 +85,6 @@
                 <behavior>Edit</behavior>
                 <field>Date_Received__c</field>
             </layoutItems>
-         
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
