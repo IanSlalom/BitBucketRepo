@@ -4,7 +4,10 @@
     <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
+    <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
+    <excludeButtons>Deactivate</excludeButtons>
+    <excludeButtons>Delete</excludeButtons>
     <excludeButtons>ReduceOrder</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
