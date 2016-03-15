@@ -114,6 +114,12 @@
         <name>CustomTab</name>
     </types>
     <types>
+        <members>Backoffice_Email_Templates</members>
+        <members>Backoffice_Email_Templates/Order_Cancellation_In_Progress</members>
+        <members>Backoffice_Email_Templates/Purchase_Order_Ship_Date_Change</members>
+        <name>EmailTemplate</name>
+    </types>
+    <types>
         <members>Account-Account Layout</members>
         <members>Account-Contractor Layout</members>
         <members>Account-Dwelling Layout</members>
@@ -205,6 +211,7 @@
         <members>Discount__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
+        <members>Order</members>
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
         <members>Store_Finance_Program__c</members>

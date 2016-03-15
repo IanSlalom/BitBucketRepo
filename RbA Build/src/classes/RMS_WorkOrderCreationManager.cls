@@ -14,7 +14,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         //FILTERING OUT NON ACTIVATED ORDERS AS WELL AS BUILDING THE LIST OF DWELLINGS TO GET THEIR STORE CONFIGS
         for(Order ord : listNew){
-            if(ord.Status == 'Activated' && mapOld.get(ord.Id).Status == 'Draft'){
+            if(ord.Status == 'Tech Measure Needed' && mapOld.get(ord.Id).Status == 'Draft'){
                 relatedDwellingIds.add(ord.AccountId);
                 activatedOrders.add(ord);
                 activatedOrderId.add(ord.id);
@@ -104,7 +104,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             //LOOP THROUGH ACTIVATED ORDERS AND CREATE WORK ORDERS
             for(Order ord : activatedOrders){
-                
+				System.Debug('*********ord' +ord);                
                 Account dwelling = dwellingIdtoDwellingMap.get(ord.AccountId);
                 Store_Configuration__c storeConfig;
                 

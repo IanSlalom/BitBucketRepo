@@ -85,10 +85,7 @@
                 <behavior>Edit</behavior>
                 <field>Date_Received__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Permit_Attached__c</field>
-            </layoutItems>
+         
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>

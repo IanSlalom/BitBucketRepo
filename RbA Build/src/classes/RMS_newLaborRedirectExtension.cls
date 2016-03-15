@@ -58,9 +58,7 @@ public with sharing class RMS_newLaborRedirectExtension {
 				return null;
 			}
 			
-			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {
-        			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N6100000Br7TE', thisStore.Name);	
+			for (Account thisStore : [SELECT Id, Name FROM Account WHERE Name =: storeLocationName]) {         			m.put('CF00N6100000Br7TE', thisStore.Name);	
          			m.put('CF00N6100000Br7TE_lkid', thisStore.Id);	
 			}
 			
@@ -72,17 +70,16 @@ public with sharing class RMS_newLaborRedirectExtension {
 		} else {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Labor__c', 'Labor'));			
 
-/*        	for (RbA_Work_Order__c theWorkOrder : [SELECT Sold_Order__r.Store_Location__r.Name, Sold_Order__r.Store_Location__c FROM RbA_Work_Order__c WHERE Id =: theLabor.Related_Work_Order__c]) {
+        	for (RbA_Work_Order__c theWorkOrder : [SELECT Sold_Order__r.Store_Location__r.Name, Sold_Order__r.Store_Location__c FROM RbA_Work_Order__c WHERE Id =: theLabor.Related_Work_Order__c]) {
         		if (theWorkOrder.Sold_Order__r.Store_Location__c == null) {
 					ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_LABOR)); //
 					return null;
         		} 
         		else { 
-        			// TODO:   This parameter will need to be updated after pushing to build and production
-         			m.put('CF00N3B000000On7g', theWorkOrder.Sold_Order__r.Store_Location__r.Name);	
-         			m.put('CF00N3B000000On7g_lkid', theWorkOrder.Sold_Order__r.Store_Location__c);	
+         			m.put('CF00N6100000Br7TE', theWorkOrder.Sold_Order__r.Store_Location__r.Name);	
+         			m.put('CF00N6100000Br7TE_lkid', theWorkOrder.Sold_Order__r.Store_Location__c);	
         		}
-        	}		*/
+        	}		
 		}
         m.put('nooverride', '1');
         return p;
