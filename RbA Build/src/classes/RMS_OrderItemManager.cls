@@ -53,10 +53,10 @@ public with sharing class RMS_OrderItemManager {
                                                      
 		
 		for(OrderItem oi : extraFieldsList){
-			//IF NO CHANGE HISTORY CREATED BY CURRENT USER TODAY			
+			//IF NO CHANGE HISTORY CREATED BY CURRENT USER TODAY	 		
 				
 			Change_History__c rCH = new Change_History__c();
-			if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0 || oldMap.get(oi.id).UnitPrice != newMap.get(oi.id).UnitPrice){
+			if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0 || oldMap.get(oi.id).Total_Retail_Price__c != newMap.get(oi.id).Total_Retail_Price__c){
 				rCH.Order_Product__c = oi.Id;
 				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
 				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
@@ -67,7 +67,7 @@ public with sharing class RMS_OrderItemManager {
 			}
 			Boolean somethingChanged = false;
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
-			for(String oiField : oiFieldsMap.KeySet()){
+			for(String oiField : oiFieldsMap.KeySet()){ 
 				string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
