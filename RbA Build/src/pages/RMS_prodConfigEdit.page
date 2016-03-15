@@ -127,7 +127,7 @@
 
 
         <apex:pageBlockSection title="" columns="1" rendered="{!productSelected || ordStat == 'rel'}">
-            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" />
+            <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" html-data-jsid="productName"/>
             <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!masterProduct.Name=='Specialty Window'}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
@@ -207,7 +207,7 @@
 		    <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_S1_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_S1_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing1" onChange="callRule('glazing1')" >
 		        <apex:selectOptions value="{!glazingItems}"/>
 		    </apex:selectList>
-		    <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_S1_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_S1_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern1" onChange="callRule('applyToAllGlassCheck')" >
+		    <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_S1_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_S1_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern1"  >
 		        <apex:selectOptions value="{!GlassPatternItems}"/>
 		    </apex:selectList>
 		    <apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered S1" required="{!prodConfig.mpc.Tempered_S1_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_S1_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered1"  />
@@ -260,13 +260,13 @@
             	<apex:selectOptions value="{!grillePatternItems}"/>
             </apex:selectList>
 
-                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide1" onChange="callRule('applyToAllGrillesCheck')">
+                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsWide1" >
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh1" onChange="callRule('applyToAllGrillesCheck')">
+                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsHigh1" >
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details {!sashFieldName}" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="customGrilleDetails1" onChange="callRule('applyToAllGrillesCheck')" />
+                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details {!sashFieldName}" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="customGrilleDetails1"  />
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="outwideBar" rendered="{!prodConfig.mpc.Wide_Bar_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
@@ -363,48 +363,64 @@
 
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
 
-            <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" html-data-jsid="screenColor" >
-                <apex:selectOptions value="{!screenColorItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" required="{!prodConfig.mpc.Screen_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="screenColor">
+                 <apex:selectOptions value="{!screenColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Screen_Color__c}" label="Screen Color" id="outscreenColor"  rendered="{!prodConfig.mpc.Screen_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" html-data-jsid="hardwareColor" >
+            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" required="{!prodConfig.mpc.Hardware_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareColor">
                 <apex:selectOptions value="{!hardwareColorItems}"/>
             </apex:selectList>
+            <apex:outputField value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" id="outhardwareColor"  rendered="{!prodConfig.mpc.Hardware_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" html-data-jsid="extGrilleColor" >
-            
-                <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
-            </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" html-data-jsid="intGrilleColor" >
-                <apex:selectOptions value="{!interiorGrilleColorItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" required="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="extGrilleColor">
+                 <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" id="outexteriorGrilleColor"  rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" html-data-jsid="stormWindowColor" >
-                <apex:selectOptions value="{!stormWindowColorItems}"/>
-            </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" html-data-jsid="exteriorTrimColor" >
-                <apex:selectOptions value="{!exteriorTrimColorItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" required="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="intGrilleColor">
+                 <apex:selectOptions value="{!interiorGrilleColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" id="outinteriorGrilleColor" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" html-data-jsid="jambLinerColor" >
-                <apex:selectOptions value="{!jambLinerColorItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" required="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="stormWindowColor">
+                 <apex:selectOptions value="{!stormWindowColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" id="outstormWindowColor" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" html-data-jsid="interiorSashColor"  >
-                <apex:selectOptions value="{!interiorSashColorItems}"/>
-            </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Astragal_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="astragalColor" >
-                <apex:selectOptions value="{!astragalColorItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" required="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="exteriorTrimColor">
+                 <apex:selectOptions value="{!exteriorTrimColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" id="outexteriorTrimColor" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" html-data-jsid="installTrackLocation" >
-                <apex:selectOptions value="{!installTrackLocationItems}"/>
-            </apex:selectList>
+             <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" required="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="jambLinerColor">
+                 <apex:selectOptions value="{!jambLinerColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" id="outjambLinerColor" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" html-data-jsid="installHolesLocation" />
+
+             <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" required="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorSashColor" >
+                 <apex:selectOptions value="{!interiorSashColorItems}"/>
+             </apex:selectList>
+             <apex:outputField value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" id="outinteriorSashColor" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Disabled' || mode != 'e'}"/ >
+
+            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal Color" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="astragalColor">
+                 <apex:selectOptions value="{!astragalColorItems}"/>
+             </apex:selectList>
+            <apex:outputField value="{!OrderItem.Astragal__c}" label="Astragal Color" id="outastragalColor" rendered="{!prodConfig.mpc.Astragal_Control__c == 'Disabled' || mode != 'e'}" />
+
+             <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" required="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installTrackLocation">
+                 <apex:selectOptions value="{!installTrackLocationItems}"/>
+              </apex:selectList>
+              <apex:outputField value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" id="outinstallTrackLocation" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Disabled' || mode != 'e'}"/>
+
+
+            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" required="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installHolesLocation"/>
+            <apex:outputField value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="outinstallHolesLocation" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Disabled' || mode != 'e'}"/>
+
 
 	        <apex:pageBlockSection title="Sash 3 Glazing" columns="1" html-data-jsid="glazing3Section">
 	            <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  required="{!prodConfig.mpc.Glazing_S3_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_S3_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing3" onChange="callRule('glazing3')" >
@@ -489,8 +505,6 @@
         grillePattern(1);
         grillePattern(2);
         grillePattern(3);
-        interiorColor('White');
-        interiorColor('Dark Bronze');
         glazing(0);
         glazing(1);
         glazing(2);
@@ -498,7 +512,6 @@
         frameType();
         specialOptions();
         specialtyWindow();
-        disableFields();
     });
     
     
@@ -628,18 +641,18 @@
 		  }
 
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
-            j$("select[data-jsid=lightsWide" +sashnumber +"]").show();
-			j$("label[for='"+j$("select[data-jsid=lightsWide" +sashnumber +"]").attr("id")+"']").show();
-            j$("select[data-jsid=lightsHigh" +sashnumber +"]").show();
-			j$("label[for='"+j$("select[data-jsid=lightsHigh" +sashnumber +"]").attr("id")+"']").show();
+            j$("select[data-jsid=LightsWide" +sashnumber +"]").show();
+            j$("label[for='"+j$("select[data-jsid=LightsWide" +sashnumber +"]").attr("id")+"']").show();
+            j$("select[data-jsid=LightsHigh" +sashnumber +"]").show();
+            j$("label[for='"+j$("select[data-jsid=LightsHigh" +sashnumber +"]").attr("id")+"']").show();
         }else{
-            j$("select[data-jsid=lightsWide" +sashnumber +"]").val(null);
-            j$("select[data-jsid=lightsWide" +sashnumber +"]").hide();
-			j$("label[for='"+j$("select[data-jsid=lightsWide" +sashnumber +"]").attr("id")+"']").hide();
+            j$("select[data-jsid=LightsWide" +sashnumber +"]").val(null);
+            j$("select[data-jsid=LightsWide" +sashnumber +"]").hide();
+            j$("label[for='"+j$("select[data-jsid=LightsWide" +sashnumber +"]").attr("id")+"']").hide();
 
-            j$("select[data-jsid=lightsHigh" +sashnumber +"]").val(null);
-            j$("select[data-jsid=lightsHigh" +sashnumber +"]").hide();
-			j$("label[for='"+j$("select[data-jsid=lightsHigh" +sashnumber +"]").attr("id")+"']").hide();
+            j$("select[data-jsid=LightsHigh" +sashnumber +"]").val(null);
+            j$("select[data-jsid=LightsHigh" +sashnumber +"]").hide();
+            j$("label[for='"+j$("select[data-jsid=LightsHigh" +sashnumber +"]").attr("id")+"']").hide();
         }
         if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Custom'){
             j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").show();
@@ -661,12 +674,12 @@
 
     function applyToAllGrilles(){
    		var grillePattern1 = j$("select[data-jsid='grillePattern1']").val();
-   		var lightsWide1 = j$("select[data-jsid='lightsWide1']").val();
-   		var lightsHigh1 = j$("select[data-jsid='lightsHigh1']").val();
+        var LightsWide1 = j$("select[data-jsid='LightsWide1']").val();
+        var LightsHigh1 = j$("select[data-jsid='LightsHigh1']").val();
    		var customGrilleDetails1 = j$("textarea[data-jsid='customGrilleDetails1']").val();
            j$("select[data-jsid='grillePattern2']").val(grillePattern1);
-           j$("select[data-jsid='lightsWide2']").val(lightsWide1);
-           j$("select[data-jsid='lightsHigh2']").val(lightsHigh1);
+           j$("select[data-jsid='LightsWide2']").val(LightsWide1);
+           j$("select[data-jsid='LightsHigh2']").val(LightsHigh1);
            j$("textarea[data-jsid='customGrilleDetails2']").val(customGrilleDetails1);
        	grillePattern(2);
 	}    
@@ -774,6 +787,65 @@
     	var specialOptionsCheck = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
         if( specialOptionsCheck == true){
             j$("div[data-jsid='specialOptions']").show();
+            
+            callRule('interiorColor');  
+            
+        	/*j$("select[data-jsid='screenColor']").val(null);*/
+        	j$("select[data-jsid='glazing3']").val(j$("select[data-jsid='glazing1']").val());
+        	j$("select[data-jsid='glassPattern3']").val(j$("select[data-jsid='glassPattern1']").val());
+        	j$("input[data-jsid='tempered3']").prop('checked',j$("input[data-jsid='tempered1']").prop('checked'));
+        	j$("select[data-jsid='exteriorTrimColor']").val(j$("select[data-jsid='exteriorColor']").val());
+        	j$("select[data-jsid='interiorSashColor']").val(j$("select[data-jsid='interiorColor']").val());
+        	
+        	
+        	if( j$("select[data-jsid='grilleStyle']").val() == 'Interior Wood Only' || j$("select[data-jsid='grilleStyle']").val() == 'Full Divided Light'){
+	        	if(j$("select[data-jsid='interiorColor']").val() == 'Stainable Pine'){
+	        		j$("select[data-jsid='intGrilleColor']").val('Maple');
+	        	}else if(	j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        				j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        				j$("select[data-jsid='interiorColor']").val() == 'Terratone'){
+	        		j$("select[data-jsid='intGrilleColor']").val(j$("select[data-jsid='interiorColor']").val());
+	        	}else{
+	        		j$("select[data-jsid='intGrilleColor']").val('Sandtone');
+	        	}
+	        }
+	        
+	        if(j$("select[data-jsid='grilleStyle']").val() != null && j$("select[data-jsid='grilleStyle']").val() != '' && j$("select[data-jsid='grilleStyle']").val() != 'No Grilles'){
+	        	 j$("select[data-jsid='extGrilleColor']").val(j$("select[data-jsid='exteriorColor']").val());
+	        }
+	        
+	        if(j$("span[data-jsid='productName']").text() == 'Double Hung'){
+	        
+       			j$("input[data-jsid='installHolesLocation']").val('6');
+       			if(j$("select[data-jsid='frameType']").val() == "Full-Frame" || j$("select[data-jsid='exteriorTrim']").val() != null){ 
+					 j$("select[data-jsid='installTrackLocation']").val('Inside');
+				}else{ 
+					 j$("select[data-jsid='installTrackLocation']").val('Outside');
+				} 
+	        }
+	        
+	        if( '{!prodConfig.mpc.Screen_Color_Default__c}' == 'Exterior Color'){
+	        	 j$("select[data-jsid='screenColor']").val( j$("select[data-jsid='exteriorColor']").val());
+	        }else if('{!prodConfig.mpc.Screen_Color_Default__c}' == 'Interior Color' &&
+	        			(j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Terratone')){
+        		j$("select[data-jsid='screenColor']").val( j$("select[data-jsid='interiorColor']").val());	
+	        }else{
+	        	j$("select[data-jsid='screenColor']").val('Sandtone');
+	        }
+	        
+	        if( '{!prodConfig.mpc.Storm_Window_Color_Default__c}' == 'Exterior Color'){
+	        	 j$("select[data-jsid='stormWindowColor']").val( j$("select[data-jsid='exteriorColor']").val());
+	        }else if('{!prodConfig.mpc.Storm_Window_Color_Default__c}' == 'Interior Color' &&
+	        			(j$("select[data-jsid='interiorColor']").val() == 'White' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
+	        			j$("select[data-jsid='interiorColor']").val() == 'Terratone')){
+        		j$("select[data-jsid='stormWindowColor']").val( j$("select[data-jsid='interiorColor']").val());	
+	        }else{
+	        	j$("select[data-jsid='stormWindowColor']").val('Sandtone');
+	        }
+
         }else{
             j$("select[data-jsid='screenColor']").val(null);
             j$("select[data-jsid='hardwareColor']").val(null);
@@ -804,32 +876,6 @@
                 j$("select[data-jsid='specialtyWindow']").hide();
 				j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").hide();
             } 
-    }
-    function disableFields() {
-		var ordStat = '{!ordStat}';
-		if (ordStat == 'rel') {
-			j$("select[data-jsid='specialtyWindow']").prop('disabled',true);
-			j$("input[data-jsid='ejFrame']").prop('disabled',true);
-			j$("input[data-jsid='fibrexLTrim']").prop('disabled',true);
-			j$("input[data-jsid='tempered1']").prop('disabled',true);
-			j$("input[data-jsid='tempered2']").prop('disabled',true);
-			j$("input[data-jsid='tempered0']").prop('disabled',true);
-			j$("input[data-jsid='tempered3']").prop('disabled',true);
-			j$("input[data-jsid='breatherTubes0']").prop('disabled',true);
-			j$("input[data-jsid='breatherTubes1']").prop('disabled',true);
-			j$("input[data-jsid='applyToAllGlass']").prop('disabled',true);
-			j$("input[data-jsid='brickmouldApplied']").prop('disabled',true);
-			j$("input[data-jsid='corrosionResistant']").prop('disabled',true);
-			j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").prop('disabled',true);
-			j$("input[data-jsid='wideBar']").prop('disabled',true);
-			j$("input[data-jsid='applyToAllGrilles']").prop('disabled',true);
-			j$("input[data-jsid='partOfBay']").prop('disabled',true);
-			j$("input[data-jsid='partOfBow']").prop('disabled',true);
-			j$("input[data-jsid='specialOptionsCheck']").prop('disabled',true);
-			j$("input[data-jsid='nspr']").prop('disabled',true);
-			j$("input[data-jsid='quantity']").prop('disabled',true);
-
-		}
     }
 
     </script>
