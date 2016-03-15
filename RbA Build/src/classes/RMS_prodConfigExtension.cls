@@ -935,7 +935,8 @@ public class RMS_prodConfigExtension {
 		if (childProduct != null)
 			prodConfig = RMS_prodConfigManager.findPricingConfiguration(prodConfig, priceBookId, childProduct.Id);
 		
-		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
+//		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
+		if(orderLineItem.unitPrice == null) orderLineItem.unitPrice = 0;
 		if (newOrderItem) {
 			orderLineItem.PriceBookEntryId = priceBookEntryId;
 			System.Debug('**********************orderLineItemFinal=' +orderLineItem);
