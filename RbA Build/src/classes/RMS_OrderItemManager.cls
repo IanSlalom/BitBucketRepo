@@ -27,7 +27,8 @@ public with sharing class RMS_OrderItemManager {
 																	IN :oldMap.Keyset()
 																	AND CreatedById = :UserInfo.getUserId() 
 																	AND CreatedDate = TODAY
-																	];
+																	order by CreatedDate desc];
+																	
 		map<id, list<Change_History__c>> orderItemIdToListChangeHistory = new map<id, list<Change_History__c>>();
 
 		for(Change_History__c ch : relatedChangeHistories){
@@ -52,77 +53,74 @@ public with sharing class RMS_OrderItemManager {
                                                      
 		
 		for(OrderItem oi : extraFieldsList){
-			//IF NO CHANGE HISTORY CREATED BY CURRENT USER TODAY			
-			if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0 || orderItemIdToListChangeHistory.get(oi.id).size() == 1){
+			//IF NO CHANGE HISTORY CREATED BY CURRENT USER TODAY	 		
 				
-				Change_History__c rCH = new Change_History__c();
-				if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0){
-					rCH.Order_Product__c = oi.Id;
-					rCH.Retail_Price__c = oi.Total_Retail_Price__c;
-					rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
-				}
-			//THERE IS A SINGLE CHANGE HISTORY CREATED TODAY BY CURRENT USER				
-				else if(orderItemIdToListChangeHistory.get(oi.id).size() == 1){
-					rCH = orderItemIdToListChangeHistory.get(oi.id)[0];
-				}
-				Boolean somethingChanged = false;
-				//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
-				for(String oiField : oiFieldsMap.KeySet()){
-					string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
-					string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
-					string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
+			Change_History__c rCH = new Change_History__c();
+			if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0 || oldMap.get(oi.id).Total_Retail_Price__c != newMap.get(oi.id).Total_Retail_Price__c){
+				rCH.Order_Product__c = oi.Id;
+				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
+				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
+			}
+			//GET MOST RECENTLY CREATED CHANGE HISTORY			
+			else {
+				rCH = orderItemIdToListChangeHistory.get(oi.id)[0];
+			}
+			Boolean somethingChanged = false;
+			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
+			for(String oiField : oiFieldsMap.KeySet()){ 
+				string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
+				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
+				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
+				
+				if(oldValue != newValue){
+					somethingChanged = true;
+					if(oldValue == null){
+						oldValue = 'none'; 
+					}
+					if(newValue == null){
+						newValue = 'none';
+					}
+					system.debug('ads oi: '+oi);
+					system.debug('ads rCH: '+rCH);
+					system.debug('ads oiField: '+oiField); 
+					system.debug('ads oiLabel: '+oiLabel);
+					system.debug('ads oldValue: '+oldValue);
+					system.debug('ads newValue: '+newValue);
 					
-					if(oldValue != newValue){
-						somethingChanged = true;
-						if(oldValue == null){
-							oldValue = 'none'; 
-						}
-						if(newValue == null){
-							newValue = 'none';
-						}
-						system.debug('ads oi: '+oi);
-						system.debug('ads rCH: '+rCH);
-						system.debug('ads oiField: '+oiField); 
-						system.debug('ads oiLabel: '+oiLabel);
-						system.debug('ads oldValue: '+oldValue);
-						system.debug('ads newValue: '+newValue);
+					//IF THAT FIELD HAS NOT BEEN CHANGED ALREADY
+					if(rCH.Changes__c == null){
+						rCH.Changes__c = '*'+oiLabel+'* : '+oldValue+' -> '+newValue+',';
+					}else if(rCH.Changes__c.contains('*'+oiLabel+'*') == false){
+						rCH.Changes__c = rCH.Changes__c+' *'+oiLabel+'* : '+oldValue+' -> '+newValue+',';
+					}
+					//IF THAT FIELD HAS BEEN CHANGED
+					else if(rCH.Changes__c != null || rCH.Changes__c.contains('*'+oiLabel+'*') == true){
 						
-						//IF THAT FIELD HAS NOT BEEN CHANGED ALREADY
-						if(rCH.Changes__c == null){
-							rCH.Changes__c = '*'+oiLabel+'* : '+oldValue+' -> '+newValue+',';
-						}else if(rCH.Changes__c.contains('*'+oiLabel+'*') == false){
-							rCH.Changes__c = rCH.Changes__c+' *'+oiLabel+'* : '+oldValue+' -> '+newValue+',';
-						}
-						//IF THAT FIELD HAS BEEN CHANGED
-						else if(rCH.Changes__c != null || rCH.Changes__c.contains('*'+oiLabel+'*') == true){
-							
-							
-							string regex = '\\*'+oiLabel+'\\* :([\\s\\S]*?),';
-							Matcher match = Pattern.compile(regex).matcher(rCH.Changes__c);
-							system.debug('ads regex: '+regex);
-							system.debug('ads rCH.Changes__c: '+rCH.Changes__c);
-							match.find();
-							string fieldsChangeHistory = match.group(0);
-					
-							system.debug('ads fieldsChangeHistory: ' + fieldsChangeHistory);
-							String newFieldChangeHistory = fieldsChangeHistory.removeEnd(',') + ' -> '+newValue+',';
-							rCH.Changes__c = rCH.Changes__c.replace(fieldsChangeHistory, newFieldChangeHistory);
-						}
+						
+						string regex = '\\*'+oiLabel+'\\* :([\\s\\S]*?),';
+						Matcher match = Pattern.compile(regex).matcher(rCH.Changes__c);
+						system.debug('ads regex: '+regex);
+						system.debug('ads rCH.Changes__c: '+rCH.Changes__c);
+						match.find();
+						string fieldsChangeHistory = match.group(0);
+				
+						system.debug('ads fieldsChangeHistory: ' + fieldsChangeHistory);
+						String newFieldChangeHistory = fieldsChangeHistory.removeEnd(',') + ' -> '+newValue+',';
+						rCH.Changes__c = rCH.Changes__c.replace(fieldsChangeHistory, newFieldChangeHistory);
 					}
 				}
-				if(somethingChanged == true && orderItemIdToListChangeHistory.get(oi.id) != null && orderItemIdToListChangeHistory.get(oi.id).size() != 0 &&  orderItemIdToListChangeHistory.get(oi.id).size() == 1){
-					rCH.Retail_Price__c = newMap.get(oi.id).Total_Retail_Price__c;
-					
-					Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
-					Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
-					
-					rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
-				}  
-				changeHistoryToUpsert.add(rCH);	
 			}
-			else if(orderItemIdToListChangeHistory.get(oi.id).size() > 1){
-				//ERROR MORE THAN ONE CHANGE HISTORY OBJECT RELATED CREATED TODAY
-			}
+			if(somethingChanged == true && orderItemIdToListChangeHistory.get(oi.id) != null && orderItemIdToListChangeHistory.get(oi.id).size() != 0){
+				rCH.Retail_Price__c = newMap.get(oi.id).Total_Retail_Price__c;
+				
+				Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
+				Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
+				
+				rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
+			}  
+			changeHistoryToUpsert.add(rCH);	
+		
+			
 	
 		}
 		upsert changeHistoryToUpsert;

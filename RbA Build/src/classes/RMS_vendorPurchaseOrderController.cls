@@ -36,6 +36,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   //public variables used in both new and edit PO
   public Order relatedOrder;
   public List<OrderItem> relatedOrderItems = new List<OrderItem>();
+  public Set<Id> unassignedProductIds = new Set<Id>();
   public list<Id> relatedProduct2IDList = new list<Id>();
   public List<Product2> relatedProducts = new List<Product2>();
   public list<Account> vendorsOnOrder = new list<Account>();
@@ -64,10 +65,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     List<SelectOption> pickListItems = new List<SelectOption>();
     pickListItems.add(new SelectOption('', '-- Select --'));
     
-    for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c from Product2 WHERE Id IN: VendorProducts
+    for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c, Service_PO__c from Product2 WHERE Id IN: VendorProducts
                               AND IsActive = true  ] ) {
-      if ((costPurchaseOrder &&  p.Cost_PO__c) || (!costPurchaseOrder &&  p.Product_PO__c))                          
+      if (	(costPurchaseOrder &&  p.Cost_PO__c) || 
+      		(!costPurchaseOrder &&  p.Product_PO__c && !servicePurchaseOrder) ||
+      		(!costPurchaseOrder &&  p.Service_PO__c && servicePurchaseOrder)) 
+      {                         
         pickListItems.add(new SelectOption(p.Id, p.Name));
+      }
     }         
     return pickListItems;
     } 
@@ -156,6 +161,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     set;
   }
+
+  // The list of vendor records associated with the store
+  public List<Account> storeVendorRecords
+  {
+    get
+    {
+      if ( storeVendorRecords != null) return storeVendorRecords;
+      if (storeVendors == null) return null;
+      storeVendorRecords = new List<Account>();
+      for (Account a : [SELECT Id, Name from Account Where Id IN : storeVendors]) {
+        storeVendorRecords.add(a);
+      }
+      
+
+      return storeVendorRecords;
+    }
+    set;
+  }
+
+
 
   // The set of products ids associated with the selected vendor
   public Set<Id> vendorProducts
@@ -272,7 +297,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     {
       if ( pageTitle != null ) return pageTitle;
       pageTitle = (newPurchaseOrder) ? 'Create ' : '';
-      pageTitle += (costPurchaseOrder) ? 'Cost' : 'Product';
+      pageTitle += (costPurchaseOrder) ? 'Cost' :
+      			   (servicePurchaseOrder) ? 'Service' : 
+      				'Product';
       return pageTitle;
     }
     private set;
@@ -298,6 +325,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public Account storeLocation { get; set; }  
   public Boolean newPurchaseOrder {get;set;}
   public Boolean costPurchaseOrder {get;set;}
+  public Boolean servicePurchaseOrder {get;set;}
   
   //public variables to be used in new PO
   public list<SelectOption> availableVendors = new list<SelectOption>();
@@ -324,6 +352,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
+
       newPurchaseOrder = true;
       status = 'new';
       this.po.Status__c = 'New';
@@ -372,9 +401,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
-      String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
-      for (Order thisOrder : [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId]){
+      for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
+      									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
+      									Store_Location__c, RecordTypeId 
+      									FROM Order WHERE Id = :orderId]){
+
+			// Determine if this is a service order
+			if (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) {
+				servicePurchaseOrder = true;
+			}
+			
+			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
+										(servicePurchaseOrder) 	? 'S' : 'P';
+
 			String storeAbbreviation;
           	relatedOrder = thisOrder;
             if (thisOrder.Store_Location__c != null) {
@@ -404,29 +444,29 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
-                    Order.Store_Location__c
-                    FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled']; 
+                    Order.Store_Location__c, Purchase_Order__c
+                    FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
-	System.Debug('************relatedOrderItems=' +relatedOrderItems);
     // If there are related order items
-    if (relatedOrderItems != null) {
+    if (!relatedOrderItems.isEmpty()) {
+	System.Debug('************relatedOrderItems=' +relatedOrderItems);
 
       //USING ORDER ITEMS GET ALL PRODUCTS
       for(OrderItem oi: relatedOrderItems){
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
+		if (oi.Purchase_Order__c == null) unassignedProductIds.add(oi.Pricebookentry.Product2Id);
       }
       relatedProducts = [SELECT Id, Name, Description, Vendor__c, Vendor__r.Id, Vendor__r.Name, Part_Number__c, Name_Part_Number__c FROM Product2 Where Id IN :relatedProduct2IDList];
         
-      //USING PRODUCTS GET LIST OF ALL VENDORS
+      //Create a map of the related products
       for(Product2 p : relatedProducts){
         productIdToProductMap.put(p.id, p);
       }
 
-
-      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
-      for(Account a : vendorsOnOrder){
+//      list<Account> vendorsOnOrder = [SELECT Id, Name FROM Account WHERE Id IN :storeVendors];
+      for(Account a : storeVendorRecords){
         accountIdToAccountMap.put(a.id, a);
       }
 	  // Create a map of product Ids to their list of vendors
@@ -441,8 +481,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
 			productVendorMap.put(vp.Product__c, vendors);			
 		}
+		if(unassignedProductIds.contains(vp.Product__c))
+			vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
       }
         
+	System.Debug('************productVendorMap=' +productVendorMap);
       //USING MAPS TO CREATE WRAPPERS
       for(OrderItem oi : relatedOrderItems){
         Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
@@ -475,6 +518,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       String userAbbreviation = (Test.isRunningTest()) ?   'A' 
       							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
       							:	currentUser.User_Abbreviation__c;
+
       String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
 
       if (String.isNotBlank(storeLocationName)) {
@@ -500,12 +544,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
   }//end of constructor
 
-
-
-
-
-
-  
   public List<SelectOption> getAvailableVendors() {
     return availableVendors;
   }
@@ -520,7 +558,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     for(OrderItemWrapper oiw : orderItemWrapperList){
       system.debug('ADS oiw: '+oiw);
       if(oiw.account != null && oiw.account.id == selectedVendor && vendorProducts.contains(oiw.product.id) ){
-        orderItemWrapperByVendor.add(oiw);
+		// Only include in the orderitemwrapperbyvendor if this is a new purchase order
+		// and the order item hasn't been assigned to an order
+		if (newPurchaseOrder && oiw.orderItem.Purchase_Order__c == null)
+        	orderItemWrapperByVendor.add(oiw);
+		// Or include if this is an existing purchase order
+		// and the order item has been assigned to the current purchase order
+        else if (!newPurchaseOrder && oiw.orderItem.Purchase_Order__c == po.Id)
+        	orderItemWrapperByVendor.add(oiw);
       }
     }
     system.debug('ADS orderItemsByVendor: '+orderItemWrapperByVendor);
@@ -586,11 +631,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
       po.Order__c = orderId;
       // Sets the PO's record type
-      po.RecordTypeId =  (costPurchaseOrder) ?
-                    UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')    :
-                (selectedVendorName == 'RbA')   ?
-                    UtilityMethods.retrieveRecordTypeId( 'RbA_Purchase_Order','Purchase_Order__c')    :
-                    UtilityMethods.retrieveRecordTypeId('Product_Purchase_Order','Purchase_Order__c');
+      po.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Cost_Purchase_Order') :
+						(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order') :
+						(selectedVendorName == 'RbA')   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
+														  UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Product_Purchase_Order');
 
       // checks that the gl and intercompany accounts are available
 //      if (!costPurchaseOrder) {
