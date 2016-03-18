@@ -322,7 +322,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @param: List<Id> opptyIds
    * @return: List<OrderContainer>
    */
-    public List<OrderContainer> buildOrderContainers(List<Id> opptyIds){
+  public List<OrderContainer> buildOrderContainers(List<Id> opptyIds){
     // get the orders
     Map<Id, Order> orderMap = queryOrders(opptyIds);
     // get the order line items
@@ -683,65 +683,53 @@ if (appts.getErrors().size() == 0){
     }
   }
 
-  public static String customerSearch(String inputJSON){
+  /* @method: customerSearch(String inputJSON)
+   * @param: String inputJSON
+   * @return: String
+   */
+  public String customerSearch(String inputJSON){
+	// setup
     DTOCustomerSearchResultsContainer container = new DTOCustomerSearchResultsContainer();
     container.searchResults = new List<DTOCustomerSearchResults>();
+	// parse the JSON
     DTOCustomerSearchParameters dtoSearchParams = (DTOCustomerSearchParameters)JSON.deserialize(inputJSON, DTOCustomerSearchParameters.class);
 
     try{
-      //All fields used for opportunity query are null
-      if(dtoSearchParams.startDate == null && dtoSearchParams.endDate == null && String.isBlank(dtoSearchParams.address) && String.isBlank(dtoSearchParams.city) && String.isBlank(dtoSearchParams.state)){
+      //validate that All fields used for query are not null
+      if(dtoSearchParams.startDate == null && dtoSearchParams.endDate == null 
+		&& String.isBlank(dtoSearchParams.address) && String.isBlank(dtoSearchParams.city) && String.isBlank(dtoSearchParams.state)
+		&& String.isBlank(dtoSearchParams.firstName) && String.isBlank(dtoSearchParams.lastName)
+		&& String.isBlank(dtoSearchParams.phone) && String.isBlank(dtoSearchParams.email)) {
+
         container.error = RMS_Settings_map.get('rSuite.search.nullParameters.error').Value__c;
         return JSON.serialize(container);
       }
+      String contactRoleQuery = 'Select isPrimary, OpportunityId, Opportunity.CloseDate, Opportunity.Account.ShippingStreet, '+ 
+                                'Opportunity.Account.ShippingCity, Opportunity.Account.ShippingStateCode, Contact.FirstName,'+
+                                'Contact.LastName, Contact.Email, Contact.Phone FROM OpportunityContactRole WHERE isDeleted = false AND ';
 
-      //All fields used for OpportunityContactRole query are null
-      /*if(String.isBlank(dtoSearchParams.firstName) && String.isBlank(dtoSearchParams.lastName) && String.isBlank(dtoSearchParams.email) && String.isBlank(dtoSearchParams.phone)){
-        container.error = RMS_Settings_map.get('rSuite.search.nullParameters.error').Value__c;
-        return JSON.serialize(container);
-      }*/
-
-      String oppQuery = 'SELECT ID FROM Opportunity WHERE ';
       if(dtoSearchParams.startDate != null){
         Date startDate = dtoSearchParams.startDate;
-        oppQuery += 'CloseDate >=: startDate AND ';
+        contactRoleQuery += 'Opportunity.CloseDate >=: startDate AND ';
       }
       if(dtoSearchParams.endDate != null){
         Date endDate = dtoSearchParams.endDate;
-        oppQuery += 'CloseDate <=: endDate AND ';
+        contactRoleQuery += 'Opportunity.CloseDate <=: endDate AND ';
       }
       if(String.isNotBlank(dtoSearchParams.address)){
         String address = '%'+dtoSearchParams.address+'%';
-        //ShippingAddress does not work, addresses can only be filtered using distance expressions, changed to ShippingStreet
-        oppQuery += 'Account.ShippingStreet Like :address AND ';
+        contactRoleQuery += 'Opportunity.Account.ShippingStreet Like :address AND ';
       }
       if(String.isNotBlank(dtoSearchParams.city)){
         String city = '%'+dtoSearchParams.city+'%';
-        oppQuery += 'Account.ShippingCity Like :city AND ';
+        contactRoleQuery += 'Opportunity.Account.ShippingCity Like :city AND ';
       }
       if(String.isNotBlank(dtoSearchParams.state)){
         String state = '%'+dtoSearchParams.state+'%';
-        oppQuery += 'Account.ShippingStateCode Like :state';
+        contactRoleQuery += 'Opportunity.Account.ShippingStateCode Like :state AND ';
       }
-      
-      oppQuery = oppQuery.removeEnd('AND');
-      System.debug(oppQuery);
-      List<Opportunity> opportunityResults = (List<Opportunity>)Database.query(oppQuery);
-      system.debug(opportunityResults);
-
-      List<Id> opportunityIds = new List<Id>();
-      for(Opportunity opp: opportunityResults){
-        opportunityIds.add(opp.Id);
-      }
-
-      //ShippingAddress is a complex datatype, using ShippingStreet for response 'address' field for now
-      String contactRoleQuery = 'Select OpportunityId, Opportunity.CloseDate, Opportunity.Account.ShippingAddress, Opportunity.Account.ShippingStreet, '+ 
-                                'Opportunity.Account.ShippingCity, Opportunity.Account.ShippingStateCode, Contact.FirstName,'+
-                                'Contact.LastName, Contact.Email, Contact.Phone FROM OpportunityContactRole WHERE OpportunityID in :opportunityIds AND ';
-
       if(String.isNotBlank(dtoSearchParams.firstName)){
         String firstName = '%'+dtoSearchParams.firstName+'%';
-        //ShippingAddress does not work, addresses can only be filtered using distance expressions, changed to ShippingStreet
         contactRoleQuery += 'Contact.FirstName Like :firstName AND ';
       }
       if(String.isNotBlank(dtoSearchParams.lastName)){
@@ -757,31 +745,41 @@ if (appts.getErrors().size() == 0){
         contactRoleQuery += 'Contact.Phone Like :phone ';
       }
 
-      contactRoleQuery = contactRoleQuery.removeEnd('AND');
+      contactRoleQuery = contactRoleQuery.removeEnd('AND ');
+
       List<OpportunityContactRole> contactRoleResults = Database.query(contactRoleQuery);
       System.debug(contactRoleResults);
-      
-      if(contactRoleResults.size() > Integer.valueOf(RMS_Settings_map.get('rSuite.search.maxresults').Value__c)){
-        container.error = RMS_Settings_map.get('rSuite.search.tooManyResults.error').Value__c;
-        return JSON.serialize(container);
-      }else{
+
+		// let's eliminate duplicate opportunities
+		Map<Id, OpportunityContactRole> oppIdtoContactRoleMap = new Map<Id, OpportunityContactRole>();
         for(OpportunityContactRole cRole: contactRoleResults){
-          DTOCustomerSearchResults resultRecord = new DTOCustomerSearchResults();
-          resultRecord.firstName = cRole.Contact.FirstName;
-          resultRecord.lastName = cRole.Contact.LastName;
-          resultRecord.email = cRole.Contact.Email;
-          resultRecord.phone = cRole.Contact.Phone;
-          resultRecord.address = cRole.Opportunity.Account.ShippingStreet;
-          resultRecord.city = cRole.Opportunity.Account.ShippingCity;
-          resultRecord.opportunityID = cRole.OpportunityId;
-          container.searchResults.add(resultRecord);
-        }
-       
-      }
+			if(!oppIdtoContactRoleMap.containsKey(cRole.OpportunityId) || cRole.isPrimary) {
+				oppIdtoContactRoleMap.put(cRole.OpportunityId, cRole);
+			}
+		}
+		// check the search result size
+		if(oppIdtoContactRoleMap.size() > Integer.valueOf(RMS_Settings_map.get('rSuite.search.maxresults').Value__c)){
+			container.error = RMS_Settings_map.get('rSuite.search.tooManyResults.error').Value__c;
+			return JSON.serialize(container);
+		} else {
+			for(OpportunityContactRole cRole: oppIdtoContactRoleMap.values()){
+				DTOCustomerSearchResults resultRecord = new DTOCustomerSearchResults();
+				resultRecord.firstName = cRole.Contact.FirstName;
+				resultRecord.lastName = cRole.Contact.LastName;
+				resultRecord.email = cRole.Contact.Email;
+				resultRecord.phone = cRole.Contact.Phone;
+				resultRecord.address = cRole.Opportunity.Account.ShippingStreet;
+				resultRecord.city = cRole.Opportunity.Account.ShippingCity;
+				resultRecord.opportunityID = cRole.OpportunityId;
+				container.searchResults.add(resultRecord);
+			}
+		}
+
     }catch(Exception e){
+		System.debug('################## Search Step Exception: ' + e.getMessage());
+		System.debug('################## Exception: ' + e.getStackTraceString());
       container.error = e.getMessage();
     }
-    
     return JSON.serialize(container);
 
   }
@@ -804,7 +802,7 @@ if (appts.getErrors().size() == 0){
       return JSON.serialize(myAppts);
     } catch (Exception e) {
       System.debug(LoggingLevel.ERROR, e);
-      return JSON.serialize(e);
+      return JSON.serialize(e.getMessage() + ' : ' + e.getStackTraceString());
     }
   }
 

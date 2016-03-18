@@ -83,11 +83,14 @@ global with sharing class RMS_mobileAppAPIController {
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else if (operation.equals(CUSTOMER_JOB_SEARCH)){
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
-				String result = handler.getSelectedSearchResults(req.requestBody.toString());
+				String result = handler.customerSearch(req.requestBody.toString());
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else if (operation.equals(GET_SELECTED_SEARCH_RESULTS)){
-
+				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
+				String result = handler.getSelectedSearchResults(req.requestBody.toString());
+				RestContext.response.addHeader('Content-Type', 'application/json');
+				RestContext.response.responseBody = Blob.valueOf(result);
 			}else {
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
