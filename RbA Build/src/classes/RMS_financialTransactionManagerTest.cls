@@ -718,9 +718,10 @@ public with sharing class RMS_financialTransactionManagerTest {
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store1.id,
-										Date_Applied__c = Date.Today(),
-										Installer__c = communityUser.id
+										Date_Applied__c = Date.Today()
 										);
+										//,
+										//Installer__c = communityUser.id
 		insert labor1;
 		
 		labor1.Hours_Applied__c = 2;
@@ -900,9 +901,10 @@ public with sharing class RMS_financialTransactionManagerTest {
 												//Standard_Hourly_Rate__c=100,
 												External_Labor_Amount__c = 100,
 												Store_Location__c = store1.id,
-												Date_Applied__c = Date.Today(),
-												Installer__c = communityUser.id
+												Date_Applied__c = Date.Today()
 												);
+												//,
+												//Installer__c = communityUser.id
 		insert labor1;
 		
 		labor1.Hours_Applied__c = 2;

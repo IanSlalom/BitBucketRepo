@@ -87,8 +87,8 @@
 	</style>
 	
 	<apex:pageBlock >
-	
-	<apex:form rendered="{!IF(Order.Status == 'Draft','false', 'true')}">
+	<!-- <apex:form rendered="{!IF(Order.Status == 'Draft','false', 'true')}"> -->
+	<apex:form rendered="{!IF(displayButtonsOnPage == true,'true', 'false')}">
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
 	</apex:form>
 		
