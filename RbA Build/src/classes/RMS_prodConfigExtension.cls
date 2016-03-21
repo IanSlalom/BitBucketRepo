@@ -63,6 +63,7 @@ public class RMS_prodConfigExtension {
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
+					oiId = orderItem.Id;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
@@ -977,10 +978,19 @@ public class RMS_prodConfigExtension {
 	}
 
 	/*******************************************************
-					cancel method
+					close method
 	*******************************************************/
-	public virtual PageReference cancel() {
-		system.debug('*****Cancel button pressed');
+	public virtual PageReference close() {
+		system.debug('*****Close button pressed');
+		errorOccurred = 'false';
+		return null;
+	}
+
+	/*******************************************************
+					edit method
+	*******************************************************/
+	public virtual PageReference edit() {
+		system.debug('*****Edit button pressed');
 		errorOccurred = 'false';
 		return null;
 	}

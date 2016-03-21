@@ -565,7 +565,7 @@ private class RMS_prodConfigExtensionTest {
 		ApexPages.StandardController stdController = new ApexPages.StandardController(oi);
 		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
 		
-		pageReference newPage = ext.cancel();
+		pageReference newPage = ext.close();
 		
 	}
 
