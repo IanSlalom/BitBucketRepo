@@ -45,9 +45,7 @@ PO_System_Number__c</formula>
         </actions>
         <active>true</active>
         <description>Fires when a purchase order&apos;s estimated ship date has changed</description>
-        <formula>AND( ISCHANGED( Estimated_Ship_Date__c ),  
-     NOT(ISBLANK(PRIORVALUE(Estimated_Ship_Date__c )))
-)</formula>
+        <formula>AND( ISCHANGED( Estimated_Ship_Date__c ),        NOT(ISBLANK(PRIORVALUE(Estimated_Ship_Date__c ))) )</formula>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <tasks>
