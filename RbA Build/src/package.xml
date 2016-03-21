@@ -191,6 +191,7 @@
         <members>Store_Discount__c-Store Discount Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
+        <members>TM_Offset__c-Tech Measure Offset Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
         <name>Layout</name>
