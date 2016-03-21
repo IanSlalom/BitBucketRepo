@@ -116,7 +116,8 @@ public with sharing class UtilityMethods {
     															LSWP_WO_Owner_ID__c,
     															Location_Number__c,
     															Paint_Stain_Vendor_Account__c,
-    															Paint_Stain_Vendor_Contact__c
+    															Paint_Stain_Vendor_Contact__c,
+    															Service_Work_Order_Queue_ID__c
     															
     															FROM Store_Configuration__c 
     															WHERE Store__c IN :storeIds

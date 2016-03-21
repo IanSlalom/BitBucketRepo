@@ -16,14 +16,13 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 	public string serviceOrderLSWPRecordTypeId{get;set;}
 	public string serviceOrderPaintStainRecordTypeId{get;set;}
 	
-	
-	
-	
 	public string serviceOrderVisitRecordTypeURL{get;set;}
 	public string serviceOrderActionsRecordTypeURL{get;set;}
 	public string serviceOrderLSWPRecordTypeURL{get;set;}
 	public string serviceOrderPaintStainRecordTypeURL{get;set;}
 	public string serviceOrderPermitRecordTypeURL{get;set;}
+	
+	public boolean displayButtonsOnPage{get;set;}
 	
 /******* Set up Standard Controller for Purchase_Order__c  *****************/
  	private Apexpages.StandardController standardController;
@@ -89,8 +88,15 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
 		Schema.DescribeSObjectResult r = RbA_Work_Order__c.sObjectType.getDescribe();
 		String workOrderKeyPrefix = r.getKeyPrefix();
 		
-		list<Order> theOrd = [SELECT Id, AccountId, Store_Location__c, OrderNumber, OpportunityId, BillToContactId FROM Order WHERE Id =:ordId ];
-		
+		list<Order> theOrd = [SELECT Id, AccountId, Status, Store_Location__c, OrderNumber, OpportunityId, BillToContactId, RecordTypeId FROM Order WHERE Id =:ordId ];
+		Id orderServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+        
+        if(theOrd[0].Status == 'Draft' && theOrd[0].RecordTypeId != orderServiceRecordTypeId){
+        	displayButtonsOnPage = false;
+        }else if(theOrd[0].Status != 'Draft' || theOrd[0].RecordTypeId == orderServiceRecordTypeId){
+        	displayButtonsOnPage = true;
+        }
+        
 		list<Account> relatedAccount = [SELECT 	Name,
 												ShippingStreet,
 								    			ShippingCity,

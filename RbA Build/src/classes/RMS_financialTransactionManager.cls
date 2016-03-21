@@ -277,7 +277,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     External_Labor_Amount__c,
                                                     Hours_Applied__c,
                                                     Installer__c,
-                                                    Installer__r.Account.Baan_Business_Partner_Number__c,
+                                                    Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c,
                                                     Installer_Account_Number__c,
                                                     GL_Account__c,
                                                     GL_Account__r.Name,
@@ -291,7 +291,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Work_Order_Type__c,
                                                     CreatedById,
                                                     Name,
-                                                    RecordTypeId
+                                                    RecordTypeId 
                                                     
                                                     FROM Labor__c WHERE Id IN :mapNew.keyset()];        
         
@@ -299,17 +299,35 @@ public with sharing class RMS_financialTransactionManager {
 
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborExternalFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'External Labor');
+        
+        map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecInternalFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Post Recognized Internal Labor');
+        map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecExternalFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Post Recognized External Labor');
+        
         map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFinacialTransactionList = linkFinacialTransactions(extraFieldsList, 'Misc Reimbursement');
         map<Id, String> laborIdToMiscReimbursementGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
         
         Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
         Id laborMiscReimbursementRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Reimbursement', 'Labor__c');
-        
+      
         for(Labor__c l : extraFieldsList){
             String typeOfLabor;
+            String subTypeOfLabor;
             if(l.RecordTypeId == laborLaborRecordTypeId ){
                 typeOfLabor = 'LaborLabor';
-            }else if(l.RecordTypeId == laborMiscReimbursementRecordTypeId ){
+                if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
+                	subTypeOfLabor = 'internal';
+                }else if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
+                	subTypeOfLabor = 'external';
+                }
+            }
+            /*
+            else if(l.RecordTypeId == laborLaborRecordTypeId && l.Labor_Complete__c == true){
+                typeOfLabor = 'PostRecInternalLabor';
+            }else if(l.RecordTypeId == laborLaborRecordTypeId ){
+                typeOfLabor = 'PostRecExternalLabor';
+            }
+            */
+            else if(l.RecordTypeId == laborMiscReimbursementRecordTypeId ){
                 typeOfLabor = 'LaborMiscReimbursement';
             }
             
@@ -323,11 +341,12 @@ public with sharing class RMS_financialTransactionManager {
                 errorMessage = checkLaborForErrors(l, errorMessage, typeOfLabor);
                 
                 if(typeOfLabor == 'LaborLabor'){
-                    if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
+                    if(subTypeOfLabor == 'external'){
                         errorMessage = checkFinacialTransationForErrors(laborIdToLaborExternalFinacialTransactionList.get(l.id) , errorMessage, 'External Labor');
-                    }else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
+                    }else if(subTypeOfLabor == 'internal'){
                         errorMessage = checkFinacialTransationForErrors(laborIdToLaborFinacialTransactionList.get(l.id) , errorMessage, 'Internal Labor');
                     }
+                    
                 }else if( typeOfLabor == 'LaborMiscReimbursement'){
                     errorMessage = checkFinacialTransationForErrors(laborIdToMiscReimbursementFinacialTransactionList.get(l.id) , errorMessage, 'Misc Reimbursement');
                     
@@ -343,15 +362,14 @@ public with sharing class RMS_financialTransactionManager {
                             );
                             
                             if(typeOfLabor == 'LaborLabor'){
-                            
-                                if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
+                                if(subTypeOfLabor == 'external'){
                                     newJE.Type__c = 'External Labor';
                                     newJE.Amount__c = l.External_Labor_Amount__c;
-                                    newJE.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+                                    newJE.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                     
                                     newJE.Debit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
                                     newJE.Credit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
-                                }else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
+                                }else if(subTypeOfLabor == 'internal'){
                                     newJE.Type__c = 'Internal Labor';
                                     newJe.Amount__c = l.Internal_Cost__c;
                                     
@@ -361,7 +379,7 @@ public with sharing class RMS_financialTransactionManager {
                             }else if(typeOfLabor == 'LaborMiscReimbursement'){
                                 newJE.Type__c = 'Misc Reimbursement';
                                 newJE.Amount__c = l.External_Labor_Amount__c;
-                                newJE.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+                                newJE.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                 
                                 newJE.Debit_General_Ledger_Account__c = laborIdToMiscReimbursementGLAmap.get(l.id);
                                 newJE.Credit_General_Ledger_Account__c = laborIdToMiscReimbursementFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
@@ -390,14 +408,14 @@ public with sharing class RMS_financialTransactionManager {
             
                                 if(typeOfLabor == 'LaborLabor'){
                                 
-                                    if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
+                                    if(subTypeOfLabor == 'external'){
                                         je.Type__c = 'External Labor';
                                         je.Amount__c = l.External_Labor_Amount__c;
-                                        je.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+                                        je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                         
                                         je.Debit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Debit_Account_Number__r.Name;
                                         je.Credit_General_Ledger_Account__c = laborIdToLaborExternalFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
-                                    }else if(l.External_Labor_Amount__c == null || l.External_Labor_Amount__c == 0){
+                                    }else if(subTypeOfLabor == 'internal'){
                                         je.Type__c = 'Internal Labor';
                                         je.Amount__c = l.Internal_Cost__c;
                                         
@@ -407,7 +425,7 @@ public with sharing class RMS_financialTransactionManager {
                                 }else if(typeOfLabor == 'LaborMiscReimbursement'){
                                     je.Type__c = 'Misc Reimbursement';
                                     je.Amount__c = l.External_Labor_Amount__c;
-                                    je.Baan_Business_Partner_Number__c = l.Installer__r.Account.Baan_Business_Partner_Number__c;
+                                    je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                     
                                     je.Debit_General_Ledger_Account__c = l.Installer_Account_Number__c;
                                     je.Credit_General_Ledger_Account__c = laborIdToMiscReimbursementFinacialTransactionList.get(l.id)[0].Credit_Account_Number__r.Name;
@@ -1562,7 +1580,7 @@ public with sharing class RMS_financialTransactionManager {
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
         if( (labor.External_Labor_Amount__c != null && labor.External_Labor_Amount__c != 0) && 
-            (labor.Installer__r.Account.Baan_Business_Partner_Number__c == null || labor.Installer__r.Account.Baan_Business_Partner_Number__c == '')){
+            (labor.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c == null || labor.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c == '')){
             dynamicErrorMessage = RMS_errorMessages.INSTALLER_HAS_NO_BAAN_NUMBER;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
