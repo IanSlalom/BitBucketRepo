@@ -81,6 +81,10 @@
                 <behavior>Edit</behavior>
                 <field>Description</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Save_Reason__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
@@ -160,15 +164,6 @@
                 <field>Amount_due_on_Account__c</field>
             </layoutItems>
         </layoutColumns>
-        <style>TwoColumnsTopToBottom</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>WARRANTY DETAILS</label>
-        <layoutColumns/>
-        <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
@@ -298,18 +293,22 @@
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
-    <relatedLists>
-        <fields>Product2</fields>
-        <fields>Charge_Cost_To__c</fields>
-        <fields>Purchase_Order__c</fields>
-        <fields>Quanity_Ordered__c</fields>
-        <fields>Variant_Number__c</fields>
-        <fields>Primary_Reason__c</fields>
-        <fields>Secondary_Reason__c</fields>
-        <fields>MTO_Source_Code__c</fields>
-        <fields>Defect_Code__c</fields>
-        <relatedList>RelatedOrderItemList</relatedList>
-    </relatedLists>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Order Products</label>
+        <layoutColumns>
+            <layoutItems>
+                <height>400</height>
+                <page>RMS_viewServiceOrderProducts</page>
+                <showLabel>false</showLabel>
+                <showScrollbars>true</showScrollbars>
+                <width>100%</width>
+            </layoutItems>
+        </layoutColumns>
+        <style>OneColumn</style>
+    </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
         <fields>Store_Discount__c.NAME</fields>
@@ -367,18 +366,12 @@
         <fields>PRODUCT2.NAME</fields>
         <relatedList>Asset.Sold_Order__c</relatedList>
     </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Amount__c</fields>
-        <fields>Date__c</fields>
-        <relatedList>Refund__c.Order__c</relatedList>
-    </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000RMAe</masterLabel>
+        <masterLabel>00h610000030Q6y</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>2</sizeY>
         <summaryLayoutItems>
@@ -394,7 +387,7 @@
         <summaryLayoutItems>
             <field>Status</field>
             <posX>1</posX>
-            <posY>1</posY>
+            <posY>0</posY>
         </summaryLayoutItems>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
     </summaryLayout>
