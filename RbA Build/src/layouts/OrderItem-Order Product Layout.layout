@@ -35,10 +35,6 @@
                 <behavior>Edit</behavior>
                 <field>NSPR_Number__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Miscellaneous_Charge_Parent_Unit_Id__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
