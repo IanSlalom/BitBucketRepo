@@ -73,7 +73,6 @@
 		{
 			var errorOccurred = '{!errorOccurred}';
 			var oiId = '{!oiId}';
-			alert(oiId);
 			if (errorOccurred == 'false') {
 				if(sforce.console.isInConsole()) {
 					openNewSubTab( '/' +oiId +'?isdtp=vw');
