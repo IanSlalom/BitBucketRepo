@@ -1,0 +1,31 @@
+<apex:page standardController="Order" showHeader="false" sidebar="false">
+  <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+  <apex:includeScript value="/support/console/26.0/integration.js"/>
+    
+    <script type="text/javascript">
+    window.onload = function() {
+            testCloseTab();
+            
+        };
+    
+    function testCloseTab() {
+            
+         
+
+            if (sforce.console.isInConsole()) { 
+                 sforce.console.getEnclosingTabId(closeSubtab);
+            } else { 
+                 window.close();
+            }
+            
+        }
+        
+        var closeSubtab = function closeSubtab(result) {
+            //Now that we have the tab ID, we can close it
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);
+        };
+</script>
+
+
+</apex:page>
