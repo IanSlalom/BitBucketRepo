@@ -498,8 +498,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       //BUILD SELECT LIST FOR CHOOSING VENDOR
       availableVendors.add(new SelectOption('','Please Select'));
+
+	  Set<Id> vendorIdsAdded = new Set<Id>();
       for(Account vend : vendorsOnOrder){
+      	if (vendorIdsAdded.contains(vend.Id)) continue;
         availableVendors.add(new SelectOption(vend.Id,vend.Name));
+        vendorIdsAdded.add(vend.Id);
       }  
     }
     
