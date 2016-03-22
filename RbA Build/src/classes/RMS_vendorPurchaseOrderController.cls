@@ -408,9 +408,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       									FROM Order WHERE Id = :orderId]){
 
 			// Determine if this is a service order
-			if (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) {
-				servicePurchaseOrder = true;
-			}
+			servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
 			
 			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
 										(servicePurchaseOrder) 	? 'S' : 'P';
