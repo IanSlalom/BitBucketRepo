@@ -466,10 +466,23 @@
         </apex:pageBlockSection>        
 
     </apex:pageBlock>
+
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
     </apex:actionRegion>
 
 </apex:form>
+    <apex:pageBlock >
+    	<apex:pageBlockSection title="Change History" columns="1" collapsible="true">
+    	<apex:pageBlockTable title="Change History" value="{!changeHistoryRecords}" var="history" style="width:100%" id="changeHistoriesTable">
+		        <apex:column value="{!history.LastModifiedBy.Name}"/>
+		        <apex:column value="{!history.LastModifiedDate}"/>
+		        <apex:column value="{!history.Retail_Price__c}"/>
+		        <apex:column value="{!history.Retail_Price_Change__c}"/>
+		        <apex:column value="{!history.Responsible_Party__c}"/>
+		        <apex:column value="{!history.Changes__c}"/>
+		 </apex:pageBlockTable>
+		 </apex:pageBlockSection>
+    </apex:pageBlock>
 <script type ="text/javascript">
     var j$ = jQuery.noConflict();
 
