@@ -55,6 +55,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public String receiveStatus {get; set;}   
   public String errorOccurred {get; set;}   
   public boolean overReceivingAllowed {get; set;}   
+  public boolean writeOff {get; set;}   
+  public boolean receiving {get; set;}   
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -348,7 +350,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
   //Constructor
   public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
     this.po = (Purchase_Order__c)stdController.getRecord();
-    
+    receiving = false;
+    writeOff = false;
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
@@ -439,7 +442,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Pricebookentry.UnitPrice, Quantity, Variant_Number__c, Unit_Wholesale_Cost__c, 
                     Unit_of_Measure__c, GL_Account__c, Discount_Amount__c, Description, NSPR__c,
                     Quantity_To_Receive__c, Date_Received__c, Installed_Product_Asset__r.Quantity,
-                    Installed_Product_Asset__c, Status__c, Order.AccountId, Order.BillToContactId,
+                    Installed_Product_Asset__c, Installed_Product_Asset__r.Quantity_Written_Off__c,
+                    Quantity_to_Write_Off__c, Date_Written_Off__c,
+                    Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c, Purchase_Order__c
@@ -665,6 +670,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     poId = po.Id;
     
     list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+    set<Id> orderItemAssetSet = new set<Id>();
     
         
     for(OrderItemWrapper oiw : orderItemWrapperByVendor){
@@ -673,13 +679,17 @@ public with sharing class RMS_vendorPurchaseOrderController {
 //      oi.GL_Account__c = glAccount;
 //      oi.Intercompany_AP_Account__c = intercompanyAccount;
       orderItemsToUpdateList.add(oi);
+      orderItemAssetSet.add(oi.Installed_Product_Asset__c);
     }
     System.Debug('**********poTax__c=' +po.Tax__c);
 
 
-    try{
+//    try{
       // upsert the order line items
-      orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList);
+      if (receiving)
+      	orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList,orderItemAssetSet);
+      if (writeOff)
+	      orderItemsToUpdateList = writeOffLineItems(orderItemsToUpdateList, orderItemAssetSet);
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
 	  } 
@@ -693,11 +703,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
       	po.Status__c = orderStatus;
       	update po;
       }
-    } catch (Exception e){
-      System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
-      return null;
-    }
+ //   } catch (Exception e){
+ //     System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
+  //    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
+  //    return null;
+ //   }
 
     errorOccurred = 'false';
     return null;
@@ -837,21 +847,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
   /*******************************************************
           receiveLineItems method
   *******************************************************/
-  public List<OrderItem> receiveLineItems(List<OrderItem> itemsToReceive) {
+  public List<OrderItem> receiveLineItems(List<OrderItem> itemsToReceive, Set<Id> assetSet) {
     system.debug('*****Receiving a line item');
     Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
     List<Asset> finalAssetsToReceive = new List<Asset>();
     List<OrderItem> finalOrderItems = new List<OrderItem>();
+    Map<Id, Asset> assetMap = new Map<Id, Asset>();
+    
+    for (Asset prodAsset : [SELECT Id, Quantity FROM Asset WHERE Id IN: assetSet]) {
+    	assetMap.put(prodAsset.Id, prodAsset);
+    }
+
 	for (OrderItem oi : itemsToReceive) {
-		// If the date or quantity received is null just add the order ite
-//		if (oi.Date_Received__c == null || oi.Quantity_To_Receive__c == null) {
-//			if (oi.Installed_Product_Asset__c == null)
-//				receiveStatus = 'Partially Received';
-//			else if(oi.)
-//			finalOrderItems.add(oi);
-			
-//			continue;
-//		}
 
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
@@ -870,7 +877,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     );
       } 
       else if (oi.Installed_Product_Asset__c != null){
-      	productAsset = [SELECT Id, Quantity FROM Asset WHERE Id =: oi.Installed_Product_Asset__c];
+      	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
       }
       if ((oi.Date_Received__c != null && oi.Quantity_To_Receive__c == null) ||
       	 (oi.Date_Received__c == null && oi.Quantity_To_Receive__c != null))
@@ -953,6 +960,95 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 
   /*******************************************************
+          writeOffLineItems method
+  *******************************************************/
+  public List<OrderItem> writeOffLineItems(List<OrderItem> itemsToWriteOff, Set<Id> assetSet) {
+    system.debug('*****Writing off a line item');
+    Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
+    List<Asset> finalAssetsToWriteOff = new List<Asset>();
+    List<OrderItem> finalOrderItems = new List<OrderItem>();
+    Map<Id, Asset> assetMap = new Map<Id, Asset>();
+    
+    for (Asset prodAsset : [SELECT Id, Quantity, Quantity_Written_Off__c FROM Asset WHERE Id IN: assetSet]) {
+    	assetMap.put(prodAsset.Id, prodAsset);
+    }
+     
+
+	for (OrderItem oi : itemsToWriteOff) {
+
+      Asset productAsset;
+      if (oi.Installed_Product_Asset__c == null && oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) { 
+      			productAsset = new Asset(
+                      AccountId      = oi.Order.AccountId,
+                      ContactId      = oi.Order.BillToContactId,
+                      SerialNumber    = oi.Variant_Number__c,
+                      Price        = oi.Total_Retail_Price__c,
+                      Product2Id      = oi.Pricebookentry.Product2Id,
+                      PurchaseDate    = oi.Order.EffectiveDate,
+                      Name        = oi.Pricebookentry.Product2.Name,
+                      Sold_Order__c    = oi.OrderId,
+                      Store_Location__c = oi.Order.Store_Location__c,
+                      Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
+                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
+				      Quantity 		  = 0
+                    );
+      } 
+      else if (oi.Installed_Product_Asset__c != null){
+      	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
+      }
+      if ((oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c == null) ||
+      	 (oi.Date_Written_Off__c == null && oi.Quantity_To_Write_Off__c != null))
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WRITEOFF_DATE_QUANTITY_REQUIRED));
+        return null;
+      }
+      if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
+			if(oi.Unit_Wholesale_Cost__c == null) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+				  return null; 
+				  
+			}
+      		productAsset.Quantity_Written_Off__c =  (productAsset.Quantity_Written_Off__c == null) 
+                          ?   oi.Quantity_To_Write_Off__c 
+                          :  oi.Quantity_To_Write_Off__c + productAsset.Quantity_Written_Off__c;
+             
+      		productAsset.Date_Written_Off__c = oi.Date_Written_Off__c;
+      		
+                  																		
+			if ((productAsset.Quantity_Written_Off__c > oi.Quantity)) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.OVERWRITINGOFF_NOT_ALLOWED));
+				  return null;
+			}
+
+      		finalAssetsToWriteOff.add(productAsset);
+
+			//TODO: Determine if we need to set the asset status to 'Written Off' or 'Partially Written Off'
+//      	productAsset.Status =   (productAsset.Quantity_Written_Off__c >= oi.Quantity ) ? 'Written Off' :
+//      																			'Partially Written Off';
+      }
+      	if (productAsset != null)
+      		orderToAssetMap.put(oi.Id, productAsset);
+      
+    }
+    
+    upsert finalAssetsToWriteOff;
+
+      for (OrderItem oi : itemsToWriteOff) {
+		if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
+        	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+		}
+        oi.Quantity_To_Write_Off__c = null;
+        oi.Date_Written_Off__c = null;
+        finalOrderItems.add(oi);
+
+      }
+    
+    return finalOrderItems;
+
+  }
+
+
+  /*******************************************************
           cancel method
   *******************************************************/
   public virtual PageReference cancel() {
@@ -1017,6 +1113,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the cancelPurchaseOrder method cancelling the PO:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
     }
+  }
+  /*******************************************************
+        writeOff button method
+  *******************************************************/
+  // Called after the confirmation window is accepted. This cancels the PO and the order line items
+  public PageReference writeOff() {
+    system.debug('*****Write Off Button pressed');
+    writeOff = true;    
+
+	PageReference p = page.RMS_vendorPurchaseOrder;
+
+	// Get all of the url parameters from the current url and put them in the new url
+	Map<String, String> m = p.getParameters();
+	m.putAll(ApexPages.currentPage().getParameters());
+
+	p.setRedirect(false);
+
+	return p;
+  }
+
+  /*******************************************************
+        receive button method
+  *******************************************************/
+  // Called after the confirmation window is accepted. This cancels the PO and the order line items
+  public PageReference receive() {
+    system.debug('*****Receive Button pressed');
+    receiving = true;    
+
+	PageReference p = page.RMS_vendorPurchaseOrder;
+
+	// Get all of the url parameters from the current url and put them in the new url
+	Map<String, String> m = p.getParameters();
+	m.putAll(ApexPages.currentPage().getParameters());
+
+	p.setRedirect(false);
+
+	return p;
   }
 
   /*******************************************************
