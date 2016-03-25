@@ -1,0 +1,106 @@
+<apex:page standardController="RbA_Work_Order__c"
+        extensions="editableTaskListExt"
+        showHeader="true" 
+        sidebar="false"
+        title="Edit Task">
+  
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+<script type="text/javascript">
+    window.onload = function() {
+       // hideSelector();
+        testOpenSubtab();
+        
+    };
+
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+
+    var openSubtab = function openSubtab(result) {
+         var primaryTabId = result.id;
+         sforce.console.setTabTitle('New Service Task');
+    };
+    
+    function hideSelector(){
+    $('select[title="Search scope"]').hide();
+    
+    }
+    
+
+</script>     
+<style>
+
+img.comboboxIcon {
+display: none;
+}
+
+.hideDropdown select{
+        visibility: hidden !important;
+        display: none !important;
+    }
+
+</style>       
+        
+        
+<apex:form >
+<apex:pageMessages id="messages"/>
+<apex:pageBlock title="Edit Task">
+  <apex:pageBlockButtons >
+    <apex:commandButton value="Cancel" action="{!cancel}" />
+    <apex:commandButton value="Save" action="{!save}"/>
+  </apex:pageBlockButtons>
+  <apex:pageBlockSection title="Work Order Information" collapsible="false">
+  <apex:outputLink value="/{!RbA_Work_Order__c.Id}" target="_blank">{!RbA_Work_Order__c.Name}</apex:outputLink>
+    <apex:pageBlockSectionItem >
+      <apex:outputText value="{!RbA_Work_Order__c.Work_Order_Type__c}" />
+    </apex:pageBlockSectionItem>
+    <!-- Add additional parent fields here -->
+  </apex:pageBlockSection>
+  <apex:pageBlockSection id="childList" columns="1" title="Tasks" collapsible="false">
+    <!-- There is a trick to creating a counter when rendering rows in a
+          pageBlockTable. You have to define a variable to default to 0,
+          and then update that variable inside the table row. This is the
+          way that I can leverage smart row deletes -->
+    <apex:variable var="rowNum" value="{!ZERO}" />
+    <apex:outputLabel value="No Tasks currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
+    <apex:pageBlockTable value="{!children}" var="task" rendered="{!hasChildren}">
+    <!--<apex:column headerValue="Work Order">
+      <apex:inputField value="{!task.WhatId}" style="width: 100px;"/>
+    </apex:column>-->
+        <apex:column headerValue="Assigned To" id="assigned">
+      <apex:inputField value="{!task.OwnerId}" styleClass="hideDropdown"/>
+    </apex:column>
+    <apex:column headerValue="Subject" width="500px;">
+      <apex:inputField value="{!task.Subject}" style="width: 500px;"/>
+    </apex:column>
+    <apex:column headerValue="Type">
+      <apex:inputField value="{!task.Service_Type__c}"/>
+    </apex:column>
+    <apex:column headerValue="Non Stock Material" width="100px;">
+        <apex:inputField value="{!task.Non_Stock_Material__c}" style="width: 100px;"/>
+    </apex:column>        
+    <apex:column headerValue="Status">
+      <apex:inputField value="{!task.Status}"/>
+    </apex:column>           
+      <!-- Add additional children metadata columns here -->
+      <apex:column headerValue=" ">
+        <!-- This is the second half of the trick to keep track
+              of your row index for deletion. -->
+        <apex:variable var="rowNum" value="{!rowNum + 1}" />
+        <apex:commandLink value="Delete" action="{!removeFromList}" rerender="childList, messages" immediate="true">
+          <apex:param name="removeIndex" assignTo="{!removeIndex}" value="{!rowNum}" />
+        </apex:commandLink>
+      </apex:column>
+    </apex:pageBlockTable>
+    <!-- Want to specify immediate here and above so validation does
+          not occur when you are trying to add/remove rows. Only want
+          validation to occur when trying to save -->
+    <apex:commandButton value="Add Task" action="{!addToList}" rerender="childList, messages" immediate="true" />
+  </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

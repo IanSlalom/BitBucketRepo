@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -54,6 +54,8 @@
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
+        <members>editableTaskList</members>
+        <members>editableTaskListExt</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -76,6 +78,7 @@
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
+        <members>RMS_addMultipleTasksToWO</members>
         <name>ApexPage</name>
     </types>
     <types>
