@@ -361,7 +361,7 @@
 			<apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
 <!-- 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" />
 --> 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" rendered="{!mode == 'e'}"/>
-			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode != 'e'}"/>
+			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode == 'e'}"/>
 		</apex:outputPanel>
 
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
@@ -448,7 +448,7 @@
 			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode == 'e'}"/>
 			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'}"/>
-			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr"/>
+			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr" onChange="callRule('nspr')"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
             <apex:outputField value="{!OrderItem.Tax__c}" />
 			<apex:inputField value="{!OrderItem.NSPR_Number__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nsprNumber"/>
@@ -567,8 +567,8 @@
         }else if(ruleName == 'specialOptions'){
             specialOptions();
         }
-        }else if(ruleName == 'nspr'){
-            nspr();
+        else if(ruleName == 'nspr') {
+        	nspr();
         }
     }       
         
@@ -805,8 +805,10 @@
     function specialOptions(){
 		// If the specialOptions checkbox is checked, display the special options section
     	var specialOptionsCheckInput = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
-    	var specialOptionsCheckOutput = j$("output[data-jsid='outSpecialOptionsCheckOut']").prop('checked');
-
+    	
+    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheckOut']").prop("title");
+		alert(specialOptionsCheckInput);
+		alert(specialOptionsCheckOutput);
         if( specialOptionsCheckOutput == true){
             j$("div[data-jsid='specialOptions']").show();
         }
@@ -908,15 +910,12 @@
 		// If the NSPR checkbox is checked, set the verify configuration to false
     	var nsprCheck = j$("input[data-jsid='nspr']").prop('checked');
         if( nsprCheck == true){
-//            j$("input[data-jsid='verify']").prop('checked',false);
- //              j$("input[data-jsid='tempered2']").prop('checked',tempered1);
-               j$("input[data-jsid='verify']").attr('checked',false);
-    
+            j$("input[data-jsid='verify']").prop('checked',false);    
         }
         if( nsprCheck == false){
-//            j$("input[data-jsid='verify']").prop('checked',true);
-               j$("input[data-jsid='verify']").attr('checked',falstruee);
+            j$("input[data-jsid='verify']").prop('checked',true);
         }
     }
+
     </script>
 </apex:page>
