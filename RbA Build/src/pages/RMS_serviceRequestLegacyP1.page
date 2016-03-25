@@ -1,0 +1,118 @@
+<apex:page standardController="Order" showHeader="false" sidebar="false" extensions="RMS_ServiceOrderLegacyExt">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        testOpenSubtab();
+        collapseSections();
+        
+    };
+    
+    function collapseSections(){
+        if({!hasValidationErrors == false}){
+            $('img[id*="additionalProducts"]').each(function() {
+                twistSection(this);
+            });
+        }
+    }  
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
+    };        
+    
+    </script>
+    <apex:form id="theForm">
+        <apex:pageBlock title="Service Request">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
+                <apex:commandButton action="{!saveClose}" value="Save"/>                
+            </apex:pageBlockButtons> 
+            
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Service Type</apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:selectList required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 150px;">
+                            <apex:selectOptions value="{!PickLstValue}" />
+                            <apex:actionSupport event="onchange" rerender="out1" />
+                        </apex:selectList> 
+                    </apex:outputPanel> 
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="out1">
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                    <apex:outputLabel value="Save Reason" for="saveReason"></apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:inputField value="{!Order.Save_Reason__c}" id="saveReason" style="width: 150px;"/> 
+                    </apex:outputPanel>                   
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection >
+                <apex:inputField value="{!Order.BillToContactId}"/>
+                <apex:outputField value="{!Order.OwnerId}"/>      
+                <apex:inputField value="{!Order.Service_initiated_By__c}" style="width: 150px;"/>                
+                <apex:outputField value="{!Order.Account.Name}"/>
+                <apex:inputField value="{!Order.Description}" label="Problem Description" style="width: 288px; height: 118px;"/>
+                <apex:outputField value="{!Order.Sold_Order__c}"/>                                                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">
+                <apex:pageBlockTable value="{!selectedProducts}" var="product" id="table" width="1000px;" >
+                    <apex:column value="{!product.Name}"/>                    
+                    <apex:column breakBefore="true" colspan="10" style="border-bottom: 10px solid #ccc;">
+                        <apex:pageBlockSection title="Select Service Products" id="additionalProducts" showheader="true" collapsible="true" columns="1">
+                            <apex:pageBlockTable value="{!ProductToProductWrapperMap[product.Id]}" var="wrapper" border="1">                                
+                                <apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
+                                    <apex:inputCheckBox value="{!wrapper.isSelected}" />
+                                </apex:column>
+                                <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
+                                    <apex:outputText value="{!wrapper.product.Name}"/>
+                                </apex:column>
+                                <apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                        <apex:selectList size="1" value="{!wrapper.cost}" required="true">
+                                            <apex:selectOptions value="{!wrapper.costs}"/>
+                                            <apex:actionSupport event="onchange" reRender="a,b"/>
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:column>
+                                <apex:column headerValue="Primary Reason" style="border-bottom: 2px solid #ccc;">                                       
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                        <apex:selectList size="1" value="{!wrapper.primary}" id="a" required="true">
+                                            <apex:selectOptions value="{!wrapper.primaries}"/>
+                                            <apex:actionSupport event="onchange" rerender="b"/>
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:column>
+                                <apex:column headerValue="Secondary Reason" style="border-bottom: 2px solid #ccc;">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                        <apex:selectList size="1" value="{!wrapper.secondary}" id="b" required="true">
+                                            <apex:selectOptions value="{!wrapper.secondaries}"/>
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:column> 
+                            </apex:pageBlockTable>
+                        </apex:pageBlockSection>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>   
+</apex:page>

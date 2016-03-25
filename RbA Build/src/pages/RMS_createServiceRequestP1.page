@@ -1,0 +1,50 @@
+<apex:page standardController="Order" showHeader="false" sidebar="false" extensions="RMS_ServiceOrderExtensionMgr">   
+  <apex:pageMessages />
+  <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+  <apex:includeScript value="/support/console/26.0/integration.js"/>
+    
+    <script type="text/javascript">
+        window.onload = function() {
+            testOpenSubtab();
+            
+        };
+
+        function testOpenSubtab() {
+            //First find the ID of the primary tab to put the new subtab in
+            sforce.console.getEnclosingPrimaryTabId(openSubtab);
+        };
+    
+        var openSubtab = function openSubtab(result) {
+             var primaryTabId = result.id;
+             sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
+        };
+        
+  
+    </script>
+    
+    <style>
+        .message ul,.messageText{
+            color:red;
+        }
+    </style>
+    
+    <apex:form id="theForm">
+        <apex:pageBlock title="Service Request">
+            <apex:pageBlockButtons location="both">                
+                <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
+                <apex:commandButton action="{!saveP2}" value="Continue"/>          
+            </apex:pageBlockButtons>                
+            <apex:pageBlockSection columns="1"> 
+                <apex:pageMessage summary="This Account Has an Outstanding Balance of ${!Order.Account.Account_Balance__c}." severity="error" strength="3" rendered="{!IF(Order.Account.Account_Balance__c > 0,true,false)}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Please Select an Order:" for="ord" style="font-weight: bold"></apex:outputLabel>
+                    <apex:outputPanel >
+                    <apex:selectList id="ord" value="{!Order.Sold_Order__c}" size="1" title="Order">
+                        <apex:selectOptions value="{!ords}"></apex:selectOptions>
+                    </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>                
+            </apex:pageBlockSection> 
+        </apex:pageBlock>       
+    </apex:form>   
+</apex:page>
