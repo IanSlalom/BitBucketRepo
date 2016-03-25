@@ -908,7 +908,8 @@ public class RMS_prodConfigExtension {
 		productSelected = true;
 		
 		// Default the verify item config to true if a product configuration record was found
-		orderLineItem.Verify_Item_Configuration__c = (prodConfig.mpc != null) ? true : false;
+		orderLineItem.Verify_Item_Configuration__c = (mode == 'v') ? orderLineItem.Verify_Item_Configuration__c :
+		 											 (prodConfig.mpc != null && !orderLineItem.NSPR__c) ? true : false;
 		return null;
 
 	}

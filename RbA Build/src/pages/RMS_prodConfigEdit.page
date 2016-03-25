@@ -359,8 +359,9 @@
 		<hr></hr>
 		<apex:outputPanel rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}">
 			<apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
-			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" rendered="{!mode == 'e'}"/>
-			<apex:outputField id="outspecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outspecialOptionsCheck" rendered="{!mode != 'e'}"/>
+<!-- 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" />
+--> 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" rendered="{!mode == 'e'}"/>
+			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode != 'e'}"/>
 		</apex:outputPanel>
 
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
@@ -450,10 +451,11 @@
 			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
             <apex:outputField value="{!OrderItem.Tax__c}" />
+			<apex:inputField value="{!OrderItem.NSPR_Number__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nsprNumber"/>
+			<apex:outputField value="{!OrderItem.NSPR_Number__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnsprNumber"/>
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
-            <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
-            <apex:outputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!(prodConfig.mpc.Verify_Item_Configuration_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
+            <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}" html-data-jsid="verify"/>
 
         </apex:pageBlockSection>
           <apex:pageBlockSection title="Sales Information" columns="2" rendered="{!prodConfig.mpc != null}">
@@ -564,6 +566,9 @@
             applyToAllGlassCheck();
         }else if(ruleName == 'specialOptions'){
             specialOptions();
+        }
+        }else if(ruleName == 'nspr'){
+            nspr();
         }
     }       
         
@@ -799,8 +804,14 @@
         
     function specialOptions(){
 		// If the specialOptions checkbox is checked, display the special options section
-    	var specialOptionsCheck = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
-        if( specialOptionsCheck == true){
+    	var specialOptionsCheckInput = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
+    	var specialOptionsCheckOutput = j$("output[data-jsid='outSpecialOptionsCheckOut']").prop('checked');
+
+        if( specialOptionsCheckOutput == true){
+            j$("div[data-jsid='specialOptions']").show();
+        }
+
+        if( specialOptionsCheckInput == true){
             j$("div[data-jsid='specialOptions']").show();
             
             callRule('interiorColor');  
@@ -893,5 +904,19 @@
             } 
     }
 
+    function nspr(){
+		// If the NSPR checkbox is checked, set the verify configuration to false
+    	var nsprCheck = j$("input[data-jsid='nspr']").prop('checked');
+        if( nsprCheck == true){
+//            j$("input[data-jsid='verify']").prop('checked',false);
+ //              j$("input[data-jsid='tempered2']").prop('checked',tempered1);
+               j$("input[data-jsid='verify']").attr('checked',false);
+    
+        }
+        if( nsprCheck == false){
+//            j$("input[data-jsid='verify']").prop('checked',true);
+               j$("input[data-jsid='verify']").attr('checked',falstruee);
+        }
+    }
     </script>
 </apex:page>
