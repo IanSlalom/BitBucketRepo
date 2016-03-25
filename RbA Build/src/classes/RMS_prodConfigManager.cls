@@ -950,8 +950,9 @@ public with sharing class RMS_prodConfigManager {
 
 		List<OrderItem> itemsToUpdate = new List<OrderItem>();
 		itemsToUpdate = UtilityMethods.calculateTaxes(allOrderItems, po.Subtotal__c, po.Tax__c);
-		update itemsToUpdate;
-		
+		if(itemsToUpdate != null){
+			update itemsToUpdate;
+		}
 		return null;
 	}
 
