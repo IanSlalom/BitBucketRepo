@@ -36,7 +36,6 @@ public class RMS_prodConfigExtension {
 	public String ordStat {get; set;}	// order status 
 	public String mode {get; set;}	// viewing mode
 	public Id poId {get; set;}	// purchase order linked to the order product
-	public List<Change_History__c> changeHistoryRecords{get;set;}
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -51,7 +50,6 @@ public class RMS_prodConfigExtension {
 //		if (mode == 'v') productSelected = true;
 		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
-		//changeHistoryRecords = new List<Change_History__c>();
 		if (newOrderItem) {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
@@ -65,7 +63,6 @@ public class RMS_prodConfigExtension {
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
-					oiId = orderItem.Id;
 					if (orderItem.Order.Status == 'Activated') {
 						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
 						orderActivated = true;
@@ -75,9 +72,6 @@ public class RMS_prodConfigExtension {
 					enterProduct();
 
 				}
-			changeHistoryRecords = [SELECT Id, Name, CreatedById, LastModifiedBy.Name, LastModifiedDate, Changes__c, Retail_Price__c, Retail_Price_Change__c, Responsible_Party__c, Order_Product__c 
-									FROM Change_History__C 
-									WHERE Order_Product__c =: oiId];
 		}
 	}
 
@@ -983,19 +977,10 @@ public class RMS_prodConfigExtension {
 	}
 
 	/*******************************************************
-					close method
+					cancel method
 	*******************************************************/
-	public virtual PageReference close() {
-		system.debug('*****Close button pressed');
-		errorOccurred = 'false';
-		return null;
-	}
-
-	/*******************************************************
-					edit method
-	*******************************************************/
-	public virtual PageReference edit() {
-		system.debug('*****Edit button pressed');
+	public virtual PageReference cancel() {
+		system.debug('*****Cancel button pressed');
 		errorOccurred = 'false';
 		return null;
 	}

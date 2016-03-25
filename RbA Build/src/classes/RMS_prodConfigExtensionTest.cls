@@ -103,9 +103,6 @@ private class RMS_prodConfigExtensionTest {
 		insert orderItem1;		
 		System.Debug('***************Test.getStandardPricebookId()=' +Test.getStandardPricebookId());
 //		System.Debug('***************pricebook1=' +pricebook1.Id);
-
-		Change_History__c changeHistory = new Change_History__c(Order_Product__c = orderItem1.Id, Retail_Price__c = 100, Responsible_Party__c = 'Customer');
-		insert changeHistory;
 	}
 	/*******************************************************
 					ConstructorTest
@@ -124,7 +121,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension customController  = new RMS_prodConfigExtension(stdController);
 				
 	
-		OrderItem oi2 = [SELECT Id, Specialty_Shape__c, PricebookentryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi2 = [SELECT Id, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef2 = Page.RMS_prodConfigEdit;
@@ -139,8 +136,6 @@ private class RMS_prodConfigExtensionTest {
 		ApexPages.currentPage().getParameters().put('id',priceBookId);
 		ApexPages.StandardController stdController3 = new ApexPages.StandardController(oi2);
 		RMS_prodConfigExtension customController3  = new RMS_prodConfigExtension(stdController3);
-		System.assert(customController3.changeHistoryRecords.size()>0);
-		System.assert(customController3.changeHistoryRecords[0].Order_Product__c == oi2.Id);
 
 	}
 
@@ -153,7 +148,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id, Specialty_Shape__c, priceBookEntryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -570,7 +565,7 @@ private class RMS_prodConfigExtensionTest {
 		ApexPages.StandardController stdController = new ApexPages.StandardController(oi);
 		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
 		
-		pageReference newPage = ext.close();
+		pageReference newPage = ext.cancel();
 		
 	}
 
@@ -645,11 +640,6 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
 		
 		OrderItem myorderItem =  RMS_prodConfigExtension.clearNonSelectableValues(oi, prodConfig);
-
-		prodConfig.Number_of_Sashes__c = '1';
-		update prodConfig;
-		RMS_prodConfigExtension.clearNonSelectableValues(oi, prodConfig);
-
 	}	
 
 }

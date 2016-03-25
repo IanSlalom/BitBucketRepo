@@ -126,11 +126,9 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:commandButton action="{!edit}" value="Edit"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 				<apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false" rendered="{! status == 'rbanew'}"/>
-				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order" oncomplete="confirmationWindow('cancelPO');return false"/>
-				<apex:commandButton action="{!receive}" value="Receiving" />
-				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" />
-			</apex:pageBlockButtons>
-
+				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order" oncomplete="confirmationWindow('cancelPO');return false"/>			
+			</apex:pageBlockButtons>			
+	
 			<div id="OrderId" style="display:none;">{!orderId}</div>	
 			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}" onComplete="closeTab();return false"/>
 			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" onComplete="closeTab();return false"/>
@@ -184,10 +182,6 @@ function prepareList(parent,child,isSubselectOptional){
                     <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
 						<apex:facet name="header">Qty Received</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
-                    </apex:column>
-                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
-						<apex:facet name="header">Qty Written Off</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
                     </apex:column>
 					
 					<apex:column style="width:50px"> 

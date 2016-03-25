@@ -20,12 +20,10 @@ public with sharing class RMS_viewOrderProductsController {
     public List<OrderItemWrapper> orderItemWrappers{get;set;}
     public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');
     public Id miscJobId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Misc_Job_and_Unit_Charges');
-    public Id servProd = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product');    
     public Id serviceOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Service');
     public String baseURL{get;set;}
     public String reportURL{get;set;}
     public String addProductURL{get;set;}
-    public String editOrderItem{get;set;}
     public Id orderItemToToggle{get;set;}
 
     public RMS_viewOrderProductsController(ApexPages.StandardController stdController) {
@@ -43,10 +41,10 @@ public with sharing class RMS_viewOrderProductsController {
 
         Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
         for(OrderItem oi: [select Id, PricebookEntry.Product2Id,  PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
-                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c 
+                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c 
                          from OrderItem 
                          where Parent_Order_Item__c in: orderItems.keySet() 
-                         and PricebookEntry.Product2.RecordTypeId =: miscJobId                       
+                         and PricebookEntry.Product2.RecordTypeId =: miscJobId
                          order by PriceBookEntry.Product2.Name]){
             system.debug(oi);
             if(relatedOrderItems.containsKey(oi.Parent_Order_Item__c)){
@@ -59,14 +57,7 @@ public with sharing class RMS_viewOrderProductsController {
         orderItemWrappers = new List<OrderItemWrapper>();
         for(OrderItem oi: orderItems.values()){
             orderItemWrappers.add(new OrderItemWrapper(oi,relatedOrderItems.get(oi.Id)));
-            
-            if(oi.Service__c = true){
-                editOrderItem = '/apex/RMS_editServiceProduct?id=' + oi.Id;
-            }else{
-                editOrderItem = '/apex/rms_ProdConfigEdit?oid='+ord.Id+'&pid='+ord.Pricebook2Id +'&mode=e';
-            }
         }
-        
         system.debug(orderItemWrappers);
         List<Report> installMatReport = [select Id from Report where DeveloperName = 'Install_Materials_Summary2' limit 1];
         String reportId = '';
@@ -75,11 +66,10 @@ public with sharing class RMS_viewOrderProductsController {
         }
         reportURL = '/'+reportId+'?pv0='+String.ValueOf(ord.Id).substring(0,15)+'&pv1=Construction_Materials';
         if(ord.RecordTypeId == serviceOrderId){
-            addProductURL = '/apex/RMS_addServiceProduct?id=' + ord.Id;
+            addProductURL = '/apex/rms_createServiceOrder2?id=' + ord.Id;
         }else{
             addProductURL = '/apex/rms_ProdConfigEdit?oid='+ord.Id+'&pid='+ord.Pricebook2Id +'&mode=e';
         }
-                
         
 
     }

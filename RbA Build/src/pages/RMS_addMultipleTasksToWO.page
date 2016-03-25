@@ -1,5 +1,5 @@
 <apex:page standardController="RbA_Work_Order__c"
-        extensions="editableTaskListExt"
+        extensions="RMS_editableTaskListExt"
         showHeader="true" 
         sidebar="false"
         title="Edit Task">

@@ -63,6 +63,8 @@
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
+        <members>RMS_editableTaskList</members>
+        <members>RMS_editableTaskListExt</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -98,7 +100,6 @@
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_viewServiceOrderProducts</members>
         <members>RMS_viewServiceOrders</members>
-        
         <name>ApexPage</name>
     </types>
     <types>

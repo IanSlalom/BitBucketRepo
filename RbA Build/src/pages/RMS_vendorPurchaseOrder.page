@@ -183,8 +183,7 @@
 				
 				</apex:pageBlockSection>
 
-				<!--  Order Item Table for Normal Editing of Order Items-->
-				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && writeOff == false && receiving == false}">
+				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
 					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:200px">
@@ -223,115 +222,18 @@
 							<apex:inputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
 							<apex:outputField value="{!oiw.orderItem.NSPR__c}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec')}"/>
 					</apex:column>
-			</apex:pageBlockTable>
-
-
-				<!--  Order Item Table for Receiving Order Items-->
-				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && receiving == true}">
-					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:200px">
-						<apex:facet name="header">{!productText} Description</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Description}" />
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Cost</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
-					<apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Retail Price</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
-					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Variant</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
-					</apex:column>
-					<apex:column style="width:100px">
-						<apex:facet name="header">Wholesale Cost</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
-					</apex:column>
-					<!-- TODO: Add check for ARO and do not show for COROs -->
-					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Discount Amount</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
-					</apex:column>
-					<apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
-						<apex:facet name="header">NSPR/SPR</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.NSPR__c}" />
-					</apex:column>
-					<apex:column style="width:25px">
+					<apex:column style="width:25px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
 						<apex:facet name="header">Qty Received</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
 					</apex:column>
-  					<apex:column style="width:25px" rendered="{!(writeOff == true) }">
-						<apex:facet name="header">Qty Written Off</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
-					</apex:column>
-					<apex:column style="width:25px" >
+					<apex:column style="width:25px" rendered="{!((status == 'con' || status == 'rbacon')) }">
 						<apex:facet name="header">Qty To Receive</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Quantity_to_Receive__c}" />
 					</apex:column>
-					<apex:column style="width:25px" >
+					<apex:column style="width:25px" rendered="{!((status == 'con' || status == 'rbacon')) }">
 						<apex:facet name="header">Date Received</apex:facet> 
 							<apex:inputField value="{!oiw.orderItem.Date_Received__c}" />
 					</apex:column>
-
-			</apex:pageBlockTable>
-
-				<!--  Order Item Table for Writing Off Order Items-->
-				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && writeOff == true}">
-					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:200px">
-						<apex:facet name="header">{!productText} Description</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Description}" />
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Cost</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
-					<apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Retail Price</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
-					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Variant</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
-					</apex:column>
-					<apex:column style="width:100px">
-						<apex:facet name="header">Wholesale Cost</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
-					</apex:column>
-					<!-- TODO: Add check for ARO and do not show for COROs -->
-					<apex:column style="width:100px"  rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Discount Amount</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
-					</apex:column>
-					<apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
-						<apex:facet name="header">NSPR/SPR</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.NSPR__c}" />
-					</apex:column>
-					<apex:column style="width:25px">
-						<apex:facet name="header">Qty Received</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
-					</apex:column>
-  					<apex:column style="width:25px" rendered="{!(writeOff == true) }">
-						<apex:facet name="header">Qty Written Off</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
-					</apex:column>
-					<apex:column style="width:25px" >
-						<apex:facet name="header">Qty To Write Off</apex:facet> 
-							<apex:inputField value="{!oiw.orderItem.Quantity_to_Write_Off__c}" />
-					</apex:column>
-					<apex:column style="width:25px" >
-						<apex:facet name="header">Date Written Off</apex:facet> 
-							<apex:inputField value="{!oiw.orderItem.Date_Written_Off__c}" />
-					</apex:column>
-
 			</apex:pageBlockTable>
 					
 			</apex:outputPanel>
@@ -340,8 +242,7 @@
 				<apex:pageBlockSection title="System Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
-				
-				</apex:pageBlockSection> 
+				</apex:pageBlockSection>
 
 			</apex:outputPanel>		
 				   

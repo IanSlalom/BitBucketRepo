@@ -1,19 +1,3 @@
-/*******************************************************//**
-
-@class	RMS_completeOrderChecksControllerTest
-
-@brief	Test Class for RMS_completeOrderChecksController
-@author  Kai Ruan (Slalom.CDK)
-
-@version	2016-2-22  Slalom.CDK
-	Created.
-
-@see		RMS_completeOrderChecksController
-
-@copyright  (c)2016 Slalom.  All Rights Reserved. 
-			Unauthorized use is prohibited.
-
-***********************************************************/
 @isTest
 public with sharing class RMS_completeOrderChecksControllerTest {
 	
@@ -44,20 +28,6 @@ public with sharing class RMS_completeOrderChecksControllerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
-
-		//Order needs to have an associated order product for the Status field to be updated successfully
-		Product2 masterProduct = new Product2(	name = 'master',
-												IsActive = true, 
-												recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product')
-											);
-		
-		List<Product2> products = new List<Product2>{masterProduct};
-		insert products;
-		PricebookEntry pricebookEntryMaster= testMethods.createPricebookEntry(Test.getStandardPricebookId(), masterProduct.id);		
-		List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster};
-		insert pbEntries;
-		OrderItem orderItemMaster = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100 );
-		insert orderItemMaster;
 		
 		Back_Office_Check__c BoC1 = new Back_Office_Check__c(	Name = 'BoC1', 
 																Completed__c = true, 
@@ -70,7 +40,7 @@ public with sharing class RMS_completeOrderChecksControllerTest {
 																Order__c = order1.id);
 		insert BoC2;														
 		Back_Office_Check__c BoC3 = new Back_Office_Check__c(	Name = 'BoC3', 
-																Completed__c = false, 
+																Completed__c = true, 
 																Signed_Date__c = Date.Today(), 
 																Order__c = order1.id);
 		insert BoC3;
@@ -87,22 +57,6 @@ public with sharing class RMS_completeOrderChecksControllerTest {
 		RMS_completeOrderChecksController controller = new RMS_completeOrderChecksController(new ApexPages.StandardSetController( BoCList ));
  		
  		controller.save();
-
- 		//Verify Order Status does not change as not all Back Office Checks are Completed.
- 		order1 = [select Id, Status from Order where Id =: order1.Id];
-
- 		System.assertEquals(order1.Status, 'Draft');
-
- 		//Update all checks to completed and verify Order Status is updated to Tech Measure Needed.
- 		for(Back_Office_Check__c check: controller.selectedChecks){
- 			check.Completed__c = true;
- 		}
-
- 		controller.save();
- 		order1 = [select Id, Status from Order where Id =: order1.Id];
- 		System.assertEquals(order1.Status, 'Tech Measure Needed');
-
-
 	}
 
 }
