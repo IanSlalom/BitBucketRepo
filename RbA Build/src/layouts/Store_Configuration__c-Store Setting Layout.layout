@@ -101,6 +101,14 @@
                 <behavior>Edit</behavior>
                 <field>Paint_Stain_Work_Order_Queue_ID__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Paint_Stain_Vendor_Account__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Paint_Stain_Vendor_Contact__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>

@@ -81,6 +81,7 @@
     <types>
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
+        <members>BusinessAdjustmentTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderItemTrigger</members>
