@@ -1049,7 +1049,14 @@ private class RMS_prodConfigManagerTest {
 		System.AssertEquals('drf', status);
 	}
 
-
+	static testmethod void updateTaxesTest(){
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Id priceBookId = Test.getStandardPricebookId();
+		Purchase_Order__c purchaseOrder = new Purchase_Order__c(Order__c = soldOrder.id);
+		insert purchaseOrder;
+		System.assertEquals(RMS_prodConfigManager.updateTaxes(purchaseOrder.Id),null);
+		System.assertEquals(RMS_prodConfigManager.updateTaxes(null),RMS_errorMessages.PO_TAX_ISSUE);
+	}
 
 	
 }

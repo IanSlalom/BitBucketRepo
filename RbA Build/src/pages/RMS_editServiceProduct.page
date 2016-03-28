@@ -1,0 +1,78 @@
+<apex:page standardController="OrderItem" showHeader="false" sidebar="false" extensions="RMS_OrderItemExtension">
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <script type="text/javascript">
+    
+    window.onload = function() {
+        testOpenSubtab();
+        
+    };
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Service Product {!OrderItem.OrderItemNumber}');
+    }; 
+    
+    function testCloseTab() {
+        
+        
+        
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+            window.close();
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    
+    </script>
+    <apex:form >
+        <apex:pageBlock mode="edit" title="Service Product">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
+                <apex:commandButton action="{!saveCloseTab}" value="Save" />                
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Service Section" columns="2">
+                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName"/>
+                <apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
+                <apex:inputField value="{!OrderItem.Service_Sympton__c}"/>
+                <apex:inputField value="{!OrderItem.Type__c}"/>                
+                <apex:inputField value="{!OrderItem.Problem_Component__c}"/>
+                <apex:inputField value="{!OrderItem.Service_Product_Note__c}"/> 
+                <apex:inputField value="{!OrderItem.Measurement_Notes__c }"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Service Warranty" columns="1">
+                <apex:inputField value="{!OrderItem.Service_Procedure_Code__c}"/>
+                <apex:inputField value="{!OrderItem.Charge_Cost_To__c}"/>                
+                <apex:inputField value="{!OrderItem.Primary_Reason__c}"/>
+                <apex:inputField value="{!OrderItem.Secondary_Reason__c}"/>                
+            </apex:pageBlockSection> 
+            <apex:pageBlockSection title="Service Ordering Information" columns="2">
+                <apex:outputField value="{!OrderItem.Purchase_Order__c}" label="Purchase Order #"/> 
+                <apex:inputField value="{!OrderItem.Quanity_Ordered__c}"/>
+                <apex:outputField value="{!OrderItem.Installed_Product_Asset__c}"/> 
+                <apex:inputField value="{!OrderItem.MTO_Source_Code__c}"/>
+                <apex:inputField value="{!OrderItem.Defect_Code__c}"/>           
+                                <td></td>
+                <apex:inputField value="{!OrderItem.Multiple_Remakes__c}"/>                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Quote/Billing Information" columns="2">
+                <apex:inputField value="{!OrderItem.Billable_Amount__c}"/>
+                <apex:inputField value="{!OrderItem.Billing_Notes__c}"/>                
+                <apex:inputField value="{!OrderItem.Quote_Amount__c}"/>                
+            </apex:pageBlockSection>             
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

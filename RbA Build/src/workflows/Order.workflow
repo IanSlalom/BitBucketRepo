@@ -10,6 +10,15 @@
         <senderType>DefaultWorkflowUser</senderType>
         <template>Backoffice_Email_Templates/Order_Cancellation_In_Progress</template>
     </alerts>
+    <fieldUpdates>
+        <fullName>Set_Status_to_Closed</fullName>
+        <field>Status</field>
+        <literalValue>Closed</literalValue>
+        <name>Set Status to Closed</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
     <rules>
         <fullName>Order Cancellation In Progress</fullName>
         <actions>
@@ -28,6 +37,20 @@
         </criteriaItems>
         <description>Fires when an order is set to cancellation in progress</description>
         <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Status to Closed</fullName>
+        <actions>
+            <name>Set_Status_to_Closed</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Order.Service_Type__c</field>
+            <operation>equals</operation>
+            <value>Save</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <tasks>
         <fullName>Complete_Cancellation_Tasks_for_Order</fullName>

@@ -349,7 +349,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	}
 
 	/*******************************************************
-					cancelLineItemTest
+					receiveLineItemsTest
 	*******************************************************/
 	static testmethod void receiveLineItems(){
 		createTestRecords();
@@ -359,7 +359,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Purchase_Order__c po = new Purchase_Order__c();
 		OrderItem soldOrderItem = [SELECT Id, Pricebookentry.Product2.Name, Order.Store_Location__c, Order.AccountId, Order.EffectiveDate, Order.BillToContactId FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
 		List<OrderItem> orderItemsToReceive = new List<OrderItem>(); 
-
+		Set<Id> assetIds = new Set<Id>();
 		soldOrderItem.Date_Received__c = System.today();
 		soldOrderItem.Quantity_To_Receive__c = 1;
 		soldOrderItem.Unit_Wholesale_Cost__c = 100;
@@ -373,7 +373,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 		
 		// TODO: Add system asserts		
-		customController.receiveLineItems(orderItemsToReceive);
+		customController.receiveLineItems(orderItemsToReceive, assetIds);
 
 	}
 }

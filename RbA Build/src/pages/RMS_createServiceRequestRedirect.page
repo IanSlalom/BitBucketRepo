@@ -1,0 +1,77 @@
+<apex:page standardController="Order" extensions="RMS_ServiceOrderExtensionMgr" showHeader="false" sidebar="false">   
+  <apex:pageMessages />
+  <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+  <apex:includeScript value="/support/console/26.0/integration.js"/>
+    
+    <script type="text/javascript">
+        window.onload = function() {
+            testOpenSubtab();
+            hideSection();
+            setDate();
+            setStatus();
+        };
+
+    
+    
+        function testOpenSubtab() {
+            //First find the ID of the primary tab to put the new subtab in
+            sforce.console.getEnclosingPrimaryTabId(openSubtab);
+        };
+    
+        var openSubtab = function openSubtab(result) {
+             var primaryTabId = result.id;
+             sforce.console.setTabTitle('Create Service Request');
+        };
+    
+    function hideSection() {
+         document.getElementById("j_id0:theForm:hideSection").style.display = 'none';
+    };
+    
+        function setDate() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            document.getElementById('j_id0:theForm:hideSection:j_id31:startDate').value = today;
+        };
+
+        function setStatus() {
+            document.getElementById('{!$Component.theForm}').elements['j_id0:theForm:hideSection:j_id31:hiddenField1'].value = 'Draft';
+        };
+
+    
+    function  getAccountId()
+    {
+        return document.getElementById( 'aid' ).innerHTML;
+    }
+    
+    function  getSLId()
+    {
+        return document.getElementById( 'slid' ).innerHTML;
+    }
+    
+    window.setTimeout(autosave,1000);
+      function autosave()
+      {         
+          saveOrder();
+      }    
+
+    </script>
+    <p style="text-align: center; margin-top: 100px; margin-bottom: 500px;">
+        <apex:image id="theImage" value="{!$Resource.LoadingPage}" width="140"/>
+    </p>
+    <apex:form id="theForm">    
+        <apex:pageBlock title="Service Order" id="hideSection">              
+            <apex:pageBlockSection columns="1" collapsible="true">
+                <apex:inputField value="{!Order.EffectiveDate}" id="startDate"/>
+                <apex:inputField value="{!Order.Status}" id="hiddenField1"/>
+                 <apex:inputField value="{!Order.Accountid}" />
+                <apex:inputField value="{!Order.Store_Location__c}" /> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:actionFunction name="saveOrder" action="{!saveOrder}"/>
+        <div id="aid" style="display:none;">{!aid}</div>
+        <div id="slid" style="display:none;">{!slid}</div>
+    </apex:form>   
+</apex:page>

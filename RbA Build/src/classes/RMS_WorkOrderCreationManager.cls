@@ -168,6 +168,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
         Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+        Id visitWORecordType = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         
         list<Id> relatedAccountIds = new list<Id>();
         list<id> relatedOpportunityIds = new list<id>();
@@ -238,8 +239,6 @@ public with sharing class RMS_WorkOrderCreationManager {
 	            }
 	            
             //CHECK THE RECORD TYPE IS CORO SERVICE, IF IT IS, SKIP LOGIC
-            }else if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
-            	continue;
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
     			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
@@ -247,52 +246,40 @@ public with sharing class RMS_WorkOrderCreationManager {
                     ord.addError('Store Configuation has not been created.');
                 } 
                 
-                Id installQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Install_Work_Order_Queue_Id__c;
+                if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c == null){
+                    ord.addError('Tech Measure Work Order Queue Id has not been set on the related Store Configuation.');
+                } 
                 Id techMeasureQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c;
-                
-                //CREATE WORK ORDER (TECH MEASURE)
-                RbA_Work_Order__c techWO = new RbA_Work_Order__c(
-                    Sold_Order__c = ord.id,
-                    RecordTypeId = serviceOrderVisitRecordTypeId,
-                    Work_Order_Type__c = 'Tech Measure',
-                    Account__c = ord.AccountId,
-                    Contact__c = ord.BillToContactId,
-                    Opportunity__c = ord.OpportunityId,
-                    
-                    Street__c = relatedDwelling.ShippingStreet,
-                    City__c = relatedDwelling.ShippingCity,
-                    State__c = relatedDwelling.ShippingStateCode,
-                    Zip__c = relatedDwelling.ShippingPostalCode, 
-                    Country__c = relatedDwelling.ShippingCountryCode,
-    
-                    OwnerId = techMeasureQueueId
-                );
-                workOrdersToAdd.add(techWO);
-                
-                /*
-                //TODO: Remove if not used
-                //CREATE WORK ORDER (INSTALL)
-                RbA_Work_Order__c installWO = new RbA_Work_Order__c(
-                    Sold_Order__c = ord.id, 
-                    RecordTypeId =  serviceOrderVisitRecordTypeId,
-                    Work_Order_Type__c = 'Install',
-                    Account__c = ord.AccountId,
-                    
-                    Street__c = relatedDwelling.ShippingStreet,
-                    City__c = relatedDwelling.ShippingCity,
-                    State__c = relatedDwelling.ShippingStateCode,
-                    Zip__c = relatedDwelling.ShippingPostalCode, 
-                    Country__c = relatedDwelling.ShippingCountryCode,
-                    
-                    
-                    OwnerId = installQueueId
-                );
-                system.debug('ads adding install WO: '+installWO);
-                workOrdersToAdd.add(installWO); 
-                */
-    
-                Store_Configuration__c storeConfig = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c);
-                system.debug('ADS storeConfig :'+storeConfig);
+                Id serviceQueueId;
+                if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
+                	serviceQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c;
+                }else{
+                	serviceQueueId = UserInfo.getUserId();
+            	}
+                if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+            		 RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, ord, visitWORecordType, serviceQueueId, 'Service', null );
+ 
+            		 workOrdersToAdd.add(serviceWorkOrder);
+                }else{
+	                //CREATE WORK ORDER (TECH MEASURE)
+	                RbA_Work_Order__c techWO = new RbA_Work_Order__c(
+	                    Sold_Order__c = ord.id,
+	                    RecordTypeId = serviceOrderVisitRecordTypeId,
+	                    Work_Order_Type__c = 'Tech Measure',
+	                    Account__c = ord.AccountId,
+	                    Contact__c = ord.BillToContactId,
+	                    Opportunity__c = ord.OpportunityId,
+	                    
+	                    Street__c = relatedDwelling.ShippingStreet,
+	                    City__c = relatedDwelling.ShippingCity,
+	                    State__c = relatedDwelling.ShippingStateCode,
+	                    Zip__c = relatedDwelling.ShippingPostalCode, 
+	                    Country__c = relatedDwelling.ShippingCountryCode,
+	    
+	                    OwnerId = techMeasureQueueId
+	                );
+	                workOrdersToAdd.add(techWO);
+                }
     
             }
         }

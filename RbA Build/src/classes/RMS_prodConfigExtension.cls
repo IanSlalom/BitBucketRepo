@@ -32,10 +32,12 @@ public class RMS_prodConfigExtension {
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
+	public String defaultInstallTrackLocation {get; set;}
 	public String errorOccurred {get; set;}	 
 	public String ordStat {get; set;}	// order status 
 	public String mode {get; set;}	// viewing mode
 	public Id poId {get; set;}	// purchase order linked to the order product
+	public List<Change_History__c> changeHistoryRecords{get;set;}
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -50,6 +52,7 @@ public class RMS_prodConfigExtension {
 //		if (mode == 'v') productSelected = true;
 		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
+		//changeHistoryRecords = new List<Change_History__c>();
 		if (newOrderItem) {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
@@ -63,15 +66,19 @@ public class RMS_prodConfigExtension {
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
-					if (orderItem.Order.Status == 'Activated') {
-						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
-						orderActivated = true;
-					}
+					oiId = orderItem.Id;
+					//if (orderItem.Order.Status == 'Activated') {
+					//	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
+					//	orderActivated = true;
+					//}
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 					enterProduct();
 
 				}
+			changeHistoryRecords = [SELECT Id, Name, CreatedById, LastModifiedBy.Name, LastModifiedDate, Changes__c, Retail_Price__c, Retail_Price_Change__c, Responsible_Party__c, Order_Product__c 
+									FROM Change_History__C 
+									WHERE Order_Product__c =: oiId];
 		}
 	}
 
@@ -901,8 +908,16 @@ public class RMS_prodConfigExtension {
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
 		
+		// If there is a product config, and we're in edit mode, retrieve the default inside track location
+		// for the store 
+		if (prodConfig != null && mode == 'e') {
+			for (Order ord : [SELECT Id, Store_Location__r.Active_Store_Configuration__r.Default_Install_Track_Location__c FROM Order WHERE Id =: orderId]) {
+				defaultInstallTrackLocation = ord.Store_Location__r.Active_Store_Configuration__r.Default_Install_Track_Location__c;
+			}
+		}
 		// Default the verify item config to true if a product configuration record was found
-		orderLineItem.Verify_Item_Configuration__c = (prodConfig.mpc != null) ? true : false;
+		orderLineItem.Verify_Item_Configuration__c = (mode == 'v') ? orderLineItem.Verify_Item_Configuration__c :
+		 											 (prodConfig.mpc != null && !orderLineItem.NSPR__c) ? true : false;
 		return null;
 
 	}
@@ -977,10 +992,19 @@ public class RMS_prodConfigExtension {
 	}
 
 	/*******************************************************
-					cancel method
+					close method
 	*******************************************************/
-	public virtual PageReference cancel() {
-		system.debug('*****Cancel button pressed');
+	public virtual PageReference close() {
+		system.debug('*****Close button pressed');
+		errorOccurred = 'false';
+		return null;
+	}
+
+	/*******************************************************
+					edit method
+	*******************************************************/
+	public virtual PageReference edit() {
+		system.debug('*****Edit button pressed');
 		errorOccurred = 'false';
 		return null;
 	}

@@ -1,0 +1,33 @@
+<apex:page standardController="Order" showHeader="false" sidebar="false">
+  <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+  <apex:includeScript value="/support/console/26.0/integration.js"/>
+    
+    <script type="text/javascript">
+
+    
+    function testCloseTab() {
+            
+         
+
+            if (sforce.console.isInConsole()) { 
+                 sforce.console.getEnclosingTabId(closeSubtab);
+            } else { 
+                window.close();
+            }
+            
+        }
+        
+        var closeSubtab = function closeSubtab(result) {
+            //Now that we have the tab ID, we can close it
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);
+        };
+</script>
+
+<apex:pageBlock >
+    <apex:pageMessage summary="Your Request Has Been Cancelled. You may close this window." severity="info" strength="3"/>
+    <apex:form >
+        <p style="text-align:center;"><apex:commandButton value="Close Tab" onClick="testCloseTab();return false" rendered="false"/></p>
+    </apex:form>
+</apex:pageBlock>
+</apex:page>

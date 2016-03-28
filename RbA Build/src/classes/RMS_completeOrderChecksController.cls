@@ -1,3 +1,17 @@
+/*******************************************************//**
+@class  RMS_completeOrderChecksController
+
+@brief  Controller for RMS_completeOrderChecks visualforce page
+
+@author  Slalom
+
+@version    2016-2-18  Slalom.CDK
+    Created.
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+            Unauthorized use is prohibited.
+
+***********************************************************/
 public with sharing class RMS_completeOrderChecksController {
 
     public list<Back_Office_Check__c> selectedChecks {get;set;}
@@ -14,7 +28,21 @@ public with sharing class RMS_completeOrderChecksController {
     
     public pageReference save(){
     	update selectedChecks;
-    	
+    	Boolean allChecksCompleted = true;
+        for(Back_Office_Check__c check : selectedChecks){
+            if(!check.Completed__c){
+                allChecksCompleted = false;
+                break;
+            }
+        }
+
+        if(allChecksCompleted){
+            Order order = [SELECT Id, Status FROM Order WHERE Id =: ordId];
+            if(order.Status == 'Draft'){
+                order.Status = 'Tech Measure Needed';
+                update order;
+            }
+        }
     	PageReference newPage = New PageReference('/'+ordId);
 		newPage.setRedirect(true);
 		return newPage;

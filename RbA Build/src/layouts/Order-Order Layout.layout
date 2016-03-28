@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <customButtons>Order_Reviewed</customButtons>
+    <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
@@ -184,8 +184,8 @@
                 <emptySpace>true</emptySpace>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Stainer__c</field>
+                <behavior>Readonly</behavior>
+                <field>Stainer2__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -220,10 +220,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Order_Reviewed_Date__c</field>
+                <field>Order_Processed_Date__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Revenue_Recognized_Date__c</field>
             </layoutItems>
         </layoutColumns>
@@ -321,6 +321,7 @@
         <fields>Total_Wholesale_Cost__c</fields>
         <fields>Variant_Number__c</fields>
         <fields>Tax__c</fields>
+        <fields>Installed_Product_Asset__c</fields>
         <relatedList>RelatedOrderItemList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -403,6 +404,13 @@
         <fields>Amount__c</fields>
         <fields>Date_Sent_to_BaanERP__c</fields>
         <relatedList>Journal_Entry__c.Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Amount__c</fields>
+        <fields>Date__c</fields>
+        <fields>Type__c</fields>
+        <relatedList>Business_Adjustment__c.Order__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>

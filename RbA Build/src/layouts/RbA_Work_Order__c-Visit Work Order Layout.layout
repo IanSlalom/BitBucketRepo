@@ -76,7 +76,44 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Assignment</label>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Original_Appt_Date_Time_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Scheduled_Appt_Date_Time_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Completed_Appt_Date_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Original_Appt_Date_Time_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Scheduled_Appt_Date_Time_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Completed_Appt_Date_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Original_Appt_Date_Time_Service__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Scheduled_Appt_Date_Time_Service__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Completed_Appt_Date_Service__c</field>
+            </layoutItems>
+        </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -137,6 +174,14 @@
                 <behavior>Readonly</behavior>
                 <field>CreatedById</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Labor_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Number_Open_Events__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -165,13 +210,14 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <customButtons>Task.Add_Service_Task</customButtons>
         <fields>TASK.SUBJECT</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <fields>ACTIVITY.TASK</fields>
-        <fields>TASK.DUE_DATE</fields>
-        <fields>TASK.STATUS</fields>
-        <fields>TASK.PRIORITY</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
+        <fields>Service_Type__c</fields>
+        <fields>Non_Stock_Material__c</fields>
+        <fields>TASK.STATUS</fields>
+        <fields>EVENT.START_DATE_TIME</fields>
+        <fields>TASK.TYPE</fields>
         <relatedList>RelatedActivityList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -188,6 +234,9 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Installer__c</fields>
+        <fields>Hours_Applied__c</fields>
+        <fields>Labor_Complete__c</fields>
         <relatedList>Labor__c.Related_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -199,7 +248,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000RSGY</masterLabel>
+        <masterLabel>00h61000002WhBS</masterLabel>
         <sizeX>2</sizeX>
         <sizeY>1</sizeY>
         <summaryLayoutItems>
