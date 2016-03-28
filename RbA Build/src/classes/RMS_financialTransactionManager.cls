@@ -121,13 +121,13 @@ public with sharing class RMS_financialTransactionManager {
                     errorMessage = RMS_errorMessages.ALREADY_SUBMITTED_DELETE;
                     o.addError(errorMessage, FALSE);
                 }
-            }else if(objectIdToJournalEntryMap.get(o.id).size() > 0 && soType == 'Asset' ){
+            }else if(objectIdToJournalEntryMap.get(o.id).size() > 0 && (soType == 'Asset' || soType == 'Business_Adjustment__c')  ){
                 Boolean submitedToBaan = false;
                 for(Journal_Entry__c je : objectIdToJournalEntryMap.get(o.id)){
                     if(je.Sent_to_BaanERP__c == true){
                         submitedToBaan = true;
                         break;
-                    }
+                    } 
                 }
                 if(submitedToBaan == true){
                     errorMessage = RMS_errorMessages.ALREADY_SUBMITTED_DELETE;
@@ -632,7 +632,7 @@ public with sharing class RMS_financialTransactionManager {
 	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRIntercompanyFTL.get(a.id) , errorMessage, 'Inventory Received - Intercompany');
                 	}
                 	if(assetSubType == 'ExternalVendor'){
-	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRIntercompanyFTL.get(a.id) , errorMessage, 'Inventory Received - External Vendor');
+	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRExternalVendorFTL.get(a.id) , errorMessage, 'Inventory Received - External Vendor');
                 	}
                 	if(assetSubType == 'PRIntercompany'){
 	                	errorMessage = checkFinacialTransationForErrors(assetIdToPRIRIntercompanyFTL.get(a.id) , errorMessage, 'Post Recognition Inventory Received - Intercompany');
