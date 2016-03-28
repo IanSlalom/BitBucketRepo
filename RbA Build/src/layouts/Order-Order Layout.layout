@@ -313,6 +313,7 @@
         <fields>Total_Wholesale_Cost__c</fields>
         <fields>Variant_Number__c</fields>
         <fields>Tax__c</fields>
+        <fields>Installed_Product_Asset__c</fields>
         <relatedList>RelatedOrderItemList</relatedList>
     </relatedLists>
     <relatedLists>
