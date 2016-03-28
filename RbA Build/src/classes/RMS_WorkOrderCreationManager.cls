@@ -246,6 +246,9 @@ public with sharing class RMS_WorkOrderCreationManager {
                     ord.addError('Store Configuation has not been created.');
                 } 
                 
+                if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c == null){
+                    ord.addError('Tech Measure Work Order Queue Id has not been set on the related Store Configuation.');
+                } 
                 Id techMeasureQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c;
                 Id serviceQueueId;
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
@@ -255,7 +258,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             	}
                 if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
             		 RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, ord, visitWORecordType, serviceQueueId, 'Service', null );
-            		 
+ 
             		 workOrdersToAdd.add(serviceWorkOrder);
                 }else{
 	                //CREATE WORK ORDER (TECH MEASURE)

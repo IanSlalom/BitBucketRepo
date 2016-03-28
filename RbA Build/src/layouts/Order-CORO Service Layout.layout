@@ -297,7 +297,7 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>false</editHeading>
-        <label>Order Products</label>
+        <label>Service Products</label>
         <layoutColumns>
             <layoutItems>
                 <height>400</height>

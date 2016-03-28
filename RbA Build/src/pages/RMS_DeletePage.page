@@ -12,7 +12,7 @@
             if (sforce.console.isInConsole()) { 
                  sforce.console.getEnclosingTabId(closeSubtab);
             } else { 
-                 window.close();
+                window.close();
             }
             
         }
@@ -25,9 +25,9 @@
 </script>
 
 <apex:pageBlock >
-    <apex:pageMessage summary="Your Request Has Been Cancelled" severity="info" strength="3"/>
+    <apex:pageMessage summary="Your Request Has Been Cancelled. You may close this window." severity="info" strength="3"/>
     <apex:form >
-        <p style="text-align:center;"><apex:commandButton value="Close Tab" onClick="testCloseTab();return false"/></p>
+        <p style="text-align:center;"><apex:commandButton value="Close Tab" onClick="testCloseTab();return false" rendered="false"/></p>
     </apex:form>
 </apex:pageBlock>
 </apex:page>

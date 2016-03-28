@@ -1,18 +1,18 @@
 <apex:page standardController="Account" extensions="RMS_viewOrdersController">
-	<apex:includeScript value="/support/console/28.0/integration.js"/>
-	<apex:includeScript value="{!$Resource.jquery}" />
-		
-	<apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
-	<apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>
-	 
-	<script type="text/javascript">
-	    $(document).ready(function(){
-	  		$("table").tablesorter();
-	    });
-	</script>
+    <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+        
+    <apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>
+     
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("table").tablesorter();
+        });
+    </script>
 
-	<script type="text/javascript">
-		var theURL;
+    <script type="text/javascript">
+        var theURL;
         var tabName;
         var primaryTabId;
         
@@ -24,85 +24,87 @@
             theURL = '';
             tabName= '';
         };
-		function openSubtab(urlPart, theTabName) {
-        	if(sforce.console.isInConsole()){
-	        	theURL = urlPart;
-	        	tabName = theTabName;
-	            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
-        	}else{
-        		top.location.href = '/'+urlPart;
-       		}
+        function openSubtab(urlPart, theTabName) {
+            if(sforce.console.isInConsole()){
+                theURL = urlPart;
+                tabName = theTabName;
+                sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+            }else{
+                //top.location.href = '/'+urlPart;
+                window.open('/'+urlPart);
+            }
         }
         
         
-		var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
-	        sforce.console.openConsoleUrl(result.id, 
-	        result.consoleUrl, 
-	        true 
-	       // (optional)tabLabels:String, 
-	       // (optional)tabNames:String, 
-	       // (optional)callback:Function
-	        );
-	        
-		};
+        var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+            sforce.console.openConsoleUrl(result.id, 
+            result.consoleUrl, 
+            true 
+           // (optional)tabLabels:String, 
+           // (optional)tabNames:String, 
+           // (optional)callback:Function
+            );
+            
+        };
        
         
         function callGenerateConsoleURL(urlPart, theTabName) {
-        	if(sforce.console.isInConsole()) {
-	        	tabName = theTabName;
-	        	var accountURL = '/'+'{!Account.Id}';
-	        	sforce.console.generateConsoleUrl([accountURL, urlPart], callOpenConsoleUrl); 
-        	}else{
-        		top.location.href = '{!baseUrl}'+urlPart;
-        	
-        	}       
+            if(sforce.console.isInConsole()) {
+                tabName = theTabName;
+                var accountURL = '/'+'{!Account.Id}';
+                sforce.console.generateConsoleUrl([accountURL, urlPart], callOpenConsoleUrl); 
+            }else{
+                //location.href = '{!baseUrl}'+urlPart;
+                window.open('{!baseUrl}'+urlPart);
+            
+            }       
         }
         
-	</script>
+    </script>
 
 
-	<style>
-		.dataCell{
-			border-style: solid !important;
-		    border-width: 1px !important;
-	    }
-	    .bigandBold{
-	    	font-size: 16px;
-	    	color:Black !important;
-	    	font-weight: bold;
-	    }
-	    .red{
-	    	color:Red !important;
-	    }     
-	      
-	</style>
-	<!-- ACTIONS --> 
-	<apex:pageBlock >
-	<apex:form >
-		<apex:commandButton onclick="callGenerateConsoleURL('{!createServiceRequestURL}', 'Create Service Request');return false" id="newVisitButton2" value="Create Service Request" style="margin-left:20%"/>
-	</apex:form>
-		
-			<apex:pageBlockTable title="Service Requests" value="{!orders}" var="ord" style="width:100%">
-				<!-- <apex:column value="{!wo.View__c}"/> --> 
-				<apex:column headerValue="">  
-					<a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}/e','Edit Order');return false">Edit</a> 
-				</apex:column>
-				<apex:column headerValue="Request Number">  
-					<a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}','View Order');return false">{!ord.OrderNumber}</a> 
-				</apex:column>
-				<apex:column headerValue="Sold Order"> 
-				<apex:outputPanel rendered="{!ord.Sold_Order__c != null}"> 
-					<a href="#" onClick="callGenerateConsoleURL('/{!ord.Sold_Order__c}','View Order');return false">
-					<apex:outputText >
-					{!ord.Sold_Order__r[0].OrderNumber}
-					</apex:outputText></a> 
-				</apex:outputPanel>
-				</apex:column>
-		        <apex:column value="{!ord.Status}"/>
-		        <apex:column value="{!ord.EffectiveDate}" headerValue="Start Date"/>
+    <style>
+        .dataCell{
+            border-style: solid !important;
+            border-width: 1px !important;
+        }
+        .bigandBold{
+            font-size: 16px;
+            color:Black !important;
+            font-weight: bold;
+        }
+        .red{
+            color:Red !important;
+        }     
+          
+    </style>
+    <!-- ACTIONS --> 
+    <apex:pageBlock >
+    <apex:form >
+        <apex:commandButton onclick="callGenerateConsoleURL('{!createServiceRequestURL}', 'Create Service Request');return false" id="newVisitButton2" value="Create Service Request" style="margin-left:20%"/>
+    </apex:form>
+        
+            <apex:pageBlockTable title="Service Requests" value="{!orders}" var="ord" style="width:100%">
+                <!-- <apex:column value="{!wo.View__c}"/> --> 
+                <apex:column headerValue="">  
+                    <a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}/e','Edit Order');return false">Edit</a> 
+                </apex:column>
+                <apex:column headerValue="Request Number">  
+                    <a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}','View Order');return false">{!ord.OrderNumber}</a> 
+                </apex:column>
+                <apex:column headerValue="Sold Order"> 
+                <apex:outputPanel rendered="{!ord.Sold_Order__c != null}"> 
+                    <a href="#" onClick="callGenerateConsoleURL('/{!ord.Sold_Order__c}','View Order');return false">
+                    <apex:outputText >
+                    {!ord.Sold_Order__r[0].OrderNumber}
+                    </apex:outputText></a> 
+                </apex:outputPanel>
+                </apex:column>
+                <apex:column value="{!ord.Status}"/>
+                <apex:column value="{!ord.EffectiveDate}" headerValue="Start Date"/>
                 <apex:column value="{!ord.Service_Type__c}"/>
-		        <apex:column value="{!ord.Description}"/>
-		        <apex:column value="{!ord.TotalAmount}" headerValue="Amount"/>
-			</apex:pageBlockTable>
-	</apex:pageBlock> 
+                <apex:column value="{!ord.Description}"/>
+                <apex:column value="{!ord.TotalAmount}" headerValue="Amount"/>
+            </apex:pageBlockTable>
+    </apex:pageBlock> 
 </apex:page>
