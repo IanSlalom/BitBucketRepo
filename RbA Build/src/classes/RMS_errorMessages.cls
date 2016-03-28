@@ -24,6 +24,7 @@ public with sharing class RMS_errorMessages {
 	public static final String REC_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to receive an item. Please try again.';
 	public static final String WRITEOFF_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to write off an item. Please try again.';
 	public static final String WHOLESALE_COST_REQUIRED = 'You must enter a unit wholesale cost to receive an item. Please try again.';
+	public static final String PO_NOT_READY_TO_RELEASE = 'The order must be in the Ready to Order status before you can release this purchase order.';
 
 
 	/*******************************************************

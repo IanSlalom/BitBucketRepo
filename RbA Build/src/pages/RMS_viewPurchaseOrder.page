@@ -132,8 +132,8 @@ function prepareList(parent,child,isSubselectOptional){
 			</apex:pageBlockButtons>
 
 			<div id="OrderId" style="display:none;">{!orderId}</div>	
-			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}" onComplete="closeTab();return false"/>
-			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" onComplete="closeTab();return false"/>
+			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}"/>
+			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" />
 			 
 			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
 				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>

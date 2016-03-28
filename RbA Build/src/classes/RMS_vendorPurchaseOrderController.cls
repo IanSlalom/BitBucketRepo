@@ -407,7 +407,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
       									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
-      									Store_Location__c, RecordTypeId 
+      									Store_Location__c, RecordTypeId, Status 
       									FROM Order WHERE Id = :orderId]){
 
 			// Determine if this is a service order
@@ -1069,24 +1069,35 @@ public with sharing class RMS_vendorPurchaseOrderController {
         releasePurchaseOrder method
   *******************************************************/
   // Called after the confirmation window is accepted
-  public void releasePurchaseOrder() {
+  public PageReference releasePurchaseOrder() {
     system.debug('*****Status set to released');
-    po.Status__c = 'Released';    
 
-    try{
-      // upsert the po with the new status
-      upsert po;  
-    } catch (Exception e){
-      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
-    }
+	if (relatedOrder.Status == 'Ready to Order') {
+    	po.Status__c = 'Released';    
+    	po.Released_Timestamp__c = System.Now();
+
+	    try{
+    	  	// upsert the po with the new status
+      		upsert po;  
+    	} catch (Exception e){
+      		System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
+      		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
+    	}
+	}
+	else {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PO_NOT_READY_TO_RELEASE));
+	}
+
+    PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
+    pageRef.setRedirect(false);
+    return pageRef;
   }
 
   /*******************************************************
         cancelPurchaseOrder method
   *******************************************************/
   // Called after the confirmation window is accepted. This cancels the PO and the order line items
-  public void cancelPurchaseOrder() {
+  public PageReference cancelPurchaseOrder() {
     system.debug('*****Status set to cancelled');
     po.Status__c = 'Cancelled';    
 
@@ -1113,6 +1124,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the cancelPurchaseOrder method cancelling the PO:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
     }
+
+    PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
+    pageRef.setRedirect(false);
+    return pageRef;
+
   }
   /*******************************************************
         writeOff button method
