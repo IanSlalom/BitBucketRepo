@@ -361,7 +361,7 @@
 			<apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
 <!-- 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" />
 --> 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" rendered="{!mode == 'e'}"/>
-			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode == 'e'}"/>
+  			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode != 'e'}"/>
 		</apex:outputPanel>
 
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
@@ -805,14 +805,11 @@
     function specialOptions(){
 		// If the specialOptions checkbox is checked, display the special options section
     	var specialOptionsCheckInput = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
-    	
-    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheckOut']").prop("title");
-		alert(specialOptionsCheckInput);
-		alert(specialOptionsCheckOutput);
-        if( specialOptionsCheckOutput == true){
-            j$("div[data-jsid='specialOptions']").show();
-        }
-
+// 	TODO:   show the special options section on view if the special options check is true    	
+//    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheckOut']").prop("title");
+//        if( specialOptionsCheckOutput == true){
+//            j$("div[data-jsid='specialOptions']").show();
+//        }
         if( specialOptionsCheckInput == true){
             j$("div[data-jsid='specialOptions']").show();
             
@@ -850,7 +847,11 @@
 				}else{ 
 					 j$("select[data-jsid='installTrackLocation']").val('Outside');
 				} 
+	        } else if('{!defaultInstallTrackLocation}' != null) {
+				j$("select[data-jsid='installTrackLocation']").val('{!defaultInstallTrackLocation}');
+	        
 	        }
+	        
 	        
 	        if( '{!prodConfig.mpc.Screen_Color_Default__c}' == 'Exterior Color'){
 	        	 j$("select[data-jsid='screenColor']").val( j$("select[data-jsid='exteriorColor']").val());

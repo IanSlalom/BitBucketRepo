@@ -32,6 +32,7 @@ public class RMS_prodConfigExtension {
 	public Decimal inputUI;	
 	public String exteriorColor {get; set;}	 
 	public String interiorColor {get; set;}	 
+	public String defaultInstallTrackLocation {get; set;}
 	public String errorOccurred {get; set;}	 
 	public String ordStat {get; set;}	// order status 
 	public String mode {get; set;}	// viewing mode
@@ -66,10 +67,10 @@ public class RMS_prodConfigExtension {
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
 					oiId = orderItem.Id;
-					if (orderItem.Order.Status == 'Activated') {
-						ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
-						orderActivated = true;
-					}
+					//if (orderItem.Order.Status == 'Activated') {
+					//	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
+					//	orderActivated = true;
+					//}
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 					enterProduct();
@@ -907,6 +908,13 @@ public class RMS_prodConfigExtension {
 		prodConfig = RMS_prodConfigManager.findProductConfiguration(orderLineItem, null, masterProductConfig);
 		productSelected = true;
 		
+		// If there is a product config, and we're in edit mode, retrieve the default inside track location
+		// for the store 
+		if (prodConfig != null && mode == 'e') {
+			for (Order ord : [SELECT Id, Store_Location__r.Active_Store_Configuration__r.Default_Install_Track_Location__c FROM Order WHERE Id =: orderId]) {
+				defaultInstallTrackLocation = ord.Store_Location__r.Active_Store_Configuration__r.Default_Install_Track_Location__c;
+			}
+		}
 		// Default the verify item config to true if a product configuration record was found
 		orderLineItem.Verify_Item_Configuration__c = (mode == 'v') ? orderLineItem.Verify_Item_Configuration__c :
 		 											 (prodConfig.mpc != null && !orderLineItem.NSPR__c) ? true : false;
