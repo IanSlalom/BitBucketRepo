@@ -86,7 +86,7 @@ public with sharing class RMS_errorMessages {
 
 	public static final String HARDWARE_FINISH_BLANK = '&bull;For this product, if you enter a hardware style, you must also enter a hardware finish.';
 	public static final String TEMPERED_GLASS_REQUIRED = '&bull;Units of this size require Tempered Glass. Please select the "Tempered Glass" checkbox and try again.';
-	public static final String SCREEN_COLOR_SELECTED_WITH_WOOD_VANEER = '&bull;You cannot select a screen color when the screen type is set to Wood Vaneer';
+	public static final String SCREEN_COLOR_SELECTED_WITH_WOOD_VENEER = '&bull;You cannot select a screen color when the screen type is set to Wood Veneer';
 	public static final String GRILLE_COLOR_WITHOUT_STYPE = '&bull;You cannot select an interior/exterior grille color without selecting a grille style';
 	public static final String TRACK_HOLE_LOCATION_NULL = '&bull;Install Track/Holes Location is required when Special Options is selected.';
 	
