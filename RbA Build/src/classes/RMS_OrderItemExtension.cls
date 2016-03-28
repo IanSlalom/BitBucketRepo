@@ -16,11 +16,15 @@
 public class RMS_OrderItemExtension {
 
     public final OrderItem o;
+    //public List<Order> parent {get;set;}
     
     public RMS_OrderItemExtension(ApexPages.StandardController stdController) {
-        
+        if(!test.isRunningTest()){
+            stdController.addFields(new List<String>{'OrderId'});           
+        }
         
         this.o = (OrderItem)stdController.getRecord();
+           
         
         
     }
@@ -30,7 +34,10 @@ public class RMS_OrderItemExtension {
         try{                             
             upsert o;
             
-            PageReference savePage = Page.RMS_closeTabPage;
+            Order parent = [SELECT id FROM Order WHERE id = :o.OrderId];   
+
+            
+            PageReference savePage = new PageReference('/apex/rms_viewOrder?id='+parent.id);
             savePage.setRedirect(true);
             return savePage;
         }catch(DMLException ex){

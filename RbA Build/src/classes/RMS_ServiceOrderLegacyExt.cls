@@ -10,7 +10,7 @@ public with sharing class RMS_ServiceOrderLegacyExt  {
     
     public RMS_ServiceOrderLegacyExt(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'AccountId'});           
+            stdController.addFields(new List<String>{'AccountId','Pricebook2Id'});           
         }
         
         this.o = (Order)stdController.getRecord();
@@ -102,11 +102,16 @@ public with sharing class RMS_ServiceOrderLegacyExt  {
         PageReference pageRef = null;
         
         try{
-            Id standardPriceBookId = [
-                select Id 
-                from Pricebook2 
-                where isStandard=true
-            ].Id;
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
             
             for(Id productId : ProductToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: ProductToProductWrapperMap.get(productId)){
@@ -331,7 +336,8 @@ public with sharing class RMS_ServiceOrderLegacyExt  {
         }   
         
         public ProductWrapper(Product2 prod){
-            product = prod;            
+            product = prod;
+			isSelected = false;            
         }
     }
     

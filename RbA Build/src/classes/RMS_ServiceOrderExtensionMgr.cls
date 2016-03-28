@@ -11,7 +11,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'AccountId'});           
+            stdController.addFields(new List<String>{'AccountId','PriceBook2Id'});           
         }
         
         this.o = (Order)stdController.getRecord();
@@ -119,11 +119,16 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         try{
             
-            Id standardPriceBookId = [
-                select Id 
-                from Pricebook2 
-                where isStandard=true
-            ].Id;
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
             
             o.AccountId = aid;
             o.Pricebook2Id = standardPriceBookId;
@@ -158,7 +163,6 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     Id rt = Schema.SObjectType.Order.RecordTypeInfosByName.get('CORO Record Type').RecordTypeId;
     
     
-    //builds a picklist of user names based on their profile
     public List<selectOption> getOrds() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
         for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
@@ -193,12 +197,19 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public PageReference saveClose(){
         PageReference pageRef = null;
         
-        try{
-            Id standardPriceBookId = [
-                select Id 
-                from Pricebook2 
-                where isStandard=true
-            ].Id;
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
+            
+
             
             for(Id assetID : AssetToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
@@ -246,7 +257,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     }        
 
     
-    public class ProductWrapper{
+   public class ProductWrapper{
         public Product2 product{get;set;}
         public Boolean isSelected{get;set;}        
         public Asset asset{get;set;}
@@ -326,7 +337,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             else if(primary == 'Installation')
             {       
-                options.add(new SelectOption('Blinds/Shutters','Blinds/Shutters'));
+                    options.add(new SelectOption('Blinds/Shutters','Blinds/Shutters'));
                 options.add(new SelectOption('Carbon Monoxide Detector','Carbon Monoxide Detector'));
                 options.add(new SelectOption('Caulking','Caulking')); 
                 options.add(new SelectOption('Clean-Up','Clean-Up')); 
@@ -430,7 +441,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }   
         
         public ProductWrapper(Product2 prod){
-            product = prod;            
+            product = prod;  
+            isSelected = false;
+            cost = '-- Select --';
+            primary = '-- Select --';
+            secondary = '-- Select --';
         }
     }
     

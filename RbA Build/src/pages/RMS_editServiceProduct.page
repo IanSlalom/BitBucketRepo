@@ -45,8 +45,8 @@
                 <apex:commandButton action="{!saveCloseTab}" value="Save" />                
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Service Section" columns="2">
-                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}"/>
-                <td></td>
+                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName"/>
+                <apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
                 <apex:inputField value="{!OrderItem.Service_Sympton__c}"/>
                 <apex:inputField value="{!OrderItem.Type__c}"/>                
                 <apex:inputField value="{!OrderItem.Problem_Component__c}"/>
@@ -60,11 +60,13 @@
                 <apex:inputField value="{!OrderItem.Secondary_Reason__c}"/>                
             </apex:pageBlockSection> 
             <apex:pageBlockSection title="Service Ordering Information" columns="2">
+                <apex:outputField value="{!OrderItem.Purchase_Order__c}" label="Purchase Order #"/> 
                 <apex:inputField value="{!OrderItem.Quanity_Ordered__c}"/>
                 <apex:outputField value="{!OrderItem.Installed_Product_Asset__c}"/> 
                 <apex:inputField value="{!OrderItem.MTO_Source_Code__c}"/>
-                                <td></td>
                 <apex:inputField value="{!OrderItem.Defect_Code__c}"/>           
+                                <td></td>
+                <apex:inputField value="{!OrderItem.Multiple_Remakes__c}"/>                
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Quote/Billing Information" columns="2">
                 <apex:inputField value="{!OrderItem.Billable_Amount__c}"/>

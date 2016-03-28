@@ -27,16 +27,65 @@
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
         sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
-    };        
+    }; 
+    
+     function testCloseTab() {
+        
+        
+        
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+            window.location.href = "/{!Order.Id}";
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };       
     
     </script>
     <apex:form id="theForm">
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
-                <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
+                <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
                 <apex:commandButton action="{!saveClose}" value="Save"/>                
             </apex:pageBlockButtons> 
             
+            <apex:pageBlockSection columns="1" rendered="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Service Type</apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:selectList required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 150px;">
+                            <apex:selectOptions value="{!PickLstValue}" />
+                            <apex:actionSupport event="onchange" rerender="out1" />
+                        </apex:selectList> 
+                    </apex:outputPanel> 
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="out1" rendered="false">
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                    <apex:outputLabel value="Save Reason" for="saveReason"></apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:inputField value="{!Order.Save_Reason__c}" id="saveReason" style="width: 150px;"/> 
+                    </apex:outputPanel>                   
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="false">
+                <apex:inputField value="{!Order.BillToContactId}"/>
+                <apex:outputField value="{!Order.OwnerId}"/>      
+                <apex:inputField value="{!Order.Service_initiated_By__c}" style="width: 150px;"/>                
+                <apex:outputField value="{!Order.Account.Name}"/>
+                <apex:inputField value="{!Order.Description}" label="Problem Description" style="width: 288px; height: 118px;"/>
+                <apex:outputField value="{!Order.Sold_Order__c}"/>                                                
+            </apex:pageBlockSection>
             
             <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">
                 <apex:pageBlockTable value="{!selectedAssets}" var="a" id="table" width="1000px;" >
