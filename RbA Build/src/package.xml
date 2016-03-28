@@ -23,6 +23,8 @@
         <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
+        <members>RMS_editableTaskList</members>
+        <members>RMS_editableTaskListExt</members>
         <members>RMS_errorMessages</members>
         <members>RMS_financialTransactionManager</members>
         <members>RMS_financialTransactionManagerTest</members>
@@ -61,6 +63,8 @@
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
+        <members>editableTaskList</members>
+        <members>editableTaskListExt</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -70,6 +74,7 @@
     <types>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
+        <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addServiceProduct</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_closeTabPage</members>
@@ -100,6 +105,7 @@
     <types>
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
+        <members>BusinessAdjustmentTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderItemTrigger</members>
@@ -147,6 +153,7 @@
         <members>Asset-Asset Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
+        <members>Business_Adjustment__c-Business Adjustment Layout</members>
         <members>Change_History__c-Change History Layout</members>
         <members>Color_Configuration__c-Color Configuration Layout</members>
         <members>Contact-Contact Layout</members>
