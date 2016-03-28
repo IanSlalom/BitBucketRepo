@@ -215,7 +215,7 @@
                 <field>Order_Processed_Date__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Revenue_Recognized_Date__c</field>
             </layoutItems>
         </layoutColumns>
