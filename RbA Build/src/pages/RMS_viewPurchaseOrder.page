@@ -176,6 +176,7 @@ function prepareList(parent,child,isSubselectOptional){
 						<apex:facet name="header">Retail Price</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
 					</apex:column>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Remake__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->

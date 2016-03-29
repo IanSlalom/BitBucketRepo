@@ -357,7 +357,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
 
       newPurchaseOrder = true;
-      status = 'new';
       this.po.Status__c = 'New';
     }//END OF NEW PRODUCT PURCHASE ORDER 
     
@@ -375,16 +374,16 @@ public with sharing class RMS_vendorPurchaseOrderController {
       
       selectedPricebook = po1.Order__r.Pricebook2Id;
       
-      orderStatus = this.po.Status__c;
-      status =  (orderStatus == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
-            (orderStatus == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
-            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName != 'RbA')  ?  'con'    :
-            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName == 'RbA')  ?  'rbacon'  :
-            (orderStatus == 'Rejected')                  ?  'rej'    :
-            (orderStatus == 'Cancelled')                  ?  'can'    :
-            (orderStatus == 'Received')                  ?  'rec'    :
-            (selectedVendorName == 'RbA')                    ?  'rbanew'  :
-                                                'new';
+//      orderStatus = this.po.Status__c;
+ //     status =  (orderStatus == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
+//            (orderStatus == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
+//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName != 'RbA')  ?  'con'    :
+//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName == 'RbA')  ?  'rbacon'  :
+//            (orderStatus == 'Rejected')                  ?  'rej'    :
+//            (orderStatus == 'Cancelled')                  ?  'can'    :
+//            (orderStatus == 'Received')                  ?  'rec'    :
+//            (selectedVendorName == 'RbA')                    ?  'rbanew'  :
+//                                                'new';
     }
 
     // Check if there's an orderId
@@ -429,10 +428,21 @@ public with sharing class RMS_vendorPurchaseOrderController {
             if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
             po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
-			
-        		
-      		
       }
+
+	  // Determine the purchase order status so we know what to display on the page.
+      orderStatus = this.po.Status__c;
+      
+      // If this is an RbA order and it's not a service purchase order, then this is an electronic order
+      boolean electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
+      status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
+            	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && !electronicOrder)  ?  'con'    :
+            	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && electronicOrder)  ?  'rbacon'  :
+            	(orderStatus == 'Rejected')                  					?  	'rej'   :
+            	(orderStatus == 'Cancelled')                  					?  	'can'   :
+            	(orderStatus == 'Received')                  					?  	'rec'   :
+            	(electronicOrder)                    							? 	'rbanew':
+                                                								'new';
 
 	  if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -447,7 +457,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
-                    Order.Store_Location__c, Purchase_Order__c
+                    Order.Store_Location__c, Purchase_Order__c, Remake__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
