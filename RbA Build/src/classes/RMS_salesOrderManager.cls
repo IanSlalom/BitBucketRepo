@@ -152,11 +152,14 @@ public with sharing class RMS_salesOrderManager {
 	public List<OrderItem> createOrderItems(List<QuoteLineItem> qliList, List<Order> theOrders, Map<String,Schema.SObjectField> qliFieldsMapRO) {
 		// since the field map is read only we need to clone it so we can remove the standard fields that can't be copied by name
 		Map<String,Schema.SObjectField> qliFieldsMap = qliFieldsMapRO.clone();
-		// remove the standard fields from the qli field mapping that can't be copied
+		// remove the standard and custom fields from the qli field mapping that can't be copied
 		qliFieldsMap.remove('Id');
 		qliFieldsMap.remove('isDeleted');
 		qliFieldsMap.remove('ListPrice');
 		qliFieldsMap.remove('CreateDate');
+		qliFieldsMap.remove('Parent_Quote_Line_Item__c');
+		qliFieldsMap.remove('Parent_Unit_rSuite_Id__c');
+		qliFieldsMap.remove('rSuite_Id__c');
 
 		// lets get the OrderLineItem fields for dynamic assignment
  		SObjectType oiType = Schema.getGlobalDescribe().get('OrderItem');
@@ -208,6 +211,7 @@ public with sharing class RMS_salesOrderManager {
 			Order_Discount__c od = new Order_Discount__c();
 			od.Store_Discount__c = qd.Store_Discount__c;
 			od.Discount_Amount__c = qd.Discount_Amount__c;
+			od.Status__c = qd.Status__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {
 				if (ord.QuoteId == qd.Quote__c) {
@@ -232,6 +236,11 @@ public with sharing class RMS_salesOrderManager {
 			Order_Financing__c ordf = new Order_Financing__c();
 			ordf.Amount_Financed__c = qf.Amount_Financed__c;
 			ordf.Store_Finance_Program__c = qf.Store_Finance_Program__c;
+			ordf.Authorization_Code__c = qf.Authorization_Code__c;
+			ordf.Expiration_Date__c = qf.Expiration_Date__c;
+			ordf.Program_Rate__c = qf.Program_Rate__c;
+			ordf.Program_Fee__c = qf.Program_Fee__c;
+
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {
 				if (ord.QuoteId == qf.Related_Quote__c) {

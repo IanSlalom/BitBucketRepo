@@ -41,10 +41,6 @@
                 <behavior>Readonly</behavior>
                 <field>OrderItemNumber</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Parent_Order_Item__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -471,7 +467,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Screen_Vaneer_Type__c</field>
+                <field>Screen_Veneer_Type__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
@@ -821,6 +817,18 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>CreatedById</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>rSuite_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parent_Unit_rSuite_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parent_Order_Item__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

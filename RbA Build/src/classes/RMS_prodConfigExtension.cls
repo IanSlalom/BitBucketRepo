@@ -595,15 +595,15 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
-	/******* Screen Vaneer Type Items  *****************/
-	private static transient List<SelectOption> lScreenVaneerTypeItems;
-	public List<SelectOption> screenVaneerTypeItems{
+	/******* Screen Veneer Type Items  *****************/
+	private static transient List<SelectOption> lScreenVeneerTypeItems;
+	public List<SelectOption> screenVeneerTypeItems{
 		get
 		{   
-			if (lScreenVaneerTypeItems== null) {
-				lScreenVaneerTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Vaneer_Type__c);
+			if (lScreenVeneerTypeItems== null) {
+				lScreenVeneerTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Veneer_Type__c);
 			}
-			return lScreenVaneerTypeItems;
+			return lScreenVeneerTypeItems;
 		}
 	}
 

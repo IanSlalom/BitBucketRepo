@@ -1,6 +1,6 @@
 /**
- *@class	RMS_mobileAppRequestHelper
- *@brief	Help class for handling api call business logic
+ *@class	RMS_mobileAppRequestHelperTest
+ *@brief	test class for RMS_mobileAppRequestHelper
  *@author  Anthony Strafaccia (Slalom.ADS)
  *@author  Mark Wochnick (Slalom.MAW)
  *@version	2015-09/16  Slalom.ADS	Created.
@@ -37,6 +37,13 @@ private class RMS_mobileAppRequestHelperTest {
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			String jsonResult = mHelper.findAppointments(u.Id, newApptTime.addDays(-1));
 			Test.stopTest();
+			//Verify the Synced DateTime field on Event is set properly by the findAppointments method
+			List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, Synced_DateTime__c, isCancelled__c FROM Event Where OwnerId =: u.Id and StartDateTime >= :newApptTime.addDays(-1) and Type = 'Sales Appointment'];
+      		List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, Synced_DateTime__c, isCancelled__c FROM Event Where OwnerId =: u.Id and StartDateTime >= :newApptTime.addDays(-1) and Type = 'Tech Measure'];
+     		System.assertEquals(salesEvents.size(),1);
+     		System.assertEquals(techmEvents.size(),1);
+     		System.assert(Datetime.now().getTime() - salesEvents[0].Synced_DateTime__c.getTime() < 2000);
+     		System.assert(Datetime.now().getTime() - techmEvents[0].Synced_DateTime__c.getTime() < 2000);
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
@@ -60,7 +67,7 @@ private class RMS_mobileAppRequestHelperTest {
         System.runAs(u) {
 			Test.startTest();
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
-			String jsonResult = mHelper.resultSalesAppointments(u.Id, '{}');
+			String jsonResult = mHelper.resultSalesAppointments(u.Id, '{"tmAppts":[],"salesAppts":[],"getApptsCompletedTimeStamp":null,"errors":null}');
 			Test.stopTest();
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
@@ -174,5 +181,7 @@ private class RMS_mobileAppRequestHelperTest {
 	   	System.assertEquals(apptContainer.salesAppts.size(),2);
 	   	System.assertEquals(apptContainer.salesAppts[0].event.Id, event.Id);
 	}
+
+	
 
 }

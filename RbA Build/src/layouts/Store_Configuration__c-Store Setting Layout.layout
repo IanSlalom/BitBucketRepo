@@ -11,6 +11,10 @@
                 <behavior>Edit</behavior>
                 <field>Store__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>rSuite_Configuration__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -332,13 +336,20 @@
         <fields>Finance_Program__c</fields>
         <fields>Finance_Company__c</fields>
         <fields>Active__c</fields>
+        <fields>Option_Order__c</fields>
         <relatedList>Store_Finance_Program__c.Store_Configuration__c</relatedList>
+        <sortField>NAME</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
         <fields>Discount__c</fields>
         <fields>Active__c</fields>
         <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>rSuite_Configuration__c.Store_Configuration__c</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>

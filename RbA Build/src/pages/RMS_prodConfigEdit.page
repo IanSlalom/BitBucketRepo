@@ -252,8 +252,8 @@
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenTypeItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Screen_Vaneer_Type__c}" label="Vaneer Type" size="1" id="screenVaneerType" html-data-jsid="screenVaneerType" required="{!prodConfig.mpc.Screen_Vaneer_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Vaneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
-                <apex:selectOptions value="{!screenVaneerTypeItems}"/>
+            <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
+                <apex:selectOptions value="{!screenVeneerTypeItems}"/>
             </apex:selectList>
         	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
             	<apex:selectOptions value="{!grilleStyleItems}"/>
@@ -597,13 +597,13 @@
     }
     
     function screenType(){
-        if(j$("select[data-jsid='screenType']").val() == 'TruScene (Wood Vaneer)'){
-            j$("select[data-jsid='screenVaneerType']").show();
-			j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").show();
+        if(j$("select[data-jsid='screenType']").val() == 'TruScene (Wood Veneer)'){
+            j$("select[data-jsid='screenVeneerType']").show();
+			j$("label[for='"+j$("select[data-jsid='screenVeneerType']").attr("id")+"']").show();
         }else{
-            j$("select[data-jsid='screenVaneerType']").val(null);
-            j$("select[data-jsid='screenVaneerType']").hide();
-			j$("label[for='"+j$("select[data-jsid='screenVaneerType']").attr("id")+"']").hide();
+            j$("select[data-jsid='screenVeneerType']").val(null);
+            j$("select[data-jsid='screenVeneerType']").hide();
+			j$("label[for='"+j$("select[data-jsid='screenVeneerType']").attr("id")+"']").hide();
         }
     }
     

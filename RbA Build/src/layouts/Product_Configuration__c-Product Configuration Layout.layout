@@ -443,7 +443,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Screen_Vaneer_Type__c</field>
+                <field>Screen_Veneer_Type__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -823,7 +823,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Screen_Vaneer_Type_Control__c</field>
+                <field>Screen_Veneer_Type_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

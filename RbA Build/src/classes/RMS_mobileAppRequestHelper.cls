@@ -11,11 +11,14 @@
 public with sharing class RMS_mobileAppRequestHelper {
 
 	public static map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
-	private static final String SHARED_FIELDS = '';
-	private static final String QLI_ONLY_FIELDS = '';
-	private static final String OLI_ONLY_FIELDS = '';
-	private static final String QLI_WHERE_CLAUSE = '';
-	private static final String OLI_WHERE_CLAUSE = '';
+	private static String SHARED_FIELDS;
+	// fields unique to Quote line items
+	private static final String QLI_QUERY_START = 'SELECT LineNumber, QuoteId, Subtotal, TotalPrice, Parent_Quote_Line_Item__c';
+	private static final String QLI_WHERE_CLAUSE = 'from QuoteLineItem where QuoteId in :quoteIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
+
+	// fields unique to Order line items
+	private static final String OLI_QUERY_START = 'SELECT Cancelled__c, Cancelled_Date__c, Charge_Cost_To__c, Parent_Order_Item__c, OrderItemNumber, OrderId, QuoteLineItemId, Height_Inches__c, Height_Fraction__c, NSPR__c, NSPR_Number__c, Sill_Angle__c, Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c';
+	private static final String OLI_WHERE_CLAUSE = 'from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
   /* @method: findAppointments(Id userId)
    * @param: Id userId - user who the appointements are assigned to
@@ -31,11 +34,19 @@ public with sharing class RMS_mobileAppRequestHelper {
       // process the sales appointments
       if (salesEvents.size() > 0) {
         myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
+        for(Event e : salesEvents){
+          e.Synced_DateTime__c = Datetime.now();
+        }
+        update salesEvents;
       }
 
       // process the tech measure appointmsnts
       if (techmEvents.size() > 0) {
         myAppts.tmAppts = this.populateTMAppointments(techmEvents);
+        for(Event e : techmEvents){
+          e.Synced_DateTime__c = Datetime.now();
+        }
+         update techmEvents;
       }
 
       myAppts.getApptsCompletedTimeStamp = Datetime.now();
@@ -180,6 +191,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       // add the appointment to the results list
       tmAppts.add(tma);
     }
+
     return tmAppts;
   }
     
@@ -206,6 +218,43 @@ public with sharing class RMS_mobileAppRequestHelper {
     return acctToOppMap;
   }
 
+  /* @method: buildQLIQuery()
+   * @return: String quote line item query
+   */
+  public String buildQLIQuery() {
+	if (SHARED_FIELDS == null || SHARED_FIELDS.equals('')) {
+		SHARED_FIELDS = buildSharedFields();
+	}
+	String qliQuery = QLI_QUERY_START + SHARED_FIELDS + QLI_WHERE_CLAUSE;
+	return qliQuery;
+  }
+
+  /* @method: buildOLIQuery()
+   * @return: String order line item query
+   */
+  public String buildOLIQuery() {
+	if (SHARED_FIELDS == null || SHARED_FIELDS.equals('')) {
+		SHARED_FIELDS = buildSharedFields();
+	}
+	String oliQuery = OLI_QUERY_START + SHARED_FIELDS + OLI_WHERE_CLAUSE;
+	return oliQuery;
+  }
+
+  /* @method: buildSharedFields()
+   * @description: uses a quote line item field set to dynamically build the query
+   * @return: String shared fields from between quote line item and order line item
+   */
+  public String buildSharedFields() {
+	String sharedQueryFields = '';
+	// get the field set
+	Schema.FieldSet fs1 = Schema.SObjectType.QuoteLineItem.fieldSets.rsuite_api_fields;
+	for (FieldSetMember fsm : fs1.getFields()) {
+		sharedQueryFields = sharedQueryFields + ', ' + fsm.getFieldPath();
+	}
+	sharedQueryFields += ' '; //add a trailing space
+	return sharedQueryFields;
+  }
+
   /* @method: populateOpportunityStructure(List<Id> opptyIds)
    * @param: List<Id> opptyIds - list of opportunity ids that will be used to build the sales appointments
    * @return: Map<Id, OpportunityContainer> containing all new appointment opportunities
@@ -216,54 +265,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 
     // get the quotes
     Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
+	List<Id> quoteIds = new List<Id> (quoteMap.keySet());
     // get the quote line items
-    List<QuoteLineItem> qliList = [SELECT Id, Description, LineNumber, ListPrice, PricebookEntryId, Quantity, QuoteId, Subtotal, TotalPrice, UnitPrice, 
-	  // custom fields shared with order lines
-      Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, 
-	  Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
-	  Casing_Location__c, Casing_Profile__c, Casing_Species__c, Checkrail_Style__c, Corrosion_Resistant_Hardware__c, 
-	  Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c,
-      Drip_Cap_Pieces__c, 
-//	  Dwelling_Room__c,
-	  EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, 
-	  Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, Exterior_Trim_Color__c, 
-      Fibrex_L_Trim__c, Finger_Lifts__c, Floor__c, Frame_Type__c,
-	  Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, 
-	  Grille_Alignment__c, Grille_Pattern__c, Grille_Style__c, 
-	  Handing__c, Handle_Type__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, Hardware_Option__c, Hardware_Style__c, Hubs__c, 
-      Insect_Screen_Style__c, Install_Holes_Location__c, Install_Track_Location__c,
-	  Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
-	  Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c,
-      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, Locks_Sash__c, 
-	  Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, 
-	  Notes__c,
-//	  Parent_Unit__c, 
-	  Part_of_Bay__c, Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Pocket_Notch__c, Product_Class__c,
-	  Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, 
-//	  Room_Description__c,
-	  Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-      Screen_Color__c, Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c, Special_Options__c, Specialty_Shape__c, Spokes__c,
-	  Storm_Window__c, Storm_Window_Color__c, Storm_Window_Style__c, SW_Grille_Alignment__c,
-      Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, 
-	  Unit_Id__c, 
-	  Wide_Bar__c,
-	  // quote line item only fields
-	  rSuite_Id__c
-      from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false order by Unit_Id__c, Product_Class__c];
-/*      from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false and Product_Class__c = :Constants.MASTER_PRODUCT_RECORD_TYPE_NAME];
-    List<QuoteLineItem> mcQLIList = [SELECT Id, Description, LineNumber, ListPrice, PricebookEntryId, Quantity, QuoteId, Subtotal, TotalPrice, UnitPrice, 
-	  Notes__c, Product_Class__c, Unit_Id__c
-	  from QuoteLineItem where QuoteId in :quoteMap.keySet() and isDeleted = false and 
-	  (Product_Class__c = :Constants.MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME or Product_Class__c = :Constants.CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME)];
-	// combine the lists
-	qliList.addAll(mcQLIList);
-*/
-
+	String qliQuery = this.buildQLIQuery();
+	List<QuoteLineItem> qliList = Database.query(qliQuery);
 
     // get the quote discounts
     List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
     // get the quote financing
-    List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c, rSuite_Id__c from Quote_Financing__c where Related_Quote__c in :quoteMap.keySet() and isDeleted = false];
+    List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c, Authorization_Code__c, Expiration_Date__c, Program_Rate__c, Program_Fee__c, rSuite_Id__c from Quote_Financing__c where Related_Quote__c in :quoteMap.keySet() and isDeleted = false];
     // build the quote containers
     List<QuoteContainer> qcList = new List<QuoteContainer>();
     for (Quote q : quoteMap.values()) {
@@ -329,6 +339,8 @@ public with sharing class RMS_mobileAppRequestHelper {
     List<OrderItem> oiList = queryOrderItems(orderMap.keySet());
     // get the order discounts
     List<Order_Discount__c> odList = queryOrderDiscounts(orderMap.keySet());
+	// get the order financing
+	List<Order_Financing__c> ofList = queryOrderFinancing(orderMap.keySet());
 
     // build the orderContainers
     List<OrderContainer> orcList = new List<OrderContainer>();
@@ -347,6 +359,12 @@ public with sharing class RMS_mobileAppRequestHelper {
           orc.orderDiscountList.add(od);
         }
       }
+	  orc.orderFinancingList = new List<Order_Financing__c>();
+	  for (Order_Financing__c ofin : ofList) {
+		if(ofin.Related_Order__c == ord.Id) {
+			orc.orderFinancingList.add(ofin);
+		}
+	  }
       orcList.add(orc);
     }
     return orcList;
@@ -373,63 +391,25 @@ public with sharing class RMS_mobileAppRequestHelper {
     return odList;
   }
 
+  /* @method: queryOrderFinancing(List<Id> orderIds)
+   * @param: List<Id> orderIds
+   * @return: List<Order_Financing__c>
+   */
+    public List<Order_Financing__c> queryOrderFinancing(Set<Id> orderIds){
+    List<Order_Financing__c> ofList = [SELECT Id, Name, Store_Finance_Program__c, Related_Order__c, Amount_Financed__c, Authorization_Code__c, Expiration_Date__c, Program_Fee__c, Program_Rate__c, rSuite_Id__c from Order_Financing__c where Related_Order__c in :orderIds and isDeleted = false];
+    return ofList;
+  }
+
   /* @method: queryOrderItems(List<Id> orderIds)
    * @param: List<Id> orderIds
    * @return: List<OrderItem>
    */
-//TODO: Dynamic query builing - sharing the fields between Order line items and quote line items to reduce maintenance
-    public List<OrderItem> queryOrderItems(Set<Id> orderIds){
-	// first get the window products
-    List<OrderItem> oiList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
-	  // custom fields shared with quote
-      Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c, 
-	  Breather_Tubes__c, Brickmould_Applied__c, Brickmould_Location__c, 
-	  Cancelled__c, Cancelled_Date__c,
-	  Casing_Location__c, Casing_Profile__c, Casing_Species__c, Charge_Cost_To__c, Checkrail_Style__c, Corrosion_Resistant_Hardware__c, 
-	  Custom_Grille_Details_S1__c, Custom_Grille_Details_S2__c, Custom_Grille_Details_S3__c,
-      Drip_Cap_Pieces__c, 
-//	  Dwelling_Room__c,
-	  EJ_Color__c, EJ_Frame__c, EJ_Species__c, EJ_Thickness__c, EJ_Wall_Depth__c, 
-	  Exterior_Color__c, Exterior_Grille_Color__c, Exterior_Trim__c, Exterior_Trim_Color__c, 
-      Fibrex_L_Trim__c, Finger_Lifts__c, Floor__c, Frame_Type__c,
-	  Glass_Pattern_S1__c, Glass_Pattern_S2__c, Glass_Pattern_S3__c, Glazing_S1__c, Glazing_S2__c, Glazing_S3__c, Gliding_Screen__c, 
-	  Grille_Alignment__c, Grille_Pattern__c, Grille_Style__c, 
-	  Handing__c, Handle_Type__c, Hardware_Color__c, Hardware_Finish__c, Hardware_Finish_Color__c, Hardware_Option__c, Hardware_Style__c, Hubs__c, 
-      Insect_Screen_Style__c, Install_Holes_Location__c, Install_Track_Location__c,
-	  Interior_Color__c, Interior_Grille_Color__c, Interior_Sash_Color__c, Interior_Trim__c, Jamb_Liner_Color__c, 
-	  Left_Leg_Inches__c, Left_Leg_Fraction__c, Lifts_Pulls__c,
-      Lites_High_S1__c, Lites_High_S2__c, Lites_High_S3__c, Lites_Wide_S1__c, Lites_Wide_S2__c, Lites_Wide_S3__c, Locks_Sash__c, 
-	  Mfg_Mull_Sequence__c, Mull_Sequence_Mullion__c, 
-	  Notes__c,
-//	  Parent_Unit__c, 
-	  Part_of_Bay__c, Part_of_Bow__c, Perm_Applied_Int_Wood_Grille__c, Pocket_Notch__c, Product_Class__c,
-	  Right_Leg_Inches__c, Right_Leg_Fraction__c, Room__c, 
-//	  Room_Description__c,
-	  Sales_Height_Fraction__c, Sales_Height_Inches__c, Sales_Width_Fraction__c, Sales_Width_Inches__c, Sash_Operation__c, Sash_Ratio__c, 
-      Screen_Color__c, Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c, Special_Options__c, Specialty_Shape__c, Spokes__c,
-	  Storm_Window__c, Storm_Window_Color__c, Storm_Window_Style__c, SW_Grille_Alignment__c,
-      Tax_Credit_Qualified__c, Tempered_S1__c, Tempered_S2__c, Tempered_S3__c, 
-	  Unit_Id__c, 
-	  Wide_Bar__c, 
-// order line only fields
-	  Height_Inches__c, Height_Fraction__c, 
-	  NSPR__c, NSPR_Number__c,
-	  Sill_Angle__c,
-	  Variant_Number__c, 
-	  Unit_Wholesale_Cost__c,
-	  Width_Fraction__c, Width_Inches__c
-      from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c];
-/*      from OrderItem where OrderId in :orderIds and isDeleted = false and Product_Class__c = :Constants.MASTER_PRODUCT_RECORD_TYPE_NAME];
-	  // now get the construction materials and misc charges
-	List<OrderItem> mcOIList = [SELECT Id, Description, ListPrice, OrderItemNumber, OrderId, PricebookEntryId, Quantity, QuoteLineItemId, UnitPrice,
-	  Notes__c, Product_Class__c, Unit_Id__c
-	  from OrderItem where OrderId in :orderIds and isDeleted = false and 
-	  (Product_Class__c = :Constants.MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME or Product_Class__c = :Constants.CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME)];
-	// combine the lists
-	oiList.addAll(mcOIList);
-*/
-    return oiList;    
-  }
+	public List<OrderItem> queryOrderItems(Set<Id> orderIdSet){
+		List<Id> orderIds = new List<Id> (orderIdSet);
+		String oliQuery = this.buildOLIQuery();
+		List<OrderItem> oiList = Database.query(oliQuery);
+		return oiList;    
+	}
 
 
   /* @method: updateOpportunity(Id OppId, String status)
@@ -447,22 +427,25 @@ public with sharing class RMS_mobileAppRequestHelper {
 // can the order be updated?
 // field level validation?
 // how to report errors to rSuite
-
-    // now lets save the quotes to the opportunitiez
-    appts = saveQuotes(appts);
-    // now lets save the quote line items and discounts to the quotes
-    // note that we will need to add the quote ids to quote line items before we can save the quotes
-    appts=saveQuoteLineItemsDiscountsandFinancing(appts);
-    // now save the opportunity changes
-    appts=saveOpportunities(appts);
-    // now that we are done lets return the updated records to the client
-    // most everything is updated but we need to add the order details that were generated from any closed won opportunities
-    appts = updateAppts(appts);
-    // process any closed won opportunities by creating work order activities
-if (appts.getErrors().size() == 0){
-    createWorkOrders(appts);
-}
-
+	//only attempt to save quotes if sales appointments exist
+	if (appts.salesAppts != null) {
+		// now lets save the quotes to the opportunitiez
+		appts = saveQuotes(appts);
+		// now lets save the quote line items and discounts to the quotes
+		// note that we will need to add the quote ids to quote line items before we can save the quotes
+		appts=saveQuoteLineItemsDiscountsandFinancing(appts);
+		// now save the opportunity changes
+		appts=saveOpportunities(appts);
+		// now that we are done lets return the updated records to the client
+		// most everything is updated but we need to add the order details that were generated from any closed won opportunities
+		appts = updateAppts(appts);
+		// process any closed won opportunities by creating work order activities
+		if (appts.getErrors().size() == 0){
+			createWorkOrders(appts);
+		}
+	} else {
+		appts.getErrors().add('No Sales Appointments Found');
+	}
     return JSON.serialize(appts);
   }
 
@@ -472,40 +455,40 @@ if (appts.getErrors().size() == 0){
    * @return: Appointments - comes back with committed quotes and/or error messages
    */
   public Appointments saveQuotes(Appointments appts) {
-    List<Quote> quotes = new List<Quote>();
-    for (SalesAppointment sa : appts.salesAppts) {
-      for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
-        if (qc.aQuote != null) {
-          quotes.add(qc.aQuote);
-        }
-      }
-    }
-    if (quotes.size() > 0) {
-      // lets set a database save point
-      System.SavePoint sp = Database.setSavePoint();
-      try {
-        Database.SaveResult[] lsr = Database.insert(quotes, false);
-        for(Database.SaveResult sr : lsr){
-          if (!sr.isSuccess()) {
-            // add error messages 
-            // Operation failed, so get all errors               
-            for(Database.Error err : sr.getErrors()) {
-              appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
-            }
-          }
-        }
-      } catch (Exception e) {
-        // we've got another error
-        // rollback the inserts if possible
-        Database.rollBack(sp);
-        // put the errors in the appts errors
-        appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
-        System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
-      }
-    } else {
-      appts.getErrors().add('No Quotes Found');
-    }
-    return appts;
+	List<Quote> quotes = new List<Quote>();
+	for (SalesAppointment sa : appts.salesAppts) {
+		for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
+			if (qc.aQuote != null) {
+				quotes.add(qc.aQuote);
+			}
+		}
+	}
+	if (quotes.size() > 0) {
+		// lets set a database save point
+		System.SavePoint sp = Database.setSavePoint();
+		try {
+			Database.UpsertResult[] lsr = Database.upsert(quotes, false);
+			for(Database.UpsertResult sr : lsr){
+				if (!sr.isSuccess()) {
+				// add error messages 
+				// Operation failed, so get all errors               
+					for(Database.Error err : sr.getErrors()) {
+						appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
+					}
+				}
+			}
+		} catch (Exception e) {
+			// we've got another error
+			// rollback the inserts if possible
+			Database.rollBack(sp);
+			// put the errors in the appts errors
+			appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+		}
+	} else {
+		appts.getErrors().add('No Quotes Found');
+	}
+	return appts;
   }
 
   /* @method: saveQuoteLineItemsDiscountsandFinancing(Appointments appts)
@@ -541,8 +524,8 @@ if (appts.getErrors().size() == 0){
     try {
       // attempt to insert the quote line item record
       if (qliList.size() > 0) {
-        Database.SaveResult[] lsr = Database.insert(qliList, false);
-        for(Database.SaveResult sr : lsr){
+        Database.UpsertResult[] lsr = Database.upsert(qliList, false);
+        for(Database.UpsertResult sr : lsr){
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
@@ -556,8 +539,8 @@ if (appts.getErrors().size() == 0){
       }
       // attempt to insert the qoute discount records
       if (qdList.size() > 0) {
-        Database.SaveResult[] lsr = Database.insert(qdList, false);
-        for(Database.SaveResult sr : lsr){
+        Database.UpsertResult[] lsr = Database.upsert(qdList, false);
+        for(Database.UpsertResult sr : lsr){
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
@@ -569,8 +552,8 @@ if (appts.getErrors().size() == 0){
       }
       // attempt to insert the qoute financing records
       if (qfList.size() > 0) {
-        Database.SaveResult[] lsr = Database.insert(qfList, false);
-        for(Database.SaveResult sr : lsr){
+        Database.UpsertResult[] lsr = Database.upsert(qfList, false);
+        for(Database.UpsertResult sr : lsr){
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
