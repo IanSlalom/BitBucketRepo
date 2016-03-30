@@ -1,0 +1,526 @@
+<apex:component controller="MA_RoutingSchedulerController" layout="none" >
+
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/overlappingmarkerspiderfier/oms.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/async/async.min.js')}"/>
+  	
+    <!-- CSS -->
+    <style type='text/css'>
+
+    </style>
+
+     <!-- JS -->
+    <script type='text/javascript'>
+       /******************************
+           Schdeuler Routing Globals
+        ******************************/
+        var MAschedRoutes = 
+        {
+            getAsyncRouting : function(token, travelM, callback)
+            {
+              dDate = new defaultDate(DD);
+                //console.log(token);
+                //console.log(travelM);
+                $.ajax({
+                  type: "POST",
+                  url: arcGISAPIaysnc,
+                  json: true,
+                  data: {
+                    f: 'json',
+                    token: token,
+                    //stops: JSON.stringify({features: response.data}),
+                    orders: JSON.stringify({features: baseOrders}),
+                    depots:JSON.stringify({features: baseDepots}), 
+                    routes: JSON.stringify({features: baseRoutes}),
+                    default_date: dDate,
+                    travel_mode: travelM,
+                    populate_directions: true,
+                    directions_language: 'en',
+                    directions_style_name:'NA Desktop',
+                    time_units: 'Minutes',
+                    time_window_factor: 'High'
+                  }
+                })
+                .done(function(data, success, body) {
+                    data = JSON.parse(data);
+                    checkStatus(token, data, function(response){
+                        console.log(response);
+                        async.parallel([
+                            function(callback){
+                                getResults(token, response.results.out_directions.paramUrl, response.jobId, function(responseD){
+                                    callback(null, responseD);
+                                });
+                            },
+                            function(callback){
+                                getResults(token, response.results.out_routes.paramUrl, response.jobId,function(responseR){
+                                    callback(null, responseR);
+                                });
+                            },
+                            function(callback){
+                                getResults(token, response.results.out_stops.paramUrl, response.jobId, function(responseS){
+                                    callback(null, responseS);
+                                });
+                            },
+                            function(callback){
+                                getResults(token, response.results.out_unassigned_stops.paramUrl, response.jobId, function(responseS){
+                                    callback(null, responseS);
+                                });
+                            },
+                            function(callback){
+                                getResults(token, response.results.solve_succeeded.paramUrl, response.jobId, function(responseS){
+                                    callback(null, responseS);
+                                });
+                            }
+                        ], 
+                        function(err, results){
+                            console.log(results);
+                            routeResults(results);
+                            callback(err, success);
+                        });
+                    //callback(null, success);
+                    });//console.log(data);
+                    //console.log(success);
+                    //console.log(body);
+                  })
+                  .error(function(error){
+                      //Need to add some other error handle stuff 
+                  })
+            },
+            
+            checkStatus : function(authToken, Sdata, callback)
+            {
+                var resultData;
+                console.log(Sdata);
+                async.until(
+                    function (){
+                        //Need to add some error checking and have it do something else if the response fails
+                        console.log(Sdata);
+                        return Sdata.jobStatus == "esriJobSucceeded";
+                    }, 
+                    function(callback){
+                        $.ajax({
+                            type: "GET",
+                            url: arcGISjobStatus.replace('<yourJobID>', Sdata.jobId).replace('<yourToken>', authToken)
+                            })
+                            .done(function(data, success, body){
+                                //console.log(data);
+                                //console.log(success);
+                                    console.log(body);
+                                    var RT;
+                                    RT = JSON.parse(body.responseText);
+                                    Sdata = RT;
+                                setTimeout(function(){
+                                    callback(null, RT);
+                                }, 1000);
+                            }) 
+                            .error(function(error, body){
+                                callback(error, body);
+                            })
+                    },
+                    function(err, n)
+                    {
+                        console.log(err);
+                        console.log(n);
+                        if(n != null)
+                        {
+                            /*getResults(authToken, n, function(response){
+                                console.log(response)
+                                resultData = response;
+                                callback(resultData);
+                            });*/
+                            callback(n);
+                        }
+                        if(err != null){
+                            callback(err, n);
+                        }
+                    })
+            },
+            
+            getResults : function(token, Rdata, jobId, callback)
+            {
+                //console.log(token);
+                //console.log(Rdata);
+                Rdata = Rdata.replace('results/', '');
+                $.ajax({
+                    type: "GET", 
+                    url: arcGISoutputs.replace('<output_parameter_name>', Rdata).replace('<yourJobID>', jobId).replace('<yourToken>', token)
+                })
+                .done(function(data, success, body){
+                    //console.log(body);
+                    var resultT = JSON.parse(body.responseText);
+                    console.log(resultT);
+                    callback(resultT);
+                }) 
+                .error(function(error, body){
+                    //Add some other error handling here 
+                    callback(error, body);
+                })
+            },
+
+            getSyncRouting : function(token, travelM, callback)
+            {
+              dDate = new defaultDate(DD);
+                //console.log(token);
+                //console.log(travelM);
+                $.ajax({
+                  type: "POST",
+                  url: arcGISAPI,
+                  json: true,
+                  data: {
+                    f: 'json',
+                    token: token,
+                    //stops: JSON.stringify({features: response.data}),
+                    orders: JSON.stringify({features: baseOrders}),
+                    depots:JSON.stringify({features: baseDepots}), 
+                    routes: JSON.stringify({features: baseRoutes}),
+                    default_date: dDate,
+                    travel_mode: travelM,
+                    populate_directions: true,
+                    directions_language: 'en',
+                    directions_style_name:'NA Desktop',
+                    time_units: 'Minutes',
+                    time_window_factor: 'High'
+                  }
+                })
+                .done(function(data, success, body) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    routeResults(data.results);
+                    callback(null, success);
+                    //console.log(success);
+                    //console.log(body);
+                  })
+                  .error(function(error){
+                      //Need to add some other error handling here
+                  })
+            },
+
+            esriTravelModes : {
+
+            },
+
+            esriToken : '',
+
+            getEsriToken : function(callback)
+            {                        
+                var EsriToken;
+                if(MAschedRoutes.esriToken != '') 
+                {
+                    EsriToken = MAschedRoutes.esriToken;
+
+                    MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
+                        callback({success:true, token:EsriToken, travelMode:travelResponse});     
+                    });
+                }
+                else 
+                {
+                    try
+                    {
+                        var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getESRIToken',{});
+                        //try tp parse response
+                        response = JSON.parse(response);
+                        if(response.error)
+                        {
+                            handleError('Scheduling Error','Unable to get scheduling token.', response.error.message);
+                            callback({success:false, error: response.error.error});
+                        }
+                        else
+                        {
+                            EsriToken = response.access_token;
+                            MAschedRoutes.esriToken = EsriToken;
+                            MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
+                                    callback({success:true, token:EsriToken, travelMode:travelResponse});     
+                            });
+                        }
+                    }
+                    catch(e)
+                    {
+                        handleError('Scheduling Error','Unable to get scheduling token.', response.error.message);
+                        callback({success:false, error: response.error.error});
+                    }
+                   /* $.ajax({
+                        type: "POST",
+                        url: MAschedRoutes.externalResources.arcGISauth,
+                        json: true,
+                        data: {
+                            client_id: MAschedRoutes.externalResources.EsriClientID,
+                            client_secret: MAschedRoutes.externalResources.EsriClientSecret,
+                            grant_type: 'client_credentials',
+                            expiration: '8000'
+                        }
+                    })
+                    .done(function(res) {
+                        try {
+                            //parse the response
+                            var response = JSON.parse(res);
+                            var EsriToken = response.access_token;
+
+                            if(EsriToken) {
+                                MAschedRoutes.esriToken = EsriToken;
+                                MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
+                                    callback({success:true, token:EsriToken, travelMode:travelResponse});     
+                                });
+                            }
+                            else {
+                                NotifyError('Routing Error','Unable to get routing token.');
+                                callback({success:false});
+                            }
+                        }
+                        catch(e) {
+                            NotifyError('Routing Error','Unable to get routing token.');
+                            callback({success:false});
+                        }
+                    })
+                    .error(function(res) {
+                        NotifyError('Routing Error','Unable to get routing token.');
+                        callback({success:false});
+                        MAschedRoutes.log(res);
+                    });*/
+                }
+            },
+
+            getEsriTravelMode : function(authToken, callback)
+            {
+                //check if we have travel modes already
+                if(!$.isEmptyObject(MAschedRoutes.esriTravelModes)) {
+                    callback(MAschedRoutes.esriTravelModes.DrivingTime);
+                }
+                else 
+                {
+                    //get the travelMode
+                    $.ajax({
+                        type: "GET",
+                        url: MAschedRoutes.externalResources.arcGIStravel,
+                        json: true,
+                        data:{
+                            f: 'json',
+                            token: authToken
+                        }
+                    })
+                    .done(function(res) {
+                        try {
+                            var response = JSON.parse(res);
+                            //get the results and loop
+                            var results = response.results || [];
+                            var ESRITravelModes = {};
+                            var hasErrors = false;
+                            for(var r = 0; r < results.length; r++) 
+                            {
+                                var result = results[r];
+                                if(result.paramName && result.paramName == "supportedTravelModes") {
+                                    //check for features
+                                    if(result.value && result.value.features) {
+                                        var features = result.value.features;
+                                        for(var f = 0; f < features.length; f++) {
+                                            var mode = features[f];
+                                            //build modes
+                                            try {
+                                                ESRITravelModes[mode.attributes.Name.replace(/\s/g,'')] = JSON.parse(mode.attributes.TravelMode);
+                                            }
+                                            catch(e) {
+                                                MAschedRoutes.log('Unable to parse travel modes. Dafaulting to Drive Time');
+                                                callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            MAschedRoutes.esriTravelModes = ESRITravelModes;
+                            callback(ESRITravelModes.MADrivingTime);
+                        }
+                        catch(e) {
+                            MAschedRoutes.log('Unable to get travel modes. Dafaulting to DrivingTime');
+                            callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
+                        }
+                    })
+                    .error(function(res){
+                        MAschedRoutes.log('Unable to get travel modes. Dafaulting to DrivingTime');
+                        callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
+                    });
+                }
+            },
+
+        orderWaypoints : function () 
+        {
+            var $table = $('#Routing-Table .waypoint-row');
+            //check if we have a start
+            var lockOffset = $('#Routing-Table .waypoint-row.start, #Routing-Table .waypoint-row.startend').length > 0 ? true : false;
+            if(lockOffset) {
+                $table = $('#Routing-Table .waypoint-row').not('.start,.startend');
+            }
+            var $sortTable = $table.sort(compareNumbers);
+            
+            if(lockOffset) {
+                $table.remove();
+                $sortTable.insertAfter($('#Routing-Table .waypoint-row').eq(0));
+            }
+            else {
+                $('#Routing-Table .waypoints').empty().append($sortTable);
+            }
+            
+            function compareNumbers(a, b) {
+                return $(a).find('.svg-marker-waypoint text').text() - $(b).find('.svg-marker-waypoint text').text();
+            }
+        },
+
+        getRBAWorkOrders : function()
+        {
+            var storeId = $('#storeSettingsSelect').val();
+            var moment = $('#calendar').fullCalendar('getDate'); 
+            moment = moment.format('YYYY-MM-DD');
+            console.log(moment);
+            try
+            {
+                var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getRecords',{dt: moment, storeId: storeId});
+                response = JSON.parse(response);
+                console.log(response);
+
+            }
+            catch(e)
+            {
+                handleError('Error', response);
+            }
+
+        },
+
+        getRBAStoreDepots : function()
+        {
+
+        },
+
+        getRBAResources : function()
+        {
+
+        },
+        
+        showOptyModal : function()
+        {
+           $('#datepicker').datepicker({
+                inline: true,
+                onSelect: function(dateText, inst) {
+                    var d = new Date(dateText);
+                    console.log(d);
+                    $('#calendar').fullCalendar('gotoDate', d);
+                }
+            });
+            
+            $('#scheduleOptimizeModal').show();
+        
+        },
+        
+        showMap : function()
+        {
+            
+        },
+
+        externalResources : {
+            'arcGISAPI'           : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblemSync/GPServer/EditVehicleRoutingProblem/execute?',
+            'arcGISAPIaysnc'      :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/submitJob?',
+            'arcGISjobStatus'     :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>?token=<yourToken>&returnMessages=true&f=json',
+            'arcGIScancelJob'     : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/cancel?token=<yourToken>&f=json',
+            'arcGISoutputs'       : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/results/<output_parameter_name>?token=<yourToken>&f=json',
+            'arcGISinputs'        :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/inputs/<inputParameterName>?token=<yourToken>&f=json',
+            'arcGIStravel'        : 'https://logistics.arcgis.com/arcgis/rest/services/World/Utilities/GPServer/GetTravelModes/execute?',
+            'EsriRoutingAPI'      : 'https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World/solve',
+        }
+    }
+    
+        /******************************
+        *   On Ready
+        ******************************/
+        $(function () {
+            $('#loaderModal').hide();
+            /****************************************
+            *   Init
+            ****************************************/
+           //set up route waypoint spiderfy
+            MAschedRoutes.waypointMarkers = new OverlappingMarkerSpiderfier(map, { keepSpiderfied: true });
+            MAschedRoutes.waypointMarkers.addListener('click', function (marker, e) {
+                if (marker.spiderfied || MAschedRoutes.waypointMarkers.markersNearMarker(marker, true).length == 0) {
+                    if(!marker.SavedQryId) {
+                        waypoint_Click.call(marker, { markerType: 'waypoint' });
+                    }
+                }
+            });
+            MAschedRoutes.waypointMarkers.addListener('spiderfy', function (markersAffected, markersNotAffected) {
+                $.each(markersAffected, function (i, marker) {
+                    marker.spiderfied = true;
+                });
+            });
+            MAschedRoutes.waypointMarkers.addListener('unspiderfy', function (markersAffected, markersNotAffected) {
+                $.each(markersAffected, function (i, marker) {
+                    marker.spiderfied = false;
+                });
+            });
+            /************************************
+            *   Handlers
+            ************************************/
+        });
+
+
+        /******************************
+        *   Component Page Methods
+        ******************************/
+         function getSyncOptimalRoute()
+         {
+            async.waterfall([
+                MAschedRoutes.getToken,
+                MAschedRoutes.getTravelMode,
+                MAschedRoutes.getSyncRouting
+            ], 
+            function (err, result){
+                console.log(result);
+                console.log(err);
+            });
+        }
+                    
+        function getAutoSchedule()
+        {
+            async.waterfall([
+                MAschedRoutes.getRBAWorkOrders,
+                MAschedRoutes.getToken,
+                MAschedRoutes.getTravelMode,
+                MAschedRoutes.getAsyncRouting
+            ], 
+            function (err, result){
+                console.log(result);
+                console.log(err);
+            });
+        }
+
+        function getReRoute()
+        {
+            //This function will be the standard routing call***This should be used only if scheduler optimzation has been run and accepted
+        }
+        
+    
+   function closeScheduleOptimizeModal() {
+            $('#scheduleOptimizeModal').hide();
+        }
+         
+    </script>
+    <div id="scheduleOptimizeModal">
+        <div id="scheduleOptimizeOverlay" />
+        <div id="scheduleOptimizeContent">
+            <div id="scheduleOptimize">
+                <div id="scheduleOptimizeHeader">
+                    <!-- <span id="scheduleWorkOrderModalSave" class="floatLeft" onclick="saveScheduleWorkOrder();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/approval_60.png')}" /></span> -->
+                    <span>Optimize Schedule</span>
+                    <span id="scheduleOptimizeModalClose" class="floatRight" onclick="closeScheduleOptimizeModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+                </div>
+                <div>
+                    <span>Pick a date</span>
+                    <div id="datepicker"></div>
+                </div>
+                <div>
+                	Work Order: <span id="OptimizeName" /> <input type="hidden" id="OptimizeId" />
+                </div>
+                <div id="scheduleOptimizeButtons">
+                	<button onclick="closeScheduleOptimizeModal();">CANCEL</button>
+                	<button onclick="getAutoSchedule();">Optimize Schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id = "map"></div>
+</apex:component>

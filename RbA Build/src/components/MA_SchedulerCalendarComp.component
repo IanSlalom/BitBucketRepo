@@ -1,0 +1,900 @@
+<apex:component >
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
+    
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/moment.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery-ui.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/fullcalendar.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/scheduler.min.js')}" />
+    
+    <apex:stylesheet value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/fullcalendar.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/scheduler.min.css')}" />
+
+	<script>
+    	$ = jQuery.noConflict();
+
+    	var storeId;
+        var storeIds = [];
+        var storeMap = {};
+        var resourceIds = [];
+        var resourceUserIds = [];
+        var eventListToRender = [];
+
+        //var calendar;
+        var storeTimezone;
+    	var initialLoad = true;
+        var viewDestroy = false;
+        var isIndividual = false;
+        var currentUserId = '{!$User.Id}';
+        var apexCalendarController = 'MA_SchedulerController';
+        var processEventsResponse = { onSuccess: processEventsSuccess, onFailure: processResponseError };
+
+    	$(function() {
+	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
+	    	getStoreTimezone();
+    		initCalendar();
+    	});
+
+    	function getStoreTimezone() {
+    		var response = sforce.apex.execute(apexCalendarController, 'getStoreTimezone', {});
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+                storeTimezone = response.storeTimezone;
+            }
+            else {
+                handleError('MA_SchedulerCalendarComp : getStoreTimezone' + apexCalendarController, response);
+            }
+    	}
+
+		function initCalendar() {
+    	    $('#calendar').fullCalendar({
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                header: {
+                    left: 'title prev,next today',
+                    center: '',
+                    right: 'timelineDay,agendaDay,agendaWeek,month'
+                    //right: 'agendaDay,agendaWeek,month'
+                },
+                buttonText: {
+                    timelineDay: 'Resources',
+                    agendaDay: 'Booking Windows'
+                },
+                views: {
+                    timeline: {
+                        slotDuration: '00:15:00',
+                        slotLabelInterval: '00:30:00'
+                    },
+                    agenda: {
+                        slotDuration: '00:30:00',
+                        slotLabelInterval: '01:00:00'
+                    }
+        	    },
+                defaultView: 'agendaDay',
+                //defaultTimedEventDuration: '02:00:00',
+                //forceEventDuration: true,
+                //timezone: 'local',
+                timezone: 'UTC',
+                //eventOverlap: false,
+                //timezone: false,
+                /*
+                businessHours: [
+                    {
+                        start: '12:00',
+                        end: '19:00',
+                        dow: [2,4,6]
+                    },
+                    {
+                        start: '09:00',
+                        end: '15:00',
+                        dow: [1,3,5]
+                    }
+                ],
+                */
+                lazyFetching: false,
+                selectable: true,
+                handleWindowResize: true,
+                allDaySlot: false,
+                slotEventOverlap: true,
+                //nowIndicator: true,
+                height: 500,
+                droppable: true,
+                /*
+                drop: function(date, jsEvent, ui, resourceId) {
+                    console.log(date);
+                    console.log(resourceId);
+                    this.remove();
+                },
+                */
+                //*
+                //resourceOrder: 'store,name',
+                resourceOrder: 'name',
+                resourceColumns: [
+                	/*
+                    {
+                        labelText: 'Store',
+                        field: 'store',
+                        width: '100px',
+                        group: true
+                    },
+                    */
+                    {
+                        labelText: 'Resource',
+                        field: 'name',
+                        width: '150px',
+                        render: function(resource, el) {
+                            if (resource.isUser) {
+                                el.addClass('userResource');
+                            }
+                            else {
+                                el.addClass('externalResource');
+                            }
+                        }
+                    }
+                ],
+                //*/
+                resources: function(callback) {
+                    fetchResources(callback);
+                },
+                events: function(start, end, timezone, callback) {
+                	console.log(eventListToRender);
+                	console.log(eventListToRender.length);
+
+                	if (eventListToRender.length > 0) {
+                		callback(eventListToRender);
+                		eventListToRender = [];
+                	}
+                	else {
+                    	fetchEvents(start, end, timezone, callback);
+                	}
+                },
+                eventAfterRender: function(event, element, view) {
+                	if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
+						$(element).find('.fc-title').after('<div class="eventNameDiv">' + event.contactName + '</div>');
+					}
+
+					/*
+					if (event.eventType != '' && event.eventType != undefined && event.eventType != null) {
+						//$(element).find('.fc-title').css('display', 'inline-block').before('<div class="eventDot ' + event.eventType + '"></div>');
+						$(element).find('.fc-time').before('<div class="eventDot ' + event.eventType + '"></div>');
+					}
+					*/
+
+					if (event.missingResource == true) {
+						//$(element).find('.fc-title').css('display', 'inline-block').before('<div class="eventDot missingResource"></div>');
+						$(element).find('.fc-time').before('<div class="eventDot missingResource"></div>');
+					}
+
+                	var dataStart = $(element).find('.fc-time').attr('data-start');
+                	if (dataStart != '' && dataStart != undefined && dataStart != null) {
+                		$(element).attr('data-start', dataStart);
+                	}
+
+					//setUpOnHover($(element).find('div.fc-content'), 'event');
+                },
+                eventAfterAllRender: function(view) {
+					//$('.woEvent .fc-title, .maEvent .fc-title').css('display', 'inline-block').before('<div style="height: 8px; width: 8px; color: green; background-color: yellow; display: inline-block; border-radius: 50%"></div>');
+
+					var records = $('.userResource > .fc-cell-text, .externalResource > .fc-cell-text');
+                    for (var i = 0, len = records.length; i < len; i++) {
+                        var el = records[i];
+                        setUpOnHover(el, 'resource');
+                        setResourceOnClick(el);
+                    };
+
+                    //records = $('.sfEvent > div.fc-content, .maEvent > div.fc-content, .woEvent > div.fc-content');
+                    records = $('.maEvent > div.fc-content, .woEvent > div.fc-content');
+                    for (var i = 0, len = records.length; i < len; i++) {
+                        setUpOnHover(records[i], 'event');
+                    };
+
+                    $('#loaderModal').hide();
+                },
+                loading: function(isLoading, view) {
+                    if (isLoading) {
+                        $('#loaderModal').show();
+                    }
+                    /*
+                    else {
+                        var records = $('.userResource > .fc-cell-text, .externalResource > .fc-cell-text');
+                        for (var i = 0, len = records.length; i < len; i++) {
+                            var el = records[i];
+                            setUpOnHover(el, 'resource');
+                            setResourceOnClick(el);
+                        };
+
+                        records = $('.sfEvent > div.fc-content, .maEvent > div.fc-content, .woEvent > div.fc-content');
+                        for (var i = 0, len = records.length; i < len; i++) {
+                            setUpOnHover(records[i], 'event');
+                        };
+
+                        $('#loaderModal').hide();
+                    }
+                    */
+                },
+                viewDestroy: function(view, element) {
+                	console.log(element);
+                    console.log(view);
+                	//var calendarTemp = $('#calendar').fullCalendar('getCalendar');
+		            //var calendarView = $('#calendar').fullCalendar('getView');
+		            //var calendarView = calendarTemp.getView();
+		            //console.log(calendarView);
+		            ///*
+		            if ($('#calendar').fullCalendar('getView').name == 'timelineDay') {
+		            	/*
+		            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+		            		$('#calendar').fullCalendar('removeResource', resourceIds[i]);
+		            	}
+		            	resourceIds = [];
+		            	resourceUserIds = [];
+		            	*/
+
+		            	viewDestroy = true;
+		            	$('#calendar').fullCalendar('refetchResources');
+		            }
+
+		            console.log('help');
+		            //*/
+                },
+                viewRender: function(view, element) {
+                	console.log('viewRender');
+
+                	/*
+		            if ($('#calendar').fullCalendar('getView').name != 'timelineDay') {
+		            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+		            		console.log(i);
+		            		$('#calendar').fullCalendar('removeResource', resourceIds[i]);
+		            	}
+		            	resourceIds = [];
+		            	resourceUserIds = [];
+		            }
+		            */
+
+		            //if (resourceIds.length == 0) {
+			            //$('#calendar').fullCalendar('refetchResources');
+			            //console.log('help');
+			        //}
+                	/*
+                	var calendarTemp = $('#calendar').fullCalendar('getCalendar');
+		            //var calendarView = $('#calendar').fullCalendar('getView');
+		            var calendarView = calendarTemp.getView();
+		            if (calendarView.name != 'timelineDay') {
+		            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+		            		calendarTemp.removeResource(resourceIds[i]);
+		            	}
+		            	resourceIds = [];
+		            	resourceUserIds = [];
+		            }
+		            */
+                },
+                select: function(start, end, jsEvent, view, resource) {
+                	/*
+                	console.log(start.add(30, 'minutes').format());
+                	console.log(view);
+                	*/
+                	console.log(start);
+                	console.log(end);
+
+                	var endWeekCheck = end;
+                	var endMonthCheck = end;
+
+                	if ((view.name == 'agendaWeek' && start.format() == endWeekCheck.add(-30, 'minutes').format()) || (view.name == 'month' && start.format() == endMonthCheck.add(-1, 'days').format())) {
+                		console.log(start.date());
+                		$('#calendar').fullCalendar('gotoDate', start);
+                		$('#calendar').fullCalendar('changeView', 'agendaDay');
+                	}
+                	else {
+                		$('#calendar').fullCalendar('unselect');
+                	}
+
+                    //console.log('hello');
+                    //createBusyEvent(start, end, view, resource);
+                }
+            });
+
+            //calendar = $('#calendar').fullCalendar('getCalendar');
+
+            /*
+            $('.fc-right .fc-button-group .fc-button').click(function() {
+            	var calendarTemp = $('#calendar').fullCalendar('getCalendar');
+	            //var calendarView = $('#calendar').fullCalendar('getView');
+	            var calendarView = calendarTemp.getView();
+	            console.log(calendarView.name);
+	            if (calendarView.name == 'timelineDay') {
+	            //if (calendarView.name == 'timelineDay') {
+	            	*//*
+	            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+	            		calendarTemp.removeResource(resourceIds[i]);
+	            	}
+	            	*//*
+	            	resourceIds = [];
+	            	resourceUserIds = [];
+	            	//calendarTemp.render();
+	            }
+
+            	$('#calendar').fullCalendar('refetchResources');
+            	$('#calendar').fullCalendar('rerenderEvents');
+            });
+            */
+
+            //$('.fc-right .fc-button-group .fc-button').click(function() {
+            $('.fc-button').click(function() {
+            	/*
+            	var calendarTemp = $('#calendar').fullCalendar('getCalendar');
+	            //var calendarView = $('#calendar').fullCalendar('getView');
+	            var calendarView = calendarTemp.getView();
+	            console.log(calendarView.name);
+	            if (calendarView.name == 'timelineDay') {
+	            //if (calendarView.name == 'timelineDay') {
+	            	*//*
+	            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+	            		calendarTemp.removeResource(resourceIds[i]);
+	            	}
+	            	*//*
+	            	resourceIds = [];
+	            	resourceUserIds = [];
+	            	//calendarTemp.render();
+	            }
+	            */
+
+	            viewDestroy = false;
+            	$('#calendar').fullCalendar('refetchResources');
+            	//$('#calendar').fullCalendar('rerenderEvents');
+            });
+
+            /*
+            $('.fc-agendaDay-button').on('click', function() {
+                $.each(calendar.getResources(), function(i, resource) {
+                    calendar.removeResource(resource.id);
+                });
+            });
+
+            $('.fc-timelineDay-button').on('click', function() {
+                calendar.refetchResources();
+            });
+            */
+
+
+    	}
+
+        function createBusyEvent(start, end, view, resource) {
+        	/*
+            console.log(resource);
+            if (view.name == 'timelineDay') {
+                var event = {
+                    //id: record.WhatId,
+                    resourceId: resource.resourceId,
+                    title: 'Busy',
+                    start: start,
+                    end: end,
+                    className: 'busyEvent',
+                    editable: true
+                    //url: '/'+record.WhatId
+                };
+
+                var response = sforce.apex.execute(apexCalendarController, 'createEvent', {obj: event});
+                response = JSON.parse(response);
+                console.log(response);
+
+                if (response.success) {
+                    
+                }
+                else {
+                    handleError('MA_SchedulerCalendarComp : createBusyEvent' + apexCalendarController, response);
+                }
+
+                //calendar.renderEvent(event);
+                $('#calendar').fullCalendar('renderEvent', event);
+            }
+            */
+        }
+
+        function setUpOnHover(el, elementType) {
+            var elId;
+            if (elementType == 'resource') {
+                elId = $(el).closest('tr').attr('data-resource-id');
+            }
+            else if (elementType == 'event') {
+                elId = $(el).closest('a').attr('href').replace('/', '');
+            }
+
+            if (elId != null) {
+                el.id = elId;
+                el.onblur = function() { LookupHoverDetail.getHover(elId).hide(); };
+                el.onfocus = function() { LookupHoverDetail.getHover(elId, '/'+elId+'/m?retURL=%2F'+elId+'&isAjaxRequest=1').show(); };
+                el.onmouseout = function() { LookupHoverDetail.getHover(elId).hide(); };
+                el.onmouseover = function() { LookupHoverDetail.getHover(elId, '/'+elId+'/m?retURL=%2F'+elId+'&isAjaxRequest=1').show(); };
+            }
+        }
+
+        function setResourceOnClick(el) {
+            var parent = $(el).closest('.userResource');
+            if (parent.length == 0) {
+                parent = $(el).closest('.externalResource');
+            }
+
+            if (parent.length != 0) {
+                parent[0].onclick = function() { alert('Hello ' + $(el).text()); };
+                parent[0].oncontextmenu = function() { alert('Hello Right ' + $(el).text()); return false; };
+            }
+        }
+
+    	function fetchResources(callback) {
+    		console.log('fetching Resources');
+
+            if (initialLoad) {
+                retrieveStoreIds();
+                initialLoad = false;
+
+	            callback([]);
+            	return;
+            }
+            else {
+	            var calendarTemp = $('#calendar').fullCalendar('getCalendar');
+	            //var calendarView = $('#calendar').fullCalendar('getView');
+	            var calendarView = calendarTemp.getView();
+	            //if (calendarView.name != 'timelineDay') {
+	            if ((viewDestroy && calendarView.name == 'timelineDay') || (!viewDestroy && calendarView.name != 'timelineDay')) {
+	            	/*
+	            	for (var i = 0, len = resourceIds.length; i < len; i++) {
+	            		calendarTemp.removeResource(resourceIds[i]);
+	            	}
+	            	*/
+	            	resourceIds = [];
+	            	resourceUserIds = [];
+	            	//calendarTemp.render();
+
+		            callback([]);
+	            	return;
+	            }
+	        }
+
+            if (!isIndividual && storeIds.length == 0) {
+                callback([]);
+                return;
+            }
+
+
+            console.log('continue fetching resources');
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+            var resourceMap = {};
+            var resourceList = [];
+            var storeIdsFilter = ' IN (\'' + storeIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            //var filters = 'Active__c = TRUE AND Resource_Type__c != \'Scheduler\' AND Retail_Location__c' + storeIdsFilter;
+            var filters = 'Active__c = TRUE AND Resource_Type__c != \'Scheduler\'';
+            if (isIndividual) {
+                filters += ' AND RbA_User__c = \'' + currentUserId + '\'';
+            }
+            else {
+                filters += ' AND Retail_Location__c' + storeIdsFilter;
+            }
+            var response = sforce.apex.execute(apexCalendarController, 'retrieveRecords', {objType: 'Resource', filters: filters});
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+            		var obj = buildResourceObject(record);
+                    
+                    resourceList.push(obj);
+                    resourceIds.push(record.Id);
+                    //storeMap[obj.storeId] = obj.store;
+
+                    /*
+                    if (storeIds.indexOf(obj.storeId) == -1) {
+                        storeIds.push(obj.storeId);
+                    }
+                    */
+
+                    if (obj.isUser) {
+                        resourceUserIds.push(record.RbA_User__c);
+                    }
+                    
+                    if (resourceMap[obj.storeId] == null) {
+                        resourceMap[obj.storeId] = { 
+                        	id: obj.storeId,
+                        	name: obj.store,
+                        	resources: [
+                        		{
+                        			id: obj.id,
+                        			name: obj.name,
+                                    //isUser: obj.isUser,
+                        			obj: obj
+                        		}
+                    		]
+                    	};
+                    }
+                    else {
+                        resourceMap[obj.storeId]['resources'].push(
+                        	{
+                        		id: obj.id,
+                        		name: obj.name,
+                                //isUser: obj.isUser,
+                        		obj: obj
+                        	}
+                    	);
+                    }
+                }
+            }
+            else {
+                handleError('MA_SchedulerCalendarComp : fetchResources' + apexCalendarController, response);
+            }
+            
+            //buildFilters(resourceMap);
+            
+            callback(resourceList);
+        }
+
+        function retrieveStoreIds() {
+            var response = sforce.apex.execute(apexCalendarController, 'retrieveRecords', {objType: 'Scheduler'});
+            response = JSON.parse(response);
+            console.log(response);
+            
+            if (response.success) {
+                var storeSettingsSelectOptions = '';
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+                    storeIds.push(record.Retail_Location__c);
+                    storeSettingsSelectOptions += '<option value="' + record.Retail_Location__c + '">' + record.Retail_Location__r.Name + '</option>';
+                    
+                    if (record.Resource_Type__c != 'Scheduler') {
+                        isIndividual = true;
+                    }
+                }
+
+                $('#storeSettingsSelect').append(storeSettingsSelectOptions);
+            }
+            else {
+                handleError('MA_SchedulerCalendarComp : retrieveStoreIds' + apexCalendarController, response);
+            }
+        }
+
+        function buildResourceObject(record) {
+            var obj = {
+                id: record.Id,
+                name: record.Name,
+                resourceId: record.Id,
+                type: record.Resource_Type__c,
+                storeId: record.Retail_Location__c,
+                store: record.Retail_Location__r.Name,
+                isUser: record.RbA_User__c != null && record.RbA_User__c != undefined,
+                crewSize: record.Crew_Size__c != null && record.Crew_Size__c != undefined ? record.Crew_Size__c : 1
+            };
+
+            if (obj.isUser) {
+                obj.name += ' (User)';
+            }
+
+            if (obj.crewSize > 1) {
+                obj.name += ' (' + obj.crewSize + ' People)';
+            }
+
+            return obj;
+        }
+        
+        /*
+    	function buildFilters(resourceMap) {
+            var filterHtml = '<ol>';
+            
+            for(store in resourceMap) {
+                filterHtml += '<li><input class="store" type="checkbox" id="' + resourceMap[store].id + '">' + resourceMap[store].name;
+                filterHtml += '<ol>';
+                $.each(resourceMap[store].resources, function(i, resource) {
+                    filterHtml += '<li><input class="resource" type="checkbox" id="' + resource.id + '" data=\'' + JSON.stringify(resource.obj) + '\'>' + resource.name + '</li>';
+                });
+                filterHtml += '</ol>';
+                filterHtml += '</li>';
+            };
+            
+            filterHtml += '</ol>';
+            $('#filtersTab').html(filterHtml);
+            $('#filtersTab input[type="checkbox"]').click();
+            
+            $('#filtersTab input.store[type="checkbox"]').click(function() {
+                if($(this).is(':checked')) {
+                    $(this).parent().find('ol li input[type="checkbox"]:not(:checked)').click();
+                }
+                else {
+                    $(this).parent().find('ol li input[type="checkbox"]:checked').click();
+                }
+            });
+            
+            $('#filtersTab input.resource[type="checkbox"]').click(function() {
+                if($(this).is(':checked')) {
+                    var obj = JSON.parse($(this).attr('data'));
+                    resourceIds.push(obj['id']);
+                    $('#calendar').fullCalendar('addResource', obj);
+                    $('#calendar').fullCalendar('refetchEvents');
+                }
+                else {
+                    $.each($('#calendar').fullCalendar('getResourceEvents', $(this).attr('id')), function(i, event) {
+                        $('#calendar').fullCalendar('removeEvents', event.id);
+                    });
+                    resourceIds.splice(resourceIds.indexOf($(this).attr('id')), 1);
+                    $('#calendar').fullCalendar('removeResource', $(this).attr('id'));
+                }
+            });
+        }
+        */
+        
+        /*
+        function fetchEvents(start, end, timezone, callback) {
+            var eventList = getBusinessHours();
+            if (resourceIds.length == 0) {
+                callback([]);
+                return;
+            }
+
+            console.log(start);
+
+            
+            //end = correctForTimezoneOffset(new Date(end));
+            //start = correctForTimezoneOffset(new Date(start));
+
+            
+            end = new Date(end.add(2, 'days'));
+            start = new Date(start.add(-2, 'days'));
+
+
+            console.log(end);
+            console.log(start);
+            console.log(start.toISOString());
+
+
+
+            var timeWindowFilter = 'StartDateTime <= ' + end.toISOString() + ' AND EndDateTime >= ' + start.toISOString();
+            var resourceIdsFilter = ' IN (\'' + resourceIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            var resourceUserIdsFilter = ' IN (\'' + resourceUserIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            
+            var filters = timeWindowFilter + ' AND OwnerId' + resourceUserIdsFilter;
+            var response = sforce.apex.execute(apexCalendarController, 'retrieveRecords', {objType: 'Event', filters: filters});
+            response = JSON.parse(response);
+            
+            if (response.success) {
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+
+
+                    eventList.push({
+                        id: record.WhatId,
+                        resourceId: record.OwnerId,
+                        title: record.Subject,
+                        start: correctForTimezoneOffset(new Date(record.StartDateTime)),
+                        end: record.EndDateTime,
+                        className: 'sfEvent',
+                        url: '/' + record.WhatId
+                    });
+                }
+            }
+            
+            filters = timeWindowFilter.replace(new RegExp('DateTime', 'g'), 'DateTime__c') + ' AND Resource__c' + resourceIdsFilter;
+            response = sforce.apex.execute(apexCalendarController, 'retrieveRecords', {objType: 'MASchedulerEvent', filters: filters});
+            response = JSON.parse(response);
+            
+            if (response.success) {
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+
+
+
+                    eventList.push({
+                        id: record.RbA_Work_Order__c,
+                        resourceId: record.Resource__c,
+                        title: record.Name,
+                        start: correctForTimezoneOffset(new Date(record.StartDateTime__c)),
+                        end: record.EndDateTime__c,
+                        className: 'maEvent',
+                        url: '/' + record.RbA_Work_Order__c//,
+                        //color: 'green',
+                        //backgroundColor: 'green'
+                    });
+                }
+            }
+            
+            callback(eventList);
+        }
+        */
+        
+        function fetchEvents(start, end, timezone, callback) {
+        	if ($('#calendar').fullCalendar('getView') == 'agendaDay') {
+        		var dayResource = { 
+                	id: start.toDateString(),
+	                name: '',
+	                resourceId: null,
+	                type: '',
+	                storeId: '',
+	                store: '',
+	                isUser: false,
+	                crewSize: 1
+            	};
+
+            	$('#calendar').fullCalendar('addResource', dayResource);
+        	}
+
+        	//var eventList = getBusinessHours();
+        	eventListToRender = getBusinessHours();
+            /*
+            if (resourceIds.length == 0) {
+                callback([]);
+                return;
+            }
+            */
+
+            console.log(start);
+
+            
+            //end = correctForTimezoneOffset(new Date(end));
+            //start = correctForTimezoneOffset(new Date(start));
+
+            
+            end = new Date(end.add(2, 'days'));
+            start = new Date(start.add(-2, 'days'));
+
+            
+            //end = new Date(end);
+            //start = new Date(start);
+
+
+            console.log(end);
+            console.log(start);
+            console.log(start.toISOString());
+
+
+
+
+            var timeWindowFilter = 'Appointment_Date__c <= ' + end.format('Y-m-d') + ' AND Appointment_Date__c >= ' + start.format('Y-m-d');
+            //var resourceIdsFilter = ' IN (\'' + resourceIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            //var resourceUserIdsFilter = ' IN (\'' + resourceUserIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            
+            var filters = timeWindowFilter + ' AND Appointment_Start_Time__c != NULL AND Appointment_End_Time__c != NULL';		// + ' AND OwnerId' + resourceUserIdsFilter;
+            /*var response = */sforce.apex.execute(apexCalendarController, 'retrieveEvents', {objType: 'WorkOrder', filters: filters}, processEventsResponse);
+            /*
+            response = JSON.parse(response);
+            console.log(response);
+            
+            if (response.success) {
+                for (var i = 0, len = response.eventList.length; i < len; i++) {
+                    //eventList.push(response.eventList[i]);
+                    var record = response.eventList[i];
+
+
+                    eventList.push({
+                        id: record.workOrderId,
+                        resourceId: record.resourceId,
+                        title: record.title,
+                        start: record.startDateTimeOffset,
+                        end: record.endDateTimeOffset,
+                        className: record.className,
+                        url: record.url
+                    });
+                }
+            }
+            */
+            
+
+            /*
+            filters = timeWindowFilter.replace(new RegExp('DateTime', 'g'), 'DateTime__c') + ' AND Resource__c' + resourceIdsFilter;
+            response = sforce.apex.execute(apexCalendarController, 'retrieveEvents', {objType: 'MASchedulerEvent', filters: filters});
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+            	//eventList.push(response.eventList);
+            	///*
+                for (var i = 0, len = response.eventList.length; i < len; i++) {
+                	//eventList.push(response.eventList[i]);
+                    var record = response.eventList[i];
+
+
+                    eventList.push({
+                        id: record.workOrderId,
+                        resourceId: record.resourceId,
+                        title: record.title,
+                        start: record.startDateTimeOffset,
+                        end: record.endDateTimeOffset,
+                        className: record.className,
+                        url: record.url//,
+                        //color: 'green',
+                        //backgroundColor: 'green'
+                    });
+                }
+                //*//*
+            }
+            */
+            
+            console.log(eventListToRender);
+
+            //callback(eventList);
+        }
+
+        function processEventsSuccess(response) {
+        	//var eventList = [];
+        	response = JSON.parse(response);
+            console.log(response);
+            
+            if (response.success) {
+                for (var i = 0, len = response.eventList.length; i < len; i++) {
+                    //eventList.push(response.eventList[i]);
+                    var record = response.eventList[i];
+
+
+                    eventListToRender.push({
+                        id: record.workOrderId,
+                        resourceId: record.resourceId,
+                        title: record.title,
+                        start: record.startDateTimeOffset,
+                        end: record.endDateTimeOffset,
+                        className: record.className,
+                        url: record.url,
+                        contactName: record.contactName,
+                        eventType: record.eventType,
+                        missingResource: record.missingResource
+                    });
+                }
+            }
+
+            //callback(eventList);
+            //$('#calendar').fullCalendar('rerenderEvents');
+            $('#calendar').fullCalendar('refetchEvents');
+        }
+        
+        function correctForTimezoneOffset(dt) {
+            var epoch = Date.parse(dt);
+            epoch = epoch + (dt.getTimezoneOffset() * 60 * 1000);
+            //epoch = epoch - (dt.getTimezoneOffset() * 60 * 1000);
+            return new Date(epoch);
+        }
+
+        function getBusinessHours() {
+            var events = [];
+            if (storeIds.length == 1) {
+                events.push({start: '00:00', end: '07:00', dow: [1,3,5], color: 'lightgray', rendering: 'background'});
+                events.push({start: '15:00', end: '24:00', dow: [1,3,5], color: 'lightgray', rendering: 'background'});
+                events.push({start: '00:00', end: '10:00', dow: [2,4], color: 'lightgray', rendering: 'background'});
+                events.push({start: '19:00', end: '24:00', dow: [2,4], color: 'lightgray', rendering: 'background'});
+                events.push({start: '00:00', end: '24:00', dow: [0,6], color: 'lightgray', rendering: 'background'});
+            }
+            return events;
+        }
+	</script>
+
+    <div>
+    	<div id="calendarLegend">
+    		<span id="calendarLegendTitle">Legend</span>
+    		<div>
+    			<div class="eventDot techmeasure"></div><span>Tech Measure</span>
+    		</div>
+    		<div>
+    			<div class="eventDot workOrderSynced"></div><span>Synced</span>
+    		</div>
+    		<div>
+    			<div class="eventDot missingResource"></div><span>Unassigned</span>
+    		</div>
+    		<div>
+    			<div class="eventDot lswp"></div><span>LSWP</span>
+    		</div>
+    	</div>
+    	<div id="calendar"></div>
+	</div>
+</apex:component>

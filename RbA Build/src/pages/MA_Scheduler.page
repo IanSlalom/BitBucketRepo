@@ -1,0 +1,105 @@
+<apex:page showHeader="true" sidebar="false">
+    
+    <apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
+
+    <!--
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/overlappingmarkerspiderfier/oms.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/async/async.min.js')}"/>
+    -->
+
+    <script>
+        $ = jQuery.noConflict();
+        var map;
+        $(function() {
+            if (isIndividual) {
+                $('#settings, #filters, #listView, #optimize, #map').hide();
+            }
+
+            var mapOptions = {
+                        center: new google.maps.LatLng(35.2033533,-80.979609),
+                        zoom: 10,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                      };
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        });
+
+        function initializeListViewAttributes() {
+            //$('#allBox').attr('disabled', true);
+            //$('.listButtons li:not(".lastItem"), .x-grid3-td-checkbox').hide();
+            $('.listButtons li:not(".lastItem"), .x-grid3-td-checkbox').hide();
+            $('.listViewportWrapper').ajaxComplete(onListViewLoad());
+        }
+
+        function onListViewLoad() {
+            setTimeout(function() {
+            	//$('.x-grid3-td-checkbox').hide();
+                var records = $('.listViewportWrapper .x-grid3-row .x-grid3-col');
+                for (var i = 0, len = records.length; i < len; i++) {
+                    var record = records[i];
+
+                    record.onclick = function() {
+                        console.log('GOOD BYE');
+                        showAvailabilityModal(this);
+                    };
+                    /*
+                    if ($(record).find('a, input[type="checkbox"]').length == 0) {
+                        record.onclick = function() { showAvailabilityModal(this); };
+                    }
+                    */
+
+                    var links = $(record).find('a, input[type="checkbox"]');
+                    for (var x = 0, linkLen = links.length; x < linkLen; x++) {
+                        var link = links[x];
+                        link.onclick = function(event) {
+                            event.cancelBubble = true;
+                            if (event.stopPropagation) {
+                                event.stopPropagation();
+                            }
+                        };
+                    }
+                }
+            }, 500);
+        }
+
+    	function processResponseError(error) {
+    		console.log(error);
+    		if (!error.faultstring) {
+    			error = { error: 'Response Error'};
+    		}
+			handleError('ERROR', error);
+		}
+
+        function handleError(componentName, error) {
+            $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
+            $('#errorModal').show();
+            $('#loaderModal').hide();
+        }
+    </script>
+
+    <c:MA_SchedulerErrorComp />
+    <c:MA_SchedulerLoaderComp />
+    <c:MA_SchedulerStylingComp />
+    <c:MA_SchedulerSettingsComp />
+    <c:MA_SchedulerWorkOrderSchedulingComp />
+    <c:MA_SchedulerRoutes />
+
+    <div id="settings">
+        <span id="gearIcon" onclick="openSettingsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/settings_60.png')}" /></span> Settings
+    </div>
+    
+    <div id="optimize">
+        <button onclick="MAschedRoutes.showOptyModal();">Batch Assign</button>
+         <button onclick="MAschedRoutes.showMap();">MAP</button>
+    </div>
+
+    <div id="filters">
+        ***INSERT RESOURCE FILTERING HERE***
+    </div>
+
+    <c:MA_SchedulerCalendarComp />
+
+    <div id="listView">
+        <apex:enhancedList id="unscheduledListView" type="RbA_Work_Order__c" height="300" rowsPerPage="25" customizable="true" oncomplete="initializeListViewAttributes()" />
+    </div>
+
+</apex:page>
