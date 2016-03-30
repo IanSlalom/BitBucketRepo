@@ -170,8 +170,8 @@
         <members>Discount__c-Discount Layout</members>
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
-        <members>Finance_Program_Tier__c-Cash and SAC Page Layout</members>
-        <members>Finance_Program_Tier__c-Finance Program Tier Layout</members>
+        <members>Finance_Program_Tier__c-Installment Loan</members>
+        <members>Finance_Program_Tier__c-SAC/NIWP Page Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Configuration__c-Financial Configuration Layout</members>
@@ -228,6 +228,9 @@
         <members>Store_Discount__c-Buy # Get the X Free Page Layout</members>
         <members>Store_Discount__c-Special Financing Page Layout</members>
         <members>Store_Discount__c-Tiered Discount Layout</members>
+        <members>Store_Finance_Program__c-Bridge Loan Page Layout</members>
+        <members>Store_Finance_Program__c-Cash Payment Page Layout</members>
+        <members>Store_Finance_Program__c-Installment Loan Page Layout</members>
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
