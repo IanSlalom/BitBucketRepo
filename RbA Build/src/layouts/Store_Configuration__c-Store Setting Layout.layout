@@ -336,7 +336,10 @@
         <fields>Finance_Program__c</fields>
         <fields>Finance_Company__c</fields>
         <fields>Active__c</fields>
+        <fields>Option_Order__c</fields>
         <relatedList>Store_Finance_Program__c.Store_Configuration__c</relatedList>
+        <sortField>NAME</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
