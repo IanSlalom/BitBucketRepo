@@ -429,10 +429,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
           	// concatanate the store abbreviation and user abbreviation
             po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
       }
-
+			
 	  // Determine the purchase order status so we know what to display on the page.
       orderStatus = this.po.Status__c;
-      
+        		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
       boolean electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
@@ -443,7 +443,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';
-
+      		
 	  if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
       }
@@ -483,20 +483,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
         accountIdToAccountMap.put(a.id, a);
       }
 	  // Create a map of product Ids to their list of vendors
-      Map<Id, List<Account>> productVendorMap = new Map<Id, List<Account>>();
-      for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c from Vendor_Product__c Where Product__c IN :relatedProduct2IDList]) {
-		if (productVendorMap.containsKey(vp.Product__c)) {
-			List<Account> vendors = productVendorMap.get(vp.Product__c);
-			vendors.add(accountIdToAccountMap.get(vp.Vendor__c));
-			productVendorMap.put(vp.Product__c, vendors);
-		}
-		else {
-			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
-			productVendorMap.put(vp.Product__c, vendors);			
-		}
-		if(unassignedProductIds.contains(vp.Product__c))
-			vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
-      }
+    Map<Id, List<Account>> productVendorMap = new Map<Id, List<Account>>();
+    for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c from Vendor_Product__c Where Product__c IN :relatedProduct2IDList]) {
+  		if (productVendorMap.containsKey(vp.Product__c)) {
+  			List<Account> vendors = productVendorMap.get(vp.Product__c);
+  			vendors.add(accountIdToAccountMap.get(vp.Vendor__c));
+  			productVendorMap.put(vp.Product__c, vendors);
+  		}
+  		else {
+  			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
+  			productVendorMap.put(vp.Product__c, vendors);			
+  		}
+  		if(unassignedProductIds.contains(vp.Product__c)){
+        	//KR Added if condition to prevent list containing nulls
+        	if(accountIdToAccountMap.get(vp.Vendor__c) != null){
+  			 	vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
+        	}
+      	}
+    }
         
 	System.Debug('************productVendorMap=' +productVendorMap);
       //USING MAPS TO CREATE WRAPPERS
@@ -509,7 +513,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	orderItemWrapperList.add(OIW);
 		}
       }
-	System.Debug('************orderItemWrapperList=' +orderItemWrapperList);
 
       //BUILD SELECT LIST FOR CHOOSING VENDOR
       availableVendors.add(new SelectOption('','Please Select'));
@@ -521,6 +524,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         vendorIdsAdded.add(vend.Id);
       }  
     }
+    
     
     // For Cost POs, pulls the current user's store location and recovers the abbreviation
     if (costPurchaseOrder && storeLocation == null) {
@@ -632,7 +636,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
         	renewal = ren;
         }
-        String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
+        String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
         Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
@@ -869,7 +873,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
 
 	for (OrderItem oi : itemsToReceive) {
-
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
       			productAsset = new Asset(
@@ -926,7 +929,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     
     // If the receive status is not null (something has been received), then change the order status
 //    if (receiveStatus != null) orderStatus = receiveStatus;
-    upsert finalAssetsToReceive;
+
+  //KR Added try/catch around upsert
+    try{
+      upsert finalAssetsToReceive;
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the receiveLineItems method:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+    }
     
     boolean noneReceived = false;
     boolean partialReceived = false;
@@ -1040,8 +1050,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		orderToAssetMap.put(oi.Id, productAsset);
       
     }
-    
-    upsert finalAssetsToWriteOff;
+    //KR Added try/catch around upsert
+    try{
+      upsert finalAssetsToWriteOff;
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the writeOffLineItems method:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+    }
 
       for (OrderItem oi : itemsToWriteOff) {
 		if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
@@ -1086,14 +1101,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     	po.Status__c = 'Released';    
     	po.Released_Timestamp__c = System.Now();
 
-	    try{
-    	  	// upsert the po with the new status
-      		upsert po;  
+    	try{
+      	// upsert the po with the new status
+      	upsert po;  
     	} catch (Exception e){
       		System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
       		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
     	}
-	}
+  	}
 	else {
 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PO_NOT_READY_TO_RELEASE));
 	}
