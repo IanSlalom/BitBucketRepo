@@ -110,6 +110,7 @@
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
         <members>BusinessAdjustmentTrigger</members>
+        <members>EventTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderItemTrigger</members>
@@ -260,6 +261,8 @@
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
         <members>Store_Finance_Program__c</members>
+        <members>RbA_Work_Order__c</members>
+        <members>Event</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>

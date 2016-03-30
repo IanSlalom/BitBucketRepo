@@ -86,7 +86,7 @@ public with sharing class UtilityMethods {
 			State__c = dwelling.ShippingStateCode,
 			Zip__c = dwelling.ShippingPostalCode, 
 			Country__c = dwelling.ShippingCountryCode,
-			Contact__c = Ord.BillToContactId,
+			Contact__c = ord.BillToContactId,
 			
 			Municipality__c = munici,
 			
