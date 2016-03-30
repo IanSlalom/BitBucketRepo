@@ -72,7 +72,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 									AccountId = dwelling.id, 
 									EffectiveDate= Date.Today(), 
 									Store_Location__c = store.Id,
-									Opportunity = opp1, 									
+									Opportunity = opp1, 
+									RecordTypeId = UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'),									
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()
 								);		
