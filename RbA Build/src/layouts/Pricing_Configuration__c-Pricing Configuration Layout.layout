@@ -272,7 +272,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>TruScene_Wood_Vaneer__c</field>
+                <field>TruScene_Wood_Veneer__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

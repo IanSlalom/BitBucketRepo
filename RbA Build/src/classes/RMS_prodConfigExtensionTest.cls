@@ -245,7 +245,7 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Lifts_Pulls__c = '1; 2';
 		prodConfig.Locks_Sash__c = '1; 2';
 		prodConfig.Screen_Type__c = 'ST1; ST2';
-		prodConfig.Screen_Vaneer_Type__c = 'SV1; SV2';
+		prodConfig.Screen_Veneer_Type__c = 'SV1; SV2';
 		prodConfig.Sill_Angle__c = '1; 2';
 		prodConfig.Mull_Sequence_Mullion__c = 'a; b';
 		prodConfig.Sash_Operation__c = 'SO1; SO2';
@@ -380,9 +380,9 @@ private class RMS_prodConfigExtensionTest {
 		List<SelectOption> screenTypeItems = ext.screenTypeItems;
 		System.AssertEquals(3, screenTypeItems.size());
 
-		// Verify the screenVaneerTypeItems
-		List<SelectOption> screenVaneerTypeItems = ext.screenVaneerTypeItems;
-		System.AssertEquals(3, screenVaneerTypeItems.size());
+		// Verify the screenVeneerTypeItems
+		List<SelectOption> screenVeneerTypeItems = ext.screenVeneerTypeItems;
+		System.AssertEquals(3, screenVeneerTypeItems.size());
 
 		// Verify the sillAngleItems
 		List<SelectOption> sillAngleItems = ext.sillAngleItems;
@@ -607,7 +607,7 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Lifts_Pulls__c = '1; 2';
 		prodConfig.Locks_Sash__c = '1; 2';
 		prodConfig.Screen_Type__c = 'ST1; ST2';
-		prodConfig.Screen_Vaneer_Type__c = 'SV1; SV2';
+		prodConfig.Screen_Veneer_Type__c = 'SV1; SV2';
 		prodConfig.Sill_Angle__c = '1; 2';
 		prodConfig.Mull_Sequence_Mullion__c = 'a; b';
 		prodConfig.Sash_Operation__c = 'SO1; SO2';

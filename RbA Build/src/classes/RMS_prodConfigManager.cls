@@ -769,8 +769,8 @@ public with sharing class RMS_prodConfigManager {
 		
 		if(orderLineItem.Special_Options__c == true){
 			
-		    if(orderLineItem.Screen_Type__c == 'TruScene (Wood Vaneer)' && (orderLineItem.Screen_Color__c != null && orderLineItem.Screen_Color__c != '')){
-		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VANEER : errorMessage + '<BR>' + RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VANEER;	
+		    if(orderLineItem.Screen_Type__c == 'TruScene (Wood Veneer)' && (orderLineItem.Screen_Color__c != null && orderLineItem.Screen_Color__c != '')){
+		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VENEER : errorMessage + '<BR>' + RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VENEER;	
 		    }
 		    if((orderLineItem.Grille_Style__c == 'No Grilles' || orderLineItem.Grille_Style__c == null) && (orderLineItem.Exterior_Grille_Color__c != null || orderLineItem.Interior_Grille_Color__c != null)){
 		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE;	

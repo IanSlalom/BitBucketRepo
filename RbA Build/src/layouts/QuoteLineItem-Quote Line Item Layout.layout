@@ -111,7 +111,16 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>** Shared - Non Unit Line Item Details **</label>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parent_Quote_Line_Item__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Parent_Unit_rSuite_Id__c</field>
+            </layoutItems>
+        </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -419,10 +428,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Permanently_Applied_Interior_Wood_Grille__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Perm_Applied_Int_Wood_Grille__c</field>
             </layoutItems>
         </layoutColumns>
@@ -549,7 +554,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Screen_Vaneer_Type__c</field>
+                <field>Screen_Veneer_Type__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
