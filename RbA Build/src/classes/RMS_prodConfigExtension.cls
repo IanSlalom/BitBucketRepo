@@ -61,7 +61,10 @@ public class RMS_prodConfigExtension {
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
-				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, Purchase_Order__c From OrderItem WHERE Id =: orderLineItem.Id]) {
+				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, 
+											PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, 
+											Purchase_Order__c, Verify_Item_Configuration__c 
+											From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
