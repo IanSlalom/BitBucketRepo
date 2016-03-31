@@ -294,7 +294,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 options.add(new SelectOption('Bayworld','Bayworld'));
                 options.add(new SelectOption('EMCO','EMCO'));
                 options.add(new SelectOption('Other Vendor','Other Vendor'));
-                options.add(new SelectOption('Renewal by Anderson','Renewal by Anderson'));            
+                options.add(new SelectOption('Renewal by Andersen','Renewal by Andersen'));            
             }
             else if(cost == 'Local - Remake')
             {       
