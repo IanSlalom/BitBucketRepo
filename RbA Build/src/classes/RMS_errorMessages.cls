@@ -138,6 +138,8 @@ public with sharing class RMS_errorMessages {
 	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You can not change the Revenue Recognized Date to another date, you must first clear it.';					
 
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
+	
+	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
 	/*******************************************************
 					Redirect Errors
 	*******************************************************/
