@@ -33,8 +33,6 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
 
-    if(UtilityMethods.runOrderOnce())
-    {
         
         //HANDLERS AND MANAGERS
         RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
@@ -72,9 +70,9 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
+
             	financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
                 accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-
         }
                     
         //After Delete
@@ -94,6 +92,5 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         */
         
         update accounts;
-    }
     }
 }
