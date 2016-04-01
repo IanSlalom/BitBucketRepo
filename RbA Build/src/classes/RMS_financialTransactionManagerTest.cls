@@ -540,7 +540,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
 		insert finacialAccountNumber2;
-		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3', Account_Type__c = 'Misc Cash Receipt');
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3333', Account_Type__c = 'Misc Cash Receipt');
 		insert glAccount1;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
@@ -617,7 +617,9 @@ public with sharing class RMS_financialTransactionManagerTest {
 		delete payment1;
 	}
 	/* NEEDS COMMUNITIES ACTIVATED */
-	static testmethod void positiveCreateAndEditLaborLaborExternal(){
+
+//TODO:  update test class to use Resource__c as the installer
+/*	static testmethod void positiveCreateAndEditLaborLaborExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -728,7 +730,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		update labor1;
 		
-	}
+	}*/
 	
 	
 	static testmethod void positiveCreateAndEditLaborLaborInternal(){
@@ -768,6 +770,9 @@ public with sharing class RMS_financialTransactionManagerTest {
 															                Sold_Order__c = order1.id 
 															                    );
 		insert workOrder1;
+
+		Test.startTest(); 
+
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
@@ -793,10 +798,13 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		update labor1;
 		delete labor1;
+
+		Test.stopTest(); 
+
 	}
 
-
-	static testmethod void positiveCreateAndEditMiscReimbursementExternal(){
+//TODO:   Add the installer back into the test as a resource
+/*	static testmethod void positiveCreateAndEditMiscReimbursementExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -911,7 +919,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		update labor1;
 		
-	}
+	}*/
 
 	
 
@@ -958,7 +966,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Inventory Received',
+																						Transaction_Type__c = 'Inventory Received - External Vendor',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
@@ -1042,39 +1050,86 @@ public with sharing class RMS_financialTransactionManagerTest {
 															                Sold_Order__c = soldOrder.id 
 															                    );
 		insert workOrder1;
+
+		Test.startTest(); 
+
+		List<Financial_Account_Number__c> acctNumsToInsert = new List<Financial_Account_Number__c>();
+		List<Financial_Transaction__c> finTransToInsert = new List<Financial_Transaction__c>();
+
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
-		insert finacialAccountNumber1;
+		acctNumsToInsert.add(finacialAccountNumber1);
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
-		insert finacialAccountNumber2;
+		acctNumsToInsert.add(finacialAccountNumber2);
 		
+		
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		acctNumsToInsert.add(finacialAccountNumber3);
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		acctNumsToInsert.add(finacialAccountNumber4);
+				
+		Financial_Account_Number__c finacialAccountNumber5 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '5');
+		acctNumsToInsert.add(finacialAccountNumber5);
+		Financial_Account_Number__c finacialAccountNumber6 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '6');
+		acctNumsToInsert.add(finacialAccountNumber6);
+		
+														
+		insert acctNumsToInsert;
+
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'Rev Recognized - Deposit',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
-		insert finacialTransaction1;
-		
-		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
-		insert finacialAccountNumber3;
-		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
-		insert finacialAccountNumber4;
-		
+		finTransToInsert.add(finacialTransaction1);
+
+		Financial_Transaction__c finacialTransactionRefund = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Refund Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		finTransToInsert.add(finacialTransactionRefund);
+
 		Financial_Transaction__c finacialTransactionLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'Rev Recognized - Labor',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
-		insert finacialTransactionLabor;
-		
-		Financial_Account_Number__c finacialAccountNumber5 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '5');
-		insert finacialAccountNumber5;
-		Financial_Account_Number__c finacialAccountNumber6 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '6');
-		insert finacialAccountNumber6;
-		
+		finTransToInsert.add(finacialTransactionLabor);
+
+		Financial_Transaction__c finacialTransactionInternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Internal Labor',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		finTransToInsert.add(finacialTransactionInternalLabor);
 		Financial_Transaction__c finacialTransaction2 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'Deposit',
 																						Debit_Account_Number__c = finacialAccountNumber3.id,
 																						Credit_Account_Number__c = finacialAccountNumber4.id);
-		insert finacialTransaction2;
-		
+		finTransToInsert.add(finacialTransaction2);
+
+		Financial_Transaction__c finacialTransactionGrossSales = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Gross Sales',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		finTransToInsert.add(finacialTransactionGrossSales);
+
+		Financial_Transaction__c finacialTransactionRevDiscount = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Discount',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		finTransToInsert.add(finacialTransactionRevDiscount);
+
+		Financial_Transaction__c finacialTransactionAR = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - AR',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		finTransToInsert.add(finacialTransactionAR);
+
+		Financial_Transaction__c finacialTransactionFF = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Finance Fees',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		finTransToInsert.add(finacialTransactionFF);
+
+		insert finTransToInsert;
+
 		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
 												RecordTypeId = paymentDespositRecordTypeId,
@@ -1083,10 +1138,12 @@ public with sharing class RMS_financialTransactionManagerTest {
 												Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today()
 												);
+
 		insert payment1;
 		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		update soldOrder;
+		Test.stopTest(); 
 		
 		//order1.Status = 'Job In Progress'; 
 		//order1.Revenue_Recognized_Date__c = Date.Today();
