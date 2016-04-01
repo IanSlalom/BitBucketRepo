@@ -50,7 +50,7 @@ private class RMS_viewOrdersControllerTests {
 				}
 	
 	@isTest static void testControllerForServiceOrders(){
-		Order order = [select Id,Pricebook2Id,RecordTypdId from Order where Name ='Sold Order 1'];
+		Order order = [select Id,Pricebook2Id,RecordTypeId from Order where Name ='Sold Order 1'];
 		Account acc = [select Id from Account where Name = 'Dwelling Account'];
 		Test.setCurrentPage(new PageReference('/apex/RMS_viewServiceOrders?Id='+acc.Id));
 		RMS_viewOrdersController controller = new RMS_viewOrdersController(new ApexPages.StandardController(acc));
