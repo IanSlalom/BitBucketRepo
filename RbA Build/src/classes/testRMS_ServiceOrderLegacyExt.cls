@@ -21,6 +21,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
+		List<Account> dwellingsToInsert = new List<Account>();       
         
         Account dwelling1 = utility.createDwellingAccount('Dwelling Account');
         Account dwelling2 = utility.createDwellingAccount('Dwelling Account 2');
@@ -30,14 +31,17 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         dwelling1.Store_Location__c = store1.Id;
         dwelling2.Store_Location__c = store1.Id; 
         dwelling3.Store_Location__c = store1.Id;         
-        insert dwelling1;
-        insert dwelling2;
-        insert dwelling3;        
+        dwellingsToInsert.add(dwelling1);
+        dwellingsToInsert.add(dwelling2);
+        dwellingsToInsert.add(dwelling3);        
+        insert dwellingsToInsert;        
         
+ 		List<Contact> contactsToInsert = new List<Contact>();       
         Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
-        insert contact1;
+		contactsToInsert.add(contact1);
         Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
-        insert contact2;
+		contactsToInsert.add(contact2);
+        insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
         insert finacialAccountNumber1;
@@ -65,7 +69,10 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
         //utility.createOrderTestRecords();
-        Order order =  new Order(   Name='Sold Order 1', 
+
+        List<Order> ordersToInsert = new List<Order>();
+
+        Order order1 =  new Order(   Name='Sold Order 1', 
                                  AccountId = dwelling1.id, 
                                  BilltoContactId = contact1.id,
                                  EffectiveDate= Date.Today(), 
@@ -73,8 +80,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                                  Status ='Draft', 
                                  Pricebook2Id = pricebookId
                                 );
-        insert order;   
-        
+        ordersToInsert.add(order1);
         Order order2 =  new Order(   Name='Sold Order 2', 
                                   AccountId = dwelling2.id, 
                                   BilltoContactId = contact2.id,
@@ -84,12 +90,14 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                                   Pricebook2Id = pricebookId,
                                   recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                                  );
-        insert order2;   
+        ordersToInsert.add(order2);
+        insert ordersToInsert;
         
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
         insert orderItemMaster;
         
+        List<Asset> assetsToInsert = new List<Asset>();
         Asset asset = new Asset (     Name='Asset1',
                                  Original_Order_Product__c = orderItemMaster.Id,
                                  Product2Id= masterProduct.Id,
@@ -101,11 +109,11 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                                  Quantity = 1,
                                  Price = 100,
                                  Status = 'Installed',
-                                 Sold_Order__c = order.Id,
+                                 Sold_Order__c = order1.Id,
                                  PurchaseDate = Date.Today()
                                 );
         
-        insert asset;  
+        assetsToInsert.add(asset);         
         
         Asset asset2 = new Asset (     Name='Asset2',
                                   Original_Order_Product__c = orderItemMaster.Id,
@@ -118,11 +126,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                                   Quantity = 1,
                                   Price = 100,
                                   Status = 'Installed',
-                                  Sold_Order__c = order.Id,
+                                  Sold_Order__c = order1.Id,
                                   PurchaseDate = Date.Today()
                                  );
         
-        insert asset2;         
+        assetsToInsert.add(asset2);         
+        insert assetsToInsert;  
         
         
         
@@ -131,7 +140,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                              EffectiveDate= Date.Today(), 
                              Store_Location__c = store1.Id,                               
                              Status ='Draft', 
-                             Sold_Order__c = order.Id,
+                             Sold_Order__c = order1.Id,
                              BilltoContactId = contact1.id,
                              Service_Type__c = 'Job in Progress',                                             
                              Pricebook2Id = pricebookId
@@ -418,6 +427,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     
     static testmethod void saveClosetest(){
         createTestRecords();
+		Test.startTest();
         Order order = [SELECT Id,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
@@ -432,6 +442,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         Pagereference pr = TE.saveClose();        
         Order ord = [select id,Name from Order where id =: order.id];
         System.Assertequals(ord.Name, 'Service Order 1');
+        Test.stopTest();
     }
     
     
