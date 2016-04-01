@@ -37,7 +37,7 @@ public with sharing class testRMS_OrderItemExtension {
         insert finacialAccountNumber2;
         
         Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(  Store_Configuration__c = storeConfig1.id,
-                                                                                     Transaction_Type__c = 'Inventory Received',
+                                                                                     Transaction_Type__c = 'Inventory Received - External Vendor',
                                                                                      Debit_Account_Number__c = finacialAccountNumber1.id,
                                                                                      Credit_Account_Number__c = finacialAccountNumber2.id);
         insert finacialTransaction1;
