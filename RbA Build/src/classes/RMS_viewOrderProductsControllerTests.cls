@@ -69,7 +69,7 @@ private class RMS_viewOrderProductsControllerTests {
 		}
 	
 	@isTest static void testController() {
-		Order order = [select Id,Pricebook2Id from Order where Name ='Sold Order 1'];
+		Order order = [select Id,Pricebook2Id,RecordTypeId from Order where Name ='Sold Order 1'];
 		RMS_viewOrderProductsController controller = new RMS_viewOrderProductsController(new ApexPages.StandardController(order));
 		System.assert(controller.OrderItemWrappers.size() == 1);
 		OrderItem orderItemMaster = [Select Id from OrderItem where Pricebookentry.Product2.Name = 'master'];
