@@ -313,4 +313,21 @@ public with sharing class UtilityMethods {
 		return itemsToReturn;
 
 	}
+	
+	/*******************************************************
+          check for recursive triggers
+	*******************************************************/
+
+    public static boolean runOrderOnce(){
+    	if(runOrder){
+     			runOrder=false;
+     			return true;
+    		}
+    		else{
+        		return runOrder;
+    		}
+    }
+	// Persistant variable used by runOrderOnce()
+	public static boolean runOrder = true;
+	
 }

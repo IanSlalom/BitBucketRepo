@@ -21,6 +21,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
+ 		List<Account> dwellingsToInsert = new List<Account>();       
         
         Account dwelling1 = utility.createDwellingAccount('Dwelling Account');
         Account dwelling2 = utility.createDwellingAccount('Dwelling Account 2');
@@ -30,14 +31,17 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         dwelling1.Store_Location__c = store1.Id;
         dwelling2.Store_Location__c = store1.Id; 
         dwelling3.Store_Location__c = store1.Id;         
-        insert dwelling1;
-        insert dwelling2;
-        insert dwelling3;        
+        dwellingsToInsert.add(dwelling1);
+        dwellingsToInsert.add(dwelling2);
+        dwellingsToInsert.add(dwelling3);        
+        insert dwellingsToInsert;        
         
+ 		List<Contact> contactsToInsert = new List<Contact>();       
         Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
-        insert contact1;
+		contactsToInsert.add(contact1);
         Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
-        insert contact2;
+		contactsToInsert.add(contact2);
+        insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
         insert finacialAccountNumber1;
@@ -65,6 +69,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
         //utility.createOrderTestRecords();
+
+        List<Order> ordersToInsert = new List<Order>();
+
         Order order =  new Order(   Name='Sold Order 1', 
                                  AccountId = dwelling1.id, 
                                  BilltoContactId = contact1.id,
@@ -73,7 +80,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                  Status ='Draft', 
                                  Pricebook2Id = pricebookId
                                 );
-        insert order;   
+        ordersToInsert.add(order);
         
         Order order2 =  new Order(   Name='Sold Order 2', 
                                   AccountId = dwelling2.id, 
@@ -84,12 +91,26 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                   Pricebook2Id = pricebookId,
                                   recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                                  );
-        insert order2;   
+        ordersToInsert.add(order2);
+
+        Order o =  new Order(     Name='Service Order 1', 
+                             AccountId = dwelling1.id, 
+                             EffectiveDate= Date.Today(), 
+                             Store_Location__c = store1.Id,                               
+                             Status ='Draft', 
+                             Sold_Order__c = order.Id,
+                             BilltoContactId = contact1.id,
+                             Service_Type__c = 'Job in Progress',                                             
+                             Pricebook2Id = pricebookId
+                            );
+        ordersToInsert.add(o);
+        insert ordersToInsert;
         
         
         OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
         insert orderItemMaster;
         
+        List<Asset> assetsToInsert = new List<Asset>();
         Asset asset = new Asset (     Name='Asset1',
                                  Original_Order_Product__c = orderItemMaster.Id,
                                  Product2Id= masterProduct.Id,
@@ -105,7 +126,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                  PurchaseDate = Date.Today()
                                 );
         
-        insert asset;  
+        assetsToInsert.add(asset);         
         
         Asset asset2 = new Asset (     Name='Asset2',
                                   Original_Order_Product__c = orderItemMaster.Id,
@@ -122,21 +143,12 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                   PurchaseDate = Date.Today()
                                  );
         
-        insert asset2;         
+        assetsToInsert.add(asset2);         
+        insert assetsToInsert;  
         
         
         
-        Order o =  new Order(     Name='Service Order 1', 
-                             AccountId = dwelling1.id, 
-                             EffectiveDate= Date.Today(), 
-                             Store_Location__c = store1.Id,                               
-                             Status ='Draft', 
-                             Sold_Order__c = order.Id,
-                             BilltoContactId = contact1.id,
-                             Service_Type__c = 'Job in Progress',                                             
-                             Pricebook2Id = pricebookId
-                            );
-        insert o;
+
         
         OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
         insert serviceOrderItem;
