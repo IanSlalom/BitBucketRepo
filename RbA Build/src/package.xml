@@ -222,7 +222,6 @@
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Quote-Quote Layout</members>
-        <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>Quote_Financing__c-Quote Financing Layout</members>
         <members>RbA_Work_Order__c-Action Work Order Layout</members>
