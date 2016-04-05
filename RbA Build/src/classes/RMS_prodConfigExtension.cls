@@ -991,8 +991,16 @@ public class RMS_prodConfigExtension {
 		}
 		// Set this flag back to false so we know it's ok to redirect from javascript
 		errorOccurred = 'false';
-		return null;
-	}
+
+	PageReference p = page.RMS_prodConfigEdit;
+
+	// Get all of the url parameters from the current url and put them in the new url
+	Map<String, String> m = p.getParameters();
+    m.put('mode', 'v');
+    m.put('id', orderLineItem.Id);
+	p.setRedirect(true);
+
+	return p;	}
 
 	/*******************************************************
 					close method
@@ -1008,8 +1016,20 @@ public class RMS_prodConfigExtension {
 	*******************************************************/
 	public virtual PageReference edit() {
 		system.debug('*****Edit button pressed');
-		errorOccurred = 'false';
-		return null;
+//		errorOccurred = 'false';
+
+	PageReference p = page.RMS_prodConfigEdit;
+
+	// Get all of the url parameters from the current url and put them in the new url
+	Map<String, String> m = p.getParameters();
+    m.put('mode', 'e');
+    m.put('id', orderLineItem.Id);
+	p.setRedirect(true);
+
+	return p;
+
+
+ 
 	}
 
 	/**********************************************************

@@ -140,10 +140,12 @@
         <apex:actionStatus id="save-new-status"  onstop="openNewOI('{!orderId}','{!priceBookId}');return false"/>
         <apex:actionStatus id="edit-status"  onstop="openSavedOI();return false"/>
 
-          <apex:pageBlockButtons location="bottom">
-            <apex:commandButton action="{!saveProduct}" value="Save" status="save-status" rerender="page-form" rendered="{!mode == 'e'}"/>
+          <apex:pageBlockButtons location="both">
+<!--              <apex:commandButton action="{!saveProduct}" value="Save" status="save-status" rerender="page-form" rendered="{!mode == 'e'}"/>
+-->            <apex:commandButton action="{!saveProduct}" value="Save" rendered="{!mode == 'e'}"/>
 			<apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form" rendered="{!mode == 'e'}"/>
-			<apex:commandButton action="{!edit}" value="Edit" status="edit-status" rerender="page-form" rendered="{!mode != 'e'}"/>
+<!-- 			<apex:commandButton action="{!edit}" value="Edit" status="edit-status" rerender="page-form" rendered="{!mode != 'e'}"/>
+-->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e'}"/>
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
        </apex:pageBlockButtons>
 
