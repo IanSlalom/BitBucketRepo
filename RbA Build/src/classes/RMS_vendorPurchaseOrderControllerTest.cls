@@ -72,7 +72,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 									AccountId = dwelling.id, 
 									EffectiveDate= Date.Today(), 
 									Store_Location__c = store.Id,
-									Opportunity = opp1, 
+									Opportunity = opp1, 									
 									RecordTypeId = UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'),									
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()
@@ -101,7 +101,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
-				
+		System.assert(customController.newPurchaseOrder);
+		System.assertEquals(customController.po.Status__c,'In Progress');
 		Purchase_Order__c po2 = new Purchase_Order__c();
 		insert po2;
 
@@ -250,7 +251,14 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		
 		// Save with a vendor, 
-		customController.save();	
+		customController.save();
+
+		//JETT-712 Verify PO Status is updated upon save if Status is Released, Estimated Ship Date is populated, and related OrderItems all have wholesale costs
+		customController.po.Estimated_Ship_Date__c = System.Today();	
+		customController.po.Status__c = 'Released';
+		customController.save();
+		System.assert(customController.po.Status__c == 'Confirmed');
+
 		List<Purchase_Order__c> newPOList = [SELECT Id, Subtotal__c FROM Purchase_Order__c WHERE Order__c =: soldOrder.Id];
 
 		// Set up another controller with no order Id
@@ -332,9 +340,15 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	static testmethod void MiscButtonTest(){
 		createTestRecords();
 
-		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
-		Purchase_Order__c po = new Purchase_Order__c();
+		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id);
+		insert po;
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		soldOrderItem.NSPR__c = false;
+		soldOrderItem.Verify_Item_Configuration__c = false;
+		soldOrderItem.Purchase_Order__c = po.Id;
+		update soldOrderItem;
 		
 		// Set up controller with an order Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
@@ -347,7 +361,22 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		// TODO: Add Asserts
 		customController.cancel();
 		customController.confirm();
+
 		customController.releasePurchaseOrder();
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
+		customController.relatedOrder.Status = 'Ready to Order';
+		customController.po.Status__c = 'New';
+		customController.releasePurchaseOrder();
+		system.debug(apexPages.getMessages());
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
+		customController.po.Status__c = 'In Progress';
+		customController.electronicOrder = true;
+		customController.releasePurchaseOrder();
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));
+		customController.electronicOrder = false;
+		customController.releasePurchaseOrder();
+		System.assertEquals(customController.po.Status__c, 'Released');
+	
 		customController.cancelPurchaseOrder();
 		customController.checkReceived();
 		customController.updateCostCenters();
