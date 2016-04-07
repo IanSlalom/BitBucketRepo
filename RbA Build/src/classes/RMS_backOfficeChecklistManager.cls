@@ -84,8 +84,7 @@ public with sharing class RMS_backOfficeChecklistManager {
 		    	}
 			}
 		}
-		insert checksToAdd;
-
+					insert checksToAdd;
 	}//END OF createBackOfficeChecksOnOrderCreation METHOD
 	
 	
