@@ -25,6 +25,10 @@ public with sharing class RMS_errorMessages {
 	public static final String WRITEOFF_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to write off an item. Please try again.';
 	public static final String WHOLESALE_COST_REQUIRED = 'You must enter a unit wholesale cost to receive an item. Please try again.';
 	public static final String PO_NOT_READY_TO_RELEASE = 'The order must be in the Ready to Order status before you can release this purchase order.';
+	public static final String ORDER_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until the Order is in Ready to Order Status.';
+	public static final String ORDER_STATUS_INVALID_FOR_PO_CREATION = 'Purchase Order cannot be created until the Order is in Ready to Order Status.';
+	public static final String PO_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released in the current status.';
+	public static final String PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until all Purchase Order line items have been verified';
 
 
 	/*******************************************************
