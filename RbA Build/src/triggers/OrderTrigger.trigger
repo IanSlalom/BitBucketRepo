@@ -18,6 +18,8 @@
 
 trigger OrderTrigger on Order (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {
+ 	// Set the order trigger to ran
+    if(Trigger.isUpdate)UtilityMethods.setOrderTriggerRan();
     
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
@@ -32,12 +34,12 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
     }
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
-
         
         //HANDLERS AND MANAGERS
         RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
         RMS_backOfficeChecklistManager backOfficeCheckListManager = new RMS_backOfficeChecklistManager();
         RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
+        RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(Trigger.isExecuting,Trigger.size);
         List<SObject> accounts = new List<SObject>();
            
         // Before Insert
@@ -51,6 +53,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         if(Trigger.isUpdate && Trigger.isBefore){
             UtilityMethods.checkLockedByStatus(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Order');
             workOrderCreationManager.createWorkOrderOnOrderActivation(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            handler.onBeforeUpdate(Trigger.oldMap, Trigger.newMap);
         }
           
     
@@ -70,9 +73,8 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
-
-            	financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-                accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
                     
         //After Delete
