@@ -12,11 +12,15 @@
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
+        <members>PurchaseOrderTriggerHandler</members>
+        <members>PurchaseOrderTriggerHandlerTests</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_OrderItemExtension</members>
         <members>RMS_OrderItemManager</members>
+        <members>RMS_OrderTriggerHandler</members>
+        <members>RMS_OrderTriggerHandlerTests</members>
         <members>RMS_ServiceOrderExtensionMgr</members>
         <members>RMS_ServiceOrderLegacyExt</members>
         <members>RMS_WorkOrderCreationManager</members>
@@ -130,6 +134,7 @@
         <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
+        <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
         <name>ApexTrigger</name>
