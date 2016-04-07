@@ -48,6 +48,7 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         
         if(Trigger.isUpdate && Trigger.isBefore){
             workOrderCreationManager.createInstallWorkOrderOnTechMeasureComplete(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+      //       orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
          
     
@@ -91,6 +92,9 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         }
         */
         
+		// Only update the orders if their update trigger hasn't run
+		// already
+    	if ( UtilityMethods.hasOrderTriggerRan() ) return;
         update orders;
     }
 }

@@ -18,7 +18,11 @@
 
 trigger OrderTrigger on Order (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {
-    
+	// Set the order trigger to ran
+    if(Trigger.isUpdate)UtilityMethods.setOrderTriggerRan();
+
+//	}    
+	System.Debug('************hasOrderTriggerRanAfter=' +UtilityMethods.hasOrderTriggerRan());
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     
@@ -65,14 +69,16 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         else if(Trigger.isInsert && Trigger.isAfter){
             workOrderCreationManager.createWorkOrderOnOrderCreation(Trigger.new, Trigger.newMap);
             backOfficeCheckListManager.createBackOfficeChecksOnOrderCreation(Trigger.new, Trigger.newMap);
-                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+
         } 
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
 
-            	financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-                accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+
         }
                     
         //After Delete
