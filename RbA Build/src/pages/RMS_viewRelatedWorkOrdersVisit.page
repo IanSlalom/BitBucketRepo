@@ -98,7 +98,7 @@
             </apex:column>
             <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
             <apex:column value="{!wo.Work_Order_Scheduling_Status__c}"/>
-            <apex:column value="{!wo.Scheduled_Installation_Date__c}"/>
+            <apex:column value="{!wo.Scheduled_Install_Date_Formula__c}"/>
             <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
         </apex:pageBlockTable>
         
