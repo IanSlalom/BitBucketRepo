@@ -152,10 +152,9 @@
                      
                     <apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" rendered="{! newPurchaseOrder == false}"/>
                     <apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
-                    <!--<apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status != 'rec' && status != 'can'}"/>
-                    <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" rendered="{! status == 'rec' || status == 'can'}"/>-->
-                    <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
-                    <apex:outputText value=""/>
+   <!--  TODO:   temporarily commented out                    <apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" />  -->
+              <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
+                  <apex:outputText value=""/>
                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
                     <apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
@@ -163,8 +162,12 @@
                      
                     <apex:inputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew'|| status == 'rel' || status == 'rej'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
+<!-- TODO: temporarily commented out rba rel for testing purposes  
                     <apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
+-->
+                    <apex:inputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'new' || status == 'rel' || status == 'rbarel' || status == 'con' || status == 'rej'}"/>
+                    <apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" rendered="{! status == 'rbanew' || status == 'rbacon' || status == 'rec'}"/>
                     
                     <apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
                     <apex:inputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="tax"  rendered="{! status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej'}"/>
@@ -215,8 +218,10 @@
                     </apex:column>
                     <apex:column style="width:100px">
                         <apex:facet name="header">Wholesale Cost</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
+<!--  TODO:   temporarily commented out                         <apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
+      -->                      <apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'rbarel' || status == 'con' || status == 'rej'}"/>
+                            <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbacon' || status == 'rec'}"/>
                     </apex:column>
                     <!-- TODO: Add check for ARO and do not show for COROs -->
                     <apex:column style="width:100px"  rendered="{!costPurchaseOrder == true}">
