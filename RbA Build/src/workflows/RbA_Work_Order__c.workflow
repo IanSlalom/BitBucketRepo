@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <alerts>
+        <fullName>Last_Renovate_Right_Date_Notification</fullName>
+        <description>Last Renovate Right Date Notification</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>RbA_Email_Templates/LastRenovateRightDateNotification</template>
+    </alerts>
+    <alerts>
         <fullName>PaintStainVendorFollowUp</fullName>
         <description>PaintStainVendorFollowUp</description>
         <protected>false</protected>
@@ -37,6 +47,20 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <rules>
+        <fullName>Last Renovate Right Date Notification</fullName>
+        <actions>
+            <name>Last_Renovate_Right_Date_Notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Age__c</field>
+            <operation>greaterThan</operation>
+            <value>53</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
     <rules>
         <fullName>PaintStainInstallReminder</fullName>
         <active>true</active>

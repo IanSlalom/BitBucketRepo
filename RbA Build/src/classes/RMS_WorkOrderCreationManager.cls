@@ -2,11 +2,100 @@ public with sharing class RMS_WorkOrderCreationManager {
     
     
     /************************************************************
+            createWorkOrderOnOrderSoldOrderBeingAssigned 
+    *************************************************************/
+    public void createWorkOrderOnOrderSoldOrderBeingAssigned(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
+  		system.debug('ads inside createWorkOrderOnOrderSoldOrderBeingAssigned:');
+  		list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
+  		
+	    Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+	    Id visitWORecordType = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+	    
+	    list<id> relatedAccountIds = new list<Id>();
+        list<id> relatedOpportunityIds = new list<id>();
+        list<id> relatedParentIds = new list<id>();
+        
+        for(Order o : listNew){
+            relatedAccountIds.add(o.AccountId);
+            //IF OPPORTUNITY POPULATED THEN ADD TO LIST
+            	system.debug('****** order: '+o);
+                if(o.OpportunityId != null){
+                    relatedOpportunityIds.add(o.OpportunityId);
+                } 
+                if(o.Sold_Order__c != null){
+                	relatedParentIds.add(o.Sold_Order__c);
+                }
+        } 
+        
+        list<Account> relatedAccounts = [SELECT ShippingStreet,
+                                                ShippingCity,
+                                                ShippingState,
+                                                ShippingStateCode,
+                                                ShippingPostalCode, 
+                                                ShippingCountry,
+                                                ShippingCountryCode,
+                                                Store_Location__c,
+                                                Name
+                                                
+                                                FROM Account WHERE Id IN :relatedAccountIds];
+        map<id, Account> accountIdToAccountMap = new map<id, Account>();        
+        list<id> dwellingStoreLocationIds = new list<id>();
+        
+        for(Account a : relatedAccounts){
+            accountIdToAccountMap.put(a.id, a);
+            dwellingStoreLocationIds.add(a.Store_Location__c);
+        }
+        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+        map<id, Order> orderIdToOrderMap = new map<id, Order>([SELECT Id, BillToContactID, AccountId, OpportunityId FROM Order WHERE Id IN :relatedParentIds]);
+        
+		for(Order ord: listNew){
+			if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+				Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
+				Id serviceQueueId;
+                if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
+                	serviceQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c;
+                }else{
+                	serviceQueueId = UserInfo.getUserId();
+            	}
+            	system.debug('ads mapOld.get(ord.Id).Sold_Order__c: '+ mapOld.get(ord.Id).Sold_Order__c); 
+            	system.debug('ads mapNew.get(ord.Id).Sold_Order__c: '+ mapNew.get(ord.Id).Sold_Order__c);
+            	
+				if(mapOld.get(ord.Id).Sold_Order__c == null && mapNew.get(ord.Id).Sold_Order__c != null ){
+					system.debug('ads making service work order ord: '+ ord);
+					system.debug('ads orderIdToOrderMap.get(ord.Sold_Order__c): '+ orderIdToOrderMap.get(ord.Sold_Order__c)); 
+					system.debug('ads ord.OpportunityId: '+ ord.OpportunityId);
+			            		
+					//RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, orderIdToOrderMap.get(ord.Sold_Order__c), visitWORecordType, serviceQueueId, 'Service', null );
+					RbA_Work_Order__c serviceWorkOrder = new RbA_Work_Order__c(
+						Sold_Order__c = ord.id,
+						RecordTypeId = visitWORecordType,
+						Work_Order_Type__c = 'Service',
+						Account__c = ord.AccountId,
+								
+						Street__c = relatedDwelling.ShippingStreet,
+						City__c = relatedDwelling.ShippingCity,
+						State__c = relatedDwelling.ShippingStateCode,
+						Zip__c = relatedDwelling.ShippingPostalCode, 
+						Country__c = relatedDwelling.ShippingCountryCode,
+						Contact__c = orderIdToOrderMap.get(ord.Sold_Order__c).BillToContactId,
+
+						OwnerId = serviceQueueId
+						
+					);
+
+					workOrdersToAdd.add(serviceWorkOrder);
+				}
+			}
+		}
+		system.debug('ads inserting workOrdersToAdd: '+workOrdersToAdd);
+		insert workOrdersToAdd;
+	}
+    /************************************************************
             createWorkOrderOnOrderActivation
     *************************************************************/
     public void createWorkOrderOnOrderActivation(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
         system.debug('******INSIDE RMS_WorkOrderCreationManager/createWorkOrderOnActivation');
-
+	
         list<Order> activatedOrders = new list<Order>();
         list<id> activatedOrderId = new list<id>();
         list<id> relatedDwellingIds = new list<id>();
@@ -164,7 +253,8 @@ public with sharing class RMS_WorkOrderCreationManager {
     
     public void createWorkOrderOnOrderCreation(List<Order> listNew, Map<Id, Order> mapNew){
         system.debug('******INSIDE RMS_WorkOrderCreationManager/createWorkOrderOnOrderCreation');
-        
+        system.debug('ads: listNew: '+listNew);
+        system.debug('ads: mapNew: '+mapNew);
         list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
         Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
@@ -250,16 +340,27 @@ public with sharing class RMS_WorkOrderCreationManager {
                     ord.addError('Tech Measure Work Order Queue Id has not been set on the related Store Configuation.');
                 } 
                 Id techMeasureQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c;
+            	
+            	/*
                 Id serviceQueueId;
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
                 	serviceQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c;
                 }else{
                 	serviceQueueId = UserInfo.getUserId();
             	}
-                if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+            	
+              	if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+            		 system.debug('ads making service work order ord: '+ ord);
+            		 system.debug('ads ord.BillToContactId: '+ ord.BillToContactId); 
+            		 system.debug('ads ord.OpportunityId: '+ ord.OpportunityId);
+            		
             		 RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, ord, visitWORecordType, serviceQueueId, 'Service', null );
  
             		 workOrdersToAdd.add(serviceWorkOrder);
+                
+                */
+                if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+                	continue;
                 }else{
 	                //CREATE WORK ORDER (TECH MEASURE)
 	                RbA_Work_Order__c techWO = new RbA_Work_Order__c(
@@ -287,15 +388,6 @@ public with sharing class RMS_WorkOrderCreationManager {
         upsert workOrdersToAdd;    
            
     }// END OF createWorkOrderOnOrderCreation METHOD
-
-
-
-
-
-
-
-
-
 
 
 

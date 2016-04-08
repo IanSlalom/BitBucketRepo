@@ -186,7 +186,7 @@ public with sharing class TestUtilityMethods {
 		account1.recordTypeId = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account'); 	
 		return account1;
     }
-    
+     
     
 	public Contact createContact(Id accountId, String x){
         Contact testContact = new Contact(

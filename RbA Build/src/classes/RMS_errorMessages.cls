@@ -121,6 +121,7 @@ public with sharing class RMS_errorMessages {
 	public static final String ORDER_ON_WORK_ORDER_NULL = '&bull;The Order on the related Work Order is null.';
 	public static final String LABOR_AMOUNTS_NULL = '&bull;Both Internal and External Costs are null.';
 	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
+	public static final String VENDOR_HAS_NO_BAAN_NUMBER = '&bull;The Vendor you have selected\'s account has no Baan Business Partner Number';
 	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount can not be zero or empty on a Misc Reimbursement.';
 
 	public static final String ASSET_ID_IS_NULL = '&bull;The Asset Id is null.';
@@ -129,7 +130,7 @@ public with sharing class RMS_errorMessages {
 	public static final String BILL_TO_CONTACT_ON_ORDER_NULL = '&bull;The \'Bill to Contact\' field on the related order is null.';
 	public static final String STORE_LOCATION_ON_ORDER_NULL = '&bull;The \'Store Location\' field on the related order is null.';
 	public static final String RETAIL_SUBTOTAL_ON_ORDER_NULL = '&bull;The \'Retail Subtotal\' field on the related order is null.';
-	public static final String QUANTITY_IS_ZERO = '&bull;The Asset Quantity can not be zero.';
+	public static final String QUANTITY_IS_LESS_THAN_ZERO = '&bull;The Asset Quantity can not be lower than zero.';
 	
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_DEPOSIT = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Deposits. Please contact your system admin for assistance';
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_LABOR = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Labor. Please contact your system admin for assistance.';
@@ -140,15 +141,18 @@ public with sharing class RMS_errorMessages {
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	
 	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
+	public static final String CHANGED_WRITE_OFF_AND_VENDOR_CREDIT = '&bull;You are unable to change the Quantity Written Off the same time you change Vendor Credit.';
+	
+	
 	/*******************************************************
 					Redirect Errors
-	*******************************************************/
+	*******************************************************/ 
 	public static final String STORE_LOCATION_IS_BLANK_PAYMENT = 'The Store Location must be entered on the Order before creating a deposit.';
 	public static final String STORE_LOCATION_IS_BLANK_LABOR = 'The Store Location must be entered on the Work Order before creating a labor record.';
 	public static final String STORE_LOCATION_IS_BLANK_USER = 'Your user record must be associated with a store location before creating a misc reimbursement.';
 
 	/*******************************************************
-					Misc Errors
+					Misc Errors 
 	*******************************************************/
 	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
 	public static final String FIELD_IS_LOCKED = '&bull;The [field] field can not be changed in the current status.';

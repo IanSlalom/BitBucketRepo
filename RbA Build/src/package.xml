@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -74,6 +74,8 @@
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
+        <members>RMS_populateResourceonEventManager</members>
+        <members>RMS_createContactHistoryManager</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -131,6 +133,7 @@
         <members>PaymentTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
+        <members>ContactTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>

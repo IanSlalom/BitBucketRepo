@@ -33,24 +33,25 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         
         //HANDLERS AND MANAGERS        
         List<SObject> wkorders = new List<SObject>();
+        RMS_populateResourceonEventManager populateResourceonEventManager = new RMS_populateResourceonEventManager();
             
         // Before Insert
-        /*
+        
         if(Trigger.isInsert && Trigger.isBefore){
-            handler.onBeforeInsert(Trigger.new);
+            populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
-        */
+        
         //  Before Update
-        /*
+        
         if(Trigger.isUpdate && Trigger.isBefore){
-            
+            populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);    
         }
-         */
+         
 
         // Before Delete
         //else  
         if(Trigger.isDelete && Trigger.isBefore){
-            
+            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
 
         // After Insert
@@ -67,12 +68,12 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         
                     
         //After Delete
-        /*
+        
         else if(Trigger.isDelete && Trigger.isAfter){
-            handler.onAfterDelete(Trigger.old, Trigger.oldMap);
+            
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
-        */
+        
         
         // After Undelete 
         /*

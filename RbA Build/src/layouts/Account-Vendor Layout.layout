@@ -27,7 +27,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Region_Id__c</field>
+                <field>Vendor_Account_Type__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
