@@ -150,6 +150,7 @@ public with sharing class RMS_financialTransactionManager {
         list<Payment__c> extraFieldsList = [SELECT  id,
                                                     Order__c,
                                                     Order__r.BillToContactId,
+                                                    Order__r.Retail_Total__c,
                                                     Payment_Amount__c,
                                                     Payment_Type__c,
                                                     Order__r.Store_Location__c,
@@ -172,6 +173,38 @@ public with sharing class RMS_financialTransactionManager {
         system.debug('ads paymentIdToMiscCashReceiptFTL: '+paymentIdToMiscCashReceiptFTL);
         Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
         Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
+        
+        
+        
+        //LINKING ALL PAYMENTS THAT ARE EITHER DEPOSIT OR FINAL PAYMENT TO ORDER.
+       
+        list<Id> relatedOrderIds = new list<Id>();
+        for(Payment__c p : extraFieldsList){
+        	relatedOrderIds.add(p.Order__c);
+        } 
+        list<Payment__c> allRelatedPayments = [SELECT  	id,
+	                                                    Order__c,
+	                                                    Order__r.BillToContactId,
+	                                                    Order__r.Retail_Total__c,
+	                                                    Payment_Amount__c,
+	                                                    Payment_Type__c,
+	                                                    Order__r.Store_Location__c,
+	                                                    RecordTypeId,
+	                                                    Store_Location__c,
+	                                                    GL_Account__r.Name
+                                                    
+                                                    FROM Payment__c WHERE Order__c IN :relatedOrderIds];
+                                                    
+        map<Id, list<Payment__c>> orderIdToListOfDFPPayments = new map<Id, list<Payment__c>>();
+        for(Payment__c p : allRelatedPayments){
+            if(orderIdToListOfDFPPayments.containsKey(p.Order__c) ){
+                orderIdToListOfDFPPayments.get(p.Order__c).add(p);
+            }
+            else{
+                orderIdToListOfDFPPayments.put(p.Order__c, new list<Payment__c>{p});
+            }
+        } 
+        
         
         for(Payment__c p : extraFieldsList){
             String typeOfPayment;
@@ -202,7 +235,18 @@ public with sharing class RMS_financialTransactionManager {
  
                         system.debug('ads p: '+p);
                         system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
-                         
+                        
+                        //CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
+                        Decimal paymentTotal = 0;
+                        for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
+                        	if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
+                        		paymentTotal = paymentTotal + payment.Payment_Amount__c;
+                        	}
+                        }
+                        if(paymentTotal+p.Payment_Amount__c > p.Order__r.Retail_Total__c){
+                        	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
+                             mapNew.get(p.id).addError(errorMessage, FALSE);
+                        } 
                         Journal_Entry__c newJE = new Journal_Entry__c(
                             Date__c = Datetime.Now(),
                             Payment__c = p.id,
@@ -237,6 +281,26 @@ public with sharing class RMS_financialTransactionManager {
                                 errorMessage = RMS_errorMessages.PAYMENT_ALREADY_SUBMITTED;
                                 mapNew.get(p.id).addError(errorMessage, FALSE);
                             }else{
+                                
+                                //CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
+                                Decimal paymentTotal = 0;
+		                        for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
+		                        	if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
+		                        		if(payment.Id == p.Id){
+		                        			paymentTotal = paymentTotal + p.Payment_Amount__c;
+		                        		}else{
+			                        		paymentTotal = paymentTotal + payment.Payment_Amount__c;
+		                        		}
+		                        	}
+		                        }
+		                        system.debug('ads temporary paymentTotal: '+paymentTotal);
+		                        system.debug('ads temporary p.Order__r.Retail_Total__c: '+p.Order__r.Retail_Total__c);
+		                        if(paymentTotal > p.Order__r.Retail_Total__c){
+		                        	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
+		                             mapNew.get(p.id).addError(errorMessage, FALSE);
+		                        }
+		                        
+		                        
                                 //Journal Entry NOT sent to BaanERP, update Journal Entry
                                 system.debug('ads inside not sent to Baan: '+ je);
                                 je.Date__c = Datetime.Now();
@@ -276,7 +340,7 @@ public with sharing class RMS_financialTransactionManager {
         upsert journalEntriesToUpsert;
     }//END createOrUpdateJournalEntryPayment Method
     
-    
+     
     /***************************************************
      Method to create or update Journal Entry for LABOR
     ****************************************************/
@@ -515,164 +579,160 @@ public with sharing class RMS_financialTransactionManager {
                                                     Sold_Order__r.Revenue_Recognized_Date__c,
                                                     Vendor__c,
                                                     Vendor__r.Name,
+                                                    Vendor__r.Vendor_Account_Type__c,
+                                                    Vendor__r.Baan_Business_Partner_Number__c,
                                                     RecordTypeId,
                                                     Store_Location__c,
-                                                    Quantity_Written_Off__c
+                                                    Quantity_Written_Off__c,
+                                                    Vendor_Credit__c
                                                     
                                                     FROM Asset WHERE Id IN :mapNew.keyset() AND RecordTypeId = :assetInstalledProductsRecordTypeId];        
         
         
         map<Id, list<Journal_Entry__c>> assetIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
-        
-        //OLD ONE
-        //map<Id, list<Journal_Entry__c>> assetIdToInventoryReceivedIntercompanyJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
-        
-        //INVENTORY RECIVED JOURNAL ENTERY
+
+        //INVENTORY Received JOURNAL ENTERY
         map<Id, list<Journal_Entry__c>> assetIdToIRIntercompanyJEM = new map<Id, list<Journal_Entry__c>>();
         map<Id, list<Journal_Entry__c>> assetIdToIRExternalVendorJEM = new map<Id, list<Journal_Entry__c>>();
-       	//POST RECOGNITION INVENTORY RECIVED JOURNAL ENTERY
+       	//POST RECOGNITION INVENTORY Received JOURNAL ENTERY
         map<Id, list<Journal_Entry__c>> assetIdToPRIRIntercompanyJEM = new map<Id, list<Journal_Entry__c>>();
         map<Id, list<Journal_Entry__c>> assetIdToPRIRExternalVendorJEM = new map<Id, list<Journal_Entry__c>>();
         
-        
         map<Id, list<Journal_Entry__c>> assetIdToInventoryWriteOffJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
-        
-        /*
-        for(id assetId : assetIdToJournalEntryMap.keySet()){
-        	for(Journal_Entry__c je : assetIdToJournalEntryMap.get(assetId) ){
-	        	if(je.Type__c == 'Inventory Received - Intercompany' || ){
-        		    if(assetIdToIRIntercompanyJEM.containsKey(je.Asset__c) ){
-	                    assetIdToIRIntercompanyJEM.get(je.Asset__c).add(je);
-	                }else{
-	                	assetIdToIRIntercompanyJEM.put(je.Asset__c, new list<Journal_Entry__c>{je});
-	                }
-	        	}/*else if(je.Type__c == 'Inventory Received - External Vendor'){
-        		    if(assetIdToIRExternalVendorJEM.containsKey(je.Asset__c) ){
-	                    assetIdToIRExternalVendorJEM.get(je.Asset__c).add(je);
-	                }else{
-	                	assetIdToIRExternalVendorJEM.put(je.Asset__c, new list<Journal_Entry__c>{je});
-	                }
-	        	}else if(je.Type__c == 'Post Recognition Inventory Received - Intercompany'){
-        		    if(assetIdToPRIRIntercompanyJEM.containsKey(je.Asset__c) ){
-	                    assetIdToPRIRIntercompanyJEM.get(je.Asset__c).add(je);
-	                }else{
-	                	assetIdToPRIRIntercompanyJEM.put(je.Asset__c, new list<Journal_Entry__c>{je});
-	                }
-	        	}else if(je.Type__c == 'Post Recognition Inventory Received - External Vendor'){
-        		    if(assetIdToPRIRExternalVendorJEM.containsKey(je.Asset__c) ){
-	                    assetIdToPRIRExternalVendorJEM.get(je.Asset__c).add(je);
-	                }else{
-	                	assetIdToPRIRExternalVendorJEM.put(je.Asset__c, new list<Journal_Entry__c>{je});
-	                }
-	        	} */
-	        	
-	        	
-	        	/*
-	        	Inventory Received - Intercompany
-	        	Inventory Received - External Vendor
-	        	Post Recognition Inventory Received - Intercompany
-	        	Post Recognition Inventory Received - External Vendor
-	        	
-	        	
-	        	
-	        	else if(je.Type__c == 'Inventory Write-Off'){
-	        		 if(assetIdToInventoryWriteOffJournalEntryMap.containsKey(je.Asset__c) ){
-	                    assetIdToInventoryWriteOffJournalEntryMap.get(je.Asset__c).add(je);
-	                }else{
-	                	assetIdToInventoryWriteOffJournalEntryMap.put(je.Asset__c, new list<Journal_Entry__c>{je});
-	                }
-	        	}
-        	}
-        }
-        */
-        
-        system.debug('ads: assetIdToInventoryWriteOffJournalEntryMap: '+assetIdToInventoryWriteOffJournalEntryMap);
-		
 		
 		//MAKING MAPS OF ASSET ID TO DIFFERENT TYPES OF FINANCIAL TRANSACION LISTS
         map<Id, list<Financial_Transaction__c>>  assetIdToInventoryWriteOffFTL = linkFinacialTransactions(extraFieldsList, 'Inventory Write-Off');
         
-        //INVENTORY RECIVED FINANCIAL TRANSATION
+        //INVENTORY Received FINANCIAL TRANSATION
         map<Id, list<Financial_Transaction__c>>  assetIdToIRIntercompanyFTL = linkFinacialTransactions(extraFieldsList, 'Inventory Received - Intercompany');
+        map<Id, list<Financial_Transaction__c>>  assetIdToIRIntercompanyCCFTL = linkFinacialTransactions(extraFieldsList, 'Inventory Received - Intercompany Consolidation Center');
         map<Id, list<Financial_Transaction__c>>  assetIdToIRExternalVendorFTL = linkFinacialTransactions(extraFieldsList, 'Inventory Received - External Vendor');
-        //POST RECOGNITION INVENTORY RECIVED FINANCIAL TRANSACTIONS
-        map<Id, list<Financial_Transaction__c>>  assetIdToPRIRIntercompanyFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognition Inventory Received - Intercompany');
-        map<Id, list<Financial_Transaction__c>>  assetIdToPRIRExternalVendorFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognition Inventory Received - External Vendor');
+        
+        //Service Material Returned
+        map<Id, list<Financial_Transaction__c>>  assetIdToSMRIntercompanyFTL = linkFinacialTransactions(extraFieldsList, 'Service Material Returned - Intercompany');
+        map<Id, list<Financial_Transaction__c>>  assetIdToSMRIntercompanyCCFTL = linkFinacialTransactions(extraFieldsList, 'Service Material Returned - Intercompany Consolidation Center');
+        map<Id, list<Financial_Transaction__c>>  assetIdToSMRExternalVendorFTL = linkFinacialTransactions(extraFieldsList, 'Service Material Returned - External Vendor');
  		
         
         for(Asset a : extraFieldsList){
-                string errorMessage;
-                string assetType;
+          		string errorMessage;
                 string assetSubType;
                 if(a.Store_Location__c == null ){ 
                     errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
                 }
-				if(	mapOld != null && 
-					mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c){
-						assetType = 'InventoryWriteOff';
-				}else{
-                	assetType = 'InventoryReceived';
-                	if(a.Sold_Order__r.Revenue_Recognized_Date__c == null && a.Vendor__r.Name == 'RbA'){
-                		assetSubType = 'Intercompany';
-                	}else if(a.Sold_Order__r.Revenue_Recognized_Date__c == null && a.Vendor__r.Name != 'RbA'){
-                		assetSubType = 'ExternalVendor';
-                	}else if(a.Sold_Order__r.Revenue_Recognized_Date__c != null && a.Vendor__r.Name == 'RbA'){
-                		assetSubType = 'PRIntercompany';
-                	}else if(a.Sold_Order__r.Revenue_Recognized_Date__c != null && a.Vendor__r.Name != 'RbA'){
-                		assetSubType = 'PRExternalVendor';
-                	}
-                }
-               
-                system.debug('ads assetType: '+ assetType); 
-               
-                errorMessage = checkAssetForErrors(a, errorMessage);
                 
-                if(assetType == 'InventoryReceived'){
+                boolean inventoryWriteOffAT = false;
+                boolean vendorCreditAT = false;
+                boolean inventoryReceivedAT = false;
+                boolean unitWholeSaleCostChangeAT = false;
+                
+                //CAN'T CHANGE WRITE OFF AND VENDOR CREDIT AT THE SAME TIME
+                if((mapOld != null && mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c && mapOld.get(a.id).Vendor_Credit__c != mapNew.get(a.id).Vendor_Credit__c)
+                	|| (mapOld == null && mapNew.get(a.id).Quantity_Written_Off__c != null && mapNew.get(a.id).Vendor_Credit__c != null)){
+                		errorMessage = RMS_errorMessages.CHANGED_WRITE_OFF_AND_VENDOR_CREDIT;
+        		}
+        		
+				if((mapOld != null && mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c)
+					||(mapOld == null && mapNew.get(a.id).Quantity_Written_Off__c != null)){
+						//ONLY IF QUANTITY IS 0 look into
+					inventoryWriteOffAT = true;
+				}
+				
+				else if( (mapOld != null && mapOld.get(a.id).Vendor_Credit__c != mapNew.get(a.id).Vendor_Credit__c)
+						||(mapOld == null && mapNew.get(a.id).Vendor_Credit__c != null)
+						&& (mapNew.get(a.id).Vendor_Credit__c != null)){
+					vendorCreditAT = true;
+		
+				}else if((mapOld != null && mapOld.get(a.id).Quantity != mapNew.get(a.id).Quantity)
+						||(mapOld == null && mapNew.get(a.id).Quantity != 0 && mapNew.get(a.id).Unit_Wholesale_Cost__c != 0)){
+					//quantity has to change.
+                	inventoryReceivedAT = true;
+                
+                }else if(mapOld != null && mapOld.get(a.id).Unit_Wholesale_Cost__c != mapNew.get(a.id).Unit_Wholesale_Cost__c){
+                	if(a.Quantity != 0){
+                		inventoryReceivedAT = true;
+                	}
+                	if(a.Quantity_Written_Off__c != null){
+	                	inventoryWriteOffAT = true;
+                	}
+                	
+                }
+                
+                if(a.Sold_Order__r.Revenue_Recognized_Date__c == null && a.Vendor__r.Vendor_Account_Type__c == 'Intercompany'){
+            		assetSubType = 'Intercompany';
+            	}else if(a.Sold_Order__r.Revenue_Recognized_Date__c == null && a.Vendor__r.Vendor_Account_Type__c == 'Intercompany Consolidation Center'){
+            		assetSubType = 'IntercompanyCC';
+            	}else if(a.Sold_Order__r.Revenue_Recognized_Date__c == null && a.Vendor__r.Vendor_Account_Type__c == 'External'){
+            		assetSubType = 'ExternalVendor';
+            	}
+            	
+                errorMessage = checkAssetForErrors(a, errorMessage, assetSubType, vendorCreditAT);
+                
+                //INVENTORY RECEIVED
+                if(inventoryReceivedAT == true){
                 	if(assetSubType == 'Intercompany'){
 	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRIntercompanyFTL.get(a.id) , errorMessage, 'Inventory Received - Intercompany');
+                	}
+                	if(assetSubType == 'IntercompanyCC'){
+	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRIntercompanyCCFTL.get(a.id) , errorMessage, 'Inventory Received - Intercompany Consolidation Center');
                 	}
                 	if(assetSubType == 'ExternalVendor'){
 	                	errorMessage = checkFinacialTransationForErrors(assetIdToIRExternalVendorFTL.get(a.id) , errorMessage, 'Inventory Received - External Vendor');
                 	}
-                	if(assetSubType == 'PRIntercompany'){
-	                	errorMessage = checkFinacialTransationForErrors(assetIdToPRIRIntercompanyFTL.get(a.id) , errorMessage, 'Post Recognition Inventory Received - Intercompany');
-                	}
-                	if(assetSubType == 'PRExternalVendor'){
-	                	errorMessage = checkFinacialTransationForErrors(assetIdToPRIRExternalVendorFTL.get(a.id) , errorMessage, 'Post Recognition Inventory Received - External Vendor');
-                	}
-                	
-                }else if(assetType == 'InventoryWriteOff'){
-                	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffFTL.get(a.id) , errorMessage, 'Inventory Write-Off');
                 }
                 
-                
+                //SERVICE MATERIAL RETURNED		
+                if(vendorCreditAT == true){
+                	system.debug('ads vendor credit assetSubType: '+assetSubType);
+                	if(assetSubType == 'Intercompany'){
+	                	errorMessage = checkFinacialTransationForErrors(assetIdToSMRIntercompanyFTL.get(a.id) , errorMessage, 'Service Material Returned - Intercompany');
+                	}
+                	if(assetSubType == 'IntercompanyCC'){
+	                	errorMessage = checkFinacialTransationForErrors(assetIdToSMRIntercompanyCCFTL.get(a.id) , errorMessage, 'Service Material Returned - Intercompany Consolidation Center');
+                	}
+                	if(assetSubType == 'ExternalVendor'){
+	                	errorMessage = checkFinacialTransationForErrors(assetIdToSMRExternalVendorFTL.get(a.id) , errorMessage, 'Service Material Returned - External Vendor');
+                	}
+                }
+                	
+                //INVENTORY WRITE OFF	
+                if(inventoryWriteOffAT == true){
+                	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffFTL.get(a.id) , errorMessage, 'Inventory Write-Off');
+                }
+
                 //SETTING UP MAPS TO CHECK IF CREDIT/DEBIT ACCOUNTS HAVE BEEN SWITCHED FOR CALCULATIONS
 	    		map<string, string> jeTypeToFTCreditNumber = new map<string,string>();
 				map<string, string> jeTypeToFTDebitNumber = new map<string,string>();	
    				
+   				//INVENTROY Received
    				if(assetIdToIRIntercompanyFTL.get(a.id) != null && assetIdToIRIntercompanyFTL.get(a.id).size() == 1){
    					jeTypeToFTCreditNumber.put('Inventory Received - Intercompany', assetIdToIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
    					jeTypeToFTDebitNumber.put('Inventory Received - Intercompany', assetIdToIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
    				}
- 
+   				if(assetIdToIRIntercompanyCCFTL.get(a.id) != null && assetIdToIRIntercompanyCCFTL.get(a.id).size() == 1){
+   					jeTypeToFTCreditNumber.put('Inventory Received - Intercompany Consolidation Center', assetIdToIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   					jeTypeToFTDebitNumber.put('Inventory Received - Intercompany Consolidation Center', assetIdToIRIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+   				}
 				if(assetIdToIRIntercompanyFTL.get(a.id) != null && assetIdToIRIntercompanyFTL.get(a.id).size() == 1){
 					jeTypeToFTCreditNumber.put('Inventory Received - External Vendor', assetIdToIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
    					jeTypeToFTDebitNumber.put('Inventory Received - External Vendor', assetIdToIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
 				}
-   
-				if(assetIdToPRIRIntercompanyFTL.get(a.id) != null && assetIdToPRIRIntercompanyFTL.get(a.id).size() == 1){
-					jeTypeToFTCreditNumber.put('Post Recognition Inventory Received - Intercompany', assetIdToPRIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-   					jeTypeToFTDebitNumber.put('Post Recognition Inventory Received - Intercompany', assetIdToPRIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+				
+				//SERVICE MATERIAL RETURNED
+				if(assetIdToSMRIntercompanyFTL.get(a.id) != null && assetIdToSMRIntercompanyFTL.get(a.id).size() == 1){
+					jeTypeToFTCreditNumber.put('Service Material Returned - Intercompany', assetIdToSMRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   					jeTypeToFTDebitNumber.put('Service Material Returned - Intercompany', assetIdToSMRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
 				}
-  
-				if(assetIdToPRIRExternalVendorFTL.get(a.id) != null && assetIdToPRIRExternalVendorFTL.get(a.id).size() == 1){
-					jeTypeToFTCreditNumber.put('Post Recognition Inventory Received - External Vendor', assetIdToPRIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-   					jeTypeToFTDebitNumber.put('Post Recognition Inventory Received - External Vendor', assetIdToPRIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+				if(assetIdToIRIntercompanyCCFTL.get(a.id) != null && assetIdToIRIntercompanyCCFTL.get(a.id).size() == 1){
+   					jeTypeToFTCreditNumber.put('Service Material Returned - Intercompany Consolidation Center', assetIdToIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   					jeTypeToFTDebitNumber.put('Service Material Returned - Intercompany Consolidation Center', assetIdToIRIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+   				}
+				if(assetIdToIRExternalVendorFTL.get(a.id) != null && assetIdToIRExternalVendorFTL.get(a.id).size() == 1){
+					jeTypeToFTCreditNumber.put('Service Material Returned - External Vendor', assetIdToIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   					jeTypeToFTDebitNumber.put('Service Material Returned - External Vendor', assetIdToIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name);
 				}
-               
-               
+				
                 //IF VALUES ARE NULL THEN SET THEM TO 0
-                
           		decimal oldQuantity = 0;
           		if(mapOld != null && mapOld.get(a.id).Quantity != null){
           			oldQuantity = mapOld.get(a.id).Quantity;
@@ -689,47 +749,81 @@ public with sharing class RMS_financialTransactionManager {
                 if(mapNew != null && mapNew.get(a.id).Quantity_Written_Off__c != null){
                 	newQuantityWrittenOff = mapNew.get(a.id).Quantity_Written_Off__c;
                 }
+                decimal oldVendorCredit = 0;
+                if(mapOld != null && mapOld.get(a.id).Vendor_Credit__c != null){
+                	oldVendorCredit = mapOld.get(a.id).Vendor_Credit__c;
+                }
+                decimal newVendorCredit = 0;
+                if(mapNew != null && mapNew.get(a.id).Vendor_Credit__c != null){
+                	newVendorCredit = mapNew.get(a.id).Vendor_Credit__c;
+                }
                
                 
                 if(errorMessage == null || errorMessage == ''){
-	                String jeType;
-					String debitAccountNumber;
-					String creditAccountNumber;
-					map<Id, list<Journal_Entry__c>> assetIdToRelatedJournalEntryList = new map<Id, list<Journal_Entry__c>>();	
-			
-					if(assetType == 'InventoryReceived'){
+		           
+		           list<wrapAssetVariable> wrapAssetVariableList = new list<wrapAssetVariable>();
+		           String aType;
+		           String jType; 
+		           String debitAccountN;
+		           String creditAccountN;
+		           
+		           if(inventoryReceivedAT == true){
+						aType = 'InventoryReceived';
 						if(assetSubType == 'Intercompany'){
-	                        jeType = 'Inventory Received - Intercompany';
-	                        debitAccountNumber = assetIdToIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-	                        creditAccountNumber = assetIdToIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name;
-	                        //assetIdToRelatedJournalEntryList = assetIdToIRIntercompanyJEM;
+	                        jType = 'Inventory Received - Intercompany';
+	                        debitAccountN = assetIdToIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+	                        creditAccountN = assetIdToIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						}else if(assetSubType == 'IntercompanyCC'){
+	                        jType = 'Inventory Received - Intercompany Consolidation Center';
+	                        debitAccountN = assetIdToIRIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+	                        creditAccountN = assetIdToIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}else if(assetSubType == 'ExternalVendor'){
-							jeType = 'Inventory Received - External Vendor';
-	                        debitAccountNumber = assetIdToIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-	                        creditAccountNumber = assetIdToIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
-	                        //assetIdToRelatedJournalEntryList = assetIdToIRExternalVendorJEM;
-						}else if(assetSubType == 'PRIntercompany'){
-							jeType = 'Post Recognition Inventory Received - Intercompany';
-	                        debitAccountNumber = assetIdToPRIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-	                        creditAccountNumber = assetIdToPRIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name;
-	                       // assetIdToRelatedJournalEntryList = assetIdToPRIRIntercompanyJEM;
-						}else if(assetSubType == 'PRExternalVendor'){
-							jeType = 'Post Recognition Inventory Received - External Vendor';
-	                        debitAccountNumber = assetIdToPRIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-	                        creditAccountNumber= assetIdToPRIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
-	                        //assetIdToRelatedJournalEntryList = assetIdToPRIRExternalVendorJEM;
+							jType = 'Inventory Received - External Vendor';
+	                        debitAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+	                        creditAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}
-					}else if(assetType == 'InventoryWriteOff'){
-						jeType = 'Inventory Write-Off';
-                        debitAccountNumber = assetIdToInventoryWriteOffFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-                        creditAccountNumber= assetIdToInventoryWriteOffFTL.get(a.id)[0].Credit_Account_Number__r.Name;
-
+						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
+               			wrapAssetVariableList.add(wAR);
 					}
-	                
-	                system.debug('ads assetIdToRelatedJournalEntryList: '+assetIdToRelatedJournalEntryList);
-	                //NO RELATED JOURNAL ENTRIES CREATE JOURNAL
-	                if(assetIdToJournalEntryMap.get(a.id) == null || assetIdToJournalEntryMap.get(a.id).size() == 0){
-                        Journal_Entry__c newJE = new Journal_Entry__c();
+					
+					if(inventoryWriteOffAT == true){
+						aType = 'InventoryWriteOff';
+						jType = 'Inventory Write-Off';
+                        debitAccountN = assetIdToInventoryWriteOffFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+                        creditAccountN= assetIdToInventoryWriteOffFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
+                		wrapAssetVariableList.add(wAR);
+					}
+					
+					if(vendorCreditAT == true){
+						system.debug('ads vendorCreditAT = true: what is subtype: '+assetSubType);
+						aType = 'VendorCredit';
+						if(assetSubType == 'Intercompany'){
+							 jType = 'Service Material Returned - Intercompany';
+		                     debitAccountN = assetIdToSMRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+		                     creditAccountN = assetIdToSMRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						 }else if(assetSubType == 'IntercompanyCC'){
+	                        jType = 'Service Material Returned - Intercompany Consolidation Center';
+	                        debitAccountN = assetIdToSMRIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+	                        creditAccountN = assetIdToSMRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						}else if(assetSubType == 'ExternalVendor'){
+							jType = 'Service Material Returned - External Vendor';
+	                        debitAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+	                        creditAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						}
+						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
+               			wrapAssetVariableList.add(wAR);
+					}  
+					
+		           for(wrapAssetVariable wAR : wrapAssetVariableList){ 
+		   				String assetType = wAR.assetType;
+		                String jeType = wAR.jeType;
+						String debitAccountNumber = wAR.debitAccountNumber;
+						String creditAccountNumber = wAR.creditAccountNumber;
+
+		                //NO RELATED JOURNAL ENTRIES CREATE JOURNAL
+		                if(assetIdToJournalEntryMap.get(a.id) == null || assetIdToJournalEntryMap.get(a.id).size() == 0){
+	                        Journal_Entry__c newJE = new Journal_Entry__c();
                             newJE.Date__c = Datetime.Now();
                             newJE.Asset__c = a.id;
                             newJE.Order__c = a.Sold_Order__c;
@@ -743,151 +837,256 @@ public with sharing class RMS_financialTransactionManager {
 	                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'InventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
+							}else if(assetType == 'VendorCredit'){
+								newJE.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
+								newJE.Amount__c = a.Vendor_Credit__c;
 							}
 							
 							if(newJE.Amount__c < 0){
                             	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
                           	}
-        
-                        journalEntriesToUpsert.add(newJE);
-  
-                	}else{
-	
-                        list<Journal_Entry__c> jeListSentToBaan = new list<Journal_Entry__c>();
-                        list<Journal_Entry__c> jeListNotSentToBaan = new list<Journal_Entry__c>();
-                        
-                        for(Journal_Entry__c je : assetIdToJournalEntryMap.get(a.id)){
+	        
+	                        journalEntriesToUpsert.add(newJE);
+	  
+	                	}else{
+		
+	                        list<Journal_Entry__c> jeListSentToBaan = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeListNotSentToBaan = new list<Journal_Entry__c>();
+	                        
+	                        list<Journal_Entry__c> jeInventoryWriteOffList = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeInventoryReceivedList = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeServiceMaterialReturnedList = new list<Journal_Entry__c>();
+		                    
+		                    list<Journal_Entry__c> jeInventoryWriteOffListSentToBaan = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeInventoryReceivedListSentToBaan = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeServiceMaterialReturnedListSentToBaan = new list<Journal_Entry__c>();
+	                        
+	                        for(Journal_Entry__c je : assetIdToJournalEntryMap.get(a.id)){
                             if(je.Sent_to_BaanERP__c == true){
                                 jeListSentToBaan.add(je);
+                                if(je.Type__c == 'Inventory Write-Off'){
+                                	jeInventoryWriteOffListSentToBaan.add(je);
+                                }
+                                if(je.Type__c.contains('Inventory Received')){
+                                	jeInventoryReceivedListSentToBaan.add(je);
+                                }
+                                if(je.Type__c.contains('Service Material Returned')){
+                                	jeServiceMaterialReturnedListSentToBaan.add(je);
+                                }
                             }else if(je.Sent_to_BaanERP__c == false){
                                 jeListNotSentToBaan.add(je);
+                                if(je.Type__c == 'Inventory Write-Off'){
+                                	jeInventoryWriteOffList.add(je);
+                                }
+                                if(je.Type__c.contains('Inventory Received')){
+                                	jeInventoryReceivedList.add(je);
+                                }
+                                if(je.Type__c.contains('Service Material Returned')){
+                                	jeServiceMaterialReturnedList.add(je);
+                                }
                             }   
                         }
-              
-                        system.debug('ads jeListSentToBaan: ' + jeListSentToBaan);
-                        system.debug('ads jeListNotSentToBaan: ' + jeListNotSentToBaan);
-                        
-                        // More than 1 JE not sent to BAAN ERROR OUT
-                        if(jeListNotSentToBaan.size() > 1){
-                            mapNew.get(a.id).addError(RMS_errorMessages.MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED, FALSE);
-                        } 
-                        
-                        // All but 1 JE sent to BAAN then update that existing journal entry. The amount should be equal to --- 'Old Journal Entry->Amount + ( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
-                        else if(jeListNotSentToBaan.size() == 1){
-                            Journal_Entry__c je = jeListNotSentToBaan[0];
-                           	
-                           	String oldTypeCreditAccountNumber = jeTypeToFTCreditNumber.get(je.Type__c);
-							String oldTypeDebitAccountNumber = jeTypeToFTDebitNumber.get(je.Type__c);
-                           
-                            je.Date__c = Datetime.Now();
-                            je.Asset__c = a.id;
-                            je.Order__c = a.Sold_Order__c;
-                            je.Customer__c = a.Sold_Order__r.BillToContactId;
-							
-							if(assetType == 'InventoryReceived'){
+	              
+	                        system.debug('ads jeListSentToBaan: ' + jeListSentToBaan);
+	                        system.debug('ads jeListNotSentToBaan: ' + jeListNotSentToBaan);
+	                        
+	                        // More than 1 JE not sent to BAAN ERROR OUT
+	                        if(jeInventoryWriteOffList.size() > 1 || jeInventoryReceivedList.size() > 1 || jeServiceMaterialReturnedList.size() > 1){
+	                            mapNew.get(a.id).addError(RMS_errorMessages.MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED, FALSE);
+	                        } 
+	                        
+	                        // All but 1 JE sent to BAAN then update that existing journal entry. The amount should be equal to --- 'Old Journal Entry->Amount + ( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
+	                        else if((jeInventoryWriteOffList.size() == 1 && assetType == 'InventoryWriteOff') || 
+			                        (jeInventoryReceivedList.size() == 1 && assetType == 'InventoryReceived') || 
+			                        (jeServiceMaterialReturnedList.size() == 1 && assetType == 'VendorCredit')){
+	                            
+	                            Journal_Entry__c je = new Journal_Entry__c();
+	                            if(assetType == 'InventoryReceived'){
+	                            	je = jeInventoryReceivedList[0];
+	                            }else if(assetType == 'VendorCredit'){
+	                            	je = jeServiceMaterialReturnedList[0];
+	                            }else if(assetType == 'InventoryWriteOff'){
+	                           		je = jeInventoryWriteOffList[0];
+	                            }
+	                            
+	                                                  	
+	                           	String oldTypeCreditAccountNumber = jeTypeToFTCreditNumber.get(je.Type__c);
+								String oldTypeDebitAccountNumber = jeTypeToFTDebitNumber.get(je.Type__c);
+	                           
+	                            je.Date__c = Datetime.Now();
+	                            je.Asset__c = a.id;
+	                            je.Order__c = a.Sold_Order__c;
+	                            je.Customer__c = a.Sold_Order__r.BillToContactId;
+								
+								if(assetType == 'InventoryReceived'){
+		
+		                            je.Type__c = jeType;
+		                            if(jeServiceMaterialReturnedListSentToBaan.size() == 0){
+		                            	if((mapNew.get(a.id).Unit_Wholesale_Cost__c == null ||mapNew.get(a.id).Unit_Wholesale_Cost__c == 0) || (newQuantity == null || newQuantity == 0)){
+		                            		journalEntriesToDelete.add(je);
+		                            	}else{
+				                            je.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+				                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
+				                            je.Credit_General_Ledger_Account__c = creditAccountNumber;
+		                            	}
+		                            }else{
+		                            	
+		                            	//CHECKING IF JE.AMOUNT SHOULD BE CALCULATED AS A NEGITIVE AMOUNT 
+		                            	system.debug('ads je.Debit_General_Ledger_Account__c: '+je.Debit_General_Ledger_Account__c);
+		                            	system.debug('ads je.Credit_General_Ledger_Account__c: '+je.Credit_General_Ledger_Account__c);
+		                        
+		                            	if(	je.Debit_General_Ledger_Account__c == oldTypeCreditAccountNumber && 
+		                            		je.Credit_General_Ledger_Account__c == oldTypeDebitAccountNumber){
+		                            			system.debug('ads changing to negative amount: '+je.Amount__c);
+		                            			je.Amount__c = je.Amount__c*-1;
+		                            	} 
+		                            	
+		                                system.debug('ads mapNew.get(a.id).Unit_Wholesale_Cost__c: ' +mapNew.get(a.id).Unit_Wholesale_Cost__c);
+		                                system.debug('ads newQuantity: ' +newQuantity);
+		                            	
+		                            	if((mapNew.get(a.id).Unit_Wholesale_Cost__c == null ||mapNew.get(a.id).Unit_Wholesale_Cost__c == 0) || (newQuantity == null || newQuantity == 0)){
+		                            		journalEntriesToDelete.add(je);
+		                            	}else if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) > 0){
+		                                    je.Amount__c = je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
+		                                    je.Debit_General_Ledger_Account__c = debitAccountNumber;
+		                           			je.Credit_General_Ledger_Account__c = creditAccountNumber;
+		                                }else if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) == 0){
+		                                	journalEntriesToDelete.add(je);
+		                                }else{
+		                                	je.Amount__c = Math.abs(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c));
+		                                    je.Debit_General_Ledger_Account__c = creditAccountNumber;
+		                           			je.Credit_General_Ledger_Account__c = debitAccountNumber;
+		                            
+		                                }   
+		                            }
+								}
+								
+								else if(assetType == 'VendorCredit'){
+									je.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
+		
+									if(jeListSentToBaan.size() == 0){
+										je.Amount__c = je.Amount__c + (newVendorCredit - oldVendorCredit);
+			                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
+			                            je.Credit_General_Ledger_Account__c = creditAccountNumber;
+		                            }else{
+		                            	
+		                            	//CHECKING IF JE.AMOUNT SHOULD BE CALCULATED AS A NEGITIVE AMOUNT 
+		                            	system.debug('ads je.Debit_General_Ledger_Account__c: '+je.Debit_General_Ledger_Account__c);
+		                            	system.debug('ads je.Credit_General_Ledger_Account__c: '+je.Credit_General_Ledger_Account__c);
+		                        
+		                            	if(	je.Debit_General_Ledger_Account__c == oldTypeCreditAccountNumber && 
+		                            		je.Credit_General_Ledger_Account__c == oldTypeDebitAccountNumber){
+		                            			system.debug('ads changing to negative amount: '+je.Amount__c);
+		                            			je.Amount__c = je.Amount__c*-1;
+		                            	}
+		   
+		                                if(je.Amount__c + (newVendorCredit-oldVendorCredit)  > 0){
+		                                    je.Amount__c = je.Amount__c + (newVendorCredit-oldVendorCredit);
+		                                    je.Debit_General_Ledger_Account__c = debitAccountNumber;
+		                           			je.Credit_General_Ledger_Account__c = creditAccountNumber;
+		                            
+		                                }else if(je.Amount__c + (newVendorCredit-oldVendorCredit) == 0){
+		                                	journalEntriesToDelete.add(je);
+		                                }else{
+		                                	je.Amount__c = Math.abs(je.Amount__c + (newVendorCredit-oldVendorCredit));
+		                                    je.Debit_General_Ledger_Account__c = creditAccountNumber;
+		                           			je.Credit_General_Ledger_Account__c = debitAccountNumber;
+		                            
+		                                }
+								
+									}
+								}
+								
 	
-	                            je.Type__c = jeType;
-	                            if(jeListSentToBaan.size() == 0){
-		                            je.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+								else if(assetType == 'InventoryWriteOff'){
+									je.Type__c = jeType;
 		                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
 		                            je.Credit_General_Ledger_Account__c = creditAccountNumber;
-	                            }else{
-	                            	
-	                            	//CHECKING IF JE.AMOUNT SHOULD BE CALCULATED AS A NEGITIVE AMOUNT 
-	                            	system.debug('ads je.Debit_General_Ledger_Account__c: '+je.Debit_General_Ledger_Account__c);
-	                            	system.debug('ads je.Credit_General_Ledger_Account__c: '+je.Credit_General_Ledger_Account__c);
-	                        
-	                            	
-	                            	if(	je.Debit_General_Ledger_Account__c == oldTypeCreditAccountNumber && 
-	                            		je.Credit_General_Ledger_Account__c == oldTypeDebitAccountNumber){
-	                            			system.debug('ads changing to negative amount: '+je.Amount__c);
-	                            			je.Amount__c = je.Amount__c*-1;
-	                            	}
-	                            	
-	                            	
-	                                if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) > 0){
-	                                    je.Amount__c = je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
-	                                    je.Debit_General_Ledger_Account__c = debitAccountNumber;
-	                           			je.Credit_General_Ledger_Account__c = creditAccountNumber;
-	                            
-	                                }else if(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c) == 0){
-	                                	journalEntriesToDelete.add(je);
-	                                }else{
-	                                	je.Amount__c = Math.abs(je.Amount__c + ((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c));
-	                                    je.Debit_General_Ledger_Account__c = creditAccountNumber;
-	                           			je.Credit_General_Ledger_Account__c = debitAccountNumber;
-	                            
-	                                }   
-	                            }
-							}
-							else if(assetType == 'InventoryWriteOff'){
-								je.Type__c = jeType;
-	                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
-	                            je.Credit_General_Ledger_Account__c = creditAccountNumber;
-								je.Amount__c = (jeListNotSentToBaan[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
-								
-								if(je.Amount__c < 0){
-	                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
-	                          	}   
-								
-								if(je.Amount__c == 0){
-									journalEntriesToDelete.add(je);
-								}
-							} 
-
-                            journalEntriesToUpsert.add(je);
-                        }
-                        
-                        // All related JE sent to BAAN
-                        //then create a new journal entry IF the quantity has changed. The amount should be equal to --- '( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
-                        else if(jeListNotSentToBaan.size() == 0){
-                        	system.debug('ads old Quantity: '+oldQuantity);
-                            if(oldQuantity != newQuantity || oldQuantityWrittenOff != newQuantityWrittenOff){
-                                Journal_Entry__c newJE = new Journal_Entry__c( );
-        						newJE.Date__c = Datetime.Now();
-	                            newJE.Asset__c = a.id;
-	                            newJE.Order__c = a.Sold_Order__c;
-	                            newJE.Customer__c = a.Sold_Order__r.BillToContactId;
-	        						
-								if(assetType == 'InventoryReceived'){
-		                            newJE.Type__c = jeType;
-		                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
-		                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
-		                            
-		                       		if(newQuantity > oldQuantity){
-                                    	newJE.Amount__c = (newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c;
-                                    	newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
-		                            	newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
-		                            
-	                                }else if (newQuantity < oldQuantity){
-	                                    newJE.Amount__c = Math.abs((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
-                                    	newJE.Debit_General_Ledger_Account__c = creditAccountNumber; 
-		                            	newJE.Credit_General_Ledger_Account__c = debitAccountNumber;  
-	                                }
-		                     
-								}else if(assetType == 'InventoryWriteOff'){
-									newJE.Type__c = jeType;
-		                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
-		                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
-									newJE.Amount__c = (mapNew.get(a.id).Quantity_Written_Off__c - mapOld.get(a.id).Quantity_Written_Off__c) * a.Unit_Wholesale_Cost__c;
-								
-	                                //CHECK THAT WOULD NOT RESULT IN NEGATIVE FINACNCIAL TRANSACTION
-									if(newJE.Amount__c < 0){
+		                            if(newQuantityWrittenOff - oldQuantityWrittenOff == 0){
+			                            	je.Amount__c = a.Quantity_Written_Off__c * a.Unit_Wholesale_Cost__c;
+			                            }else{
+											je.Amount__c = (jeInventoryWriteOffList[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
+		                            	}
+									if(je.Amount__c < 0){
 		                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
-		                          	}
-								}
-        				 
-                                
-                               
-                                journalEntriesToUpsert.add(newJE);  
-                            }
-                        }
-  
-                }//end of if there is atleast one related journal entery
+		                          	}   
+									
+									if(je.Amount__c == 0){
+										journalEntriesToDelete.add(je);
+									}
+								} 
+	
+	                            journalEntriesToUpsert.add(je);
+	                        }
+	                        
+	                        // All related JE sent to BAAN
+	                        //then create a new journal entry IF the quantity has changed. The amount should be equal to --- '( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
+	                        else{
+	                        	system.debug('ads old Quantity: '+oldQuantity);
+	                            if(oldQuantity != newQuantity || oldQuantityWrittenOff != newQuantityWrittenOff || oldVendorCredit != newVendorCredit){
+	                                Journal_Entry__c newJE = new Journal_Entry__c( );
+	        						newJE.Date__c = Datetime.Now();
+		                            newJE.Asset__c = a.id;
+		                            newJE.Order__c = a.Sold_Order__c;
+		                            newJE.Customer__c = a.Sold_Order__r.BillToContactId;
+		                            newJE.Type__c = jeType;
+		        						
+									if(assetType == 'InventoryReceived'){
+			                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
+			                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+			                            
+			                       		if(newQuantity > oldQuantity){
+	                                    	newJE.Amount__c = (newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c;
+	                                    	newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
+			                            	newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+			                            
+		                                }else if (newQuantity < oldQuantity){
+		                                    newJE.Amount__c = Math.abs((newQuantity-oldQuantity) * a.Unit_Wholesale_Cost__c);
+	                                    	newJE.Debit_General_Ledger_Account__c = creditAccountNumber; 
+			                            	newJE.Credit_General_Ledger_Account__c = debitAccountNumber;  
+		                                }
+			                     
+									}
+									else if(assetType == 'VendorCredit'){
+										newJE.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
+				
+										if(newVendorCredit > oldVendorCredit){
+	                                    	newJE.Amount__c = newVendorCredit-oldVendorCredit;
+	                                    	newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
+			                            	newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+			                            
+		                                }else if (newVendorCredit < oldVendorCredit){
+		                                    newJE.Amount__c = Math.abs(newVendorCredit-oldVendorCredit);
+	                                    	newJE.Debit_General_Ledger_Account__c = creditAccountNumber; 
+			                            	newJE.Credit_General_Ledger_Account__c = debitAccountNumber;  
+		                                }
+									}
+								else if(assetType == 'InventoryWriteOff'){
+			                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
+			                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+										newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
+		                                //CHECK THAT WOULD NOT RESULT IN NEGATIVE FINACNCIAL TRANSACTION
+										if(newJE.Amount__c < 0){
+			                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
+			                          	}
+									}
+	        				 
+	                                
+	                               
+	                                journalEntriesToUpsert.add(newJE);  
+	                            }
+	                        }//end of for loop
+	  					
+	                }//end of if there is atleast one related journal entery
+                }
             }else{
                 //there is an error message
                 mapNew.get(a.id).addError(errorMessage, FALSE);
             }
+            
+            
+            
+        	
         }//END OF ASSET FOR LOOP
         system.debug('ads journalEntriesToUpsert: '+journalEntriesToUpsert);
         upsert journalEntriesToUpsert;
@@ -895,7 +1094,25 @@ public with sharing class RMS_financialTransactionManager {
         	delete journalEntriesToDelete;
         }
     }//END createOrUpdateJournalEntryAsset Method
-
+	
+	
+	public class wrapAssetVariable{
+				    	String assetType{get;set;}
+				    	String jeType{get;set;} 
+				    	String creditAccountNumber{get;set;} 
+				    	String debitAccountNumber{get;set;}
+	
+	public wrapAssetVariable(	String assetTypeX, 
+   								String jeTypeX, 
+						   		String creditAccountNumberX, 
+						   		String debitAccountNumberX){
+			
+			assetType = assetTypeX; 
+			jeType = jeTypeX;
+			creditAccountNumber = creditAccountNumberX; 
+			debitAccountNumber  = debitAccountNumberX;
+		}
+	}
 
 
     /***************************************************
@@ -1083,7 +1300,7 @@ public with sharing class RMS_financialTransactionManager {
                                     }
                                 }
                             }
-                            //does not have related JE records of type Revenue Recived labor
+                            //does not have related JE records of type Revenue Received labor
                             if(alreadyHasJEofTypeRevRecLabor == false && relatedExternalLaborJE.size() > 0){
                                 for(Journal_Entry__c je : relatedExternalLaborJE){
                                     errorMessage = checkOrderJEForErrors(je, errorMessage, 'internalLabor');
@@ -1109,7 +1326,7 @@ public with sharing class RMS_financialTransactionManager {
                                 }//END relatedDespoitJE LOOP
 
                             }
-                            //has records Revenue Recived labor
+                            //has records Revenue Received labor
                             else if(alreadyHasJEofTypeRevRecLabor == true && relatedRevRecognizedRefundDepositJE.size() > 0){
                                 for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
                                     if(je.Sent_to_BaanERP__c == true){
@@ -1119,7 +1336,7 @@ public with sharing class RMS_financialTransactionManager {
                                 }
                             }
                             
-                            //does not have related JE records of type Revenue Recived labor
+                            //does not have related JE records of type Revenue Received labor
                             if(alreadyHasJEofTypeRevRecInternalLabor == false && relatedInternalLaborJE.size() > 0){
                                 for(Journal_Entry__c je : relatedExternalLaborJE){
                                     errorMessage = checkOrderJEForErrors(je, errorMessage, 'labor');
@@ -1146,7 +1363,7 @@ public with sharing class RMS_financialTransactionManager {
                                 }//END relatedDespoitJE LOOP
 
                             }
-                            //has records Revenue Recived labor
+                            //has records Revenue Received labor
                             else if(alreadyHasJEofTypeRevRecLabor == true && relatedRevRecognizedRefundDepositJE.size() > 0){
                                 for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
                                     if(je.Sent_to_BaanERP__c == true){
@@ -1647,20 +1864,6 @@ public with sharing class RMS_financialTransactionManager {
     }   
     
 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
     /***************************************************
      Method to link object Id to a list of Journal_Entry__c
     ****************************************************/
@@ -1903,7 +2106,7 @@ public with sharing class RMS_financialTransactionManager {
     /***************************************************
      Method to run error checks against the Asset Object
     ****************************************************/
-    public String checkAssetForErrors(Asset asset, string errorMessage){
+    public String checkAssetForErrors(Asset asset, string errorMessage, string assetSubType, boolean vendorCreditAT){
         String dynamicErrorMessage;
         //If the Asset Id, Order, Unit Wholesale Cost, Quantity, Customer Id 
 
@@ -1923,8 +2126,8 @@ public with sharing class RMS_financialTransactionManager {
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Quantity');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
-        if(asset.Quantity == 0){
-            dynamicErrorMessage = RMS_errorMessages.QUANTITY_IS_ZERO;
+        if(asset.Quantity < 0){
+            dynamicErrorMessage = RMS_errorMessages.QUANTITY_IS_LESS_THAN_ZERO;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
         // Turned this off temporarily. Not sure if we need to do this check or not
@@ -1935,6 +2138,11 @@ public with sharing class RMS_financialTransactionManager {
         }*/
         if(asset.Sold_Order__r.Store_Location__c == null){
             dynamicErrorMessage = RMS_errorMessages.STORE_LOCATION_ON_ORDER_NULL;
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        }
+        
+        if(vendorCreditAT == true && asset.Vendor__r.Baan_Business_Partner_Number__c == null){
+        	dynamicErrorMessage = RMS_errorMessages.VENDOR_HAS_NO_BAAN_NUMBER;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
 

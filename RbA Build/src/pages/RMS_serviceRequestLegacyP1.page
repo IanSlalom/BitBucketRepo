@@ -52,11 +52,19 @@
             
             <apex:pageBlockSection id="out1">
                 <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
-                    <apex:outputLabel value="Save Reason" for="saveReason"></apex:outputLabel>
+                    <apex:outputLabel value="Primary Save Reason" for="saveReason"></apex:outputLabel>
                     <apex:outputPanel layout="block" styleClass="requiredInput">
                         <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                        <apex:inputField value="{!Order.Save_Reason__c}" id="saveReason" style="width: 150px;"/> 
+                        <apex:inputField value="{!Order.Save_Reason__c}" id="saveReason" style="width: 200px;"/> 
                     </apex:outputPanel>                   
+                </apex:pageBlockSectionItem>
+                <apex:pageblockSectionItem ></apex:pageblockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                <apex:outputLabel value="Secondary Save Reason" for="saveReason2"></apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                    <apex:inputField value="{!Order.Secondary_Save_Reason__c}" id="saveReason2" style="width: 250px;"/>
+                    </apex:outputPanel>        
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
             
@@ -64,9 +72,9 @@
                 <apex:inputField value="{!Order.BillToContactId}"/>
                 <apex:outputField value="{!Order.OwnerId}"/>      
                 <apex:inputField value="{!Order.Service_initiated_By__c}" style="width: 150px;"/>                
-                <apex:outputField value="{!Order.Account.Name}"/>
-                <apex:inputField value="{!Order.Description}" label="Problem Description" style="width: 288px; height: 118px;"/>
-                <apex:outputField value="{!Order.Sold_Order__c}"/>                                                
+                <apex:outputField value="{!Order.Account.Name}"/>                
+                <apex:inputField value="{!Order.Description}" label="Problem Description" style="width: 288px; height: 118px;"/>                                                                
+                <apex:outputField value="{!Order.Sold_Order__c}"/>
             </apex:pageBlockSection>
             
             <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">

@@ -45,10 +45,6 @@
                 <behavior>Required</behavior>
                 <field>Reason__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Scheduled_Date_Time__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

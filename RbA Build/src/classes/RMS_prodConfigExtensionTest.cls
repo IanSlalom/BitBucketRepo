@@ -381,8 +381,8 @@ private class RMS_prodConfigExtensionTest {
 		System.AssertEquals(3, screenTypeItems.size());
 
 		// Verify the screenVeneerTypeItems
-		List<SelectOption> screenVeneerTypeItems = ext.screenVeneerTypeItems;
-		System.AssertEquals(3, screenVeneerTypeItems.size());
+//		List<SelectOption> screenVeneerTypeItems = ext.screenVeneerTypeItems;
+//		System.AssertEquals(3, screenVeneerTypeItems.size());
 
 		// Verify the sillAngleItems
 		List<SelectOption> sillAngleItems = ext.sillAngleItems;

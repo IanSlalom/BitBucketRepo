@@ -11,7 +11,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'AccountId','PriceBook2Id'});           
+            stdController.addFields(new List<String>{'AccountId','PriceBook2Id','Service_Type__c'});           
         }
         
         this.o = (Order)stdController.getRecord();
@@ -26,6 +26,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                                         FROM Asset 
                                         WHERE AccountId = :aid];
         num_assets = (Integer) results2[0].get('expr0');
+        
+        propPickValSelected = o.Service_Type__c;
         
         
         listOI=new list<OrderItem>();
@@ -134,6 +136,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             o.Pricebook2Id = standardPriceBookId;
             o.Store_Location__c = slid;                              
             o.RecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+            o.Status = 'Product Ordered';
             upsert o;
             
             PageReference newPage;
@@ -167,7 +170,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
         for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
                              FROM Order 
-                             WHERE ActivatedDate != null 
+                             WHERE Status NOT IN('Draft', 'Tech Measure Needed', 'Tech Measure Scheduled', 'Ready to Order', 'Order Released', 'Install Needed')
                              AND RecordTypeId = :rt 
                              AND AccountId = :o.AccountId 
                              ORDER BY Order.OrderNumber DESC]) { 

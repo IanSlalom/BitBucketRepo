@@ -599,7 +599,7 @@ public class RMS_prodConfigExtension {
 	} 
 
 	/******* Screen Veneer Type Items  *****************/
-	private static transient List<SelectOption> lScreenVeneerTypeItems;
+/*	private static transient List<SelectOption> lScreenVeneerTypeItems;
 	public List<SelectOption> screenVeneerTypeItems{
 		get
 		{   
@@ -608,7 +608,7 @@ public class RMS_prodConfigExtension {
 			}
 			return lScreenVeneerTypeItems;
 		}
-	}
+	}*/
 
 	/******* Sill Angle Items  *****************/
 	private static transient List<SelectOption> lSillAngleItems;

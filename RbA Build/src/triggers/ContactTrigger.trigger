@@ -1,23 +1,25 @@
 /*******************************************************//**
 
-@trigger EventTrigger
+@trigger ContactTrigger
 
 @brief  trigger framework to secure order of operation
 
 @author  Brianne Wilson (Slalom.BLW)
 
-@version    2016-3/21  Slalom.BLW
+@version    2016-04/04  Slalom.BLW
     Created.
 
+@see        ContactTriggerTest
 
 @copyright  (c)2016 Slalom.  All Rights Reserved.
             Unauthorized use is prohibited.
 
 ***********************************************************/
 
-trigger EventTrigger on Event (after delete, after insert, after undelete, 
-                                    after update, before delete, before insert, before update) {
-//GET ALL RMS SETTINGS CUSTOM SETTINGS
+trigger ContactTrigger on Contact (before insert, before update, before delete, 
+                                            after insert, after undelete, after update, after delete) {
+    
+    //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     
     //CHECK IF DATA LOADING PROFILE 
@@ -31,57 +33,59 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
-        //HANDLERS AND MANAGERS        
-        List<SObject> wkorders = new List<SObject>();
-        RMS_populateResourceonEventManager populateResourceonEventManager = new RMS_populateResourceonEventManager();
-            
+        //HANDLERS AND MANAGERS
+        RMS_createContactHistoryManager contactHistoryCreationManager = new RMS_createContactHistoryManager();
+           
         // Before Insert
-        
+        /*
         if(Trigger.isInsert && Trigger.isBefore){
-            populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            handler.OnBeforeInsert(Trigger.new);
         }
-        
+        */
         //  Before Update
         
+        /*
         if(Trigger.isUpdate && Trigger.isBefore){
-            populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);    
-        }
-         
-
-        // Before Delete
-        //else  
-        if(Trigger.isDelete && Trigger.isBefore){
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        }
-
-        // After Insert
-        else if(Trigger.isInsert && Trigger.isAfter){
             
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            
+        }
+         */ 
+    
+        // Before Delete
+        /*
+        else if(Trigger.isDelete && Trigger.isBefore){
+            handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
+        }
+        */
+        
+        // After Insert 
+        if(Trigger.isInsert && Trigger.isAfter){
+            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new, Trigger.newMap);
+            
         } 
-         
+        
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
-            
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            contactHistoryCreationManager.createContactHistoryonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+                         
         }
-        
                     
         //After Delete
-        
+        /*
         else if(Trigger.isDelete && Trigger.isAfter){
-            
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+            handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
+                         
         }
-        
+        */
         
         // After Undelete 
         /*
         else if(Trigger.isUnDelete){
-            
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            handler.OnUndelete(Trigger.new);
+                         
         }
         */
-        update wkorders;
+        
+       
     }
 }
