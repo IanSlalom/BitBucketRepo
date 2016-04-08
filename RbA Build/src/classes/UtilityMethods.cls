@@ -313,4 +313,34 @@ public with sharing class UtilityMethods {
 		return itemsToReturn;
 
 	}
+	
+	/*******************************************************
+          check for recursive triggers
+	*******************************************************/
+
+	/*******************************************************
+			TriggerRan functionality
+
+	Static variables and methods used from several triggers/classes
+	to track whether a trigger has already ran
+	*******************************************************/
+
+	private static boolean alreadyRanOrderTrigger = false;
+
+	public static boolean hasOrderTriggerRan()
+	{
+		return alreadyRanOrderTrigger;
+	}
+
+	public static void setOrderTriggerRan()
+	{
+		alreadyRanOrderTrigger = true;
+	}
+
+	public static void unsetOrderTriggerRan()
+	{
+		alreadyRanOrderTrigger = false;
+	}
+
+	
 }

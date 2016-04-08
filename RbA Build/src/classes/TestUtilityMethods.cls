@@ -80,7 +80,8 @@ public with sharing class TestUtilityMethods {
         	Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-        	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id
+        	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
+        	Location_Number__c = '777'
         	
         	);
     	insert storeConfig;

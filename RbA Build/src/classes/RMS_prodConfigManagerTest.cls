@@ -580,7 +580,6 @@ private class RMS_prodConfigManagerTest {
 	*******************************************************/
 	static testmethod void checkMakeabilityEJConfigTest(){
 		
-
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
@@ -686,6 +685,7 @@ private class RMS_prodConfigManagerTest {
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_REQUIRED));
 
+		test.starttest();
 		soldOrderItem.Lites_High_S1__c = 1;
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_REQUIRED));
@@ -711,6 +711,7 @@ private class RMS_prodConfigManagerTest {
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_DISABLED));
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_WIDE_DISABLED));
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_STYLE_DISABLED));
+		test.stoptest();
 	
 	}
 
@@ -760,6 +761,7 @@ private class RMS_prodConfigManagerTest {
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_SPOKES));
 
+		test.starttest();
 		soldOrderItem.Spokes__c = '1';
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_SPOKES));
@@ -774,6 +776,7 @@ private class RMS_prodConfigManagerTest {
 
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 		System.assert(!returnMessage.contains(RMS_errorMessages.GRILLE_LITES));
+		test.stoptest();
 	
 	}
 

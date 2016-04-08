@@ -124,7 +124,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension customController  = new RMS_prodConfigExtension(stdController);
 				
 	
-		OrderItem oi2 = [SELECT Id, Specialty_Shape__c, PricebookentryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi2 = [SELECT Id, Specialty_Shape__c, PricebookentryId, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef2 = Page.RMS_prodConfigEdit;
@@ -153,7 +153,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id, Specialty_Shape__c, priceBookEntryId from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, Specialty_Shape__c, priceBookEntryId, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -222,7 +222,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 		Product_Configuration__c prodConfig = [SELECT Id from Product_Configuration__c where Name = 'Product Config'];
 		prodConfig.Measurement_Fractions__c = '1/2;3/4';
 		prodConfig.Exterior_Color__c = 'White; Red';
@@ -381,8 +381,8 @@ private class RMS_prodConfigExtensionTest {
 		System.AssertEquals(3, screenTypeItems.size());
 
 		// Verify the screenVeneerTypeItems
-		List<SelectOption> screenVeneerTypeItems = ext.screenVeneerTypeItems;
-		System.AssertEquals(3, screenVeneerTypeItems.size());
+//		List<SelectOption> screenVeneerTypeItems = ext.screenVeneerTypeItems;
+//		System.AssertEquals(3, screenVeneerTypeItems.size());
 
 		// Verify the sillAngleItems
 		List<SelectOption> sillAngleItems = ext.sillAngleItems;
@@ -495,7 +495,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -562,7 +562,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id, PricebookEntryId, Specialty_Shape__c, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
@@ -584,7 +584,7 @@ private class RMS_prodConfigExtensionTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Id priceBookId = Test.getStandardPricebookId();
 	
-		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi = [SELECT Id,PricebookEntryId, Specialty_Shape__c, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
 		Product_Configuration__c prodConfig = [SELECT Id from Product_Configuration__c where Name = 'Product Config'];
 		prodConfig.Measurement_Fractions__c = '1/2;3/4';
 		prodConfig.Exterior_Color__c = 'White; Red';

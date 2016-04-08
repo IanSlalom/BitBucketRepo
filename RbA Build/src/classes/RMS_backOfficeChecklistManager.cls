@@ -80,10 +80,12 @@ public with sharing class RMS_backOfficeChecklistManager {
 				    		checksToAdd.add(boc);
 			    		}	
 			    	}
-					insert checksToAdd;
+//					insert checksToAdd;
 		    	}
 			}
 		}
+		insert checksToAdd;
+
 	}//END OF createBackOfficeChecksOnOrderCreation METHOD
 	
 	
