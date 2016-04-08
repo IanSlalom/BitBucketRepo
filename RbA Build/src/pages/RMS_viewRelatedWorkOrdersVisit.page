@@ -1,22 +1,22 @@
 <apex:page standardController="Order" extensions="RMS_viewRelatedWorkOrdersController" standardStylesheets="false" >
-	<!-- VISIT -->
-	<!-- //TODO: Change to component along with Actions page -->
-	<apex:includeScript value="/support/console/28.0/integration.js"/>
+    <!-- VISIT -->
+    <!-- //TODO: Change to component along with Actions page -->
+    <apex:includeScript value="/support/console/28.0/integration.js"/>
 
-	<apex:includeScript value="{!$Resource.jquery}" />
-	
-	<apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
-	<apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>
-	 
-	<script type="text/javascript">
-	    $(document).ready(function(){
-	  		$("table").tablesorter(); 
-	  		
-	    }); 
-	</script>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>
+     
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("table").tablesorter(); 
+            
+        }); 
+    </script>
 
-	<script type="text/javascript">
-		var theURL;
+    <script type="text/javascript">
+        var theURL;
         var tabName;
         var primaryTabId;
         
@@ -28,27 +28,27 @@
             theURL = '';
             tabName= '';
         };
-		function openSubtab(urlPart, theTabName) {
-        	if(sforce.console.isInConsole()){
-	        	theURL = urlPart;
-	        	tabName = theTabName;
-	            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
-        	}else{
-        		top.location.href = '/'+urlPart;
-       		}
+        function openSubtab(urlPart, theTabName) {
+            if(sforce.console.isInConsole()){
+                theURL = urlPart;
+                tabName = theTabName;
+                sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+            }else{
+                top.location.href = '/'+urlPart;
+            }
         }
         
         
-		var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
-	        sforce.console.openConsoleUrl(result.id, 
-	        result.consoleUrl, 
-	        true 
-	       // (optional)tabLabels:String, 
-	       // (optional)tabNames:String, 
-	       // (optional)callback:Function
-	        );
-	        
-		};
+        var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+            sforce.console.openConsoleUrl(result.id, 
+            result.consoleUrl, 
+            true 
+           // (optional)tabLabels:String, 
+           // (optional)tabNames:String, 
+           // (optional)callback:Function
+            );
+            
+        };
        
         function displayResult(result) {
              if (result.success) {
@@ -59,52 +59,52 @@
         }
         
         function callGenerateConsoleURL(urlPart, theTabName) {
-        	if(sforce.console.isInConsole()) {
-	        	tabName = theTabName;
-	        	var orderURL = '/'+'{!Order.Id}';
-	        	sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
-        	}else{
-        		top.location.href = '{!baseUrl}'+urlPart;
-        	
-        	}       
+            if(sforce.console.isInConsole()) {
+                tabName = theTabName;
+                var orderURL = '/'+'{!Order.Id}';
+                sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+            }else{
+                top.location.href = '{!baseUrl}'+urlPart;
+            
+            }       
         }
         
         
-	</script>
+    </script>
 
 
-	<style>
-		.dataCell{
-			border-style: solid !important;
-		    border-width: 1px !important;
-	    } 
-	    .bigandgreen{
-	    	font-size: 16px;
-	    	color: Black !important;
-	    	font-weight: bold; 
-	    }     
-	     
-	</style>
-	
-	<apex:pageBlock >
-	<!-- <apex:form rendered="{!IF(Order.Status == 'Draft','false', 'true')}"> -->
-	<apex:form rendered="{!IF(displayButtonsOnPage == true,'true', 'false')}">
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
-	</apex:form>
-		
-		<apex:pageBlockTable id="workOrderTable" title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
-			<apex:column headerValue="">  
-				<a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
-			</apex:column>
-	        <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
-	        <apex:column value="{!wo.Work_Order_Scheduling_Status__c}"/>
-	        <apex:column value="{!wo.Scheduled_Date_Time__c}"/>
-	        <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
-		</apex:pageBlockTable>
-		
-		
-	</apex:pageBlock>  
+    <style>
+        .dataCell{
+            border-style: solid !important;
+            border-width: 1px !important;
+        } 
+        .bigandgreen{
+            font-size: 16px;
+            color: Black !important;
+            font-weight: bold; 
+        }     
+         
+    </style>
+    
+    <apex:pageBlock >
+    <!-- <apex:form rendered="{!IF(Order.Status == 'Draft','false', 'true')}"> -->
+    <apex:form rendered="{!IF(displayButtonsOnPage == true,'true', 'false')}">
+        <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
+    </apex:form>
+        
+        <apex:pageBlockTable id="workOrderTable" title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">
+            <apex:column headerValue="">  
+                <a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
+            </apex:column>
+            <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
+            <apex:column value="{!wo.Work_Order_Scheduling_Status__c}"/>
+            <apex:column value="{!wo.Scheduled_Installation_Date__c}"/>
+            <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
+        </apex:pageBlockTable>
+        
+        
+    </apex:pageBlock>  
 
 
-		
+        
 </apex:page>
