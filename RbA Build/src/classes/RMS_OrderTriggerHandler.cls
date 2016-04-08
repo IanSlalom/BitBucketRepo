@@ -64,7 +64,7 @@ public with sharing class RMS_OrderTriggerHandler {
       }else if(o.Status == 'Install Needed' && o.Install_Order_Status__c == 'Scheduled' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Scheduled';
-      }else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Completed' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
+      }else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Complete' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Complete';
       }

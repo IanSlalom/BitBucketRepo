@@ -113,7 +113,7 @@ private class RMS_OrderTriggerHandlerTests {
 			}else if(o.Status == 'Install Needed'){
 				clonedOrder.Install_Order_Status__c = 'Scheduled';
 			}else if(o.Status == 'Install Scheduled'){
-				clonedOrder.Install_Order_Status__c = 'Completed';
+				clonedOrder.Install_Order_Status__c = 'Complete';
 			}
 			newMap.put(o.Id, clonedOrder);
 		}
@@ -129,7 +129,7 @@ private class RMS_OrderTriggerHandlerTests {
 				System.assert(o.Status == 'Ready to Order');
 			}else if(o.Install_Order_Status__c == 'Scheduled'){
 				System.assert(o.Status == 'Install Scheduled');
-			}else if(o.Install_Order_Status__c == 'Completed'){
+			}else if(o.Install_Order_Status__c == 'Complete'){
 				System.assert(o.Status == 'Install Complete');
 			}
 		}
@@ -143,7 +143,7 @@ private class RMS_OrderTriggerHandlerTests {
 			}else if(o.Status == 'Tech Measure Scheduled'){
 				o.Tech_Measure_Status__c = 'Complete';
 			}else if(o.Status == 'Install Scheduled'){
-				o.Install_Order_Status__c = 'Completed';
+				o.Install_Order_Status__c = 'Complete';
 			}
 		}
 		update oldMap.values();
