@@ -286,7 +286,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	*******************************************************/
 	static testmethod void AddProductTest(){
 		createTestRecords();
-
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
@@ -310,6 +309,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController2.newProduct = testProduct.Id;
 		customController2.selectedPricebook = priceBookId;		
 		customController2.addproduct();
+		Test.startTest();
 
 		ApexPages.StandardController stdController3 = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController3  = new RMS_vendorPurchaseOrderController(stdController3);
@@ -332,6 +332,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		testProduct.Account_Number__c = null;
 		update testProduct;
 		customController3.addproduct();
+		Test.stopTest();
 	}
 
 	/*******************************************************

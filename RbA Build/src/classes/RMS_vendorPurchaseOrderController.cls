@@ -357,6 +357,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     receiving = false;
     writeOff = false;
     renderVendorSelection = true;
+    zeroDollarVendor = false;
     system.debug(orderId);
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
