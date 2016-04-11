@@ -233,7 +233,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.UnitPrice = pbe.UnitPrice;
                         oi.OrderId = o.Id;
                         oi.PriceBookEntryId = pbe.id;
-                        oi.Installed_Product_Asset__c = assetId; 
+// Creston commented this out    oi.Installed_Product_Asset__c = assetId; 
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
