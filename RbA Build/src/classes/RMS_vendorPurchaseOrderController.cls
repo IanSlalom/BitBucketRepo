@@ -456,7 +456,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
-                    Order.Store_Location__c, Purchase_Order__c, Remake__c
+                    Order.Store_Location__c, Purchase_Order__c, Remake__c,
+                    Parent_Order_Item__r.Installed_Product_Asset__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
@@ -686,6 +687,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
+        po.Confirmed_Timestamp__c = System.Now();
       }
     }    
     try{
@@ -893,7 +895,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	for (OrderItem oi : itemsToReceive) {
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
-      			productAsset = new Asset(
+      		productAsset = new Asset(
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
@@ -904,8 +906,15 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Sold_Order__c    = oi.OrderId,
                       Store_Location__c = oi.Order.Store_Location__c,
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
-                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
+                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
+                      Vendor__c 		=  selectedVendor,
+                      Original_Order_Product__c = oi.Id
                     );
+      		// If this is a servicepurchaseorder and it's a complete unit
+      		// link the new asset to the original asset
+      		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
+      			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
+      		}
       } 
       else if (oi.Installed_Product_Asset__c != null){
       	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
@@ -1114,7 +1123,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   // Called after the confirmation window is accepted
   public PageReference releasePurchaseOrder() {
     system.debug('*****Status set to released');
-    if(relatedOrder.Status != 'Ready to Order'){
+    if(relatedOrder.Status != 'Ready to Order' && !costPurchaseOrder && !servicePurchaseOrder){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
     }else if(po.Status__c != 'In Progress' && po.Status__c != 'Rejected'){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
