@@ -1,0 +1,21 @@
+<apex:component >
+    <div id="errorModal" class="ma-modal">
+        <div id="errorOverlay" class="ma-modal-overlay" />
+        <div id="errorContent" class="ma-modal-conent">
+        	<div id="error" class="ma-modal-window">
+	        	<div id="errorHeader" class="ma-modal-header">
+	        	    <div class="ma-modal-padding">
+	        		    <h3 class="text-red">ERROR</h3>
+	        		    </div>
+	        		<span id="errorModalClose" class="ma-modal-close" onclick="$('#errorModal').hide();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+	        	</div>
+	        	<div class="ma-modal-body">
+	        	    <div class="ma-modal-padding">
+	        		An error has occurred.  Please contact your local administrator if the issue continues.
+	            	<div id="errorMessage"></div>
+	               </div>
+	            </div>
+            </div>
+        </div>
+    </div>
+</apex:component>

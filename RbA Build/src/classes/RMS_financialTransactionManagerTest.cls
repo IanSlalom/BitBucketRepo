@@ -1,7 +1,7 @@
 @isTest
 public with sharing class RMS_financialTransactionManagerTest {
 
-	static testmethod void positiveCreate(){
+	static testmethod void positiveCreatePayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -28,7 +28,27 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+
+			
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
 		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
+
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
@@ -74,7 +94,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 	}
 	
 	
-	static testmethod void positiveEdit(){
+	static testmethod void positiveEditPayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -101,6 +121,25 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+			
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
@@ -127,7 +166,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 	}
 	
-	static testmethod void positiveDelete(){
+	static testmethod void positiveDeletePayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -155,6 +194,28 @@ public with sharing class RMS_financialTransactionManagerTest {
 								);
 		insert order1;
 		
+				//ADDED		
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
+		//END OF ADDED
+		
+		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
@@ -178,7 +239,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		delete payment1;	
 	}
 	
-	static testmethod void noContact(){
+	static testmethod void noContactPayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -206,6 +267,26 @@ public with sharing class RMS_financialTransactionManagerTest {
 								);
 		insert order1;
 		
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
+		
+	
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
@@ -237,7 +318,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		} 
 	}
 	
-	static testmethod void noFinancialRecordAndTwoFinancialRecords(){
+	static testmethod void noFinancialRecordAndTwoFinancialRecordsPayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -264,6 +345,24 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
@@ -314,7 +413,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		 
 	}
 	
-	static testmethod void noCreditOrDebitNumber(){
+	static testmethod void noCreditOrDebitNumberPayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -341,6 +440,24 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
@@ -387,7 +504,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 	}
 	
-	static testmethod void noPaymentAmount(){
+	static testmethod void noPaymentAmountPayment(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -414,6 +531,24 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
@@ -445,7 +580,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 	
 	}
 	
-	static testmethod void noOrder(){
+	static testmethod void noOrderPayement(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -514,7 +649,9 @@ public with sharing class RMS_financialTransactionManagerTest {
 
 		store1.Active_Store_Configuration__c = storeConfig1.Id;
 		update store1;
-				
+		storeConfig1.Location_Number__c = '123';
+		update storeConfig1;
+						
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
@@ -535,12 +672,30 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
 		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
 		insert finacialAccountNumber2;
-		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3', Account_Type__c = 'Misc Cash Receipt');
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3132', Account_Type__c = 'Misc Cash Receipt');
 		insert glAccount1;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
@@ -552,7 +707,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = order1.id,
 												Payment_Amount__c = 100,
-												Payment_Date__c = Date.Today(),
+												Payment_Date__c = Date.Today(), 
 												GL_Account__c = glAccount1.Id,
 												Store_Location__c = store1.id,
 												RecordTypeId = paymentMiscCashReceiptRecordTypeId
@@ -590,6 +745,24 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert order1;
+		Account vend1 = testMethods.createVendorAccount('Vendor Account 1');
+		insert vend1;
+		
+		Pricebook2 pricebook1 =  testMethods.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		Product2 product1 = new Product2(
+			Name='Test Product',
+			Vendor__c = vend1.id
+		);
+
+		insert product1;
+		
+		PricebookEntry pricebookEntry1 = testMethods.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		insert pricebookEntry1;
+		
+		OrderItem orderItem1 = new OrderItem(OrderId = order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 10000 );
+		insert orderItem1;	
 		
 		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
 		insert finacialAccountNumber1;
@@ -722,12 +895,16 @@ public with sharing class RMS_financialTransactionManagerTest {
 										);
 										//,
 										//Installer__c = communityUser.id
-		insert labor1;
 		
-		labor1.Hours_Applied__c = 2;
 		
-		update labor1;
-		
+		try{
+			insert labor1;
+			throw new anException('An exception should have been thrown by the trigger but was not.'); // 1. If we get to this line it means an error was not added and the test class should throw an exception here. 2. MyException class extends Exception.
+		}
+		catch(Exception e)
+		{
+			System.Assert(e.getMessage().contains('Installer'));
+		} 
 	}
 	
 	
@@ -787,16 +964,17 @@ public with sharing class RMS_financialTransactionManagerTest {
 												Store_Location__c = store1.id,
 												Date_Applied__c = Date.Today()
 												);
+		Test.StartTest();
 		insert labor1;
 		
 		labor1.Hours_Applied__c = 2;
-		
 		update labor1;
 		delete labor1;
+		Test.StopTest();
 	}
 
 
-	static testmethod void positiveCreateAndEditMiscReimbursementExternal(){
+	static testmethod void positiveCreateLaborMiscReimbursementExternal(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -805,6 +983,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		store1.Active_Store_Configuration__c = storeConfig1.id;
 		update store1;
 		storeConfig1.Standard_Hourly_Rate__c = 100;
+		storeConfig1.Location_Number__c = '123';
 		update storeConfig1;
 		
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
@@ -834,9 +1013,9 @@ public with sharing class RMS_financialTransactionManagerTest {
 															                Sold_Order__c = order1.id 
 															                    );
 		insert workOrder1;
-		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1234');
 		insert finacialAccountNumber1;
-		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2234');
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
@@ -893,27 +1072,27 @@ public with sharing class RMS_financialTransactionManagerTest {
 						                );
        
         insert communityUser;
- 
-
+ 		
+ 		Resource__c	resource1 = new Resource__c(Name='Resource1', Active__c = true, Resource_Type__c = 'Install Crew', RbA_User__c = communityUser.id);
+		insert resource1;
+		
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
 												Hours_Applied__c = 1,
 												RecordTypeId = laborMiscReimbursementRecordTypeId,
 												//Standard_Hourly_Rate__c=100,
 												External_Labor_Amount__c = 100,
 												Store_Location__c = store1.id,
-												Date_Applied__c = Date.Today()
+												Date_Applied__c = Date.Today(),
+												Installer__c = resource1.id,
+												GL_Account__c = finacialAccountNumber1.id
 												);
-												//,
-												//Installer__c = communityUser.id
+		Test.StartTest();
 		insert labor1;
-		
 		labor1.Hours_Applied__c = 2;
-		
 		update labor1;
-		
+		Test.StopTest();
 	}
 
-	
 
 	static testmethod void positiveCreateAsset(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
@@ -958,10 +1137,21 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Inventory Received',
+																						Transaction_Type__c = 'Inventory Received - External Vendor',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
+		
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert finacialAccountNumber3;
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		insert finacialAccountNumber4;
+		
+		Financial_Transaction__c finacialTransaction2 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Write-Off',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction2;
 		
 		Id assetInstalledProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
 		
@@ -994,8 +1184,22 @@ public with sharing class RMS_financialTransactionManagerTest {
 		}
 		update JEList;
 		
+		Test.startTest();
 		asset1.Quantity = 3;
 		update asset1;
+		
+		asset1.Quantity = 1;
+		update asset1;
+		
+		asset1.Quantity_Written_Off__c = 1;
+		update asset1;
+		
+		
+		asset1.Quantity = 10;
+		update asset1;
+
+		
+		Test.stopTest();
 		
 		for(Journal_Entry__c je : JEList){
 			je.Sent_to_BaanERP__c = false;
@@ -1005,7 +1209,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 	}
 	
 	
-	static testmethod void positiveCreateAndEditOrder(){
+	static testmethod void positiveCreateOrder(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 
 		testMethods.createOrderTestRecords();
@@ -1075,6 +1279,47 @@ public with sharing class RMS_financialTransactionManagerTest {
 																						Credit_Account_Number__c = finacialAccountNumber4.id);
 		insert finacialTransaction2;
 		
+		
+		Financial_Account_Number__c finacialAccountNumber7 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '7');
+		insert finacialAccountNumber7;
+		Financial_Account_Number__c finacialAccountNumber8 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '8');
+		insert finacialAccountNumber8;
+		
+		Financial_Transaction__c finacialTransaction3 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Refund Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction3;
+		Financial_Transaction__c finacialTransaction4 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Internal Labor',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction4;
+		
+		Financial_Transaction__c finacialTransaction5 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Gross Sales',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction5;
+		
+		Financial_Transaction__c finacialTransaction6 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Discount',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction6;
+		
+		
+		Financial_Transaction__c finacialTransaction7 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - AR',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction7;
+		Financial_Transaction__c finacialTransaction8 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Finance Fees',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction8;
+		Test.startTest();
 		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
 												RecordTypeId = paymentDespositRecordTypeId,
@@ -1087,14 +1332,162 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		update soldOrder;
+		Test.stopTest();
+	}
+	
+	
+	static testmethod void positiveCreateRefund(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+
+		testMethods.createOrderTestRecords();
 		
-		//order1.Status = 'Job In Progress'; 
-		//order1.Revenue_Recognized_Date__c = Date.Today();
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
 		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		Id orderCORORecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
+		
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+
+
+		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
+		soldOrder.Revenue_Recognized_Date__c = null;
+		soldOrder.Status = 'Job Close';
+		soldOrder.Payments_Received__c = 10000.00;
+		update soldOrder;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = soldOrder.id 
+															                    );
+		insert workOrder1;
+		
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert finacialAccountNumber3;
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		insert finacialAccountNumber4;
+		
+		Financial_Transaction__c finacialTransactionLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Final Payment',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransactionLabor;
+		
+
+
+		Refund__c refund1 = new Refund__c(	Order__c = soldOrder.id, 
+											Amount__c = 10, 
+											Store_Location__c = store1.id, 
+											Refund_Method__c = 'Check'
+											);
+		
+		Test.startTest();
+		insert refund1;
+		
+		refund1.Amount__c = 20;
+		update refund1;
+		Test.stopTest();
 	}
 	
 	
 	
+	//Business_Adjustment__c
+	static testmethod void positiveCreateBusinessAdjustment(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+
+		testMethods.createOrderTestRecords();
+		
+		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		Id orderCORORecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
+		
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+
+
+		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
+		soldOrder.Revenue_Recognized_Date__c = null;
+		soldOrder.Status = 'Job Close';
+		soldOrder.Payments_Received__c = 10000.00;
+		update soldOrder;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = soldOrder.id 
+															                    );
+		insert workOrder1;
+		
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'AR write-off',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert finacialAccountNumber3;
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		insert finacialAccountNumber4;
+		
+		Financial_Transaction__c finacialTransactionLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Install Adjustment',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransactionLabor;
+		
+
+
+		Business_Adjustment__c busAdj = new Business_Adjustment__c(	Order__c = soldOrder.id, 
+																	Amount__c = 10, 
+																	Store_Location__c = store1.id, 
+																	Type__c = 'AR write-off'
+																	);
+		insert busAdj;
+		busAdj.Amount__c = 5;
+		update busAdj;
+	}
 	
 	public class anException extends Exception {}
 }

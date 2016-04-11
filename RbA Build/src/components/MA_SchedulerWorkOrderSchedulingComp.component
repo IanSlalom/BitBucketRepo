@@ -1,0 +1,359 @@
+<apex:component >
+<script>
+    $ = jQuery.noConflict();
+
+    var apexSchedulingController = 'MA_SchedulerController';
+    var processBookingResponse = { onSuccess: processBookingSuccess, onFailure: processResponseError };
+    var processAvailabilityResponse = { onSuccess: processAvailabilitySuccess, onFailure: processResponseError };
+    var processWorkOrderRetrievalResponse = { onSuccess: processWorkOrderRetrievalSuccess, onFailure: processResponseError };
+
+    $(function() {
+        sforce.connection.sessionId = '{!$Api.Session_Id}';
+
+        var tomorrow = moment(new Date()).add(1, 'days');
+        $('#availabilityStartDate, #availabilityEndDate').val(tomorrow.format('YYYY-MM-DD'));
+
+        var times = [];
+        var timeOptions = '';
+
+        for (var i = 0, len = 12; i < len; i++) {
+            var hour = i == 0 ? 12 : i;
+            times.push(hour+':00');
+            times.push(hour+':30');
+        }
+
+        for (var i = 0, len = times.length; i < len; i++) {
+            timeOptions += '<option value="' + times[i] + '">' + times[i] + '</option>';
+        }
+        $('#scheduleWorkOrder .startTime, #scheduleWorkOrder .endTime').append(timeOptions);
+    });
+
+    function showAvailabilityModal(workOrderEl) {
+        var workOrderElRow = $(workOrderEl).closest('.x-grid3-row')[0];
+		//var workOrderName = $(workOrderElRow).find('.x-grid3-col-NAME a span').text();
+		var workOrderId = $(workOrderElRow).find('.x-grid3-col-LIST_RECORD_ID').text();
+		//$('#workOrderName').text(workOrderName);
+		$('#workOrderId').val(workOrderId);
+
+		$('#availableSlots').html('');
+		$('#availableSlotsContainer').hide();
+		$('#scheduleWorkOrderModal').fadeIn('fast');
+		$('#loaderModal').show();
+
+		sforce.apex.execute(apexSchedulingController, 'retrieveRecords', {objType: 'WorkOrder', filters: 'Id = \'' + workOrderId + '\''}, processWorkOrderRetrievalResponse);
+	}
+
+	function processWorkOrderRetrievalSuccess(response) {
+	    response = JSON.parse(response);
+	    console.log(response);
+
+	    if (response.success) {
+	        for (var i = 0, len = response.objList.length; i < len; i++) {
+	            var record = response.objList[i];
+	            $('#workOrderName').text(record.Name);
+
+	            if (record.Contact__c == '' || record.Contact__c == undefined || record.Contact__c == null) {
+	                $('#workOrderContactName').text('unknown');
+	            }
+	            else {
+	                $('#workOrderContactName').text(record.Contact__r.LastName + (record.Contact__r.FirstName == '' || record.Contact__r.FirstName == undefined || record.Contact__r.FirstName == null ? '' : ', ' + record.Contact__r.FirstName));
+	            }
+
+	            if (record.Appointment_Duration__c == '' || record.Appointment_Duration__c == undefined || record.Appointment_Duration__c == null) {
+	                $('#workOrderDuration').text('unknown');
+	            }
+	            else {
+	                $('#workOrderDuration').text(record.Appointment_Duration__c);
+	            }
+	        }
+	        //$('#loaderModal').hide();
+
+	        checkAvailability(true);
+	    }
+	    else {
+	        handleError('MA_SchedulerWorkOrderSchedulingComp : showAvailabilityModal', response);
+	    }
+	}
+
+	function checkAvailability(nextAvailable) {
+	    $('#loaderModal').show();
+	    $('#availableSlots').html('');
+
+		//try {
+
+		var startDate, startTime;
+		var endDate, endTime;
+
+		if (nextAvailable) {
+			var tomorrow = moment(new Date()).add(1, 'days');
+			startDate = tomorrow.format('YYYY-MM-DD');
+			endDate = tomorrow.add(1, 'months').format('YYYY-MM-DD');
+			startTime = endTime = '12:00 am';
+		}
+		else {
+		    startDate = $('#availabilityStartDate').val();
+		    startTime = $('#scheduleWorkOrder .startTime').val() + ' ' + $('input[type="radio"][name="availableStartTime"]:checked').val();
+
+			/*
+			var epoch = Date.UTC(2016, 2, 17, 10);
+			console.log(epoch);
+			console.log(new Date(epoch));
+			*/
+
+			endDate = $('#availabilityEndDate').val();
+			endTime = $('#scheduleWorkOrder .endTime').val() + ' ' + $('input[type="radio"][name="availableEndTime"]:checked').val();
+		}
+
+	    var startDateTime = new Date(startDate + ' ' + startTime);
+	    console.log(startDateTime);
+
+		var endDateTime = new Date(endDate + ' ' + endTime);
+		console.log(endDateTime);
+
+		var offsetMinutes = startDateTime.getTimezoneOffset();
+		console.log(offsetMinutes);
+
+		/*
+		if (startDate == endDate && startTime.toLowercase() == '12:00 am' && endTime.toLowercase() == '12:00 am') {
+		endDateTime = endDateTime.addDays(1);
+		}
+		*/
+
+		/*var response = */sforce.apex.execute(apexSchedulingController, 'checkAvailability', {workOrderId: $('#workOrderId').val(), startDateTimeEpoch: Date.parse(startDateTime), endDateTimeEpoch: Date.parse(endDateTime), offsetPageMinutes: offsetMinutes, nextAvailable: nextAvailable}, processAvailabilityResponse);
+		/*
+		response = JSON.parse(response);
+		console.log(response);
+
+		if (response.success) {
+		var bookingWindowHtml = '';
+		for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
+		var bookingWindow = response.bookingWindows[i];
+		bookingWindowHtml += '<div><input type="radio" name="bookingWindow" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '</input></div>';
+		}
+
+		if (bookingWindowHtml == '') {
+		bookingWindowHtml = 'No timeslots available during the selected times.';
+		}
+
+		$('#availableSlots').html(bookingWindowHtml).show();
+		$('#loaderModal').hide();
+		}
+		else {
+		handleError('MA_SchedulerWorkOrderSchedulingComp : checkAvailability', response);
+		}
+		*/
+		/*
+		}
+		catch(error) {
+		console.log(error);
+		handleError('MA_SchedulerWorkOrderSchedulingComp : checkAvailability', error);
+		}
+		*/
+	}
+
+function processAvailabilitySuccess(response) {
+    response = JSON.parse(response);
+    console.log(response);
+
+    if (response.success) {
+    	if (response.nextAvailable) {
+			var nextAvailableHtml = '';
+	        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
+	            var nextAvailableWindow = response.bookingWindows[i];
+	            nextAvailableHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" value="' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '">' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '</input></div>';
+	        }
+
+	        if (nextAvailableHtml == '') {
+	            nextAvailableHtml = '<div class="ma-alert ma-alert-red">No timeslots available within a month.</div>';
+	        }
+
+	        $('#nextAvailableSlots').html(nextAvailableHtml);
+    	}
+    	else {
+    		var bookingWindowHtml = '';
+	        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
+	            var bookingWindow = response.bookingWindows[i];
+	            bookingWindowHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '</input></div>';
+	        }
+
+	        if (bookingWindowHtml == '') {
+	            bookingWindowHtml = '<div class="ma-alert ma-alert-red">No timeslots available during the selected times.</div>';
+	        }
+
+	        $('#availableSlots').html(bookingWindowHtml);
+	        $('#availableSlotsContainer').show();
+	    }
+
+        $('#loaderModal').hide();
+    }
+    else {
+        handleError('MA_SchedulerWorkOrderSchedulingComp : checkAvailability', response);
+    }
+}
+
+function saveScheduleWorkOrder() {
+    $('#loaderModal').show();
+
+    var selectedWindow = $('#scheduleWorkOrderModal input[type="radio"][name="bookingWindow"]:checked').val();
+    if (selectedWindow == '' || selectedWindow == undefined || selectedWindow == null) {
+        handleError('NO TIME SELECTED', { error: 'A time window must be selected before booking' });
+        return;
+    }
+
+    /*var response = */sforce.apex.execute(apexSchedulingController, 'schedulerWorkOrder', {workOrderId: $('#workOrderId').val(), selectedWindow: selectedWindow}, processBookingResponse);
+/*
+response = JSON.parse(response);
+console.log(response);
+
+if (response.success) {
+$('.listViewportWrapper .refreshListButton').click();
+closeScheduleWorkOrderModal();
+$('#calendar').fullCalendar('refetchEvents');
+$('#loaderModal').hide();
+}
+else {
+handleError('MA_SchedulerWorkOrderSchedulingComp : saveScheduleWorkOrder', response);
+}
+*/
+}
+
+function processBookingSuccess(response) {
+    response = JSON.parse(response);
+    console.log(response);
+
+    if (response.success) {
+        $('.listViewportWrapper .refreshListButton').click();
+        closeScheduleWorkOrderModal();
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#loaderModal').hide();
+    }
+    else {
+        handleError('MA_SchedulerWorkOrderSchedulingComp : saveScheduleWorkOrder', response);
+    }
+}
+
+function closeScheduleWorkOrderModal() {
+    $('#scheduleWorkOrderModal').fadeOut('fast');
+}
+</script>
+
+<div id="scheduleWorkOrderModal" class="ma-modal">
+    <div id="scheduleWorkOrderOverlay" class="ma-modal-overlay"></div>
+    <div id="scheduleWorkOrderContent" class="ma-modal-content">
+        <div id="scheduleWorkOrder" class="ma-modal-window">
+            <div id="scheduleWorkOrderHeader" class="ma-modal-header">
+                <div class="ma-modal-padding">
+                    <!-- <span id="scheduleWorkOrderModalSave" class="floatLeft" onclick="saveScheduleWorkOrder();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/approval_60.png')}" /></span> -->
+                    <h3>Check Availability</h3>
+                    <span id="scheduleWorkOrderModalClose" class="ma-modal-close" onclick="closeScheduleWorkOrderModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+                </div>
+            </div>
+            <div id="scheduleWorkOrderBody" class="ma-modal-body">
+                <div class="ma-modal-padding">
+                    <table class="modal-text-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="ma-input-label"><strong>Work Order:</strong></label>
+                                </td>
+                                <td colspan="3">
+                                    <label class="ma-input-label"><span id="workOrderName"></span></label> <input type="hidden" id="workOrderId" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="ma-input-label"><strong>Customer:</strong></label>
+                                </td>
+                                <td colspan="3">
+                                    <label class="ma-input-label"><span id="workOrderContactName"></span></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="ma-input-label"><strong>Duration:</strong></label>
+                                </td>
+                                <td>
+                                    <label class="ma-input-label"><span class="ma-label-value" id="workOrderDuration"></span> (hours)</label>
+                                </td>
+                            </tr>
+                            <tr class="align-top">
+				                <div id="nextAvailableContainer">
+				                    <td>
+			                        	<label class="ma-input-label"><strong>Next Available:</strong></label>
+		                        	</td>
+			                        <td id="nextAvailableSlots" colspan="3"></td>
+				                </div>
+			                </tr>
+                            <tr class="modal-input-row">
+                                <td>
+                                    <label class="ma-input-label"><strong>Date:</strong></label>
+                                </td>
+                                <td>
+                                    <input type="date" class="ma-input" id="availabilityStartDate" />
+                                </td>
+                                <td> 
+                                    - 
+                                </td>
+                                <td>
+                                    <input type="date" class="ma-input" id="availabilityEndDate" />
+                                </td>
+                            </tr>
+                            <tr class="modal-input-row">
+                                <td>
+                                    <label class="ma-input-label"><strong>Time:</strong></label> 
+                                </td>
+                                <td>
+                                    <div class="timeDiv">
+                                        <label class="ma-input-label" style="margin-bottom:0;">Start:</label>
+                                        <div class="ma-form-control icon-right">
+                                            <img class="ma-icon icon-right" src="http://developer.cloudbilt.com/icons/utility/down_60.png" alt="drop down" />
+                                            <select class="startTime ma-input" />
+                                        </div>
+                                        <label class="ma-input-label">
+                                            <input type="radio" name="availableStartTime" value="AM" checked="true"> AM</input>&nbsp;&nbsp;
+                                            <input type="radio" name="availableStartTime" value="PM"> PM</input>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    <div class="timeDiv">
+                                        <label class="ma-input-label" style="margin-bottom:0;">End:</label>
+                                        <div class="ma-form-control icon-right">
+                                            <img class="ma-icon icon-right" src="http://developer.cloudbilt.com/icons/utility/down_60.png" alt="drop down" />
+                                            <select class="endTime ma-input" />
+                                        </div>
+                                        <label class="ma-input-label">
+                                            <input type="radio" name="availableEndTime" value="AM" checked="true"> AM</input>&nbsp;&nbsp;
+                                            <input type="radio" name="availableEndTime" value="PM"> PM</input>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="availableSlotsContainer">
+                    <div class="ma-divider ma-divider-compact"></div>
+                    <div class="ma-modal-padding">
+                        <div><label class="ma-input-label"><strong>Available Windows:</strong></label></div>
+                        <div id="availableSlots"></div>
+                    </div><!--ma-modal-padding-->
+                </div>
+
+            </div><!--ma-modal-body-->
+            <div class="ma-modal-footer">
+                <div id="scheduleWorkOrderButtons" class="ma-modal-padding clearfix">
+                    <button class="ma-button button-white float-left" onclick="closeScheduleWorkOrderModal();">Cancel</button>
+                    <button class="ma-button button-blue float-right" onclick="checkAvailability(false);">See Available Times</button>
+                    <button class="ma-button button-blue float-right" onclick="saveScheduleWorkOrder();">Book</button>
+                </div>
+            </div><!--ma-modal-footer-->
+        </div><!--ma-modal-window-->
+    </div><!--ma-modal-content-->
+</div><!--ma-modal-->
+
+</apex:component>

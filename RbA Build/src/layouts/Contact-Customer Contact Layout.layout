@@ -28,6 +28,14 @@
                 <behavior>Edit</behavior>
                 <field>Spouse__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Primary_Contact__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Primary_Dwelling_for_Contact__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -199,7 +207,10 @@
         <relatedList>RelatedCaseList</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>Dwelling__c</fields>
+        <fields>Primary_Contact__c</fields>
+        <fields>Primary_Dwelling_for_Contact__c</fields>
         <fields>Type__c</fields>
         <fields>CREATED_DATE</fields>
         <relatedList>Contact_History__c.Contact__c</relatedList>

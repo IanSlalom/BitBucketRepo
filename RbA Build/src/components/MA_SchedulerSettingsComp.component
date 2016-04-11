@@ -1,0 +1,253 @@
+<apex:component >
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
+    
+	<script>
+    	$ = jQuery.noConflict();
+
+        var storeSettingsMap = {};
+		var apexSettingsController = 'MA_SchedulerController';
+
+    	$(function() {
+	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
+
+            var times = [];
+            var timeOptions = '';
+
+            for (var i = 0, len = 12; i < len; i++) {
+                var hour = i == 0 ? 12 : i;
+                times.push(hour+':00');
+                times.push(hour+':30');
+            }
+
+            for (var i = 0, len = times.length; i < len; i++) {
+                timeOptions += '<option value="' + times[i] + '">' + times[i] + '</option>';
+            }
+            $('#settingsModal .startTime, #settingsModal .endTime').append(timeOptions);
+    	});
+
+        function openSettingsModal() {
+            $('#loarderModal').show();
+            var storeIdsFilter = ' IN (\'' + storeIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            var filters = 'Store_Id__c' + storeIdsFilter;
+            var response = sforce.apex.execute(apexSettingsController, 'retrieveRecords', {objType: 'MASettings', filters: filters});
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+                    storeSettingsMap[record.Store_Id__c] = record;
+                }
+                
+                setSettingsModal();
+                $('#settingsModal').show();
+                $('#loaderModal').hide();
+            }
+            else {
+                handleError('MA_SchedulerSettingsComp : openSettingsModal', response);
+            }
+        }
+
+        function setSettingsModal() {
+            var record = storeSettingsMap[$('#storeSettingsSelect').val()];
+            if (record != null && record != undefined) {
+                $('#settingsId').val(record.Id);
+                var jsonSettings = record.Settings__c;
+                jsonSettings = JSON.parse(jsonSettings);
+                for (var key in jsonSettings) {
+                    $('#' + key).val(jsonSettings[key]);
+                }
+            }
+            else {
+                techMeasureJobDuration: $('#techMeasureJobDuration').val('');
+                techMeasureCrewSize: $('#techMeasureCrewSize').val('');
+                installJobDuration: $('#installJobDuration').val('');
+                installCrewSize: $('#installCrewSize').val('');
+                serviceJobDuration: $('#serviceJobDuration').val('');
+                serviceCrewSize: $('#serviceCrewSize').val('');
+            }
+        }
+
+        function saveSettings() {
+            var jsonSettings = {
+                techMeasureJobDuration: $('#techMeasureJobDuration').val(),
+                techMeasureCrewSize: $('#techMeasureCrewSize').val(),
+                installJobDuration: $('#installJobDuration').val(),
+                installCrewSize: $('#installCrewSize').val(),
+                serviceJobDuration: $('#serviceJobDuration').val(),
+                serviceCrewSize: $('#serviceCrewSize').val(),
+            };
+            var response = sforce.apex.execute(apexSettingsController, 'saveSettings', {recordId: $('#settingsId').val(), storeId: $('#storeSettingsSelect').val(), jsonSettings: JSON.stringify(jsonSettings)});
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+                closeSettingsModal();
+            }
+            else {
+                handleError('MA_SchedulerSettingsComp : saveSettings', response);
+            }
+        }
+
+        function closeSettingsModal() {
+            $('#settingsModal').hide();
+        }
+    </script>
+
+	<div id="settingsModal">
+        <div id="settingsOverlay" />
+        <div id="settingsContent">
+            <div id="storeSettings">
+                <div id="settingsHeader">
+                    <span id="settingsModalSave" class="floatLeft" onclick="saveSettings();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/approval_60.png')}" /></span>
+                    <span>Settings</span>
+                    <span id="settingsModalClose" class="floatRight" onclick="closeSettingsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+                </div>
+                <div class="newSettingsGroup">
+                    Configure Store Settings for <select id="storeSettingsSelect" onchange="setSettingsModal();" />
+                    <input type="hidden" id="settingsId" />
+                </div>
+                <div class="newSettingsGroup">
+                    Tech Measure Defaults
+                    <div class="innerSettingsGroup">
+                        <div>Job Duration: <input type="number" id="techMeasureJobDuration" /> (in hours)</div>
+                        <div>Crew Size: <input type="number" id="techMeasureCrewSize" /></div>
+                        ***BOOKING WINDOWS HERE***
+                    </div>
+                </div>
+                <div class="newSettingsGroup">
+                    Install Defaults
+                    <div class="innerSettingsGroup">
+                        <div>Job Duration: <input type="number" id="installJobDuration" /> (in hours)</div>
+                        <div>Crew Size: <input type="number" id="installCrewSize" /></div>
+                        ***BOOKING WINDOWS HERE***
+                    </div>
+                </div>
+                <div class="newSettingsGroup">
+                    Service Defaults
+                    <div class="innerSettingsGroup">
+                        <div>Job Duration: <input type="number" id="serviceJobDuration" /> (in hours)</div>
+                        <div>Crew Size: <input type="number" id="serviceCrewSize" /></div>
+                        ***BOOKING WINDOWS HERE***
+                    </div>
+                </div>
+                <div class="newSettingsGroup">
+                    Store Hours:
+                    <div class="newSettingsGroup">
+                        Sunday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Monday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Tuesday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Wednesday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Thursday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Friday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                    <div class="newSettingsGroup">
+                        Saturday:
+                        <div class="innerSettingsGroup">
+                            <div class="timeDiv">
+                                Start: <select class="startTime" />
+                                <input type="radio" name="startTime" value="AM" checked="true"> AM</input>
+                                <input type="radio" name="startTime" value="PM"> PM</input>
+                            </div>
+                            <div class="timeDiv">
+                                End: <select class="endTime" />
+                                <input type="radio" name="endTime" value="AM"> AM</input>
+                                <input type="radio" name="endTime" value="PM" checked="true"> PM</input>
+                            </div>
+                        </div>
+                        <div onclick="addStoreHoursRow">+ Add Hours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:component>

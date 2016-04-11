@@ -14,7 +14,7 @@
 @version  2015-10-12  Slalom.CDK
   Added ability to add products manually and Cost PO Functionality.
 @version  2015-12-17  Slalom.CDK
-  Added account number functionality
+  Added account number functionality 
 
 @see    RMS_vendorPurchaseOrderControllerTest 
 
@@ -55,8 +55,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public String receiveStatus {get; set;}   
   public String errorOccurred {get; set;}   
   public boolean overReceivingAllowed {get; set;}   
+  public boolean zeroDollarVendor {get; set;}   
   public boolean writeOff {get; set;}   
   public boolean receiving {get; set;}   
+  public boolean renderVendorSelection{get;set;}
+  public boolean electronicOrder{get;set;}
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -344,46 +347,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
   /******* Set up Standard Controller for Purchase_Order__c  *****************/
   private Apexpages.StandardController standardController;
-  private final Purchase_Order__c po;
-  
+  @testVisible private final Purchase_Order__c po;
+   
   
   //Constructor
   public RMS_vendorPurchaseOrderController(ApexPages.StandardController stdController) {
     this.po = (Purchase_Order__c)stdController.getRecord();
+    System.debug('THIS.PO' + po);
     receiving = false;
     writeOff = false;
+    renderVendorSelection = true;
+    zeroDollarVendor = false;
+    system.debug(orderId);
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
 
       newPurchaseOrder = true;
-      this.po.Status__c = 'New';
+      status = 'new';
+      //JETT-712 
+      this.po.status__c = 'In Progress';
     }//END OF NEW PRODUCT PURCHASE ORDER 
     
     //EXISTING PURCHASE ORDER       
     else {
       newPurchaseOrder = false;
       
-      Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name,Vendor__r.Over_Receiving_Allowed__c From Purchase_Order__c Where ID =:po.id];
+      Purchase_Order__c po1 = [	SELECT 	Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name, 
+      									Vendor__r.Over_Receiving_Allowed__c, Vendor__r.Zero_Dollar_Vendor__c 
+      							From Purchase_Order__c Where ID =:po.id];
       orderId = po1.Order__c;
       costPurchaseOrder = (po.RecordTypeId == UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')) ? true : false;
 
       selectedVendor = po1.Vendor__c;
       selectedVendorName = po1.Vendor__r.Name;
       overReceivingAllowed = po1.Vendor__r.Over_Receiving_Allowed__c;
-      
+      zeroDollarVendor = po1.Vendor__r.Zero_Dollar_Vendor__c;
       selectedPricebook = po1.Order__r.Pricebook2Id;
-      
-//      orderStatus = this.po.Status__c;
- //     status =  (orderStatus == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
-//            (orderStatus == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
-//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName != 'RbA')  ?  'con'    :
-//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName == 'RbA')  ?  'rbacon'  :
-//            (orderStatus == 'Rejected')                  ?  'rej'    :
-//            (orderStatus == 'Cancelled')                  ?  'can'    :
-//            (orderStatus == 'Received')                  ?  'rec'    :
-//            (selectedVendorName == 'RbA')                    ?  'rbanew'  :
-//                                                'new';
     }
 
     // Check if there's an orderId
@@ -429,12 +429,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
           	// concatanate the store abbreviation and user abbreviation
             po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
       }
-
+			
 	  // Determine the purchase order status so we know what to display on the page.
       orderStatus = this.po.Status__c;
-      
+        		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
-      boolean electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
+      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
             	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && !electronicOrder)  ?  'con'    :
             	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && electronicOrder)  ?  'rbacon'  :
@@ -443,7 +443,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';
-
+      		
 	  if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
       }
@@ -457,7 +457,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Status__c, Order.AccountId, Order.BillToContactId,
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
-                    Order.Store_Location__c, Purchase_Order__c, Remake__c
+                    Order.Store_Location__c, Purchase_Order__c, Remake__c,
+                    Parent_Order_Item__r.Installed_Product_Asset__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
@@ -483,33 +484,40 @@ public with sharing class RMS_vendorPurchaseOrderController {
         accountIdToAccountMap.put(a.id, a);
       }
 	  // Create a map of product Ids to their list of vendors
-      Map<Id, List<Account>> productVendorMap = new Map<Id, List<Account>>();
-      for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c from Vendor_Product__c Where Product__c IN :relatedProduct2IDList]) {
-		if (productVendorMap.containsKey(vp.Product__c)) {
-			List<Account> vendors = productVendorMap.get(vp.Product__c);
-			vendors.add(accountIdToAccountMap.get(vp.Vendor__c));
-			productVendorMap.put(vp.Product__c, vendors);
-		}
-		else {
-			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
-			productVendorMap.put(vp.Product__c, vendors);			
-		}
-		if(unassignedProductIds.contains(vp.Product__c))
-			vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
+    Map<Id, List<Account>> productVendorMap = new Map<Id, List<Account>>();
+    for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c from Vendor_Product__c Where Product__c IN :relatedProduct2IDList]) {
+  		if (productVendorMap.containsKey(vp.Product__c)) {
+  			List<Account> vendors = productVendorMap.get(vp.Product__c);
+  			vendors.add(accountIdToAccountMap.get(vp.Vendor__c));
+  			productVendorMap.put(vp.Product__c, vendors);
+  		}
+  		else {
+  			List<Account> vendors = new List<Account>{accountIdToAccountMap.get(vp.Vendor__c)};
+  			productVendorMap.put(vp.Product__c, vendors);			
+  		}
+  		if(unassignedProductIds.contains(vp.Product__c)){
+        //KR Added if condition to prevent list containing nulls
+        if(accountIdToAccountMap.get(vp.Vendor__c) != null){
+  			 vendorsOnOrder.add(accountIdToAccountMap.get(vp.Vendor__c));
+        }
       }
+    }
         
 	System.Debug('************productVendorMap=' +productVendorMap);
       //USING MAPS TO CREATE WRAPPERS
       for(OrderItem oi : relatedOrderItems){
         Product2 product2 = productIdToProductMap.get(oi.Pricebookentry.Product2Id);
-		for (Account vendor : productVendorMap.get(product2.Id)) {
-//        	--Account account = accountIdToAccountMap.get(selectedVendor);
-        	OrderItemWrapper OIW = new OrderItemWrapper(oi, vendor, product2);
-          
-        	orderItemWrapperList.add(OIW);
-		}
+        //JETT-712 KR- Added if condition, if map did not contain key, for loop throws deferencce null pointer excception
+        if(productVendorMap.containsKey(product2.Id)){
+      		for (Account vendor : productVendorMap.get(product2.Id)) {
+      //        	--Account account = accountIdToAccountMap.get(selectedVendor);
+              	OrderItemWrapper OIW = new OrderItemWrapper(oi, vendor, product2);
+              	orderItemWrapperList.add(OIW);
+      		}
+        }
       }
 	System.Debug('************orderItemWrapperList=' +orderItemWrapperList);
+  System.debug('VENDORSONORDER' + vendorsOnOrder);
 
       //BUILD SELECT LIST FOR CHOOSING VENDOR
       availableVendors.add(new SelectOption('','Please Select'));
@@ -521,6 +529,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         vendorIdsAdded.add(vend.Id);
       }  
     }
+    
     
     // For Cost POs, pulls the current user's store location and recovers the abbreviation
     if (costPurchaseOrder && storeLocation == null) {
@@ -559,6 +568,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
     }
 
+
+    //JETT-712 
+    if(newPurchaseOrder && !costPurchaseOrder && !servicePurchaseOrder && relatedOrder.Status != 'Ready to Order'){
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_STATUS_INVALID_FOR_PO_CREATION));
+      renderVendorSelection = false;
+    }
   }//end of constructor
 
   public List<SelectOption> getAvailableVendors() {
@@ -632,7 +647,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
         	renewal = ren;
         }
-        String standardPriceBookId = [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
+        String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
         Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
@@ -664,8 +679,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
       return null;
 
     // update the subtotal and upsert the PO
-    updateSubTotal();     
+    updateSubTotal();   
+    //JETT-712  
+    if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
+      boolean allOrderItemsHaveWholesaleCost;
+      if (zeroDollarVendor) allOrderItemsHaveWholesaleCost = true;
+      else allOrderItemsHaveWholesaleCost = ([Select Unit_Wholesale_Cost__c from OrderItem where Purchase_Order__c =: po.Id and Unit_Wholesale_Cost__c = null]).isEmpty();
 
+      if(allOrderItemsHaveWholesaleCost){
+        po.Status__c = 'Confirmed';
+        po.Confirmed_Timestamp__c = System.Now();
+      }
+    }    
     try{
       // upsert the purchase order
       upsert po;
@@ -869,10 +894,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
 
 	for (OrderItem oi : itemsToReceive) {
-
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
-      			productAsset = new Asset(
+      		productAsset = new Asset(
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
@@ -883,8 +907,15 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Sold_Order__c    = oi.OrderId,
                       Store_Location__c = oi.Order.Store_Location__c,
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
-                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset')
+                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
+                      Vendor__c 		=  selectedVendor,
+                      Original_Order_Product__c = oi.Id
                     );
+      		// If this is a servicepurchaseorder and it's a complete unit
+      		// link the new asset to the original asset
+      		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
+      			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
+      		}
       } 
       else if (oi.Installed_Product_Asset__c != null){
       	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
@@ -896,7 +927,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
-			if(oi.Unit_Wholesale_Cost__c == null) {
+			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null;
 			}
@@ -926,7 +957,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     
     // If the receive status is not null (something has been received), then change the order status
 //    if (receiveStatus != null) orderStatus = receiveStatus;
-    upsert finalAssetsToReceive;
+
+  //KR Added try/catch around upsert
+    try{
+      upsert finalAssetsToReceive;
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the receiveLineItems method:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+    }
     
     boolean noneReceived = false;
     boolean partialReceived = false;
@@ -1013,7 +1051,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
-			if(oi.Unit_Wholesale_Cost__c == null) {
+			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null; 
 				  
@@ -1040,8 +1078,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		orderToAssetMap.put(oi.Id, productAsset);
       
     }
-    
-    upsert finalAssetsToWriteOff;
+    //KR Added try/catch around upsert
+    try{
+      upsert finalAssetsToWriteOff;
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the writeOffLineItems method:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+    }
 
       for (OrderItem oi : itemsToWriteOff) {
 		if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
@@ -1081,22 +1124,38 @@ public with sharing class RMS_vendorPurchaseOrderController {
   // Called after the confirmation window is accepted
   public PageReference releasePurchaseOrder() {
     system.debug('*****Status set to released');
+    if(relatedOrder.Status != 'Ready to Order' && !costPurchaseOrder && !servicePurchaseOrder){
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
+    }else if(po.Status__c != 'In Progress' && po.Status__c != 'Rejected'){
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
+    }
+    else{
+      boolean allLineItemsVerified = true;
+      if(electronicOrder){
+        allLineItemsVerified = ([Select Verify_Item_Configuration__c, NSPR__c 
+                                  from OrderItem 
+                                  where Purchase_Order__c =: po.Id 
+                                  and Verify_Item_Configuration__c = false 
+                                  and NSPR__c = false]).isEmpty();
 
-	if (relatedOrder.Status == 'Ready to Order') {
-    	po.Status__c = 'Released';    
-    	po.Released_Timestamp__c = System.Now();
+        
+      }
 
-	    try{
-    	  	// upsert the po with the new status
-      		upsert po;  
-    	} catch (Exception e){
-      		System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
-      		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
-    	}
-	}
-	else {
-		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.PO_NOT_READY_TO_RELEASE));
-	}
+      if(allLineItemsVerified){
+        po.Status__c = 'Released';    
+        po.Released_Timestamp__c = System.Now();
+
+        try{
+          // upsert the po with the new status
+          upsert po;  
+        } catch (Exception e){
+          System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the addproduct method:' + e);
+          ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
+        }
+      }else{
+        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));  
+      }
+    }
 
     PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
     pageRef.setRedirect(false);
@@ -1115,7 +1174,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
         
     for(OrderItemWrapper oiw : orderItemWrapperByVendor){
       OrderItem oi = oiw.orderItem;
-      oi.Status__c = 'Cancelled';
+      //JETT-712
+     //oi.Status__c = 'Cancelled';
+      oi.Purchase_Order__c = null;
       orderItemsToCancelList.add(oi);
     }
 
@@ -1197,7 +1258,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       
     // If the status is received and one of the unit costs is null, return true
     for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-      if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+      if (oiw.orderItem.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
         ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UNIT_COST_REQUIRED));
         return true;          
       }

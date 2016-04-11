@@ -125,7 +125,7 @@ function prepareList(parent,child,isSubselectOptional){
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!edit}" value="Edit"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-				<apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false" rendered="{! status == 'rbanew'}"/>
+				<apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false"/>
 				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order" oncomplete="confirmationWindow('cancelPO');return false"/>
 				<apex:commandButton action="{!receive}" value="Receiving" />
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" />

@@ -4,13 +4,23 @@
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
         <members>Constants</members>
+        <members>MA_RoutingSchedulerController</members>
+        <members>MA_SchedulerBookingWindow</members>
+        <members>MA_SchedulerController</members>
+        <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerTESTS</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
+        <members>PurchaseOrderTriggerHandler</members>
+        <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_OrderItemExtension</members>
         <members>RMS_OrderItemManager</members>
+        <members>RMS_OrderTriggerHandler</members>
+        <members>RMS_OrderTriggerHandlerTests</members>
         <members>RMS_ServiceOrderExtensionMgr</members>
         <members>RMS_ServiceOrderLegacyExt</members>
         <members>RMS_WorkOrderCreationManager</members>
@@ -69,13 +79,23 @@
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
+        <members>RMS_populateResourceonEventManager</members>
+        <members>RMS_createContactHistoryManager</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>AutoCompleteV2</members>
+        <members>MA_SchedulerCalendarComp</members>
+        <members>MA_SchedulerErrorComp</members>
+        <members>MA_SchedulerLoaderComp</members>
+        <members>MA_SchedulerRoutes</members>
+        <members>MA_SchedulerSettingsComp</members>
+        <members>MA_SchedulerStylingComp</members>
+        <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <name>ApexComponent</name>
     </types>
     <types>
+        <members>MA_Scheduler</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
         <members>RMS_addMultipleTasksToWO</members>
@@ -116,8 +136,10 @@
         <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
+        <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
+        <members>ContactTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -209,7 +231,6 @@
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Quote-Quote Layout</members>
-        <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>Quote_Financing__c-Quote Financing Layout</members>
         <members>RbA_Work_Order__c-Action Work Order Layout</members>
@@ -252,7 +273,27 @@
         <name>Queue</name>
     </types>
     <types>
-        <members>*</members>
+        <members>BuildingPermitText</members>
+        <members>CasementWindowS1</members>
+        <members>CreateSO</members>
+        <members>HOAText</members>
+        <members>HistoricalText</members>
+        <members>InstallText</members>
+        <members>LSWP</members>
+        <members>LeadPaintPermit</members>
+        <members>LoadingPage</members>
+        <members>MA_Scheduler</members>
+        <members>Order</members>
+        <members>PaintStainText</members>
+        <members>ServiceOrder</members>
+        <members>ServiceText</members>
+        <members>SiteSamples</members>
+        <members>TechMeasureText</members>
+        <members>jquery</members>
+        <members>jquery_TableSorterZip</members>
+        <members>jquery_tableSorter</members>
+        <members>jqueryautocomplete</members>
+        <members>select2</members>
         <name>StaticResource</name>
     </types>
     <types>

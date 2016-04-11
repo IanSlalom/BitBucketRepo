@@ -49,13 +49,18 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		
 		Opportunity opp1 = utility.createOpportunity(dwelling.id, 'Closed - Won');
 		insert opp1;
+	
+		//Store_Configuration__c stconfig = new Store_Configuration__c(Store__c = store.Id);
+		//insert stconfig;
 		
-//		Pricebook2 pricebook1 =  utility.createPricebook2Name('Standard Price Book');
-//		insert pricebook1;
-
+		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc');
+		insert fan;
 		Product2 product1 = new Product2(
 			Name='Test Product',
-			Vendor__c = account1.id
+			Vendor__c = account1.id,
+			Cost_PO__c = true,
+			isActive = true,
+			Account_Number__c =  fan.Id
 		);
 		
 		insert product1;
@@ -68,12 +73,16 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 									EffectiveDate= Date.Today(), 
 									Store_Location__c = store.Id,
 									Opportunity = opp1, 									
+									RecordTypeId = UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'),									
 									Status ='Draft', 
 									Pricebook2Id = Test.getStandardPricebookId()
 								);		
 		insert order1;
 		OrderItem orderItem1 = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
 		insert orderItem1;		
+		Vendor_Product__c vp = new Vendor_Product__c(Vendor__c = account1.Id, Product__c = product1.Id);
+		insert vp;
+
 	}
 	
 	/*******************************************************
@@ -92,7 +101,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
-				
+		System.assert(customController.newPurchaseOrder);
+		System.assertEquals(customController.po.Status__c,'In Progress');
 		Purchase_Order__c po2 = new Purchase_Order__c();
 		insert po2;
 
@@ -102,7 +112,9 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.CurrentPage().getparameters().put('id', po2.Id)		;
 		ApexPages.StandardController stdController2 = new ApexPages.StandardController(po2);
 		RMS_vendorPurchaseOrderController customController2  = new RMS_vendorPurchaseOrderController(stdController2);
-		
+		customController2.selectedVendor = vendorAccount.Id;
+		customController2.costPurchaseOrder =true;
+		System.assert(customController2.vendorProducts.contains(customController2.productItems[1].getvalue()));
 	}
 
 	/*******************************************************
@@ -239,7 +251,14 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		
 		// Save with a vendor, 
-		customController.save();	
+		customController.save();
+
+		//JETT-712 Verify PO Status is updated upon save if Status is Released, Estimated Ship Date is populated, and related OrderItems all have wholesale costs
+		customController.po.Estimated_Ship_Date__c = System.Today();	
+		customController.po.Status__c = 'Released';
+		customController.save();
+		System.assert(customController.po.Status__c == 'Confirmed');
+
 		List<Purchase_Order__c> newPOList = [SELECT Id, Subtotal__c FROM Purchase_Order__c WHERE Order__c =: soldOrder.Id];
 
 		// Set up another controller with no order Id
@@ -249,7 +268,10 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.StandardController stdController2 = new ApexPages.StandardController(po2);
 		RMS_vendorPurchaseOrderController customController2  = new RMS_vendorPurchaseOrderController(stdController2);
 
+		//KR - Save with orderId isBlank
 		customController2.selectedVendor = vendorAccount.Id;
+		customController2.orderId = '';
+		customController2.save();
 		//TODO: Finish setting up data to add store location to user
 		// Save with a vendor but no PO in the controller
 //		customController2.save();
@@ -264,7 +286,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	*******************************************************/
 	static testmethod void AddProductTest(){
 		createTestRecords();
-
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
@@ -288,12 +309,30 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController2.newProduct = testProduct.Id;
 		customController2.selectedPricebook = priceBookId;		
 		customController2.addproduct();
+		Test.startTest();
 
 		ApexPages.StandardController stdController3 = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController3  = new RMS_vendorPurchaseOrderController(stdController3);
 		// Add product with right pricebook
+		customController3.newProduct = testProduct.Id;
 		customController3.selectedPricebook = Test.getStandardPricebookId();		
 		customController3.addproduct();
+
+
+		//Cover branch where costPurchaseOrder is true
+		customController3.costPurchaseOrder = true;
+		customController3.costCenter = null;
+		customController3.addproduct();
+		customController3.costCenter = '1';
+		customController3.addproduct();
+		customController3.storeLocationNumber = '';
+		customController3.addproduct();
+		customController3.storeLocationNumber = '1';
+		customController3.addproduct();
+		testProduct.Account_Number__c = null;
+		update testProduct;
+		customController3.addproduct();
+		Test.stopTest();
 	}
 
 	/*******************************************************
@@ -302,9 +341,15 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	static testmethod void MiscButtonTest(){
 		createTestRecords();
 
-		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
-		Purchase_Order__c po = new Purchase_Order__c();
+		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id);
+		insert po;
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		soldOrderItem.NSPR__c = false;
+		soldOrderItem.Verify_Item_Configuration__c = false;
+		soldOrderItem.Purchase_Order__c = po.Id;
+		update soldOrderItem;
 		
 		// Set up controller with an order Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
@@ -317,10 +362,27 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		// TODO: Add Asserts
 		customController.cancel();
 		customController.confirm();
+
 		customController.releasePurchaseOrder();
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
+		customController.relatedOrder.Status = 'Ready to Order';
+		customController.po.Status__c = 'New';
+		customController.releasePurchaseOrder();
+		system.debug(apexPages.getMessages());
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
+		customController.po.Status__c = 'In Progress';
+		customController.electronicOrder = true;
+		customController.releasePurchaseOrder();
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));
+		customController.electronicOrder = false;
+		customController.releasePurchaseOrder();
+		System.assertEquals(customController.po.Status__c, 'Released');
+	
 		customController.cancelPurchaseOrder();
 		customController.checkReceived();
 		customController.updateCostCenters();
+		customController.writeOff();
+		customController.receive();
 		
 	}
 
@@ -358,7 +420,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
 		OrderItem soldOrderItem = [SELECT Id, Pricebookentry.Product2.Name, Order.Store_Location__c, Order.AccountId, Order.EffectiveDate, Order.BillToContactId FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
-		List<OrderItem> orderItemsToReceive = new List<OrderItem>(); 
+		List<OrderItem> orderItemsToReceive = new List<OrderItem>{soldOrderItem}; 
 		Set<Id> assetIds = new Set<Id>();
 		soldOrderItem.Date_Received__c = System.today();
 		soldOrderItem.Quantity_To_Receive__c = 1;
@@ -373,7 +435,90 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 		
 		// TODO: Add system asserts		
+		System.assert(customController.receiveLineItems(orderItemsToReceive, assetIds) != null);
+		orderItemsToReceive[0].Quantity_to_Receive__c = null;
+		orderItemsToReceive[0].Date_Received__c = System.today();
 		customController.receiveLineItems(orderItemsToReceive, assetIds);
+		System.debug(ApexPages.getMessages());
+		system.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.REC_DATE_QUANTITY_REQUIRED));
+		orderItemsToReceive[0].Quantity_to_Receive__c = 1;
+		orderItemsToReceive[0].Unit_Wholesale_Cost__c = null;
+		orderItemsToReceive = new List<OrderItem>{soldOrderItem}; 
+		customController.receiveLineItems(orderItemsToReceive, assetIds);
+		system.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+		
 
+
+	}
+
+
+	/*******************************************************
+					receiveLineItemsTest
+	*******************************************************/
+	static testmethod void writeOffLineItemsTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id, Pricebookentry.Product2.Name, Order.Store_Location__c, Order.AccountId, Order.EffectiveDate, Order.BillToContactId FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		List<OrderItem> orderItemsToWriteOff = new List<OrderItem>{soldOrderItem}; 
+		Set<Id> assetIds = new Set<Id>();
+		soldOrderItem.Date_Written_Off__c = System.today();
+		soldOrderItem.Quantity_To_Write_Off__c  = 1;
+		soldOrderItem.Unit_Wholesale_Cost__c = 100;
+		update soldOrderItem;
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+			
+		System.assert(customController.writeOffLineItems(orderItemsToWriteOff, assetIds) != null);
+		orderItemsToWriteOff[0].Date_Written_Off__c = System.Today();
+		orderItemsToWriteOff[0].Quantity_To_Write_Off__c = null;
+		customController.writeOffLineItems(orderItemsToWriteOff, assetIds);
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.WRITEOFF_DATE_QUANTITY_REQUIRED));
+		orderItemsToWriteOff[0].Date_Written_Off__c = System.Today();
+		orderItemsToWriteOff[0].Quantity_To_Write_Off__c = 1;
+		soldOrderItem.Unit_Wholesale_Cost__c = null;
+		customController.writeOffLineItems(orderItemsToWriteOff, assetIds);
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+
+
+
+
+	}
+
+	@isTest
+	public static void testOrderItemWrapperClass(){		
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
+	
+		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper();
+		wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
+		System.assertEquals(wrap.orderItem,soldOrderItem);	
+		System.assertEquals(wrap.account,vendorAccount);	
+		System.assertEquals(wrap.product,testProduct);	
+		wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem);
+		wrap.quantityReceived = 1;
+		wrap.dateReceived = System.today();
+		System.assertEquals(wrap.orderItem,soldOrderItem);		
+	}
+
+	static boolean containsMessage(List<ApexPages.Message> pageMessages, String message){
+		boolean returnVal = false;
+		for(ApexPages.Message msg : pageMessages){
+			if(msg.getDetail().contains(message)){
+				returnVal = true;
+				break;
+			}
+		}
+		return returnVal;
 	}
 }

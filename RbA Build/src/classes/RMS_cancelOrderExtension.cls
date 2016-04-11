@@ -74,17 +74,17 @@ public with sharing class RMS_cancelOrderExtension {
 			discountsToCancel.add(discToCancel);
 		}
 
-		try{
+//		try{
 			// upsert all of the cancelled order items, pos, and the order
 			upsert purchaseOrdersToCancel;  
 			upsert discountsToCancel; 
 			upsert orderItemsToCancel; 
 			upsert theOrder;
-		} catch (Exception e){
+//		} catch (Exception e){
 			// TODO: Add comment here
-			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
-			return null;
-		}
+//			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
+//			return null;
+//		}
 
 		// Redirect the user back to the order page
 		PageReference pageRef = new PageReference('/' + theId);
