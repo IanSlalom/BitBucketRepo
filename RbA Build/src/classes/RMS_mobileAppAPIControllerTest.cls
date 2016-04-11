@@ -76,6 +76,22 @@ private class RMS_mobileAppAPIControllerTest {
 		Blob b = (blob) (RestContext.response.responseBody);
 		System.debug('################################################## ' + b.toString());
 //		System.assert(b.toString().startsWith('{"tmAppts":'));
+		
+		//Cover various helper class method invocations
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.SAVE_TECH_MEASURE;
+		RMS_mobileAppAPIController.doPost();
+
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.RESULT_APPOINTMENTS;
+		RMS_mobileAppAPIController.doPost();
+
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.CREATE_CONTACT;
+		RMS_mobileAppAPIController.doPost();
+
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.CUSTOMER_JOB_SEARCH;
+		RMS_mobileAppAPIController.doPost();
+
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.GET_SELECTED_SEARCH_RESULTS;
+		RMS_mobileAppAPIController.doPost();
 	}
 
 	static testmethod void testdoPostException(){
@@ -87,7 +103,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
-		System.assert(b.toString().startsWith('Unhandeld Exception:'));
+		System.assert(b.toString().startsWith('Unhandled Exception:'));
 	}
 
 	static testmethod void testdoPostUnsupportedOperation(){

@@ -19,6 +19,10 @@
                 <behavior>Edit</behavior>
                 <field>Disclosure__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Language__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -42,8 +42,8 @@ private class RMS_mobileAppRequestHelperTest {
       		List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, Synced_DateTime__c, isCancelled__c FROM Event Where OwnerId =: u.Id and StartDateTime >= :newApptTime.addDays(-1) and Type = 'Tech Measure'];
      		System.assertEquals(salesEvents.size(),1);
      		System.assertEquals(techmEvents.size(),1);
-     		System.assert(Datetime.now().getTime() - salesEvents[0].Synced_DateTime__c.getTime() < 2000);
-     		System.assert(Datetime.now().getTime() - techmEvents[0].Synced_DateTime__c.getTime() < 2000);
+     		System.assert(Datetime.now().getTime() - salesEvents[0].Synced_DateTime__c.getTime() < 120000);
+     		System.assert(Datetime.now().getTime() - techmEvents[0].Synced_DateTime__c.getTime() < 120000);
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
@@ -143,12 +143,14 @@ private class RMS_mobileAppRequestHelperTest {
 		System.assertEquals(resultRecord.opportunityID, opp.Id);
 
 		//If # OpportunityContactRoles returned by query is more than max allowed, return an error message
-		OpportunityContactRole contact2 = new OpportunityContactRole(ContactId = contact.ID, OpportunityID = opp.Id, IsPrimary = false, Role = 'Influencer');
+		Opportunity opp2 = utility.createOpportunity(dwelling.Id, 'New2');	
+		opp2.CloseDate = System.Today().addDays(1);
+		insert opp2;
+		OpportunityContactRole contact2 = new OpportunityContactRole(ContactId = contact.ID, OpportunityID = opp2.Id, IsPrimary = true, Role = 'Influencer');
 	    insert contact2;
 	    JSONResponse = mHelper.customerSearch(JSON.serialize(dtoSearchParams));
 	    responseContainer = (RMS_mobileAppRequestHelper.DTOCustomerSearchResultsContainer)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.DTOCustomerSearchResultsContainer.class);
-// TODO: fix this assert
-//		System.assertEquals(responseContainer.error, RMS_mobileAppRequestHelper.RMS_Settings_map.get('rSuite.search.tooManyResults.error').Value__c);
+		System.assertEquals(responseContainer.error, RMS_mobileAppRequestHelper.RMS_Settings_map.get('rSuite.search.tooManyResults.error').Value__c);
 
 	}
 
@@ -182,6 +184,88 @@ private class RMS_mobileAppRequestHelperTest {
 	   	System.assertEquals(apptContainer.salesAppts[0].event.Id, event.Id);
 	}
 
+	static testmethod void testSaveTechMeasure(){
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		//tUtil.createSalesAppt(u.Id, newApptTime, false);
+		tUtil.createTMAppt(u.Id, tmApptTime);
+		Account dwelling = [select Id from Account where Name = '1'];
+		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'Negotiation';
+		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
+		Order ord1 = [Select Id, Status from Order where OpportunityID =: opp.Id];
+		ord1.Status = 'Ready to Order';
+		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp.id AND Sold_Order__c = :ord1.id];
+		workOrder[0].Work_Order_Status__c = 'Scheduled';
+		PricebookEntry pricebookEntry1 = [Select Id from PricebookEntry where Product2Id =: productList[0].Id];
+		OrderItem oiToUpdate = new OrderItem(OrderId = ord1.Id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
+		insert oiToUpdate;
+		oiToUpdate.Quantity =1;
+		OrderItem oiToInsert = new OrderItem(OrderId = ord1.Id, PricebookentryId = pricebookEntry1.Id, Quantity = 10, UnitPrice = 10 );
+		TM_OffSet__C tmOffsetToUpdate = new TM_OffSet__C(Order_Line__c = oiToUpdate.Id,Description__c = 'New Description', Measurement__c = 1 );
+		insert tmOffsetToUpdate;
+		tmOffsetToUpdate.Description__c = 'Updated Description';
+		TM_OffSet__c tmOffsetToInsert = new TM_Offset__C(Order_Line__c = oiToUpdate.Id,Description__c = 'Insert Description TMO', Measurement__c = 2 );
+
+		RMS_mobileAppRequestHelper.OrderItemContainer oiContainerUpdate = new RMS_mobileAppRequestHelper.OrderItemContainer();
+		oiContainerUpdate.oi = oiToUpdate;
+		oiContainerUpdate.tmOffSetList = new List<TM_Offset__C>{tmOffsetToUpdate};
+		RMS_mobileAppRequestHelper.OrderItemContainer oiContainerInsert = new RMS_mobileAppRequestHelper.OrderItemContainer();
+		oiContainerInsert.oi = oiToInsert;
+		oiContainerInsert.tmOffSetList = new List<TM_Offset__C>{tmOffsetToInsert};
+		RMS_mobileAppRequestHelper.OrderContainer orderContainerUpsert = new RMS_mobileAppRequestHelper.OrderContainer();
+		orderContainerUpsert.anOrder = ord1;
+		orderContainerUpsert.oiContainerList = new List<RMS_mobileAppRequestHelper.OrderItemContainer>{oiContainerUpdate,oiContainerInsert};
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainerUpsert = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainerUpsert.anOrderContainer = orderContainerUpsert;
+		oppContainerUpsert.oppty = opp;
+		RMS_mobileAppRequestHelper.TechMeasureAppointment tmApptUpdate = new RMS_mobileAppRequestHelper.TechMeasureAppointment();
+		tmApptUpdate.account = dwelling;
+		tmApptUpdate.workOrder = workOrder[0];
+		tmApptUpdate.opptyContainer = oppContainerUpsert;
+		RMS_mobileAppRequestHelper.Appointments appUpdate = new RMS_mobileAppRequestHelper.Appointments();
+		appUpdate.tmAppts = new List<RMS_mobileAppRequestHelper.TechMeasureAppointment>{tmApptUpdate};
+
+
+
+		
+
+        System.runAs(u) {
+        	Test.StartTest();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			helper.saveTechMeasure(JSON.serialize(appUpdate));
+			Test.StopTest();
+
+			//Assert Opportunity Status is updated
+			opp = [Select StageName from Opportunity where Id =: opp.Id];
+			System.assertEquals(opp.StageName,'Negotiation');
+			//Assert Order status is updated
+			ord1 = [Select Status from Order where Id =: ord1.Id];
+			System.assertEquals(ord1.Status, 'Ready to Order');
+			//assert OrderItems are updated/inserted
+			oiToUpdate = [Select Quantity from OrderItem where Id =: oiToUpdate.Id];
+			System.assertEquals(oiToUpdate.Quantity, 1);
+			List<OrderItem> oiInsertedList = [Select Id from OrderItem where Quantity = 10];
+			System.assertEquals(oiInsertedList.size(), 1);
+			//Assert Tech Measure Offsets are updated/serted
+			tmOffsetToUpdate = [Select Description__c from TM_Offset__C where Id =: tmOffsetToUpdate.Id];
+			System.assertEquals(tmOffsetToUpdate.Description__c,'Updated Description');
+			List<TM_Offset__C> tmoInsertedList = [Select Id from TM_Offset__C where Description__c = 'Insert Description TMO'];
+			System.assertEquals(tmoInsertedList.size(),1);
+			//Assert RBA Work Order is updated 
+			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
+			System.assertEquals(rbaUpdatedList.size(),1);
+        }
 	
+	}
 
 }

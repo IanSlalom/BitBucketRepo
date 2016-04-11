@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -235,9 +235,12 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
+        <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
+        <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
         <name>Layout</name>
     </types>
     <types>
@@ -255,14 +258,14 @@
     <types>
         <members>Account</members>
         <members>Discount__c</members>
+        <members>Event</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
-        <members>Store_Finance_Program__c</members>
         <members>RbA_Work_Order__c</members>
-        <members>Event</members>
+        <members>Store_Finance_Program__c</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>

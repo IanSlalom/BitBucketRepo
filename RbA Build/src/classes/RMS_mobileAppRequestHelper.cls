@@ -504,17 +504,27 @@ public with sharing class RMS_mobileAppRequestHelper {
       for (QuoteContainer qc: sa.opptyContainer.quoteContainerList) {
         // add the quote id to the quote line items and put the quote line items in the list to be inserted
         for (QuoteLineItem qli : qc.quoteLineItems) {
-          qli.QuoteId = qc.aQuote.Id;
-          qliList.add(qli);
+			if (qli.QuoteId == null) {
+				// since this is used in inserts and updates we need to set the id only when the qli is net new
+//TODO:remove this line				System.debug('###################: adding a new qli: ' + qli.rSuite_Id__c);
+				qli.QuoteId = qc.aQuote.Id;
+			}
+			qliList.add(qli);
         }
         // add the quote id to the quote discounts and put the quote discounts in the list to be inserted
         for (Quote_Discount__c qd : qc.quoteDiscountList) {
-          qd.Quote__c = qc.aQuote.Id;
+			if (qd.Quote__c == null) {
+				// since this is used in inserts and updates we need to set the id only when the qli is net new
+				qd.Quote__c = qc.aQuote.Id;
+			}
           qdList.add(qd);
         }
         // add the quote id to the quote financing and put the quote financing in the list to be inserted
         for (Quote_Financing__c qf : qc.quoteFinancingList) {
-          qf.Related_Quote__c = qc.aQuote.Id;
+			if (qf.Related_Quote__c == null) {
+				// since this is used in inserts and updates we need to set the id only when the qli is net new
+				qf.Related_Quote__c = qc.aQuote.Id;
+			}
           qfList.add(qf);
         }
       }
@@ -789,6 +799,94 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
   }
 
+  public String saveTechMeasure(String inputJSON){
+  
+    Appointments appt = (Appointments)JSON.deserialize(inputJSON,Appointments.class);
+    System.SavePoint sp = Database.setSavePoint();
+    try{
+      List<Order> ordToUpdate = new List<Order>();
+      List<OrderItemContainer> oiContainersToUpsert = new List<OrderItemContainer>();
+      List<OrderItem> oiToUpsert = new List<OrderItem>();
+      List<TM_Offset__c> TMOffsetToUpsert = new List<TM_Offset__c>();
+      List<Opportunity> oppToUpdate = new List<Opportunity>();  
+      List<RbA_Work_Order__c> rbaWorkOrdersToUpdate = new List<RbA_Work_Order__c>();
+     
+      for(TechMeasureAppointment tmAppt: appt.tmAppts){
+        oppToUpdate.add(tmAppt.opptyContainer.oppty);
+        rbaWorkOrdersToUpdate.add(tmAppt.workOrder);
+        OrderContainer oContainer = tmAppt.opptyContainer.anOrderContainer;
+        ordToUpdate.add(oContainer.anOrder);  
+        oiContainersToUpsert.addAll(oContainer.oiContainerList); 
+      }  
+
+      
+
+      Database.SaveResult[] lsr  = Database.update(oppToUpdate, false);
+      for(Database.SaveResult sr : lsr){
+        if (!sr.isSuccess()) {            
+          for(Database.Error err : sr.getErrors()) {
+            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
+          }
+        }
+      }
+      
+      lsr = Database.update(rbaWorkOrdersToUpdate, false);
+      for(Database.SaveResult sr : lsr){
+        if (!sr.isSuccess()) {            
+          for(Database.Error err : sr.getErrors()) {
+            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': RBA Work Order fields that affected this error: ' + err.getFields());
+          }
+        }
+      }
+
+      for(OrderItemContainer oiCon: oiContainersToUpsert){
+        oiToUpsert.add(oiCon.oi);
+      }    
+
+      Database.UpsertResult[] lur = Database.upsert(oiToUpsert, false);
+      for(Database.UpsertResult ur : lur){
+        if (!ur.isSuccess()) {        
+          for(Database.Error err : ur.getErrors()) {
+            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order Item fields that affected this error: ' + err.getFields());
+          }
+        }
+      }
+
+      for(OrderItemContainer oiCon: oiContainersToUpsert){
+        for(TM_Offset__c tmOff: oiCon.tmOffSetList){
+          tmOff.Order_Line__c = oiCon.oi.Id;
+          TMOffsetToUpsert.add(tmOff);
+        }     
+      }   
+     
+     lur = Database.upsert(TMOffsetToUpsert, false);
+      for(Database.UpsertResult ur : lur){
+        if (!ur.isSuccess()) {            
+          for(Database.Error err : ur.getErrors()) {
+            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Tech Measure Offset fields that affected this error: ' + err.getFields());
+          }
+        }
+      }
+
+      //Update Order last, as activated orders do not allow addition of orderitems
+     lsr = Database.update(ordToUpdate, false);
+      for(Database.SaveResult sr : lsr){
+        if (!sr.isSuccess()) {            
+          for(Database.Error err : sr.getErrors()) {
+            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order fields that affected this error: ' + err.getFields());
+          }
+        }
+      }
+
+    }catch(Exception e){
+      Database.rollBack(sp);
+      appt.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+    }
+
+    return JSON.serialize(appt);
+  
+  }
+  
   public class Appointments {
     public List<SalesAppointment> salesAppts;
     public List<TechMeasureAppointment> tmAppts;
@@ -833,6 +931,12 @@ public with sharing class RMS_mobileAppRequestHelper {
     public List<OrderItem>  oiList {get; set;}
     public List<Order_Discount__c> orderDiscountList {get; set;}
     public List<Order_Financing__c> orderFinancingList {get; set;}
+    public List<OrderItemContainer> oiContainerList{get;set;}
+  }
+
+  public class OrderItemContainer{
+    public OrderItem oi {get;set;}
+    public List<TM_Offset__c> tmOffSetList {get;set;}
   }
 
   public class QuoteContainer {
