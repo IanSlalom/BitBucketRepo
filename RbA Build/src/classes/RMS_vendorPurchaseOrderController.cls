@@ -55,6 +55,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public String receiveStatus {get; set;}   
   public String errorOccurred {get; set;}   
   public boolean overReceivingAllowed {get; set;}   
+  public boolean zeroDollarVendor {get; set;}   
   public boolean writeOff {get; set;}   
   public boolean receiving {get; set;}   
   public boolean renderVendorSelection{get;set;}
@@ -371,26 +372,17 @@ public with sharing class RMS_vendorPurchaseOrderController {
     else {
       newPurchaseOrder = false;
       
-      Purchase_Order__c po1 = [SELECT Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name,Vendor__r.Over_Receiving_Allowed__c From Purchase_Order__c Where ID =:po.id];
+      Purchase_Order__c po1 = [	SELECT 	Id, Order__c, Order__r.Pricebook2Id, Vendor__c, Vendor__r.Name, 
+      									Vendor__r.Over_Receiving_Allowed__c, Vendor__r.Zero_Dollar_Vendor__c 
+      							From Purchase_Order__c Where ID =:po.id];
       orderId = po1.Order__c;
       costPurchaseOrder = (po.RecordTypeId == UtilityMethods.retrieveRecordTypeId( 'Cost_Purchase_Order','Purchase_Order__c')) ? true : false;
 
       selectedVendor = po1.Vendor__c;
       selectedVendorName = po1.Vendor__r.Name;
       overReceivingAllowed = po1.Vendor__r.Over_Receiving_Allowed__c;
-      
+      zeroDollarVendor = po1.Vendor__r.Zero_Dollar_Vendor__c;
       selectedPricebook = po1.Order__r.Pricebook2Id;
-      
-//      orderStatus = this.po.Status__c;
- //     status =  (orderStatus == 'Released' && selectedVendorName != 'RbA')  ?  'rel'    :
-//            (orderStatus == 'Released' && selectedVendorName == 'RbA')  ?  'rbarel'  :
-//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName != 'RbA')  ?  'con'    :
-//            ((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && selectedVendorName == 'RbA')  ?  'rbacon'  :
-//            (orderStatus == 'Rejected')                  ?  'rej'    :
-//            (orderStatus == 'Cancelled')                  ?  'can'    :
-//            (orderStatus == 'Received')                  ?  'rec'    :
-//            (selectedVendorName == 'RbA')                    ?  'rbanew'  :
-//                                                'new';
     }
 
     // Check if there's an orderId
@@ -688,7 +680,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
     updateSubTotal();   
     //JETT-712  
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
-      boolean allOrderItemsHaveWholesaleCost = ([Select Unit_Wholesale_Cost__c from OrderItem where Purchase_Order__c =: po.Id and Unit_Wholesale_Cost__c = null]).isEmpty();
+      boolean allOrderItemsHaveWholesaleCost;
+      if (zeroDollarVendor) allOrderItemsHaveWholesaleCost = true;
+      else allOrderItemsHaveWholesaleCost = ([Select Unit_Wholesale_Cost__c from OrderItem where Purchase_Order__c =: po.Id and Unit_Wholesale_Cost__c = null]).isEmpty();
+
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
       }
@@ -922,7 +917,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
-			if(oi.Unit_Wholesale_Cost__c == null) {
+			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null;
 			}
@@ -1046,7 +1041,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
-			if(oi.Unit_Wholesale_Cost__c == null) {
+			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null; 
 				  
@@ -1253,7 +1248,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       
     // If the status is received and one of the unit costs is null, return true
     for(OrderItemWrapper oiw : orderItemWrapperByVendor){
-      if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+      if (oiw.orderItem.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
         ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UNIT_COST_REQUIRED));
         return true;          
       }
