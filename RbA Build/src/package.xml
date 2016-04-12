@@ -8,7 +8,9 @@
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
         <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
+        <members>MA_SchedulerUtilities</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
@@ -85,9 +87,13 @@
     </types>
     <types>
         <members>AutoCompleteV2</members>
+        <members>MA_SchedulerAssignResourceComp</members>
         <members>MA_SchedulerCalendarComp</members>
+        <members>MA_SchedulerCancelAppointmentComp</members>
         <members>MA_SchedulerErrorComp</members>
+        <members>MA_SchedulerListViewOptionsModalComp</members>
         <members>MA_SchedulerLoaderComp</members>
+        <members>MA_SchedulerMainNav</members>
         <members>MA_SchedulerRoutes</members>
         <members>MA_SchedulerSettingsComp</members>
         <members>MA_SchedulerStylingComp</members>
@@ -313,15 +319,15 @@
     <types>
         <members>Account</members>
         <members>Discount__c</members>
+        <members>Event</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
-        <members>Event</members>
-        <members>Order_Financing__c</members> 
-        <members>Purchase_Order__c</members>  
+        <members>Order_Financing__c</members>
+        <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Store_Finance_Program__c</members>
-        <name>Workflow</name> 
-    </types> 
+        <name>Workflow</name>
+    </types>
     <version>33.0</version>
 </Package>
