@@ -841,18 +841,17 @@ public with sharing class RMS_financialTransactionManager {
 							newJE.Baan_Business_Partner_Number__c = baanBPN;
 							
 							if(assetType == 'InventoryReceived'){
-<<<<<<< HEAD
 	                            if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null){
 	                            	newJE.Amount__c = 0;
 	                            }else{
 	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
 	                            }
-=======
+
 								if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null)
 								   newJE.Amount__c = 0;
 								else 
 	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
->>>>>>> refs/heads/master
+
 							}else if(assetType == 'InventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'VendorCredit'){
@@ -1281,7 +1280,7 @@ public with sharing class RMS_financialTransactionManager {
                                 if(je.Type__c == 'Rev Recognized - AR'){
                                     alreadyHasJEofTypeRevRecAR = true;  
                                     relatedRevRecognizedARJE.add(je);
-                                }
+                                } 
                                 if(je.Type__c == 'Rev Recognized - Finance Fees'){
                                     alreadyHasJEofTypeRevRecFinanceFees = true; 
                                     relatedRevRecognizedFinanceFeesJE.add(je);
