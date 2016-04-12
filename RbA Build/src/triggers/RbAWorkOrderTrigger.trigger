@@ -48,7 +48,6 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         
         if(Trigger.isUpdate && Trigger.isBefore){
             workOrderCreationManager.createInstallWorkOrderOnTechMeasureComplete(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-      //       orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
          
     
@@ -62,17 +61,25 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         // After Insert 
        
       else if(Trigger.isInsert && Trigger.isAfter){
-           // handler.OnAfterInsert(Trigger.new, Trigger.newMap);
-            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			// run the order rollup real-time if the order trigger
+			// hasn't been run yet, otherwise run it @future			
+			  if (UtilityMethods.hasOrderTriggerRan())
+				RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
+			  else
+	            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         } 
      
         
         // After Update
         
-      else if(Trigger.isUpdate && Trigger.isAfter){
-           // handler.onAfterUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        }
+		else if(Trigger.isUpdate && Trigger.isAfter){
+			// run the order rollup real-time if the order trigger
+			// hasn't been run yet, otherwise run it @future			
+			if (UtilityMethods.hasOrderTriggerRan())
+				RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
+			else
+				orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+		}
 
        
                     
@@ -92,9 +99,9 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         }
         */
         
-		// Only update the orders if their update trigger hasn't run
-		// already
-    	if ( UtilityMethods.hasOrderTriggerRan() ) return;
-        update orders;
+		// run the order rollup real-time if the order trigger
+		// hasn't been run yet, otherwise run it @future			
+		if (UtilityMethods.hasOrderTriggerRan()) return;
+ 	    update orders;
     }
 }

@@ -27,7 +27,6 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                                         WHERE AccountId = :aid];
         num_assets = (Integer) results2[0].get('expr0');
         
-        propPickValSelected = o.Service_Type__c;
         
         
         listOI=new list<OrderItem>();
