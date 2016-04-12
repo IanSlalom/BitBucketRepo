@@ -1,6 +1,7 @@
 global with sharing class MA_SchedulerBookingWindow {
 	
 	public Boolean isValid;
+	public String dayOfWeek;
     public String endDateTimeFormated;
     public String startDateTimeFormated;
     public DateTime endDateTime;
@@ -13,7 +14,7 @@ global with sharing class MA_SchedulerBookingWindow {
     public MA_SchedulerBookingWindow(String dayOfWeek, Date day, Map<String, Object> window, Set<Id> resourceIds, DateTime startDateTime, DateTime endDateTime, String storeTimezone) {
         this.isValid = false;
 
-        /*
+        /**/
         Date startOfWeek = day.toStartOfWeek();
 
         Map<String, Integer> dayNumMap = new Map<String, Integer> {
@@ -26,9 +27,9 @@ global with sharing class MA_SchedulerBookingWindow {
             'saturday' => 6
         };
 
-        if (startOfWeek.daysBetween(day) == dayNumMap.get(dayOfWeek)) {
-        */
-        if (DateTime.newInstance(day, Time.newInstance(12, 0, 0, 0)).format('EEEE').toLowercase() == dayOfWeek.toLowercase()) {
+        if (startOfWeek.daysBetween(day) == dayNumMap.get(dayOfWeek.toLowercase())) {
+        /**/
+        //if (DateTime.newInstance(day, Time.newInstance(12, 0, 0, 0)).format('EEEE').toLowercase() == dayOfWeek.toLowercase()) {
 
 
         	/*
@@ -83,11 +84,16 @@ global with sharing class MA_SchedulerBookingWindow {
 
 
 
+            /*
+            startDateTimeTemp = MA_SchedulerUtilities.convertTimezoneToTimezone(startDateTimeTemp, null, storeTimezone, false);
+            endDateTimeTemp = MA_SchedulerUtilities.convertTimezoneToTimezone(endDateTimeTemp, null, storeTimezone, false);
+            */
+
+            startDateTimeTemp = MA_SchedulerUtilities.convertTimezoneToTimezone(startDateTimeTemp, null, storeTimezone);
+            endDateTimeTemp = MA_SchedulerUtilities.convertTimezoneToTimezone(endDateTimeTemp, null, storeTimezone);
 
 
-
-
-
+            /*
             Integer serverOffset = Integer.valueOf(startDateTimeTemp.format('Z'));
         	Integer storeOffset = Integer.valueOf(startDateTimeTemp.format('Z', storeTimezone));
 
@@ -106,12 +112,13 @@ global with sharing class MA_SchedulerBookingWindow {
 
 			startDateTimeTemp = startDateTimeTemp.addMinutes(-offsetMinutes);
 			//System.debug(startDateTimeTemp);
+            */
 			/*
 			startDateTimeTemp = DateTime.newInstance(day, startDateTimeTemp.time());
 			System.debug(startDateTimeTemp);
 			*/
 
-			endDateTimeTemp = endDateTimeTemp.addMinutes(-offsetMinutes);
+			//endDateTimeTemp = endDateTimeTemp.addMinutes(-offsetMinutes);
 			//System.debug(endDateTimeTemp);
 			/*
 			endDateTimeTemp = DateTime.newInstance(day, endDateTimeTemp.time());
@@ -135,13 +142,13 @@ global with sharing class MA_SchedulerBookingWindow {
 
 
 
-            ///*
+            /*
             System.debug('NEW BOOKING WINDOW');
             System.debug(endDateTimeTemp.format('MM/dd/yyyy hh:mm a Z', storeTimezone) + '     >     ' + startDateTimeChecked.format('MM/dd/yyyy hh:mm a Z', storeTimezone));
             //System.debug(startDateTimeTemp.format('MM/dd/yyyy h:mm a Z', storeTimezone));
             System.debug(startDateTimeTemp.format('MM/dd/yyyy h:mm a Z', storeTimezone) + '     <     ' + endDateTimeChecked.format('MM/dd/yyyy hh:mm a Z', storeTimezone));
             //System.debug(endDateTimeTemp.format('MM/dd/yyyy hh:mm a Z', storeTimezone));
-            //*/
+            //
 
             System.debug(endDateTimeTemp.format() + '     >     ' + startDateTimeChecked.format());
             System.debug(startDateTimeTemp.format() + '     <     ' + endDateTimeChecked.format());
@@ -150,11 +157,13 @@ global with sharing class MA_SchedulerBookingWindow {
             System.debug(startDateTimeChecked);
             System.debug(endDateTimeTemp);
             System.debug(endDateTimeChecked);
+            */
 
-            System.debug(startDateTimeTemp < endDateTimeChecked && endDateTimeTemp > startDateTimeChecked);
+            //System.debug(startDateTimeTemp < endDateTimeChecked && endDateTimeTemp > startDateTimeChecked);
 
             if (startDateTimeTemp < endDateTimeChecked && endDateTimeTemp > startDateTimeChecked) {
 	            this.isValid = true;
+	            this.dayOfWeek = dayOfWeek.capitalize();
 	            this.availableResources = new Set<Id>(resourceIds);
 	            this.bookedWorkOrders = new Set<Id>();
 	            
@@ -162,7 +171,8 @@ global with sharing class MA_SchedulerBookingWindow {
 	            this.endDateTime = endDateTimeTemp;
 
 	            this.startDateTimeFormated = this.startDateTime.format('MM/dd/yyyy hh:mm a', storeTimezone);
-	            this.endDateTimeFormated = this.endDateTime.format('MM/dd/yyyy hh:mm a', storeTimezone);
+	            //this.endDateTimeFormated = this.endDateTime.format('MM/dd/yyyy hh:mm a', storeTimezone);
+	            this.endDateTimeFormated = this.endDateTime.format('hh:mm a', storeTimezone);
 	        }
         }
     }

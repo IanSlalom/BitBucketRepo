@@ -14,6 +14,7 @@ global with sharing class MA_SchedulerEvent {
 	public String contactName;
 	public String eventType;
 	public Boolean missingResource;
+	public Map<Id, String> assignedResourceMap;
 
 	public MA_SchedulerEvent(SObject obj, Map<Id, Id> userMap) {
 		Schema.SObjectType objType = obj.getSObjectType();
@@ -32,7 +33,7 @@ global with sharing class MA_SchedulerEvent {
 		workOrderId = sfEvent.WhatId;
 		resourceId = userMap != null && userMap.containsKey(sfEvent.OwnerId) ? userMap.get(sfEvent.OwnerId) : sfEvent.OwnerId;
 		//title = sfEvent.Subject;
-		title = 'busy';
+		title = sfEvent.Subject;
 		startDateTime = sfEvent.StartDateTime;
 		endDateTime = sfEvent.EndDateTime;
 		className = 'sfEvent';
@@ -40,8 +41,9 @@ global with sharing class MA_SchedulerEvent {
 		//url = new PageReference('/' + workOrderId).getUrl();
 		url = '';
 		contactName = '';
-		eventType = '';
+		eventType = 'personal';
 		missingResource = false;
+		assignedResourceMap = new Map<Id, String>();
 	}
 
 	public void convertMASchedulerEvent(MA_Scheduler_Event__c maEvent) {
@@ -56,6 +58,7 @@ global with sharing class MA_SchedulerEvent {
 		eventType = maEvent.RbA_Work_Order__r.Work_Order_Type__c.toLowerCase().deleteWhitespace();
 		className = 'maEvent ' + eventType;
 		missingResource = false;
+		assignedResourceMap = new Map<Id, String>();
 	}
 
 	public void convertMASchedulerEvent(RbA_Work_Order__c woEvent) {
@@ -77,6 +80,11 @@ global with sharing class MA_SchedulerEvent {
 		eventType = woEvent.Work_Order_Type__c.toLowerCase().deleteWhitespace();
 		className = 'woEvent ' + eventType;
 		missingResource = woEvent.Assigned_Resources__r.isEmpty();
+		assignedResourceMap = new Map<Id, String>();
+
+		for (Assigned_Resources__c resource : woEvent.Assigned_Resources__r) {
+			assignedResourceMap.put(resource.Scheduled_Resource__c, resource.Scheduled_Resource__r.Name);
+		}
 	}
 
 	private String discoverContactName(RbA_Work_Order__c workOrder) {
@@ -287,19 +295,27 @@ global with sharing class MA_SchedulerEvent {
 	public void setBookingWindowsOverlappingWorkOrders(List<MA_SchedulerBookingWindow> allBookingWindows) {
 		for (MA_SchedulerBookingWindow window : allBookingWindows) {
 
-			///*
-			System.debug('WORK ORDER FOR WINDOW BOOKING');
-			System.debug(startDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
-			System.debug(window.startDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
-			System.debug(window.startDateTimeFormated);
-			System.debug(endDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
-			System.debug(window.endDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
-			System.debug(window.endDateTimeFormated);
-			//*/
+			if (workOrderId == 'a0V4B000000SN7GUAW') {
+
+				///*
+				System.debug('WORK ORDER FOR WINDOW BOOKING');
+				System.debug(startDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
+				System.debug(window.startDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
+				System.debug(window.startDateTimeFormated);
+				System.debug(endDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
+				System.debug(window.endDateTime.format('MM/dd/yyyy hh:mm a Z', 'America/Los_Angeles'));
+				System.debug(window.endDateTimeFormated);
+				//*/
+
+			}
 
 
 			if (startDateTime < window.endDateTime && endDateTime > window.startDateTime) {
 				window.bookedWorkOrders.add(workOrderId);
+
+				if (!assignedResourceMap.isEmpty()) {
+					window.availableResources.removeAll(assignedResourceMap.keySet());
+				}
 			}
 		}
 	}
