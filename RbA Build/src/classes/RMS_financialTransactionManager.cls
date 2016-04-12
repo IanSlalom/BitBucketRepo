@@ -837,7 +837,10 @@ public with sharing class RMS_financialTransactionManager {
                             newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
 							
 							if(assetType == 'InventoryReceived'){
-	                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+								if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null)
+								   newJE.Amount__c = 0;
+								else 
+	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'InventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'VendorCredit'){
