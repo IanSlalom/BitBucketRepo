@@ -31,6 +31,7 @@
         <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
+        <members>RMS_createContactHistoryManager</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -52,6 +53,7 @@
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
         <members>RMS_opportunityUtilitiesTest</members>
+        <members>RMS_populateResourceonEventManager</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -79,8 +81,6 @@
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
-        <members>RMS_populateResourceonEventManager</members>
-        <members>RMS_createContactHistoryManager</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -130,6 +130,7 @@
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
         <members>BusinessAdjustmentTrigger</members>
+        <members>ContactTrigger</members>
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
@@ -139,7 +140,6 @@
         <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
-        <members>ContactTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
