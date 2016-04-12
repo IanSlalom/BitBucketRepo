@@ -861,9 +861,9 @@ public with sharing class RMS_financialTransactionManager {
 							if(newJE.Amount__c < 0){
                             	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
                           	}
-	        
-	                        journalEntriesToUpsert.add(newJE);
-	  
+	        				if(newJE.Amount__c > 0){ 
+	                        	journalEntriesToUpsert.add(newJE);
+	        				}
 	                	}else{
 		
 	                        list<Journal_Entry__c> jeListSentToBaan = new list<Journal_Entry__c>();
