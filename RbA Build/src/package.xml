@@ -270,6 +270,23 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>RbA_Operational_Reporting</members>
+        <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
+        <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
+        <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
+        <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
+        <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
+        <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
+        <name>Report</name>
+    </types>
+    <types>
+        <members>Orders_with_All_Fields</members>
+        <members>Orders_with_Order_Products</members>
+        <name>ReportType</name>
+    </types>
+    <types>
         <members>BuildingPermitText</members>
         <members>CasementWindowS1</members>
         <members>CreateSO</members>
@@ -296,15 +313,15 @@
     <types>
         <members>Account</members>
         <members>Discount__c</members>
+        <members>Event</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
-        <members>Event</members>
-        <members>Order_Financing__c</members> 
-        <members>Purchase_Order__c</members>  
+        <members>Order_Financing__c</members>
+        <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Store_Finance_Program__c</members>
-        <name>Workflow</name> 
-    </types> 
+        <name>Workflow</name>
+    </types>
     <version>33.0</version>
 </Package>
