@@ -1,0 +1,105 @@
+<apex:component >
+
+	<script>
+	    $ = jQuery.noConflict();
+
+	    var apexSchedulingController = 'MA_SchedulerController';
+	    var processCancellationResponse = { onSuccess: processCancellationSuccess, onFailure: processResponseError };
+	    var processWorkOrderCancellationRetrievalResponse = { onSuccess: processWorkOrderCancellationRetrievalSuccess, onFailure: processResponseError };
+
+	    $(function() {
+	        sforce.connection.sessionId = '{!$Api.Session_Id}';
+	    });
+
+	    function showCancellationModal() {
+			var workOrderId = $('#eventOptionsRecordId').val();
+
+			$('#cancellationReason').val('');
+			$('#workOrderCancellationId').val(workOrderId);
+
+			$('#cancellationModal').fadeIn('fast');
+			$('#loaderModal').show();
+			$('#cancellationModal').addClass('ma-open');
+			$('#cancellationOverlay').addClass('ma-in');
+			$('body').css('overflow','hidden');
+
+			sforce.apex.execute(apexSchedulingController, 'retrieveRecords', {objType: 'WorkOrder', filters: 'Id = \'' + workOrderId + '\''}, processWorkOrderCancellationRetrievalResponse);
+		}
+
+		function processWorkOrderCancellationRetrievalSuccess(response) {
+		    response = JSON.parse(response);
+		    console.log(response);
+
+		    if (response.success) {
+		        for (var i = 0, len = response.objList.length; i < len; i++) {
+		            var record = response.objList[i];
+		            $('#workOrderCancellationName').text(record.Name);
+		        }
+		        $('#loaderModal').hide();
+		    }
+		    else {
+		        handleError('MA_SchedulerCancelAppointmentComp : showCancellationModal', response);
+		    }
+		}
+
+		function saveCancellation() {
+		    $('#loaderModal').show();
+
+		    var workOrderId = $('#workOrderCancellationId').val();
+		    var cancellationReason = $('#cancellationReason').val();
+
+		    sforce.apex.execute(apexSchedulingController, 'cancelWorkOrder', {workOrderId: workOrderId, cancellationReason: cancellationReason}, processCancellationResponse);
+		}
+
+		function processCancellationSuccess(response) {
+		    response = JSON.parse(response);
+		    console.log(response);
+
+		    if (response.success) {
+		        $('.listViewportWrapper .refreshListButton').click();
+		        closeCancellationModal();
+		        $('#calendar').fullCalendar('refetchEvents');
+		        $('#loaderModal').hide();
+		    }
+		    else {
+		        handleError('MA_SchedulerCancelAppointmentComp : saveCancellation', response);
+		    }
+		}
+
+		function closeCancellationModal() {
+		    $('#cancellationModal').fadeOut('fast');
+		    $('#cancellationOverlay').removeClass('ma-in');
+		}
+	</script>
+
+	<div id="cancellationModal" class="ma-modal">
+	    <div id="cancellationContent" class="">
+	        <div id="cancelWorkOrder" class="">
+	            <div id="cancellationHeader" class="">
+                    <h3>Cancel Appointment</h3>
+                    <span id="cancellationModalClose" class="floatRight" onclick="closeCancellationModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+	            </div>
+
+	            <div id="cancellationBody" class="ma-modal-body">
+	                <div class="ma-modal-padding">
+	                	<input type="hidden" id="workOrderCancellationId" />
+	                	<div>Are you sure you want to cancel <span id="workOrderCancellationName" /></div>
+	                	<div>Reason for cancelling</div>
+	                	<div>
+	                		<input id="cancellationReason" />
+	            		</div>
+	                </div>
+	            </div><!--ma-modal-body-->
+
+	            <div class="ma-modal-footer">
+	                <div id="cancellationButtons" class="ma-modal-padding clearfix">
+	                    <button class="ma-button ma-button--white float-left" onclick="closeCancellationModal();">No, don't cancel</button>
+	                    <button class="ma-button ma-button--blue float-right" onclick="saveCancellation();">Yes, cancel</button>
+	                </div>
+	            </div><!--ma-modal-footer-->
+	        </div><!--ma-modal-window-->
+	    </div><!--ma-modal-content-->
+	</div><!--ma-modal-->
+
+	<div id="cancellationOverlay" class="ma-modal-overlay"></div>
+</apex:component>
