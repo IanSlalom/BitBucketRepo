@@ -15,10 +15,6 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Payments_Received__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Amount_Due__c</field>
     </columns>
     <description>The current consumer deposits report</description>
@@ -44,7 +40,7 @@
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <timeFrameFilter>
-        <dateColumn>Order$ActivatedDate</dateColumn>
+        <dateColumn>Order$EffectiveDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
