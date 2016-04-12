@@ -296,7 +296,6 @@
     <types>
         <members>Account</members>
         <members>Discount__c</members>
-        <members>Event</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
