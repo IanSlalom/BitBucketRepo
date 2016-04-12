@@ -188,7 +188,7 @@
                 </apex:pageBlockSection>
 
                 <!--  Order Item Table for Normal Editing of Order Items-->
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && writeOff == false && receiving == false}">
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && !writeOff && !receiving && !vendorCredit}">
                     <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
@@ -344,7 +344,61 @@
                     </apex:column>
 
             </apex:pageBlockTable>
-                    
+
+                <!--  Order Item Table for Vendor Credit-->
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && vendorCredit == true}">
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+                    <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:200px">
+                        <apex:facet name="header">{!productText} Description</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Description}" />
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
+                        <apex:facet name="header">Retail Price</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
+                    <apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
+                        <apex:facet name="header">Variant</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
+                    </apex:column>
+                    <apex:column style="width:100px">
+                        <apex:facet name="header">Wholesale Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
+                    </apex:column>
+                    <!-- TODO: Add check for ARO and do not show for COROs -->
+                    <apex:column style="width:100px"  rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Discount Amount</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
+                    </apex:column>
+                    <apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
+                        <apex:facet name="header">NSPR/SPR</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.NSPR__c}" />
+                    </apex:column>
+                    <apex:column style="width:25px">
+                        <apex:facet name="header">Qty Received</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
+                    </apex:column>
+                    <apex:column style="width:25px" rendered="{!(vendorCredit == true) }">
+                        <apex:facet name="header">Total Vendor Credit</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Vendor_Credit__c}" />
+                    </apex:column>
+                    <apex:column style="width:25px" >
+                        <apex:facet name="header">New Vendor Credit</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.Vendor_Credit_to_Receive__c}" />
+                    </apex:column>
+                    <apex:column style="width:25px" >
+                        <apex:facet name="header">Date of Vendor Credit</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.Date_Vendor_Credit__c}" />
+                    </apex:column>
+
+            </apex:pageBlockTable>
+                                
             </apex:outputPanel>
             
             <apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">

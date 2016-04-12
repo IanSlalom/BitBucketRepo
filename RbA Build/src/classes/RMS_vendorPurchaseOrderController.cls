@@ -57,6 +57,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean overReceivingAllowed {get; set;}   
   public boolean zeroDollarVendor {get; set;}   
   public boolean writeOff {get; set;}   
+  public boolean vendorCredit {get; set;}   
   public boolean receiving {get; set;}   
   public boolean renderVendorSelection{get;set;}
   public boolean electronicOrder{get;set;}
@@ -356,6 +357,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     System.debug('THIS.PO' + po);
     receiving = false;
     writeOff = false;
+    vendorCredit = false;
     renderVendorSelection = true;
     zeroDollarVendor = false;
     system.debug(orderId);
@@ -458,7 +460,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c, Purchase_Order__c, Remake__c,
-                    Parent_Order_Item__r.Installed_Product_Asset__c
+                    Parent_Order_Item__r.Installed_Product_Asset__c,
+                    Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
     }
 
@@ -725,6 +728,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
       	orderItemsToUpdateList = receiveLineItems(orderItemsToUpdateList,orderItemAssetSet);
       if (writeOff)
 	      orderItemsToUpdateList = writeOffLineItems(orderItemsToUpdateList, orderItemAssetSet);
+      if (vendorCredit)
+	      orderItemsToUpdateList = vendorCreditLineItems(orderItemsToUpdateList, orderItemAssetSet);
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
 	  } 
@@ -932,6 +937,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
+    		system.debug('*****oi.Unit_Wholesale_Cost__c=' +oi.Unit_Wholesale_Cost__c);
+    		system.debug('*****!zeroDollarVendor=' +!zeroDollarVendor);
+
 			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null;
@@ -1105,6 +1113,95 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
   }
 
+  /*******************************************************
+          vendorCreditLineItems method
+  *******************************************************/
+  public List<OrderItem> vendorCreditLineItems(List<OrderItem> itemsForVendorCredit, Set<Id> assetSet) {
+    system.debug('*****Applying vendor credit to a line item');
+    Map<Id,Asset> orderToAssetMap = new Map<Id,Asset>();
+    List<Asset> finalAssetsForVendorCredit = new List<Asset>();
+    List<OrderItem> finalOrderItems = new List<OrderItem>();
+    Map<Id, Asset> assetMap = new Map<Id, Asset>();
+    
+    for (Asset prodAsset : [SELECT Id, Vendor_Credit__c FROM Asset WHERE Id IN: assetSet]) {
+    	assetMap.put(prodAsset.Id, prodAsset);
+    }
+     
+
+	for (OrderItem oi : itemsForVendorCredit) {
+
+      Asset productAsset;
+      if (oi.Installed_Product_Asset__c == null && oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_To_Receive__c != null) { 
+      			productAsset = new Asset(
+                      AccountId      = oi.Order.AccountId,
+                      ContactId      = oi.Order.BillToContactId,
+                      SerialNumber    = oi.Variant_Number__c,
+                      Price        = oi.Total_Retail_Price__c,
+                      Product2Id      = oi.Pricebookentry.Product2Id,
+                      PurchaseDate    = oi.Order.EffectiveDate,
+                      Name        = oi.Pricebookentry.Product2.Name,
+                      Sold_Order__c    = oi.OrderId,
+                      Store_Location__c = oi.Order.Store_Location__c,
+                      Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
+                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
+				      Quantity 		  = 0
+                    );
+      } 
+      else if (oi.Installed_Product_Asset__c != null){
+      	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
+      }
+      if ((oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_to_Receive__c == null) ||
+      	 (oi.Date_Vendor_Credit__c == null && oi.Vendor_Credit_to_Receive__c != null))
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
+        return null;
+      }
+      if (oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_to_Receive__c != null) {
+			if(oi.Unit_Wholesale_Cost__c == null) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED_CREDIT));
+				  return null; 
+				  
+			}
+      		productAsset.Vendor_Credit__c =  (productAsset.Vendor_Credit__c == null) 
+                          ?   oi.Vendor_Credit_to_Receive__c 
+                          :  oi.Vendor_Credit_to_Receive__c + productAsset.Vendor_Credit__c;
+             
+      		productAsset.Date_Vendor_Credit__c = oi.Date_Vendor_Credit__c;
+      		
+                  																		
+			if ((productAsset.Vendor_Credit__c > oi.Total_Wholesale_Cost__c)) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.OVERVENDORCREDIT_NOT_ALLOWED));
+				  return null;
+			}
+
+      		finalAssetsForVendorCredit.add(productAsset);
+
+      }
+      	if (productAsset != null)
+      		orderToAssetMap.put(oi.Id, productAsset);
+      
+    }
+    //KR Added try/catch around upsert
+    try{
+      upsert finalAssetsForVendorCredit;
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the vendorCredit method:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+    }
+
+      for (OrderItem oi : itemsForVendorCredit) {
+		if (oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_to_Receive__c != null) {
+        	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+		}
+        oi.Vendor_Credit_to_Receive__c = null;
+        oi.Date_Vendor_Credit__c = null;
+        finalOrderItems.add(oi);
+
+      }
+    
+    return finalOrderItems;
+
+  }
 
   /*******************************************************
           cancel method
@@ -1209,10 +1306,29 @@ public with sharing class RMS_vendorPurchaseOrderController {
   /*******************************************************
         writeOff button method
   *******************************************************/
-  // Called after the confirmation window is accepted. This cancels the PO and the order line items
+  // Called when the inventory write off button is pressed
   public PageReference writeOff() {
     system.debug('*****Write Off Button pressed');
     writeOff = true;    
+
+	PageReference p = page.RMS_vendorPurchaseOrder;
+
+	// Get all of the url parameters from the current url and put them in the new url
+	Map<String, String> m = p.getParameters();
+	m.putAll(ApexPages.currentPage().getParameters());
+
+	p.setRedirect(false);
+
+	return p;
+  }
+
+  /*******************************************************
+        vendor credit button method
+  *******************************************************/
+  // Called when the vendor credit button is pressed
+  public PageReference vendorCredit() {
+    system.debug('*****Vendor Credit Button pressed');
+    vendorCredit = true;    
 
 	PageReference p = page.RMS_vendorPurchaseOrder;
 
