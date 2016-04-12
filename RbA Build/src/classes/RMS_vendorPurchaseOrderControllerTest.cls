@@ -383,6 +383,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.updateCostCenters();
 		customController.writeOff();
 		customController.receive();
+		customController.vendorCredit();
 		
 	}
 
@@ -453,7 +454,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 
 	/*******************************************************
-					receiveLineItemsTest
+					writeOffLineItemsTest
 	*******************************************************/
 	static testmethod void writeOffLineItemsTest(){
 		createTestRecords();
@@ -486,11 +487,38 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.writeOffLineItems(orderItemsToWriteOff, assetIds);
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 
-
-
-
 	}
 
+	/*******************************************************
+					writeOffLineItemsTest
+	*******************************************************/
+	static testmethod void vendorCreditTest(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id, Pricebookentry.Product2.Name, Order.Store_Location__c, Order.AccountId, Order.EffectiveDate, Order.BillToContactId FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		List<OrderItem> orderItemsForVendorCredit = new List<OrderItem>{soldOrderItem}; 
+		Set<Id> assetIds = new Set<Id>();
+		soldOrderItem.Date_Vendor_Credit__c = System.today();
+		soldOrderItem.Vendor_Credit_to_Receive__c  = 50;
+		soldOrderItem.Unit_Wholesale_Cost__c = 100;
+		update soldOrderItem;
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+			
+		System.assert(customController.vendorCreditLineItems(orderItemsForVendorCredit, assetIds) != null);
+		orderItemsForVendorCredit[0].Date_Vendor_Credit__c = System.Today();
+		orderItemsForVendorCredit[0].Vendor_Credit_to_Receive__c = null;
+		customController.vendorCreditLineItems(orderItemsForVendorCredit, assetIds);
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
+
+	}
 	@isTest
 	public static void testOrderItemWrapperClass(){		
 		createTestRecords();
