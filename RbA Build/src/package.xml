@@ -286,14 +286,10 @@
         <members>ServiceText</members>
         <members>SiteSamples</members>
         <members>TechMeasureText</members>
-        <members>bootstrap</members>
-        <members>bootstrapsf1</members>
         <members>jquery</members>
         <members>jquery_TableSorterZip</members>
         <members>jquery_tableSorter</members>
         <members>jqueryautocomplete</members>
-        <members>jqueryvalidate</members>
-        <members>jqueryvalidatemethods</members>
         <members>select2</members>
         <name>StaticResource</name>
     </types>
