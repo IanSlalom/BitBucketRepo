@@ -270,6 +270,23 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>RbA_Operational_Reporting</members>
+        <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
+        <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
+        <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
+        <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
+        <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
+        <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
+        <name>Report</name>
+    </types>
+    <types>
+        <members>Orders_with_All_Fields</members>
+        <members>Orders_with_Order_Products</members>
+        <name>ReportType</name>
+    </types>
+    <types>
         <members>BuildingPermitText</members>
         <members>CasementWindowS1</members>
         <members>CreateSO</members>
