@@ -769,6 +769,7 @@ public with sharing class RMS_financialTransactionManager {
 		           String jType; 
 		           String debitAccountN;
 		           String creditAccountN;
+		           String baanBPN;
 		           
 		           if(inventoryReceivedAT == true){
 						aType = 'InventoryReceived';
@@ -782,6 +783,7 @@ public with sharing class RMS_financialTransactionManager {
 	                        creditAccountN = assetIdToIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}else if(assetSubType == 'ExternalVendor'){
 							jType = 'Inventory Received - External Vendor';
+	                        baanBPN = a.vendor__r.Baan_Business_Partner_Number__c;
 	                        debitAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
 	                        creditAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}
@@ -811,6 +813,7 @@ public with sharing class RMS_financialTransactionManager {
 	                        creditAccountN = assetIdToSMRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}else if(assetSubType == 'ExternalVendor'){
 							jType = 'Service Material Returned - External Vendor';
+							baanBPN = a.vendor__r.Baan_Business_Partner_Number__c;
 	                        debitAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
 	                        creditAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}
@@ -835,13 +838,17 @@ public with sharing class RMS_financialTransactionManager {
                             newJE.Type__c = jeType;
                             newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
                             newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+							newJE.Baan_Business_Partner_Number__c = baanBPN;
 							
 							if(assetType == 'InventoryReceived'){
-	                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+	                            if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null){
+	                            	newJE.Amount__c = 0;
+	                            }else{
+	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+	                            }
 							}else if(assetType == 'InventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'VendorCredit'){
-								newJE.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
 								newJE.Amount__c = a.Vendor_Credit__c;
 							}
 							
@@ -919,8 +926,8 @@ public with sharing class RMS_financialTransactionManager {
 	                            je.Date__c = Datetime.Now();
 	                            je.Asset__c = a.id;
 	                            je.Order__c = a.Sold_Order__c;
-	                            je.Customer__c = a.Sold_Order__r.BillToContactId;
-								
+	                            je.Customer__c = a.Sold_Order__r.BillToContactId; 
+								je.Baan_Business_Partner_Number__c = baanBPN;
 								if(assetType == 'InventoryReceived'){
 		
 		                            je.Type__c = jeType;
@@ -965,8 +972,6 @@ public with sharing class RMS_financialTransactionManager {
 								}
 								
 								else if(assetType == 'VendorCredit'){
-									je.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
-		
 									if(jeListSentToBaan.size() == 0){
 										je.Amount__c = je.Amount__c + (newVendorCredit - oldVendorCredit);
 			                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
