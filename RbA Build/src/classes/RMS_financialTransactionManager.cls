@@ -243,7 +243,10 @@ public with sharing class RMS_financialTransactionManager {
                         		paymentTotal = paymentTotal + payment.Payment_Amount__c;
                         	}
                         }
-                        if(paymentTotal+p.Payment_Amount__c > p.Order__r.Retail_Total__c){
+                        system.debug('ads temporary paymentTotal 1: '+paymentTotal);
+                        system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
+                        system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
+                        if(paymentTotal > p.Order__r.Retail_Total__c){
                         	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
                              mapNew.get(p.id).addError(errorMessage, FALSE);
                         } 
@@ -1023,6 +1026,13 @@ public with sharing class RMS_financialTransactionManager {
 	                        //then create a new journal entry IF the quantity has changed. The amount should be equal to --- '( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
 	                        else{
 	                        	system.debug('ads old Quantity: '+oldQuantity);
+	                        	system.debug('ads newQuantity: '+newQuantity);
+	                        	
+	                        	system.debug('ads oldQuantityWrittenOff: '+oldQuantityWrittenOff);
+	                        	system.debug('ads newQuantityWrittenOff: '+newQuantityWrittenOff);
+	                        	
+	                        	system.debug('ads oldVendorCredit: '+oldVendorCredit);
+	                        	system.debug('ads newVendorCredit: '+newVendorCredit);
 	                            if(oldQuantity != newQuantity || oldQuantityWrittenOff != newQuantityWrittenOff || oldVendorCredit != newVendorCredit){
 	                                Journal_Entry__c newJE = new Journal_Entry__c( );
 	        						newJE.Date__c = Datetime.Now();
@@ -2117,7 +2127,8 @@ public with sharing class RMS_financialTransactionManager {
         if(asset.Sold_Order__c == null){
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Order');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-        }
+        } 
+        /*
         if(asset.Unit_Wholesale_Cost__c == null){
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Unit Wholesale Cost');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -2126,6 +2137,7 @@ public with sharing class RMS_financialTransactionManager {
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Quantity');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+        */
         if(asset.Quantity < 0){
             dynamicErrorMessage = RMS_errorMessages.QUANTITY_IS_LESS_THAN_ZERO;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -2145,6 +2157,10 @@ public with sharing class RMS_financialTransactionManager {
         	dynamicErrorMessage = RMS_errorMessages.VENDOR_HAS_NO_BAAN_NUMBER;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+        if(asset.Vendor__c == null){
+            dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Vendor');
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        } 
 
         return errorMessage;        
     }

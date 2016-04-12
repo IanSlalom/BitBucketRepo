@@ -160,9 +160,11 @@ public with sharing class RMS_financialTransactionManagerTest {
 												Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today()
 												);
+		Test.StartTest();
 		insert payment1;	
 		payment1.Payment_Amount__c = 200;
 		update payment1;
+		Test.StopTest();
 		
 	}
 	
@@ -784,10 +786,13 @@ public with sharing class RMS_financialTransactionManagerTest {
 												RecordTypeId = paymentDepositRecordTypeId,
 												Payment_Type__c = 'Final Payment'
 												);
+		Test.startTest();
 		insert payment1;
 		payment1.Payment_Amount__c = 10;
 		update payment1;
 		delete payment1;
+		Test.StopTest();
+	
 	}
 	/* NEEDS COMMUNITIES ACTIVATED */
 	static testmethod void positiveCreateAndEditLaborLaborExternal(){
@@ -1107,6 +1112,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
 		dwelling1.Store_Location__c = store1.id;
+		dwelling1.Vendor_Account_Type__c = 'Intercompany';
 		insert dwelling1;
 		
 		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
@@ -1137,7 +1143,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialAccountNumber2;
 		
 		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
-																						Transaction_Type__c = 'Inventory Received - External Vendor',
+																						Transaction_Type__c = 'Inventory Received - Intercompany',
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
@@ -1167,10 +1173,12 @@ public with sharing class RMS_financialTransactionManagerTest {
 									Store_Location__c = store1.id,
 									Name = 'asset1',
 									AccountId = dwelling1.id,
-									ContactId = contact1.id
+									ContactId = contact1.id,
+									Vendor__c = dwelling1.id
 		);
 		
 
+		Test.startTest();
 		insert asset1;
 		
 		asset1.Quantity = 2;
@@ -1184,7 +1192,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		}
 		update JEList;
 		
-		Test.startTest();
+		
 		asset1.Quantity = 3;
 		update asset1;
 		
