@@ -520,7 +520,8 @@ private class RMS_prodConfigExtensionTest {
 		Product2 masterProd = [SELECT Id FROM Product2 WHERE Name = 'Master Product' limit 1];
 	
 		OrderItem oi = new OrderItem(OrderId = soldOrder.Id, Width_Inches__c = 19, Height_Inches__c = 19, Quantity = 0);
-		
+
+		Test.starttest();		
 		// Set up controller with order line id, order, and pricebook only for a new product
 		PageReference pageRef = Page.RMS_prodConfigEdit;
 		Test.setCurrentPage(pageRef);
@@ -550,6 +551,7 @@ private class RMS_prodConfigExtensionTest {
 		pageReference savePage2 = ext2.saveProduct();
 		System.Assert(ext.errorOccurred == 'true');
 
+		Test.stoptest();		
 		
 	}
 

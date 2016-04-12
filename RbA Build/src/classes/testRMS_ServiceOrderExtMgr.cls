@@ -21,7 +21,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
- 		List<Account> dwellingsToInsert = new List<Account>();       
+        List<Account> dwellingsToInsert = new List<Account>();       
         
         Account dwelling1 = utility.createDwellingAccount('Dwelling Account');
         Account dwelling2 = utility.createDwellingAccount('Dwelling Account 2');
@@ -36,11 +36,11 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         dwellingsToInsert.add(dwelling3);        
         insert dwellingsToInsert;        
         
- 		List<Contact> contactsToInsert = new List<Contact>();       
+        List<Contact> contactsToInsert = new List<Contact>();       
         Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
-		contactsToInsert.add(contact1);
+        contactsToInsert.add(contact1);
         Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
-		contactsToInsert.add(contact2);
+        contactsToInsert.add(contact2);
         insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
@@ -159,13 +159,17 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Sold Order 1'];        
         
+        
+        Test.startTest();
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Pagereference pr = TE.customDelete();        
+        Pagereference pr = TE.customDelete();                    
         Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
         System.Assertequals(delOrd.isdeleted, true);
         
+        Test.stopTest(); 
         
         
     }
@@ -193,7 +197,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         System.Assertequals(ord.Name, 'Sold Order 1');
         System.assertEquals(2, num_orders);
-        System.assertEquals(1, num_assets);        
+        System.assertEquals(1, num_assets);  
+
+        Test.stopTest();       
     }
     static testmethod void saveOrderTest2(){
         createTestRecords();
@@ -201,6 +207,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Account acct = [Select Id FROM Account WHERE Name = 'Dwelling Account 2'];
         Contact cont = [Select Id FROM Contact Where LastName = '2'];
         Account store1 = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        
+        Test.startTest();
         
         Test.setCurrentPage(Page.RMS_createServiceRequestRedirect);
         ApexPages.currentPage().getParameters().put('aid',acct.id);
@@ -221,6 +229,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Pagereference pr2 = TE2.saveOrder();        
         Order ord2 = [select id,Name from Order where id =: order2.id];
         System.Assertequals(ord2.Name, 'Sold Order 2');
+        
+        Test.stopTest();
     }
     
     static testmethod void saveOrderTest3(){
@@ -229,6 +239,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Account acct3 = [Select Id FROM Account WHERE Name = 'Dwelling Account 3'];
         Account store1 = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
         
+        Test.startTest();
         Test.setCurrentPage(Page.RMS_createServiceRequestRedirect);
         ApexPages.currentPage().getParameters().put('aid',acct3.id);
         ApexPages.currentPage().getParameters().put('slid',store1.id);
@@ -248,6 +259,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Order ord3 = [select id,Name from Order where id =: order3.id];
         System.Assertequals(ord3.Name, 'Sold Order 3');
         
+        Test.stopTest();
+        
         
     } 
     
@@ -255,6 +268,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         createTestRecords();
         
         Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+
+        Test.startTest();
         
         Test.setCurrentPage(Page.RMS_createServiceRequestP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
@@ -262,6 +277,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         list<SelectOption> testoptions = TE.getOrds();
         
         system.assertEquals(1,testoptions.size());
+
+        Test.stopTest();
         
     }
     
@@ -270,6 +287,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         
+        Test.startTest();        
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
@@ -277,6 +296,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         system.assertEquals(3,testoptions.size());
         
+        Test.stopTest();        
     }
     
     static testmethod void testProductWrapperManufacturer(){
@@ -287,6 +307,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
+        Test.startTest();        
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
@@ -295,6 +317,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         for(SelectOption primOpt : TE.getPrimaries()){
             primOpt.getValue();
         }  
+        
+        Test.stopTest();        
         
     }
     
@@ -305,6 +329,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();        
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
@@ -312,7 +339,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         TE.cost = 'Local - Remake';
         for(SelectOption primOpt : TE.getPrimaries()){
             primOpt.getValue();
-        }  
+        } 
+        
+        Test.stopTest();         
         
     }
     
@@ -323,6 +352,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();        
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
@@ -331,6 +363,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
+        
+        Test.stopTest();
         
     }
     
@@ -341,6 +375,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();        
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);        
@@ -349,6 +386,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
+        
+        Test.stopTest();
+        
         
     }
     
@@ -359,6 +399,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);        
@@ -367,6 +409,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
+        Test.stopTest();        
         
     }
     
@@ -377,6 +420,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);        
@@ -385,6 +430,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
+        Test.stopTest();       
         
     }
     
@@ -508,6 +554,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
 String primary = 'Goodwill';
 String secondary = 'Customer Satisfaction';*/
         
+        
+        Test.startTest();        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
@@ -522,7 +570,7 @@ String secondary = 'Customer Satisfaction';*/
         system.assertEquals('-- Select --',primary);
         system.assertEquals('-- Select --',secondary);
         
-        
+                Test.stopTest();
         
     }
     
@@ -533,12 +581,15 @@ String secondary = 'Customer Satisfaction';*/
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
         
+        
+        Test.startTest();        
         Test.setCurrentPage(Page.RMS_createServiceRequestP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         Pagereference pr = TE.saveP2();        
         Order ord = [select id,Name from Order where id =: order.id];
         System.Assertequals(ord.Name, 'Sold Order 1');
+        Test.stopTest();        
     }
     
     static testmethod void saveClosetest(){
@@ -549,12 +600,16 @@ String secondary = 'Customer Satisfaction';*/
         Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
         OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];
         
+        Test.startTest();
+        
         Test.setCurrentPage(Page.RMS_createServiceRequestP2);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         Pagereference pr = TE.saveClose();        
         Order ord = [select id,Name from Order where id =: order.id];
         System.Assertequals(ord.Name, 'Service Order 1');
+        
+        Test.stopTest();
     }
     
     
