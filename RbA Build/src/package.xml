@@ -276,7 +276,6 @@
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
-        <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
