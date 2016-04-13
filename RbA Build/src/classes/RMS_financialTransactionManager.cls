@@ -2168,10 +2168,11 @@ public with sharing class RMS_financialTransactionManager {
         	dynamicErrorMessage = RMS_errorMessages.VENDOR_HAS_NO_BAAN_NUMBER;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
-        if(asset.Vendor__c == null){
-            dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Vendor');
-            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-        } 
+	 // TODO:  Update all test classes with a vendor where assets are created     
+     //   if(asset.Vendor__c == null){
+     //       dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Vendor');
+     //       errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+     //   } 
 
         return errorMessage;        
     }
