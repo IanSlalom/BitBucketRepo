@@ -1,27 +1,112 @@
 <apex:page showHeader="true" sidebar="false">
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
     
-    <apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
+    <!-- <apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" /> -->
 
     <!--
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/overlappingmarkerspiderfier/oms.min.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/async/async.min.js')}"/>
     -->
 
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
+
+
     <script>
         $ = jQuery.noConflict();
-        var map;
-        $(function() {
-            if (isIndividual) {
-                $('#settings, #filters, #listView, #optimize, #map').hide();
-            }
+		var map;
+        //var selectedStore = '';
+        var isIndividual = true;
+        var storeFound = false;
+        var storeIdToResourceIndividualityMap = {};
+        var apexMainPageController = 'MA_SchedulerController';
+        var processStoreResponse = { onSuccess: processStoreSuccess, onFailure: processResponseError };
+        var processTimezoneOptionsResponse = { onSuccess: processTimezoneOptionsSuccess, onFailure: processResponseError };
 
-            var mapOptions = {
+        $(function() {
+            sforce.connection.sessionId = '{!$Api.Session_Id}';
+            $('#storeSelectDiv, .hideIndividual').hide();
+
+            retrieveStoreIds();
+            retrieveTimezoneOptions();
+
+            //$('#calendar').fullCalendar('refetchResources');
+
+            //if (isIndividual) {
+                //$('#settings, #filters, #listView, #optimize, #map, #calendarFilter').hide();
+            //}
+
+			var mapOptions = {
                         center: new google.maps.LatLng(35.2033533,-80.979609),
                         zoom: 10,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                       };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
         });
+
+        function retrieveTimezoneOptions() {
+            sforce.apex.execute(apexMainPageController, 'retrieveTimezoneOptions', {}, processTimezoneOptionsResponse);
+        }
+
+        function processTimezoneOptionsSuccess(response) {
+            response = JSON.parse(response);
+            console.log(response);
+
+            if (response.success) {
+                var timezoneOptionsHtml = '';
+                for (var key in response.timezoneOptions) {
+                    timezoneOptionsHtml += '<option value="' + key + '">' + response.timezoneOptions[key] + '</option>';
+                }
+
+                $('#timezoneOptions').append(timezoneOptionsHtml);
+            }
+        }
+
+        function retrieveStoreIds() {
+            sforce.apex.execute(apexMainPageController, 'retrieveRecords', { objType: 'Scheduler' }, processStoreResponse);
+        }
+
+        function processStoreSuccess(response) {
+            response = JSON.parse(response);
+            console.log(response);
+            if (response.success) {
+                var storeSelectOptions = '';
+                for (var i = 0, len = response.objList.length; i < len; i++) {
+                    var record = response.objList[i];
+                    storeIdToResourceIndividualityMap[record.Retail_Location__c] = record.Resource_Type__c != 'Scheduler';
+                    //storeIds.push(record.Retail_Location__c);
+                    storeSelectOptions += '<option value="' + record.Retail_Location__c + '">' + record.Retail_Location__r.Name + '</option>';
+                    
+                    /*
+                    if (record.Resource_Type__c != 'Scheduler') {
+                        isIndividual = true;
+                    }
+                    */
+                }
+
+                $('#storeSelect').append(storeSelectOptions);
+
+                if ($('#storeSelect option').length > 1) {
+                    $('#storeSelectDiv').show();
+                }
+
+                var selectedStoreId = $('#storeSelect').val();
+                if (selectedStoreId != '' && selectedStoreId != undefined && selectedStoreId != null) {
+                    storeFound = true;
+                    isIndividual = storeIdToResourceIndividualityMap[selectedStoreId];
+
+                    if (!isIndividual) {
+                        $('.hideIndividual').show();
+                    }
+                }
+
+                newCalendarFilter = true;
+                $('#calendar').fullCalendar('refetchResources');
+            }
+            else {
+                handleError('MA_Scheduler : retrieveStoreIds' + apexMainPageController, response);
+            }
+        }
 
         function initializeListViewAttributes() {
             //$('#allBox').attr('disabled', true);
@@ -32,15 +117,41 @@
 
         function onListViewLoad() {
             setTimeout(function() {
-            	//$('.x-grid3-td-checkbox').hide();
+                //$('.x-grid3-td-checkbox').hide();
                 var records = $('.listViewportWrapper .x-grid3-row .x-grid3-col');
                 for (var i = 0, len = records.length; i < len; i++) {
                     var record = records[i];
 
-                    record.onclick = function() {
-                        console.log('GOOD BYE');
-                        showAvailabilityModal(this);
+                    /*
+                    record.onclick = function(e) {
+                        //showAvailabilityModal(this);
+
+
+                        var workOrderElRow = $(this).closest('.x-grid3-row')[0];
+                        var workOrderId = $(workOrderElRow).find('.x-grid3-col-LIST_RECORD_ID').text();
+                        $('#listViewOptionsRecordId').val(workOrderId);
+                        //$('#listViewOptionsModal').offset({ top: e.pageY, left: e.pageX }).show();
+                        //$('#listViewOptionsModal').offset({ top: e.clientY, left: e.clientX }).show();
+                        //$('#listViewOptionsModal').offset({ top: e.y, left: e.x }).show();
+                        //$('#listViewOptionsModal').offset({ top: e.screenY, left: e.pageX }).show();
+                        $('#listViewOptionsModal').offset({ top: e.pageY, left: e.pageX }).show();
+                        //$('#listViewOptionsModal').offset({ top: e.offsetY, left: e.offsetX }).show();
                     };
+                    */
+
+
+                    record.onclick = function(e) {
+                        console.log(e);
+                        var workOrderElRow = $(this).closest('.x-grid3-row')[0];
+                        var workOrderId = $(workOrderElRow).find('.x-grid3-col-LIST_RECORD_ID').text();
+                        $('#listViewOptionsRecordId').val(workOrderId);
+                        //$('#listViewOptionsModal').offset({ top: e.pageY, left: e.pageX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY - e.layerX), left: (e.pageX - e.layerY) }).show();
+                        $('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY - 110), left: e.pageX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY), left: e.pageX }).show();
+                    };
+
+
                     /*
                     if ($(record).find('a, input[type="checkbox"]').length == 0) {
                         record.onclick = function() { showAvailabilityModal(this); };
@@ -61,45 +172,107 @@
             }, 500);
         }
 
-    	function processResponseError(error) {
-    		console.log(error);
-    		if (!error.faultstring) {
-    			error = { error: 'Response Error'};
-    		}
-			handleError('ERROR', error);
-		}
+        function closeListViewOptionsModal() {
+            $('#listViewOptionsModal').hide();
+        }
+
+        function processResponseError(error) {
+            console.log(error);
+            if (!error.faultstring) {
+                error = { error: 'Response Error'};
+            }
+            handleError('ERROR', error);
+        }
 
         function handleError(componentName, error) {
             $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
             $('#errorModal').show();
             $('#loaderModal').hide();
         }
+        
+        $(document).mouseup(function (e)
+        {
+            var container = $("#listViewOptionsModal, #eventOptionsModal");
+        
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                container.hide();
+            }
+        });
+        
+        $( document ).ready(function() {
+            $('#errorModal').addClass('ma-in');
+        });
+
+        function viewEditWorkOrder(isCalendar) {
+            console.log(isCalendar);
+
+            var workOrderId;
+            if (isCalendar) {
+                console.log('eventOptions');
+                workOrderId = $('#eventOptionsRecordId').val();
+            }
+            else {
+                console.log('listViewOptions');
+                workOrderId = $('#listViewOptionsRecordId').val();
+            }
+            
+            var win = window.open('/' + workOrderId, '_blank', 'height=500, width=800, location=no, menubar=no, scrollbars=yes, status=no, titlebar=no, toolbar=no, resizable=yes, fullscreen=no');
+            var winTimer = setInterval(function() {
+                if (win.closed) {
+                    $('#loaderModal').show();
+                    clearInterval(winTimer);
+                    $('.listViewportWrapper .refreshListButton').click();
+                    $('#calendar').fullCalendar('refetchEvents');
+                    $('#loaderModal').hide();
+                }
+            }, 500);
+        }
+        
     </script>
 
     <c:MA_SchedulerErrorComp />
     <c:MA_SchedulerLoaderComp />
     <c:MA_SchedulerStylingComp />
+    <apex:stylesheet value="{!URLFOR($Resource.MA_Scheduler, '/css/ma2-style.css')}" />
     <c:MA_SchedulerSettingsComp />
+    <c:MA_SchedulerAssignResourceComp />
+    <c:MA_SchedulerCancelAppointmentComp />
     <c:MA_SchedulerWorkOrderSchedulingComp />
     <c:MA_SchedulerRoutes />
+    <c:MA_SchedulerMainNav /> 
 
-    <div id="settings">
+    <!--
+    <div id="settings" class="hideIndividual">
         <span id="gearIcon" onclick="openSettingsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/settings_60.png')}" /></span> Settings
     </div>
+    -->
     
-    <div id="optimize">
-        <button onclick="MAschedRoutes.showOptyModal();">Batch Assign</button>
-         <button onclick="MAschedRoutes.showMap();">MAP</button>
+    <!--
+	<div id="optimize" class="hideIndividual">
+        <button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showOptyModal();">Batch Assign</button>
+		<button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showMap();">MAP</button>
     </div>
+	-->
 
-    <div id="filters">
+    <!--
+    <div id="filters" class="hideIndividual">
         ***INSERT RESOURCE FILTERING HERE***
-    </div>
+     -->
 
     <c:MA_SchedulerCalendarComp />
 
-    <div id="listView">
+    <div id="listView" class="hideIndividual pad-0-10">
         <apex:enhancedList id="unscheduledListView" type="RbA_Work_Order__c" height="300" rowsPerPage="25" customizable="true" oncomplete="initializeListViewAttributes()" />
+    </div>
+
+    <div id="listViewOptionsModal">
+        <!-- <span class="ma-modal-close" onclick="closeListViewOptionsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span> -->
+        <input type="hidden" id="listViewOptionsRecordId" />
+        <div id="" onclick="showAvailabilityModal(false); closeListViewOptionsModal();">Schedule Work Order</div>
+        <div onclick="showAssignResourceModal(false); closeListViewOptionsModal();">Assign a Resource</div>
+        <div onclick="viewEditWorkOrder(false); closeListViewOptionsModal();">View / Edit</div>
     </div>
 
 </apex:page>

@@ -165,6 +165,7 @@ private class UtilityMethodsTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account store = [SELECT Id, Active_Store_Configuration__c from Account Where Name = '77 - Twin Cities, MN'];
 
+		Test.startTest();
 		List<Financial_Account_Number__c> numbersList = new List<Financial_Account_Number__c>();
 		Financial_Account_Number__c accountNumber1 = new Financial_Account_Number__c(Name='123', Store_Configuration__c = store.Active_Store_Configuration__c);	
 		Financial_Account_Number__c accountNumber2 = new Financial_Account_Number__c(Name='234', Store_Configuration__c = store.Active_Store_Configuration__c);	
@@ -209,6 +210,8 @@ private class UtilityMethodsTest {
 		// This should work but throws a null pointer exception in the utility class. I suspect this is a salesforce bug
 //		String result = UtilityMethods.checkLocked(lockedRecords, unlockedRecords, lockedMap, unlockedMap, 'Update');		
 //		System.AssertEquals('At least one record was locked', result);
+
+		Test.stopTest();
 		
 	}
 

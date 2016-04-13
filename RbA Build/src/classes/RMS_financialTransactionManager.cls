@@ -243,7 +243,10 @@ public with sharing class RMS_financialTransactionManager {
                         		paymentTotal = paymentTotal + payment.Payment_Amount__c;
                         	}
                         }
-                        if(paymentTotal+p.Payment_Amount__c > p.Order__r.Retail_Total__c){
+                        system.debug('ads temporary paymentTotal 1: '+paymentTotal);
+                        system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
+                        system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
+                        if(paymentTotal > p.Order__r.Retail_Total__c){
                         	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
                              mapNew.get(p.id).addError(errorMessage, FALSE);
                         } 
@@ -766,6 +769,7 @@ public with sharing class RMS_financialTransactionManager {
 		           String jType; 
 		           String debitAccountN;
 		           String creditAccountN;
+		           String baanBPN;
 		           
 		           if(inventoryReceivedAT == true){
 						aType = 'InventoryReceived';
@@ -779,6 +783,7 @@ public with sharing class RMS_financialTransactionManager {
 	                        creditAccountN = assetIdToIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}else if(assetSubType == 'ExternalVendor'){
 							jType = 'Inventory Received - External Vendor';
+	                        baanBPN = a.vendor__r.Baan_Business_Partner_Number__c;
 	                        debitAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
 	                        creditAccountN = assetIdToIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}
@@ -808,6 +813,7 @@ public with sharing class RMS_financialTransactionManager {
 	                        creditAccountN = assetIdToSMRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}else if(assetSubType == 'ExternalVendor'){
 							jType = 'Service Material Returned - External Vendor';
+							baanBPN = a.vendor__r.Baan_Business_Partner_Number__c;
 	                        debitAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name;
 	                        creditAccountN = assetIdToSMRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						}
@@ -832,22 +838,32 @@ public with sharing class RMS_financialTransactionManager {
                             newJE.Type__c = jeType;
                             newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
                             newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
+							newJE.Baan_Business_Partner_Number__c = baanBPN;
 							
 							if(assetType == 'InventoryReceived'){
-	                            newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+	                            if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null){
+	                            	newJE.Amount__c = 0;
+	                            }else{
+	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+	                            }
+
+								if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null)
+								   newJE.Amount__c = 0;
+								else 
+	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
+
 							}else if(assetType == 'InventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'VendorCredit'){
-								newJE.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
 								newJE.Amount__c = a.Vendor_Credit__c;
 							}
 							
 							if(newJE.Amount__c < 0){
                             	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
                           	}
-	        
-	                        journalEntriesToUpsert.add(newJE);
-	  
+	        				if(newJE.Amount__c > 0){ 
+	                        	journalEntriesToUpsert.add(newJE);
+	        				}
 	                	}else{
 		
 	                        list<Journal_Entry__c> jeListSentToBaan = new list<Journal_Entry__c>();
@@ -916,8 +932,8 @@ public with sharing class RMS_financialTransactionManager {
 	                            je.Date__c = Datetime.Now();
 	                            je.Asset__c = a.id;
 	                            je.Order__c = a.Sold_Order__c;
-	                            je.Customer__c = a.Sold_Order__r.BillToContactId;
-								
+	                            je.Customer__c = a.Sold_Order__r.BillToContactId; 
+								je.Baan_Business_Partner_Number__c = baanBPN;
 								if(assetType == 'InventoryReceived'){
 		
 		                            je.Type__c = jeType;
@@ -962,8 +978,6 @@ public with sharing class RMS_financialTransactionManager {
 								}
 								
 								else if(assetType == 'VendorCredit'){
-									je.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
-		
 									if(jeListSentToBaan.size() == 0){
 										je.Amount__c = je.Amount__c + (newVendorCredit - oldVendorCredit);
 			                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
@@ -1023,6 +1037,13 @@ public with sharing class RMS_financialTransactionManager {
 	                        //then create a new journal entry IF the quantity has changed. The amount should be equal to --- '( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
 	                        else{
 	                        	system.debug('ads old Quantity: '+oldQuantity);
+	                        	system.debug('ads newQuantity: '+newQuantity);
+	                        	
+	                        	system.debug('ads oldQuantityWrittenOff: '+oldQuantityWrittenOff);
+	                        	system.debug('ads newQuantityWrittenOff: '+newQuantityWrittenOff);
+	                        	
+	                        	system.debug('ads oldVendorCredit: '+oldVendorCredit);
+	                        	system.debug('ads newVendorCredit: '+newVendorCredit);
 	                            if(oldQuantity != newQuantity || oldQuantityWrittenOff != newQuantityWrittenOff || oldVendorCredit != newVendorCredit){
 	                                Journal_Entry__c newJE = new Journal_Entry__c( );
 	        						newJE.Date__c = Datetime.Now();
@@ -1259,7 +1280,7 @@ public with sharing class RMS_financialTransactionManager {
                                 if(je.Type__c == 'Rev Recognized - AR'){
                                     alreadyHasJEofTypeRevRecAR = true;  
                                     relatedRevRecognizedARJE.add(je);
-                                }
+                                } 
                                 if(je.Type__c == 'Rev Recognized - Finance Fees'){
                                     alreadyHasJEofTypeRevRecFinanceFees = true; 
                                     relatedRevRecognizedFinanceFeesJE.add(je);
@@ -2117,7 +2138,8 @@ public with sharing class RMS_financialTransactionManager {
         if(asset.Sold_Order__c == null){
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Order');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
-        }
+        } 
+        /*
         if(asset.Unit_Wholesale_Cost__c == null){
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Unit Wholesale Cost');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -2126,6 +2148,7 @@ public with sharing class RMS_financialTransactionManager {
             dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Quantity');
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+        */
         if(asset.Quantity < 0){
             dynamicErrorMessage = RMS_errorMessages.QUANTITY_IS_LESS_THAN_ZERO;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
@@ -2145,6 +2168,11 @@ public with sharing class RMS_financialTransactionManager {
         	dynamicErrorMessage = RMS_errorMessages.VENDOR_HAS_NO_BAAN_NUMBER;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+	 // TODO:  Update all test classes with a vendor where assets are created     
+     //   if(asset.Vendor__c == null){
+     //       dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.REQUIRED_FIELD_IS_NULL, '[field]', 'Vendor');
+     //       errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+     //   } 
 
         return errorMessage;        
     }
