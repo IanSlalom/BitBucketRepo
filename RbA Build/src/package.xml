@@ -11,6 +11,8 @@
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
         <members>MA_SchedulerUtilities</members>
+        <members>MyProfilePageController</members>
+        <members>MyProfilePageControllerTest</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
