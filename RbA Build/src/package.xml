@@ -79,6 +79,7 @@
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
+        <members>eventTest</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
