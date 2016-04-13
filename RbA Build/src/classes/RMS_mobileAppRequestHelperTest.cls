@@ -20,7 +20,8 @@ private class RMS_mobileAppRequestHelperTest {
 	static testmethod void testFindAppointments(){
 		
 		TestUtilityMethods tUtil = new TestUtilityMethods();
-		tUtil.setUpConfigsMark();
+//		tUtil.setUpConfigsMark();
+		tUtil.setUpConfigs();
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		// setup configuration stuff
 //		Datetime existingApptTime = Datetime.newInstance(2016, 1, 10, 8, 0, 0);

@@ -24,7 +24,7 @@ private class RMS_mobileAppContactHelperTests {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		Opportunity opp = [Select Id from Opportunity where AccountId =: dwelling.Id limit 1];
-		Contact c = utility.createContact(null, 'TestName2');
+		Contact c = utility.createContact(dwelling.Id, 'TestName2');
 		RMS_mobileAppContactHelper.DTOContact dtoContact = new RMS_mobileAppContactHelper.DTOContact();
 		dtoContact.DwellingId = dwelling.Id;
 		dtoContact.OpportunityId = opp.Id;

@@ -3,9 +3,11 @@ public with sharing class UtilityMethods {
 	public UtilityMethods() {}
 	
 	//CHANGE UTILITY METHOD TO SEND SOBJECT AS WELL
+//TODO: remove this method
 	public static Id retrieveRecordTypeId(String developerName, String sobjectType){
-		RecordType recordType = [SELECT Id FROM RecordType WHERE IsActive = true AND DeveloperName = :developerName AND SobjectType = :sobjectType];
-		return recordType.Id;
+		return UtilityMethods.RecordTypeFor(sobjectType, developerName);
+//		RecordType recordType = [SELECT Id FROM RecordType WHERE IsActive = true AND DeveloperName = :developerName AND SobjectType = :sobjectType];
+//		return recordType.Id;
 	}
 	
 	// Retrieves Id for recordtype using object name and dev name
@@ -13,7 +15,7 @@ public with sharing class UtilityMethods {
 
 		String devString = sObjectName + devName;
 		if (masterRTList == null || masterRTList.isEmpty()) {
-			for (RecordType rt : [SELECT Id, developerName, sObjectType FROM RecordType]) {
+			for (RecordType rt : [SELECT Id, developerName, sObjectType FROM RecordType WHERE IsActive = true]) {
 				masterRTList.put(rt.sObjectType + rt.DeveloperName, rt.Id);
 			}
 		}
