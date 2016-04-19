@@ -7,9 +7,6 @@ global with sharing class RMS_opportunityUtilities {
 		if(orderList.size() > 0){
 			 return 'alreadyConverted';
 		}
-		else if(opp.SyncedQuoteId == null ){
-			return 'noSyncedQuote';
-		}
 		else{
 			if (opp.StageName == 'Closed Won') {
 				opp.StageName = 'New';
