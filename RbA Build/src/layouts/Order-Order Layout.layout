@@ -33,10 +33,6 @@
                 <behavior>Edit</behavior>
                 <field>BillToContactId</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Material_Application_Pct__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -250,7 +246,7 @@
         <label>Additional Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Order_Processed_Date__c</field>
             </layoutItems>
             <layoutItems>
@@ -343,24 +339,29 @@
         <fields>EffectiveDate</fields>
     </miniLayout>
     <relatedLists>
-        <fields>Product2</fields>
-        <fields>Purchase_Order__c</fields>
-        <fields>Quantity</fields>
-        <fields>UnitPrice</fields>
-        <fields>TotalPrice</fields>
-        <fields>Unit_Wholesale_Cost__c</fields>
-        <fields>Total_Wholesale_Cost__c</fields>
-        <fields>Variant_Number__c</fields>
-        <fields>Tax__c</fields>
-        <fields>Installed_Product_Asset__c</fields>
-        <relatedList>RelatedOrderItemList</relatedList>
+        <customButtons>Complete_Multiple</customButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Completed__c</fields>
+        <fields>Signed_Date__c</fields>
+        <relatedList>Back_Office_Check__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <customButtons>New_Order_Discount</customButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Store_Discount__c.NAME</fields>
         <fields>Discount_Amount__c</fields>
         <fields>Status__c</fields>
         <relatedList>Order_Discount__c.Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <customButtons>New_Order_Financing</customButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Store_Finance_Program__c.NAME</fields>
+        <fields>Amount_Financed__c</fields>
+        <relatedList>Order_Financing__c.Related_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
         <customButtons>New_Purchase_Order</customButtons>
@@ -383,6 +384,24 @@
         <relatedList>Payment__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <customButtons>New_Refund</customButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Amount__c</fields>
+        <fields>Date__c</fields>
+        <relatedList>Refund__c.Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <customButtons>New_Business_Adjustment</customButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Amount__c</fields>
+        <fields>Date__c</fields>
+        <fields>Type__c</fields>
+        <relatedList>Business_Adjustment__c.Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>ASSET.NAME</fields>
         <fields>ASSET.SERIAL_NUMBER</fields>
         <fields>ASSET.INSTALL_DATE</fields>
@@ -392,56 +411,21 @@
         <relatedList>Asset.Sold_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Amount__c</fields>
-        <fields>Date__c</fields>
-        <relatedList>Refund__c.Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Store_Finance_Program__c.NAME</fields>
-        <fields>Amount_Financed__c</fields>
-        <relatedList>Order_Financing__c.Related_Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <customButtons>Complete_Multiple</customButtons>
         <excludeButtons>New</excludeButtons>
-        <fields>NAME</fields>
-        <fields>Completed__c</fields>
-        <fields>Signed_Date__c</fields>
-        <relatedList>Back_Office_Check__c.Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ORDERS.ORDER_NUMBER</fields>
-        <fields>SALES.ACCOUNT.NAME</fields>
-        <fields>ORDER.BILL_TO_CONTACT</fields>
-        <fields>ORDERS.TOTAL_AMOUNT</fields>
-        <fields>ORDERS.EFFECTIVE_DATE</fields>
-        <fields>ORDERS.STATUS</fields>
-        <fields>CORE.USERS.ALIAS</fields>
-        <relatedList>Order.Sold_Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedEntityHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>Date__c</fields>
         <fields>NAME</fields>
         <fields>Type__c</fields>
+        <fields>Debit_General_Ledger_Account__c</fields>
         <fields>Credit_General_Ledger_Account__c</fields>
         <fields>Amount__c</fields>
         <fields>Date_Sent_to_BaanERP__c</fields>
         <relatedList>Journal_Entry__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Amount__c</fields>
-        <fields>Date__c</fields>
-        <fields>Type__c</fields>
-        <relatedList>Business_Adjustment__c.Order__c</relatedList>
+        <relatedList>RelatedNoteList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
