@@ -16,6 +16,7 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String CREATE_CONTACT = 'createContact';
 	public static final String CUSTOMER_JOB_SEARCH = 'customerJobSearch';
 	public static final String GET_SELECTED_SEARCH_RESULTS = 'getSelectedSearchResults';
+	public static final String SAVE_TECH_MEASURE = 'saveTechMeasure';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
@@ -64,35 +65,34 @@ global with sharing class RMS_mobileAppAPIController {
     global static void doPost(){
 		try {
 			RestRequest req = RestContext.request;
+			RestContext.response.addHeader('Content-Type', 'application/json');
 			String temp = req.requestURI.substringAfter('/');
 			temp = temp.substringAfter('/');
 			String operation = temp.substringBefore('/');
-			if (operation == null || operation== ''){
-				RestContext.response.addHeader('Content-Type', 'application/json');
+			if (operation == null || operation== ''){			
 				RestContext.response.responseBody = Blob.valueOf(NO_REQUEST_FOUND + req.requestURI);
 			} else if (operation.equals(RESULT_APPOINTMENTS)) {
 				Id userId = UserInfo.getUserId();
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				String result = handler.resultSalesAppointments(userId, req.requestBody.toString());
 				// lets handle the processed result
-				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else if (operation.equals(CREATE_CONTACT)){
 				String result = RMS_mobileAppContactHelper.saveNewContact(req.requestBody.toString());
-				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else if (operation.equals(CUSTOMER_JOB_SEARCH)){
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				String result = handler.customerSearch(req.requestBody.toString());
-				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else if (operation.equals(GET_SELECTED_SEARCH_RESULTS)){
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				String result = handler.getSelectedSearchResults(req.requestBody.toString());
-				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf(result);
-			}else {
-				RestContext.response.addHeader('Content-Type', 'application/json');
+			} else if (operation.equals(SAVE_TECH_MEASURE)){
+				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
+				String result = handler.saveTechMeasure(req.requestBody.toString());
+				RestContext.response.responseBody = Blob.valueOf(result);
+			} else {
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 			}
 		} catch (Exception e) {

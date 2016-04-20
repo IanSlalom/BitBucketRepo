@@ -1,0 +1,715 @@
+<apex:component >
+    
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
+
+	<style>
+
+        #assignResourceHeader, #scheduleWorkOrderHeader {
+            background-color: #3083d3 !important;
+            color: #ffffff !important;
+            padding: 20px 25px 45px 25px !important;
+            height: 0px !important;
+            border-bottom: 2px solid #d8dde6;
+        }
+        
+        #assignResourceOverlay, #scheduleWorkOrderOverlay {
+            position: fixed;
+            height: 100%;
+            top: 0;
+            max-height: 0;
+            width: 100%;
+            background-color: rgba(126, 140, 153, 0.8);
+            opacity: 0;
+            z-index: 900;
+            visibility: hidden;
+            -webkit-transition: visibility 0s linear 0.31s, opacity 0.2s linear 0s, max-height 0s linear 0.31s;
+            -moz-transition: visibility 0s linear 0.31s, opacity 0.2s linear 0s, max-height 0s linear 0.31s;
+            -ms-transition: visibility 0s linear 0.31s, opacity 0.2s linear 0s, max-height 0s linear 0.31s;
+            -o-transition: visibility 0s linear 0.31s, opacity 0.2s linear 0s, max-height 0s linear 0.31s;
+            transition: visibility 0s linear 0.31s, opacity 0.2s linear 0s, max-height 0s linear 0.31s;
+            left: 0;
+        }
+        
+        #assignResourceOverlay.ma-in, #scheduleWorkOrderOverlay.ma-in {
+            opacity: 1;
+            max-height: 100%;
+            visibility: visible;
+            -webkit-transition: opacity 0.2s linear 0.01s, visibility 0s linear 0s;
+            -moz-transition: opacity 0.2s linear 0.01s, visibility 0s linear 0s;
+            -ms-transition: opacity 0.2s linear 0.01s, visibility 0s linear 0s;
+            -o-transition: opacity 0.2s linear 0.01s, visibility 0s linear 0s;
+            transition: opacity 0.2s linear 0.01s, visibility 0s linear 0s;
+        }
+
+		#assignResourceModalClose {
+			position: relative;
+		}
+
+        #assignResourceInnerDiv {
+            border: 1px solid #d8dde6;
+            margin: 20px;
+            background-color: #ffffff;
+        }
+
+		#assignResourceInfoTable {
+			margin: 20px;
+			width: 100%;
+		}
+		
+        #assignedResourcesAvailableTable tbody {
+            display: block;
+            overflow-y: scroll;
+            height: calc(100vh - 475px);
+            width: 100%;
+        }
+        
+        #assignedResourcesAvailableTable tr td {
+            color: #54698d;
+        }
+
+        #assignedResourcesAvailableTable tbody tr {
+            display: table-header-group;
+        }
+
+        #assignedResourcesAvailableTable {
+            width: 100%;
+            overflow: auto;
+            border-spacing: 0px;
+        }
+
+		.fieldLabel {
+			font-weight: bold;
+			padding: 0px 15px;
+			color: #54698d;
+		}
+		
+		#assignResourceInnerDiv h4 {
+            font-weight: 700;
+        }
+
+		#assignResourceSkillsMatched, #assignResourceAssigned {
+			width: 45%;
+			padding: 20px;
+			display: inline-block;
+			vertical-align: top;
+		}
+
+		#assignResourceSkillsMatchedInnerDiv, #assignResourcesAssignedInnerDiv {
+			padding-left: 15px;
+		}
+
+        #assignedResourcesAvailableTable .headerRow {
+            background-color: #3083d3;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: .0625em;
+        }
+
+        #assignedResourcesAvailableTable .headerRow th {
+            font-weight: bold;
+            width: 31%;
+        }
+
+        #assignedResourcesAvailableTable th, #assignedResourcesAvailableTable td {
+            padding: 7px 10px;
+        }
+        
+        #assignResourceButtons, #scheduleWorkOrderButtons {
+            z-index: 9;
+            padding: 0.74rem 1em;
+            background-color: #f4f6f9;
+            text-align: right;
+            display: block;
+            position: relative;
+        }
+        
+        #assignResourceButtons .ma-button {
+            margin-left: 10px;
+        }
+        
+        input.assignResourceSearch {
+            width: 275px;
+            height: 20px;
+            background-color: #1061b1;
+            color: #ffffff;
+            border-radius: 0.25rem;
+            border: 1px solid #1061b1;
+            padding: 2px 10px;
+        }
+        
+        #assignedResourcesAvailableTable .resourceAssigned td, .resourceAssigned span {
+            color: #ffffff;
+        }
+        
+        .assignResourceSearch::-webkit-input-placeholder {
+            color: #ffffff;
+        }
+        
+        .assignResourceSearch::-moz-placeholder {
+            color: #ffffff;
+        }
+        
+        .assignResourceSearch:-ms-input-placeholder {
+            color: #ffffff;
+        }
+        
+    	/*
+		.hiddenRow {
+			visibility: hidden;
+		}
+		*/
+
+		.removableRow:nth-child(4n), .removableRow:nth-child(4n+1) {
+			background-color: #ffffff;
+		}
+
+		.removableRow:nth-child(4n+2), .removableRow:nth-child(4n+3) {
+			background-color: #f4f6f9;
+		}
+
+		.resourceSkillMatched {
+			color: green;
+		}
+
+		.resourceSkillNotMatched {
+			color: red;
+		}
+
+		.matchedSkills, .nonMatchedSkills {
+			display: inline-block;
+			padding: 5px 30px;
+			width: 30%;
+			height: 100%;
+			vertical-align: top;
+		}
+
+		.addResource, .removeResource {
+			font-size: 20px;
+		}
+
+        .closed {
+            height: 0;
+            width: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 7px solid #54698d;
+            display: inline-block;
+            margin: 0px 20px;
+        }
+
+		.open {
+			height: 0;
+			width: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-top: 7px solid #54698d;
+			display: inline-block;
+			margin: 0px 20px;
+		}
+		
+		.ma-open {
+		    opacity: 1 !important;
+            visibility: visible !important;
+            -webkit-transition: opacity 0.1s linear;
+            -moz-transition: opacity 0.1s linear;
+            -ms-transition: opacity 0.1s linear;
+            -o-transition: opacity 0.1s linear;
+            transition: opacity 0.1s linear;
+        }
+		
+		.ma-slide-in-left {
+            left: 0px !important;
+            transition: 0.25s ease-out;
+            display: block !important;
+            opacity: 1 !important;
+        }
+        
+        .ma-close {
+            opacity: 0;
+            transition: 0.1s ease-out;
+        }
+
+
+
+
+
+
+        /********************************/
+        /*								*/
+        /*		Dan's Temp Styling		*/
+        /*								*/
+        /********************************/
+
+        .requiredSkillMatchedIcon, .requiredSkillName {
+        	display: inline-block;
+        }
+
+        .workOrderSkillNotMatched {
+        	height: 10px;
+        	width: 10px;
+        	background-color: red;
+        	margin-right: 5px;
+        }
+
+        .workOrderSkillMatched {
+        	height: 10px;
+        	width: 10px;
+        	background-color: green;
+        	margin-right: 5px;
+        }
+
+        .resourceAssigned {
+        	background-color: #a7b8d1 !important;
+        }
+        
+        .resourceAssigned .closed {
+            border-left: 7px solid #fff;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        #resourceHeadCount, #requiredSkillsMatchCount {
+        	color: lightgrey;
+        }
+
+        .inactiveResource, .inactiveResource td, .inactiveResource span, .inactiveResource div {
+        	font-weight: bold !important;
+        	color: red !important;
+        }
+
+        .inactiveResource .pointer.closed {
+        	border-left-color: red !important;
+        }
+
+        .inactiveResource .pointer.open {
+        	border-top-color: red !important;
+        }
+
+        .resourceRemoval {
+        	padding: 0px 5px;
+        }
+	</style>
+
+	<script>
+    	$ = jQuery.noConflict();
+
+    	var assignedSkillsToResourcesMap = {};
+    	var apexAssignResourcesController = 'MA_SchedulerController';
+        var processResourceAvailablityResponse = { onSuccess: processResourceAvailablitySuccess, onFailure: processResponseError };
+        var processAssignedResourceSaveResponse = { onSuccess: processAssignedResourceSaveSuccess, onFailure: processResponseError };
+
+    	$(function() {
+	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
+	    });
+
+		function showAssignResourceModal(isReassign) {
+			closeAssignResourceModal();
+			var workOrderId;
+			if (isReassign) {
+				workOrderId = $('#eventOptionsRecordId').val();
+			}
+			else {
+				workOrderId = $('#listViewOptionsRecordId').val();
+			}
+			$('#assignResourceWorkOrderId').val(workOrderId);
+
+			sforce.apex.execute(apexAssignResourcesController, 'retrieveAvailableResources', { workOrderId: workOrderId }, processResourceAvailablityResponse);
+			$('#assignResourceModal').addClass('ma-open');
+			$('#assignResourceOverlay').addClass('ma-in');
+			$('body').css('overflow','hidden');
+		}
+
+		function processResourceAvailablitySuccess(response) {
+			response = JSON.parse(response);
+			console.log(response);
+
+			if (response.success) {
+				console.log('successful response');
+
+				var workOrder = response.workOrder;
+				var workOrderTime = '';
+
+				if (workOrder.Appointment_Start_Time__c) {
+					workOrderTime += workOrder.Appointment_Start_Time__c;
+				}
+				if (workOrder.Appointment_End_Time__c) {
+					workOrderTime += ' - ' + workOrder.Appointment_End_Time__c;
+				}
+
+				$('.assignResourceSearch').val('');
+				$('#assignedWorkOrderName').text(workOrder.Name);
+				$('#assignedWorkOrderType').text(workOrder.Work_Order_Type__c);
+				$('#assignedWorkOrderContact').text(workOrder.Contact__c ? workOrder.Contact__r.Name : '');
+				$('#assignedWorkOrderAddress').text(workOrder.Street__c + ', ' + workOrder.City__c + ', ' + workOrder.State__c + ' ' + workOrder.Zip__c);
+				$('#assignedWorkOrderDate').text(workOrder.Appointment_Date__c ? new Date(workOrder.Appointment_Date__c + ' 12:00 pm').format('m/d/Y') : '');
+				$('#assignedWorkOrderTime').text(workOrderTime);
+				$('#assignedWorkOrderDuration').text(workOrder.Appointment_Duration__c ? workOrder.Appointment_Duration__c + ' (hours)' : '');
+				$('#assignedWorkOrderPreferredHeadcount').text(workOrder.Recommended_Crew_Size__c);
+
+				if (response.workOrder.Work_Order_Required_Skills__r) {
+					var requiredSkillsHtml = '';
+					console.log(response.workOrder);
+					console.log(response.workOrder.Work_Order_Required_Skills__r);
+					console.log(response.workOrder.Work_Order_Required_Skills__r.records);
+
+					var requiredSkillsRecords = response.workOrder.Work_Order_Required_Skills__r.records;
+					for (var i = 0, len = requiredSkillsRecords.length; i < len; i++) {
+						console.log('loop');
+						var skill = requiredSkillsRecords[i].RbA_Skill__r;
+						console.log(skill);
+						requiredSkillsHtml += '<div class="requiredSkill">'
+												+ '<div class="requiredSkillMatchedIcon workOrderSkillNotMatched"></div>'
+												+ '<div class="requiredSkillName" skill-id="' + skill.Id + '">' + skill.Name + '</div>'
+											+ '</div>';
+					}
+
+					console.log(requiredSkillsHtml);
+					$('#assignResourceSkillsMatchedInnerDiv').append(requiredSkillsHtml);
+				}
+
+				var availableResourcesTableHtml = '';
+				for (var i = 0, len = response.availableResources.length; i < len; i++) {
+					var availableResource = response.availableResources[i];
+					availableResourcesTableHtml += '<tr class="removableRow assignedResourceRow' + (availableResource.isAssigned ? ' resourceAlreadyAssigned' : '') + (!availableResource.isAvailable ? ' deleteTempRow' : '') + (availableResource.isActive ? '' : ' inactiveResource') + '">'
+													+ '<td>'
+														//+ '<input type="hidden" class="resourceId" value="' + availableResource.resourceId + '" />'
+														+ '<span class="pointer addResource" resource-id="' + availableResource.resourceId + '" resource-name="' + availableResource.resourceName + '" onclick="addAvaibleResource(this);">+</span>'
+														+ '<span class="pointer removeResource" resource-id="' + availableResource.resourceId + '" resource-name="' + availableResource.resourceName + '" onclick="removeAssignedResource(this, false);">-</span>'
+														+ '<div class="pointer closed" onclick="toggleExpandAvaibleResource(this);"></div>'
+														+ ' ' + availableResource.resourceName
+													+ '</td>'
+													+ '<td>'
+														+ ' ' + availableResource.skillsMatchedTotal + ' skills'
+													+ '</td>'
+													+ '<td class="headCountCol" headCount="' + (availableResource.headcount != null ? availableResource.headcount : '1') + '">'
+														+ ' ' + (availableResource.headcount != null ? availableResource.headcount + ' head(s)' : 'assuming 1 head')
+													+ '</td>'
+													+ '<td colspan="2">'
+														+ ' '
+													+ '</td>'
+												+ '</tr>'
+												+ '<tr class="removableRow hiddenRow' + (!availableResource.isAvailable ? ' deleteTempRow' : '') + '">'
+													+ '<td colspan="5">'
+														+ '<div class="matchedSkills">';
+															/*
+															for (var x = 0, skillLen = availableResource.skillsMatched.length; x < skillLen; x++) {
+																availableResourcesTableHtml += '<div class="resourceSkillMatched">' + availableResource.skillsMatched[x] + '</div>';
+															}
+															*/
+
+															availableResourcesTableHtml += '<div class="resourceSkillMatchedHeader">MATCHED SKILLS</div>';
+															for (var key in availableResource.skillsMatched) {
+																availableResourcesTableHtml += '<div class="resourceSkillMatched" skill-id="' + key + '">' + availableResource.skillsMatched[key] + '</div>';
+															}
+							availableResourcesTableHtml += '</div>'
+														+ '<div class="nonMatchedSkills">';
+															/*
+															for (var x = 0, skillLen = availableResource.skillsNotMatched.length; x < skillLen; x++) {
+																availableResourcesTableHtml += '<div class="resourceSkillNotMatched">' + availableResource.skillsNotMatched[x] + '</div>';
+															}
+															*/
+
+															availableResourcesTableHtml += '<div class="resourceSkillNotMatchedHeader">MISSING SKILLS</div>';
+															for (var key in availableResource.skillsNotMatched) {
+																availableResourcesTableHtml += '<div class="resourceSkillNotMatched" skill-id="' + key + '">' + availableResource.skillsNotMatched[key] + '</div>';
+															}
+							availableResourcesTableHtml += '</div>'
+													+ '</td>'
+												+ '</tr>';
+				}
+
+				$('#assignedResourcesAvailableTable').append(availableResourcesTableHtml);
+				$('.hiddenRow, .removeResource').hide();
+
+				$('.resourceAlreadyAssigned .addResource').click();
+				//$('.deleteTempRow').remove();
+			}
+		}
+
+		function addAvaibleResource(el) {
+			var resourceId = $(el).attr('resource-id');
+			var resourceName = $(el).attr('resource-name');
+			
+			var resourceRow = $(el).closest('.removableRow');
+			var resourceSkillsRow = $(resourceRow).next();
+
+			var resourceNotActive = $(el).closest('tr').hasClass('inactiveResource');
+
+			var headCount = $(resourceRow).find('.headCountCol').text();
+			console.log(headCount);
+
+			$('#assignResourcesAssignedInnerDiv').append('<div class="assignedResource' + (resourceNotActive ? ' inactiveResource' : '') + '">' + resourceName + (headCount != ' ' ? ' - ' + headCount : '') + ' <span class="pointer resourceRemoval" resource-id="' + resourceId + '" resource-name="' + resourceName + '" onclick="removeAssignedResource(this, true);">X</span></div>');
+
+			//var resourceSkills = [];
+			var resourceSkillRows = $(resourceSkillsRow).find('.resourceSkillMatched');
+			for (var i = 0, len = resourceSkillRows.length; i < len; i++) {
+				var skillId = $(resourceSkillRows[i]).attr('skill-id');
+				//resourceSkills.push(skillId);
+
+				if (assignedSkillsToResourcesMap[skillId]) {
+					var tempResourceList = assignedSkillsToResourcesMap[skillId];
+					tempResourceList.push(resourceId);
+					assignedSkillsToResourcesMap[skillId] = tempResourceList;
+				}
+				else {
+					assignedSkillsToResourcesMap[skillId] = [resourceId];
+				}
+			}
+
+			var requiredSkills = $('#assignResourceSkillsMatchedInnerDiv .requiredSkill');
+			for (var i = 0, len = requiredSkills.length; i < len; i++) {
+				if (assignedSkillsToResourcesMap[$(requiredSkills[i]).find('.requiredSkillName').attr('skill-id')]) {
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillNotMatched').addClass('workOrderSkillMatched');
+				}
+			}
+
+			$(resourceSkillsRow).addClass('resourceAssigned');
+			$(resourceRow).addClass('resourceAssigned');
+			$(resourceRow).find('.addResource').hide();
+			$(resourceRow).find('.removeResource').show();
+
+			updateHeadCount();
+		}
+
+		function removeAssignedResource(el, isAssignedResource) {
+			var resourceId = $(el).attr('resource-id');
+			
+			var resourceRow = $('.removableRow .removeResource[resource-id="' + resourceId + '"]').closest('.removableRow');
+			var resourceSkillsRow = $(resourceRow).next();
+
+			//var resourceSkills = [];
+			var resourceSkillRows = $(resourceSkillsRow).find('.resourceSkillMatched');
+			for (var i = 0, len = resourceSkillRows.length; i < len; i++) {
+				var skillId = $(resourceSkillRows[i]).attr('skill-id');
+				//resourceSkills.push(skillId);
+
+				if (assignedSkillsToResourcesMap[skillId]) {
+					var tempResourceList = assignedSkillsToResourcesMap[skillId];
+					tempResourceList.remove(resourceId);
+
+					if (tempResourceList.length > 0) {
+						assignedSkillsToResourcesMap[skillId] = tempResourceList;
+					}
+					else {
+						delete assignedSkillsToResourcesMap[skillId];
+					}
+				}
+			}
+
+			var requiredSkills = $('#assignResourceSkillsMatchedInnerDiv .requiredSkill');
+			$(requiredSkills).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillMatched').addClass('workOrderSkillNotMatched');
+			for (var i = 0, len = requiredSkills.length; i < len; i++) {
+				if (assignedSkillsToResourcesMap[$(requiredSkills[i]).find('.requiredSkillName').attr('skill-id')]) {
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillNotMatched').addClass('workOrderSkillMatched');
+				}
+			}
+
+			$('.assignedResource [resource-id="' + resourceId + '"]').closest('.assignedResource').remove();
+
+			$(resourceSkillsRow).removeClass('resourceAssigned');
+			$(resourceRow).removeClass('resourceAssigned');
+			$(resourceRow).find('.addResource').show();
+			$(resourceRow).find('.removeResource').hide();
+
+			updateHeadCount();
+		}
+
+		function updateHeadCount() {
+			var totalHeads = 0;
+			var preferredHeadCount = $('#assignedWorkOrderPreferredHeadcount').text();
+
+			var headCountCols = $('.resourceAssigned .headCountCol');
+			for (var i = 0, len = headCountCols.length; i < len; i++) {
+				totalHeads += parseInt($(headCountCols[i]).attr('headCount')) || 0;
+			}
+
+			$('#resourceHeadCount').text('(' + totalHeads + (preferredHeadCount != '' ? '/' + preferredHeadCount : '') + ' Heads)');
+			updateRequiredSkillsMatchCount();
+		}
+
+		function updateRequiredSkillsMatchCount() {
+			var totalMatched = $('#assignResourceSkillsMatched .workOrderSkillMatched').length;
+			var totalSkills = totalMatched + $('#assignResourceSkillsMatched .workOrderSkillNotMatched').length;
+
+			$('#requiredSkillsMatchCount').text('(' + totalMatched + '/' + totalSkills + ')');
+		}
+
+		function toggleExpandAvaibleResource(el) {
+			if ($(el).hasClass('closed')) {
+				$(el).closest('.removableRow').next().show();
+				$(el).removeClass('closed').addClass('open');
+				$('#expandAllAvailableResourcesDiv').removeClass('closed').addClass('open');
+			}
+			else {
+				$(el).closest('.removableRow').next().hide();
+				$(el).removeClass('open').addClass('closed');
+				if ($('.assignedResourceRow .open').length == 0) {
+					$('#expandAllAvailableResourcesDiv').removeClass('open').addClass('closed');
+				}
+			}
+		}
+
+		function toggleExpandAllAvaibleResource(el) {
+			if ($(el).hasClass('closed')) {
+				$('.removableRow.hiddenRow').show();
+				$(el).removeClass('closed').addClass('open');
+			}
+			else {
+				$('.removableRow.hiddenRow').hide();
+				$(el).removeClass('open').addClass('closed');
+			}
+		}
+
+		function availableResourcesSearchFiltering(el) {
+			var val = $(el).val().toLowerCase();
+			var resourceRows = $('.assignedResourceRow');
+
+			console.log(val);
+
+			for (var i = 0, len = resourceRows.length; i < len; i++) {
+				var row = resourceRows[i];
+				var skillsRow = $(row).next();
+
+				if ($(row).text().toLowerCase().indexOf(val) > -1 || $(skillsRow).find('.resourceSkillMatched').text().toLowerCase().indexOf(val) > -1) {
+					$(row).show();
+
+					/*
+					if ($(skillsRow).find('.resourceSkillMatched').text().toLowerCase().search(val) > -1) {
+						$(skillsRow).show();
+					}
+					*/
+				}
+				else {
+					$(row).hide();
+					$(skillsRow).hide();
+				}
+			}
+		}
+
+		function closeAssignResourceModal() {
+			assignedSkillsToResourcesMap = {};
+			$('#assignResourceWorkOrderId, #assignResourceInfoTable .fieldValue').val('').text('');
+			$('#assignedResourcesAvailableTable .removableRow, .requiredSkill, .assignedResource').remove();
+
+			updateHeadCount();
+
+		    $('#assignResourceOverlay').removeClass('ma-in');
+			$('#assignResourceModal').addClass('ma-close');
+			$('#assignResourceModal').removeClass('ma-open');
+			$('#loaderModal').hide();
+			$('body').css('overflow','auto');
+		}
+
+		function saveAssignedResources() {
+			$('#loaderModal').show();
+			var assignedResourceIds = [];
+			var assignedResourceRows = $('.assignedResource .resourceRemoval');
+			for (var i = 0, len = assignedResourceRows.length; i < len; i++) {
+				assignedResourceIds.push($(assignedResourceRows[i]).attr('resource-id'));
+			}
+
+			sforce.apex.execute(apexAssignResourcesController, 'saveAssignedResources', { workOrderId:$('#assignResourceWorkOrderId').val(), assignedResourceIdsList: assignedResourceIds }, processAssignedResourceSaveResponse);
+		}
+
+		function processAssignedResourceSaveSuccess(response) {
+			response = JSON.parse(response);
+			console.log(response);
+
+			if (response.success) {
+				$('#calendar').fullCalendar('refetchEvents');
+				closeAssignResourceModal();
+			}
+			else {
+				handleError('MA_SchedulerAssignResourceComp : saveAssignedResources', response);
+			}
+		}
+	</script>
+
+	<div id="assignResourceModal">
+        <div id="assignResourceContent">
+            <div id="assignResourceOuterDiv">
+                <div id="assignResourceHeader">
+                    <h2><span>Assign Resource</span></h2>
+                    <span id="assignResourceModalClose" class="floatRight" onclick="closeAssignResourceModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
+                </div>
+
+                <input type="hidden" id="assignResourceWorkOrderId" />
+
+                <table id="assignResourceInfoTable" cellspacing="15px">
+                	<tr>
+                		<td>
+                			<span class="fieldLabel">Work Order: </span>
+                			<span id="assignedWorkOrderName" class="fieldValue"></span>
+                		</td>
+                		<td>
+                			<span class="fieldLabel">Type: </span>
+                			<span id="assignedWorkOrderType" class="fieldValue"></span>
+                		</td>
+                	</tr>
+                	<tr>
+                		<td>
+                			<span class="fieldLabel">Contact: </span>
+                			<span id="assignedWorkOrderContact" class="fieldValue"></span>
+                		</td>
+                		<td>
+                			<span class="fieldLabel">Address: </span>
+                			<span id="assignedWorkOrderAddress" class="fieldValue"></span>
+                		</td>
+                	</tr>
+                	<tr>
+                		<td>
+                			<span class="fieldLabel">Date: </span>
+                			<span id="assignedWorkOrderDate" class="fieldValue"></span>
+                		</td>
+                		<td>
+                			<span class="fieldLabel">Time: </span>
+                			<span id="assignedWorkOrderTime" class="fieldValue"></span>
+                		</td>
+                	</tr>
+                	<tr>
+                		<td>
+                			<span class="fieldLabel">Duration: </span>
+                			<span id="assignedWorkOrderDuration" class="fieldValue"></span>
+                		</td>
+                		<td>
+                			<span class="fieldLabel">Preferred Headcount: </span>
+                			<span id="assignedWorkOrderPreferredHeadcount" class="fieldValue"></span>
+                		</td>
+                	</tr>
+                </table>
+
+                <div id="assignResourceInnerDiv">
+                	<div id="assignResourceSkillsMatched">
+                		<div class="fieldLabel">
+                			<h4>Required Skills <span id="requiredSkillsMatchCount">(0/0)</span></h4>
+                		</div>
+                		<div id="assignResourceSkillsMatchedInnerDiv"></div>
+                	</div>
+                	<div id="assignResourceAssigned">
+                		<div class="fieldLabel">
+                			<h4>Assigned Resources <span id="resourceHeadCount">(0/0 Heads)</span></h4>
+                		</div>
+                		<div id="assignResourcesAssignedInnerDiv"></div>
+                	</div>
+
+                	<table id="assignedResourcesAvailableTable">
+                		<tr class="headerRow">
+                			<th><div id="expandAllAvailableResourcesDiv" class="pointer closed" onclick="toggleExpandAllAvaibleResource(this);" />Resource</th>
+                			<th>Skills Match</th>
+                			<th>Head Count</th>
+                			<th>Revenue Past 30 Days</th>
+                			<td><input type="text" class="assignResourceSearch floatRight" onkeyup="availableResourcesSearchFiltering(this);" placeholder="Search" /></td>
+                		</tr>
+                	</table>
+                </div>
+            </div>
+            <div id="assignResourceButtons">
+                <button class="ma-button ma-button--white" onclick="closeAssignResourceModal();">Cancel</button>
+                <button class="ma-button ma-button--green" onclick="saveAssignedResources();">Save</button>
+            </div>
+        </div>
+        
+    </div>
+    <div id="assignResourceOverlay" class=""></div>
+</apex:component>

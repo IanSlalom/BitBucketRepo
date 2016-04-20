@@ -1,10 +1,12 @@
 <apex:component controller="MA_RoutingSchedulerController" layout="none" >
-
+    
+    <apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/overlappingmarkerspiderfier/oms.min.js')}"/>
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/async/async.min.js')}"/>
-  	
+    
     <!-- CSS -->
     <style type='text/css'>
+    
 
     </style>
 
@@ -15,141 +17,193 @@
         ******************************/
         var MAschedRoutes = 
         {
-            getAsyncRouting : function(token, travelM, callback)
+            getAsyncRouting : function(callback)
             {
-              dDate = new defaultDate(DD);
-                //console.log(token);
-                //console.log(travelM);
-                $.ajax({
-                  type: "POST",
-                  url: arcGISAPIaysnc,
-                  json: true,
-                  data: {
-                    f: 'json',
-                    token: token,
-                    //stops: JSON.stringify({features: response.data}),
-                    orders: JSON.stringify({features: baseOrders}),
-                    depots:JSON.stringify({features: baseDepots}), 
-                    routes: JSON.stringify({features: baseRoutes}),
-                    default_date: dDate,
-                    travel_mode: travelM,
-                    populate_directions: true,
-                    directions_language: 'en',
-                    directions_style_name:'NA Desktop',
-                    time_units: 'Minutes',
-                    time_window_factor: 'High'
-                  }
-                })
-                .done(function(data, success, body) {
-                    data = JSON.parse(data);
-                    checkStatus(token, data, function(response){
-                        console.log(response);
-                        async.parallel([
-                            function(callback){
-                                getResults(token, response.results.out_directions.paramUrl, response.jobId, function(responseD){
-                                    callback(null, responseD);
-                                });
-                            },
-                            function(callback){
-                                getResults(token, response.results.out_routes.paramUrl, response.jobId,function(responseR){
-                                    callback(null, responseR);
-                                });
-                            },
-                            function(callback){
-                                getResults(token, response.results.out_stops.paramUrl, response.jobId, function(responseS){
-                                    callback(null, responseS);
-                                });
-                            },
-                            function(callback){
-                                getResults(token, response.results.out_unassigned_stops.paramUrl, response.jobId, function(responseS){
-                                    callback(null, responseS);
-                                });
-                            },
-                            function(callback){
-                                getResults(token, response.results.solve_succeeded.paramUrl, response.jobId, function(responseS){
-                                    callback(null, responseS);
-                                });
-                            }
-                        ], 
-                        function(err, results){
-                            console.log(results);
-                            routeResults(results);
-                            callback(err, success);
-                        });
-                    //callback(null, success);
-                    });//console.log(data);
-                    //console.log(success);
-                    //console.log(body);
-                  })
-                  .error(function(error){
-                      //Need to add some other error handle stuff 
-                  })
-            },
-            
-            checkStatus : function(authToken, Sdata, callback)
-            {
-                var resultData;
-                console.log(Sdata);
-                async.until(
-                    function (){
-                        //Need to add some error checking and have it do something else if the response fails
-                        console.log(Sdata);
-                        return Sdata.jobStatus == "esriJobSucceeded";
-                    }, 
-                    function(callback){
-                        $.ajax({
-                            type: "GET",
-                            url: arcGISjobStatus.replace('<yourJobID>', Sdata.jobId).replace('<yourToken>', authToken)
-                            })
-                            .done(function(data, success, body){
-                                //console.log(data);
-                                //console.log(success);
-                                    console.log(body);
-                                    var RT;
-                                    RT = JSON.parse(body.responseText);
-                                    Sdata = RT;
-                                setTimeout(function(){
-                                    callback(null, RT);
-                                }, 1000);
-                            }) 
-                            .error(function(error, body){
-                                callback(error, body);
-                            })
-                    },
-                    function(err, n)
-                    {
-                        console.log(err);
-                        console.log(n);
-                        if(n != null)
-                        {
-                            /*getResults(authToken, n, function(response){
-                                console.log(response)
-                                resultData = response;
-                                callback(resultData);
-                            });*/
-                            callback(n);
-                        }
-                        if(err != null){
-                            callback(err, n);
-                        }
+                try
+                {
+                    //console.log(token);
+                    //console.log(travelM);
+                    $.ajax({
+                      type: "POST",
+                      url: MAschedRoutes.externalResources.arcGISAPIaysnc,
+                      json: true,
+                      data: {
+                        f: 'json',
+                        token: MAschedRoutes.master.token, //token
+                        orders: JSON.stringify(MAschedRoutes.master.orders),//JSON.stringify({features: baseOrders}),
+                        depots: JSON.stringify(MAschedRoutes.master.depots),//JSON.stringify({features: baseDepots}), 
+                        routes: JSON.stringify(MAschedRoutes.master.routes),//JSON.stringify({features: baseRoutes}),
+                        default_date: MAschedRoutes.master.defaultdate,
+                        travel_mode: JSON.stringify(MAschedRoutes.master.travelMode),
+                        breaks: JSON.stringify(MAschedRoutes.master.breaks),
+                        populate_directions: true,
+                        directions_language: 'en',
+                        directions_style_name:'NA Desktop',
+                        time_units: 'Minutes',
+                        time_window_factor: 'High'
+                      }
                     })
+                    .done(function(data, success, body) {
+                        data = JSON.parse(data);
+                        var error;
+                        var routeResults;
+                            MAschedRoutes.checkStatus(data, function(err, res){
+                                console.log(err);     
+                                console.log(res);
+                            });
+                      })
+                      .error(function(error){
+                          //Need to add some other error handle stuff 
+                      })
+                }
+                catch(e)
+                {
+                    handleError('Scheduling Error','Unable to complete scheduling. ', e);
+                    callback(true, {success:false, error: e});
+                }
             },
             
-            getResults : function(token, Rdata, jobId, callback)
+            checkStatus : function(Sdata, callback)
             {
-                //console.log(token);
-                //console.log(Rdata);
+                try
+                {
+                    var resultData;
+                    console.log(Sdata);
+                    async.until(
+                        function (){
+                            console.log(Sdata);
+                            if(Sdata.jobStatus == "esriJobFailed"){
+                                callback({success: false, error: Sdata});
+                            }
+                            else if(Sdata.jobStatus == "esriJobSucceeded"){
+
+                                //callback({success: true, response: Sdata});
+                                return Sdata.jobStatus == "esriJobSucceeded";
+                            }
+                        }, 
+                        function(callback){
+                            $.ajax({
+                                type: "GET",
+                                url: MAschedRoutes.externalResources.arcGISjobStatus.replace('<yourJobID>', Sdata.jobId).replace('<yourToken>', MAschedRoutes.master.token)
+                                })
+                                .done(function(data, success, body){
+                                    //console.log(data);
+                                    //console.log(success);
+                                    console.log(body);
+                                        var RT;
+                                        RT = JSON.parse(body.responseText);
+                                        Sdata = RT;
+                                    setTimeout(function(){
+                                        callback(false, RT);
+                                    }, 1000);
+                                }) 
+                                .error(function(error, body){
+                                    callback(error, body);
+                                })
+                        },
+                        function(err, res)
+                        {
+                            console.log(err);
+                            console.log(res);
+                            if(res.jobStatus == 'esriJobSucceeded')
+                            {
+                                async.series({
+                                    solve_succeeded: function(callback){
+                                        MAschedRoutes.getResults(res.results.solve_succeeded.paramUrl, res.jobId, function(responseS){
+                                            console.log(responseS);
+                                            if(!responseS.value){
+                                                callback(false, responseS);
+                                            }
+                                            else{
+                                                //Do something else
+                                                //callback(false, responseS);
+                                            }
+                                        });
+                                    },
+                                    out_directions: function(callback){
+                                        MAschedRoutes.getResults(res.results.out_directions.paramUrl, res.jobId, function(responseD){
+                                            console.log(responseD);
+                                            //Make call to do something with results//Check for success first
+                                            callback(false, responseD);
+                                        });
+                                    },
+                                    out_routes: function(callback){
+                                        MAschedRoutes.getResults(res.results.out_routes.paramUrl, res.jobId,function(responseR){
+                                            console.log(responseR);
+                                            //Make call to do something with results//Check for success first
+                                            callback(false, responseR);
+                                        });
+                                    },
+                                    out_stops: function(callback){
+                                        MAschedRoutes.getResults(res.results.out_stops.paramUrl, res.jobId, function(responseOS){
+                                            console.log(responseOS);
+                                            //Make call to do something with results//Check for success first
+                                            callback(false, responseOS);
+                                        });
+                                    },
+                                    out_unassigned_stops: function(callback){
+                                        MAschedRoutes.getResults(res.results.out_unassigned_stops.paramUrl, res.jobId, function(responseU){
+                                            console.log(responseU);
+                                            //Make call to do something with results//Check for success first
+                                            callback(false, responseU);
+                                        });
+                                    }
+                                },
+                                function(err, results){
+                                    //callback(err, results);
+                                    //callback(true, {success: false, error: routeResults});
+                                    if(err){
+                                        console.log(err);
+                                        console.log(results);
+                                        callback(err, results);
+                                    }
+                                    else{
+                                        console.log(err);
+                                        console.log(results);
+                                        callback(err, results);
+                                        //routeResults(results);
+                                    }
+                                });
+                                //callback(err, res);
+                            }
+                        }
+                    )
+                }
+                catch(e)
+                {
+                    handleError('Scheduling Error','Unable to complete scheduling. ', e);
+                    callback(true, {success:false, error: e});
+                }
+            },
+            
+            getResults : function(Rdata, jobId, callback)
+            {
                 Rdata = Rdata.replace('results/', '');
                 $.ajax({
                     type: "GET", 
-                    url: arcGISoutputs.replace('<output_parameter_name>', Rdata).replace('<yourJobID>', jobId).replace('<yourToken>', token)
+                    url: MAschedRoutes.externalResources.arcGISoutputs.replace('<output_parameter_name>', Rdata).replace('<yourJobID>', jobId).replace('<yourToken>', MAschedRoutes.master.token)
                 })
                 .done(function(data, success, body){
-                    //console.log(body);
-                    var resultT = JSON.parse(body.responseText);
-                    console.log(resultT);
-                    callback(resultT);
-                }) 
+                    try
+                    {
+                        var resultT = JSON.parse(body.responseText);
+                        console.log(success);
+                        callback(resultT);
+                        if(resultT.paramName == 'solve_succeeded' && !resultT.value)
+                        {
+                            callback(resultT);
+                        }
+                        else
+                        {
+                            callback(resultT);
+                        }
+                    }
+                    catch(e)
+                    {
+                        handleError('Scheduling Error','Unable to complete scheduling. ', e);
+                        callback(true, {success:false, error: e});
+                    }
+                })
                 .error(function(error, body){
                     //Add some other error handling here 
                     callback(error, body);
@@ -158,7 +212,7 @@
 
             getSyncRouting : function(token, travelM, callback)
             {
-              dDate = new defaultDate(DD);
+                //dDate = new defaultDate(DD);
                 //console.log(token);
                 //console.log(travelM);
                 $.ajax({
@@ -194,21 +248,32 @@
                   })
             },
 
-            esriTravelModes : {
+            master : {
 
             },
 
+            esriTravelModes : {},
+
             esriToken : '',
 
-            getEsriToken : function(callback)
+            getEsriToken : function(master, callback)
             {                        
+                console.log(master);
                 var EsriToken;
-                if(MAschedRoutes.esriToken != '') 
+                //if(MAschedRoutes.esriToken != '')
+                if(MAschedRoutes.master.hasOwnProperty('token'))
                 {
-                    EsriToken = MAschedRoutes.esriToken;
-
-                    MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
-                        callback({success:true, token:EsriToken, travelMode:travelResponse});     
+                    //EsriToken = MAschedRoutes.esriToken;
+                    EsriToken = MAschedRoutes.master.token;
+                    //master['token'] = EsriToken;
+                    master['token'] = MAschedRoutes.master.token;;
+                    MAschedRoutes.master = master;
+                    console.log(MAschedRoutes.master);
+                    MAschedRoutes.getEsriTravelMode(function(travelResponse){
+                        MAschedRoutes.master['travelMode'] = travelResponse;
+                        //console.log(MAschedRoutes.master.travelMode);
+                        //callback(false, {success:true, token:EsriToken, travelMode:travelResponse});
+                        callback(false, {success:true});     
                     });
                 }
                 else 
@@ -218,24 +283,34 @@
                         var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getESRIToken',{});
                         //try tp parse response
                         response = JSON.parse(response);
-                        if(response.error)
+                        console.log(response);
+                        if(!response.error)
                         {
-                            handleError('Scheduling Error','Unable to get scheduling token.', response.error.message);
-                            callback({success:false, error: response.error.error});
+                            EsriToken = response.access_token;
+                            //MAschedRoutes.esriToken = EsriToken;
+                            master['token'] = EsriToken;
+                            MAschedRoutes.master = master;
+                            //console.log(MAschedRoutes.master);
+                            //console.log(master);
+                            //console.log(EsriToken);
+                            MAschedRoutes.getEsriTravelMode(function(travelResponse){
+                                MAschedRoutes.master['travelMode'] = travelResponse;
+                                //console.log(MAschedRoutes.master.travelMode);
+                                //callback(false, {success:true, token:EsriToken, travelMode:travelResponse});
+                                callback(false, {success:true});     
+                            });
                         }
                         else
                         {
-                            EsriToken = response.access_token;
-                            MAschedRoutes.esriToken = EsriToken;
-                            MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
-                                    callback({success:true, token:EsriToken, travelMode:travelResponse});     
-                            });
+                            handleError('Scheduling Error','Unable to get scheduling token.', response.error.message);
+                            //callback({success:false, error: response.error.error});
+                            callback(true, {success:false, error: response.error.error});
                         }
                     }
                     catch(e)
                     {
-                        handleError('Scheduling Error','Unable to get scheduling token.', response.error.message);
-                        callback({success:false, error: response.error.error});
+                        handleError('Scheduling Error','Unable to get scheduling token.', e);
+                        callback(true, {success:false, error: e});
                     }
                    /* $.ajax({
                         type: "POST",
@@ -278,11 +353,11 @@
                 }
             },
 
-            getEsriTravelMode : function(authToken, callback)
+            getEsriTravelMode : function(callback)
             {
                 //check if we have travel modes already
                 if(!$.isEmptyObject(MAschedRoutes.esriTravelModes)) {
-                    callback(MAschedRoutes.esriTravelModes.DrivingTime);
+                    callback(false, MAschedRoutes.esriTravelModes.DrivingTime);
                 }
                 else 
                 {
@@ -293,7 +368,7 @@
                         json: true,
                         data:{
                             f: 'json',
-                            token: authToken
+                            token: MAschedRoutes.master.token
                         }
                     })
                     .done(function(res) {
@@ -317,7 +392,7 @@
                                                 ESRITravelModes[mode.attributes.Name.replace(/\s/g,'')] = JSON.parse(mode.attributes.TravelMode);
                                             }
                                             catch(e) {
-                                                MAschedRoutes.log('Unable to parse travel modes. Dafaulting to Drive Time');
+                                                handleError('Unable to parse travel modes. Dafaulting to Drive Time', e);
                                                 callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
                                             }
                                         }
@@ -326,15 +401,15 @@
                                 }
                             }
                             MAschedRoutes.esriTravelModes = ESRITravelModes;
-                            callback(ESRITravelModes.MADrivingTime);
+                            callback(ESRITravelModes.DrivingTime);
                         }
                         catch(e) {
-                            MAschedRoutes.log('Unable to get travel modes. Dafaulting to DrivingTime');
+                            handleError('Unable to get travel modes. Dafaulting to DrivingTime', e);
                             callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
                         }
                     })
                     .error(function(res){
-                        MAschedRoutes.log('Unable to get travel modes. Dafaulting to DrivingTime');
+                        handleError('Unable to get travel modes. Dafaulting to DrivingTime', res);
                         callback({"attributeParameterValues":[{"parameterName":"Restriction Usage","attributeName":"Avoid Unpaved Roads","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Avoid Private Roads","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Driving an Automobile","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Through Traffic Prohibited","value":"AVOID_HIGH"},{"parameterName":"Restriction Usage","attributeName":"Roads Under Construction Prohibited","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Gates","value":"AVOID_MEDIUM"},{"parameterName":"Restriction Usage","attributeName":"Avoid Express Lanes","value":"PROHIBITED"},{"parameterName":"Restriction Usage","attributeName":"Avoid Carpool Roads","value":"PROHIBITED"}],"description":"Models the movement of cars and other similar small automobiles, such as pickup trucks, and finds solutions that optimize travel time. Travel obeys one-way roads, avoids illegal turns, and follows other rules that are specific to cars. Dynamic travel speeds based on traffic are used where it is available when you specify a start time.","impedanceAttributeName":"TravelTime","simplificationToleranceUnits":"esriFeet","uturnAtJunctions":"esriNFSBAtDeadEndsAndIntersections","restrictionAttributeNames":["Avoid Carpool Roads","Avoid Express Lanes","Avoid Gates","Avoid Private Roads","Avoid Unpaved Roads","Driving an Automobile","Roads Under Construction Prohibited","Through Traffic Prohibited"],"useHierarchy":true,"simplificationTolerance":10,"timeAttributeName":"TravelTime","distanceAttributeName":"Miles","type":"AUTOMOBILE","id":"FEgifRtFndKNcJMJ","name":"Driving Time"});
                     });
                 }
@@ -363,9 +438,10 @@
             }
         },
 
-        getRBAWorkOrders : function()
+        getRBAWorkOrders : function(callback)
         {
-            var storeId = $('#storeSettingsSelect').val();
+            //var storeId = $('#storeSettingsSelect').val();
+            var storeId = $('#storeSelect').val();
             var moment = $('#calendar').fullCalendar('getDate'); 
             moment = moment.format('YYYY-MM-DD');
             console.log(moment);
@@ -374,11 +450,20 @@
                 var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getRecords',{dt: moment, storeId: storeId});
                 response = JSON.parse(response);
                 console.log(response);
-
+                if (!response.success)
+                {
+                    handleError('Error : getRBAWorkOrders', response);
+                    callback(true, response);
+                }
+                else
+                {
+                    callback(false, response);
+                }
             }
             catch(e)
             {
-                handleError('Error', response);
+                handleError('Error : getRBAWorkOrders', e);
+                callback(true, {success:false, error: e});
             }
 
         },
@@ -405,6 +490,8 @@
             });
             
             $('#scheduleOptimizeModal').show();
+            $('#scheduleOptimizeModal').addClass('ma-open');
+            $('#scheduleOptimizeOverlay').addClass('ma-in');
         
         },
         
@@ -464,8 +551,8 @@
          function getSyncOptimalRoute()
          {
             async.waterfall([
-                MAschedRoutes.getToken,
-                MAschedRoutes.getTravelMode,
+                MAschedRoutes.getEsriToken,
+                MAschedRoutes.getEsriTravelMode,
                 MAschedRoutes.getSyncRouting
             ], 
             function (err, result){
@@ -476,10 +563,11 @@
                     
         function getAutoSchedule()
         {
+            //$('#optimize button').attr('disabled', true);
             async.waterfall([
                 MAschedRoutes.getRBAWorkOrders,
-                MAschedRoutes.getToken,
-                MAschedRoutes.getTravelMode,
+                MAschedRoutes.getEsriToken,
+                //MAschedRoutes.getEsriTravelMode,
                 MAschedRoutes.getAsyncRouting
             ], 
             function (err, result){
@@ -496,11 +584,12 @@
     
    function closeScheduleOptimizeModal() {
             $('#scheduleOptimizeModal').hide();
+            $('#scheduleOptimizeOverlay').removeClass('ma-in');
         }
          
     </script>
     <div id="scheduleOptimizeModal">
-        <div id="scheduleOptimizeOverlay" />
+
         <div id="scheduleOptimizeContent">
             <div id="scheduleOptimize">
                 <div id="scheduleOptimizeHeader">
@@ -508,19 +597,20 @@
                     <span>Optimize Schedule</span>
                     <span id="scheduleOptimizeModalClose" class="floatRight" onclick="closeScheduleOptimizeModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
                 </div>
-                <div>
-                    <span>Pick a date</span>
+                <div class="batch-assign-calendar-container">
+                    <span>Select a date:</span>
                     <div id="datepicker"></div>
                 </div>
-                <div>
-                	Work Order: <span id="OptimizeName" /> <input type="hidden" id="OptimizeId" />
+                <div class="batch-assign-wo-container">
+                    Work Order: <span id="OptimizeName" /> <input type="hidden" id="OptimizeId" />
                 </div>
                 <div id="scheduleOptimizeButtons">
-                	<button onclick="closeScheduleOptimizeModal();">CANCEL</button>
-                	<button onclick="getAutoSchedule();">Optimize Schedule</button>
+                    <button class="ma-button ma-button--white" onclick="closeScheduleOptimizeModal();">Cancel</button>
+                    <button class="ma-button ma-button--green" onclick="getAutoSchedule();">Optimize Schedule</button>
                 </div>
             </div>
         </div>
     </div>
     <div id = "map"></div>
+    <div id="scheduleOptimizeOverlay" />
 </apex:component>

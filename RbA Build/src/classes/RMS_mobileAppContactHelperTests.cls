@@ -24,7 +24,7 @@ private class RMS_mobileAppContactHelperTests {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		Opportunity opp = [Select Id from Opportunity where AccountId =: dwelling.Id limit 1];
-		Contact c = utility.createContact(null, 'TestName2');
+		Contact c = utility.createContact(dwelling.Id, 'TestName2');
 		RMS_mobileAppContactHelper.DTOContact dtoContact = new RMS_mobileAppContactHelper.DTOContact();
 		dtoContact.DwellingId = dwelling.Id;
 		dtoContact.OpportunityId = opp.Id;
@@ -32,11 +32,9 @@ private class RMS_mobileAppContactHelperTests {
 		String jsonResult = RMS_mobileAppContactHelper.saveNewContact(JSON.serialize(dtoContact));
 		//Assert Contact is created
 		List<Contact> cList = [select Id, AccountId from Contact where FirstName Like '%TestName2%'];
-// TODO: fix this assert
-// Commented out the section because cHistList is empty
-//		System.assert(!cList.isEmpty());
+		System.assert(!cList.isEmpty());
 		//Assert Contact History is created
-/*		List<Contact_History__c> cHistList = [select Contact__c, Dwelling__c, Type__c from Contact_History__c where Dwelling__c = :dwelling.Id and Contact__c =: clist[0].Id];
+		List<Contact_History__c> cHistList = [select Contact__c, Dwelling__c, Type__c from Contact_History__c where Dwelling__c = :dwelling.Id and Contact__c =: clist[0].Id];
 		System.assert(!cHistList.isEmpty());
 		System.assertEquals(cHistList[0].Dwelling__c, dwelling.Id);
 		System.assertEquals(cHistList[0].Type__c, 'Current Resident');
@@ -46,7 +44,7 @@ private class RMS_mobileAppContactHelperTests {
 		System.assertEquals(cRoleList[0].OpportunityId, opp.Id);
 		System.assertEquals(cRoleList[0].Role, 'Decision Maker');
 		//Assert Json response contains contact Id
-		System.assert(jsonResult.contains(clist[0].Id));		*/
+		System.assert(jsonResult.contains(clist[0].Id));		
 	}
 
 	@isTest

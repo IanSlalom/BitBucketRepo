@@ -1,0 +1,76 @@
+<apex:component >
+
+  <style>
+
+    #rowsIcon img {
+        height: 20px;
+        top: 2px;
+        position: relative;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    
+    .show {
+        display: block !important;
+    }
+
+  </style>
+  
+  <script>
+    function openMainNavModal() {
+        $('.main-nav-container').show();
+        $('.main-nav-container').addClass('ma-left-in');
+        $('.nav-overlay-container').fadeIn(100);
+    }
+    
+    function closeMainNavModal() {
+        $('.nav-overlay-container').fadeOut(100);
+        $('.main-nav-container').removeClass('ma-left-in');
+    }
+    
+    function changeText() {
+        document.getElementById('topbar-header-text').innerHTML = 'Settings';
+    }
+    
+    $(document).mouseup(function (e)
+        {
+            var container = $(".main-nav-container");
+        
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                // container.hide();
+                $('.main-nav-container').removeClass('ma-left-in');
+                $('.nav-overlay-container').fadeOut(100);
+            }
+        });
+  </script>
+  
+  <div class="topbar-container">
+      <span id="rowsIcon" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" /></span>
+      <!--<span id="rowsIcon" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" /></span>-->
+      <h2><span id="topbar-header-text">Work Order Planner</span></h2>
+        <!--<svg aria-hidden="true" class="slds-icon icon-utility-rows slds-icon-text-default"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}"></use></svg>-->
+  </div>
+  
+  <div class="main-nav-container" style="display:none">
+      <!--<div id="mainNavModalClose">-->
+      <!--    <span class="floatRight" onclick="closeMainNav();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>-->
+      <!--</div>-->
+      <div class="main-nav-logo">
+          <span class=""><img src="{!URLFOR($Resource.MA_Scheduler, '/images/ma_logo.png')}" /></span>
+      </div>
+      <div class="main-nav-links">
+        <ul>
+          <a onclick="closeMainNavModal(); goToWorkOrderView();"  href="#"><li>Work Order Planner</li></a>
+          <a onclick="closeMainNavModal(); goToResourceView();" href="#"><li>Resource View</li></a>
+          <a onclick="closeMainNavModal(); openSettingsModal(); changeText();" href="#"><li>Settings</li></a>
+        </ul>
+      </div>
+  </div>
+  
+  <div class="nav-overlay-container" style="display:none">
+  </div>
+  
+
+</apex:component>

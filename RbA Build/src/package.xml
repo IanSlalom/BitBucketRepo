@@ -8,7 +8,11 @@
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
         <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
+        <members>MA_SchedulerUtilities</members>
+        <members>MyProfilePageController</members>
+        <members>MyProfilePageControllerTest</members>
         <members>OpportunityTriggerHandler</members>
         <members>OrderTriggerHandler</members>
         <members>OrderTriggerHandlerTest</members>
@@ -77,6 +81,7 @@
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
+        <members>eventTest</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
@@ -85,9 +90,13 @@
     </types>
     <types>
         <members>AutoCompleteV2</members>
+        <members>MA_SchedulerAssignResourceComp</members>
         <members>MA_SchedulerCalendarComp</members>
+        <members>MA_SchedulerCancelAppointmentComp</members>
         <members>MA_SchedulerErrorComp</members>
+        <members>MA_SchedulerListViewOptionsModalComp</members>
         <members>MA_SchedulerLoaderComp</members>
+        <members>MA_SchedulerMainNav</members>
         <members>MA_SchedulerRoutes</members>
         <members>MA_SchedulerSettingsComp</members>
         <members>MA_SchedulerStylingComp</members>
@@ -256,9 +265,12 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
+        <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
+        <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
         <name>Layout</name>
     </types>
     <types>
