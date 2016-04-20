@@ -56,7 +56,11 @@ public with sharing class RMS_OrderItemManager {
 			//IF NO CHANGE HISTORY CREATED BY CURRENT USER TODAY	 		
 				
 			Change_History__c rCH = new Change_History__c();
-			if(orderItemIdToListChangeHistory.get(oi.id) == null || orderItemIdToListChangeHistory.get(oi.id).size() == 0 || oldMap.get(oi.id).Total_Retail_Price__c != newMap.get(oi.id).Total_Retail_Price__c){
+			if(	orderItemIdToListChangeHistory.get(oi.id) == null || 
+				orderItemIdToListChangeHistory.get(oi.id).size() == 0 || 
+				oldMap.get(oi.id).Total_Retail_Price__c != newMap.get(oi.id).Total_Retail_Price__c ||
+				oldMap.get(oi.id).UnitPrice != newMap.get(oi.id).UnitPrice){
+					
 				rCH.Order_Product__c = oi.Id;
 				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
 				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;

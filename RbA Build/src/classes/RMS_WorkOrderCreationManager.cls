@@ -103,7 +103,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         //FILTERING OUT NON ACTIVATED ORDERS AS WELL AS BUILDING THE LIST OF DWELLINGS TO GET THEIR STORE CONFIGS
         for(Order ord : listNew){
-            if(ord.Status == 'Tech Measure Needed' && mapOld.get(ord.Id).Status == 'Draft'){
+            if((ord.Status == 'Tech Measure Scheduled' || ord.Status == 'Tech Measure Needed') && mapOld.get(ord.Id).Status == 'Draft'){
                 relatedDwellingIds.add(ord.AccountId);
                 activatedOrders.add(ord);
                 activatedOrderId.add(ord.id);
