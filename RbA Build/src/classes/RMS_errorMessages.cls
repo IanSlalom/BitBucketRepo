@@ -163,6 +163,8 @@ public with sharing class RMS_errorMessages {
 	*******************************************************/
 	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
 	public static final String FIELD_IS_LOCKED = '&bull;The [field] field can not be changed in the current status.';
+	public static final String WORK_ORDERS_WITH_OPEN_EVENTS = 'Please close appointments within any Tech Measure or Install Work Orders before cancelling this order.';
+	public static final String ORDER_CLOSED = 'You can not add or edit products on a closed order.';
 
 
 }
