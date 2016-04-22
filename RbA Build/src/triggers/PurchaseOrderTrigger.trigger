@@ -9,4 +9,7 @@ trigger PurchaseOrderTrigger on Purchase_Order__c (  after update) {
     handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
   }
   
+  if(Trigger.isInsert && Trigger.isAfter){
+    handler.OnAfterInsert(Trigger.new);
+  }
 }

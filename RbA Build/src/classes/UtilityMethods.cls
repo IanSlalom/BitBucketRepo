@@ -1,4 +1,4 @@
-public with sharing class UtilityMethods {
+global with sharing class UtilityMethods {
 
 	public UtilityMethods() {}
 	
@@ -315,7 +315,25 @@ public with sharing class UtilityMethods {
 		return itemsToReturn;
 
 	}
-	
+
+	webservice static String completeWorkOrders(String id){
+		try{
+			List<RbA_Work_Order__c> workOrdersToComplete = [SELECT Id, Work_Order_Type__c,Work_Order_Status__c 
+															FROM RbA_Work_Order__c
+															WHERE Sold_Order__c =: id
+															AND Work_Order_Type__c != 'Building Permit'
+															AND Work_Order_Type__c != 'Paint/Stain'];
+			for(RbA_Work_Order__c wo : workOrdersToComplete){
+				wo.Work_Order_Status__c = 'Closed';
+			}
+
+			update workOrdersToComplete;
+			}catch(Exception e){
+				return 'Error occured in completeWorkOrders method due to ' + e.getMessage();
+			}
+		return 'success';
+	}
+
 	/*******************************************************
           check for recursive triggers
 	*******************************************************/
@@ -343,6 +361,4 @@ public with sharing class UtilityMethods {
 	{
 		alreadyRanOrderTrigger = false;
 	}
-
-	
 }

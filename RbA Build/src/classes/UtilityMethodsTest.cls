@@ -210,7 +210,7 @@ private class UtilityMethodsTest {
 		// This should work but throws a null pointer exception in the utility class. I suspect this is a salesforce bug
 //		String result = UtilityMethods.checkLocked(lockedRecords, unlockedRecords, lockedMap, unlockedMap, 'Update');		
 //		System.AssertEquals('At least one record was locked', result);
-
+		
 		Test.stopTest();
 		
 	}
@@ -269,5 +269,29 @@ private class UtilityMethodsTest {
 		System.AssertEquals(2.5, orderItem2.Tax__c);				
 		System.AssertEquals(5, orderItem3.Tax__c);				
 		System.AssertEquals(2.5, orderItem4.Tax__c);				
+	}
+
+	/*******************************************************
+					completeWorkOrdersTest
+	*******************************************************/
+	static testMethod void completeWorkOrdersTest() {
+
+		TestUtilityMethods utility = new TestUtilityMethods();
+		
+		utility.createOrderTestRecords();
+
+		Order soldOrder = [SELECT Id, Name, Status FROM Order WHERE Name = 'Sold Order 1'];
+		Account store = [SELECT Id, Active_Store_Configuration__c from Account Where Name = '77 - Twin Cities, MN'];
+
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c visitWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = soldOrder.Id,
+															                Work_Order_Type__c = 'Tech Measure'  
+															                    );
+    	insert visitWorkOrder;
+    	System.assertEquals(UtilityMethods.completeWorkOrders(soldOrder.Id), 'success');
+    	visitWorkOrder = [Select Work_Order_Status__c from RbA_Work_Order__c where Id =: visitWorkOrder.Id];
+		System.assertEquals(visitWorkOrder.Work_Order_Status__c,'Closed');
+		
 	}
 }

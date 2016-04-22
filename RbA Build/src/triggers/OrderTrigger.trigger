@@ -71,6 +71,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
             workOrderCreationManager.createWorkOrderOnOrderCreation(Trigger.new, Trigger.newMap);
             backOfficeCheckListManager.createBackOfficeChecksOnOrderCreation(Trigger.new, Trigger.newMap);
                          accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+             handler.OnAfterInsert(Trigger.new);
         } 
         
         // After Update

@@ -13,11 +13,13 @@ public with sharing class PurchaseOrderTriggerHandler {
   public void OnBeforeInsert(Purchase_Order__c[] newPurchaseOrders){
 
   }
-
+*/
+ 
   public void OnAfterInsert(Purchase_Order__c[] newPurchaseOrders){
-
+    updateHasPOCheckBox(newPurchaseOrders);
   }
 
+/*
   @future public static void OnAfterInsertAsync(Set<ID> newPurchaseOrderIDs){
     //Example usage
     //List<Purchase_Order__c> newPurchase_Order__cs = [select Id, Name from Purchase_Order__c where Id IN :newPurchase_Order__cIDs];
@@ -32,6 +34,7 @@ public with sharing class PurchaseOrderTriggerHandler {
 
     updateOrderStatusToOrderReleased(oldMap, newMap);
     updateOrderStatusToInstallNeeded(oldMap, newMap);
+    updateHasPOCheckbox(oldMap,newMap);
 
   }
 
@@ -61,14 +64,17 @@ public with sharing class PurchaseOrderTriggerHandler {
     Set<Id> orderIds = new Set<Id>();
     Map<Id, Boolean> mapOrderIDtoValidForUpdate = new Map<Id, Boolean>();
     List<Order> ordersToUpdate = new List<Order>();
+    Set<Id> poIdsToExclude = new Set<Id>(); //Added for test class to be able to test this method as a unit, since SOQL query is issued later.
     for(Purchase_Order__c po : newMap.values()){
       if(po.Status__c == 'Released' && oldMap.get(po.Id).Status__c != po.Status__c){
         orderIds.add(po.Order__c);
+        poIdsToExclude.add(po.Id);
       }
     }
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Ready to Order']);
-    List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() and Id not in: newMap.keySet()];
+    //This query is modified to exclude Ids of records that have Status updated to Released in the test class, but no update dml is actually issued.
+    List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in: poIdsToExclude];
 
     for(Id orderId: parentOrders.keySet()){
       mapOrderIDtoValidForUpdate.put(orderId, true);
@@ -97,14 +103,16 @@ public with sharing class PurchaseOrderTriggerHandler {
     Set<Id> orderIds = new Set<Id>();
     Map<Id, Boolean> mapOrderIDtoValidForUpdate = new Map<Id, Boolean>();
     List<Order> ordersToUpdate = new List<Order>();
+    Set<Id> poIdsToExclude = new Set<Id>();
     for(Purchase_Order__c po : newMap.values()){
       if(po.Status__c == 'Confirmed' && oldMap.get(po.Id).Status__c != po.Status__c){
         orderIds.add(po.Order__c);
+        poIdsToExclude.add(po.Id);
       }
     }
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Order Released']);
-    List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() and Id not in: newMap.keySet()];
+    List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in : poIdsToExclude];
     for(Id orderId: parentOrders.keySet()){
       mapOrderIDtoValidForUpdate.put(orderId, true);
     }
@@ -122,6 +130,52 @@ public with sharing class PurchaseOrderTriggerHandler {
 
     for(Order o : ordersToUpdate){
       o.Status = 'Install Needed';
+    }
+    update ordersToUpdate;
+  }
+
+  public void updateHasPOCheckbox(Map<Id, Purchase_Order__c> oldMap, Map<Id,Purchase_Order__c> newMap){
+    Map<Id, Order> parentOrders = new Map<Id,Order>();
+    Set<Id> orderIds = new Set<Id>();
+    Map<Id, Boolean> mapOrderIDtoValidForUpdate = new Map<Id, Boolean>();
+    List<Order> ordersToUpdate = new List<Order>();
+    Set<Id> poIdsToExclude = new Set<Id>();
+    for(Purchase_Order__c po : newMap.values()){
+      if(po.Status__c == 'Cancelled' && oldMap.get(po.Id).Status__c != po.Status__c){
+        orderIds.add(po.Order__c);
+        poIdsToExclude.add(po.Id);
+      }
+    }
+
+    parentOrders = new Map<Id,Order>([SELECT Id, Status, hasPO__c FROM Order WHERE Id in: orderIds]);
+    List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: orderIds AND Status__c != 'Cancelled' AND  Id not in : poIdsToExclude];
+    for(Id orderId: parentOrders.keySet()){
+      mapOrderIDtoValidForUpdate.put(orderId, true);
+    }
+    for(Purchase_Order__c po: allRelatedPOs){
+        mapOrderIDtoValidForUpdate.put(po.Order__c,false);
+    }
+
+    for(Id orderId: mapOrderIDtoValidForUpdate.keySet()){
+      if(mapOrderIDtoValidForUpdate.get(orderId)){
+        ordersToUpdate.add(parentOrders.get(orderId));
+      }
+    }
+
+    for(Order o : ordersToUpdate){
+      o.hasPO__c = false;
+    }
+    update ordersToUpdate;
+  }
+
+  public void updateHasPOCheckbox(List<Purchase_Order__c> newPOs){
+    List<Id> orderIds = new List<Id>();
+    for(Purchase_Order__c po: newPOs){
+      orderIds.add(po.Order__c);
+    }
+    List<Order> ordersToUpdate = [Select Id from Order where Id in: orderIds];
+    for(Order o: ordersToUpdate){
+      o.hasPO__c = true; 
     }
     update ordersToUpdate;
   }

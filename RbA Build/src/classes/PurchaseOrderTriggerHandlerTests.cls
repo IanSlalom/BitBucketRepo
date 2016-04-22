@@ -180,5 +180,69 @@ private class PurchaseOrderTriggerHandlerTests {
 			}
 		}
 	}
+
+	@isTest static void testupdateHasPOCheckbox() {
+		PurchaseOrderTriggerHandler handler = new PurchaseOrderTriggerHandler(false,200);
+
+		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
+		for(Order o: orderList){
+			o.Status = 'Order Released';
+		}
+		update orderList;
+		List<Purchase_Order__c> poList = new List<Purchase_Order__c>();
+		//Add two Purchase Orders for each Order in the list. Order1 will have one PO updated to Confirmed, but have a related PO in New Status.
+		//Order2 will have a related PO in Cancelled Status, and Order3 will have a related PO in Confirmed status.
+		for(Order o: orderList){
+			if(o.Name == 'Order1'){
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'New'));
+			}else if(o.Name == 'Order2'){
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+			}else if(o.Name == 'Order3'){
+			}
+		}
+
+
+		handler.updateHasPOCheckbox(poList);
+		orderList = [Select Id, Name, Status, hasPO__c from Order where accountId =: dwelling.Id];
+		for(Order o: orderList){
+			if(o.Name == 'Order1'){
+				system.assertEquals(o.hasPO__c,true);
+			}else if(o.Name == 'Order2'){
+				system.assertEquals(o.hasPO__c,true);
+			}else if(o.Name == 'Order3'){
+				system.assertEquals(o.hasPO__c,false);
+			}
+		}
+
+		insert poList;
+
+		Map<Id, Purchase_Order__c> oldMap = new Map<Id, Purchase_Order__c>();
+		Map<Id, Purchase_Order__c> newMap = new Map<Id, Purchase_Order__c>();
+		for(Purchase_Order__c po: poList){
+				oldMap.put(po.Id, po);
+				Purchase_Order__c poClone = po.clone(true, true, false, false);
+				if(poClone.Status__c == 'In Progress'){
+					poClone.Status__c = 'Cancelled';
+				}
+				newMap.put(poClone.Id, poClone);
+		}
+
+		System.assertEquals(newMap.keySet().size(),oldMap.keySet().size());
+
+		handler.updateHasPOCheckbox(oldMap,newMap);
+		
+		orderList = [Select Id, Name, Status, hasPO__c from Order where accountId =: dwelling.Id];
+		for(Order o: orderList){
+			if(o.Name == 'Order1'){
+				system.assertEquals(o.hasPO__c,true);
+			}else if(o.Name == 'Order2'){
+				system.assertEquals(o.hasPO__c,false);
+			}else if(o.Name == 'Order3'){
+				system.assertEquals(o.hasPO__c,false);
+			}
+		}
+	}
 	
 }

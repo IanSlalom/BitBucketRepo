@@ -23,7 +23,7 @@ private class RMS_cancelOrderExtensionTest {
 	/*******************************************************
 					createTestRecords
 	*******************************************************/
-	static void createTestRecords(){
+	@testSetup static void createTestRecords(){
 		
 		TestUtilityMethods utility = new TestUtilityMethods();
 		
@@ -90,13 +90,16 @@ private class RMS_cancelOrderExtensionTest {
 		Order_Discount__c orderDiscount1 = new Order_Discount__c(Order__c = Order1.id, Store_Discount__c = storeDiscount1.Id, Discount_Amount__c = 50 );
 		insert orderDiscount1;		
 
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+ 		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId,  Sold_Order__c = order1.id, Work_Order_Type__c = 'Historical');
+ 		insert workOrder1;
+
 	}
 	
 	/*******************************************************
 					NoOrderIdTest
 	*******************************************************/
 	static testmethod void NoOrderIdTest(){
-		createTestRecords();
 
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 
@@ -113,9 +116,7 @@ private class RMS_cancelOrderExtensionTest {
 					CancelOrderTest
 	*******************************************************/
 	static testmethod void CancelOrderTest(){
-		createTestRecords();
 
-		Test.starttest();
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 
 		// Set up controller with an order Id
@@ -124,6 +125,24 @@ private class RMS_cancelOrderExtensionTest {
 		ApexPages.currentPage().getParameters().put('id',soldOrder.id);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(soldOrder);
 		RMS_cancelOrderExtension customController  = new RMS_cancelOrderExtension(stdController);
+
+		//Verify if related Visit RbA_Work_Order__c has open events, order is not cancelled
+		List<RbA_Work_Order__c> relatedVisitWOs = [Select Id, Number_Open_Events__c from RbA_Work_Order__c WHERE Sold_Order__c =: soldOrder.Id AND RecordType.DeveloperName = 'Visit'];
+		for(RbA_Work_Order__c relatedWO : relatedVisitWOs){
+			relatedWO.Number_Open_Events__c = 1;
+		}
+		update relatedVisitWOs;
+
+		Test.startTest();
+		customController.cancelOrder();
+		Order soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		System.AssertEquals('Draft', soldOrderResult.Status);	
+
+		//Update related rba_Work_Orders to 0 open events, verify records are cancelled	
+		for(RbA_Work_Order__c relatedWO : relatedVisitWOs){
+			relatedWO.Number_Open_Events__c = 0;
+		}
+		update relatedVisitWOs;
 		customController.cancelOrder();
 
 		// Verify all POs are cancelled
@@ -141,10 +160,17 @@ private class RMS_cancelOrderExtensionTest {
 			System.AssertEquals('Cancelled', cancelledOD.Status__c);		
 		}
 
+		// Verify all rba_Work_Orders of the proper types are cancelled
+		for (RbA_Work_Order__c cancelledWO :  [SELECT Id, Work_Order_Status__c FROM RbA_Work_Order__c WHERE Sold_Order__c =: soldOrder.Id
+												AND Work_Order_Type__c in ('LSWP','Bulding Permit','HOA','Historical','Tech Measure','Install','Paint/Stain')]) {
+			System.AssertEquals('Cancelled', cancelledWO.Work_Order_Status__c);		
+		}
+
 		// Verify the sold order is Cancelled
-		Order soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
 		System.AssertEquals('Cancelled', soldOrderResult.Status);		
-		Test.stoptest();
+
+		Test.stopTest();
 
 	}
 }

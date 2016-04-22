@@ -91,7 +91,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	static testmethod void ConstructorTest(){
 		createTestRecords();
 
-		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
+		System.debug('ORDER REV REC' + soldOrder.Revenue_Recognized_Date__c);
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
 
@@ -105,6 +106,26 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assertEquals(customController.po.Status__c,'In Progress');
 		Purchase_Order__c po2 = new Purchase_Order__c();
 		insert po2;
+		System.debug('RELATEDORDER with fields ' + customController.relatedOrder);
+		System.debug(customController.showInventoryWriteOff);
+		System.assertEquals(customController.showInventoryWriteOff,false);
+
+
+		soldOrder.Status = 'Job Closed';
+		
+		update soldOrder;
+		customController  = new RMS_vendorPurchaseOrderController(stdController);
+		system.AssertEquals(customController.status, 'rec');
+		
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		soldOrder.Status = 'Job in Progress';
+		update soldOrder;
+		customController  = new RMS_vendorPurchaseOrderController(stdController);
+		System.debug('RELATEDORDER with fields ' + customController.relatedOrder);
+		System.debug(customController.showInventoryWriteOff);
+		System.assertEquals(customController.showInventoryWriteOff,true);
+
+
 
 		// Set up controller with no order Id but has a PO Id
 		PageReference pageRef2 = Page.RMS_viewPurchaseOrder;
@@ -286,6 +307,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	*******************************************************/
 	static testmethod void AddProductTest(){
 		createTestRecords();
+
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
@@ -511,7 +533,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
-			
+
 		System.assert(customController.vendorCreditLineItems(orderItemsForVendorCredit, assetIds) != null);
 		orderItemsForVendorCredit[0].Date_Vendor_Credit__c = System.Today();
 		orderItemsForVendorCredit[0].Vendor_Credit_to_Receive__c = null;
@@ -519,6 +541,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
 
 	}
+
 	@isTest
 	public static void testOrderItemWrapperClass(){		
 		createTestRecords();
