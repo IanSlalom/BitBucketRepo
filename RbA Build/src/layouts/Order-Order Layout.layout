@@ -2,8 +2,10 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
-    <customButtons>Cancel_Order</customButtons>
+    <customButtons>On_Hold</customButtons>
+    <customButtons>Job_Closed</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
+    <customButtons>Cancel_Order</customButtons>
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>
@@ -390,6 +392,16 @@
         <fields>Amount__c</fields>
         <fields>Date__c</fields>
         <relatedList>Refund__c.Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>ORDERS.ORDER_NUMBER</fields>
+        <fields>SALES.ACCOUNT.NAME</fields>
+        <fields>ORDER.BILL_TO_CONTACT</fields>
+        <fields>ORDERS.TOTAL_AMOUNT</fields>
+        <fields>ORDERS.EFFECTIVE_DATE</fields>
+        <fields>ORDERS.STATUS</fields>
+        <fields>CORE.USERS.ALIAS</fields>
+        <relatedList>Order.Sold_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
         <customButtons>New_Business_Adjustment</customButtons>
