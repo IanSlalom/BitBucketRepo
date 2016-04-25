@@ -324,7 +324,7 @@ global with sharing class UtilityMethods {
 															AND Work_Order_Type__c != 'Building Permit'
 															AND Work_Order_Type__c != 'Paint/Stain'];
 			for(RbA_Work_Order__c wo : workOrdersToComplete){
-				wo.Work_Order_Status__c = 'Closed';
+				wo.Work_Order_Status__c = 'Appt Complete / Closed';
 			}
 
 			update workOrdersToComplete;

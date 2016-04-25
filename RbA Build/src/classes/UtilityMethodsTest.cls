@@ -291,7 +291,7 @@ private class UtilityMethodsTest {
     	insert visitWorkOrder;
     	System.assertEquals(UtilityMethods.completeWorkOrders(soldOrder.Id), 'success');
     	visitWorkOrder = [Select Work_Order_Status__c from RbA_Work_Order__c where Id =: visitWorkOrder.Id];
-		System.assertEquals(visitWorkOrder.Work_Order_Status__c,'Closed');
+		System.assertEquals(visitWorkOrder.Work_Order_Status__c,'Appt Complete / Closed');
 		
 	}
 }
