@@ -405,6 +405,7 @@
                 <apex:pageBlockSection title="System Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
                     <apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
                     <apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+                    <apex:outputField value="{!Purchase_Order__c.Submitted_Timestamp__c}" label="Submitted Timestamp" />
                 </apex:pageBlockSection>
 
             </apex:outputPanel>     
