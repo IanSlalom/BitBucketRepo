@@ -696,10 +696,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
     updateSubTotal();   
     //JETT-712  
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
-      boolean allOrderItemsHaveWholesaleCost;
-      if (zeroDollarVendor) allOrderItemsHaveWholesaleCost = true;
-      else allOrderItemsHaveWholesaleCost = ([Select Unit_Wholesale_Cost__c from OrderItem where Purchase_Order__c =: po.Id and Unit_Wholesale_Cost__c = null]).isEmpty();
-
+      boolean allOrderItemsHaveWholesaleCost = false;
+      if (zeroDollarVendor) {
+      	 allOrderItemsHaveWholesaleCost = true;
+      }
+      else {
+		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+        	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+          		allOrderItemsHaveWholesaleCost = false;
+          		break;
+        	}
+        	else 
+        		allOrderItemsHaveWholesaleCost = true;
+      	}
+      }
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
         po.Confirmed_Timestamp__c = System.Now();
