@@ -933,7 +933,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Sold_Order__c    = oi.OrderId,
                       Store_Location__c = oi.Order.Store_Location__c,
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
-                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
                       Vendor__c 		=  selectedVendor,
                       Original_Order_Product__c = oi.Id
                     );
@@ -942,10 +941,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
       			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
       		}
-// TODO: Add this after Anthony updates the financial trigger to handle record types
-//      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
-//										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
-//														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
+      		// Sets the product Asset to the correct record type based on the type of PO we are on
+      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
+										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
+														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
       } 
       else if (oi.Installed_Product_Asset__c != null){
