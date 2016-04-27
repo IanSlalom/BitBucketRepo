@@ -59,19 +59,19 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Height_to_Width_Height__c</field>
+                <field>Height_to_Width_Cap_Height__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Height_to_Width_Fractions_Ht__c</field>
+                <field>Height_to_Width_Cap_Fractions_Height__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Height_to_Width_Width__c</field>
+                <field>Height_to_Width_Cap_Width__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Height_to_Width_Fractions_Wth__c</field>
+                <field>Height_to_Width_Cap_Fractions_Width__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -96,19 +96,19 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Width_to_Height_Width__c</field>
+                <field>Width_to_Height_Cap_Width__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Width_to_Height_Fractions_Wth__c</field>
+                <field>Width_to_Height_Cap_Fractions_Width__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Width_to_Height_Height__c</field>
+                <field>Width_to_Height_Cap_Height__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Extended_Width_to_Height_Fractions_Ht__c</field>
+                <field>Width_to_Height_Cap_Fractions_Height__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>

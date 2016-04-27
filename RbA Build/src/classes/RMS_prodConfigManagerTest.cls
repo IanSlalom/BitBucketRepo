@@ -274,6 +274,7 @@ private class RMS_prodConfigManagerTest {
 		prodConfig.Max_Height__c = 15;
 		prodConfig.United_Inch_Maximum__c = 30;
 		prodConfig.Glass_Square_Ft_Max__c = 1.56;
+		prodConfig.Rectangular_Area_Limitation__c = 1.56;
 		
 		// Set the width & height to 14 15/16
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
@@ -286,10 +287,10 @@ private class RMS_prodConfigManagerTest {
 		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 
 		// verify width/height/united/square foot above max errors are NOT thrown
-		System.Assert(!returnMessage.contains(RMS_errorMessages.WIDTH_ABOVE_MAX));
-		System.Assert(!returnMessage.contains(RMS_errorMessages.HEIGHT_ABOVE_MAX));
-		System.Assert(!returnMessage.contains(RMS_errorMessages.UNITED_INCH_ABOVE_MAX));
-		System.Assert(!returnMessage.contains(RMS_errorMessages.GLASS_MAX_SQ_FEET));
+		System.Assert(!returnMessage.contains('above the maximum'));
+		System.Assert(!returnMessage.contains('united inch total'));
+		System.Assert(!returnMessage.contains('max square feet'));
+		System.Assert(!returnMessage.contains('rectangular area limitation'));
 
 		// Set the width & height to 15 1/16
 		soldOrderItem.Width_Inches__c = 15;
@@ -301,10 +302,10 @@ private class RMS_prodConfigManagerTest {
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 
 		// verify width/height/united inch above max errors are thrown
-//		System.Assert(returnMessage.contains(RMS_errorMessages.WIDTH_ABOVE_MAX));
-//		System.Assert(returnMessage.contains(RMS_errorMessages.HEIGHT_ABOVE_MAX));
-//		System.Assert(returnMessage.contains(RMS_errorMessages.UNITED_INCH_ABOVE_MAX));
-//		System.Assert(returnMessage.contains(RMS_errorMessages.GLASS_MAX_SQ_FEET));
+		System.Assert(returnMessage.contains('above the maximum'));
+		System.Assert(returnMessage.contains('united inch total'));
+		System.Assert(returnMessage.contains('max square feet'));
+		System.Assert(returnMessage.contains('rectangular area limitation'));
 	}
 
 	/*******************************************************
@@ -383,11 +384,16 @@ private class RMS_prodConfigManagerTest {
 
 		// Set the caps
 		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
-		prodConfig.Extended_Width_to_Height_Height__c = 80;
-		prodConfig.Extended_Width_to_Height_Width__c = 60;
-		prodConfig.Extended_Height_to_Width_Height__c = 80;
-		prodConfig.Extended_Height_to_Width_Width__c = 60;
+		prodConfig.Width_to_Height_Cap_Height__c = 80;
+		prodConfig.Width_to_Height_Cap_Width__c = 60;
+		prodConfig.Height_to_Width_Cap_Height__c = 80;
+		prodConfig.Height_to_Width_Cap_Width__c = 60;
 
+		// Set the extended height / width
+		prodConfig.Extended_Max_Height__c = 80;
+		prodConfig.Extended_Max_Width__c = 60;
+		
+		
 		// Set the width below the cap and the height above
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
 		soldOrderItem.Width_Inches__c = 59;
@@ -401,6 +407,7 @@ private class RMS_prodConfigManagerTest {
 		// verify cap errors are NOT thrown
 		System.Assert(!returnMessage.contains(RMS_errorMessages.HEIGHT_TO_WIDTH_CAP));
 		System.Assert(!returnMessage.contains(RMS_errorMessages.WIDTH_TO_HEIGHT_CAP));
+		System.Assert(!returnMessage.contains(RMS_errorMessages.EXTENDED_MAX));
 
 		// Set the width above the caps
 		soldOrderItem.Width_Inches__c = 60;
@@ -410,8 +417,9 @@ private class RMS_prodConfigManagerTest {
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
 
 		// verify cap errors are thrown
-//		System.Assert(returnMessage.contains(RMS_errorMessages.HEIGHT_TO_WIDTH_CAP));
-//		System.Assert(returnMessage.contains(RMS_errorMessages.WIDTH_TO_HEIGHT_CAP));
+		System.Assert(returnMessage.contains(RMS_errorMessages.HEIGHT_TO_WIDTH_CAP));
+		System.Assert(returnMessage.contains(RMS_errorMessages.WIDTH_TO_HEIGHT_CAP));
+		System.Assert(returnMessage.contains(RMS_errorMessages.EXTENDED_MAX));
 	}
 
 	/*******************************************************

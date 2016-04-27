@@ -50,8 +50,10 @@ public with sharing class RMS_errorMessages {
 	public static final String UNITED_INCH_BELOW_MIN = '&bull; The united inch total for the measurements entered[enteredValue] is below the minimum[requiredValue] for this product.';
 	public static final String HEIGHT_TO_WIDTH_CAP = '&bull; The height and width you entered exceeds the height to width cap.';
 	public static final String WIDTH_TO_HEIGHT_CAP = '&bull; The width and height you entered exceeds the width to height cap.';
+	public static final String EXTENDED_MAX = '&bull; The height and width you entered exceeds the extended max height & width.';
 	public static final String PEAK_HEIGHT = '&bull; The left and right leg difference is greater then the width times the product\'s peak height.'; 
-	public static final String GLASS_MAX_SQ_FEET = '&bull; The height and width you have entered exceeds the max square feet allowed for this product.';
+	public static final String GLASS_MAX_SQ_FEET = '&bull; The height and width you have entered[enteredValue] exceeds the max square feet[requiredValue] allowed for this product.';
+	public static final String RECTANGULAR_AREA_LIMITATION = '&bull; The height and width you have entered[enteredValue] exceeds the rectangular area limitation[requiredValue] allowed for this product.';
 	public static final String WIDTH_TO_HEIGHT_RATIO_MAX = '&bull; The height and width you have entered[enteredValue] exceeds the width to height ratio max[requiredValue] for this product.';
 	public static final String WIDTH_TO_HEIGHT_RATIO_MIN = '&bull; The height and width you have entered[enteredValue] is below the width to height ratio minimum[requiredValue] for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_RIGHT = '&bull; The right leg height you entered[enteredValue] is below the minimum[requiredValue] leg height for this product.';
