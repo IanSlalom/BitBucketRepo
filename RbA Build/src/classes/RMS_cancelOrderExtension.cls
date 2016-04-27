@@ -48,7 +48,7 @@ public with sharing class RMS_cancelOrderExtension {
 
 
 		List<RbA_Work_Order__c> workOrdersWithOpenEvents = [Select Id from RbA_Work_Order__c WHERE Sold_Order__c =:theOrder.Id 
-															AND Number_Open_Events__c > 0];
+                                                            AND Number_Open_Events_Formula__c > 0];
 		if(!workOrdersWithOpenEvents.isEmpty()){
 			System.debug('Error encountered in RMS_CancelOrderExtensions: ' + RMS_errorMessages.WORK_ORDERS_WITH_OPEN_EVENTS);
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.WORK_ORDERS_WITH_OPEN_EVENTS)); 
