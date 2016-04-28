@@ -46,9 +46,18 @@ public with sharing class RMS_cancelOrderExtension {
 		Order theOrder = [Select Id, Name, Status from Order where id =:theId];
 		theOrder.Status = 'Cancelled';
 
+
+		List<RbA_Work_Order__c> workOrdersWithOpenEvents = [Select Id from RbA_Work_Order__c WHERE Sold_Order__c =:theOrder.Id 
+                                                            AND Number_Open_Events_Formula__c > 0];
+		if(!workOrdersWithOpenEvents.isEmpty()){
+			System.debug('Error encountered in RMS_CancelOrderExtensions: ' + RMS_errorMessages.WORK_ORDERS_WITH_OPEN_EVENTS);
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.WORK_ORDERS_WITH_OPEN_EVENTS)); 
+			return null;
+		}	
 		List<Purchase_Order__c> purchaseOrdersToCancel = new List<Purchase_Order__c>();
 		List<OrderItem> orderItemsToCancel = new List<OrderItem>();
 		List<Order_Discount__c> discountsToCancel = new List<Order_Discount__c>();
+		List<RbA_Work_Order__c> workOrdersToCancel = new List<RbA_Work_Order__c>();
 
 		// Find any purchase orders linked to the order that haven't been cancelled and cancel them
 		for (Purchase_Order__c poToCancel : [SELECT Id, Status__c FROM Purchase_Order__c 
@@ -74,17 +83,25 @@ public with sharing class RMS_cancelOrderExtension {
 			discountsToCancel.add(discToCancel);
 		}
 
-//		try{
+		for(RbA_Work_Order__c woTocancel : [Select Id, Work_Order_Status__c, Work_Order_Type__c FROM RbA_Work_Order__c
+											WHERE Work_Order_Type__c in ('LSWP','Bulding Permit','HOA','Historical','Tech Measure','Install','Paint/Stain')
+											AND Sold_Order__c =:theOrder.Id]){
+			woToCancel.Work_Order_Status__c = 'Cancelled';
+			workOrdersToCancel.add(woTocancel);
+		}
+
+		try{
 			// upsert all of the cancelled order items, pos, and the order
 			upsert purchaseOrdersToCancel;  
 			upsert discountsToCancel; 
 			upsert orderItemsToCancel; 
+			update workOrdersToCancel;
 			upsert theOrder;
-//		} catch (Exception e){
+		} catch (Exception e){
 			// TODO: Add comment here
-//			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
-//			return null;
-//		}
+			System.debug('************The following exception occurred in the RMS_cancelOrderExtension in the cancelOrder method:' + e);
+			return null;
+		}
 
 		// Redirect the user back to the order page
 		PageReference pageRef = new PageReference('/' + theId);

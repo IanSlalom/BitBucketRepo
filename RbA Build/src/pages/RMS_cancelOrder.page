@@ -17,6 +17,7 @@
 ******************************************************** -->
 <apex:page standardController="Order" extensions="RMS_cancelOrderExtension" action="{!cancelOrder}" docType="html-5.0">
   <apex:sectionHeader title="Order Cancellation"/>
+  <apex:pageMessages />
   <apex:outputPanel >
       If you land on this page, an error occurred during the cancellation of the order. Please try again or contact your administrator.
   </apex:outputPanel>

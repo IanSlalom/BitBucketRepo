@@ -9,15 +9,16 @@ public with sharing class RMS_OrderTriggerHandler {
     BatchSize = size;
   }
 
-
- /* public void OnBeforeInsert(Order[] newOrders){
-
+/*
+  public void OnBeforeInsert(Order[] newOrders){
+    
   }
+ */
 
   public void OnAfterInsert(Order[] newOrders){
-
+    updateJIPCOROServiceOrders(newOrders);
   }
-
+/*
   @future public static void OnAfterInsertAsync(Set<ID> newOrderIDs){
     //Example usage
     //List<Order> newOrders = [select Id, Name from Order where Id IN :newOrderIDs];
@@ -26,6 +27,7 @@ public with sharing class RMS_OrderTriggerHandler {
   public void OnBeforeUpdate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
 
     updateOrderStatus(oldMap,newMap);
+    updateOrderTimeStamps(oldMap,newMap);
   }
 
   /*public void OnAfterUpdate(Order[] oldOrders, Order[] updatedOrders, Map<ID, Order> OrderMap){
@@ -64,12 +66,58 @@ public with sharing class RMS_OrderTriggerHandler {
       }else if(o.Status == 'Install Needed' && o.Install_Order_Status__c == 'Scheduled' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Scheduled';
-      }else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Complete' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
+      }/* removing per JETT-1601 else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Complete' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Complete';
+      }*/
+    }
+  }
+
+   public void updateOrderTimeStamps(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
+    DateTime now = Datetime.now();
+    for(Order o: newMap.values()){   
+      if(o.Status != oldMap.get(o.Id).Status){
+       if(o.Status == 'Draft'){
+         o.Time_Draft__c = now;
+        }else if(o.Status == 'On Hold'){
+          o.Time_On_Hold__c = now;
+        }else if(o.Status == 'Tech Measure Needed'){
+          o.Time_Tech_Measure_Needed__c = now;
+        }else if(o.Status == 'Tech Measure Scheduled'){
+          o.Time_Tech_Measure_Scheduled__c = now;
+        }else if(o.Status == 'Ready to Order'){
+          o.Time_Ready_To_Order__c = now;
+        }else if(o.Status == 'Order Released'){
+          o.Time_Order_Released__c = now;
+        }else if(o.Status == 'Install Needed'){
+          o.Time_Install_Needed__c = now;
+        }else if(o.Status == 'Install Scheduled'){
+          o.Time_Install_Scheduled__c = now;
+        }else if(o.Status == 'Install Complete'){
+          o.Time_Install_Complete__c = now;
+        }else if(o.Status == 'Job in Progress'){
+          o.Time_Job_In_Progress__c = now;
+        }else if(o.Status == 'Job Closed'){  
+          o.Time_Job_Close__c = now;
+        }else if(o.Status == 'Cancelled'){
+          o.Time_Cancelled__c = now;
+        }
       }
     }
   }
 
+
+  public void updateJIPCOROServiceOrders(List<Order> newOrders){
+    List<Order> ordersToUpdate = new List<Order>();
+    for(Order o : [SELECT Id, Status FROM Order 
+                    WHERE RecordType.DeveloperName = 'CORO_Service' 
+                    AND Service_Type__c = 'Job in Progress'
+                    AND Sold_Order__r.Status = 'Install Scheduled'
+                    AND Id in: newOrders]){
+      o.Status = 'Job in Progress';
+      ordersToUpdate.add(o);
+    }
+    update ordersToUpdate;
+  }
   
 }

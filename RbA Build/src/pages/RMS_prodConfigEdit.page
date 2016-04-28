@@ -107,7 +107,7 @@
  
   <apex:pageMessages escape="false" />
 	<div id="OrderId" style="display:none;">{!orderId}</div>	
-    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!orderActivated}">
+    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!jobClosed}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
@@ -145,7 +145,7 @@
 -->            <apex:commandButton action="{!saveProduct}" value="Save" rendered="{!mode == 'e'}"/>
 			<apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form" rendered="{!mode == 'e'}"/>
 <!-- 			<apex:commandButton action="{!edit}" value="Edit" status="edit-status" rerender="page-form" rendered="{!mode != 'e'}"/>
--->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e'}"/>
+-->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e' && !jobClosed}"/>
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
        </apex:pageBlockButtons>
 
@@ -475,7 +475,7 @@
     </apex:actionRegion>
 
 </apex:form>
-    <apex:pageBlock >
+    <apex:pageBlock rendered="{!!newOrderItem}">
     	<apex:pageBlockSection title="Change History" columns="1" collapsible="true">
     	<apex:pageBlockTable title="Change History" value="{!changeHistoryRecords}" var="history" style="width:100%" id="changeHistoriesTable">
 		        <apex:column value="{!history.LastModifiedBy.Name}"/>

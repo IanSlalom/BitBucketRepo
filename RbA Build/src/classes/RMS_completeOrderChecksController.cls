@@ -37,9 +37,12 @@ public with sharing class RMS_completeOrderChecksController {
         }
 
         if(allChecksCompleted){
-            Order order = [SELECT Id, Status FROM Order WHERE Id =: ordId];
+            Order order = [SELECT Id, Status, Tech_Measure_Status__c FROM Order WHERE Id =: ordId];
             if(order.Status == 'Draft'){
                 order.Status = 'Tech Measure Needed';
+                if(order.Tech_Measure_Status__c == 'Scheduled'){
+                    order.Status = 'Tech Measure Scheduled';
+                }
                 update order;
             }
         }

@@ -283,7 +283,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension ext = new RMS_prodConfigExtension(stdController);
 
 		// properties
-		boolean orderActivated = ext.orderActivated;
+		boolean jobClosed = ext.jobClosed;
 		String oiId = ext.oiId;
 		String exteriorColor = ext.exteriorColor; 
 		String interiorColor = ext.interiorColor; 

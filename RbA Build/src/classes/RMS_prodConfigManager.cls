@@ -199,7 +199,7 @@ public with sharing class RMS_prodConfigManager {
 		}
 
 		// Check for height to width cap
-/*		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
+		if (masterProductConfig.Height_to_Width_Cap_Height__c != null && masterProductConfig.Height_to_Width_Cap_Width__c != null) {
 			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Height__c))) &&
 				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Height_to_Width_Cap_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Height_to_Width_Cap_Fractions_Width__c))) ) 
 			{	
@@ -214,7 +214,16 @@ public with sharing class RMS_prodConfigManager {
 			{
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.WIDTH_TO_HEIGHT_CAP : errorMessage + '<BR>' + RMS_errorMessages.WIDTH_TO_HEIGHT_CAP;
 			}
-		} */
+		} 
+
+		// Check for extended max height/width
+		if (masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null) {
+			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
+				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ) 
+			{	
+				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.EXTENDED_MAX : errorMessage + '<BR>' + RMS_errorMessages.EXTENDED_MAX;
+			}
+		}
 
 		// Check for peak height
 		if(masterProductConfig.Peak_Height__c != null && orderLineItem.Width_Inches__c != null){
@@ -241,8 +250,23 @@ public with sharing class RMS_prodConfigManager {
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
 		}
+
+		//Check for rectangular area limitation
+		if(masterProductConfig.Rectangular_Area_Limitation__c != null){
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+			
+			if((widthInches * heightInches) / 144 > masterProductConfig.Rectangular_Area_Limitation__c ){
+				String enteredValue = String.ValueOf(widthInches * heightInches);
+				String requiredValue = String.ValueOf(masterProductConfig.Rectangular_Area_Limitation__c);
+				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.RECTANGULAR_AREA_LIMITATION, enteredValue, requiredValue);
+				
+				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+			}
+		}
+
 	 	
-	 	// Check for width to heither ratio max
+	 	// Check for width to height ratio max
 		// Check for specialty width / height ratio max
 		if(masterProductConfig.Specialty_Width_to_Height_Ratio_Max__c != null){
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
@@ -916,7 +940,7 @@ public with sharing class RMS_prodConfigManager {
 		(	orderStatus == 'Install Needed') 			?	'rel'	:
 		(	orderStatus == 'Install Scheduled') 		?	'rel'	:
 		(	orderStatus == 'Job in Progress') 			?	'rel'	:
-		(	orderStatus == 'Job Close')		 			?	'clo'	:
+		(	orderStatus == 'Job Closed')		 			?	'clo'	:
 		(	orderStatus == 'On Hold')		 			?	'clo'	:
 		(	orderStatus == 'Cancellation in Progress')	?	'clo'	:
 		(	orderStatus == 'Cancelled')					?	'clo'	: 

@@ -1246,7 +1246,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 
 		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
 		soldOrder.Revenue_Recognized_Date__c = null;
-		soldOrder.Status = 'Job Close';
+		soldOrder.Status = 'Job Closed';
 		update soldOrder;
 		
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
@@ -1373,7 +1373,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 
 		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
 		soldOrder.Revenue_Recognized_Date__c = null;
-		soldOrder.Status = 'Job Close';
+		soldOrder.Status = 'Job Closed';
 		soldOrder.Payments_Received__c = 10000.00;
 		update soldOrder;
 		
@@ -1453,7 +1453,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 
 		soldOrder.RecordTypeId = orderCORORecordTypeRecordTypeId;
 		soldOrder.Revenue_Recognized_Date__c = null;
-		soldOrder.Status = 'Job Close';
+		soldOrder.Status = 'Job Closed';
 		soldOrder.Payments_Received__c = 10000.00;
 		update soldOrder;
 		
