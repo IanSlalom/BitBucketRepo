@@ -6,6 +6,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public integer sales_tax;
     public list<OrderItem > listOI{ get; set; }    
     public List<Asset> selectedAssets {get;set;}
+    public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');    
     public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}
     public static final Id serviceProductRecordTypeId = UtilityMethods.RecordTypeFor('Product2','Service_Product');
     public Boolean hasValidationErrors {get{return ApexPages.hasMessages(ApexPages.Severity.ERROR);}}
@@ -33,9 +34,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         listOI=new list<OrderItem>();
         
         List<id> assetIds=new List<id>();
-        for(Asset a : [SELECT    Id
+        for(Asset a : [SELECT    Id,Product2.RecordTypeId
                        FROM Asset 
-                       WHERE AccountId = :o.AccountId]){
+                       WHERE AccountId = :o.AccountId
+                       AND Product2.RecordTypeId = :masterProductId]){
                            assetIds.add(a.id);
                        }        
         selectedAssets = [SELECT    Id,
