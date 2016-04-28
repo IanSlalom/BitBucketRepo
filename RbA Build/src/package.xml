@@ -305,31 +305,7 @@
         <name>ReportType</name>
     </types>
     <types>
-        <members>BuildingPermitText</members>
-        <members>CasementWindowS1</members>
-        <members>CreateSO</members>
-        <members>HOAText</members>
-        <members>HistoricalText</members>
-        <members>InstallText</members>
-        <members>LSWP</members>
-        <members>LeadPaintPermit</members>
-        <members>LoadingPage</members>
-        <members>MA_Scheduler</members>
-        <members>Order</members>
-        <members>PaintStainText</members>
-        <members>ServiceOrder</members>
-        <members>ServiceText</members>
-        <members>SiteSamples</members>
-        <members>TechMeasureText</members>
-        <members>bootstrap</members>
-        <members>bootstrapsf1</members>
-        <members>jquery</members>
-        <members>jquery_TableSorterZip</members>
-        <members>jquery_tableSorter</members>
-        <members>jqueryautocomplete</members>
-        <members>jqueryvalidate</members>
-        <members>jqueryvalidatemethods</members>
-        <members>select2</members>
+        <members>*</members>
         <name>StaticResource</name>
     </types>
     <types>
