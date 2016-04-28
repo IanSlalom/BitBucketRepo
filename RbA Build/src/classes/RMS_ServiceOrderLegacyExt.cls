@@ -133,6 +133,7 @@ public with sharing class RMS_ServiceOrderLegacyExt  {
                         oi.Charge_Cost_To__c = wrapper.cost;
                         oi.Primary_Reason__c = wrapper.primary;
                         oi.Secondary_Reason__c = wrapper.secondary;
+                        oi.Description = wrapper.description;
                         listOI.add(oi);                           
                     }
                 }        
@@ -159,6 +160,15 @@ public with sharing class RMS_ServiceOrderLegacyExt  {
         public String cost {get;set;}
         public String primary {get;set;}
         public String secondary {get;set;}
+        public String description {get;set;}
+        
+        public String getDescription(){
+            return description;
+        }
+        
+        public void description (String description){
+            this.description = description;
+        }
         
         public List<SelectOption> getCosts()
         {

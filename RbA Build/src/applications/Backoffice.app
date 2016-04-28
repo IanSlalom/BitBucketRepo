@@ -162,7 +162,6 @@
         <location>full</location>
     </listPlacement>
     <listRefreshMethod>refreshList</listRefreshMethod>
-    <logo>SharedDocuments/RbA_Logo.jpg</logo>
     <saveUserSessions>true</saveUserSessions>
     <tab>standard-Account</tab>
     <tab>standard-Contact</tab>
@@ -172,6 +171,8 @@
     <tab>Payment__c</tab>
     <tab>Labor__c</tab>
     <tab>RbA_Work_Order__c</tab>
+    <tab>standard-report</tab>
+    <tab>standard-Dashboard</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
@@ -192,10 +193,16 @@
             <tab>standard-Contact</tab>
         </mapping>
         <mapping>
+            <tab>standard-Dashboard</tab>
+        </mapping>
+        <mapping>
             <tab>standard-Opportunity</tab>
         </mapping>
         <mapping>
             <tab>standard-Order</tab>
+        </mapping>
+        <mapping>
+            <tab>standard-report</tab>
         </mapping>
     </workspaceMappings>
 </CustomApplication>

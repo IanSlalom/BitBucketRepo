@@ -41,6 +41,10 @@
                 <behavior>Readonly</behavior>
                 <field>OrderItemNumber</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>OriginalOrderItemId</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>

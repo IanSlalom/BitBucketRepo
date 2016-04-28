@@ -3,7 +3,6 @@
     <defaultLandingTab>standard-home</defaultLandingTab>
     <description>Used as the base App for RbA</description>
     <label>Renewal by Andersen</label>
-    <logo>SharedDocuments/RbA_Logo.jpg</logo>
     <tab>standard-Account</tab>
     <tab>standard-Contact</tab>
     <tab>standard-Case</tab>

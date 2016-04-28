@@ -29,7 +29,7 @@ public with sharing class RMS_createContactHistoryManager {
         }
         
         for(Contact con : listNew){ 
-            if(con.RecordTypeId == customerContactRecordType){
+            if(con.AccountId != null && con.RecordTypeId == customerContactRecordType){
                 Contact_History__c ch = new Contact_History__c(
                     Contact__c = con.Id,
                     Dwelling__c = con.AccountId,

@@ -54,8 +54,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
         //TODO: Get rid of dynamic and set record type var
         String woQuery= 'SELECT id, '+ 
                         'Name, '+ 
-                        'Sold_Order__c, '+
-                        'Work_Order_Scheduling_Status__c, '+
+                        'Sold_Order__c, '+                        
                         'Type_image__c, '+
                         'Scheduled_Install_Date_Formula__c, '+
                         'Work_Order_Status__c, '+

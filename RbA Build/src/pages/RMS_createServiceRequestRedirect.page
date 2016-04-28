@@ -37,7 +37,7 @@
         };
 
         function setStatus() {
-            document.getElementById('{!$Component.theForm}').elements['j_id0:theForm:hideSection:j_id31:hiddenField1'].value = 'Draft';
+            document.getElementById('{!$Component.theForm}').elements['j_id0:theForm:hideSection:j_id31:hiddenField1'].value = 'Ready to Order';
         };
 
     

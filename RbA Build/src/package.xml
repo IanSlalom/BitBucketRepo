@@ -27,6 +27,7 @@
         <members>RMS_OrderTriggerHandlerTests</members>
         <members>RMS_ServiceOrderExtensionMgr</members>
         <members>RMS_ServiceOrderLegacyExt</members>
+        <members>RMS_ServiceProductPickup</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_backOfficeChecklistManager</members>
@@ -67,6 +68,7 @@
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
         <members>RMS_serviceRequestTests</members>
+        <members>RMS_setBilltoContact</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
@@ -85,6 +87,7 @@
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_createContactHistoryMgr</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <name>ApexClass</name>
     </types>
@@ -105,6 +108,7 @@
     </types>
     <types>
         <members>MA_Scheduler</members>
+        <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
         <members>RMS_addMultipleTasksToWO</members>
@@ -125,6 +129,7 @@
         <members>RMS_prodConfigEdit</members>
         <members>RMS_prodConfigRedirect</members>
         <members>RMS_serviceRequestLegacyP1</members>
+        <members>RMS_updateServiceType</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewCOROOrders</members>
         <members>RMS_viewOrderProducts</members>
@@ -329,6 +334,7 @@
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
+        <members>OrderItem</members>
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
