@@ -1,0 +1,74 @@
+<apex:page standardController="Order" showHeader="false" sidebar="false" extensions="RMS_ServiceOrderExtensionMgr">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        testOpenSubtab();
+        collapseSections();
+        
+    };
+    
+    function collapseSections(){
+        if({!hasValidationErrors == false}){
+            $('img[id*="additionalProducts"]').each(function() {
+                twistSection(this);
+            });
+        }
+    }  
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
+    };        
+    
+    </script>
+    <apex:form id="theForm">
+        <apex:pageBlock title="Service Request">
+            <apex:pageBlockButtons location="both">
+                <!--<apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>-->
+                <apex:commandButton action="{!save}" value="Save"/>                
+            </apex:pageBlockButtons> 
+            
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Service Type</apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:selectList required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 150px;">
+                            <apex:selectOptions value="{!PickLstValue}" />
+                            <apex:actionSupport event="onchange" rerender="out1" />
+                        </apex:selectList> 
+                    </apex:outputPanel> 
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="out1">
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                    <apex:outputLabel value="Primary Save Reason" for="saveReason"></apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                        <apex:inputField value="{!Order.Save_Reason__c}" id="saveReason" style="width: 200px;"/> 
+                    </apex:outputPanel>                   
+                </apex:pageBlockSectionItem>
+                <apex:pageblockSectionItem ></apex:pageblockSectionItem>
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                <apex:outputLabel value="Secondary Save Reason" for="saveReason2"></apex:outputLabel>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                    <apex:inputField value="{!Order.Secondary_Save_Reason__c}" id="saveReason2" style="width: 250px;"/>
+                    </apex:outputPanel>        
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            
+        </apex:pageBlock>
+    </apex:form>   
+</apex:page>

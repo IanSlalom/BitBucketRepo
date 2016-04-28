@@ -69,7 +69,7 @@
             </apex:pageBlockSection>
             
             <apex:pageBlockSection >
-                <apex:inputField value="{!Order.BillToContactId}"/>
+                <apex:inputField value="{!Order.BillToContactId}" required="true"/>
                 <apex:outputField value="{!Order.OwnerId}"/>      
                 <apex:inputField value="{!Order.Service_initiated_By__c}" style="width: 150px;"/>                
                 <apex:outputField value="{!Order.Account.Name}"/>                
@@ -118,6 +118,9 @@
                                         </apex:selectList>
                                     </apex:outputPanel>
                                 </apex:column> 
+                                <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
+                                </apex:column>
                             </apex:pageBlockTable>
                         </apex:pageBlockSection>
                     </apex:column>

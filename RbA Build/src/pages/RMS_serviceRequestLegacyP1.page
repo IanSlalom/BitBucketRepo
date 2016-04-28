@@ -115,6 +115,9 @@
                                         </apex:selectList>
                                     </apex:outputPanel>
                                 </apex:column> 
+                                <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
+                                </apex:column>
                             </apex:pageBlockTable>
                         </apex:pageBlockSection>
                     </apex:column>

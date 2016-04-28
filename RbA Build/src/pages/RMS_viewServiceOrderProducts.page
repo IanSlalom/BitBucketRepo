@@ -107,8 +107,8 @@
                 <apex:column value="{!wrapper.OrderItem.Secondary_Reason__c}"/>
                 <apex:column value="{!wrapper.OrderItem.MTO_Source_Code__c}"/>
                 <apex:column value="{!wrapper.OrderItem.Defect_Code__c}"/>
-                <apex:column headerValue="Installed Product Asset">  
-					<a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Installed_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Installed_Product_Asset__r.Name}</a> 
+                <apex:column headerValue="Installed Product">  
+					<a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
 				</apex:column>
             </apex:pageBlockTable>
             </apex:form>

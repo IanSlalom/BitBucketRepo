@@ -48,6 +48,10 @@
                 <behavior>Edit</behavior>
                 <field>Active_Store_Configuration__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Sales_Tax__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -35,11 +35,11 @@ public with sharing class RMS_viewServiceOrderProductsCtlr {
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, 
                          Variant_Number__c, Charge_Cost_To__c , Primary_Reason__c, Secondary_Reason__c, 
-                         Quanity_Ordered__c, MTO_Source_Code__c, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
+                         Quanity_Ordered__c, MTO_Source_Code__c, Sold_Order_Product_Asset__r.Name, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
                          from OrderItem 
                          where OrderId =: ord.Id 
                          and PricebookEntry.Product2.RecordTypeId =: servProd
-                                             ORDER BY Installed_Product_Asset__c, PricebookEntry.Product2.Name]);
+                                             ORDER BY Sold_Order_Product_Asset__r.Name , PricebookEntry.Product2.Name]);
 
         orderItemWrappers = new List<OrderItemWrapper>();
         for(OrderItem oi: orderItems.values()){

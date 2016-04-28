@@ -3,7 +3,6 @@
     <defaultLandingTab>standard-home</defaultLandingTab>
     <description>Used for the Homeowner Resolution group</description>
     <label>Homeowner Resolution</label>
-    <logo>SharedDocuments/RbA_Logo.jpg</logo>
     <tab>standard-Account</tab>
     <tab>standard-Contact</tab>
     <tab>standard-Case</tab>

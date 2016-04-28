@@ -162,7 +162,6 @@
         <location>full</location>
     </listPlacement>
     <listRefreshMethod>refreshList</listRefreshMethod>
-    <logo>SharedDocuments/RbA_Logo.jpg</logo>
     <saveUserSessions>true</saveUserSessions>
     <tab>standard-Account</tab>
     <tab>standard-Contact</tab>

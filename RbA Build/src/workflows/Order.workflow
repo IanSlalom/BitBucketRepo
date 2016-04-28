@@ -11,6 +11,15 @@
         <template>Backoffice_Email_Templates/Order_Cancellation_In_Progress</template>
     </alerts>
     <fieldUpdates>
+        <fullName>Set_Install_Work_Order_Status_to_Cancell</fullName>
+        <field>Install_Order_Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Set Install Work Order Status to Cancell</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Status_to_Closed</fullName>
         <field>Status</field>
         <literalValue>Closed</literalValue>
@@ -36,6 +45,31 @@
             <value>Cancellation in Progress</value>
         </criteriaItems>
         <description>Fires when an order is set to cancellation in progress</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Install Order Status Cancelled</fullName>
+        <actions>
+            <name>Set_Install_Work_Order_Status_to_Cancell</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Order.Status</field>
+            <operation>equals</operation>
+            <value>Cancelled</value>
+        </criteriaItems>
+        <description>Due to recursive triggers, workflow used to set Install Order Status to Cancelled on the Sold Order to reflect the Install Work Order status.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Sales Tax on Service Order</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Order.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>CORO Service</value>
+        </criteriaItems>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>

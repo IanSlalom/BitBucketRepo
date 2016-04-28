@@ -2,10 +2,8 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
-    <customButtons>On_Hold</customButtons>
-    <customButtons>Job_Closed</customButtons>
-    <customButtons>Conga_Composer_InvoiceTesting</customButtons>
     <customButtons>Cancel_Order</customButtons>
+    <customButtons>Conga_Composer_InvoiceTesting</customButtons>
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>
@@ -192,6 +190,14 @@
                 <behavior>Edit</behavior>
                 <field>Primary_Service__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>LSWP_Test_Results__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Install_Ship_Date_Conflict__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -209,6 +215,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Installation_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reinstall_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -254,6 +264,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Revenue_Recognized_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Estimated_Ship_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -394,18 +408,7 @@
         <relatedList>Refund__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>ORDERS.ORDER_NUMBER</fields>
-        <fields>SALES.ACCOUNT.NAME</fields>
-        <fields>ORDER.BILL_TO_CONTACT</fields>
-        <fields>ORDERS.TOTAL_AMOUNT</fields>
-        <fields>ORDERS.EFFECTIVE_DATE</fields>
-        <fields>ORDERS.STATUS</fields>
-        <fields>CORE.USERS.ALIAS</fields>
-        <relatedList>Order.Sold_Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <customButtons>New_Business_Adjustment</customButtons>
-        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Amount__c</fields>
         <fields>Date__c</fields>
@@ -413,7 +416,6 @@
         <relatedList>Business_Adjustment__c.Order__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <excludeButtons>New</excludeButtons>
         <fields>ASSET.NAME</fields>
         <fields>ASSET.SERIAL_NUMBER</fields>
         <fields>ASSET.INSTALL_DATE</fields>

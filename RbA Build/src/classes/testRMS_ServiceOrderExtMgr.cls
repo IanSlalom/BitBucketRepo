@@ -562,6 +562,7 @@ String secondary = 'Customer Satisfaction';*/
         list<SelectOption> costoptions = TE.getCosts();
         list<SelectOption> primaryoptions = TE.getPrimaries();
         list<SelectOption> secondaryoptions = TE.getSecondaries();
+        String description = TE.getDescription();
         String cost = TE.getCost();
         String primary = TE.getPrimary();
         String secondary = TE.getSecondary();        
