@@ -1,0 +1,146 @@
+<apex:component >
+    
+    <!-- <apex:includeScript value="//maps.googleapis.com/maps/api/js" /> -->
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
+
+    <style>
+        #resourceRoute.ma-modal-window {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #resourceMap {
+            display: inline-block;
+            height: 400px;
+            width: 800px;
+        }
+
+        #resourceCalendar {
+            display: inline-block;
+            width: 400px;
+            vertical-align: top;
+        }
+        
+    </style>
+
+    <script>
+        $ = jQuery.noConflict();
+
+        var resourceMap;
+        var apexSchedulingController = 'MA_SchedulerController';
+        var processResourceRouteResponse = { onSuccess: processBookingSuccess, onFailure: processResourceRouteSuccess };
+
+        $(function() {
+            sforce.connection.sessionId = '{!$Api.Session_Id}';
+        });
+
+        function initializeRouteComp() {
+            initializeRoute();
+            initResourceCalendar();
+        }
+
+        function initializeRoute() {
+            if (resourceMap == null) {
+                var lat = 33.7700;
+                var lng = -84.3700;
+
+                var mapOptions = {
+                    center: new google.maps.LatLng(lat, lng),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    zoom: 10
+                };
+                resourceMap = new google.maps.Map(document.getElementById('resourceMap'), mapOptions);
+            }
+        }
+
+        function initResourceCalendar() {
+            $('#resourceCalendar').fullCalendar({
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                header: {
+                    left: 'title',
+                    center: '',
+                    right: 'prev,next today'
+                },
+                views: {
+                    agenda: {
+                        slotDuration: '00:30:00',
+                        slotLabelInterval: '01:00:00'
+                    }
+                },
+                defaultView: 'agendaDay',
+                //defaultTimedEventDuration: '02:00:00',
+                //forceEventDuration: true,
+                //timezone: 'local',
+                timezone: 'UTC',
+                //eventOverlap: false,
+                //timezone: false,
+                /*
+                businessHours: [
+                    {
+                        start: '12:00',
+                        end: '19:00',
+                        dow: [2,4,6]
+                    },
+                    {
+                        start: '09:00',
+                        end: '15:00',
+                        dow: [1,3,5]
+                    }
+                ],
+                */
+                lazyFetching: false,
+                handleWindowResize: true,
+                allDaySlot: false,
+                slotEventOverlap: true,
+                height: 500,
+                events: function(start, end, timezone, callback) {
+                    retrieveResourceRouteRecords(start, end, timezone, callback);
+                    callback([]);
+                }
+            });
+        }
+
+        function retrieveResourceRouteRecords(start, end, timezone, callback) {
+            end = new Date(end.add(2, 'days'));
+            start = new Date(start.add(-2, 'days'));
+
+            console.log($('#resourceRoute').attr('resource-id'));
+            console.log(start.toISOString());
+            console.log(end.toISOString());
+
+            //sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startString: start.toISOString(), endString: end.toISOString() }, processResourceRouteResponse);
+
+            sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startEpoch: start.getTime(), endEpoch: end.getTime(), storeId: $('#storeSelect').val() }, processResourceRouteResponse);
+        }
+
+        function processResourceRouteSuccess(response) {
+            console.log(response);
+            response = JSON.parse(response);
+        }
+
+        function closeResourceRoute() {
+            $('#resourceRouteModal').hide();
+        }
+    </script>
+
+    <div id="resourceRouteModal" class="ma-modal">
+        <div id="resourceRouteOverlay" class="ma-modal-overlay" />
+        <div id="resourceRouteContent">
+            <div id="resourceRoute" class="ma-modal-window" resource-id="">
+                <div id="resourceRouteHeader" class="">
+                    <h3><span id="resourceRoutesName" /></h3>
+                    <span id="resourceRouteModalClose" class="floatRight" onclick="closeResourceRoute();">
+                        <img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" />
+                    </span>
+                </div>
+                <div class="ma-modal-body">
+                    <div id="resourceCalendar"></div>
+                    <div id="resourceMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:component>
