@@ -5,15 +5,17 @@
 
 	<style>
 
-        #assignResourceHeader, #scheduleWorkOrderHeader {
+        #assignResourceHeader, #scheduleWorkOrderHeader, #cancellationHeader {
             background-color: #3083d3 !important;
             color: #ffffff !important;
-            padding: 20px 25px 45px 25px !important;
-            height: 0px !important;
+            padding: 20px;
+            order: 1;
+            flex-shrink: 0;
             border-bottom: 2px solid #d8dde6;
+            margin-top: 60px;
         }
         
-        #assignResourceOverlay, #scheduleWorkOrderOverlay {
+        #assignResourceOverlay, #scheduleWorkOrderOverlay, #cancellationOverlay {
             position: fixed;
             height: 100%;
             top: 0;
@@ -31,7 +33,7 @@
             left: 0;
         }
         
-        #assignResourceOverlay.ma-in, #scheduleWorkOrderOverlay.ma-in {
+        #assignResourceOverlay.ma-in, #scheduleWorkOrderOverlay.ma-in, #cancellationOverlay.ma-in {
             opacity: 1;
             max-height: 100%;
             visibility: visible;
@@ -48,34 +50,50 @@
 
         #assignResourceInnerDiv {
             border: 1px solid #d8dde6;
-            margin: 20px;
+            padding: 20px;
             background-color: #ffffff;
         }
 
 		#assignResourceInfoTable {
-			margin: 20px;
 			width: 100%;
 		}
 		
         #assignedResourcesAvailableTable tbody {
             display: block;
-            overflow-y: scroll;
-            height: calc(100vh - 475px);
+            overflow-y: auto;
+            height: calc(100vh - 507px);
             width: 100%;
         }
         
-        #assignedResourcesAvailableTable tr td {
+        #resourcesSettingsTable tbody {
+            display: block;
+            overflow-y: auto;
+            width: 100%;
+        }
+        
+        #storeSettingsHolidayTable tbody {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+        
+        #assignedResourcesAvailableTable tr td, #storeSettingsHolidayTable tr td, #resourcesSettingsTable tr td {
             color: #54698d;
         }
 
-        #assignedResourcesAvailableTable tbody tr {
+        #assignedResourcesAvailableTable tbody tr, #storeSettingsHolidayTable tbody tr, #resourcesSettingsTable tbody tr {
             display: table-header-group;
         }
+        
+        #resourcesSettingsTable tbody tr:nth-child(4n+2), #resourcesSettingsTable tbody tr:nth-child(4n+3) {
+            background-color: #f4f6f9;
+        }
 
-        #assignedResourcesAvailableTable {
+        #assignedResourcesAvailableTable, #storeSettingsHolidayTable, #resourcesSettingsTable {
             width: 100%;
             overflow: auto;
             border-spacing: 0px;
+            border: 1px solid #d8dde6;
         }
 
 		.fieldLabel {
@@ -90,7 +108,7 @@
 
 		#assignResourceSkillsMatched, #assignResourceAssigned {
 			width: 45%;
-			padding: 20px;
+			padding: 10px 0px 20px 0px;
 			display: inline-block;
 			vertical-align: top;
 		}
@@ -99,20 +117,35 @@
 			padding-left: 15px;
 		}
 
-        #assignedResourcesAvailableTable .headerRow {
+        #assignedResourcesAvailableTable .headerRow, #storeSettingsHolidayTable .headerRow, #resourcesSettingsTable .headerRow {
             background-color: #3083d3;
             color: #ffffff;
             text-transform: uppercase;
             letter-spacing: .0625em;
         }
 
-        #assignedResourcesAvailableTable .headerRow th {
+        #assignedResourcesAvailableTable .headerRow th, #resourcesSettingsTable .headerRow th {
             font-weight: bold;
-            width: 31%;
+        }
+        
+        #storeSettingsHolidayTable .headerRow th {
+            font-weight: bold;
         }
 
+        #resourcesSettingsTable th, #resourcesSettingsTable td {
+            padding: 12px 10px;
+        }
+        
         #assignedResourcesAvailableTable th, #assignedResourcesAvailableTable td {
             padding: 7px 10px;
+        }
+        
+        #storeSettingsHolidayTable th, #storeSettingsHolidayTable td {
+            padding: 7px 75px 7px 15px;
+        }
+        
+        #storeSettingsHolidayTable td:last-child, #assignedResourcesAvailableTable td:last-child, #resourcesSettingsTable td:last-child {
+            width: 100%;
         }
         
         #assignResourceButtons, #scheduleWorkOrderButtons {
@@ -128,14 +161,26 @@
             margin-left: 10px;
         }
         
-        input.assignResourceSearch {
-            width: 275px;
+        #assignedResourcesAvailableTable td, #resourcesSettingsTable td {
+            width: 1px;
+            white-space: nowrap;
+        }
+        
+        input.assignResourceSearch, input.settingsResourceSearch {
             height: 20px;
             background-color: #1061b1;
             color: #ffffff;
             border-radius: 0.25rem;
             border: 1px solid #1061b1;
             padding: 2px 10px;
+        }
+        
+        input.assignResourceSearch {
+            width: 275px;
+        }
+        
+        input.settingsResourceSearch {
+            width: 200px;
         }
         
         #assignedResourcesAvailableTable .resourceAssigned td, .resourceAssigned span {
@@ -245,20 +290,10 @@
         	display: inline-block;
         }
 
-        .workOrderSkillNotMatched {
-        	height: 10px;
-        	width: 10px;
-        	background-color: red;
+        .requiredSkillMatchedIcon {
         	margin-right: 5px;
         }
-
-        .workOrderSkillMatched {
-        	height: 10px;
-        	width: 10px;
-        	background-color: green;
-        	margin-right: 5px;
-        }
-
+        
         .resourceAssigned {
         	background-color: #a7b8d1 !important;
         }
@@ -267,6 +302,11 @@
             border-left: 7px solid #fff;
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
+        }
+        
+        .requiredSkill img {
+            width: 13px;
+            vertical-align: middle;
         }
 
         #resourceHeadCount, #requiredSkillsMatchCount {
@@ -295,6 +335,7 @@
     	$ = jQuery.noConflict();
 
     	var assignedSkillsToResourcesMap = {};
+        var forceAssignmentScheduleCombo = false;
     	var apexAssignResourcesController = 'MA_SchedulerController';
         var processResourceAvailablityResponse = { onSuccess: processResourceAvailablitySuccess, onFailure: processResponseError };
         var processAssignedResourceSaveResponse = { onSuccess: processAssignedResourceSaveSuccess, onFailure: processResponseError };
@@ -303,10 +344,16 @@
 	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
 	    });
 
-		function showAssignResourceModal(isReassign) {
+		function showAssignResourceModal(isForcedNextStep, isReassign, isSingleDay, isBatched) {
 			closeAssignResourceModal();
 			var workOrderId;
-			if (isReassign) {
+            if(isBatched){
+                
+            }
+			else if (isForcedNextStep) {
+				workOrderId = $('#workOrderId').val();
+			}
+			else if (isReassign) {
 				workOrderId = $('#eventOptionsRecordId').val();
 			}
 			else {
@@ -314,7 +361,12 @@
 			}
 			$('#assignResourceWorkOrderId').val(workOrderId);
 
-			sforce.apex.execute(apexAssignResourcesController, 'retrieveAvailableResources', { workOrderId: workOrderId }, processResourceAvailablityResponse);
+			var assignForDay = null;
+			if (isSingleDay) {
+				assignForDay = $('#eventOptionsDate').val();
+			}
+
+			sforce.apex.execute(apexAssignResourcesController, 'retrieveAvailableResources', { workOrderId: workOrderId, assignForDay: assignForDay }, processResourceAvailablityResponse);
 			$('#assignResourceModal').addClass('ma-open');
 			$('#assignResourceOverlay').addClass('ma-in');
 			$('body').css('overflow','hidden');
@@ -338,14 +390,19 @@
 				}
 
 				$('.assignResourceSearch').val('');
+				$('#assignedWorkOrderSingleDay').val(response.isSingleDay);
 				$('#assignedWorkOrderName').text(workOrder.Name);
 				$('#assignedWorkOrderType').text(workOrder.Work_Order_Type__c);
 				$('#assignedWorkOrderContact').text(workOrder.Contact__c ? workOrder.Contact__r.Name : '');
-				$('#assignedWorkOrderAddress').text(workOrder.Street__c + ', ' + workOrder.City__c + ', ' + workOrder.State__c + ' ' + workOrder.Zip__c);
 				$('#assignedWorkOrderDate').text(workOrder.Appointment_Date__c ? new Date(workOrder.Appointment_Date__c + ' 12:00 pm').format('m/d/Y') : '');
 				$('#assignedWorkOrderTime').text(workOrderTime);
 				$('#assignedWorkOrderDuration').text(workOrder.Appointment_Duration__c ? workOrder.Appointment_Duration__c + ' (hours)' : '');
 				$('#assignedWorkOrderPreferredHeadcount').text(workOrder.Recommended_Crew_Size__c);
+
+				var address = workOrder.Street__c + ', ' + workOrder.City__c + ', ' + workOrder.State__c + ' ' + workOrder.Zip__c;
+	            address = formatAddress(address);
+	            $('#assignedWorkOrderAddress').text(address);
+				//$('#assignedWorkOrderAddress').text(workOrder.Street__c + ', ' + workOrder.City__c + ', ' + workOrder.State__c + ' ' + workOrder.Zip__c);
 
 				if (response.workOrder.Work_Order_Required_Skills__r) {
 					var requiredSkillsHtml = '';
@@ -359,7 +416,7 @@
 						var skill = requiredSkillsRecords[i].RbA_Skill__r;
 						console.log(skill);
 						requiredSkillsHtml += '<div class="requiredSkill">'
-												+ '<div class="requiredSkillMatchedIcon workOrderSkillNotMatched"></div>'
+												+ '<div class="requiredSkillMatchedIcon workOrderSkillNotMatched"><img class="workOrderSkillWarning" src="{!URLFOR($Resource.MA_Scheduler, '/images/warning.png')}" /><img class="workOrderSkillCheckmark" style="display: none" src="{!URLFOR($Resource.MA_Scheduler, '/images/checkmark.png')}" /></div>'
 												+ '<div class="requiredSkillName" skill-id="' + skill.Id + '">' + skill.Name + '</div>'
 											+ '</div>';
 					}
@@ -420,9 +477,14 @@
 				}
 
 				$('#assignedResourcesAvailableTable').append(availableResourcesTableHtml);
-				$('.hiddenRow, .removeResource').hide();
+				$('#assignedResourcesAvailableTable .hiddenRow, .removeResource').hide();
 
 				$('.resourceAlreadyAssigned .addResource').click();
+
+                if (workOrder.Work_Order_Type__c == 'Install' && !workOrder.Appointment_Date__c && workOrderTime == '' && $('.resourceAlreadyAssigned').length == 0) {
+                    forceAssignmentScheduleCombo = true;
+                }
+
 				//$('.deleteTempRow').remove();
 			}
 		}
@@ -460,7 +522,8 @@
 			var requiredSkills = $('#assignResourceSkillsMatchedInnerDiv .requiredSkill');
 			for (var i = 0, len = requiredSkills.length; i < len; i++) {
 				if (assignedSkillsToResourcesMap[$(requiredSkills[i]).find('.requiredSkillName').attr('skill-id')]) {
-					$(requiredSkills[i]).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillNotMatched').addClass('workOrderSkillMatched');
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon .workOrderSkillWarning').hide();
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon .workOrderSkillCheckmark').show();
 				}
 			}
 
@@ -498,10 +561,12 @@
 			}
 
 			var requiredSkills = $('#assignResourceSkillsMatchedInnerDiv .requiredSkill');
-			$(requiredSkills).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillMatched').addClass('workOrderSkillNotMatched');
+			$(requiredSkills).find('.requiredSkillMatchedIcon .workOrderSkillCheckmark').hide();
+			$(requiredSkills).find('.requiredSkillMatchedIcon .workOrderSkillWarning').show();
 			for (var i = 0, len = requiredSkills.length; i < len; i++) {
 				if (assignedSkillsToResourcesMap[$(requiredSkills[i]).find('.requiredSkillName').attr('skill-id')]) {
-					$(requiredSkills[i]).find('.requiredSkillMatchedIcon').removeClass('workOrderSkillNotMatched').addClass('workOrderSkillMatched');
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon .workOrderSkillWarning').hide();
+					$(requiredSkills[i]).find('.requiredSkillMatchedIcon .workOrderSkillCheckmark').show();
 				}
 			}
 
@@ -529,8 +594,8 @@
 		}
 
 		function updateRequiredSkillsMatchCount() {
-			var totalMatched = $('#assignResourceSkillsMatched .workOrderSkillMatched').length;
-			var totalSkills = totalMatched + $('#assignResourceSkillsMatched .workOrderSkillNotMatched').length;
+			var totalMatched = $('#assignResourceSkillsMatched .workOrderSkillCheckmark:visible').length;
+			var totalSkills = $('#assignResourceSkillsMatched .requiredSkillMatchedIcon').length;
 
 			$('#requiredSkillsMatchCount').text('(' + totalMatched + '/' + totalSkills + ')');
 		}
@@ -552,11 +617,11 @@
 
 		function toggleExpandAllAvaibleResource(el) {
 			if ($(el).hasClass('closed')) {
-				$('.removableRow.hiddenRow').show();
+				$('#assignedResourcesAvailableTable .removableRow.hiddenRow').show();
 				$(el).removeClass('closed').addClass('open');
 			}
 			else {
-				$('.removableRow.hiddenRow').hide();
+				$('#assignedResourcesAvailableTable .removableRow.hiddenRow').hide();
 				$(el).removeClass('open').addClass('closed');
 			}
 		}
@@ -588,6 +653,7 @@
 		}
 
 		function closeAssignResourceModal() {
+			forceAssignmentScheduleCombo = false;
 			assignedSkillsToResourcesMap = {};
 			$('#assignResourceWorkOrderId, #assignResourceInfoTable .fieldValue').val('').text('');
 			$('#assignedResourcesAvailableTable .removableRow, .requiredSkill, .assignedResource').remove();
@@ -603,13 +669,18 @@
 
 		function saveAssignedResources() {
 			$('#loaderModal').show();
-			var assignedResourceIds = [];
+			var assignedResourceIds = [$('#assignResourceWorkOrderId').val()];
 			var assignedResourceRows = $('.assignedResource .resourceRemoval');
 			for (var i = 0, len = assignedResourceRows.length; i < len; i++) {
 				assignedResourceIds.push($(assignedResourceRows[i]).attr('resource-id'));
 			}
 
-			sforce.apex.execute(apexAssignResourcesController, 'saveAssignedResources', { workOrderId:$('#assignResourceWorkOrderId').val(), assignedResourceIdsList: assignedResourceIds }, processAssignedResourceSaveResponse);
+			var assignForDay = '';
+			if ($('#assignedWorkOrderSingleDay').val() == 'true') {
+				assignForDay = $('#assignedWorkOrderDate').text();
+			}
+
+			sforce.apex.execute(apexAssignResourcesController, 'saveAssignedResources', { workOrderId:$('#assignResourceWorkOrderId').val(), assignedResourceIdsList: assignedResourceIds, assignForDay: assignForDay }, processAssignedResourceSaveResponse);
 		}
 
 		function processAssignedResourceSaveSuccess(response) {
@@ -618,6 +689,9 @@
 
 			if (response.success) {
 				$('#calendar').fullCalendar('refetchEvents');
+                if (forceAssignmentScheduleCombo) {
+                    showAvailabilityModal(true, false);
+                }
 				closeAssignResourceModal();
 			}
 			else {
@@ -628,15 +702,16 @@
 
 	<div id="assignResourceModal">
         <div id="assignResourceContent">
-            <div id="assignResourceOuterDiv">
+            <div id="assignResource">
                 <div id="assignResourceHeader">
                     <h2><span>Assign Resource</span></h2>
                     <span id="assignResourceModalClose" class="floatRight" onclick="closeAssignResourceModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
                 </div>
 
                 <input type="hidden" id="assignResourceWorkOrderId" />
+                <input type="hidden" id="assignedWorkOrderSingleDay" />
 
-                <table id="assignResourceInfoTable" cellspacing="15px">
+                <table id="assignResourceInfoTable" class="ma-body" cellspacing="15px">
                 	<tr>
                 		<td>
                 			<span class="fieldLabel">Work Order: </span>
@@ -679,7 +754,7 @@
                 	</tr>
                 </table>
 
-                <div id="assignResourceInnerDiv">
+                <div id="assignResourceInnerDiv" class="ma-modal-body">
                 	<div id="assignResourceSkillsMatched">
                 		<div class="fieldLabel">
                 			<h4>Required Skills <span id="requiredSkillsMatchCount">(0/0)</span></h4>
@@ -693,9 +768,13 @@
                 		<div id="assignResourcesAssignedInnerDiv"></div>
                 	</div>
 
+                	<div>
+                	    <h6>* All Resources listed in the below table match at least 1 Skill on the Work Order</h6>
+                	</div>
+                	
                 	<table id="assignedResourcesAvailableTable">
                 		<tr class="headerRow">
-                			<th><div id="expandAllAvailableResourcesDiv" class="pointer closed" onclick="toggleExpandAllAvaibleResource(this);" />Resource</th>
+                			<th><div id="expandAllAvailableResourcesDiv" class="pointer closed" onclick="toggleExpandAllAvaibleResource(this);"></div>Resource</th>
                 			<th>Skills Match</th>
                 			<th>Head Count</th>
                 			<th>Revenue Past 30 Days</th>
@@ -703,10 +782,10 @@
                 		</tr>
                 	</table>
                 </div>
-            </div>
-            <div id="assignResourceButtons">
-                <button class="ma-button ma-button--white" onclick="closeAssignResourceModal();">Cancel</button>
-                <button class="ma-button ma-button--green" onclick="saveAssignedResources();">Save</button>
+                <div class="ma-modal-footer" id="">
+                    <button class="ma-button ma-button--white" onclick="closeAssignResourceModal();">Cancel</button>
+                    <button class="ma-button ma-button--green" onclick="saveAssignedResources();">Save</button>
+                </div>
             </div>
         </div>
         

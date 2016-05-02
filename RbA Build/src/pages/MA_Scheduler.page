@@ -14,10 +14,11 @@
 
     <script>
         $ = jQuery.noConflict();
-		var map;
+        //var map;
         //var selectedStore = '';
         var isIndividual = true;
         var storeFound = false;
+        var storeRetrievalProcessed = false;
         var storeIdToResourceIndividualityMap = {};
         var apexMainPageController = 'MA_SchedulerController';
         var processStoreResponse = { onSuccess: processStoreSuccess, onFailure: processResponseError };
@@ -36,12 +37,14 @@
                 //$('#settings, #filters, #listView, #optimize, #map, #calendarFilter').hide();
             //}
 
-			var mapOptions = {
+            /*
+            var mapOptions = {
                         center: new google.maps.LatLng(35.2033533,-80.979609),
                         zoom: 10,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                       };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            */
         });
 
         function retrieveTimezoneOptions() {
@@ -100,6 +103,7 @@
                     }
                 }
 
+                storeRetrievalProcessed = true;
                 newCalendarFilter = true;
                 $('#calendar').fullCalendar('refetchResources');
             }
@@ -151,6 +155,44 @@
                         //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY), left: e.pageX }).show();
                     };
 
+                    /*
+                    record.oncontextmenu = function(e) {
+                        console.log(e);
+                        e.preventDefault();
+                        var workOrderElRow = $(this).closest('.x-grid3-row')[0];
+                        var workOrderId = $(workOrderElRow).find('.x-grid3-col-LIST_RECORD_ID').text();
+                        $('#listViewOptionsRecordId').val(workOrderId);
+                        //$('#listViewOptionsModal').offset({ top: e.pageY, left: e.pageX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY - e.layerX), left: (e.pageX - e.layerY) }).show();
+
+
+                        var posX;
+                        var posY;
+
+                        //console.log(document.body.scrollLeft);
+                        //console.log(document.documentElement.scrollLeft);
+
+                        if (e.pageX || e.pageY) {
+                            posX = e.pageX;
+                            posY = e.pageY - (e.screenY - e.clientY);
+                        }
+                        else if (e.clientX || e.clientY) {
+                            posX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                            posY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                        }
+
+
+                        console.log(posX);
+                        console.log(posY);
+
+
+
+
+                        $('#listViewOptionsModal').css({ position: 'absolute', top: posY, left: posX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY), left: e.pageX }).show();
+                    };
+                    */
+
 
                     /*
                     if ($(record).find('a, input[type="checkbox"]').length == 0) {
@@ -176,6 +218,18 @@
             $('#listViewOptionsModal').hide();
         }
 
+        function formatAddress(address) {
+            address = address.replace(new RegExp('undefined', 'g'), '').replace(', ,', ',').replace(',  ', ', ');
+            if (address.startsWith(', ')) {
+                address = address.substring(2);
+            }
+            if (address.endsWith(', ')) {
+                address = address.substring(0, address.lastIndexOf(', '));
+            }
+
+            return address;
+        }
+
         function processResponseError(error) {
             console.log(error);
             if (!error.faultstring) {
@@ -187,6 +241,8 @@
         function handleError(componentName, error) {
             $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
             $('#errorModal').show();
+            $('#errorModal').addClass('ma-open');
+            $('#errorModalOverlay').addClass('ma-in');
             $('#loaderModal').hide();
         }
         
@@ -206,26 +262,24 @@
         });
 
         function viewEditWorkOrder(isCalendar) {
-            console.log(isCalendar);
-
             var workOrderId;
             if (isCalendar) {
-                console.log('eventOptions');
                 workOrderId = $('#eventOptionsRecordId').val();
             }
             else {
-                console.log('listViewOptions');
                 workOrderId = $('#listViewOptionsRecordId').val();
             }
-            
+
             var win = window.open('/' + workOrderId, '_blank', 'height=500, width=800, location=no, menubar=no, scrollbars=yes, status=no, titlebar=no, toolbar=no, resizable=yes, fullscreen=no');
             var winTimer = setInterval(function() {
                 if (win.closed) {
-                    $('#loaderModal').show();
                     clearInterval(winTimer);
-                    $('.listViewportWrapper .refreshListButton').click();
-                    $('#calendar').fullCalendar('refetchEvents');
-                    $('#loaderModal').hide();
+                    if (!isBatchResources) {
+                        $('#loaderModal').show();
+                        $('.listViewportWrapper .refreshListButton').click();
+                        $('#calendar').fullCalendar('refetchEvents');
+                        $('#loaderModal').hide();
+                    }
                 }
             }, 500);
         }
@@ -241,7 +295,8 @@
     <c:MA_SchedulerCancelAppointmentComp />
     <c:MA_SchedulerWorkOrderSchedulingComp />
     <c:MA_SchedulerRoutes />
-    <c:MA_SchedulerMainNav /> 
+    <c:MA_SchedulerMainNav />
+    <c:MA_SchedulerResourceRouteComp />
 
     <!--
     <div id="settings" class="hideIndividual">
@@ -250,11 +305,11 @@
     -->
     
     <!--
-	<div id="optimize" class="hideIndividual">
+    <div id="optimize" class="hideIndividual">
         <button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showOptyModal();">Batch Assign</button>
-		<button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showMap();">MAP</button>
+        <button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showMap();">MAP</button>
     </div>
-	-->
+    -->
 
     <!--
     <div id="filters" class="hideIndividual">
@@ -263,15 +318,40 @@
 
     <c:MA_SchedulerCalendarComp />
 
-    <div id="listView" class="hideIndividual pad-0-10">
+    <div id="listView" class="hideIndividual pad-0-10 batchHide">
         <apex:enhancedList id="unscheduledListView" type="RbA_Work_Order__c" height="300" rowsPerPage="25" customizable="true" oncomplete="initializeListViewAttributes()" />
+    </div>
+    
+    <div id="unassignedBatch" class="unassigned-batch pad-15-10 batchShow" >
+        <div>
+            <h2><span>Unassigned Batched Work Orders</span></h2>
+        </div>
+        
+        <table id ="unassignedBatch-table" class ="unassigned-batch-wo" title="Unassigned WorkOrders">
+            <thead id="unassignedBatch-header" class="unassigned-batch-header">
+                <tr>
+                    <th id="unassignedBatch-action">Action</th>
+                    <th id="unassignedBatch-wo">WorkOrder#</th>
+                    <th id="unassignedBatch-contact">Contact</th>
+                    <th id="unassignedBatch-account">Account</th>
+                    <th id="unassignedBatch-appt">Appointment Duration</th>
+                    <th id="unassignedBatch-cdate">Created Date</th>
+                </tr>
+            </thead>
+            <tbody id="unassignedBatch-body">
+                <tr>
+                    <td colspan="2"><p>There are no work orders to be displayed.</p></td>
+                </tr>
+            </tbody>
+            
+        </table>
     </div>
 
     <div id="listViewOptionsModal">
         <!-- <span class="ma-modal-close" onclick="closeListViewOptionsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span> -->
         <input type="hidden" id="listViewOptionsRecordId" />
-        <div id="" onclick="showAvailabilityModal(false); closeListViewOptionsModal();">Schedule Work Order</div>
-        <div onclick="showAssignResourceModal(false); closeListViewOptionsModal();">Assign a Resource</div>
+        <div id="" onclick="showAvailabilityModal(false, false); closeListViewOptionsModal();">Schedule Work Order</div>
+        <div onclick="showAssignResourceModal(false, false, false); closeListViewOptionsModal();">Assign a Resource</div>
         <div onclick="viewEditWorkOrder(false); closeListViewOptionsModal();">View / Edit</div>
     </div>
 
