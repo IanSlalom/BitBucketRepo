@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -308,7 +308,27 @@
         <name>ReportType</name>
     </types>
     <types>
-        <members>*</members>
+        <members>BuildingPermitText</members>
+        <members>CasementWindowS1</members>
+        <members>CreateSO</members>
+        <members>HistoricalText</members>
+        <members>HOAText</members>
+        <members>InstallText</members>
+        <members>jquery</members>
+        <members>jquery_tableSorter</members>
+        <members>jquery_TableSorterZip</members>
+        <members>jqueryautocomplete</members>
+        <members>LeadPaintPermit</members>
+        <members>LoadingPage</members>
+        <members>LSWP</members>
+        <members>MA_Scheduler</members>
+        <members>Order</members>
+        <members>PaintStainText</members>
+        <members>select2</members>
+        <members>ServiceOrder</members>
+        <members>ServiceText</members>
+        <members>SiteSamples</members>
+        <members>TechMeasureText</members>
         <name>StaticResource</name>
     </types>
     <types>
