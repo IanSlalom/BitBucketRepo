@@ -8,6 +8,7 @@
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
         <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerResource</members>
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
         <members>MA_SchedulerUtilities</members>
@@ -100,6 +101,8 @@
         <members>MA_SchedulerListViewOptionsModalComp</members>
         <members>MA_SchedulerLoaderComp</members>
         <members>MA_SchedulerMainNav</members>
+        <members>MA_SchedulerResourceRouteComp</members>
+        <members>MA_SchedulerResourceSettingsComp</members>
         <members>MA_SchedulerRoutes</members>
         <members>MA_SchedulerSettingsComp</members>
         <members>MA_SchedulerStylingComp</members>
