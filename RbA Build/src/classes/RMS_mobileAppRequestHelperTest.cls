@@ -201,7 +201,7 @@ private class RMS_mobileAppRequestHelperTest {
 		tUtil.createTMAppt(u.Id, tmApptTime);
 		Account dwelling = [select Id from Account where Name = '1'];
 		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
-		opp.StageName = 'Negotiation';
+		opp.StageName = 'Sold';
 		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
 		Order ord1 = [Select Id, Status from Order where OpportunityID =: opp.Id];
 		ord1.Status = 'Ready to Order';
@@ -234,21 +234,19 @@ private class RMS_mobileAppRequestHelperTest {
 		tmApptUpdate.workOrder = workOrder[0];
 		tmApptUpdate.opptyContainer = oppContainerUpsert;
 		RMS_mobileAppRequestHelper.Appointments appUpdate = new RMS_mobileAppRequestHelper.Appointments();
-		appUpdate.tmAppts = new List<RMS_mobileAppRequestHelper.TechMeasureAppointment>{tmApptUpdate};
-
-
-
-		
+		appUpdate.tmAppts = new List<RMS_mobileAppRequestHelper.TechMeasureAppointment>{tmApptUpdate};	
 
         System.runAs(u) {
         	Test.StartTest();
         	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
-			helper.saveTechMeasure(JSON.serialize(appUpdate));
+			String input = JSON.serialize(appUpdate);
+//			System.debug('################ - the JSON:' + input);
+			helper.saveTechMeasure(input);
 			Test.StopTest();
 
 			//Assert Opportunity Status is updated
 			opp = [Select StageName from Opportunity where Id =: opp.Id];
-			System.assertEquals(opp.StageName,'Negotiation');
+			System.assertEquals(opp.StageName,'Sold');
 			//Assert Order status is updated
 			ord1 = [Select Status from Order where Id =: ord1.Id];
 			System.assertEquals(ord1.Status, 'Ready to Order');
@@ -265,6 +263,144 @@ private class RMS_mobileAppRequestHelperTest {
 			//Assert RBA Work Order is updated 
 			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
 			System.assertEquals(rbaUpdatedList.size(),1);
+        }
+	
+	}
+
+	static testmethod void testSaveQuotes(){
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		//tUtil.createSalesAppt(u.Id, newApptTime, false);
+		tUtil.createTMAppt(u.Id, tmApptTime);
+		Account dwelling = [select Id from Account where Name = '1'];
+		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'Sold';
+		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
+		Quote quoteToUpdate = tUtil.createQuote(opp.Id, Test.getStandardPriceBookId());
+		insert quoteToUpdate;
+		quoteToUpdate.Description = 'UPDATED DESCRIPTION';
+		Quote quoteToInsert = tUtil.createQuote(opp.Id, Test.getStandardPriceBookId());
+		quoteToInsert.Description = 'INSERT THIS QUOTE';
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quoteToUpdate;
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainerInsert = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainerInsert.aQuote = quoteToInsert;
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer,quoteContainerInsert};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.account = dwelling;
+		salesAppt.opptyContainer = oppContainer;
+		RMS_mobileAppRequestHelper.Appointments appt = new RMS_mobileAppRequestHelper.Appointments();
+		appt.salesAppts = new List<RMS_mobileAppRequestHelper.SalesAppointment>{salesAppt};	
+
+        System.runAs(u) {
+        	Test.StartTest();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			helper.saveQuotes(appt);
+			Test.StopTest();
+
+			//Assert Quote Description field is updated
+			quoteToUpdate = [SELECT Description from Quote where Id =: quoteToUpdate.Id];
+			System.assertEquals(quoteToUpdate.Description, 'UPDATED DESCRIPTION');
+			//Assert quoteToInsert is inserted
+			System.assert(quoteToInsert.Id != null);
+        }
+	
+	}
+
+	static testmethod void testSaveQuoteLineItemsDiscountsandFinancing(){
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		//tUtil.createSalesAppt(u.Id, newApptTime, false);
+		tUtil.createTMAppt(u.Id, tmApptTime);
+		Account dwelling = [select Id from Account where Name = '1'];
+		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'Sold';
+		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
+		PricebookEntry pricebookEntry1 = [Select Id from PricebookEntry where Product2Id =: productList[0].Id];
+		Quote quote = tUtil.createQuote(opp.Id, Test.getStandardPriceBookId());
+		insert quote;
+
+		QuoteLineItem lineItemToUpdate = tUtil.createQuoteLineItem(pricebookEntry1.Id, quote.Id);
+		insert lineItemToUpdate;
+		lineItemToUpdate.Description ='UPDATED QLI DESCRIPTION';
+		QuoteLineItem lineItemToInsert = tUtil.createQuoteLineItem(pricebookEntry1.Id, quote.Id);
+		System.assertEquals(lineItemToInsert.Id, null);
+
+		Account myStore = [select Id, Active_Store_Configuration__c from Account where Name = '77 - Twin Cities, MN' Limit 1];
+		Discount__c discount1 = new Discount__c(Name = 'my discount');
+		insert discount1;
+		Store_Discount__c storeDiscount1 = new Store_Discount__c();
+		storeDiscount1.Discount__c = discount1.Id;
+		storeDiscount1.Store_Configuration__c = myStore.Active_Store_Configuration__c;
+		storeDiscount1.Active__c = true;
+		insert storeDiscount1;		
+
+		Quote_Discount__c discountToUpdate = new Quote_Discount__c(Quote__c = quote.Id, Store_Discount__c = storeDiscount1.Id);
+		insert discountToUpdate;
+		discountToUpdate.Status__c = 'Cancelled';
+		Quote_Discount__c discountToInsert = new Quote_Discount__c(Quote__c = quote.Id, Store_Discount__c = storeDiscount1.Id);
+
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = myStore.Active_Store_Configuration__c, Active__c = true);
+		insert storeFinance;
+		Quote_Financing__c financeToUpdate = new Quote_Financing__c(Related_Quote__c = quote.Id, Store_Finance_Program__c = storeFinance.Id);
+		insert financeToUpdate;
+		financeToUpdate.Program_Rate__c = 20;
+		Quote_Financing__c financeToInsert = new Quote_Financing__c(Related_Quote__c = quote.Id, Store_Finance_Program__c = storeFinance.Id);
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quote;
+		quoteContainer.quoteLineItems = new List<QuoteLineItem>{lineItemToUpdate,lineItemToInsert};
+		quoteContainer.quoteDiscountList = new List<Quote_Discount__c>{discountToUpdate,discountToInsert};
+		quoteContainer.quoteFinancingList = new List<Quote_Financing__c>{financeToUpdate,financeToInsert};
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.account = dwelling;
+		salesAppt.opptyContainer = oppContainer;
+		RMS_mobileAppRequestHelper.Appointments appt = new RMS_mobileAppRequestHelper.Appointments();
+		appt.salesAppts = new List<RMS_mobileAppRequestHelper.SalesAppointment>{salesAppt};	
+
+        System.runAs(u) {
+        	Test.StartTest();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			helper.saveQuoteLineItemsDiscountsandFinancing(appt);
+			Test.StopTest();
+
+			//Assert Quote Line Items are Upserted
+			lineItemToUpdate = [SELECT Description from QuoteLineItem where Id =: lineItemToUpdate.Id];
+			System.assertEquals(lineItemToUpdate.Description, 'UPDATED QLI DESCRIPTION');
+			System.assert(lineItemToInsert.Id != null);
+
+			//Assert Quote Discounts are Upserted
+			discountToUpdate = [SELECT Status__c from Quote_Discount__c where Id =: discountToUpdate.Id];
+			System.assertEquals(discountToUpdate.Status__c,'Cancelled');
+			System.assert(discountToInsert.Id != null);
+
+			//Assert Quote Line Items are Upserted
+			financeToUpdate = [SELECT Program_Rate__c from Quote_Financing__c where Id =: financeToUpdate.Id];
+			System.assertEquals(financeToUpdate.Program_Rate__c, 20);
+			System.assert(financeToInsert.Id != null);
         }
 	
 	}

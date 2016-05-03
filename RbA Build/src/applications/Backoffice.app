@@ -172,6 +172,7 @@
     <tab>Payment__c</tab>
     <tab>Labor__c</tab>
     <tab>RbA_Work_Order__c</tab>
+    <tab>standard-Dashboard</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
@@ -190,6 +191,9 @@
         </mapping>
         <mapping>
             <tab>standard-Contact</tab>
+        </mapping>
+        <mapping>
+            <tab>standard-Dashboard</tab>
         </mapping>
         <mapping>
             <tab>standard-Opportunity</tab>

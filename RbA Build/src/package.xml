@@ -85,6 +85,7 @@
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_createContactHistoryMgr</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <name>ApexClass</name>
     </types>
