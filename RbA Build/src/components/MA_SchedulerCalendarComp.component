@@ -1,4 +1,4 @@
-<apex:component >
+<apex:component controller="MA_SchedulerController">
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
     <apex:includeScript value="/soap/ajax/34.0/apex.js" />
     
@@ -34,6 +34,7 @@
         var newCalendarFilter = false;
         var initialLoad = true;
         var viewDestroy = false;
+        var isBatchResources = false;
         //var isIndividual = false;
         var currentUserId = '{!$User.Id}';
         var apexCalendarController = 'MA_SchedulerController';
@@ -67,17 +68,15 @@
                 header: {
                     //left: 'title prev,next today',
                     left: '',
-                    center: '',
-                    right: 'title prev,next today timelineDay,agendaDay,agendaWeek,month'
-                    //right: 'title prev,next today agendaDay,agendaWeek,month'
-                    //right: 'timelineDay,agendaDay,agendaWeek,month'
-                    //right: 'agendaDay,agendaWeek,month'
+                    center: 'timelineDay',
+                    //right: 'title prev,next today timelineDay,agendaDay,agendaWeek,month'
+                    right: 'title prev,next today agendaDay,agendaWeek,month'
                 },
                 buttonText: {
                     timelineDay: 'Resources',
                     agendaDay: 'Time Slots'
                 },
-                eventLimit: true,
+                eventLimit: 4,
                 views: {
                     timeline: {
                         slotDuration: '00:15:00',
@@ -85,16 +84,19 @@
                     },
                     agenda: {
                         slotDuration: '00:30:00',
-                        slotLabelInterval: '01:00:00',
+                        slotLabelInterval: '01:00:00'
+                    }
+                    /*,
+                    week: {
+                        eventLimit: 2
                     },
-                    /*
                     agendaWeek: {
                         eventLimit: 4
                     },
-                    */
                     month: {
                         eventLimit: 4
                     }
+                    */
                 },
                 defaultView: 'agendaDay',
                 //defaultTimedEventDuration: '02:00:00',
@@ -166,7 +168,7 @@
                 resources: function(callback) {
                     console.log('checking');
                     $('#loaderModal').show();
-                    if (viewDestroy) {
+                    if (viewDestroy || !storeRetrievalProcessed) {
                         callback([]);
                         //$('#loaderModal').hide();
                     }
@@ -181,6 +183,13 @@
                         callback(eventListToRender);
                         eventListToRender = [];
                     }
+                    else if (!storeRetrievalProcessed) {
+                        callback([]);
+                    }
+                    else if (isBatchResources) {
+                        //isBatchResources = false;
+                        callback([]);
+                    }
                     else if ($('#calendar').fullCalendar('getView').name == 'timelineDay') {
                         fetchResourceEvents(start, end, timezone, callback);
                     }
@@ -188,9 +197,46 @@
                         fetchWorkOrderEvents(start, end, timezone, callback);
                     }
                 },
+                eventClick: function(calEvent, jsEvent ,view) {
+                    //$(el).on('click', function(e) {
+                        console.log(jsEvent);
+                        console.log(calEvent);
+                        console.log(calEvent.start);
+                        console.log(calEvent.start.format('MM/DD/YYYY'));
+
+                        //tempD = calEvent.start;
+
+                        //var workOrderElRow = $(this).closest('.x-grid3-row')[0];
+                        //var workOrderId = $(workOrderElRow).find('.x-grid3-col-LIST_RECORD_ID').text();
+
+                        jsEvent.preventDefault();
+
+                        //var workOrderElRow = $(this).closest('.x-grid3-row')[0];
+                        //var eventId = $(el).find('.fc-content .popupPlaceHolder').attr('id');
+                        var eventId = calEvent.id;
+
+                        $('#eventOptionsRecordId').val(eventId);
+                        $('#eventOptionsDate').val(calEvent.start.format('MM/DD/YYYY'));
+                        //$('#listViewOptionsModal').offset({ top: e.pageY, left: e.pageX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY - e.layerX), left: (e.pageX - e.layerY) }).show();
+                        $('#eventOptionsModal').css({ position: 'absolute', top: (jsEvent.pageY - 110), left: jsEvent.pageX }).show();
+                        //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY), left: e.pageX }).show();
+                    //});
+                },
                 eventAfterRender: function(event, element, view) {
-                    if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
-                        $(element).find('.fc-title').after('<div class="eventNameDiv">' + event.contactName + '</div>');
+                    if (view.name != 'month') {
+                        if (view.name != 'timelineDay') {
+                            if (event.city != '' && event.city != undefined && event.city != null) {
+                                $(element).find('.fc-title').after('<div class="cityDiv">' + event.city + '</div>');
+                            }
+                            if (event.resourceNamesText != '' && event.resourceNamesText != undefined && event.resourceNamesText != null) {
+                                $(element).find('.fc-title').after('<div class="resourceNamesTextDiv">' + event.resourceNamesText + '</div>');
+                            }
+                        }
+
+                        if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
+                            $(element).find('.fc-title').after('<div class="eventNameDiv">' + event.contactName + '</div>');
+                        }
                     }
 
                     /*
@@ -200,15 +246,86 @@
                     }
                     */
 
+                    /*
                     if (event.missingResource == true) {
                         //$(element).find('.fc-title').css('display', 'inline-block').before('<div class="eventDot missingResource"></div>');
                         $(element).find('.fc-time').before('<div class="eventDot missingResource"></div>');
+                    }
+                    */
+
+                    if ($(element).find('.fc-time').length > 0) {
+                        $(element).find('.fc-time').before('<div class="wo-icon icon-' + event.eventType + '"></div>');
+                    }
+                    else {
+                        $(element).find('.fc-title').before('<div class="wo-icon icon-' + event.eventType + '"></div>');
                     }
 
                     var titleEl = $(element).find('.fc-title')[0];
                     var eventTitle = $(titleEl).text();
                     $(titleEl).text('');
                     $(titleEl).prepend('<span class="popupPlaceHolder">' + eventTitle + '</span>');
+
+
+
+                    //if (view.name != 'month' && view.name != 'timelineDay') {
+                        var fcContentDiv = $(element).find('.fc-content')[0];
+                        var woIconsHtml = '<div id="wo-icons">';
+                        var iconDivs = $(fcContentDiv).find('.wo-icon');
+                        //console.log(iconDivs);
+                        for (var i = 0, len = iconDivs.length; i < len; i++) {
+                            woIconsHtml += iconDivs[i].outerHTML;
+                        }
+                        woIconsHtml += '</div>';
+                        //console.log(woIconsHtml);
+
+                        var calTextHtml = '<div class="calContent">';
+                        var nonIconDivs = $(fcContentDiv).find('.fc-time, .fc-title, div:not(.wo-icon)');
+                        //console.log(nonIconDivs);
+                        for (var i = 0, len = nonIconDivs.length; i < len; i++) {
+                            calTextHtml += nonIconDivs[i].outerHTML;
+                        }
+                        calTextHtml += '</div>';
+                        //console.log(calTextHtml);
+
+                        $(fcContentDiv).html(woIconsHtml + calTextHtml);
+                    //}
+
+
+
+
+                    /*
+                    var fcContentDiv = $(element).find('.fc-content')[0];
+                    var tempHtml = fcContentDiv;
+                    console.log(tempHtml);
+
+                    var tempIconsDiv;
+                    $(tempIconsDiv).html('<div id="wo-icons"></div>');
+
+                    var iconDivs = $(tempHtml).find('div.wo-icon');
+                    console.log(iconDivs);
+                    for (var i = 0, len = iconDivs.length; i < len; i++) {
+                        $(tempIconsDiv).append($(iconDivs[i]));
+                    }
+
+                    var tempCalTextDiv;
+                    $(tempCalTextDiv).html('<div class="calContent"></div>');
+                    var nonIconDivs = $(tempHtml).find('div:not(.wo-icon)');
+                    console.log(nonIconDivs);
+                    for (var i = 0, len = nonIconDivs.length; i < len; i++) {
+                        $(tempCalTextDiv).append($(nonIconDivs[i]));
+                    }
+
+                    console.log(tempIconsDiv);
+                    console.log(tempCalTextDiv);
+
+                    $(fcContentDiv).html('').append(tempIconsDiv).append(tempCalTextDiv);
+                    */
+
+
+
+
+
+
 
                     var dataStart = $(element).find('.fc-time').attr('data-start');
                     if (dataStart != '' && dataStart != undefined && dataStart != null) {
@@ -236,14 +353,58 @@
                     };
 
                     
+                    /*
                     records = $('a.fc-time-grid-event.fc-event.woEvent');
                     for (var i = 0, len = records.length; i < len; i++) {
                         setEventOnClick(records[i]);
                     };
+                    */
 
                     $('#loaderModal').hide();
 
-                    $('.fc-head .fc-axis').html('<a class="ma-button dropdown-right" id="calendarLegendTitle" onclick="openCalendarLegend();">Legend<div class="dropdown-triangle-legend"></div></a><div id="calendarLegendDrop" style="display:none"><div><div class="eventDot techmeasure"></div><span>Tech Measure</span></div><div><div class="eventDot workOrderSynced"></div><span>Synced</span></div><div><div class="eventDot missingResource"></div><span>Unassigned</span></div><div><div class="eventDot lswp"></div><span>LSWP</span></div></div>');
+                    var legendHtml = '<a class="ma-button dropdown-right" id="calendarLegendTitle" onclick="openCalendarLegend();">'
+                                        + 'Legend'
+                                        + '<div class="dropdown-triangle-legend"></div>'
+                                    + '</a>'
+                                    + '<div id="calendarLegendDrop" style="display:none">'
+                                        + '<div>'
+                                            + '<div class="legend-icon-container">'
+                                                + '<div class="legend-icon legend-icon-techmeasure"></div>'
+                                            + '</div>'
+                                            + '<span>Tech Measure</span>'
+                                        + '</div>'
+                                        + '<div>'
+                                            + '<div class="legend-icon-container">'
+                                                + '<div class="legend-icon legend-icon-install"></div>'
+                                            + '</div>'
+                                            + '<span>Install</span>'
+                                        + '</div>'
+                                        + '<div>'
+                                            + '<div class="legend-icon-container">'
+                                                + '<div class="legend-icon legend-icon-service"></div>'
+                                            + '</div>'
+                                            + '<span>Service</span>'
+                                        + '</div>'
+                                        + '<div>'
+                                            + '<div class="legend-icon-container">'
+                                                + '<div class="legend-icon legend-icon-synced"></div>'
+                                            + '</div>'
+                                            + '<span>Synced</span>'
+                                        + '</div>'
+                                        + '<div>'
+                                            + '<div class="legend-icon-container">'
+                                                + '<div class="legend-icon legend-icon-lswp"></div>'
+                                            + '</div>'
+                                            + '<span>LSWP</span>'
+                                        + '</div>'
+                                        + '<hr class="hr-legend">'
+                                        + '<div>'
+                                            + '<div class="eventDot missingResource"></div>'
+                                            + '<span>Unassigned</span>'
+                                        + '</div>'
+                                    + '</div>';
+                    
+                    $('.fc-head .fc-axis').html(legendHtml);
                 },
                 loading: function(isLoading, view) {
                     /*
@@ -312,18 +473,20 @@
             });
 
             $('.fc-timelineDay-button').hide();
+            $('.fc-button-group, .fc-today-button').addClass('batchHide');
 
             //$('.fc-head .fc-axis').html('<a class="ma-button dropdown-right" id="calendarLegendTitle" onclick="openCalendarLegend();">Legend<div class="dropdown-triangle-legend"></div></a>');
         }
 
         function goToResourceView() {
-            $('.fc-timelineDay-button').show().click();
+            //$('.fc-timelineDay-button').show().click();
+            $('.fc-timelineDay-button').click();
             $('.fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button').hide();
             closeSettingsModal();
         }
 
         function goToWorkOrderView() {
-            $('.fc-timelineDay-button').hide();
+            //$('.fc-timelineDay-button').hide();
             $('.fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button').show();
             $('.fc-agendaDay-button').click();
             closeSettingsModal();
@@ -368,6 +531,7 @@
             }
             else if (elementType == 'event') {
                 elId = $(el).closest('a').attr('href').replace('/', '');
+                $(el).removeAttr('href');
             }
 
             if (elId != null) {
@@ -386,14 +550,24 @@
             }
 
             if (parent.length != 0) {
-                parent[0].onclick = function() { alert('Hello ' + $(el).text()); };
+                //parent[0].onclick = function() { alert('Hello ' + $(el).text()); };
+                parent[0].onclick = function() {
+                    console.log('show');
+                    $('#resourceRoute').attr('resource-id', $(parent).closest('tr').attr('data-resource-id'));
+                    $('#resourceRoutesName').text($(el).text());
+                    initializeRouteComp();
+                    $('#resourceRouteModal').show();
+                    $('#resourceRouteModal').addClass('ma-open');
+                    $('#resourceRouteModalOverlay').addClass('ma-in');
+                };
                 //parent[0].oncontextmenu = function() { alert('Hello Right ' + $(el).text()); return false; };
             }
         }
 
         function setEventOnClick(el) {
-        	//console.log($(el));
-        	$(el).removeAttr('href');
+            //console.log($(el));
+            //$(el).removeAttr('href');
+            /*
             $(el).on('click', function(e) {
                 console.log(e);
                 //var workOrderElRow = $(this).closest('.x-grid3-row')[0];
@@ -408,13 +582,31 @@
                 $('#eventOptionsModal').css({ position: 'absolute', top: (e.pageY - 110), left: e.pageX }).show();
                 //$('#listViewOptionsModal').css({ position: 'absolute', top: (e.pageY), left: e.pageX }).show();
             });
+            */
         }
 
-		function closeEventOptionsModal() {
-			$('#eventOptionsModal').hide();
-		}
+        function closeEventOptionsModal() {
+            $('#eventOptionsModal').hide();
+        }
 
         function filterCalendar() {
+            var filter = $('#calendarFilter .calendarFilterSelect').val();
+            var listViewSelect = $('#listView .listViewportWrapper .listViewport select');
+            var availableOptions = $(listViewSelect).find('option:contains("' + filter + '")');
+
+            $(availableOptions).css('display', '');
+            $(listViewSelect).find('option:not(:contains("' + filter + '"))').css('display', 'none');
+
+            if (availableOptions.length == 0) {
+                $('#listView').hide();
+            }
+            else {
+                if ($(listViewSelect).find('option[value="' + $(listViewSelect).val() + '"]').css('display') == 'none') {
+                    $(listViewSelect).val($(availableOptions[0]).val())[0].onchange();
+                }
+                $('#listView').show();
+            }
+
             newCalendarFilter = true;
             console.log('hello');
             $('#calendar').fullCalendar('refetchResources');
@@ -454,13 +646,21 @@
                 else {
                     //var storeIdsFilter = ' IN (\'' + storeIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
                     var storeIdFilter = storeFound ? ' AND Retail_Location__c = \'' + $('#storeSelect').val() + '\'' : '';
-                    var typeFilter = $('#calendarFilterSelect').val() == 'all' ? '' : ' AND Resource_Type__c = \'' + $('#calendarFilterSelect').val() + '\'';
+                    //var typeFilter = $('#calendarFilterSelect').val() == '' ? '' : ' AND Resource_Type__c = \'' + $('#calendarFilterSelect').val() + '\'';
                     //filters += typeFilter + ' AND Retail_Location__c' + storeIdsFilter;
-                    filters += typeFilter + storeIdFilter;
+                    filters += /*typeFilter +*/ storeIdFilter;
                 }
 
+                var workOrderType = $('#calendarFilter .calendarFilterSelect').val();
+                /*
+                if (isBatchResources) {
+                    workOrderType = $('.batch-assign-wo-container .calendarFilterSelect').val();
+                    //isBatchResources = false;
+                }
+                */
+
                 console.log('new request');
-                sforce.apex.execute(apexCalendarController, 'retrieveRecords', { objType: 'Resource', filters: filters }, processResourceResponse);
+                sforce.apex.execute(apexCalendarController, 'retrieveRecords', { objType: 'Resource', filters: filters, workOrderType: workOrderType }, processResourceResponse);
                 callback([]);
             }
             else if ($('#calendar').fullCalendar('getView').name == 'timelineDay') {
@@ -543,6 +743,7 @@
                 id: record.Id,
                 name: record.Name,
                 resourceId: record.Id,
+                resourceName: record.Name,
                 isActive: record.Active__c,
                 type: record.Resource_Type__c,
                 storeId: record.Retail_Location__c,
@@ -577,7 +778,7 @@
             var resourceUserIdsFilter = ' IN (\'' + resourceUserIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
             var altFilters = timeWindowFilter + ' AND OwnerId' + resourceUserIdsFilter;
             var filters = timeWindowFilter.replace(new RegExp('DateTime', 'g'), 'DateTime__c') + ' AND Resource__c' + resourceIdsFilter;
-            sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'allEvents', filters: filters, altFilters: altFilters, resourceUserIdToIdMapString: JSON.stringify(resourceUserIdToIdMap) }, processEventsResponse);
+            sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'allEvents', filters: filters, altFilters: altFilters, resourceUserIdToIdMapString: JSON.stringify(resourceUserIdToIdMap), storeId: $('#storeSelect').val() }, processEventsResponse);
         }
         
         function fetchWorkOrderEvents(start, end, timezone, callback) {
@@ -598,21 +799,49 @@
 
             eventListToRender = getBusinessHours();
             
+            /*
+            end = new Date(end.add(7, 'days'));
+            start = new Date(start.add(-7, 'days'));
+            */
+            
             end = new Date(end.add(2, 'days'));
             start = new Date(start.add(-2, 'days'));
 
-            var timeWindowFilter = 'Appointment_Date__c <= ' + end.format('Y-m-d') + ' AND Appointment_Date__c >= ' + start.format('Y-m-d');
+            //var timeWindowFilter = 'Appointment_Date__c <= ' + end.format('Y-m-d') + ' AND Appointment_Date__c >= ' + start.format('Y-m-d');
 
+            /*
             var calendarFilterMap = {
                 'Tech Measure': 'Tech Measure',
                 'Install Crew': 'Install',
                 'Field Service': 'Service'
             }
-            var typeFilter = $('#calendarFilterSelect').val() == 'all' ? '' : ' AND Work_Order_Type__c = \'' + calendarFilterMap[$('#calendarFilterSelect').val()] + '\'';
-            var storeIdFilter = storeFound ? ' AND Account__r.Store_Location__r.Active_Store_Configuration__c = \'' + $('#storeSelect').val() + '\'' : '';
+            var typeFilter = $('.calendarFilterSelect').val() == '' ? '' : ' AND Work_Order_Type__c = \'' + calendarFilterMap[$('.calendarFilterSelect').val()] + '\'';
+            */
+
+
+            var workOrderType = $('#calendarFilter .calendarFilterSelect').val();
+            /*
+            if (isBatchResources) {
+                workOrderType = $('.batch-assign-wo-container .calendarFilterSelect').val();
+                isBatchResources = false;
+            }
+            */
+
+
+
+            //var typeFilter = $('#calendarFilter .calendarFilterSelect').val() == '' ? '' : ' AND Work_Order_Type__c = \'' + workOrderType + '\'';
+            var typeFilter = workOrderType == '' ? '' : ' AND RbA_Work_Order__r.Work_Order_Type__c = \'' + workOrderType + '\'';
+            //var storeIdFilter = storeFound ? ' AND Account__r.Store_Location__r.Active_Store_Configuration__c = \'' + $('#storeSelect').val() + '\'' : '';
+            var storeIdFilter = storeFound ? ' AND RbA_Work_Order__r.Account__r.Store_Location__r.Active_Store_Configuration__c = \'' + $('#storeSelect').val() + '\'' : '';
             
-            var filters = timeWindowFilter + ' AND Appointment_Start_Time__c != NULL AND Appointment_End_Time__c != NULL' + typeFilter + storeIdFilter;
-            sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'WorkOrder', filters: filters, resourceUserIdToIdMapString: JSON.stringify({}) }, processEventsResponse);
+            var timeWindowFilter = 'StartDateTime__c <= ' + end.toISOString() + ' AND EndDateTime__c >= ' + start.toISOString();
+            //var resourceIdsFilter = ' IN (\'' + resourceIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            //var resourceUserIdsFilter = ' IN (\'' + resourceUserIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
+            //var altFilters = timeWindowFilter + ' AND OwnerId' + resourceUserIdsFilter;
+            var filters = timeWindowFilter + typeFilter + storeIdFilter;
+            
+            //var filters = timeWindowFilter + ' AND Appointment_Start_Time__c != NULL AND Appointment_End_Time__c != NULL' + typeFilter + storeIdFilter;
+            sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'WorkOrder', filters: filters, resourceUserIdToIdMapString: JSON.stringify({}), storeId: $('#storeSelect').val() }, processEventsResponse);
         }
 
         function processEventsSuccess(response) {
@@ -620,6 +849,7 @@
             console.log(response);
             
             if (response.success) {
+                var calendarView = $('#calendar').fullCalendar('getView').name;
                 for (var i = 0, len = response.eventList.length; i < len; i++) {
                     var record = response.eventList[i];
 
@@ -627,19 +857,28 @@
                         id: record.workOrderId,
                         resourceId: record.resourceId,
                         title: record.title,
-                        start: record.startDateTimeOffset,
-                        end: record.endDateTimeOffset,
+                        start: calendarView == 'timelineDay' && record.estimatedStartDateTimeOffset != undefined && record.estimatedStartDateTimeOffset != null ? record.estimatedStartDateTimeOffset : record.startDateTimeOffset,
+                        end: calendarView == 'timelineDay' && record.estimatedEndDateTimeOffset != undefined && record.estimatedEndDateTimeOffset != null ? record.estimatedEndDateTimeOffset : record.endDateTimeOffset,
                         className: record.className,
                         url: record.url,
                         contactName: record.contactName,
                         eventType: record.eventType,
-                        missingResource: record.missingResource
+                        missingResource: record.missingResource,
+                        resourceNamesText: record.resourceNamesText,
+                        city: record.city
                     });
                 }
             }
 
-            $('#calendar').fullCalendar('refetchEvents');
-            $('#loaderModal').hide();
+            if (response.showEvents) {
+                $('#calendar').fullCalendar('refetchEvents');
+                $('#loaderModal').hide();
+            }
+            else {
+                sforce.apex.execute(apexCalendarController, 'retrieveHolidays', { storeId: $('#storeSelect').val() }, processEventsResponse);
+            }
+
+            
         }
         
         function correctForTimezoneOffset(dt) {
@@ -662,12 +901,12 @@
         }
         
         function openCalendarLegend() {
-            $( "#calendarLegendDrop" ).toggle();
+            $('#calendarLegendDrop').toggle();
         }
         
     </script>
     
-    <div class="pad-0-10">
+    <div class="pad-15-10">
         <!--<div id="calendarLegend">-->
         <!--    <button id="calendarLegendTitle" onclick="openCalendarLegend();" class="ma-button ma-button--white dropdown-right">Legend<div class="dropdown-triangle-legend"></div></button>-->
         <!--    <div id="calendarLegendDrop" style="display:none;">-->
@@ -685,8 +924,8 @@
         <!--        </div>-->
         <!--    </div>-->
         <!--</div>-->
-        <div class="hideIndividual batch-assign-btn-container" id="optimize">
-            <button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showOptyModal();">Batch Assign</button>
+        <div class="hideIndividual batch-assign-btn-container batchHide" id="optimize">
+            <button class="ma-button ma-button--yellow" onclick="MAschedRoutes.showOptyModal({mainPage: true});">Batch Assign</button>
         </div>
 
         <div id="storeSelectDiv" class="ma-form-control-wrap">
@@ -697,26 +936,38 @@
             </div>
         </div>
         
-        <div id="calendarFilter" class="ma-form-control-wrap">
+        <div id="calendarFilter" class="ma-form-control-wrap batchHide">
             <label class="ma-input-label">Work Order Type:</label>
             <div class="ma-form-control icon-right">
-            <div class="dropdown-triangle"></div>
-            <select id="calendarFilterSelect" onchange="filterCalendar();" class="ma-input">
-                <option value="all">Show All</option>
-                <option value="Tech Measure">Tech Measure</option>
-                <option value="Install Crew">Install Crew</option>
-                <option value="Field Service">Field Service</option>
-            </select>
+                <div class="dropdown-triangle"></div>
+                <!--
+                <select id="calendarFilterSelect" onchange="filterCalendar();" class="ma-input">
+                    <option value="all">Show All</option>
+                    <option value="Tech Measure">Tech Measure</option>
+                    <option value="Install Crew">Install Crew</option>
+                    <option value="Field Service">Field Service</option>
+                </select>
+                -->
+                <apex:form >
+                    <apex:inputField value="{!tempWo.Work_Order_Type__c}" onchange="filterCalendar();" styleClass="ma-input calendarFilterSelect" />
+                </apex:form>
             </div>
+        </div>
+
+        <div id="batchConfirm" class="batch-confirm-btn-container batchShow" >
+            <button class ="ma-button ma-button--white" onclick ="MAschedRoutes.processBatchResults({accept: false})">Cancel Batch</button>
+            <button class ="ma-button ma-button--green" onclick ="MAschedRoutes.processBatchResults({accept: true})">Confirm Batch</button>
         </div>
 
         <div id="eventOptionsModal">
             <!-- <span class="ma-modal-close" onclick="closeListViewOptionsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span> -->
             <input type="hidden" id="eventOptionsRecordId" />
-            <div onclick="viewEditWorkOrder(true); closeEventOptionsModal();">View / Edit</div>
-            <div onclick="showAvailabilityModal(true); closeEventOptionsModal();">Reschedule</div>
-            <div onclick="showAssignResourceModal(true); closeEventOptionsModal();">Reassign Resources</div>
-            <div onclick="showCancellationModal(true); closeEventOptionsModal();">Cancel Work Order</div>
+            <input type="hidden" id="eventOptionsDate" />
+            <div onclick="viewEditWorkOrder(true); closeEventOptionsModal();" class="batchHide">View / Edit</div>
+            <div onclick="showAvailabilityModal(false, true); closeEventOptionsModal();" class="batchHide">Reschedule</div>
+            <div onclick="showAssignResourceModal(false, true, false, isBatchResources); closeEventOptionsModal();" >Modify Resources for Entire Work Order</div>
+            <div onclick="showAssignResourceModal(false, true, true, isBatchResources); closeEventOptionsModal();" >Modify Resources for this Day Only</div>
+            <div onclick="showCancellationModal(true); closeEventOptionsModal();" class="batchHide">Cancel Work Order</div>
         </div>
         
         <div id="calendar"></div>

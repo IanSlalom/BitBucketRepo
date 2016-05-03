@@ -1,4 +1,4 @@
-<apex:component >
+<apex:component controller="MA_SchedulerController">
 
 	<script>
 	    $ = jQuery.noConflict();
@@ -14,7 +14,8 @@
 	    function showCancellationModal() {
 			var workOrderId = $('#eventOptionsRecordId').val();
 
-			$('#cancellationReason').val('');
+			//$('#cancellationReason').val('');
+			$('.cancellationReason').val('');
 			$('#workOrderCancellationId').val(workOrderId);
 
 			$('#cancellationModal').fadeIn('fast');
@@ -46,7 +47,8 @@
 		    $('#loaderModal').show();
 
 		    var workOrderId = $('#workOrderCancellationId').val();
-		    var cancellationReason = $('#cancellationReason').val();
+		    //var cancellationReason = $('#cancellationReason').val();
+		    var cancellationReason = $('.cancellationReason').val();
 
 		    sforce.apex.execute(apexSchedulingController, 'cancelWorkOrder', {workOrderId: workOrderId, cancellationReason: cancellationReason}, processCancellationResponse);
 		}
@@ -83,18 +85,24 @@
 	            <div id="cancellationBody" class="ma-modal-body">
 	                <div class="ma-modal-padding">
 	                	<input type="hidden" id="workOrderCancellationId" />
-	                	<div>Are you sure you want to cancel <span id="workOrderCancellationName" /></div>
-	                	<div>Reason for cancelling</div>
-	                	<div>
-	                		<input id="cancellationReason" />
-	            		</div>
+	                	<h3>Are you sure you want to cancel <span id="workOrderCancellationName" />?</h3>
+	                	<div class="ma-form-control-wrap">
+	                	    <label class="ma-input-label">Reason for cancelling</label>
+	                	    <div class="ma-form-control icon-right">
+	                	        <div class="dropdown-triangle"></div>
+	                		    <!-- <input id="cancellationReason" /> -->
+	                		    <apex:form >
+	                			    <apex:inputField value="{!tempWo.Cancel_Reason__c}" styleClass="ma-input cancellationReason" />
+	                		    </apex:form>
+	            		    </div>
+	                    </div>
 	                </div>
 	            </div><!--ma-modal-body-->
 
 	            <div class="ma-modal-footer">
 	                <div id="cancellationButtons" class="ma-modal-padding clearfix">
-	                    <button class="ma-button ma-button--white float-left" onclick="closeCancellationModal();">No, don't cancel</button>
-	                    <button class="ma-button ma-button--blue float-right" onclick="saveCancellation();">Yes, cancel</button>
+	                    <button class="ma-button ma-button--white" onclick="closeCancellationModal();">No, don't cancel</button>
+	                    <button class="ma-button ma-button--red" onclick="saveCancellation();">Yes, cancel</button>
 	                </div>
 	            </div><!--ma-modal-footer-->
 	        </div><!--ma-modal-window-->

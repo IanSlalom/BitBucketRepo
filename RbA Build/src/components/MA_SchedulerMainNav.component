@@ -28,7 +28,11 @@
         $('.main-nav-container').removeClass('ma-left-in');
     }
     
-    function changeText() {
+    function changeTextResource() {
+        document.getElementById('topbar-header-text').innerHTML = 'Resource View';
+    }
+    
+    function changeTextSettings() {
         document.getElementById('topbar-header-text').innerHTML = 'Settings';
     }
     
@@ -47,7 +51,7 @@
   </script>
   
   <div class="topbar-container">
-      <span id="rowsIcon" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" /></span>
+      <span id="rowsIcon" class="batchHide" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" class="batchHide" /></span>
       <!--<span id="rowsIcon" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" /></span>-->
       <h2><span id="topbar-header-text">Work Order Planner</span></h2>
         <!--<svg aria-hidden="true" class="slds-icon icon-utility-rows slds-icon-text-default"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}"></use></svg>-->
@@ -63,8 +67,8 @@
       <div class="main-nav-links">
         <ul>
           <a onclick="closeMainNavModal(); goToWorkOrderView();"  href="#"><li>Work Order Planner</li></a>
-          <a onclick="closeMainNavModal(); goToResourceView();" href="#"><li>Resource View</li></a>
-          <a onclick="closeMainNavModal(); openSettingsModal(); changeText();" href="#"><li>Settings</li></a>
+          <a onclick="closeMainNavModal(); goToResourceView(); changeTextResource();" href="#"><li>Resource View</li></a>
+          <a onclick="closeMainNavModal(); openSettingsModal(); changeTextSettings();" href="#"><li>Settings</li></a>
         </ul>
       </div>
   </div>

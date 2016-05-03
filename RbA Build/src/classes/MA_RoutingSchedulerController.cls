@@ -1,17 +1,24 @@
 global with sharing class MA_RoutingSchedulerController {
 
-    private static final string ESRIClientID = 'YRGMYKIjOjSpQnUz';
-    private static final string ESRIClientSecret = 'ff4a4b1ecc9b43c591ac05ef98df135e';
+    //private static final string ESRIClientID = 'zoqjF8KMFWmkuXPF';
+    //private static final string ESRIClientSecret = '8661390e1d4643039882f35836ccceb4';
+    private static final string ESRIClientID = 'GQMPeLvcxxRRDozD';
+    private static final string ESRIClientSecret = '482931042ffb4018a88007a05e75acc0';
     private static final string ArcGISauth = 'https://www.arcgis.com/sharing/rest/oauth2/token/';
     private static Set<Id> rId; // = new Set<Object>();
     private static Map<String, Object> configs = new Map<String,Object>();
-    private static Map<Id, Object> evConfigs = new Map<Id,Object>(); 
+    private static Map<Id, Object> evConfigs = new Map<Id,Object>();
     //private static Map<String, String> storeSettings;
     //private static Map<String, List<Object>> objLists; //objLists = new Map<String, List<Object>>();
     //private static Map<String, Map<String, Object>> master  = new  Map<String, Map<String, Object>>();
     private static Map<String, Object> master  = new  Map<String, Object>();
+    public RbA_Work_Order__c tempWo {get;set;}
 
-    public MA_RoutingSchedulerController(){}
+
+    public MA_RoutingSchedulerController(){
+        Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
+        tempWo = new RbA_Work_Order__c(RecordTypeId = visitRecordTypeId);
+    }
     
      webService static String getESRIToken()
      {
@@ -26,31 +33,6 @@ global with sharing class MA_RoutingSchedulerController {
         try{
             res = h.send(req);
             System.debug(res.getBody());
-            //JSONParser parser = JSON.createParser(res.getBody());
-            /*while (parser.nextToken() != null)
-            {
-                if ((parser.getCurrentToken() == JSONToken.FIELD_NAME)
-                    && (parser.getText() == 'access_token'))
-                {
-                    parser.nextToken();
-                    returnRes = parser.getText();
-                    break;
-                }
-                else if((parser.getCurrentToken() == JSONToken.FIELD_NAME)
-                    && (parser.getText() == 'error'))
-                {
-                    //System.debug(res.getBody());
-                    returnRes = res.getBody();
-                    break;
-                }
-                else
-                {
-                    System.debug('ERROR+++ '+ res.getStatus());
-                    System.debug('ERROR BODY+++ '+ res.getBody());
-                    System.debug('STATUS CODE+++ '+ res.getStatusCode());
-                    returnRes = error;
-                }
-            }*/
         }
         catch(System.CalloutException e){
             System.debug('Callout error: '+ e);
@@ -60,7 +42,7 @@ global with sharing class MA_RoutingSchedulerController {
         return res.getBody();
     }
     
-    webService static String getRecords(String dt, String storeId)
+    webService static String getRecords(String dt, String storeId, String workOrderType)
     {
         List<Object> eventList = new List<Object>();
         List<Object> MAeventList = new List<Object>();
@@ -69,24 +51,26 @@ global with sharing class MA_RoutingSchedulerController {
         Map<String, List<Object>> objLists = new Map<String, List<Object>>();
         try
         {
-            if(String.isNotBlank(dt) && String.isNotBlank(storeId))
+            if(String.isNotBlank(dt) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType))
             {
                 Date d = Date.valueOf(dt);
                 DateTime dateT = (DateTime)d;
                 Long milliTime = dateT.getTime();
                 master.put('defaultdate', milliTime);
                 //Set up Depots first for the day
-                depotSettings(dt, storeId);
+                depotSettings(dt, storeId, workOrderType);
                 //Set up Resources and Routes with skills second for the day
-                setupResource(dt, storeId);
+                setupResource(dt, storeId, workOrderType);
                 //Set up breaks and WOs that have been assigned to Resources/Routes for the day
-                setupEvents(dt, storeId);
+                setupEvents(dt, storeId, workOrderType);
                 //Set up breaks and WOs that have been assigned to Resources/Routes for the day
-                setupMAEvents(dt, storeId);
+                setupMAEvents(dt, storeId, workOrderType);
                 //Set up rest of work orders that are not assigned for the day
-                setupWO(dt, storeId);
+                setupWO(dt, storeId, workOrderType);
                 //Success is true
                 master.put('success', true);
+
+                system.debug(master);
                 
             }
             else
@@ -117,8 +101,101 @@ global with sharing class MA_RoutingSchedulerController {
         }
         return JSON.serialize(master);
     }
+
+    //webService static String processConfirmBatch(List<MA_Scheduler_Event__c> maEvList, List<Event> sfEvList, String dt){
+    webService static String processConfirmBatch(List<MA_Scheduler_Event__c> maEvList, String sfEvListString, String storeId, String offsetPageMinutes, String dt){
+        System.savepoint sp = Database.setSavepoint();
+        Map<String, Object> response  = new  Map<String, Object>();
+
+        System.debug(maEvList);
+        System.debug(sfEvListString);
+
+         List<Event> sfEvList;
+        if (String.isNotBlank(sfEvListString)) {
+            sfEvList = (List<Event>)JSON.deserialize(sfEvListString, List<Event>.class);
+        }
+        System.debug(sfEvList);
+
+        if(maEvList.isEmpty() && String.isNotBlank(dt))
+        {
+
+            //qeury the MABAtchable record by dt date to create events
+            response.put('ListEmpty', true);
+
+        }
+        else
+        {
+            try
+            {
+
+                String storeTimezone = MA_SchedulerUtilities.retrieveStoreTimezone(storeId);
+
+                for (MA_Scheduler_Event__c maEvent : maEvList) {
+                    maEvent.Estimated_Start_Date_Time__c = MA_SchedulerUtilities.convertGmtToTimezone(maEvent.Estimated_Start_Date_Time__c, storeTimezone, offsetPageMinutes);
+                    maEvent.Estimated_End_Date_Time__c = MA_SchedulerUtilities.convertGmtToTimezone(maEvent.Estimated_End_Date_Time__c, storeTimezone, offsetPageMinutes);
+                }
+
+                for (Event sfEvent : sfEvList) {
+                    sfEvent.StartDateTime = MA_SchedulerUtilities.convertGmtToTimezone(sfEvent.StartDateTime, storeTimezone, offsetPageMinutes);
+                    sfEvent.EndDateTime = MA_SchedulerUtilities.convertGmtToTimezone(sfEvent.EndDateTime, storeTimezone, offsetPageMinutes);
+                }
+
+
+
+                List<Object> errors = new List<Object>();
+                List<Object> success = new List<Object>();
+                Database.UpsertResult[] upsertEx;
+                upsertEx = database.upsert(maEvList, false);
+                for (Database.UpsertResult sr: upsertEx){
+                    if(sr.isSuccess()){
+                        system.debug('Update Succeeded. MAEvent Id: '+ sr.getId());
+                    }
+                    else{
+                        Database.rollback(sp);
+                        for(database.Error err: sr.getErrors()){
+                            system.debug('The following error has occured. ');
+                            system.debug(err.getStatusCode() + ': ' + err.getMessage());
+                            system.debug('Error fields: ' + err.getFields());
+                            
+                        }
+                    }
+                }
+                Database.SaveResult[] insertEx;
+                insertEx = database.insert(sfEvList, false);
+                for (Database.SaveResult sr: insertEx){
+                    if(sr.isSuccess()){
+                        system.debug('Insert Succeeded. SF Event ID: '+ sr.getId());
+                        success.add(sr);
+                    }
+                    else{
+                        for(database.Error err: sr.getErrors()){
+                            //if (err.getStatusCode() != 'OP_WITH_INVALID_USER_TYPE_EXCEPTION') {
+                            if (err.getMessage() != 'Operation not valid for this user type') {
+                                Database.rollback(sp);
+                            }
+                            system.debug('The following error has occured. ');
+                            system.debug(err.getStatusCode() + ': ' + err.getMessage());
+                            system.debug('Error fields: ' + err.getFields());
+                            errors.add(sr);
+                        }
+                    }
+                }
+                response.put('success', true);
+                //response.put('response', success);
+                //response.put('error', errors);
+            }
+            catch(DMLException ex){
+                Database.rollback(sp);
+                system.debug('Error+++ '+ ex);
+                system.debug(maEvList);
+                system.debug(sfEvList);
+            }
+        }
+        
+        return JSON.serialize(response);
+    }
     
-    private static void setupResource(String dt, String storeId)
+    private static void setupResource(String dt, String storeId, String workOrderType)
     {
         //List<Object> routes = new List<Object>();
         //List<sObject> resourceList = new List<sObject>();
@@ -127,7 +204,7 @@ global with sharing class MA_RoutingSchedulerController {
         rId = new Set<Id>();
         try
         {
-            for(List<SObject> l : [SELECT Id,Name, Active__c, Available_Time_Window__c, Crew_Size__c, RbA_User__c, Resource_Type__c, Retail_Location__c,(SELECT Id, Name, RbA_Skill__c, Type__c FROM Resource_Skills__r) FROM Resource__c WHERE  Retail_Location__c =: storeId AND Active__c =: true AND Resource_Type__c =: 'Tech Measure' Limit 100])
+            for(List<SObject> l : [SELECT Id,Name, Active__c, Available_Time_Window__c, Crew_Size__c, RbA_User__c, Resource_Type__c, Retail_Location__c,(SELECT Id, Name, RbA_Skill__c, Type__c FROM Resource_Skills__r) FROM Resource__c WHERE  Retail_Location__c =: storeId AND Active__c =: true AND Resource_Type__c =: workOrderType Limit 25])
             {
                 for(SObject res : l)
                 {
@@ -137,30 +214,35 @@ global with sharing class MA_RoutingSchedulerController {
                     //rId = new Set<Id>();
                     rId.add((ID)res.get('RbA_User__c'));
                     //attributes
-                    attributes.put('Name', res.get('Id'));
+                    //attributes.put('Name', res.get('Id'));
+                    attributes.put('Name', '{"resId":"'+ res.get('Id')+'",'+'"userId":"'+res.get('RbA_User__c')+'"}');
+
                     if(configs.containsKey((String)res.get('Retail_Location__c')))
                     {
-                        attributes.put('StartDepotName', res.get('Retail_Location__c'));
-                        attributes.put('EndDepotName', res.get('Retail_Location__c'));
-                        //attributes.put('StartDepotServiceTime');
-                        //attributes.put('EndDepotServiceTime');
+                        attributes.put('StartDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}');
+                        attributes.put('EndDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}');
+                         attributes.put('StartDepotServiceTime', 15);
+                        attributes.put('EndDepotServiceTime', 15);
                     }
                     else
                     {
-                        attributes.put('StartDepotName', res.get('Retail_Location__c'));
-                        attributes.put('EndDepotName', res.get('Retail_Location__c')); 
-                        attributes.put('StartDepotServiceTime', 15);
-                        attributes.put('EndDepotServiceTime', 15);
+                        attributes.put('StartDepotName','{"storeID":"'+res.get('Retail_Location__c')+'"}');
+                        attributes.put('EndDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}'); 
+                        attributes.put('StartDepotServiceTime', 10);
+                        attributes.put('EndDepotServiceTime', 10);
                     }
+
                     if(configs.containsKey((String)res.get('Id')))
                     {
                         //Deseralize resource configs settings
                         
 
-                        MA_SchedulerSettings ma = (MA_SchedulerSettings)JSON.deserialize((String)configs.get((String)res.get('Id')) , MA_SchedulerSettings.class);
-                        system.debug(ma);
-                        system.debug(ma.storeHours);
-                        system.debug(ma.timezone);
+                        //JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
+                        //MA_SchedulerSettings ma = new MA_SchedulerSettings(parser);                       
+                        //system.debug(ma);
+                        //system.debug(ma.storeHours);
+                        //system.debug(ma.timezone);
+                        //system.debug(ma.resourceHours);
 
                         //ma.MA_SchedulerSettings(JSONParser((String)configs.get((String)res.get('Id'))));
                         //ma.MA_SchedulerSettings(JSONParser parser) = (Map<String, Object>)JSON.deserialize((String)configs.get((String)res.get('Id')) , Map<String, Object>.class);
@@ -211,16 +293,22 @@ global with sharing class MA_RoutingSchedulerController {
                         for(Resource_Skill__c skill : (List<Resource_Skill__c>)res.getSObjects('Resource_Skills__r'))
                         {
                             //skills += skill.RbA_Skill__c + '';
+                            system.debug(skill.RbA_Skill__c);
                             skillIds.add(skill.RbA_Skill__c);
 
                         }
-                        skillIds.add(res.get('Resource_Type__c'));
+                        skillIds.add(((String)res.get('Resource_Type__c')).deleteWhitespace());
                         skills = String.join(skillIds, ' ');
                         //skills = skills.replaceAll('(\\s+)', ' ');
                         attributes.put('SpecialtyNames', skills);
                     }
                     else
                     {
+                        List<Object> skillIds = new List<Object>();
+                        skillIds.add(((String)res.get('Resource_Type__c')).deleteWhitespace());
+                        skills = String.join(skillIds, ' ');
+                        attributes.put('SpecialtyNames', skills);
+
                         if(master.containsKey('error'))
                         {
                             Map<String, Object> tempError = (Map<String, Object>)master.get('error');
@@ -265,13 +353,13 @@ global with sharing class MA_RoutingSchedulerController {
         
     }
     
-    private static void setupEvents(String dt, String storeId)
+    private static void setupEvents(String dt, String storeId, String workOrderType)
     {
         List<Object> features = new List<Object>();
         Map<String, List<Object>> objLists = new Map<String, List<Object>>();
         try
         {
-            for(List<SObject> l : [SELECT Id, OwnerId, Type, StartDateTime, EndDateTime, ActivityDate, DurationInMinutes, WhoId, WhatId, ActivityDateTime FROM Event WHERE OwnerId =: rId AND ActivityDate =: Date.valueOf(dt)])
+            for(List<SObject> l : [SELECT Id, OwnerId, Type, MA_Scheduler_Event__c, StartDateTime, EndDateTime, ActivityDate, DurationInMinutes, WhoId, WhatId, ActivityDateTime FROM Event WHERE OwnerId =: rId AND ActivityDate =: Date.valueOf(dt) AND MA_Scheduler_Event__c = null])
             {
                 for(SObject ev : l)
                 {
@@ -280,9 +368,12 @@ global with sharing class MA_RoutingSchedulerController {
 
                     if(configs.containsKey((String)ev.get('OwnerId')))
                     {
-                        if(ev.get('Type') != 'Tech Measure')
+                        if(ev.get('MA_Scheduler_Event__c') == null)
                         {
-                            attributes.put('RouteName', ((Map<String, Object>)configs.get('OwnerId')).get('Name'));
+                            system.debug(configs);
+                            system.debug((Map<String, Object>)configs.get((String)ev.get('OwnerId')));
+                            attributes.put('RouteName', ((Map<String, Object>)configs.get((String)ev.get('OwnerId'))).get('Name'));
+                            //attributes.put('RouteName', '{"resId":"'+ res.get('Id')+'",'+'"userId":"'+res.get('RbA_User__c')+'"}');
                             //attributes.put('Precedence',);
                             attributes.put('ServiceTime', ev.get('DurationInMinutes'));
                             
@@ -328,13 +419,13 @@ global with sharing class MA_RoutingSchedulerController {
             master.put('error', objLists);
         }
     }
-    private static void setupMAEvents(String dt, String storeId)
+    private static void setupMAEvents(String dt, String storeId, String workOrderType)
     {
         //List<Object> MAevents = new List<Object>();
         List<Object> features = new List<Object>();
         Map<String, List<Object>> objLists = new Map<String, List<Object>>();
         try{
-            for(List<SObject> l : [SELECT Id, Name, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.Active__c, Resource__r.Available_Time_Window__c, Resource__r.Crew_Size__c, Resource__r.RbA_User__c, Resource__r.Resource_Type__c, Resource__r.Retail_Location__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__r.Appointment_Date__c =: Date.valueOf(dt)])
+            for(List<SObject> l : [SELECT Id, Name, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.Active__c, Resource__r.Available_Time_Window__c, Resource__r.Crew_Size__c, Resource__r.RbA_User__c, Resource__r.Resource_Type__c, Resource__r.Retail_Location__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__r.Appointment_Date__c =: Date.valueOf(dt) AND RbA_Work_Order__r.Work_Order_Type__c =: workOrderType])
             {
                 for(SObject MAev : l)
                 {
@@ -355,7 +446,7 @@ global with sharing class MA_RoutingSchedulerController {
             master.put('error', objLists);
         }
     }
-    private static void setupWO(String dt, String storeId)
+    private static void setupWO(String dt, String storeId, String workOrderType)
     {
         List<Object> features = new List<Object>();
         List<Object> featuresGeoCode = new List<Object>();
@@ -363,9 +454,9 @@ global with sharing class MA_RoutingSchedulerController {
         Map<String, List<Object>> objListsGeoCode = new Map<String, List<Object>>();
         try
         {
-            for(List<SObject> l : [SELECT Id, Name, Appointment_Date__c, Appointment_Duration__c, Appointment_Start_Time__c, Appointment_End_Time__c, Alternate_End_Time__c, Alternate_Start_Time__c, Zip__c, Recommended_Crew_Size__c, Street__c, State__c, City__c,Country__c, Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c, Account__r.ShippingLatitude, Account__r.ShippingLongitude,(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)FROM RbA_Work_Order__c WHERE Appointment_Date__c =: Date.valueOf(dt) AND Account__r.Store_Location__r.Active_Store_Configuration__c =: storeId])
+            for(List<SObject> l : [SELECT Id, Name, Appointment_Date__c, Appointment_Duration__c, Appointment_Start_Time__c, Appointment_End_Time__c, Alternate_End_Time__c, Alternate_Start_Time__c, Zip__c, Recommended_Crew_Size__c, Street__c, State__c, City__c,Country__c, Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c, Account__r.ShippingLatitude, Account__r.ShippingLongitude,(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)FROM RbA_Work_Order__c WHERE Appointment_Date__c =: Date.valueOf(dt) AND Account__r.Store_Location__r.Active_Store_Configuration__c =: storeId AND Work_Order_Type__c =: workOrderType])
             {
-                //system.debug(l);
+                system.debug(l);
                 for(SObject wo : l)
                 {
                     system.debug(wo);
@@ -419,38 +510,47 @@ global with sharing class MA_RoutingSchedulerController {
                     //Attributes stuff
                     if(configs.containsKey(rb.Id))
                     {
-                        attributes.put('Name', rb.Id);
+                        MA_Scheduler_Event__c maEvent = (MA_Scheduler_Event__c)configs.get(rb.Id);
+
+                        attributes.put('Name', '{"woId":"'+ rb.Id+'",'+'"MAevId":"'+maEvent.Id+ '",' +'"woName":"'+rb.Name+ '",' +'"userId":"'+ maEvent.Resource__r.RbA_User__c+'"}');
+                        //attributes.put('Name', rb.Id);
                         attributes.put('WOName', rb.Name);
-                        attributes.put('ServiceTime', rb.Appointment_Duration__c);
-                        attributes.put('TimeWindowStart1', ((Map<String, Object>)configs.get(rb.Id)).get('StartDateTime__c'));
-                        attributes.put('TimeWindowEnd1', ((Map<String, Object>)configs.get(rb.Id)).get('EndDateTime__c'));
+                        attributes.put('ServiceTime', rb.Appointment_Duration__c * 60);
+                        attributes.put('TimeWindowStart1', maEvent.StartDateTime__c);
+                        attributes.put('TimeWindowEnd1', maEvent.EndDateTime__c);
+                        //attributes.put('TimeWindowEnd1', ((Map<String, Object>)configs.get(rb.Id)).get('StartDateTime__c'));
                         attributes.put('TimeWindowStart2', rb.Alternate_Start_Time__c);
                         attributes.put('TimeWindowEnd2', rb.Alternate_End_Time__c);
-                        //attributes.put('MaxViolationTime1', );
+                        //attributes.put('MaxViolationTime1', 0);
                         //attributes.put('MaxViolationTime2', );
                         //attributes.put('DeliveryQuantities', );
                         //attributes.put('PickupQuantities', );
                         //attributes.put('Revenue', );
+                        String skills;
                         if(rb.Work_Order_Required_Skills__r != null || !rb.Work_Order_Required_Skills__r.isEmpty())
                         {
-                            String skills;
                             List<Object> skillIds = new List<Object>();
                             for(Work_Order_Required_Skill__c woSkills : rb.Work_Order_Required_Skills__r)
                             {
                                 //skills += woSkills.RbA_Skill__c + '';
+                                system.debug(woSkills.RbA_Skill__c);
                                 skillIds.add(woSkills.RbA_Skill__c);
 
                             }
-                            skillIds.add(rb.Work_Order_Type__c);
-                            MA_Scheduler_Event__c evMa = (MA_Scheduler_Event__c)configs.get(rb.Id);
-                            skillIds.add(evMA.Resource__r.Resource_Type__c);
+                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
+
+                            //MA_Scheduler_Event__c evMa = (MA_Scheduler_Event__c)configs.get(rb.Id);
+                            //skillIds.add(maEvent.Resource__r.Resource_Type__c.deleteWhitespace());
                             skills = String.join(skillIds, ' ');
-                            //skills = skills.deleteWhitespace();
-                            //skills = skills.replaceAll('(\\s+)', ' ');
                             attributes.put('SpecialtyNames', skills);
                         }
                         else
                         {
+                            List<Object> skillIds = new List<Object>();
+                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
+                            skills = String.join(skillIds, ' ');
+                            attributes.put('SpecialtyNames', skills);
+
                             if(master.containsKey('error'))
                             {
                                 Map<String, Object> tempError = (Map<String, Object>)master.get('error');
@@ -472,48 +572,58 @@ global with sharing class MA_RoutingSchedulerController {
                             }
                         }
                         
-                        //Need some testing with Assignment Rules // Maybe some configs to the user
-                        //attributes.put('AssignmentRule', wo.get('Id'));
-                        
                         //There may be need to be settings for this as well
                         attributes.put('CurbApproach', 3);
-                        if(((Map<String, Object>)configs.get(rb.Id)).get('Resource__c') != null)
+                        if(maEvent.Resource__c != null)
                         {
-                            attributes.put('RouteName', ((Map<String, Object>)configs.get(rb.Id)).get('Resource__c'));
+                            attributes.put('AssignmentRule', 3);
+                            //attributes.put('RouteName', maEvent.Resource__c);
+                            attributes.put('RouteName', '{"resId":"'+ maEvent.Resource__c+'",'+'"userId":"'+maEvent.Resource__r.RbA_User__c+'"}');
                             //attributes.put('Sequence', '');
                         }
                         else
                         {
+                            attributes.put('AssignmentRule', 3);
                             attributes.put('RouteName', '');
                             attributes.put('Sequence', '');
                         }
                     }
                     else
                     {
-                        attributes.put('Name', rb.Id);
+                        attributes.put('Name', '{"woId":"'+ rb.Id+'",'+'"woName":"'+rb.Name+'"}');
+                        //attributes.put('Name', rb.Id);
                         attributes.put('WOName', rb.Name);
-                        attributes.put('ServiceTime', rb.Appointment_Duration__c);
+                        attributes.put('ServiceTime', rb.Appointment_Duration__c * 60);
                         attributes.put('TimeWindowStart1', rb.Appointment_Start_Time__c);
                         attributes.put('TimeWindowEnd1', rb.Appointment_End_Time__c);
+                        //attributes.put('TimeWindowEnd1', rb.Appointment_Start_Time__c);
                         attributes.put('TimeWindowStart2', rb.Alternate_Start_Time__c);
                         attributes.put('TimeWindowEnd2', rb.Alternate_End_Time__c);
-                        //attributes.put('MaxViolationTime1', );
+                        //attributes.put('MaxViolationTime1', 30);
                         //attributes.put('MaxViolationTime2', );
                         //attributes.put('DeliveryQuantities', );
                         //attributes.put('PickupQuantities', );
                         //attributes.put('Revenue', );
+                        String skills;
                         if(rb.Work_Order_Required_Skills__r != null || !rb.Work_Order_Required_Skills__r.isEmpty())
                         {
-                            String skills;
+                            List<Object> skillIds = new List<Object>();
                             for(Work_Order_Required_Skill__c woSkills : rb.Work_Order_Required_Skills__r)
                             {
-                                skills += woSkills.RbA_Skill__c + '';
+                                system.debug(woSkills.RbA_Skill__c);
+                                skillIds.add(woSkills.RbA_Skill__c);
                             }
-                            skills += rb.Work_Order_Type__c + '';
+                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
+                            skills = String.join(skillIds, ' ');
                             attributes.put('SpecialtyNames', skills);
                         }
                         else
                         {
+                            List<Object> skillIds = new List<Object>();
+                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
+                            skills = String.join(skillIds, ' ');
+                            attributes.put('SpecialtyNames', skills);
+
                             //Error No skills on the WorkOrder
                             if(master.containsKey('error'))
                             {
@@ -537,7 +647,7 @@ global with sharing class MA_RoutingSchedulerController {
                         }
                         
                         //Need some testing with Assignment Rules // Maybe some configs to the user
-                        //attributes.put('AssignmentRule', wo.get('Id'));
+                        attributes.put('AssignmentRule', 3);
                         
                         //There may be need to be settings for this as well
                         attributes.put('CurbApproach', 3);
@@ -552,6 +662,7 @@ global with sharing class MA_RoutingSchedulerController {
                     features.add(obj); 
                 }
             }
+            system.debug(features);
             objLists.put('features', features);
             master.put('orders', objLists);
         }
@@ -567,7 +678,7 @@ global with sharing class MA_RoutingSchedulerController {
             master.put('error', objLists);
         }
     }
-    private static void depotSettings(String dt, String storeId)
+    private static void depotSettings(String dt, String storeId, String workOrderType)
     {
         List<Object> features = new List<Object>();
         List<Object> featuresGeoCode = new List<Object>();
@@ -608,7 +719,7 @@ global with sharing class MA_RoutingSchedulerController {
                             //master.put('geocode', objLists);
                             geometry.put('x', '');
                             geometry.put('y', '');
-                            attributes.put('Name', storeConfig.Id);
+                            attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
                             //System.debug(geoCodeAddress);
 
                         }
@@ -619,14 +730,21 @@ global with sharing class MA_RoutingSchedulerController {
                             //Add to obj
                             //obj.put('geometry', geometry);
                             //Set Depot name as StoreId
-                            attributes.put('Name', storeConfig.Id);
+                            attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
+                            //attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
                         }
-                        MA_SchedulerSettings ma = (MA_SchedulerSettings)JSON.deserialize((String)s.get('Settings__c') , MA_SchedulerSettings.class);
+                          
+                        JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
+                        MA_SchedulerSettings ma = new MA_SchedulerSettings(parser);                       
+                        //MA_SchedulerSettings ma = (MA_SchedulerSettings)JSON.deserialize((String)s.get('Settings__c') , MA_SchedulerSettings.class);
                         system.debug(ma);
                         system.debug(ma.storeHours);
                         system.debug(ma.timezone);
                         system.debug(ma.resourceHours);
-                        Boolean storeFlag = false;
+                        //attributes.put('TimeWindowStart1', parser.getText());
+                        //attributes.put('TimeWindowEnd1', ma.storeHours.Monday);
+                        
+                        /*Boolean storeFlag = false;
                         JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
                         while (!storeFlag && parser.nextToken() != null)
                         {
@@ -683,7 +801,7 @@ global with sharing class MA_RoutingSchedulerController {
                                     }
                                 }
                             }
-                        }
+                        }*/
                         //configs.put((String)s.get('Store_Id__c'), (String)s.get('Settings__c'));
                         configs.put((String)s.get('Store_Id__c'), s);
                         obj.put('attributes', attributes);
