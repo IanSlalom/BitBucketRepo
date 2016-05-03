@@ -61,6 +61,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean receiving {get; set;}   
   public boolean renderVendorSelection{get;set;}
   public boolean electronicOrder{get;set;}
+  public boolean showInventoryWriteOff{get;set;}
+  public boolean relatedOrderClosed{get;set;}
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -361,6 +363,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
     renderVendorSelection = true;
     zeroDollarVendor = false;
     system.debug(orderId);
+    showInventoryWriteOff = false;
+    relatedOrderClosed = false;
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
@@ -408,9 +412,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
       									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
-      									Store_Location__c, RecordTypeId, Status 
+      									Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
       									FROM Order WHERE Id = :orderId]){
 
+      showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
+      relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
 			// Determine if this is a service order
 			servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
 			
@@ -445,6 +451,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';
+
+    System.debug('RELATED ORDER STATUS ' + relatedOrder.Status);
+    if(relatedOrder.Status == 'Job Closed'){
+      status = 'rec';
+    }                                                             
       		
 	  if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -685,10 +696,20 @@ public with sharing class RMS_vendorPurchaseOrderController {
     updateSubTotal();   
     //JETT-712  
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
-      boolean allOrderItemsHaveWholesaleCost;
-      if (zeroDollarVendor) allOrderItemsHaveWholesaleCost = true;
-      else allOrderItemsHaveWholesaleCost = ([Select Unit_Wholesale_Cost__c from OrderItem where Purchase_Order__c =: po.Id and Unit_Wholesale_Cost__c = null]).isEmpty();
-
+      boolean allOrderItemsHaveWholesaleCost = false;
+      if (zeroDollarVendor) {
+      	 allOrderItemsHaveWholesaleCost = true;
+      }
+      else {
+		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+        	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+          		allOrderItemsHaveWholesaleCost = false;
+          		break;
+        	}
+        	else 
+        		allOrderItemsHaveWholesaleCost = true;
+      	}
+      }
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
         po.Confirmed_Timestamp__c = System.Now();
@@ -901,7 +922,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	for (OrderItem oi : itemsToReceive) {
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
-      		productAsset = new Asset(
+      			productAsset = new Asset(
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
@@ -912,7 +933,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Sold_Order__c    = oi.OrderId,
                       Store_Location__c = oi.Order.Store_Location__c,
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
-                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
                       Vendor__c 		=  selectedVendor,
                       Original_Order_Product__c = oi.Id
                     );
@@ -921,10 +941,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
       			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
       		}
-// TODO: Add this after Anthony updates the financial trigger to handle record types
-//      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
-//										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
-//														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
+      		// Sets the product Asset to the correct record type based on the type of PO we are on
+      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
+										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
+														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
       } 
       else if (oi.Installed_Product_Asset__c != null){
@@ -937,10 +957,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
-    		system.debug('*****oi.Unit_Wholesale_Cost__c=' +oi.Unit_Wholesale_Cost__c);
-    		system.debug('*****!zeroDollarVendor=' +!zeroDollarVendor);
-
-			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
+			if(oi.Unit_Wholesale_Cost__c == null) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null;
 			}

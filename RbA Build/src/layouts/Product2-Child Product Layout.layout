@@ -43,6 +43,14 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Service_PO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Product_PO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Inventoried_Item__c</field>
             </layoutItems>
             <layoutItems>
@@ -131,6 +139,10 @@
     </layoutSections>
     <relatedLists>
         <relatedList>RelatedStandardPriceList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Vendor_Product__c.Product__c</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedPricebookEntryList</relatedList>

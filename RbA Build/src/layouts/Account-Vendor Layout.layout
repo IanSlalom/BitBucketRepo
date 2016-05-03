@@ -123,6 +123,11 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Store__c</fields>
+        <relatedList>Store_Vendor__c.Vendor__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
         <fields>Product__c</fields>
         <fields>UPDATEDBY_USER</fields>
         <fields>LAST_UPDATE</fields>

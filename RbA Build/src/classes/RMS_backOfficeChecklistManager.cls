@@ -68,10 +68,13 @@ public with sharing class RMS_backOfficeChecklistManager {
 		    	
 		    	//IF THE STORE CONFIG IS NOT SET SKIP REST OF LOGIC
 		    	if(storeConfig.id != null){
+		    		if(storeConfigIdToBackOfficeChecklistMap.get(storeConfig.id) == null){
+			    		ord.addError('A Back Office Checklist Configuration needs to be created on the selected store', FALSE);
+		    			break;
+		    		}
 			    	Back_Office_Checklist_Configuration__c boChecklist = storeConfigIdToBackOfficeChecklistMap.get(storeConfig.id);
 			    	
 			    	system.debug('ADS boChecklist :'+boChecklist);
-			    	
 			    	//FOR EACH FIELD ON BACK OFFICE CHECKLIST CONFIG CREATES A CHECK ON THE ORDER.
 			    	for(String bocField :bocFieldsMap.KeySet()){
 			    		if(boChecklist.get(bocField) != null && boChecklist.get(bocField) == true){

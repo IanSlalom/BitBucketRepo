@@ -5,10 +5,7 @@ global with sharing class RMS_opportunityUtilities {
 		List<Order> orderList = [SELECT Id, Status FROM Order WHERE OpportunityId = :oppId AND Status != 'Cancelled'];
 		
 		if(orderList.size() > 0){
-			 return 'alreadyConverted';
-		}
-		else if(opp.SyncedQuoteId == null ){
-			return 'noSyncedQuote';
+			 return 'alreadyConverted'; 
 		}
 		else{
 			if (opp.StageName == 'Closed Won') {

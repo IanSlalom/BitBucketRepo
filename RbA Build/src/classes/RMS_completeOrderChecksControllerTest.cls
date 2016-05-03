@@ -98,11 +98,18 @@ public with sharing class RMS_completeOrderChecksControllerTest {
  			check.Completed__c = true;
  		}
 
- // Determine recursive order trigger issue
- //		controller.save();
- //		order1 = [select Id, Status from Order where Id =: order1.Id];
- //		System.assertEquals(order1.Status, 'Tech Measure Needed');
+ 		controller.save();
+ 		order1 = [select Id, Status from Order where Id =: order1.Id];
+ 		System.assertEquals(order1.Status, 'Tech Measure Needed');
 
+ 		//Verify Order Status is updated to Tech Measure Scheduled when Tech Measure Status field = Scheduled
+
+ 		order1.Tech_Measure_Status__c = 'Scheduled';
+ 		order1.Status = 'Draft';
+ 		update order1;
+ 		controller.save();
+ 		order1 = [select Id, Status from Order where Id =: order1.Id];
+ 		System.assertEquals(order1.Status, 'Tech Measure Scheduled');
 
 	}
 

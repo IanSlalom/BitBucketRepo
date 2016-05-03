@@ -47,6 +47,24 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_WO_Status_Pending_Assignment</fullName>
+        <field>Work_Order_Status__c</field>
+        <literalValue>Pending Assignment</literalValue>
+        <name>Set WO Status Pending Assignment</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_WO_Status_Scheduled_Assigned</fullName>
+        <field>Work_Order_Status__c</field>
+        <literalValue>Scheduled &amp; Assigned</literalValue>
+        <name>Set WO Status Scheduled &amp; Assigned</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
     <rules>
         <fullName>Last Renovate Right Date Notification</fullName>
         <actions>
@@ -99,9 +117,9 @@
             <value>Install</value>
         </criteriaItems>
         <criteriaItems>
-            <field>RbA_Work_Order__c.Work_Order_Scheduling_Status__c</field>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
             <operation>equals</operation>
-            <value>Complete</value>
+            <value>Appt Complete / Closed</value>
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Install</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
@@ -119,11 +137,62 @@
             <value>Service</value>
         </criteriaItems>
         <criteriaItems>
-            <field>RbA_Work_Order__c.Work_Order_Scheduling_Status__c</field>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
             <operation>equals</operation>
-            <value>Complete</value>
+            <value>Appt Complete / Closed</value>
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Service</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Status Pending Assignment</fullName>
+        <actions>
+            <name>Set_WO_Status_Pending_Assignment</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure,Install,Service</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Appointment_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Appointment_Start_Time__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Status Scheduled %26 Assigned</fullName>
+        <actions>
+            <name>Set_WO_Status_Scheduled_Assigned</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure,Install,Service</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled,Pending Assignment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Number_Open_Events_Formula__c</field>
+            <operation>greaterOrEqual</operation>
+            <value>1</value>
+        </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
@@ -139,9 +208,9 @@
             <value>Tech Measure</value>
         </criteriaItems>
         <criteriaItems>
-            <field>RbA_Work_Order__c.Work_Order_Scheduling_Status__c</field>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
             <operation>equals</operation>
-            <value>Complete</value>
+            <value>Appt Complete / Closed</value>
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Tech Measure</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>

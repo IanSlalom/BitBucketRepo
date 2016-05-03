@@ -1,0 +1,54 @@
+<apex:page >
+<style>
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    border-style: hidden;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+    font-size: Medium;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #ecf6f9;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#fff;
+}
+table#t01 th    {
+    background-color: #efedef;
+    color: black;
+    text-align: center;
+    font-style: bold;
+    font-size: Larger;
+}
+</style>
+
+    <table style="width: 100%" id="t01">
+        <th colspan="3">
+            Click Links to View Orders
+        </th>
+        <tr>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXK" target="_parent">Orders - Draft</apex:outputLink><br/></td>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXP" target="_parent">Orders - On Hold</apex:outputLink><br/></td>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXS" target="_parent">Orders - Tech Measure Needed</apex:outputLink><br/></td>
+        </tr>
+        <tr>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXT" target="_parent">Orders - Tech Measure Scheduled</apex:outputLink><br/></td>        
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXR" target="_parent">Orders - Ready to Order</apex:outputLink><br/></td>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXQ" target="_parent">Orders - Order Released</apex:outputLink><br/></td>
+        </tr>
+        <tr>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXM" target="_parent">Orders - Install Needed</apex:outputLink><br/></td>        
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXN" target="_parent">Orders - Install Scheduled</apex:outputLink><br/></td>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXL" target="_parent">Orders - Install Complete</apex:outputLink><br/></td>            
+        </tr>
+        <tr>
+            <td><apex:outputLink value="/801?fcf=00BQ0000001EyXO" target="_parent">Orders - Job in Progress</apex:outputLink></td>
+        </tr>
+    </table>                                
+</apex:page>

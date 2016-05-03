@@ -48,7 +48,6 @@ public with sharing class MA_SchedulerSettings {
 		public List<dayHours> friday {get;set;} 
 		public List<dayHours> saturday {get;set;}
 		public List<dayHours> sunday {get;set;} 
-
 		public StoreHours(JSONParser parser) {
 			while (parser.nextToken() != JSONToken.END_OBJECT) {
 				if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
@@ -102,7 +101,6 @@ public with sharing class MA_SchedulerSettings {
 	public class dayHours {
 		public String start {get;set;} 
 		public String end_Z {get;set;} // in json: end
-
 		public dayHours(JSONParser parser) {
 			while (parser.nextToken() != JSONToken.END_OBJECT) {
 				if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
@@ -119,7 +117,7 @@ public with sharing class MA_SchedulerSettings {
 					}
 				}
 			}
-		}
+		}	
 	}
 	
 	public String timezone {get;set;} 
@@ -128,8 +126,9 @@ public with sharing class MA_SchedulerSettings {
 	public Install Install {get;set;} 
 	public Service Service {get;set;} 
 	public ResourceHours resourceHours {get;set;}
-
+	
 	public MA_SchedulerSettings(JSONParser parser) {
+		System.debug('called');
 		while (parser.nextToken() != JSONToken.END_OBJECT) {
 			if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
 				String text = parser.getText();

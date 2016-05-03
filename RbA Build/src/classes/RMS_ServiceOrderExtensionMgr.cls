@@ -3,8 +3,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public final Order o;   
     public integer num_orders;
     public integer num_assets;
+    public integer sales_tax;
     public list<OrderItem > listOI{ get; set; }    
     public List<Asset> selectedAssets {get;set;}
+    public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');    
     public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}
     public static final Id serviceProductRecordTypeId = UtilityMethods.RecordTypeFor('Product2','Service_Product');
     public Boolean hasValidationErrors {get{return ApexPages.hasMessages(ApexPages.Severity.ERROR);}}
@@ -32,9 +34,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         listOI=new list<OrderItem>();
         
         List<id> assetIds=new List<id>();
-        for(Asset a : [SELECT    Id
+        for(Asset a : [SELECT    Id,Product2.RecordTypeId
                        FROM Asset 
-                       WHERE AccountId = :o.AccountId]){
+                       WHERE AccountId = :o.AccountId
+                       AND Product2.RecordTypeId = :masterProductId]){
                            assetIds.add(a.id);
                        }        
         selectedAssets = [SELECT    Id,
@@ -57,7 +60,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                                           Master_Product__c
                                           FROM Product2
                                           WHERE RecordTypeId =: serviceProductRecordTypeId
-                                          AND Master_Product__c in: assetIdToProductIdMap.values()
+                                          AND (Master_Product__c in: assetIdToProductIdMap.values() OR ProductCode = 'MISCINSTALL')
                                           ORDER BY Name];
         Map<Id,List<ProductWrapper>> masterProductToProductWrapperMap = new Map<Id,List<ProductWrapper>>();
         
@@ -73,7 +76,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         AssetToProductWrapperMap = new Map<Id, List<ProductWrapper>>();
         for(Asset a: selectedAssets){
             if(masterProductToProductWrapperMap.containsKey(a.Product2Id)){
-                AssetToProductWrapperMap.put(a.Id,masterProductToProductWrapperMap.get(a.Product2Id).clone());
+                List<ProductWrapper> wrapperList = new List<ProductWrapper>();
+                for(ProductWrapper wrap: masterProductToProductWrapperMap.get(a.Product2Id)){
+                    wrapperList.add(new ProductWrapper(wrap.product));
+                }
+                AssetToProductWrapperMap.put(a.Id,wrapperList);
             }else{
                 AssetToProductWrapperMap.put(a.Id, new List<ProductWrapper>());
             }
@@ -116,6 +123,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         if ( slid == null ) slid = '';
     }
     
+    
     public PageReference saveOrder(){
         
         try{
@@ -135,7 +143,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             o.Pricebook2Id = standardPriceBookId;
             o.Store_Location__c = slid;                              
             o.RecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
-            o.Status = 'Product Ordered';
+            o.Status = 'New';           
             upsert o;
             
             PageReference newPage;
@@ -167,20 +175,27 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public List<selectOption> getOrds() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
-        for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
+        for (Order orders : [SELECT Id, OrderNumber, EffectiveDate, Status 
                              FROM Order 
                              WHERE Status NOT IN('Draft', 'Tech Measure Needed', 'Tech Measure Scheduled', 'Ready to Order', 'Order Released', 'Install Needed')
                              AND RecordTypeId = :rt 
                              AND AccountId = :o.AccountId 
                              ORDER BY Order.OrderNumber DESC]) { 
-                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.Activated_Date__c + ' - ' + orders.Status)); //for all records found - add them to the picklist options
+                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.EffectiveDate + ' - ' + orders.Status)); //for all records found - add them to the picklist options
                              }
         options.add(new selectOption('', 'None')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
         return options; //return the picklist options        
     }               
     
     public PageReference saveP2(){
-        try{              
+        try{      
+            
+            Account sl = new Account();
+            sl = [SELECT Store_Location__r.Sales_Tax__c FROM Account WHERE id =: o.AccountId];
+            if(sl != null){
+                o.Sales_Tax_Percent__c = sl.Store_Location__r.Sales_Tax__c;    
+            }
+            
             upsert o;
             
             PageReference pageRef = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
@@ -211,7 +226,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 ].Id;
             }
             
-
+            
             
             for(Id assetID : AssetToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
@@ -224,7 +239,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                             AND Product2Id = :wrapper.Product.Id];
                         
                         Asset oa = [
-                            SELECT Id,Original_Order_Product__c
+                            SELECT Id,Product2Id,Original_Order_Product__c
                             FROM Asset
                             WHERE Id = :assetId];                        
                         
@@ -232,14 +247,15 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.UnitPrice = pbe.UnitPrice;
                         oi.OrderId = o.Id;
                         oi.PriceBookEntryId = pbe.id;
- //                       oi.Installed_Product_Asset__c = assetId; 
+                        oi.Sold_Order_Product_Asset__c = assetId; 
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
-                        oi.Parent_Order_Item__c = oa.Original_Order_Product__c; 
+                        //oi.Parent_Order_Item__c = oa.Product2Id; 
                         oi.Charge_Cost_To__c = wrapper.cost;
                         oi.Primary_Reason__c = wrapper.primary;
                         oi.Secondary_Reason__c = wrapper.secondary;
+                        oi.Description = wrapper.description;
                         listOI.add(oi);                           
                     }
                 }        
@@ -257,15 +273,24 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         return pageRef;
     }        
-
     
-   public class ProductWrapper{
+    
+    public class ProductWrapper{
         public Product2 product{get;set;}
         public Boolean isSelected{get;set;}        
         public Asset asset{get;set;}
         public String cost {get;set;}
         public String primary {get;set;}
         public String secondary {get;set;}
+        public String description {get;set;}
+        
+        public String getDescription(){
+            return description;
+        }
+        
+        public void description (String description){
+            this.description = description;
+        }
         
         public List<SelectOption> getCosts()
         {
@@ -339,7 +364,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             else if(primary == 'Installation')
             {       
-                    options.add(new SelectOption('Blinds/Shutters','Blinds/Shutters'));
+                options.add(new SelectOption('Blinds/Shutters','Blinds/Shutters'));
                 options.add(new SelectOption('Carbon Monoxide Detector','Carbon Monoxide Detector'));
                 options.add(new SelectOption('Caulking','Caulking')); 
                 options.add(new SelectOption('Clean-Up','Clean-Up')); 
@@ -448,6 +473,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             cost = '-- Select --';
             primary = '-- Select --';
             secondary = '-- Select --';
+            description = '';
         }
     }
     

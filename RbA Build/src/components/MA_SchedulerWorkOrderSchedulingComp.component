@@ -1,4 +1,4 @@
-<apex:component >
+<apex:component controller="MA_SchedulerController">
 
 <!--
 <style>
@@ -12,6 +12,7 @@
     $ = jQuery.noConflict();
 
     var apexSchedulingController = 'MA_SchedulerController';
+    var forceScheduleAssignmentCombo = false;
     var processBookingResponse = { onSuccess: processBookingSuccess, onFailure: processResponseError };
     var processAvailabilityResponse = { onSuccess: processAvailabilitySuccess, onFailure: processResponseError };
     var processWorkOrderRetrievalResponse = { onSuccess: processWorkOrderRetrievalSuccess, onFailure: processResponseError };
@@ -23,7 +24,7 @@
 
         var tomorrow = moment(new Date()).add(1, 'days');
         //$('#availabilityStartDate, #availabilityEndDate').val(tomorrow.format('YYYY-MM-DD'));
-        $('#availabilityStartDate, #availabilityEndDate').val(tomorrow.format('MM/DD/YYYY'));
+        // $('#availabilityStartDate, #availabilityEndDate').val(tomorrow.format('MM/DD/YYYY'));
 
         var times = [];
         var timeOptions = '';
@@ -41,7 +42,7 @@
     });
 
     //function showAvailabilityModal(workOrderEl) {
-	function showAvailabilityModal(isReschedule) {
+	function showAvailabilityModal(isForcedNextStep, isReschedule) {
     	/*
         var workOrderElRow = $(workOrderEl).closest('.x-grid3-row')[0];
 		//var workOrderName = $(workOrderElRow).find('.x-grid3-col-NAME a span').text();
@@ -51,8 +52,12 @@
 		*/
 
 		var workOrderId;
+		forceScheduleAssignmentCombo = false;
 
-		if (isReschedule) {
+		if (isForcedNextStep) {
+			workOrderId = $('#assignResourceWorkOrderId').val();
+		}
+		else if (isReschedule) {
 			$('#rescheduleReasonRow').show();
 			workOrderId = $('#eventOptionsRecordId').val();
 		}
@@ -61,7 +66,8 @@
 			workOrderId = $('#listViewOptionsRecordId').val();
 		}
 
-		$('#rescheduleReason').val('');
+		//$('#rescheduleReason').val('');
+		$('.rescheduleReason').val('');
 		$('#workOrderId').val(workOrderId);
 		$('#availableSlots, #unAvailableSlots').html('');
 		$('#availableSlotsContainer, #showUnAvailable, #unAvailableSlotsContainer, .invisibleRow').hide();
@@ -82,7 +88,18 @@
 	        for (var i = 0, len = response.objList.length; i < len; i++) {
 	            var record = response.objList[i];
 	            $('#workOrderName').text(record.Name);
-	            $('#workOrderAddress').text(record.Street__c + ', ' + record.City__c + ', ' + record.State__c + ' ' + record.Zip__c);
+	            $('#workOrderType').text(record.Work_Order_Type__c);
+
+	            if (record.Work_Order_Type__c == 'Install' && (!record.Assigned_Resources__r || record.Assigned_Resources__r.length == 0)) {
+	            	forceScheduleAssignmentCombo = true;
+	            }
+
+
+	            var address = record.Street__c + ', ' + record.City__c + ', ' + record.State__c + ' ' + record.Zip__c;
+	            address = formatAddress(address);
+	            $('#workOrderAddress').text(address);
+	            //$('#workOrderAddress').text(record.Street__c + ', ' + record.City__c + ', ' + record.State__c + ' ' + record.Zip__c);
+
 
 	            if (record.Contact__c == '' || record.Contact__c == undefined || record.Contact__c == null) {
 	                $('#workOrderContactName').text('');
@@ -194,7 +211,7 @@ function processAvailabilitySuccess(response) {
 			var nextAvailableHtml = '';
 	        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
 	            var nextAvailableWindow = response.bookingWindows[i];
-	            nextAvailableHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" value="' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '">' + nextAvailableWindow.dayOfWeek + ' ' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '</input></div>';
+	            nextAvailableHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '">' + nextAvailableWindow.dayOfWeek + ' ' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '</input></div>';
 	        }
 
 	        if (nextAvailableHtml == '') {
@@ -207,7 +224,7 @@ function processAvailabilitySuccess(response) {
     		var bookingWindowHtml = '';
 	        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
 	            var bookingWindow = response.bookingWindows[i];
-	            bookingWindowHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.dayOfWeek + ' ' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '</input></div>';
+	            bookingWindowHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.dayOfWeek + ' ' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '</input></div>';
 	        }
 
 	        if (bookingWindowHtml == '') {
@@ -217,7 +234,7 @@ function processAvailabilitySuccess(response) {
     		var unAvailableSlotsHtml = '';
 	        for (var i = 0, len = response.unAvailableSlots.length; i < len; i++) {
 	            var unAvailableSlot = response.unAvailableSlots[i];
-	            unAvailableSlotsHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" value="' + unAvailableSlot.startDateTimeFormated + ' - ' + unAvailableSlot.endDateTimeFormated + '">' + unAvailableSlot.dayOfWeek + ' ' + unAvailableSlot.startDateTimeFormated + ' - ' + unAvailableSlot.endDateTimeFormated + '</input></div>';
+	            unAvailableSlotsHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + unAvailableSlot.startDateTimeFormated + ' - ' + unAvailableSlot.endDateTimeFormated + '">' + unAvailableSlot.dayOfWeek + ' ' + unAvailableSlot.startDateTimeFormated + ' - ' + unAvailableSlot.endDateTimeFormated + '</input></div>';
 	        }
 
 	        if (unAvailableSlotsHtml == '') {
@@ -230,6 +247,7 @@ function processAvailabilitySuccess(response) {
 
 	        $('#availableSlots').html(bookingWindowHtml);
 	        $('#availableSlotsContainer').show();
+	        $('.show-available-timeslots').show();
 	    }
 
         $('#loaderModal').hide();
@@ -252,9 +270,10 @@ function saveScheduleWorkOrder() {
         return;
     }
 
-    var rescheduleReason = $('#rescheduleReason').val();
+    //var rescheduleReason = $('#rescheduleReason').val();
+    var rescheduleReason = $('.rescheduleReason').val();
 
-    /*var response = */sforce.apex.execute(apexSchedulingController, 'schedulerWorkOrder', {workOrderId: $('#workOrderId').val(), selectedWindow: selectedWindow, rescheduleReason: rescheduleReason}, processBookingResponse);
+    /*var response = */sforce.apex.execute(apexSchedulingController, 'scheduleWorkOrder', {workOrderId: $('#workOrderId').val(), selectedWindow: selectedWindow, rescheduleReason: rescheduleReason}, processBookingResponse);
 /*
 response = JSON.parse(response);
 console.log(response);
@@ -277,9 +296,14 @@ function processBookingSuccess(response) {
 
     if (response.success) {
         $('.listViewportWrapper .refreshListButton').click();
-        closeScheduleWorkOrderModal();
         $('#calendar').fullCalendar('refetchEvents');
-        $('#loaderModal').hide();
+
+    	if (forceScheduleAssignmentCombo) {
+    		showAssignResourceModal(true, false, false);
+    	}
+
+        closeScheduleWorkOrderModal();
+        //$('#loaderModal').hide();
     }
     else {
         handleError('MA_SchedulerWorkOrderSchedulingComp : saveScheduleWorkOrder', response);
@@ -287,9 +311,37 @@ function processBookingSuccess(response) {
 }
 
 function closeScheduleWorkOrderModal() {
+	forceScheduleAssignmentCombo = false;
     $('#scheduleWorkOrderModal').fadeOut('fast');
     $('#scheduleWorkOrderOverlay').removeClass('ma-in');
+    $('body').css('overflow', 'auto');
 }
+    
+function inputAvailStart() {
+    $('#scheduleSeeAvailBtn').show();
+    $('#scheduleBookBtn').hide();
+    $('input[type="radio"][name="bookingWindow"]:checked').attr('checked', false);
+}
+
+function inputAvailStart() {
+    $('#scheduleSeeAvailBtn').show();
+    $('#scheduleBookBtn').hide();
+    $('input[type="radio"][name="bookingWindow"]:checked').attr('checked', false);
+}
+
+function inputAvailStart() {
+    $('#scheduleSeeAvailBtn').delay(175).fadeIn(175);
+    $('#scheduleBookBtn').fadeOut(175);
+    $('input[type="radio"][name="bookingWindow"]:checked').attr('checked', false);
+}
+
+function selectNextAvailable() {
+    $('#scheduleSeeAvailBtn').fadeOut(175);
+    $('#scheduleBookBtn').delay(175).fadeIn(175);
+    document.getElementById('availabilityEndDate').value = "";
+    document.getElementById('availabilityStartDate').value = "";
+}
+
 </script>
 
 <div id="scheduleWorkOrderModal" class="ma-modal">
@@ -309,7 +361,16 @@ function closeScheduleWorkOrderModal() {
                                     <label class="ma-input-label"><strong>Work Order:</strong></label>
                                 </td>
                                 <td colspan="3">
-                                    <label class="ma-input-label"><span id="workOrderName"></span></label> <input type="hidden" id="workOrderId" />
+                                    <label class="ma-input-label"><span id="workOrderName"></span></label>
+                                    <input type="hidden" id="workOrderId" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="ma-input-label"><strong>Type:</strong></label>
+                                </td>
+                                <td colspan="3">
+                                    <label class="ma-input-label"><span id="workOrderType"></span></label>
                                 </td>
                             </tr>
                             <tr>
@@ -349,16 +410,24 @@ function closeScheduleWorkOrderModal() {
                                     <label class="ma-input-label"><strong>Reason:</strong></label>
                                 </td>
                                 <td colspan="3">
-                                    <label class="ma-input-label"><span class="ma-label-value"></span><input id="rescheduleReason" /></label>
+                                    <!-- <label class="ma-input-label"><span class="ma-label-value"></span><input id="rescheduleReason" /></label> -->
+                                    <apex:form >
+                                    	<label class="ma-input-label"><span class="ma-label-value"></span><apex:inputField value="{!tempWo.Reschedule_Reason__c}" styleClass="rescheduleReason" /></label>
+                                    </apex:form>
                                 </td>
                             </tr>
                             <tr class="align-top">
 				                <div id="nextAvailableContainer">
 				                    <td>
-			                        	<label class="ma-input-label"><strong>Next Available:</strong></label>
+			                        	<label class="ma-input-label"><strong>Next Available (based on availability of skills):</strong></label>
 		                        	</td>
 			                        <td id="nextAvailableSlots" colspan="3"></td>
 				                </div>
+			                </tr>
+			                <tr>
+			                    <td colspan="4">
+			                        <hr class="hr-legend"></hr>
+			                    </td>
 			                </tr>
                             <tr class="modal-input-row">
                                 <td>
@@ -366,7 +435,7 @@ function closeScheduleWorkOrderModal() {
                                 </td>
                                 <td>
                                     <!-- <input type="date" class="ma-input" id="availabilityStartDate" /> -->
-                                    <input type="text" class="ma-input" id="availabilityStartDate" />
+                                    <input type="text" class="ma-input" id="availabilityStartDate" onchange="inputAvailStart()"/>
                                 </td>
                                 <td> 
                                     - 
@@ -376,6 +445,22 @@ function closeScheduleWorkOrderModal() {
                                     <input type="text" class="ma-input" id="availabilityEndDate" />
                                 </td>
                             </tr>
+                            <!--
+                            <tr>
+                                <td>
+                                    <label class="ma-input-label"><strong></strong></label>
+                                </td>
+                                <td colspan="3" id="">
+                                    <div class="">
+                                        <label class="ma-checkbox">
+                                            <input name="checkbox" type="checkbox" id="showUnAvailable" onclick="showUnavailableSlots();"></input>
+                                            <span class="ma-checkbox-faux"></span>
+                                            <span class="ma-checkbox-label">Show Unavailable Slots</span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            -->
                             <tr class="modal-input-row invisibleRow">
                                 <td>
                                     <label class="ma-input-label"><strong>Time:</strong></label> 
@@ -413,30 +498,32 @@ function closeScheduleWorkOrderModal() {
                         </tbody>
                     </table>
                 </div>
-
-                <div id="availableSlotsContainer">
-                    <div class="ma-divider ma-divider-compact"></div>
-                    <div class="ma-modal-padding">
-                        <div><label class="ma-input-label"><strong>Available Time Slots:</strong></label></div>
-                        <div id="availableSlots"></div>
-                    </div><!--ma-modal-padding-->
-                    <div id="showUnAvailable" onclick="showUnavailableSlots();">Show Unavailable Slots</div>
+    
+                <div class="show-available-timeslots" style="display:none">
+                    <div id="availableSlotsContainer">
+                        <div class="ma-divider ma-divider-compact"></div>
+                        <div class="ma-modal-padding">
+                            <div><label class="ma-input-label"><strong>Available Time Slots (based on availability of skills):</strong></label></div>
+                            <div id="availableSlots"></div>
+                        </div><!--ma-modal-padding-->
+                        <!--
+                        <div id="showUnAvailable" onclick="showUnavailableSlots();">Show Unavailable Slots</div>
+                        -->
+                    </div>
+    
+                    <div id="unAvailableSlotsContainer">
+                        <div class="ma-modal-padding">
+                            <div><label class="ma-input-label"><strong>Unavailable Time Slots:</strong></label></div>
+                            <div id="unAvailableSlots"></div>
+                        </div><!--ma-modal-padding-->
+                    </div>
                 </div>
-
-                <div id="unAvailableSlotsContainer">
-                    <div class="ma-divider ma-divider-compact"></div>
-                    <div class="ma-modal-padding">
-                        <div><label class="ma-input-label"><strong>Unavailable Time Slots:</strong></label></div>
-                        <div id="unAvailableSlots"></div>
-                    </div><!--ma-modal-padding-->
-                </div>
-
             </div><!--ma-modal-body-->
             <div class="ma-modal-footer">
                 <div id="scheduleWorkOrderButtons" class="ma-modal-padding clearfix">
-                    <button class="ma-button ma-button--white float-left" onclick="closeScheduleWorkOrderModal();">Cancel</button>
-                    <button class="ma-button ma-button--blue float-right" onclick="checkAvailability(false);">See Available Times</button>
-                    <button class="ma-button ma-button--blue float-right" onclick="saveScheduleWorkOrder();">Book</button>
+                    <button class="ma-button ma-button--white" onclick="closeScheduleWorkOrderModal();">Cancel</button>
+                    <button class="ma-button ma-button--green" id="scheduleSeeAvailBtn" onclick="checkAvailability(false);" style="display:none">See Available Times</button>
+                    <button class="ma-button ma-button--green" id="scheduleBookBtn" onclick="saveScheduleWorkOrder();">Book</button>
                 </div>
             </div><!--ma-modal-footer-->
         </div><!--ma-modal-window-->

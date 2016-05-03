@@ -17,68 +17,89 @@
         ******************************/
         var MAschedRoutes = 
         {
-            getAsyncRouting : function(callback)
+            //SitePrefix: options.sitePrefix,
+            SessionId: '{!$Api.Session_ID}',
+
+            getAsyncRouting : function(options, callback)
             {
-                try
-                {
-                    //console.log(token);
-                    //console.log(travelM);
-                    $.ajax({
-                      type: "POST",
-                      url: MAschedRoutes.externalResources.arcGISAPIaysnc,
-                      json: true,
-                      data: {
-                        f: 'json',
-                        token: MAschedRoutes.master.token, //token
-                        orders: JSON.stringify(MAschedRoutes.master.orders),//JSON.stringify({features: baseOrders}),
-                        depots: JSON.stringify(MAschedRoutes.master.depots),//JSON.stringify({features: baseDepots}), 
-                        routes: JSON.stringify(MAschedRoutes.master.routes),//JSON.stringify({features: baseRoutes}),
-                        default_date: MAschedRoutes.master.defaultdate,
-                        travel_mode: JSON.stringify(MAschedRoutes.master.travelMode),
-                        breaks: JSON.stringify(MAschedRoutes.master.breaks),
-                        populate_directions: true,
-                        directions_language: 'en',
-                        directions_style_name:'NA Desktop',
-                        time_units: 'Minutes',
-                        time_window_factor: 'High'
-                      }
-                    })
-                    .done(function(data, success, body) {
+                options = $.extend({
+                    out_directions: false
+                }, options);
+                //console.log(options);
+                //console.log(callback);
+                console.log(MAschedRoutes.master.travelMode);
+                $.ajax({
+                  type: "POST",
+                  url: MAschedRoutes.externalResources.arcGISAPIaysnc,
+                  json: true,
+                  data: {
+                    f: 'json',
+                    token: MAschedRoutes.master.token, //token
+                    orders: JSON.stringify(MAschedRoutes.master.orders),//JSON.stringify({features: baseOrders}),
+                    depots: JSON.stringify(MAschedRoutes.master.depots),//JSON.stringify({features: baseDepots}), 
+                    routes: JSON.stringify(MAschedRoutes.master.routes),//JSON.stringify({features: baseRoutes}),
+                    default_date: MAschedRoutes.master.defaultdate,
+                    travel_mode: MAschedRoutes.master.travelMode,
+                    breaks: JSON.stringify(MAschedRoutes.master.breaks),
+                    populate_directions: false ,
+                    directions_language: 'en',
+                    directions_style_name:'NA Desktop',
+                    time_units: 'Minutes',
+                    time_window_factor: 'High'
+                  }
+                })
+                .done(function(data, success, body) {
+                    try{
                         data = JSON.parse(data);
                         var error;
                         var routeResults;
-                            MAschedRoutes.checkStatus(data, function(err, res){
+                        if(data.error && data.error.code == 403){
+                            console.log('403');
+                            callback(true, data.error);
+                        }
+                        else{
+                            MAschedRoutes.batchResponse['jobId'] = data.jobId;
+                            MAschedRoutes.checkStatus(options, data, function(err, res){
                                 console.log(err);     
                                 console.log(res);
+                                if(err){
+                                    callback(err, res);
+                                }
+                                else{
+                                    callback(err, res);
+                                }
                             });
-                      })
-                      .error(function(error){
-                          //Need to add some other error handle stuff 
-                      })
-                }
-                catch(e)
-                {
+                        }
+                    }
+                    catch(e){
+                        handleError('Scheduling Error','Unable to complete scheduling. ', e);
+                        callback(true, {success:false, error: e, response: data});
+
+                    }
+                  })
+                .error(function(error){
                     handleError('Scheduling Error','Unable to complete scheduling. ', e);
-                    callback(true, {success:false, error: e});
-                }
+                    callback(true, {success:false, error: error});
+                })
             },
             
-            checkStatus : function(Sdata, callback)
+            checkStatus : function(options, Sdata, callback)
             {
                 try
                 {
                     var resultData;
-                    console.log(Sdata);
                     async.until(
                         function (){
                             console.log(Sdata);
                             if(Sdata.jobStatus == "esriJobFailed"){
-                                callback({success: false, error: Sdata});
+                                return Sdata.jobStatus == 'esriJobFailed';
                             }
                             else if(Sdata.jobStatus == "esriJobSucceeded"){
-
-                                //callback({success: true, response: Sdata});
                                 return Sdata.jobStatus == "esriJobSucceeded";
+                            }
+                            else if(Sdata.error && Sdata.error.code == 403){
+                                console.log('403');
+                                return Sdata.error.code == 403; 
                             }
                         }, 
                         function(callback){
@@ -89,15 +110,24 @@
                                 .done(function(data, success, body){
                                     //console.log(data);
                                     //console.log(success);
+                                    try{
                                     console.log(body);
                                         var RT;
                                         RT = JSON.parse(body.responseText);
                                         Sdata = RT;
-                                    setTimeout(function(){
-                                        callback(false, RT);
-                                    }, 1000);
+                                        setTimeout(function(){
+                                            console.log('timeout');
+                                            callback(false, RT);
+                                        }, 1000);
+                                    }
+                                    catch(e){
+                                        console.log('catch'); 
+                                        handleError('Scheduling Error','Unable to complete scheduling. ', e);
+                                        callback(true, {success:false, error: e, response: data});
+                                    }
                                 }) 
                                 .error(function(error, body){
+                                    console.log('error');
                                     callback(error, body);
                                 })
                         },
@@ -105,66 +135,108 @@
                         {
                             console.log(err);
                             console.log(res);
-                            if(res.jobStatus == 'esriJobSucceeded')
+                            if(Sdata.error && Sdata.error.code == 403){
+                                callback(true, {success: false, error: Sdata.error});
+                            }
+                            else if(res.jobStatus == 'esriJobSucceeded')
                             {
                                 async.series({
                                     solve_succeeded: function(callback){
                                         MAschedRoutes.getResults(res.results.solve_succeeded.paramUrl, res.jobId, function(responseS){
                                             console.log(responseS);
                                             if(!responseS.value){
-                                                callback(false, responseS);
+                                                MAschedRoutes.batchResponse
+                                                //callback(true, responseS);
+                                                callback(false, {success: false, error: responseS});
                                             }
                                             else{
-                                                //Do something else
-                                                //callback(false, responseS);
+                                                MAschedRoutes.batchResponse['solve_succeeded'] = responseS;
+                                                //Everything else is good Do something 
+                                                callback(false, {success: true, response: responseS});
                                             }
                                         });
                                     },
                                     out_directions: function(callback){
-                                        MAschedRoutes.getResults(res.results.out_directions.paramUrl, res.jobId, function(responseD){
-                                            console.log(responseD);
-                                            //Make call to do something with results//Check for success first
-                                            callback(false, responseD);
-                                        });
+                                        if(options.out_directions){
+                                            MAschedRoutes.getResults(res.results.out_directions.paramUrl, res.jobId, function(responseD){
+                                                console.log(responseD);
+                                                MAschedRoutes.batchResponse['out_directions'] = responseD;
+                                                //Make call to do something with results//Check for success first
+                                                callback(false, {success: true,  out_directions: true});
+                                                //callback(false, responseD);
+                                            });
+                                        }
+                                        else{
+                                            callback(false, {success: true, out_directions: false});
+                                        }
                                     },
                                     out_routes: function(callback){
                                         MAschedRoutes.getResults(res.results.out_routes.paramUrl, res.jobId,function(responseR){
                                             console.log(responseR);
                                             //Make call to do something with results//Check for success first
-                                            callback(false, responseR);
+                                            MAschedRoutes.batchResponse['out_routes'] = responseR;
+                                            callback(false, {success: true});
+                                            //callback(false, responseR);
                                         });
                                     },
                                     out_stops: function(callback){
                                         MAschedRoutes.getResults(res.results.out_stops.paramUrl, res.jobId, function(responseOS){
                                             console.log(responseOS);
                                             //Make call to do something with results//Check for success first
-                                            callback(false, responseOS);
+                                            MAschedRoutes.batchResponse['out_stops'] = responseOS;
+                                            MAschedRoutes.processBatchEventsSuccess({success: true, values: responseOS.value.features});
+                                            callback(false, {success: true});
+                                            //callback(false, responseOS);
                                         });
                                     },
                                     out_unassigned_stops: function(callback){
                                         MAschedRoutes.getResults(res.results.out_unassigned_stops.paramUrl, res.jobId, function(responseU){
                                             console.log(responseU);
                                             //Make call to do something with results//Check for success first
-                                            callback(false, responseU);
+                                            MAschedRoutes.batchResponse['out_unassigned_stops'] = responseU;
+                                            //MAschedRoutes.processUnassignedBatch({success: true, values: responseU.value.features});
+                                            callback(false, {success: true});
+                                            //callback(false, responseU);
                                         });
                                     }
                                 },
                                 function(err, results){
-                                    //callback(err, results);
-                                    //callback(true, {success: false, error: routeResults});
                                     if(err){
                                         console.log(err);
                                         console.log(results);
                                         callback(err, results);
                                     }
                                     else{
+                                        try{
+                                            var currentbatch = [];
+                                            var MABatch = new sforce.SObject("MABatchSchedule__c");
+                                            MABatch.BatchResults__c = JSON.stringify(MAschedRoutes.batchResponse.solve_succeeded) + JSON.stringify(MAschedRoutes.batchResponse.out_stops.value.features) +  JSON.stringify(MAschedRoutes.batchResponse.out_unassigned_stops.value.features);
+                                            for(var x = 0; x < MAschedRoutes.batchResponse.out_routes.value.features.length; x++){
+                                                var route = MAschedRoutes.batchResponse.out_routes.value.features[x].attributes;
+                                                //console.log(route);
+                                                MABatch.BatchResults__c += JSON.stringify(route);
+                                            }
+                                            MABatch.JobId__c = MAschedRoutes.batchResponse.jobId;
+                                            MABatch.Type__c = $('.batch-assign-wo-container .calendarFilterSelect').val();
+                                            var d = new Date(MAschedRoutes.master.defaultdate);
+                                            var dOff = correctForTimezoneOffset(d);
+                                            MABatch.BatchDate__c = dOff;
+                                            currentbatch.push(MABatch);
+                                            var result = sforce.connection.create(currentbatch);
+                                            console.log(result);
+                                        }
+                                        catch(e){
+                                            console.log('Error'+ e);
+                                            console.log('Unable to insert batch record');
+                                        }
                                         console.log(err);
                                         console.log(results);
                                         callback(err, results);
-                                        //routeResults(results);
                                     }
                                 });
-                                //callback(err, res);
+                            }
+                            else{
+                                callback(true, {success: false, error: res});
                             }
                         }
                     )
@@ -186,22 +258,14 @@
                 .done(function(data, success, body){
                     try
                     {
+                        //console.log(success);
                         var resultT = JSON.parse(body.responseText);
-                        console.log(success);
                         callback(resultT);
-                        if(resultT.paramName == 'solve_succeeded' && !resultT.value)
-                        {
-                            callback(resultT);
-                        }
-                        else
-                        {
-                            callback(resultT);
-                        }
                     }
                     catch(e)
                     {
                         handleError('Scheduling Error','Unable to complete scheduling. ', e);
-                        callback(true, {success:false, error: e});
+                        callback(true, {success:false, error: e, response: data});
                     }
                 })
                 .error(function(error, body){
@@ -248,13 +312,15 @@
                   })
             },
 
-            master : {
+            master : {},
 
-            },
+            batchResponse : {},
 
             esriTravelModes : {},
 
             esriToken : '',
+
+            options : {}, 
 
             getEsriToken : function(master, callback)
             {                        
@@ -312,44 +378,6 @@
                         handleError('Scheduling Error','Unable to get scheduling token.', e);
                         callback(true, {success:false, error: e});
                     }
-                   /* $.ajax({
-                        type: "POST",
-                        url: MAschedRoutes.externalResources.arcGISauth,
-                        json: true,
-                        data: {
-                            client_id: MAschedRoutes.externalResources.EsriClientID,
-                            client_secret: MAschedRoutes.externalResources.EsriClientSecret,
-                            grant_type: 'client_credentials',
-                            expiration: '8000'
-                        }
-                    })
-                    .done(function(res) {
-                        try {
-                            //parse the response
-                            var response = JSON.parse(res);
-                            var EsriToken = response.access_token;
-
-                            if(EsriToken) {
-                                MAschedRoutes.esriToken = EsriToken;
-                                MAschedRoutes.getEsriTravelMode(EsriToken, function(travelResponse){
-                                    callback({success:true, token:EsriToken, travelMode:travelResponse});     
-                                });
-                            }
-                            else {
-                                NotifyError('Routing Error','Unable to get routing token.');
-                                callback({success:false});
-                            }
-                        }
-                        catch(e) {
-                            NotifyError('Routing Error','Unable to get routing token.');
-                            callback({success:false});
-                        }
-                    })
-                    .error(function(res) {
-                        NotifyError('Routing Error','Unable to get routing token.');
-                        callback({success:false});
-                        MAschedRoutes.log(res);
-                    });*/
                 }
             },
 
@@ -357,7 +385,7 @@
             {
                 //check if we have travel modes already
                 if(!$.isEmptyObject(MAschedRoutes.esriTravelModes)) {
-                    callback(false, MAschedRoutes.esriTravelModes.DrivingTime);
+                    callback(MAschedRoutes.esriTravelModes.DrivingTime);
                 }
                 else 
                 {
@@ -442,12 +470,13 @@
         {
             //var storeId = $('#storeSettingsSelect').val();
             var storeId = $('#storeSelect').val();
-            var moment = $('#calendar').fullCalendar('getDate'); 
-            moment = moment.format('YYYY-MM-DD');
+            //var moment = $('#calendar').fullCalendar('getDate'); 
+            var moment = $('#datepicker').val();
+            //moment = moment.format('YYYY-MM-DD');
             console.log(moment);
             try
             {
-                var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getRecords',{dt: moment, storeId: storeId});
+                var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getRecords',{dt: moment, storeId: storeId, workOrderType: $('.batch-assign-wo-container .calendarFilterSelect').val()});
                 response = JSON.parse(response);
                 console.log(response);
                 if (!response.success)
@@ -465,26 +494,206 @@
                 handleError('Error : getRBAWorkOrders', e);
                 callback(true, {success:false, error: e});
             }
+        },
+
+        processBatchEventsSuccess : function(response)
+        {
+            try
+            {
+                console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                console.log(response);
+                console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                if (response.success) {
+                    for (var i = 0, len = response.values.length; i < len; i++) 
+                    {
+                        var record = response.values[i].attributes;
+                        record.Name = JSON.parse(record.Name);
+                        record.RouteName = JSON.parse(record.RouteName);
+                        var rId;
+                        var urlId;
+                        if(record.Name.hasOwnProperty('MAevId')){
+                            rId= record.Name.MAevId;
+                            urlId = record.Name.woId;
+                        }
+                        else{
+                            rId = record.Name.storeId;
+                            urlId = record.Name.storeId;
+                        }
+                        eventListToRender.push({
+                            id: rId,
+                            resourceId: record.RouteName.resId,
+                            title: record.Name.woName,
+                            start: moment(record.ArriveTime),
+                            end: moment(record.DepartTime),
+                            className: 'woEvent',
+                            url: '/' + urlId,
+                            //contactName: record.contactName,
+                            eventType: 'Tech Measure',
+                            //missingResource: record.missingResource
+                        });
+                    }
+
+                    console.log(eventListToRender);
+                    $('#calendar').fullCalendar('refetchEvents');
+                    $('#loaderModal').hide();
+                }
+                console.log(eventListToRender);
+
+                /*if (response.success) {
+                    $('#calendar').fullCalendar('refetchEvents');
+                    $('#loaderModal').hide();
+                }
+                else {
+                    //sforce.apex.execute(apexCalendarController, 'retrieveHolidays', { storeId: $('#storeSelect').val() }, processEventsResponse);
+                }*/
+            }
+            catch(e){
+                handleError('Error : getRBAWorkOrders', e);
+                console.log('Error ', e);
+                //callback(true, {success:false, error: e});
+            }
+        },
+
+        processUnassignedBatch : function(unassigned){
+
+
 
         },
 
-        getRBAStoreDepots : function()
+        processBatchResults : function(options)
         {
+            console.log(options);
+            MAschedRoutes.options = $.extend({
+                    accept: options.accept
+                }, MAschedRoutes.options);
 
-        },
+            if(MAschedRoutes.options.accept)
+            {
+                $('#loaderModal').show();
+                //Do a bunch of shit
+                try
+                {
+                    console.log('success');
+                    if(!$.isEmptyObject(MAschedRoutes.batchResponse)){
+                           var MAevList = [];
+                           var sfEventL = [];
+                           var offsetMinutes = '';
+                            var j = MAschedRoutes.batchResponse.out_stops.value.features.length;
+                            for(var q=0; q < j; q++){
+                                var MAev = new sforce.SObject("MA_Scheduler_Event__c");
+                                //var sfEv = new sforce.SObject("Event");
+                                var sfEv = {};
+                                var wo = MAschedRoutes.batchResponse.out_stops.value.features[q].attributes;
+                                //wo.Name = JSON.parse(wo.Name);
+                                console.log(wo);
+                                if(wo.Name.hasOwnProperty('MAevId')){
 
-        getRBAResources : function()
-        {
 
+                                    var startDate = new Date(wo.ArriveTimeUTC);
+                                    var endDate = new Date(wo.DepartTimeUTC);
+
+                                    if (offsetMinutes == '') {
+                                        offsetMinutes = startDate.getTimezoneOffset();
+                                        console.log(offsetMinutes);
+
+                                        var epochUtc = wo.ArriveTimeUTC;
+                                        var epoch = wo.ArriveTime;
+                                        var epochDiff = epochUtc - epoch;
+                                        epochDiff = (epochDiff / 1000 / 60) - offsetMinutes;
+                                        offsetMinutes += epochDiff;
+                                    }
+
+
+                                    //MA Event
+                                    MAev.Id = wo.Name.MAevId;
+                                    MAev.Resource__c = wo.RouteName.resId;
+                                    //MAev.StartDateTime__c = moment(wo.ArriveTime).format('YYYY-MM-DD HH:mm:ss A');
+                                    //MAev.EndDateTime__c = moment(wo.DepartTime).format('YYYY-MM-DD HH:mm:ss A');
+                                    //MAev.Estimated_Start_Date_Time__c = moment(wo.ArriveTimeUTC)._d;
+                                    //MAev.Estimated_End_Date_Time__c = moment(wo.DepartTimeUTC)._d;
+                                    //MAev.Estimated_Start_Date_Time__c = moment(wo.ArriveTime)._d;
+                                    //MAev.Estimated_End_Date_Time__c = moment(wo.DepartTime)._d;
+                                    MAev.Estimated_Start_Date_Time__c = startDate;
+                                    MAev.Estimated_End_Date_Time__c = endDate;
+                                    MAev.RbA_Work_Order__c = wo.Name.woId;
+                                    MAevList.push(MAev);
+
+                                    //SF Event
+                                    /*
+                                    if(wo.RouteName.hasOwnProperty('userId') && wo.RouteName.userId != null){
+                                        sfEv.WhatId = wo.Name.woId;
+                                        sfEv.OwnerId = wo.RouteName.userId;
+                                        sfEv.Subject = wo.Name.woName;
+                                        sfEv.StartDateTime = moment(wo.ArriveTime)._d;
+                                        sfEv.EndDateTime = moment(wo.DepartTime)._d;
+                                        sfEv.MA_Scheduler_Event__c = wo.Name.MAevId;
+                                        sfEv.Type = null;
+                                        sfEventL.push(sfEv);
+                                    }
+                                    */
+
+                                    if(wo.RouteName.hasOwnProperty('userId') && wo.RouteName.userId != null && wo.RouteName.userId != 'null'){
+                                        sfEv = {
+                                            WhatId: wo.Name.woId,
+                                            OwnerId: wo.RouteName.userId,
+                                            Subject: wo.Name.woName,
+                                            //StartDateTime: moment(wo.ArriveTimeUTC)._d,
+                                            //EndDateTime: moment(wo.DepartTimeUTC)._d,
+                                            //StartDateTime: moment(wo.ArriveTime)._d,
+                                            //EndDateTime: moment(wo.DepartTime)._d,
+                                            StartDateTime: startDate,
+                                            EndDateTime: endDate,
+                                            MA_Scheduler_Event__c: wo.Name.MAevId
+                                        };
+                                        sfEventL.push(sfEv);
+                                    }
+                                } 
+                                else{
+                                    console.log('This is Depot stop or a break');
+                                    console.log(wo);
+                                }
+                            }
+                        //var result = sforce.connection.update(MAevList); 
+                        //var response = sforce.apex.execute('MA_RoutingSchedulerController', 'processConfirmBatch', {maEvList: MAevList, sfEvList: sfEventL}); 
+                        var response = sforce.apex.execute('MA_RoutingSchedulerController', 'processConfirmBatch', {maEvList: MAevList, sfEvListString: JSON.stringify(sfEventL), storeId: $('#storeSelect').val(), offsetPageMinutes: offsetMinutes}); 
+                        console.log(response);
+                    }
+                    else{
+                        //var moment = $('#calendar').fullCalendar('getDate'); 
+                        //moment = moment.format('YYYY-MM-DD');
+                        //Go Grab the batch results for today in Apex and process there
+                        //Pass the date
+                        var response = sforce.apex.execute('MA_RoutingSchedulerController', 'processConfirmBatch', {dt: MAschedRoutes.master.defaultDate});
+                        console.log(response);
+                    }
+                    hideResourceBatch({batch: false});
+                }
+                catch(e)
+                {
+                    handleError('Error : processBatchResults', e);
+                }
+            }
+            else{
+                $('#loaderModal').show();
+                hideResourceBatch({batch: false});
+            }
         },
         
-        showOptyModal : function()
+        showOptyModal : function(options)
         {
+            
+            MAschedRoutes.options = $.extend({
+                    optimize: options.mainPage
+                }, MAschedRoutes.options);
+
            $('#datepicker').datepicker({
                 inline: true,
+                dateFormat: 'yy-mm-dd',
                 onSelect: function(dateText, inst) {
                     var d = new Date(dateText);
                     console.log(d);
+                    var dOff = correctForTimezoneOffset(d);
+                    console.log(dOff);
                     $('#calendar').fullCalendar('gotoDate', d);
                 }
             });
@@ -492,12 +701,8 @@
             $('#scheduleOptimizeModal').show();
             $('#scheduleOptimizeModal').addClass('ma-open');
             $('#scheduleOptimizeOverlay').addClass('ma-in');
+            $('body').css('overflow','hidden');
         
-        },
-        
-        showMap : function()
-        {
-            
         },
 
         externalResources : {
@@ -509,6 +714,312 @@
             'arcGISinputs'        :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/inputs/<inputParameterName>?token=<yourToken>&f=json',
             'arcGIStravel'        : 'https://logistics.arcgis.com/arcgis/rest/services/World/Utilities/GPServer/GetTravelModes/execute?',
             'EsriRoutingAPI'      : 'https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World/solve',
+            //'GeocoderFrame'       : options.sitePrefix + '/apex/'+options.namespace+'GeocoderFrame',
+            //'Geocode'               : options.sitePrefix + '/apex/'+options.namespace+'MAGeoCodeAJAXResources',
+            'Queue'                 : 'https://product-api-prod.cloudbilt.com/queue/'
+        }, 
+        
+        //Geocoding capabilities
+        Geocoding: {
+            confidenceMap: { 'ROOFTOP': 100, 'RANGE_INTERPOLATED': 90, 'GEOMETRIC_CENTER': 75, 'APPROXIMATE': 50 },
+
+            //multithreaded geocoding
+            threads: [],
+            threadIndex: 0,
+            addThread: function () {
+                var threadIndex = MAschedRoutes.Geocoding.threads.length;
+                MAschedRoutes.Geocoding.threads.push({
+                    requests: [],                   //sample request: { address: '123 Street', callback: function (request) { console.log(request.result); } }
+                });
+                $('body').first().append($("<iframe style='display: none;'></iframe>").attr('src', MAschedRoutes.externalResources.GeocoderFrame + '?index=' + threadIndex));
+            },
+            addThreads: function () {
+                var geocodeThreads = 5;
+                while (geocodeThreads > MAschedRoutes.Geocoding.threads.length) {
+                    MAschedRoutes.Geocoding.addThread();
+                }
+            },
+            threadedGeocode: function (request) {
+                MAschedRoutes.Geocoding.threads[MAschedRoutes.Geocoding.threadIndex].requests.push(request);
+                MAschedRoutes.Geocoding.threadIndex++;
+                if (MAschedRoutes.Geocoding.threadIndex >= MAschedRoutes.Geocoding.threads.length) { MAschedRoutes.Geocoding.threadIndex = 0; }
+            },
+
+            //reverse geocode
+            reverseGeocode: function (options, callback) {
+                callback = callback || function () {};
+
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ latLng: options.latLng }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var result = results[0];
+                        var resultMap = {};
+                        $.each(result.address_components, function (i, component) {
+                            $.each(component.types, function (j, type) {
+                                resultMap[type] = component['long_name'];
+                            });
+                        });
+
+                        //basic response data
+                        var responseData = {
+                            IsBadAddress        : false,
+                            Label               : result.geometry.location_type,
+                            Relevance           : MAschedRoutes.Geocoding.confidenceMap[result.geometry.location_type] || 0,
+                            Latitude            : result.geometry.location.lat(),
+                            Longitude           : result.geometry.location.lng(),
+                            FormattedAddress    : result.formatted_address,
+                            HouseNumber         : resultMap['street_number'] || '',
+                            Street              : resultMap['route'] || '',
+                            City                : resultMap['locality'] || '',
+                            County              : resultMap['administrative_area_level_2'] || '',
+                            State               : resultMap['administrative_area_level_1'] || '',
+                            PostalCode          : resultMap['postal_code'] || '',
+                            District            : resultMap['neighborhood'] || '',
+                            Country             : resultMap['country'] || ''
+                        };
+
+                        //complete street address (house number + route)
+                        var completeStreetAddress = '';
+                        if (resultMap['street_number']) {
+                            completeStreetAddress += resultMap['street_number'] + ' ';
+                        }
+                        if (resultMap['route']) {
+                            completeStreetAddress += resultMap['route'];
+                        }
+                        responseData['CompleteStreetAddress'] = completeStreetAddress;
+
+                        callback({
+                            success: true,
+                            request: options,
+                            result: responseData
+                        });
+                    }
+                    else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                        setTimeout(function () { MAschedRoutes.Geocoding.reverseGeocode(options, callback); }, 500);
+                    }
+                    else {
+                        //MAschedRoutes.log('Bad Reverse Geocode', status);
+                        callback({success: false});
+                    }
+                });
+            },
+
+            //geocode a single address
+            geocode: function (options, callback) {
+                callback = callback || function () {};
+
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ address: options.address }, function (response, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var result = response[0];
+                        var resultMap = {};
+                        $.each(result.address_components, function (i, component) {
+                            $.each(component.types, function (j, type) {
+                                resultMap[type] = component['short_name'];
+                            });
+                        });
+
+                        //basic response data
+                        var responseData = {
+                            IsBadAddress        : false,
+                            Label               : result.geometry.location_type,
+                            Relevance           : MAschedRoutes.Geocoding.confidenceMap[result.geometry.location_type] || 0,
+                            Latitude            : result.geometry.location.lat(),
+                            Longitude           : result.geometry.location.lng(),
+                            FormattedAddress    : result.formatted_address,
+                            HouseNumber         : resultMap['street_number'] || '',
+                            Street              : resultMap['route'] || '',
+                            City                : resultMap['locality'] || '',
+                            County              : resultMap['administrative_area_level_2'] || '',
+                            State               : resultMap['administrative_area_level_1'] || '',
+                            PostalCode          : resultMap['postal_code'] || '',
+                            District            : resultMap['neighborhood'] || '',
+                            Country             : resultMap['country'] || ''
+                        };
+
+                        //complete street address (house number + route)
+                        var completeStreetAddress = '';
+                        if (resultMap['street_number']) {
+                            completeStreetAddress += resultMap['street_number'] + ' ';
+                        }
+                        if (resultMap['route']) {
+                            completeStreetAddress += resultMap['route'];
+                        }
+                        responseData['CompleteStreetAddress'] = completeStreetAddress;
+
+                        //fire the callback
+                        callback({ success: true, result: responseData });
+                    }
+                    else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                        window.overCount++;
+                        setTimeout(function () { MAschedRoutes.Geocoding.geocode(options, callback); }, 500);
+                    }
+                    else {
+                        callback({ success: true, result: { IsBadAddress: true }, status: status });
+                    }
+                });
+            },
+
+            //geocode query records (and write the results back to the db)
+            geocodeMultipleRecords: function (options, callback, step) {
+                callback = callback || function () {};
+
+                //build list of queue items
+                var itemsToUpdate = [];
+                var pendingItems = [];
+                var recordMap = {};
+                $.each(options.records, function (i, record) {
+                    pendingItems.push({ Operation: 'Geocode', Priority: 1, RequestData: { recordId: record.record.Id, address: record.markerAddress } });
+                    recordMap[record.record.Id] = record;
+                });
+
+                var numSuccess = 0;
+                var numFail = 0;
+                //$.post(MAschedRoutes.externalResources['Queue'], { action: 'Push', orgId: '{!$Organization.Id}', items: JSON.stringify(pendingItems) }, function (pushResponse) {
+                $.ajax({
+                    url: MAschedRoutes.SitePrefix + '/services/proxy',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'JSON',
+                    data: { action: 'Push', orgId: '{!$Organization.Id}', items: JSON.stringify(pendingItems) },
+                    success: function (pushResponse) {
+                        if (pushResponse.success)
+                        {
+                            //start polling to get the geo data when it's ready
+                            pendingItems = pushResponse.items;
+                            setTimeout(function checkQueue () {
+                                //$.post(MAschedRoutes.externalResources['Queue'], { action: 'Pop', orgId: '{!$Organization.Id}', items: JSON.stringify(pendingItems) }, function (popResponse) 
+                                $.ajax({
+                                    url: MAschedRoutes.SitePrefix + '/services/proxy',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    dataType: 'JSON',
+                                    data: { action: 'Pop', orgId: '{!$Organization.Id}', items: JSON.stringify(pendingItems) },
+                                    success: function (popResponse) {
+                                        pendingItems = [];
+                                        $.each(popResponse.items, function (i, item) {
+                                            if (item.Status == 'Pending')
+                                            {
+                                                //this item is still pending
+                                                pendingItems.push(item);
+                                            }
+                                            else if (item.Status == 'Complete')
+                                            {
+                                                //push geo data into the record
+                                                var record = recordMap[item.RequestData.recordId];
+                                                $.extend(record, {
+                                                    isBadAddress    : item.ResponseData.IsBadAddress,
+                                                    latitude        : item.ResponseData.Latitude,
+                                                    longitude       : item.ResponseData.Longitude,
+                                                    markerLatitude  : item.ResponseData.Latitude,
+                                                    markerLongitude : item.ResponseData.Longitude
+                                                });
+
+                                                //keep track of this item for updating the db (also need parent record id if address information is inherited)
+                                                var addressObject = MAschedRoutes.Util.g(record.plottedQuery.data(), 'coordinateFields.AddressObject') || 'SAME';
+                                                if (addressObject != 'SAME') {
+                                                    item.RequestData.addressObjectId = record.record[addressObject];
+                                                }
+                                                itemsToUpdate.push(item);
+
+                                                //keep track of success rate
+                                                if (recordMap[item.RequestData.recordId].isBadAddress) {
+                                                    numFail++;
+                                                }
+                                                else {
+                                                    recordMap[item.RequestData.recordId].latLng = new google.maps.LatLng(item.ResponseData.Latitude, item.ResponseData.Longitude);
+                                                    numSuccess++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //consider this a bad geocode
+                                                $.extend(recordMap[item.RequestData.recordId], { isBadAddress: true, latitude: '', longitude: '', markerLatitude: '', markerLongitude: '' });
+                                                itemsToUpdate.push(item);
+                                                numFail++;
+                                            }
+                                        });
+
+                                        //wait for pending items or we're done
+                                        if (pendingItems.length > 0) {
+                                            setTimeout(checkQueue, 3000);
+                                        }
+                                        else 
+                                        {
+                                            //time to write the records back to the database
+                                            if (!options.skipSave) {
+                                                $.post(MAschedRoutes.externalResources.Geocode+pageSuffix+'?core.apexpages.devmode.url=0', { action: 'updateRecordsFromQueueItems', serializedItems: JSON.stringify(itemsToUpdate), baseObjectId: options.baseObjectId }, function (response) {
+                                                    if (response.success) {
+                                                        $.each(response.updatedRecords, function (i, record) {
+                                                            $.extend(recordMap[record.Id].record, record);
+                                                        });
+                                                        callback({ success: true, numSuccess: numSuccess, numFail: numFail });
+                                                    }
+                                                    else
+                                                    {
+                                                        //still proceed, but log an error that we couldn't write back to the database
+                                                        callback({ success: true, numSuccess: numSuccess, numFail: numFail });
+                                                        //MAschedRoutes.log('Unable to write back to the database', response);
+                                                    }
+                                                }, 'json').fail(function () { callback({ success: true, numSuccess: numSuccess, numFail: numFail }); 
+                                                handleError('Unable to write back to the database'); });
+                                            }
+                                            else {
+                                                callback({ success: true, numSuccess: numSuccess, numFail: numFail });
+                                            }
+                                        }
+                                    },
+                                    error: function () {
+                                        //MAschedRoutes.log(arguments);
+                                        handleError(arguments);
+                                    },
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader('SalesforceProxy-Endpoint', MAschedRoutes.externalResources['Queue']);
+                                        xhr.setRequestHeader('Authorization', 'OAuth ' + MAschedRoutes.SessionId);
+                                        xhr.setRequestHeader('X-User_Agent', 'salesforce-toolkit-rest-javascript/v31.0');
+                                    }
+                                });
+                            }, 3000);
+                        }
+                        else {
+                            //MAschedRoutes.log(pushResponse);
+                            handleError(pushResponse);
+                        }
+                    },
+                    error: function () {
+                        //MAschedRoutes.log(arguments);
+                        handleError(arguments);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('SalesforceProxy-Endpoint', MAschedRoutes.externalResources['Queue']);
+                        xhr.setRequestHeader('Authorization', 'OAuth ' + MAschedRoutes.SessionId);
+                        xhr.setRequestHeader('X-User_Agent', 'salesforce-toolkit-rest-javascript/v31.0');
+                    }
+                });
+            },
+
+            //find the nearest coordinates that support street view
+            findNearestStreetView: function (pos) {
+                var search = function (radius) {
+                    new google.maps.StreetViewService().getPanoramaByLocation(pos, radius, function (data, status) {
+                        
+                        //console.log(data);
+                        //console.log(status);
+                        
+                        if (status == 'OK') {
+                            return data.location.latLng;
+                        }
+                        else if (radius > 1 && radius <= 500) {
+                            return search(radius * 2);
+                        }
+                        else {
+                            return null;
+                        }
+                    });
+                };
+                //If the radius is 50 meters or less, the panorama returned will be the nearest panorama to the given location.
+                return search(50);
+            }
         }
     }
     
@@ -563,33 +1074,101 @@
                     
         function getAutoSchedule()
         {
-            //$('#optimize button').attr('disabled', true);
-            async.waterfall([
-                MAschedRoutes.getRBAWorkOrders,
-                MAschedRoutes.getEsriToken,
-                //MAschedRoutes.getEsriTravelMode,
-                MAschedRoutes.getAsyncRouting
-            ], 
-            function (err, result){
-                console.log(result);
-                console.log(err);
-            });
+            isBatchResources = true;
+            //var d = new Date($('#datepicker').val());
+            //$('#calendar').fullCalendar('gotoDate', d);
+            hideResourceBatch({batch:isBatchResources});
+            if(MAschedRoutes.options.optimize)
+            {
+                async.waterfall([
+                    MAschedRoutes.getRBAWorkOrders,
+                    MAschedRoutes.getEsriToken,
+                    //MAschedRoutes.getEsriTravelMode,
+                    MAschedRoutes.getAsyncRouting
+                ], 
+                function (err, result){
+                    console.log(err);
+                    console.log(result);
+                    if(err){
+                        hideResourceBatch({batch: false});
+                    }
+                    else{
+                        closeScheduleOptimizeModal();
+                        $('#loaderModal').hide();
+                        $('#optimize button').attr('disabled', false);
+                    }
+                });
+            }
+            else{
+                MAschedRoutes.getRBAWorkOrders(function(res){
+                    console.log(res);
+                })
+                closeScheduleOptimizeModal();
+                $('#loaderModal').hide();
+                $('#optimize button').attr('disabled', false);
+            }
         }
 
         function getReRoute()
         {
             //This function will be the standard routing call***This should be used only if scheduler optimzation has been run and accepted
         }
+        function filterBatchType(){
+            $('#calendarFilter .calendarFilterSelect').val($('.batch-assign-wo-container .calendarFilterSelect').val());
+            //filterCalendar();
+            //$('#calendar').fullCalendar('refetchResources');
+            //$('#calendar').fullCalendar('refetchEvents');
+        }
         
     
-   function closeScheduleOptimizeModal() {
+      function closeScheduleOptimizeModal() {
             $('#scheduleOptimizeModal').hide();
             $('#scheduleOptimizeOverlay').removeClass('ma-in');
+            $('body').css('overflow','auto');
+        }
+
+        function hideResourceBatch(options){
+            if(options.batch){
+                goToResourceView();
+                $('#loaderModal').show();
+                //$('#unassignedBatch').show()
+                //$('#listView').hide();
+                //$('.fc-button-group').hide()
+                //$('.fc-today-button').hide()
+                //$('#calendarFilter').hide()
+                //$('#optimize').hide()
+                $('#optimize button').attr('disabled', true);
+                //$('#rowsIcon img').hide()
+                //$('.batch-confirm-btn-container').show();
+                //$('#scheduleOptimizeOverlay').show();
+                $('#scheduleOptimizeModal').hide();
+
+                $('.batchShow').show();
+                $('.batchHide').hide()
+            }
+            else{
+                isBatchResources = false;
+                $('.batchShow').hide();
+                $('.batchHide').show()
+                $('#calendar').fullCalendar('refetchEvents');
+                //$('.batch-confirm-btn-container').hide();
+                //$('#rowsIcon img').show()
+                //$('.fc-today-button').show()
+                //$('.fc-button-group').show()
+                //$('#calendarFilter').show()
+                //$('#scheduleOptimizeOverlay').hide();
+                //$('#optimize').show()
+                $('#optimize button').attr('disabled', false);
+                //$('#unassignedBatch').hide()
+                //$('#listView').show();
+                $('#loaderModal').hide();
+                goToResourceView();
+
+            }
         }
          
     </script>
     <div id="scheduleOptimizeModal">
-
         <div id="scheduleOptimizeContent">
             <div id="scheduleOptimize">
                 <div id="scheduleOptimizeHeader">
@@ -601,9 +1180,26 @@
                     <span>Select a date:</span>
                     <div id="datepicker"></div>
                 </div>
+                
                 <div class="batch-assign-wo-container">
-                    Work Order: <span id="OptimizeName" /> <input type="hidden" id="OptimizeId" />
+                    <label class="ma-input-label">Work Order Type:</label>
+                    <div class="ma-form-control icon-right">
+                        <div class="dropdown-triangle"></div> 
+                            <select id="calendarFilterSelect" onchange="filterCalendar();" class="ma-input calendarFilterSelect">
+                                <option value="all">--None--</option>
+                                <option value="Tech Measure">Tech Measure</option>
+                                <option value="Field Service">Field Service</option>
+                            </select>
+                        <!--   
+                        <apex:form >
+                            <apex:inputField value="{!tempWo.Work_Order_Type__c}" onchange="filterBatchType()" styleClass="ma-input calendarFilterSelect" />
+                        </apex:form>
+                        -->
+                    </div>
                 </div>
+                   <!-- Work Order Type: <span id="OptimizeName" /> 
+                    <input type="select" id="OptimizeId" />
+                </div>-->
                 <div id="scheduleOptimizeButtons">
                     <button class="ma-button ma-button--white" onclick="closeScheduleOptimizeModal();">Cancel</button>
                     <button class="ma-button ma-button--green" onclick="getAutoSchedule();">Optimize Schedule</button>
@@ -612,5 +1208,5 @@
         </div>
     </div>
     <div id = "map"></div>
-    <div id="scheduleOptimizeOverlay" />
+    <div id="scheduleOptimizeOverlay" class="batchShow"> </div>
 </apex:component>

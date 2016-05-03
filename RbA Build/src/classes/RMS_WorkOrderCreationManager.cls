@@ -103,7 +103,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         //FILTERING OUT NON ACTIVATED ORDERS AS WELL AS BUILDING THE LIST OF DWELLINGS TO GET THEIR STORE CONFIGS
         for(Order ord : listNew){
-            if(ord.Status == 'Tech Measure Needed' && mapOld.get(ord.Id).Status == 'Draft'){
+           if((ord.Status == 'Tech Measure Scheduled' || ord.Status == 'Tech Measure Needed') && mapOld.get(ord.Id).Status == 'Draft'){
                 relatedDwellingIds.add(ord.AccountId);
                 activatedOrders.add(ord);
                 activatedOrderId.add(ord.id);
@@ -423,18 +423,18 @@ public with sharing class RMS_WorkOrderCreationManager {
 								                    Country__c,
 								                    OwnerId,
 								                    
-								                    Work_Order_Scheduling_Status__c
+								                    Work_Order_Status__c
 								                    
 													FROM RbA_Work_Order__c WHERE Id IN :mapNew.keyset()];		
 		
 		
 		for(RbA_Work_Order__c wo : extraFieldsList){
       		if(wo.Work_Order_Type__c != null && wo.Work_Order_Type__c == 'Tech Measure'){
-	      		if(mapOld.get(wo.id).Work_Order_Scheduling_Status__c != 'Complete' && mapNew.get(wo.id).Work_Order_Scheduling_Status__c == 'Complete'){
-	      			completeWorkOrders.add(wo);
-	      			relatedOrderIdList.add(wo.Sold_Order__c);
-	      			relatedDwellingIds.add(wo.Account__c);
-	      		}
+	      		if(mapOld.get(wo.id).Work_Order_Status__c != 'Appt Complete / Closed' && mapNew.get(wo.id).Work_Order_Status__c == 'Appt Complete / Closed'){
+                    completeWorkOrders.add(wo);
+                    relatedOrderIdList.add(wo.Sold_Order__c);
+                    relatedDwellingIds.add(wo.Account__c);
+                }
       		}
 		}
 		

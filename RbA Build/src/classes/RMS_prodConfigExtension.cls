@@ -25,7 +25,7 @@ public class RMS_prodConfigExtension {
 
 	/******* public variables  *****************/
 	public boolean newOrderItem {get; set;}	 
-	public boolean orderActivated {get; set;}	 
+	public boolean jobClosed {get; set;}	 
 	public String priceBookId {get; set;}   
 	public String orderId {get; set;}   
 	public String oiId {get;set;} // used for redirecting of tabs
@@ -46,7 +46,8 @@ public class RMS_prodConfigExtension {
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		newOrderItem = stdController.getId() == null;
-		ordStat = 'dft';			
+		ordStat = 'dft';
+		jobClosed = false;			
 		mode = ApexPages.currentPage().getParameters().get('mode');
 		if (mode == null) mode = 'v';
 //		if (mode == 'v') productSelected = true;
@@ -70,10 +71,6 @@ public class RMS_prodConfigExtension {
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
 					oiId = orderItem.Id;
-					//if (orderItem.Order.Status == 'Activated') {
-					//	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_ACTIVATED_EDIT));
-					//	orderActivated = true;
-					//}
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 					enterProduct();
@@ -82,6 +79,13 @@ public class RMS_prodConfigExtension {
 			changeHistoryRecords = [SELECT Id, Name, CreatedById, LastModifiedBy.Name, LastModifiedDate, Changes__c, Retail_Price__c, Retail_Price_Change__c, Responsible_Party__c, Order_Product__c 
 									FROM Change_History__C 
 									WHERE Order_Product__c =: oiId];
+		}
+
+		Order o = [Select Status from Order where Id =: orderId];
+		if(o.Status == 'Job Closed'){
+			jobClosed = true;
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_CLOSED)); 
+			mode = 'v';
 		}
 	}
 
@@ -897,6 +901,81 @@ public class RMS_prodConfigExtension {
 			return lInstallTrackLocationItems;
 		}
 	}
+	
+	
+	/******* Interior Pre Finish Items  *****************/
+	private static transient List<SelectOption> linteriorPreFinishItems;
+	public List<SelectOption> interiorPreFinishItems{
+		get
+		{   
+			if (linteriorPreFinishItems == null) {
+				linteriorPreFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Pre_Finish__c);
+			}
+			return linteriorPreFinishItems;
+		}
+	}
+
+	/******* Interior Pre Finish Items  *****************/
+	private static transient List<SelectOption> lInteriorExtensionJambKitItems;
+	public List<SelectOption> InteriorExtensionJambKitItems{
+		get
+		{   
+			if (lInteriorExtensionJambKitItems == null) {
+				lInteriorExtensionJambKitItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Extension_Jamb_Kit__c);
+			}
+			return lInteriorExtensionJambKitItems;
+		}
+	}
+	
+	/******* Exterior Door Jamb Items  *****************/
+	private static transient List<SelectOption> lExteriorDoorJambItems;
+	public List<SelectOption> ExteriorDoorJambItems{
+		get
+		{   
+			if (lExteriorDoorJambItems == null) {
+				lExteriorDoorJambItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Door_Jamb__c);
+			}
+			return lExteriorDoorJambItems;
+		}
+	}
+	
+	/******* Exterior Frame Depth Items  *****************/
+	private static transient List<SelectOption> lExteriorFrameDepthItems;
+	public List<SelectOption> ExteriorFrameDepthItems{
+		get
+		{   
+			if (lExteriorFrameDepthItems == null) {
+				lExteriorFrameDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Frame_Depth__c);
+			}
+			return lExteriorFrameDepthItems;
+		}
+	}
+ 
+ 	/******* Door Sill Color Items  *****************/
+	private static transient List<SelectOption> lDoorSillColorItems;
+	public List<SelectOption> DoorSillColorItems{
+		get
+		{   
+			if (lDoorSillColorItems == null) {
+				lDoorSillColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Door_Sill_Color__c);
+			}
+			return lDoorSillColorItems;
+		}
+	} 
+	
+	/******* Exterior Keyed Lock Items  *****************/
+	private static transient List<SelectOption> lExteriorKeyedLockItems;
+	public List<SelectOption> ExteriorKeyedLockItems{
+		get
+		{   
+			if (lExteriorKeyedLockItems == null) {
+				lExteriorKeyedLockItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Keyed_Lock__c);
+			}
+			return lExteriorKeyedLockItems;
+		}
+	} 
+	
+
 
 	/*******************************************************
 					enterProduct method

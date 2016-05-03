@@ -107,7 +107,7 @@
  
   <apex:pageMessages escape="false" />
 	<div id="OrderId" style="display:none;">{!orderId}</div>	
-    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!orderActivated}">
+    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!jobClosed}">
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
@@ -145,7 +145,7 @@
 -->            <apex:commandButton action="{!saveProduct}" value="Save" rendered="{!mode == 'e'}"/>
 			<apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form" rendered="{!mode == 'e'}"/>
 <!-- 			<apex:commandButton action="{!edit}" value="Edit" status="edit-status" rerender="page-form" rendered="{!mode != 'e'}"/>
--->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e'}"/>
+-->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e' && !jobClosed}"/>
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
        </apex:pageBlockButtons>
 
@@ -358,6 +358,61 @@
             <apex:outputField value="{!OrderItem.Part_of_Bow__c}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outpartOfBow"/>
         </apex:pageBlockSection>
 
+
+		<apex:pageBlockSection title="Door Fields" columns="2" rendered="{!prodConfig.mpc != null}">
+			 
+			<apex:inputField value="{!OrderItem.isStandardSize__c}"  required="{!prodConfig.mpc.Standard_Size_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isStandardSize"/>
+            <apex:outputField value="{!OrderItem.isStandardSize__c}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid="isStandardSize" />
+			
+			<apex:inputField value="{!OrderItem.Aluminum_Sill_Support__c}"  required="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="AluminiumSillSupport"/>
+            <apex:outputField value="{!OrderItem.Aluminum_Sill_Support__c}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid="AluminiumSillSupport"/>
+			
+			<apex:inputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}"  required="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+			
+			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Standard_Size_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+			
+			<apex:inputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}"  required="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+			
+			<apex:inputField value="{!OrderItem.Number_of_Panels__c}"  required="{!prodConfig.mpc.Number_of_Panels_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Number_of_Panels_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Number_of_Panels__c}" rendered="{!prodConfig.mpc.Number_of_Panels_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid=""/>
+
+			<apex:selectList value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" size="1" id="interiorPreFinish" required="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorPreFinish">
+            	<apex:selectOptions value="{!interiorPreFinishItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" id="outinteriorPreFinish" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Disabled' || mode != 'e'}" />
+			
+			<apex:selectList value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" size="1" id="InteriorExtensionJambKit" required="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="InteriorExtensionJambKit">
+            	<apex:selectOptions value="{!InteriorExtensionJambKitItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="outInteriorExtensionJambKit" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />
+			
+			<apex:selectList value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" size="1" id="ExteriorDoorJamb" required="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ExteriorDoorJamb">
+            	<apex:selectOptions value="{!ExteriorDoorJambItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="outExteriorDoorJamb" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />
+			
+			<apex:selectList value="{!OrderItem.Exterior_Frame_Depth__c}" label="Exterior Frame Depth" size="1" id="ExteriorFrameDepth" required="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ExteriorFrameDepth">
+            	<apex:selectOptions value="{!ExteriorFrameDepthItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Exterior_Frame_Depth__c}" label="Exterior Frame Depth" id="outExteriorFrameDepth" rendered="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c == 'Disabled' || mode != 'e'}" />
+			 
+			<apex:selectList value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" size="1" id="DoorSillColor" required="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
+            	<apex:selectOptions value="{!DoorSillColorItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" id="outDoorSillColor" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Disabled' || mode != 'e'}" />
+			 
+		    <apex:selectList value="{!OrderItem.Exterior_Keyed_Lock__c}" label="Exterior Keyed Lock" size="1" id="ExteriorKeyedLock" required="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
+            	<apex:selectOptions value="{!ExteriorKeyedLockItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Exterior_Keyed_Lock__c}" label="Exterior Keyed Lock" id="outExteriorKeyedLock" rendered="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c == 'Disabled' || mode != 'e'}" />
+			  
+		  
+		</apex:pageBlockSection> 
+		
+
 		<hr></hr>
 		<apex:outputPanel rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}">
 			<apex:outputLabel value="Enable Special Options" for="specialOptionsCheck" style="font-weight:bold; font-size:91%; color: #4a4a56;"/>
@@ -460,22 +515,23 @@
             <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}" html-data-jsid="verify"/>
 
         </apex:pageBlockSection>
-          <apex:pageBlockSection title="Sales Information" columns="2" rendered="{!prodConfig.mpc != null}">
+        <apex:pageBlockSection title="Sales Information" columns="2" rendered="{!prodConfig.mpc != null}">
 
             <apex:outputText value="{!OrderItem.Room__c}" label="Room" id="room" /> 
             <apex:outputField value="{!OrderItem.Sales_Width_Inches__c}" label="Sales Width" id="salesOutputWidth"/> 
             <apex:outputField value="{!OrderItem.Sales_Width_Fraction__c}" label="Sales Width Fraction" id="salesOutputWidthFraction"/> 
             <apex:outputField value="{!OrderItem.Sales_Height_Inches__c}" label="Sales Height" id="salesInputHeight"/>
             <apex:outputField value="{!OrderItem.Sales_Height_Fraction__c}" label="Sales Height Fraction" id="salesInputHeightFraction"/>
-        </apex:pageBlockSection>        
-
+        </apex:pageBlockSection>
+        
+   
     </apex:pageBlock>
 
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
     </apex:actionRegion>
 
 </apex:form>
-    <apex:pageBlock >
+    <apex:pageBlock rendered="{!!newOrderItem}">
     	<apex:pageBlockSection title="Change History" columns="1" collapsible="true">
     	<apex:pageBlockTable title="Change History" value="{!changeHistoryRecords}" var="history" style="width:100%" id="changeHistoriesTable">
 		        <apex:column value="{!history.LastModifiedBy.Name}"/>
