@@ -175,13 +175,13 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public List<selectOption> getOrds() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
-        for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
+        for (Order orders : [SELECT Id, OrderNumber, EffectiveDate, Status 
                              FROM Order 
                              WHERE Status NOT IN('Draft', 'Tech Measure Needed', 'Tech Measure Scheduled', 'Ready to Order', 'Order Released', 'Install Needed')
                              AND RecordTypeId = :rt 
                              AND AccountId = :o.AccountId 
                              ORDER BY Order.OrderNumber DESC]) { 
-                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.Activated_Date__c + ' - ' + orders.Status)); //for all records found - add them to the picklist options
+                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.EffectiveDate + ' - ' + orders.Status)); //for all records found - add them to the picklist options
                              }
         options.add(new selectOption('', 'None')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
         return options; //return the picklist options        
