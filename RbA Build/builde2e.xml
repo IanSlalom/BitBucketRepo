@@ -1,6 +1,6 @@
 <project name="Sample usage of Salesforce Ant tasks" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
 
-    <property file="e2e.properties"/>
+    <property file="builde2e.properties"/>
     <property environment="env"/>
 	
     <!-- Test out deploy and retrieve verbs for package 'mypkg' -->
