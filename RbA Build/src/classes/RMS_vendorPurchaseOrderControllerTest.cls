@@ -135,7 +135,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assert(customController2.vendorProducts.contains(customController2.productItems[1].getvalue()));
 
 		//Set up controller with order Id and PO Id
-		//JETT 2083 verify showCancelPO attribute is set properly
+		//JETT 2083 verify showCancelPO attribute is set properly TEST JIRA LINK
 		TestUtilityMethods utility = new TestUtilityMethods();
 		Account accountRBA = utility.createVendorAccount('RbA');
 		accountRBA.name = 'RbA';
