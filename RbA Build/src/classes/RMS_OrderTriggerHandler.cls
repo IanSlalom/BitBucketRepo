@@ -28,6 +28,7 @@ public with sharing class RMS_OrderTriggerHandler {
 
     updateOrderStatus(oldMap,newMap);
     updateOrderTimeStamps(oldMap,newMap);
+    updateRevenueRecDate(oldMap,newMap);
   }
 
   /*public void OnAfterUpdate(Order[] oldOrders, Order[] updatedOrders, Map<ID, Order> OrderMap){
@@ -66,7 +67,7 @@ public with sharing class RMS_OrderTriggerHandler {
       }else if(o.Status == 'Install Needed' && o.Install_Order_Status__c == 'Scheduled' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Scheduled';
-      }/* removing per JETT-1601 else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Complete' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
+      }/* removing per JETT-1601 else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Completed' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Complete';
       }*/
@@ -118,6 +119,16 @@ public with sharing class RMS_OrderTriggerHandler {
       ordersToUpdate.add(o);
     }
     update ordersToUpdate;
+  }
+
+  public void updateRevenueRecDate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
+    Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+    for(Order o: newMap.values()){   
+      if(o.RecordTypeId == COROServiceId && o.Status != oldMap.get(o.Id).Status &&
+          (o.Status == 'Closed' || o.Status == 'Submitted for Warranty' && o.Invoice_Subtotal__c > 0)){
+          o.Revenue_Recognized_Date__c = System.Today();
+      }
+    }
   }
   
 }

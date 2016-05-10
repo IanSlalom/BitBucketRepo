@@ -276,4 +276,24 @@ private class RMS_OrderTriggerHandlerTests {
 		system.assertEquals(newOrder.Status, 'Job in Progress');
 
 	}
+
+	@isTest static void testUpdateRevenueRecDate(){
+		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
+												  and Name = 'InstallScheduled'];
+		System.assertEquals(soldOrder.size(),1);
+		
+		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+													Service_Type__c = 'Job in Progress',Pricebook2Id = Test.getStandardPricebookId() );
+		insert newOrder;
+		List<PricebookEntry> pbeList = [Select Id from PricebookEntry];
+		OrderItem oi = new OrderItem(OrderId = newOrder.Id, PricebookentryId = pbeList[0].Id, Quantity = 2, UnitPrice = 100, 
+			Quote_Accepted__c = true, Billable_Amount__c = 2, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Service', Secondary_Reason__c = 'Egress');
+		insert oi;
+		newOrder.Status = 'Closed';
+		update newOrder;
+		newOrder = [Select Revenue_Recognized_Date__c from Order where Id =: newOrder.Id];
+		System.assertEquals(newOrder.Revenue_Recognized_Date__c, System.Today());	
+	}
 }
