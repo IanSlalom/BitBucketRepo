@@ -31,10 +31,12 @@ public with sharing class RMS_OrderTriggerHandler {
     updateRevenueRecDate(oldMap,newMap);
   }
 
-  /*public void OnAfterUpdate(Order[] oldOrders, Order[] updatedOrders, Map<ID, Order> OrderMap){
+  public void OnAfterUpdate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
+    createOnHoldTasks(oldMap, newMap);
 
   }
 
+  /*  
   @future public static void OnAfterUpdateAsync(Set<ID> updatedOrderIDs){
     //List<Order> updatedOrders = [select Id, Name from Order where Id IN :updatedOrderIDs];
   }
@@ -130,5 +132,19 @@ public with sharing class RMS_OrderTriggerHandler {
       }
     }
   }
+
+  public void createOnHoldTasks(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
+    Id onHoldTaskID = UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task');
+    List<Task> tasksToInsert = new List<Task>();
+    for(Order o: newMap.values()){ 
+      if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
+        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId));
+      }
+    }
+    if(!tasksToInsert.isEmpty()){
+      insert tasksToInsert;
+    }
+  }
+  
   
 }
