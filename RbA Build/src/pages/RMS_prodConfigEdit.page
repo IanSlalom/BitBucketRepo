@@ -539,7 +539,8 @@
 		        <apex:column value="{!history.Retail_Price__c}"/>
 		        <apex:column value="{!history.Retail_Price_Change__c}"/>
 		        <apex:column value="{!history.Responsible_Party__c}"/>
-		        <apex:column value="{!history.Changes__c}"/>
+<!-- 
+ 		        <apex:column value="{!history.Changes__c}"/>-->
 		 </apex:pageBlockTable>
 		 </apex:pageBlockSection>
     </apex:pageBlock>
