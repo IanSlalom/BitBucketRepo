@@ -85,6 +85,8 @@
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
         <members>eventTest</members>
+        <members>TaskTriggerHandler</members>
+        <members>TaskTriggerHandlerTests</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
@@ -157,6 +159,7 @@
         <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
+        <members>TaskTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
