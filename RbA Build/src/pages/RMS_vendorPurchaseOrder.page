@@ -281,12 +281,12 @@
                             <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
                     </apex:column>
                     <apex:column style="width:25px" >
-                        <apex:facet name="header">Qty To Receive</apex:facet> 
+                        <apex:facet name="header">
+                            <apex:outputText value="Qty To Receive ({0,date,MM'/'dd'/'yyyy})">
+                                   <apex:param name="date" value="{!TODAY()}"/>
+                            </apex:outputText>
+                        </apex:facet> 
                             <apex:inputField value="{!oiw.orderItem.Quantity_to_Receive__c}" />
-                    </apex:column>
-                    <apex:column style="width:25px" >
-                        <apex:facet name="header">Date Received</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Date_Received__c}" />
                     </apex:column>
 
             </apex:pageBlockTable>
@@ -335,12 +335,12 @@
                             <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
                     </apex:column>
                     <apex:column style="width:25px" >
-                        <apex:facet name="header">Qty To Write Off</apex:facet> 
+                        <apex:facet name="header">
+                            <apex:outputText value="Qty To Write Off ({0,date,MM'/'dd'/'yyyy})">
+                                   <apex:param name="date" value="{!TODAY()}"/>
+                            </apex:outputText>
+                        </apex:facet>  
                             <apex:inputField value="{!oiw.orderItem.Quantity_to_Write_Off__c}" />
-                    </apex:column>
-                    <apex:column style="width:25px" >
-                        <apex:facet name="header">Date Written Off</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Date_Written_Off__c}" />
                     </apex:column>
 
             </apex:pageBlockTable>
@@ -389,12 +389,12 @@
                             <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Vendor_Credit__c}" />
                     </apex:column>
                     <apex:column style="width:25px" >
-                        <apex:facet name="header">New Vendor Credit</apex:facet> 
+                        <apex:facet name="header">
+                            <apex:outputText value="New Vendor Credit ({0,date,MM'/'dd'/'yyyy})">
+                                   <apex:param name="date" value="{!TODAY()}"/>
+                            </apex:outputText>
+                        </apex:facet> 
                             <apex:inputField value="{!oiw.orderItem.Vendor_Credit_to_Receive__c}" />
-                    </apex:column>
-                    <apex:column style="width:25px" >
-                        <apex:facet name="header">Date of Vendor Credit</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Date_Vendor_Credit__c}" />
                     </apex:column>
 
             </apex:pageBlockTable>
