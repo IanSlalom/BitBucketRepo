@@ -126,7 +126,7 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:commandButton action="{!edit}" value="Edit" rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
 				<apex:commandButton action="{!confirm}" value="Release Purchase Order" oncomplete="confirmationWindow('releasePO');return false" rendered="{!NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order"  rendered="{!NOT(relatedOrderClosed)}" oncomplete="confirmationWindow('cancelPO');return false"/>
+				<apex:commandButton action="{!confirm}" value="Cancel Purchase Order"  rendered="{!NOT(relatedOrderClosed) && showCancelPO}" oncomplete="confirmationWindow('cancelPO');return false"/>
 				<apex:commandButton action="{!receive}" value="Receiving"  rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed)}"/>
@@ -162,7 +162,7 @@ function prepareList(parent,child,isSubselectOptional){
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
 					
-					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
+  					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
 		
 				</apex:pageBlockSection>
 				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
@@ -197,7 +197,8 @@ function prepareList(parent,child,isSubselectOptional){
                     </apex:column>
 					
 					<apex:column style="width:50px"> 
-						<apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
+						<apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" rendered="{!showCancelPO}" 
+						oncomplete="confirmationWindow('cancelLineItem');return false" >
 							<apex:param name="lineItemToCancel"
 								value="{!oiw.orderItem.Id}"
 								assignTo="{!lineItemToCancel}"/>

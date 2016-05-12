@@ -337,6 +337,16 @@ public with sharing class RMS_mobileAppRequestHelper {
     Map<Id, Order> orderMap = queryOrders(opptyIds);
     // get the order line items
     List<OrderItem> oiList = queryOrderItems(orderMap.keySet());
+    // get the tech measure offsets
+    List<TM_Offset__c> tmoList = [select Id, Name, Description__c, Dimension__c, 
+    Location__c, Measurement__c, Order_Line__c, rSuite_Id__c, createdDate 
+    from TM_Offset__c where isDeleted = false and Order_Line__c in :oiList 
+    Order By createdDate asc];
+
+	//get the change histories
+	List<Change_History__c> chList = [Select Id, Name, Order_Product__c, Changes__c, Responsible_Party__c, Retail_Price__c, Retail_Price_Change__c, createdDate
+		from Change_History__c where isDeleted = false and Order_Product__c in : oiList and RecordType.DeveloperName = 'Order_Product_Change'
+		Order By LastModifiedDate];
     // get the order discounts
     List<Order_Discount__c> odList = queryOrderDiscounts(orderMap.keySet());
 	// get the order financing
@@ -344,15 +354,36 @@ public with sharing class RMS_mobileAppRequestHelper {
 
     // build the orderContainers
     List<OrderContainer> orcList = new List<OrderContainer>();
-    for (Order ord : orderMap.values()) {
-      OrderContainer orc = new OrderContainer();
-      orc.anOrder = ord;
-      orc.oiList = new List<OrderItem>();
-      for (OrderItem oi : oiList) {
-        if (oi.OrderId == ord.Id) {
-          orc.oiList.add(oi);
-        }
-      }
+	for (Order ord : orderMap.values()) {
+		OrderContainer orc = new OrderContainer();
+		orc.anOrder = ord;
+		orc.oiContainerList = new List<OrderItemContainer>();
+		for (OrderItem oi : oiList) {
+		if (oi.OrderId == ord.Id) {
+			OrderItemContainer oic = new OrderItemContainer();
+			oic.oi = oi;
+			// now add the TM offsets to the order item container
+			for (TM_Offset__c tmo: tmoList) {
+				if (tmo.Order_Line__c == oi.Id) {
+					if (oic.tmOffsetList == null) {
+						oic.tmOffsetList = new List<TM_Offset__c>();
+					}
+					oic.tmOffSetList.add(tmo);
+				}
+			}
+			// Add the Change Histories to the Order Item Container
+			for(Change_History__c ch: chList){
+				if(ch.Order_Product__c == oi.Id){
+					if(oic.changeHistoryList == null){
+						oic.changeHistoryList = new List<Change_History__c>();
+					}
+					oic.changeHistoryList.add(ch);
+				}
+			}
+			// now add the order item containter to the list
+			orc.oiContainerList.add(oic);
+		}
+	}
       orc.orderDiscountList = new List<Order_Discount__c>();
       for (Order_Discount__c od : odList) {
         if (od.Order__c == ord.Id) {
@@ -376,7 +407,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
     public Map<Id, Order> queryOrders(List<Id> opptyIds){
     Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
-      Discount_Amount__c, Installation_Date__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c
+      Discount_Amount__c, Installation_Date__c, Install_Notes__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c
       from Order where OpportunityId in :opptyIds and isDeleted = false]);
 
     return orderMap;
@@ -440,9 +471,11 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// most everything is updated but we need to add the order details that were generated from any closed won opportunities
 		appts = updateAppts(appts);
 		// process any closed won opportunities by creating work order activities
+/* this is being done in the order trigger now
 		if (appts.getErrors().size() == 0){
 			createWorkOrders(appts);
 		}
+*/		
 	} else {
 		appts.getErrors().add('No Sales Appointments Found');
 	}
@@ -459,6 +492,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 	for (SalesAppointment sa : appts.salesAppts) {
 		for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
 			if (qc.aQuote != null) {
+				// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON an exception occurs
+				// when trying to do an upsert.  This code is to handle that situation
+				if (qc.aQuote.Id != null) {
+					String temp = (String)qc.aQuote.Id;
+					if (temp.equals('')) {
+						qc.aQuote.Id = null;
+					}	
+				}
+				// END ID patch
 				quotes.add(qc.aQuote);
 			}
 		}
@@ -506,27 +548,30 @@ public with sharing class RMS_mobileAppRequestHelper {
         for (QuoteLineItem qli : qc.quoteLineItems) {
 			if (qli.QuoteId == null) {
 				// since this is used in inserts and updates we need to set the id only when the qli is net new
-//TODO:remove this line				System.debug('###################: adding a new qli: ' + qli.rSuite_Id__c);
 				qli.QuoteId = qc.aQuote.Id;
 			}
 			qliList.add(qli);
         }
         // add the quote id to the quote discounts and put the quote discounts in the list to be inserted
-        for (Quote_Discount__c qd : qc.quoteDiscountList) {
-			if (qd.Quote__c == null) {
-				// since this is used in inserts and updates we need to set the id only when the qli is net new
-				qd.Quote__c = qc.aQuote.Id;
+		if (qc.quoteDiscountList != null) {
+			for (Quote_Discount__c qd : qc.quoteDiscountList) {
+				if (qd.Quote__c == null) {
+					// since this is used in inserts and updates we need to set the id only when the qli is net new
+					qd.Quote__c = qc.aQuote.Id;
+				}
+			  qdList.add(qd);
 			}
-          qdList.add(qd);
-        }
+		}
         // add the quote id to the quote financing and put the quote financing in the list to be inserted
-        for (Quote_Financing__c qf : qc.quoteFinancingList) {
-			if (qf.Related_Quote__c == null) {
-				// since this is used in inserts and updates we need to set the id only when the qli is net new
-				qf.Related_Quote__c = qc.aQuote.Id;
+		if (qc.quoteFinancingList != null) {
+			for (Quote_Financing__c qf : qc.quoteFinancingList) {
+				if (qf.Related_Quote__c == null) {
+					// since this is used in inserts and updates we need to set the id only when the qli is net new
+					qf.Related_Quote__c = qc.aQuote.Id;
+				}
+			  qfList.add(qf);
 			}
-          qfList.add(qf);
-        }
+		}
       }
     }
     // lets set a database save point
@@ -580,7 +625,6 @@ public with sharing class RMS_mobileAppRequestHelper {
       // put the errors in the appts errors
       appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
       System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
-
     }
     return appts;
   }
@@ -631,6 +675,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @param: Appointments appts
    * @return: void
    */
+/* This is being done in the OrderTrigger now
   public void createWorkOrders(Appointments appts) {
     // first find the closed won opportunities
     List<Order> ordList = new List<Order>();
@@ -675,7 +720,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       insert woList;
     }
   }
-
+*/
   /* @method: customerSearch(String inputJSON)
    * @param: String inputJSON
    * @return: String
@@ -853,10 +898,12 @@ public with sharing class RMS_mobileAppRequestHelper {
       }
 
       for(OrderItemContainer oiCon: oiContainersToUpsert){
-        for(TM_Offset__c tmOff: oiCon.tmOffSetList){
-          tmOff.Order_Line__c = oiCon.oi.Id;
-          TMOffsetToUpsert.add(tmOff);
-        }     
+		if (oiCon.tmOffSetList != null) {
+			for(TM_Offset__c tmOff: oiCon.tmOffSetList){
+			  tmOff.Order_Line__c = oiCon.oi.Id;
+			  TMOffsetToUpsert.add(tmOff);
+			}     
+		}
       }   
      
      lur = Database.upsert(TMOffsetToUpsert, false);
@@ -928,7 +975,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 
   public class OrderContainer {
     public Order anOrder {get; set;}
-    public List<OrderItem>  oiList {get; set;}
     public List<Order_Discount__c> orderDiscountList {get; set;}
     public List<Order_Financing__c> orderFinancingList {get; set;}
     public List<OrderItemContainer> oiContainerList{get;set;}
@@ -937,6 +983,7 @@ public with sharing class RMS_mobileAppRequestHelper {
   public class OrderItemContainer{
     public OrderItem oi {get;set;}
     public List<TM_Offset__c> tmOffSetList {get;set;}
+    public List<Change_History__c> changeHistoryList {get;set;}
   }
 
   public class QuoteContainer {

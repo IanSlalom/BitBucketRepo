@@ -884,6 +884,17 @@
         <fields>TotalPrice</fields>
         <relatedList>OrderItem.Parent_Order_Item__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Description__c</fields>
+        <fields>Dimension__c</fields>
+        <fields>Location__c</fields>
+        <fields>Measurement__c</fields>
+        <fields>LAST_UPDATE</fields>
+        <relatedList>TM_Offset__c.Order_Line__c</relatedList>
+        <sortField>NAME</sortField>
+        <sortOrder>Asc</sortOrder>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>

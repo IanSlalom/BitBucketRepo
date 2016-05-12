@@ -18,6 +18,42 @@
                 <behavior>Edit</behavior>
                 <field>Specialty_Shape__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Whole_Inch_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Fraction_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Whole_Inch_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Fraction_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Display_Visual_Note__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Meet_Rail_Dimension_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Meet_Rail_Dimension__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Height_L_or_R_Leg_Height_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Leg_Height_L_or_R_Leg_Height_Control__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -1066,37 +1102,37 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Width_Interior_Whole_Inch__c</field>
+                <field>Unit_Width_Interior_Whole_Inch_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Width_Exterior_Whole_Inch__c</field>
+                <field>Unit_Width_Exterior_Whole_Inch_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Height_Interior_Whole_Inch__c</field>
+                <field>Unit_Height_Interior_Whole_Inch_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Height_Exterior_Whole_Inch__c</field>
+                <field>Unit_Height_Exterior_Whole_Inch_Control__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Width_Interior_Fraction__c</field>
+                <field>Unit_Width_Interior_Fraction_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Width_Exterior_Fraction__c</field>
+                <field>Unit_Width_Exterior_Fraction_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Height_Interior_Fraction__c</field>
+                <field>Unit_Height_Interior_Fraction_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Unit_Height_Exterior_Fraction__c</field>
+                <field>Unit_Height_Exterior_Fraction_Control__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>

@@ -34,11 +34,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Account account1 = utility.createVendorAccount('Vendor Account 1 ');
 		insert account1;
 
-		Account account2 = new Account(	Name = 'RbA',
-										AccountNumber = '1234567890',
-										Phone = '(763) 555-2000'
-									);
-		insert account2;
+
 
 		Account dwelling = utility.createDwellingAccount('Dwelling Account');
 
@@ -95,7 +91,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.debug('ORDER REV REC' + soldOrder.Revenue_Recognized_Date__c);
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
-
+		Test.startTest();
 		// Set up controller with an order Id and no PO Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef);
@@ -128,7 +124,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 //		System.assertEquals(customController.showInventoryWriteOff,true);
 
 
-
 		// Set up controller with no order Id but has a PO Id
 		PageReference pageRef2 = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef2);
@@ -138,7 +133,33 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController2.selectedVendor = vendorAccount.Id;
 		customController2.costPurchaseOrder =true;
 		System.assert(customController2.vendorProducts.contains(customController2.productItems[1].getvalue()));
+
+		//Set up controller with order Id and PO Id
+		//JETT 2083 verify showCancelPO attribute is set properly TEST JIRA LINK
+		TestUtilityMethods utility = new TestUtilityMethods();
+		Account accountRBA = utility.createVendorAccount('RbA');
+		accountRBA.name = 'RbA';
+		insert accountRBA;
+		Purchase_Order__c po3 = new Purchase_Order__c(Vendor__c = accountRBA.Id,Order__c = soldOrder.Id);
+		insert po3;
+		PageReference pageRef3 = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef3);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);	
+		ApexPages.CurrentPage().getparameters().put('id', po3.Id)		;
+		ApexPages.StandardController stdController3 = new ApexPages.StandardController(po3);
+		RMS_vendorPurchaseOrderController customController3  = new RMS_vendorPurchaseOrderController(stdController3);
+	
+		customController3.selectedVendor = accountRBA.Id;
+		System.assertEquals(customController3.showCancelPO,false);
+		po3.Status__c = 'In Progress';
+		update po3;
+		customController3  = new RMS_vendorPurchaseOrderController(stdController3);
+		System.assertEquals(customController3.showCancelPO,true);
+		System.debug('VENDOR NAME ' + customController3.selectedVendorName);
+		system.debug(customController3.servicePurchaseOrder);
+		Test.stopTest();
 	}
+
 
 	/*******************************************************
 					PageVariableTest
@@ -245,6 +266,38 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	
 	}
 
+	@isTest
+	static void saveTestDates(){
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id,Purchase_Order__c FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];	
+		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
+		upsert soldOrderItem;
+			// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		//JETT 2083 Verify when quantities are set on OI, Date fields are set to Today
+		RMS_vendorPurchaseOrderController customControllerDates  = new RMS_vendorPurchaseOrderController(stdController);
+		customControllerDates.selectedVendor = vendorAccount.Id;
+		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
+		customControllerDates.orderItemWrapperList = new List<RMS_vendorPurchaseOrderController.OrderItemWrapper>{wrap};
+		customControllerDates.getOrderItemWrappersByVendor();
+		customControllerDates.orderItemWrapperByVendor[0].orderItem.Quantity_To_Receive__c = 2;
+		customControllerDates.orderItemWrapperByVendor[0].orderItem.Quantity_To_Write_Off__c = 2;
+		customControllerDates.orderItemWrapperByVendor[0].orderItem.Vendor_Credit_To_Receive__c = 2;
+		// Save with a vendor, 
+		customControllerDates.save();
+		soldOrderItem = [Select Date_Received__c, Date_Written_Off__c, Date_Vendor_Credit__c from OrderItem where Id =: soldOrderItem.Id];
+		System.assertEquals(soldOrderItem.Date_Vendor_Credit__c, System.Today());
+		System.assertEquals(soldOrderItem.Date_Written_Off__c, System.Today());
+		System.assertEquals(soldOrderItem.Date_Vendor_Credit__c, System.Today());
+
+	}
 	/*******************************************************
 					SaveTest
 	*******************************************************/
@@ -254,8 +307,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
-		Product2 prod = [Select Id from Product2 where Name = 'Test Product'];
-		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		OrderItem soldOrderItem = [SELECT Id,Purchase_Order__c FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];	
+		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
 		soldOrderItem.Unit_Wholesale_Cost__c = 50;
 		upsert soldOrderItem;
 
@@ -273,17 +326,13 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		// set the selected vendor to the vendor account id
 		customController.selectedVendor = vendorAccount.Id;
 
-		
-		// Save with a vendor, 
-		customController.save();
-
+		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
+		customController.orderItemWrapperList = new List<RMS_vendorPurchaseOrderController.OrderItemWrapper>{wrap};
 		//JETT-712 Verify PO Status is updated upon save if Status is Released, Estimated Ship Date is populated, and related OrderItems all have wholesale costs
-		customController.orderItemWrapperList = new List<RMS_VendorPurchaseOrderController.OrderItemWrapper>{new RMS_VendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,prod)};
 		customController.po.Estimated_Ship_Date__c = System.Today();	
 		customController.po.Status__c = 'Released';
 		customController.save();
 		System.assert(customController.po.Status__c == 'Confirmed');
-
 		
 		//Update post-demo, replaced soql query with checking the order item wrapper for ois with null unit wholesale cost.
 		soldOrderItem.Purchase_Order__c = null;
@@ -314,7 +363,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 	}
 		
-//		RMS_vendorPurchaseOrderController.OrderItemWrapper orderWrapper = new RMS_vendorPurchaseOrderController.OrderItemWrapper();
 
 
 	/*******************************************************
@@ -322,7 +370,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	*******************************************************/
 	static testmethod void AddProductTest(){
 		createTestRecords();
-
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
@@ -548,7 +595,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
-
+			
 		System.assert(customController.vendorCreditLineItems(orderItemsForVendorCredit, assetIds) != null);
 		orderItemsForVendorCredit[0].Date_Vendor_Credit__c = System.Today();
 		orderItemsForVendorCredit[0].Vendor_Credit_to_Receive__c = null;
@@ -556,7 +603,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
 
 	}
-
 	@isTest
 	public static void testOrderItemWrapperClass(){		
 		createTestRecords();
