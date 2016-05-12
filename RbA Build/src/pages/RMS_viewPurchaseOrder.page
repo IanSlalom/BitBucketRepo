@@ -82,24 +82,41 @@ function prepareList(parent,child,isSubselectOptional){
           j$('#'+parent+child).html(j$("#"+child+" option"));
           j$('#'+child).html("<option> — </option>");
           j$('#'+parent).change(function(){
+//              var parentValue = j$('#'+parent).attr('value');
+//                alert (j$("select[data-jsid=parent]").val());
               var parentValue = j$("select[html-data-jsid='productList']").val();
+//              var parentValue = j$('#'+parent).attr('value');
+//               alert (parentValue);
+ //             alert (j$("select[data-jsid='accountList2']").val());
+ //             var accountList2 = j$("select[data-jsid='accountList2']").val();
+//              j$('#'+child).html(j$("#"+parent+child+" .child_"+parentValue).clone());
+//              alert(j$("#"+parentValue+child+" .child_"+parentValue));
+//              j$('#'+child).html(j$("#"+parentValue+child+" .child_"+parentValue).clone());
+ //             if(isSubselectOptional) j$('#'+child).prepend("<option> — Select — </option>");
 
+//             var parentValue = j$('select#'+parent).attr('value');
+//              var myVar = j$("#span").find('.select2-chosen').val();
+//              var myVar  = j$('#select2-chosen').text();    
+//                var abc = j$(this).closest('.x-panel x-border-panel').attr('id');
+//                var abc = j$('#x-panel-bwrap').val();
+//                var abc = j$(".select2-chosen");$( "#myDivId" ).val()
+//var $element = j$('.select2-chosen').html();
+//var $element = j$('.select2-chosen').text();
+//parentValue = $element;
+//alert($element);
+//alert(parent);
+
+
+//              var myVar  = j$('#select2-chosen').text();
+//                alert('abc' +abc);
+
+
+//             alert(parentValue);
              j$('#'+child).html(j$("select#"+parent+child+" .child_"+parentValue).clone());
              if(isSubselectOptional) j$('select#'+child).prepend("<option> — Select — </option>");
 
           });
-
      }
-
-	function openCongaCostPO() { 
-		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Cost_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
-	}
-
-//	function openCongaServicePO() { 
-//		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Cost_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
-//	}
-
-
     </script>
 	<apex:pageMessages /> 
 
@@ -113,10 +130,7 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:commandButton action="{!receive}" value="Receiving"  rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed)}"/>
-				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="openCongaCostPO()" rendered="{!costPurchaseOrder}"/>
-<!--  				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="openCongaServicePO()" rendered="{!servicePurchaseOrder}"/>
-		-->
-		</apex:pageBlockButtons>
+			</apex:pageBlockButtons>
 
 			<div id="OrderId" style="display:none;">{!orderId}</div>	
 			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}"/>
