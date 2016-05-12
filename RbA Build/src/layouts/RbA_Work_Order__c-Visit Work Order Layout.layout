@@ -127,10 +127,6 @@
                 <behavior>Edit</behavior>
                 <field>Primary_Service__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>LSWP_Test_Results__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
