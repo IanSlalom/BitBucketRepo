@@ -107,7 +107,7 @@
  
   <apex:pageMessages escape="false" />
 	<div id="OrderId" style="display:none;">{!orderId}</div>	
-    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!jobClosed}">
+    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!jobClosed}" > 
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" />
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
@@ -145,7 +145,7 @@
 -->            <apex:commandButton action="{!saveProduct}" value="Save" rendered="{!mode == 'e'}"/>
 			<apex:commandButton action="{!saveProduct}" value="Save & New" status="save-new-status" rerender="page-form" rendered="{!mode == 'e'}"/>
 <!-- 			<apex:commandButton action="{!edit}" value="Edit" status="edit-status" rerender="page-form" rendered="{!mode != 'e'}"/>
--->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e' && !jobClosed}"/>
+-->			<apex:commandButton action="{!edit}" value="Edit" rendered="{!mode != 'e' && !jobClosed}" /> 
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
        </apex:pageBlockButtons>
 
@@ -501,10 +501,10 @@
 			<apex:outputField value="{!OrderItem.Description}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.UnitPrice}" rendered="{!mode == 'e'}"/>
 			<apex:outputField value="{!OrderItem.UnitPrice}" rendered="{!mode != 'e'}"/>
-			<apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode == 'e'}"/>
-			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e'}"/>
-			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode == 'e'}"/>
-			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'}"/>
+			<apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode == 'e' || mode == 'r'}"/>
+			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
+			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode == 'e'  || mode == 'r'}"/>
+			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'  && mode != 'r'}"/>
 			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr" onChange="callRule('nspr')"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
             <apex:outputField value="{!OrderItem.Tax__c}" />
