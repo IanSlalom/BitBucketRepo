@@ -148,7 +148,7 @@ function prepareList(parent,child,isSubselectOptional){
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
 					
-					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
+  					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
 		
 				</apex:pageBlockSection>
 				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->

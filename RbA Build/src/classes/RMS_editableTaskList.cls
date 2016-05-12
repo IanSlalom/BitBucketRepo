@@ -1,3 +1,24 @@
+/*******************************************************//**
+
+@class  RMS_editableTaskList
+
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@brief 1 of 2 classes used on the RMS_addMultipleTaskstoWO page
+for creating a dynamic page where user may add multiple records
+on a single page. Class used to create records and add/delete
+rows on the single page, each representing a new record.
+
+@version    2016-05-11 Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
+
 public abstract with sharing class RMS_editableTaskList 
 {
 // Used to help instantiate a counter for the Visualforce table rows
