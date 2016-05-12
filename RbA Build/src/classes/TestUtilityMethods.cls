@@ -36,6 +36,13 @@ public with sharing class TestUtilityMethods {
 		
 		Account store1 = createStoreAccount('77 - Twin Cities, MN');
 		insert store1;
+
+		Account masterAccount = new Account(name = 'Unassigned Account');
+		insert masterAccount;
+
+		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
+		insert customSetting2;
+		
 		
 		//Creating RMS_Queue_Settings__c
 		Group Order_Queue = createQueue('Order_Queue');
@@ -104,6 +111,12 @@ public with sharing class TestUtilityMethods {
 		//Creating RMS_Settings__c
     	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
 		insert customSetting1;
+		Account masterAccount = new Account(name = 'Unassigned Account');
+		insert masterAccount;
+
+		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
+		insert customSetting2;
+		
 		
 		//Creating RMS_Queue_Settings__c
 		Group Order_Queue = createQueue('Order_Queue');
