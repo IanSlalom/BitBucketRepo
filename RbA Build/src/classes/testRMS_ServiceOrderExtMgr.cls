@@ -37,10 +37,12 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         insert dwellingsToInsert;        
         
         List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
         contactsToInsert.add(contact1);
-        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
+        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
         contactsToInsert.add(contact2);
+        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        contactsToInsert.add(contact3);
         insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
@@ -578,7 +580,7 @@ String secondary = 'Customer Satisfaction';*/
     
     static testmethod void saveP2test(){
         createTestRecords();
-        Order order = [SELECT Id,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Order order = [SELECT Id,AccountId,pricebook2id,BilltoContactId,Name FROM Order WHERE Name = 'Sold Order 1'];        
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
         

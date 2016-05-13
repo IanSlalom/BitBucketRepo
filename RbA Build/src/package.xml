@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -83,14 +83,14 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>TaskTriggerHandler</members>
+        <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
         <members>eventTest</members>
-        <members>TaskTriggerHandler</members>
-        <members>TaskTriggerHandlerTests</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
@@ -263,6 +263,7 @@
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
+        <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>

@@ -3,6 +3,7 @@
 @class  RMS_viewServiceOrderProductsCtlr
 
 @brief  Controller for RMS_viewServiceOrderProducts visualforce page
+which is embedded in the View Service Request page.
 
 @author  Brianne Wilson (Slalom.CDK)
 
@@ -14,7 +15,7 @@
 
 ***********************************************************/
 public with sharing class RMS_viewServiceOrderProductsCtlr {
-
+	    
     public final Order ord;
     public Map<Id,OrderItem> orderItems {get;set;}
     public List<OrderItemWrapper> orderItemWrappers{get;set;}
@@ -27,9 +28,9 @@ public with sharing class RMS_viewServiceOrderProductsCtlr {
     public Id orderItemToToggle{get;set;}
 
     public RMS_viewServiceOrderProductsCtlr(ApexPages.StandardController stdController) {
-        if(!test.isRunningTest()){
+        /*if(!test.isRunningTest()){
             stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
-        }
+        }*/
         this.ord = (Order)stdController.getRecord();
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
