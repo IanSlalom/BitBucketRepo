@@ -22,6 +22,7 @@
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
+        <members>RMS_OrderDiscountManager</members>
         <members>RMS_OrderItemExtension</members>
         <members>RMS_OrderItemManager</members>
         <members>RMS_OrderTriggerHandler</members>
@@ -82,14 +83,14 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>TaskTriggerHandler</members>
+        <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
         <members>eventTest</members>
-        <members>TaskTriggerHandler</members>
-        <members>TaskTriggerHandlerTests</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
@@ -163,6 +164,7 @@
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
+        <members>OrderDiscountTrigger</members>
         <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
@@ -261,6 +263,7 @@
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
+        <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>

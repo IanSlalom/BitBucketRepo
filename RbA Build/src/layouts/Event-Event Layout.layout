@@ -44,14 +44,6 @@
                 <behavior>Readonly</behavior>
                 <field>Open_Event__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Closed_Event__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>End_Date_Time_Minus_1_Hour__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

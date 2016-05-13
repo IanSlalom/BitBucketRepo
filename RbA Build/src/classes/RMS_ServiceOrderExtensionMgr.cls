@@ -261,7 +261,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                     o.BillToContactId = bc.BilltoContactId;
                 }
             } else {
-                ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true];
+                ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true LIMIT 1];
                 o.BillToContactId = ch.Contact__c;
             }            
             

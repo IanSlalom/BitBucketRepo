@@ -12,8 +12,10 @@
     window.onload = function() {
        // hideSelector();
         testOpenSubtab();
+        //removeRequiredInput();
         
     };
+    
 
     function testOpenSubtab() {
         //First find the ID of the primary tab to put the new subtab in
@@ -72,17 +74,14 @@ display: none;
       <apex:inputField value="{!task.WhatId}" style="width: 100px;"/>
     </apex:column>-->
         <apex:column headerValue="Assigned To" id="assigned">
-      <apex:inputField value="{!task.OwnerId}" styleClass="hideDropdown"/>
+      <apex:inputField value="{!task.Assigned_To__c}" styleClass="hideDropdown" id="assign"/>
     </apex:column>
     <apex:column headerValue="Subject" width="500px;">
       <apex:inputField value="{!task.Subject}" style="width: 500px;"/>
     </apex:column>
     <apex:column headerValue="Type">
-      <apex:inputField value="{!task.Service_Type__c}"/>
-    </apex:column>
-    <apex:column headerValue="Non Stock Material" width="100px;">
-        <apex:inputField value="{!task.Non_Stock_Material__c}" style="width: 100px;"/>
-    </apex:column>        
+      <apex:inputField value="{!task.Service_Type__c}" required="true"/>
+    </apex:column>       
     <apex:column headerValue="Status">
       <apex:inputField value="{!task.Status}"/>
     </apex:column>           
