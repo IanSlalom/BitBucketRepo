@@ -214,7 +214,7 @@
             <value>To be scheduled,Pending Assignment</value>
         </criteriaItems>
         <criteriaItems>
-            <field>RbA_Work_Order__c.Number_Open_Events__c</field>
+            <field>RbA_Work_Order__c.Number_Open_Events_Formula__c</field>
             <operation>greaterOrEqual</operation>
             <value>1</value>
         </criteriaItems>
