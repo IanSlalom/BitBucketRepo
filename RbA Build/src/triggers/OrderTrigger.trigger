@@ -81,7 +81,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
             financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             customerPickup.customerPickup(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
                          accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-            handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
+        	handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
         }
                     
         //After Delete
