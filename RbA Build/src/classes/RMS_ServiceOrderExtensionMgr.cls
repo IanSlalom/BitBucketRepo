@@ -333,8 +333,83 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 }        
             }
             
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
             //convert the selectOption value to picklist value, set on Ordre
             o.Service_Type__c = propPickValSelected;
+            
+
+            upsert o;
+            system.debug(listOI);
+            
+            //inserts the OrderItems
+            insert listOi;
+            pageRef = new PageReference('/' + o.id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+        }
+        
+        return pageRef;
+    }    
+    
+    //add product page
+        public PageReference saveNewProducts(){
+        
+        PageReference pageRef = null;
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
+            
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.isSelected){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Id];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        //oi.Parent_Order_Item__c = oa.Product2Id; 
+                        oi.Charge_Cost_To__c = wrapper.cost;
+                        oi.Primary_Reason__c = wrapper.primary;
+                        oi.Secondary_Reason__c = wrapper.secondary;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+                        
             
             //checkbox on Order set to true, needed to ensure we validate required fields, but
             //only when the entire request is filled out and not during a rerender.
@@ -353,7 +428,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
         
         return pageRef;
-    }        
+    }       
     
     //product wrapper for creating table of Service Products
     public class ProductWrapper{

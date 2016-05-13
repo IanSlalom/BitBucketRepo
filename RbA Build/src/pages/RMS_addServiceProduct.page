@@ -52,7 +52,7 @@
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
-                <apex:commandButton action="{!saveClose}" value="Save"/>                
+                <apex:commandButton action="{!saveNewProducts}" value="Save"/>                
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1" rendered="false">
