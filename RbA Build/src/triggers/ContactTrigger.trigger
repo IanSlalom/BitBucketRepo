@@ -23,7 +23,7 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     
     //CHECK IF DATA LOADING PROFILE 
-    if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
+    if(RMS_Settings_map.get('Data Loading Profile ID') == null || RMS_Settings_map.get('Unassigned Account Id') == null){
         if(Trigger.isDelete){
             Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
         }else{
@@ -60,13 +60,13 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
         
         // After Insert 
         if(Trigger.isInsert && Trigger.isAfter){
-            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new, Trigger.newMap);
+            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);
             
         } 
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
-            contactHistoryCreationManager.createContactHistoryonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            contactHistoryCreationManager.createContactHistoryonUpdate(Trigger.oldMap, Trigger.newMap);
                          
         }
                     
