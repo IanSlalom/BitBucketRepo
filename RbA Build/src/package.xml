@@ -41,6 +41,7 @@
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createContactHistoryManager</members>
+        <members>RMS_createContactHistoryManagerTests</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
