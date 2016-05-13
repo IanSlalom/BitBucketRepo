@@ -127,7 +127,7 @@ public with sharing class RMS_OrderTriggerHandler {
     Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
     for(Order o: newMap.values()){   
       if(o.RecordTypeId == COROServiceId && o.Status != oldMap.get(o.Id).Status &&
-          (o.Status == 'Closed' || o.Status == 'Submitted for Warranty' && o.Invoice_Subtotal__c > 0)){
+          (o.Status == 'Closed' || o.Status == 'Warranty Submitted' && o.Invoice_Subtotal__c > 0)){
           o.Revenue_Recognized_Date__c = System.Today();
       }
     }
