@@ -138,7 +138,7 @@ public with sharing class RMS_OrderTriggerHandler {
     List<Task> tasksToInsert = new List<Task>();
     for(Order o: newMap.values()){ 
       if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
-        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId));
+        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId, Subject = 'On Hold'));
       }
     }
     if(!tasksToInsert.isEmpty()){
