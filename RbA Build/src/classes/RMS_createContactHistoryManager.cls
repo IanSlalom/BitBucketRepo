@@ -1,3 +1,28 @@
+/*******************************************************//**
+
+@class  RMS_createContactHistoryManager
+
+@brief  When a Contact is created, a Contact History record is created. 
+Primary Contact and Primary Dwelling for Contact are passed from Contact
+to Contact History. Should a Contact have their Account change, a Contact
+History record is created as well. This means each Contact has at least one
+Contact History record. They should have a Contact History record for each
+Account they have had populated in the "Account" field over time.
+
+Note: Contact related list on the Account page is actually the list of Contact Histories
+in order to view all Contacts who have lived at that Dwelling. The "New Contact" button; h
+however brings user to "Create Contact" page.
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@version    2016-4-19  Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
 public with sharing class RMS_createContactHistoryManager {
 
     Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');

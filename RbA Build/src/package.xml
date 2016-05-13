@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -22,6 +22,7 @@
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
+        <members>RMS_OrderDiscountManager</members>
         <members>RMS_OrderItemExtension</members>
         <members>RMS_OrderItemManager</members>
         <members>RMS_OrderTriggerHandler</members>
@@ -31,6 +32,8 @@
         <members>RMS_ServiceProductPickup</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
+        <members>RMS_addSkilltoWO</members>
+        <members>RMS_assignServiceTaskOwner</members>
         <members>RMS_backOfficeChecklistManager</members>
         <members>RMS_backOfficeChecklistManagerTest</members>
         <members>RMS_cancelOrderExtension</members>
@@ -59,6 +62,7 @@
         <members>RMS_newPaymentRedirectExtensionTest</members>
         <members>RMS_opportunityUtilities</members>
         <members>RMS_opportunityUtilitiesTest</members>
+        <members>RMS_orderHistoryController</members>
         <members>RMS_populateResourceonEventManager</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
@@ -79,6 +83,8 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>TaskTriggerHandler</members>
+        <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
@@ -88,7 +94,13 @@
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_addSkilltoWO</members>
+        <members>testRMS_assignServiceTaskOwner</members>
         <members>testRMS_createContactHistoryMgr</members>
+        <members>testRMS_editableTaskList</members>
+        <members>testRMS_editableTaskListExt</members>
+        <members>testRMS_orderHistoryController</members>
+        <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <name>ApexClass</name>
     </types>
@@ -107,6 +119,7 @@
         <members>MA_SchedulerSettingsComp</members>
         <members>MA_SchedulerStylingComp</members>
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
+        <members>RMS_orderHistoryComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -151,12 +164,14 @@
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
         <members>OpportunityTrigger</members>
+        <members>OrderDiscountTrigger</members>
         <members>OrderItemTrigger</members>
         <members>OrderTrigger</members>
         <members>PaymentTrigger</members>
         <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
+        <members>TaskTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -176,6 +191,7 @@
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
         <members>Product_Configuration__c</members>
+        <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Store_Configuration__c</members>
@@ -247,6 +263,7 @@
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
+        <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
@@ -311,25 +328,27 @@
     <types>
         <members>BuildingPermitText</members>
         <members>CasementWindowS1</members>
+        <members>ConsoleOrderIcon</members>
         <members>CreateSO</members>
-        <members>HistoricalText</members>
         <members>HOAText</members>
+        <members>HistoricalText</members>
         <members>InstallText</members>
-        <members>jquery</members>
-        <members>jquery_tableSorter</members>
-        <members>jquery_TableSorterZip</members>
-        <members>jqueryautocomplete</members>
+        <members>LSWP</members>
         <members>LeadPaintPermit</members>
         <members>LoadingPage</members>
-        <members>LSWP</members>
         <members>MA_Scheduler</members>
         <members>Order</members>
         <members>PaintStainText</members>
-        <members>select2</members>
         <members>ServiceOrder</members>
         <members>ServiceText</members>
         <members>SiteSamples</members>
         <members>TechMeasureText</members>
+        <members>jquery</members>
+        <members>jquery_TableSorterZip</members>
+        <members>jquery_tableSorter</members>
+        <members>jqueryautocomplete</members>
+        <members>orderIconNonConsole</members>
+        <members>select2</members>
         <name>StaticResource</name>
     </types>
     <types>
@@ -343,7 +362,9 @@
         <members>Order_Financing__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
+        <members>Resource__c</members>
         <members>Store_Finance_Program__c</members>
+        <members>Task</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>

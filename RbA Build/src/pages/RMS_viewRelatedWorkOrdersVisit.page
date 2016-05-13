@@ -96,9 +96,9 @@
             <apex:column headerValue="">  
                 <a href="#" onClick="openSubtab('{!wo.Id}','{!wo.Name}');return false">View</a> 
             </apex:column>
-            <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />
+            <apex:column value="{!wo.Work_Order_Type__c}" id="OrderTypeColumn" styleClass="bigandgreen" />            
             <apex:column value="{!wo.Work_Order_Status__c}"/>
-            <apex:column value="{!wo.Scheduled_Install_Date_Formula__c}"/>
+            <apex:column value="{!wo.Confirmed_Appt_w_Customer__c}" headerValue="Scheduled Date/Time"/>
             <apex:column value="{!wo.Owner.Name}" headerValue="Owner"/>
         </apex:pageBlockTable>
         
