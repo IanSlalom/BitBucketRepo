@@ -441,7 +441,6 @@ public with sharing class RMS_financialTransactionManager {
         
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecInternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecExternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized External Labor');
-        map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborPostRecExternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized Service External Labor');
         
         map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFTL = linkFinacialTransactions(extraFieldsList, 'Misc Reimbursement');
         map<Id, String> laborIdToMiscReimbursementGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
@@ -515,18 +514,14 @@ public with sharing class RMS_financialTransactionManager {
                 //POST RECOGNIZED LABOR
                 else if(typeOfLabor == 'PostRecLabor'){
                     if(subTypeOfLabor == 'external'){
- 						if(typeOfOrder == 'coroService'){
-	                		errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized Service External Labor');
-		                }else if(typeOfOrder == 'coroRecordType'){
-	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
-	                	}                   
+                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
                     }else if(subTypeOfLabor == 'internal'){
                         if(typeOfOrder == 'coroService'){
                 			//DO NOT CREATE POST RECOGNIZED SERVICE EXTERNAL LABOR FINANCIAL TRANSACTIONS
                 			continue;
 		                }else if(typeOfOrder == 'coroRecordType'){
 	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecInternalFTL.get(l.id) , errorMessage, 'Post Recognized Internal Labor');
-	                    }
+	                    } 
                         
                         
                         
