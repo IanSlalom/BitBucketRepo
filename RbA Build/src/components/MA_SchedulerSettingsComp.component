@@ -55,13 +55,6 @@
             font-size: 1em;
         }
         
-		/*
-        .bookingWindowGroup, .storeHoursGroup {
-            border-bottom: 1px solid #e6e6e6;
-            padding: 15px 0px;
-        }
-		*/
-        
         span.pointer.expandSettingsRow {
             padding: 0px 3px;
         }
@@ -80,6 +73,7 @@
         var storeSettingsMap = {};
 		var apexSettingsController = 'MA_SchedulerController';
         var resourceTypes = [ 'Tech Measure', 'Install', 'Service' ];
+        var verifyEsriResponse = { onSuccess: verifyEsriSuccess, onFailure: processResponseError };
 		var daysOfWeek = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
         var processSettingsResponse = { onSuccess: processSettingsSuccess, onFailure: processResponseError };
         var processSaveSettingsResponse = { onSuccess: processSaveSettingsSuccess, onFailure: processResponseError };
@@ -100,7 +94,6 @@
             for (var i = 0, len = times.length; i < len; i++) {
                 timeOptions += '<option value="' + times[i] + '">' + times[i] + '</option>';
             }
-            //$('#settingsModal .startTime, #settingsModal .endTime').append(timeOptions);
 
             for (var i = 0, len = resourceTypes.length; i < len; i++) {
                 var resourceTypeNoSpaces = resourceTypes[i].replace(new RegExp(' ', 'g'), '');
@@ -110,11 +103,7 @@
 
                 var resourceTypeSettingsDivHtml = '<div id="' + resourceDivId + '" name="' + resourceTypes[i] + '" class="tabDiv ma-jquery-tab-content-override">'
                                                     + '<div class="innerSettingsGroup">'
-                                                        //+ '<div>Job Duration: <input type="number" id="' + resourceTypeNoSpaces + 'JobDuration" /> (in hours)</div>'
-                                                        //+ '<div>Crew Size: <input type="number" id="' + resourceTypeNoSpaces + 'CrewSize" /></div>'
-                                                        
                                                         + '<h2><span>Set specific time slots</span></h2>'
-                                                        //+ '<h4><span>Set timeslots that will appear as available blocks to start appointments in. The end of the last timeslot should represent the end of the working day (when technicians stop working).</span><h4>'
                                                         + '<div class="pad-0-15"><p>Set timeslots that will appear as available blocks to start appointments in. The end of the last timeslot should represent the end of the working day (when technicians stop working).</p></div>'
                                                     + '</div>'
                                                 + '</div>';
@@ -146,6 +135,7 @@
 
         function openSettingsModal() {
             $('#loarderModal, .addHours').show();
+            $('.esri-verify-fail, .esri-verify-success').hide();
             $('.expandSettingsRow').text('+');
             $('.settingsBookingWindows, #newHolidaySelectionModal').hide();
             $('.storeHoursInnerGroup, .bookingWindowsInnerGroup, .holidayRow, .removableSettingsRow').remove();
@@ -156,32 +146,27 @@
                 $('.nav-overlay-container').hide();
             }, 100);
 
-            //var storeIdsFilter = ' IN (\'' + storeIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
-            //var filters = 'Store_Id__c' + storeIdsFilter;
-
-            //var filters = 'Store_Id__c = \'' + $('#storeSelect').val() + '\' AND Resource_Id__c = null';
-            //sforce.apex.execute(apexSettingsController, 'retrieveRecords', {objType: 'MASettings', filters: filters}, processSettingsResponse);
-
-
-            //var filters = 'Store_Id__c = \'' + $('#storeSelect').val() + '\'';
             sforce.apex.execute(apexSettingsController, 'retrieveSettings', { storeId: $('#storeSelect').val() }, processSettingsResponse);
         }
 
         function processSettingsSuccess(response) {
             response = JSON.parse(response);
-            console.log(response);
 
             if (response.success) {
             	var settingsRecord = response.storeSettings;
 
-            	console.log('test 1');
-                if (settingsRecord != undefined && settingsRecord != null) {
-                	console.log('test 2');
+            	if (settingsRecord != undefined && settingsRecord != null) {
 	                var jsonSettings = settingsRecord.Settings__c;
 	                jsonSettings = JSON.parse(jsonSettings);
 
 	                $('#storeSettingsId').val(settingsRecord.Id);
                 	$('#timezoneOptions').val(jsonSettings['timezone']);
+                    $('#storeSettingsEsri #esriClientId').val(jsonSettings['esriClientId']);
+                    $('#storeSettingsEsri #esriClientSecret').val(jsonSettings['esriClientSecret']);
+
+                    if (jsonSettings['esriClientSecretVerified'] == true) {
+                        $('.esri-verify-success').show();
+                    }
 
                 	var storeHours = jsonSettings['storeHours'];
                 	if (storeHours != undefined && storeHours != null) {
@@ -213,8 +198,7 @@
 		                }
 	                }
 
-	                //var storeHolidaysArray = [];
-		            var storeHolidays = jsonSettings['storeHolidays'];
+	                var storeHolidays = jsonSettings['storeHolidays'];
 		            if (storeHolidays != undefined && storeHolidays != null) {
 		            	for (var i = 0, len = storeHolidays.length; i < len; i++) {
 			            	var holiday = storeHolidays[i];
@@ -222,13 +206,6 @@
 			            }
 		            }
                 }
-
-
-
-                console.log('test 3');
-
-
-
 
                 if (response.resourceList) {
 	                for (var i = 0, len = response.resourceList.length; i < len; i++) {
@@ -255,11 +232,8 @@
 																+ '<td colspan="10" id="' + resource.Id + 'ResourceHours" resource-id="' + resource.Id + '"></td>'
 															+ '</tr>';
 
-
-
 							$('#resourcesSettingsTable').append(resourcesSettingsTableHtml);
 							var resourceEl = $('#resourcesSettingsTable #' + resource.Id + 'ResourceHours');
-
 
 			                for (var x = 0, daysOfWeekLen = daysOfWeek.length; x < daysOfWeekLen; x++) {
 				                var resourceSettingsGroupHtml = '<div class="resourceHoursGroup">'
@@ -271,11 +245,9 @@
 				                $(resourceEl).append(resourceSettingsGroupHtml);
 				            }
 
-
 				            if (response.resourceSettingsMap[resource.Id]) {
 				            	settingsRecord = response.resourceSettingsMap[resource.Id];
 				            	if (settingsRecord != undefined && settingsRecord != null) {
-				                	console.log('test 4');
 					                jsonSettings = settingsRecord.Settings__c;
 					                jsonSettings = JSON.parse(jsonSettings);
 
@@ -292,30 +264,11 @@
 					            }
 				            }
 
-
-
-
-
 							$('#resourcesSettingsTable .hiddenRow').hide();
 		                }
 	                }
 	            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-                //setSettingsModal();
                 $('#settingsModal').show();
                 $('#loaderModal').hide();
             }
@@ -335,80 +288,17 @@
 			}
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        function setSettingsModal() {
-            var record = storeSettingsMap[$('#storeSelect').val()];
-            if (record != null && record != undefined) {
-                $('#settingsId').val(record.Id);
-                var jsonSettings = record.Settings__c;
-                jsonSettings = JSON.parse(jsonSettings);
-                for (var key in jsonSettings) {
-                    if ($('#' + key).length > 0) {
-                        $('#' + key).val(jsonSettings[key]);
-                    }
-                }
-            }
-            else {
-                */
-                /*
-                techMeasureJobDuration: $('#techMeasureJobDuration').val('');
-                techMeasureCrewSize: $('#techMeasureCrewSize').val('');
-                installJobDuration: $('#installJobDuration').val('');
-                installCrewSize: $('#installCrewSize').val('');
-                serviceJobDuration: $('#serviceJobDuration').val('');
-                serviceCrewSize: $('#serviceCrewSize').val
-                */
-                /*
-            }
-        }
-        */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         function saveSettings() {
             $('#loaderModal').show();
 
             var settings = [];
 
             var jsonSettings = {
-                /*
-                techMeasureJobDuration: $('#techMeasureJobDuration').val(),
-                techMeasureCrewSize: $('#techMeasureCrewSize').val(),
-                installJobDuration: $('#installJobDuration').val(),
-                installCrewSize: $('#installCrewSize').val(),
-                serviceJobDuration: $('#serviceJobDuration').val(),
-                serviceCrewSize: $('#serviceCrewSize').val(),
-                */
-
-                timezone: $('#timezoneOptions').val()
+                timezone: $('#timezoneOptions').val(),
+                esriClientId: $('#storeSettingsEsri #esriClientId').val(),
+                esriClientSecret: $('#storeSettingsEsri #esriClientSecret').val(),
+                esriClientSecretVerified: $('.esri-verify-success').is(':visible')
             };
-
 
             var storeHoursRowsPopulated = $('#storeHours .storeHoursGroup .timeDiv');
             if (storeHoursRowsPopulated.length > 0) {
@@ -420,15 +310,11 @@
                         var dayOfWeekEl = $(storeHoursGroup).find('.dayOfWeek')[0];
                         var dayOfWeek = $(dayOfWeekEl).text();
 
-                        /*
-                        var storeHoursStart = $(storeHoursGroup).find('.startTime').val() + ' ' + $(storeHoursGroup).find('input[type="radio"][name="' + dayOfWeek + 'StartTime"]:checked').val();
-                        var storeHoursEnd = $(storeHoursGroup).find('.endTime').val() + ' ' + $(storeHoursGroup).find('input[type="radio"][name="' + dayOfWeek + 'EndTime"]:checked').val();
-                        */
-
                         var storeHoursStart = $(storeHoursGroup).find('.startTime').val();
                         var storeHoursStartAmPm = $(storeHoursGroup).find('input[type="radio"][name="store' + dayOfWeek + 'StartTime"]:checked').val();
                         var storeHoursStartSplit = storeHoursStart.split(':');
                         var storeHoursStartHour = storeHoursStartSplit[0];
+
                         if (storeHoursStartHour == '12') {
                         	storeHoursStartHour = '00';
                         }
@@ -446,6 +332,7 @@
                         var storeHoursEndAmPm = $(storeHoursGroup).find('input[type="radio"][name="store' + dayOfWeek + 'EndTime"]:checked').val();
                         var storeHoursEndSplit = storeHoursEnd.split(':');
                         var storeHoursEndHour = storeHoursEndSplit[0];
+
                         if (storeHoursEndHour == '12') {
                         	storeHoursEndHour = '00';
                         }
@@ -469,8 +356,6 @@
                     jsonSettings['storeHours'] = storeHours;
                 }
             }
-
-
 
             for (var x = 0, resourceTypeLen = resourceTypes.length; x < resourceTypeLen; x++) {
                 var resourceType = resourceTypes[x];
@@ -497,19 +382,14 @@
                             		var lastRowRadio = $(innerBookingWindowRow).find('input[type="radio"]:last')[0];
                                 	var settingsRowNum = $(lastRowRadio).attr('name').split('EndTime')[1];
 
-                                	/*
-	                                var bookingWindowHoursStart = $(innerBookingWindowRow).find('.startTime').val() + ' ' + $(innerBookingWindowRow).find('input[type="radio"][name="' + tabDivName + dayOfWeek + 'StartTime' + settingsRowNum + '"]:checked').val();
-	                                var bookingWindowHoursEnd = $(innerBookingWindowRow).find('.endTime').val() + ' ' + $(innerBookingWindowRow).find('input[type="radio"][name="' + tabDivName + dayOfWeek + 'EndTime' + settingsRowNum + '"]:checked').val();
-	                                */
-
 	                                var bookingWindowHoursStart = $(innerBookingWindowRow).find('.startTime').val();
 	                                var bookingWindowHoursEnd = $(innerBookingWindowRow).find('.endTime').val();
-	                                
 	                                
 	                                var bookingWindowHoursStart = $(innerBookingWindowRow).find('.startTime').val();
 			                        var bookingWindowHoursStartAmPm = $(innerBookingWindowRow).find('input[type="radio"][name="' + tabDivName + dayOfWeek + 'StartTime' + settingsRowNum + '"]:checked').val();
 			                        var bookingWindowHoursStartSplit = bookingWindowHoursStart.split(':');
 			                        var bookingWindowHoursStartHour = bookingWindowHoursStartSplit[0];
+
 			                        if (bookingWindowHoursStartHour == '12') {
 			                        	bookingWindowHoursStartHour = '00';
 			                        }
@@ -527,6 +407,7 @@
 			                        var bookingWindowHoursEndAmPm = $(innerBookingWindowRow).find('input[type="radio"][name="' + tabDivName + dayOfWeek + 'EndTime' + settingsRowNum + '"]:checked').val();
 			                        var bookingWindowHoursEndSplit = bookingWindowHoursEnd.split(':');
 			                        var bookingWindowHoursEndHour = bookingWindowHoursEndSplit[0];
+
 			                        if (bookingWindowHoursEndHour == '12') {
 			                        	bookingWindowHoursEndHour = '00';
 			                        }
@@ -634,16 +515,12 @@
         	storeHolidaysArray = tempholidays;
 			jsonSettings['storeHolidays'] = storeHolidaysArray;
 
+            var storeSettingsId = $('#storeSettingsId').val();
+            if (storeSettingsId == undefined || storeSettingsId == '') {
+                storeSettingsId = null;
+            }
 
-
-			settings.push({ Id: $('#storeSettingsId').val(), Store_Id__c: $('#storeSelect').val(), Resource_Id__c: null, Settings__c: JSON.stringify(jsonSettings) });
-
-
-
-
-
-
-
+			settings.push({ Id: storeSettingsId, Store_Id__c: $('#storeSelect').val(), Resource_Id__c: null, Settings__c: JSON.stringify(jsonSettings) });
 
 			var resourceHoursPopulated = $('#resourcesSettingsTable .resourceHoursGroup .timeDiv');
 			if (resourceHoursPopulated.length > 0) {
@@ -660,15 +537,11 @@
 	                        var dayOfWeekEl = $(resourceHoursGroup).find('.dayOfWeek')[0];
 	                        var dayOfWeek = $(dayOfWeekEl).text();
 
-	                        /*
-	                        var resourceHoursStart = $(resourceHoursGroup).find('.startTime').val() + ' ' + $(resourceHoursGroup).find('input[type="radio"][name="' + dayOfWeek + 'StartTime"]:checked').val();
-	                        var resourceHoursEnd = $(resourceHoursGroup).find('.endTime').val() + ' ' + $(resourceHoursGroup).find('input[type="radio"][name="' + dayOfWeek + 'EndTime"]:checked').val();
-	                        */
-
 	                        var resourceHoursStart = $(resourceHoursGroup).find('.startTime').val();
 	                        var resourceHoursStartAmPm = $(resourceHoursGroup).find('input[type="radio"][name="resource' + resourceId + dayOfWeek + 'StartTime"]:checked').val();
 	                        var resourceHoursStartSplit = resourceHoursStart.split(':');
 	                        var resourceHoursStartHour = resourceHoursStartSplit[0];
+
 	                        if (resourceHoursStartHour == '12') {
 	                        	resourceHoursStartHour = '00';
 	                        }
@@ -686,6 +559,7 @@
 	                        var resourceHoursEndAmPm = $(resourceHoursGroup).find('input[type="radio"][name="resource' + resourceId + dayOfWeek + 'EndTime"]:checked').val();
 	                        var resourceHoursEndSplit = resourceHoursEnd.split(':');
 	                        var resourceHoursEndHour = resourceHoursEndSplit[0];
+
 	                        if (resourceHoursEndHour == '12') {
 	                        	resourceHoursEndHour = '00';
 	                        }
@@ -708,21 +582,16 @@
 	                if (!$.isEmptyObject(resourceHours)) {
 	                    jsonSettings['resourceHours'] = resourceHours;
 
-	                    settings.push({ Id: $(resourceHoursRows[0]).closest('td').attr('settings-id'), Store_Id__c: $('#storeSelect').val(), Resource_Id__c: resourceId, Settings__c: JSON.stringify(jsonSettings) });
+                        var resourceSettingsId = $(resourceHoursRows[0]).closest('td').attr('settings-id');
+                        if (resourceSettingsId == undefined || resourceSettingsId == '') {
+                            resourceSettingsId = null;
+                        }
+
+	                    settings.push({ Id: resourceSettingsId, Store_Id__c: $('#storeSelect').val(), Resource_Id__c: resourceId, Settings__c: JSON.stringify(jsonSettings) });
 	                }
 				}
 			}
 
-            
-
-
-            console.log(jsonSettings);
-            console.log(JSON.stringify(jsonSettings));
-            console.log(settings);
-            //return;
-
-
-            //sforce.apex.execute(apexSettingsController, 'saveSettings', { recordId: $('#storeSettingsId').val(), storeId: $('#storeSelect').val(), jsonSettings: JSON.stringify(jsonSettings )}, processSaveSettingsResponse);
             sforce.apex.execute(apexSettingsController, 'saveSettings', { jsonSettings: JSON.stringify(settings) }, processSaveSettingsResponse);
         }
 
@@ -742,7 +611,6 @@
 
         function processSaveSettingsSuccess(response) {
             response = JSON.parse(response);
-            console.log(response);
 
             if (response.success) {
                 closeSettingsModal();
@@ -753,33 +621,13 @@
         }
 
         function closeSettingsModal() {
+            $('#storeSettingsId, #timezoneOptions, #storeSettingsEsri #esriClientId, #storeSettingsEsri #esriClientSecret').val('');
             $('#settingsModal').hide();
-            $('#loaderModal').hide();
+
+            if (!isBatchResources) {
+                $('#loaderModal').hide();
+            }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         function showHideWindows(el) {
         	if ($(el).text() == '+') {
@@ -823,7 +671,7 @@
 			                        + ' <input type="radio" name="' + tabDiv + dayOfWeek + 'EndTime' + settingsRowNum + '" value="AM"> AM</input>'
 			                        + ' <input type="radio" name="' + tabDiv + dayOfWeek + 'EndTime' + settingsRowNum + '" value="PM" checked="true"> PM</input>'
 			                    + '</div>'
-			                    + ' <span class="red pointer" onclick="removeSettingsBookingWindowRow(this);">Remove</span>'
+			                    + ' <span class="removeTimeSlot pointer" onclick="removeSettingsBookingWindowRow(this);"><img src="/resource/1461010458000/MA_Scheduler/images/close-table-row.png" /></span>'
 			                + '</div>';
 
             $(el).before(newRowHtml);
@@ -856,6 +704,7 @@
             	var endTimeAmPm = 'AM';
             	var endTimeSplit = endTime.split(':');
             	var endTimeHour = endTimeSplit[0];
+
             	if (endTimeHour >= '12') {
             		endTimeAmPm = 'PM';
             		endTimeHour = (parseInt(endTimeHour) - 12).toString();
@@ -926,7 +775,7 @@
                                     + ' <input type="radio" name="' + hoursType + resourceId + dayOfWeek + 'EndTime" value="AM"' + onchangeEvent + '> AM</input>'
                                     + ' <input type="radio" name="' + hoursType + resourceId + dayOfWeek + 'EndTime" value="PM" checked="true"' + onchangeEvent + '> PM</input>'
                                 + '</div>'
-                                + ' <span class="red pointer" onclick="removeSettingsHoursRow(this, \'' + hoursType + '\');">Remove</span>'
+                                + ' <span class="removeTimeSlot pointer" onclick="removeSettingsHoursRow(this, \'' + hoursType + '\');"><img src="/resource/1461010458000/MA_Scheduler/images/close-table-row.png" /></span> '
                             + '</div>';
 
             $(el).before(newRowHtml);
@@ -959,6 +808,7 @@
             	endTimeAmPm = 'AM';
             	var endTimeSplit = endTime.split(':');
             	var endTimeHour = endTimeSplit[0];
+
             	if (endTimeHour >= '12') {
             		endTimeAmPm = 'PM';
             		endTimeHour = (parseInt(endTimeHour) - 12).toString();
@@ -1048,8 +898,6 @@
 			var val = $(el).val().toLowerCase();
 			var resourceNames = $('.resourceSettingsNameCol');
 
-			console.log(val);
-
 			for (var i = 0, len = resourceNames.length; i < len; i++) {
 				var row = $(resourceNames[i]).closest('tr');
 				var hoursRow = $(row).next();
@@ -1064,13 +912,33 @@
 			}
 		}
         
-        $(document).on('click', '.ma-tab-link', function(){
+        $(document).on('click', '.ma-tab-link', function() {
     		var tab_id = $(this).attr('data-tab');
     		$(this).siblings('.ma-tab-link').removeClass('active');
     		$("#"+tab_id).siblings('.ma-tab-content').removeClass('active');
     		$(this).addClass('active');
     		$("#"+tab_id).addClass('active');
     	});
+
+        function verifyEsriLogin() {
+            $('#loaderModal').show();
+            var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getESRIToken', { storeId: $('#storeSelect').val(), isVerification: true, clientId: $('#esriClientId').val(), clientSecret: $('#esriClientSecret').val() }, verifyEsriResponse);
+        }
+
+        function verifyEsriSuccess(response) {
+            response = JSON.parse(response);
+
+            if (!response.error && response.access_token != undefined && response.access_token != null) {
+                $('.esri-verify-success').show();
+                $('.esri-verify-fail').hide();
+            }
+            else {
+                $('.esri-verify-fail').show();
+                $('.esri-verify-success').hide();
+            }
+
+            $('#loaderModal').hide();
+        }
             
     </script>
     
@@ -1080,31 +948,22 @@
         <div id="settingsContent">
             <div id="storeSettings">
                 <div id="settingsHeader">
-                    <c:MA_SchedulerMainNav /> 
-                    <!--
-                    <span id="settingsModalSave" class="floatLeft" onclick="saveSettings();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/approval_60.png')}" /></span>
-                    -->
-                    <!--
-                    <span id="settingsModalClose" class="floatRight" onclick="closeSettingsModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" /></span>
-                    -->
+                    <c:MA_SchedulerMainNav />
                 </div>
                 <div class="ma-modal-settings compact">
-                  <div class="ma-tab-vertical-wrap">
-                    <div class="ma-tab-link-group">
-                      <a class="ma-tab-link active" data-tab="tab-store-settings">Store Settings</a>
-                      <a class="ma-tab-link" data-tab="tab-resource-settings">Resource Settings</a>
-                      <!--<a class="ma-tab-link" data-tab="tv-tab-3">Store Settings</a>-->
-                    </div><!--ma-tab-link-group-->
+                    <div class="ma-tab-vertical-wrap">
+                        <div class="ma-tab-link-group">
+                            <a class="ma-tab-link active" data-tab="tab-store-settings">Store Settings</a>
+                            <a class="ma-tab-link" data-tab="tab-resource-settings">Resource Settings</a>
+                        </div>
         
-                    <div class="ma-tab-content-group">
-                      <div class="ma-tab-content active" id="tab-store-settings">
-                          <div class="pad-32">
+                        <div class="ma-tab-content-group">
+                            <div class="ma-tab-content active" id="tab-store-settings">
 								<span class="ipsum">
 	                                <div class="newSettingsGroup">
-	                                    <!-- Configure Store Settings for <span id="storeSettingsName" /> -->
 	                                    <input type="hidden" id="storeSettingsId" />
 	                                </div>
-	                
+	                                <div class="ma-section-title background--dark-gray">Set Hours</div>
 	                                <div id="tabs" class="ma-jquery-tab-override">
 	                                	<ul>
 	                                        <li><a href="#storeSettingsTab">Store</a></li>
@@ -1123,11 +982,8 @@
 	                	                </div>
 	                                </div>
 	                
+	                                <div class="ma-section-title background--dark-gray">Holidays and Exceptions</div>
 	                                <div id="storeSettingsHolidays">
-	                                    <div class="newSettingsGroup">
-	                                        <h2><span>Holidays and Exceptions</span></h2>
-	                                    </div>
-	                
 	                                    <table id="storeSettingsHolidayTable">
 	                                        <tr class="headerRow">
 	                                            <th id="removeHolidayRow"></th>
@@ -1155,32 +1011,45 @@
 	                                        </div> 
 	                                    </div>
 	                                </div> 
+	                                <div class="ma-section-title background--dark-gray">Esri License Key</div>
+	                                <div id="storeSettingsEsri">
+                						<div class="">
+                                            <div>
+                    						    <label class="ma-input-label">Client Id:</label>
+                                                <input class="ma-input" type="text" id="esriClientId" placeholder="Enter here"></input>
+                                            </div>
+                                            <div>
+                                                <label class="ma-input-label">Client Secret:</label>
+                                                <input class="ma-input" type="text" id="esriClientSecret" placeholder="Enter here"></input>
+                                                <button class="ma-button ma-button--green" onclick="verifyEsriLogin();">Verify</button>
+                                            </div>
+                                            <div class="esri-verify-success" style="display: none;"><p>Verified</p></div>
+                                            <div class="esri-verify-fail" style="display: none;"><p>Verification Failed</p></div>
+                                        </div>
+                                    </div>
 	                            </span>
-							</div>
-						</div>
+    						</div>
 
-						<div class="ma-tab-content" id="tab-resource-settings">
-							<div class="pad-32">
-								<table id="resourcesSettingsTable">
-			                		<tr class="headerRow">
-			                			<th>Resource</th>
-			                			<th>Type</th>
-			                			<th>Sunday</th>
-			                			<th>Monday</th>
-			                			<th>Tuesday</th>
-			                			<th>Wednesday</th>
-			                			<th>Thursday</th>
-			                			<th>Friday</th>
-			                			<th>Saturday</th>
-			                			<td><input type="text" class="settingsResourceSearch floatRight" onkeyup="resourcesSettingsSearchFiltering(this);" placeholder="Search" /></td>
-			                		</tr>
-			                	</table>
-							</div>
-						</div>
-
-						<!--<div class="ma-tab-content" id="tv-tab-3"><div class="pad-32">Tab content area #3</div></div>-->
-                    </div><!--ma-tab-content-group-->
-                  </div><!--ma-tab-vertical-wrap-->
+    						<div class="ma-tab-content" id="tab-resource-settings">
+    							<div class="pad-32">
+    								<table id="resourcesSettingsTable">
+    			                		<tr class="headerRow">
+    			                			<th>Resource</th>
+    			                			<th>Type</th>
+    			                			<th>Sunday</th>
+    			                			<th>Monday</th>
+    			                			<th>Tuesday</th>
+    			                			<th>Wednesday</th>
+    			                			<th>Thursday</th>
+    			                			<th>Friday</th>
+    			                			<th>Saturday</th>
+    			                			<td><input type="text" class="settingsResourceSearch floatRight" onkeyup="resourcesSettingsSearchFiltering(this);" placeholder="Search" /></td>
+    			                		</tr>
+    			                	</table>
+    							</div>
+    						</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class= "ma-settings-modal-footer">

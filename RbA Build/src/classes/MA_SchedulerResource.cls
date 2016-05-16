@@ -18,11 +18,10 @@ public with sharing class MA_SchedulerResource implements Comparable {
         this.resourceName = resource.Name;
         this.isActive = resource.Active__c;
     	this.rank = (Integer)resource.Rank__c;
-        this.headcount = String.valueOf(resource.Crew_Size__c);
-        this.isAssigned = assignedResources.contains(this.resourceId);
-
         this.skillsMatched = new Map<Id, String>();
+        this.headcount = String.valueOf(resource.Crew_Size__c);
         this.skillsNotMatched = new Map<Id, String>(requiredSkills);
+        this.isAssigned = assignedResources.contains(this.resourceId);
 
         for (Resource_Skill__c skill : resource.Resource_Skills__r) {
             this.skillsNotMatched.remove(skill.RbA_Skill__c);
