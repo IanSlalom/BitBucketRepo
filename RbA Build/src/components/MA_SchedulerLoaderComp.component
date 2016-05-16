@@ -1,10 +1,10 @@
 <apex:component >
     <div id="loaderModal">
-        <div id="loaderOverlay" />
         <div id="loaderContent">
             <div id="loaderImage">
-                <img src="{!URLFOR($Resource.MA_Scheduler, '/images/slds_spinner.gif')}" />
+                <img src="{!URLFOR($Resource.MA_Scheduler, '/images/slds_spinner_inverse.gif')}" />
             </div>
         </div>
+        <div id="loaderOverlay"></div>
     </div>
 </apex:component>

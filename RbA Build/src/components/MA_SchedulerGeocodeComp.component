@@ -1,0 +1,164 @@
+<apex:component >
+    
+    <apex:includeScript value="/soap/ajax/34.0/connection.js" />
+    <apex:includeScript value="/soap/ajax/34.0/apex.js" />
+
+    <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
+
+	<script>
+		$ = jQuery.noConflict();
+
+    	var geocodeSubset = [];
+		var needsBatching = false;
+    	var accIdToAddressMap = {};
+    	var addressesForGeocode = [];
+    	var addressToGeocodeMap = {};
+    	var apexGeocodeController = 'MA_SchedulerController';
+        var processUpdateGeocodesResponse = { onSuccess: processUpdateGeocodesSuccess, onFailure: processGeocodeResponseError };
+        var processRetrieveGeocodesResponse = { onSuccess: processRetrieveGeocodesSuccess, onFailure: processGeocodeResponseError };
+
+    	$(function() {
+	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
+    	});
+
+        function processGeocodeResponseError(error) {
+            if (!error.faultstring) {
+                error = { error: 'Response Error'};
+            }
+            handleError('ERROR', error);
+        }
+
+        function handleGeocodeError(componentName, error) {
+            $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
+            $('#errorModal').show();
+            $('#errorModal').addClass('ma-open');
+            $('#errorModalOverlay').addClass('ma-in');
+            $('#loaderModal').hide();
+        }
+
+		function retrieveAccountsForGeocode(appointmentDateString, storeId, workOrderType) {
+    		accIdToAddressMap = {};
+			addressesForGeocode = [];
+    		addressToGeocodeMap = {};
+			sforce.apex.execute(apexGeocodeController, 'retrieveNonGeocodedAddresses', { appointmentDateString: appointmentDateString, storeId: storeId, workOrderType: workOrderType }, processRetrieveGeocodesResponse);
+		}
+
+		function processRetrieveGeocodesSuccess(response) {
+			response = JSON.parse(response);
+
+			if (response.success) {
+				var tempAddressList = [];
+				for (var i = 0, len = response.accList.length; i < len; i++) {
+					var acc = response.accList[i];
+					var address = acc.ShippingStreet + ', ' + acc.ShippingCity + ', ' + acc.ShippingState + ' ' + acc.ShippingPostalCode;
+					tempAddressList.push(address);
+					accIdToAddressMap[acc.Id] = address;
+
+					if (tempAddressList.length == 10 || i == len - 1) {
+						addressesForGeocode.push(tempAddressList);
+						tempAddressList = [];
+					}
+				}
+
+				if (addressesForGeocode.length > 0) {
+					if (addressesForGeocode.length > 1) {
+						needsBatching = true;
+					}
+					else {
+						geocodeSubset = addressesForGeocode[0];
+					}
+					
+					geocodeAddresses();
+				}
+				else {
+					if (isBatchResources) {
+						getAutoScheduleGeocoded();
+					}
+					else if (isDailyResource) {
+						MARoutesComp.processRouteStops();
+					}
+				}
+			}
+			else {
+				handleGeocodeError('MA_SchedulerGeocodeComp : retrieveAccountsForGeocode' + apexSchedulingController, response.error);
+
+				/*
+				if (isBatchResources) {
+					getAutoScheduleGeocoded();
+				}
+				else if (isDailyResource) {
+					MARoutesComp.processRouteStops();
+				}
+				*/
+			}
+		}
+
+		function geocodeAddresses() {
+			if (needsBatching) {
+				for (var i = 0, len = addressesForGeocode.length; i < len; i++) {
+
+					var iframe = document.createElement("iframe");
+					iframe.src = '/apex/MA_SchedulerGeocode?index' + i;
+					iframe.style.width = "0px";
+					iframe.style.height = "0px";
+					iframe.style.display = 'none';
+					document.body.appendChild(iframe);
+
+					$(iframe).load(function() {
+						var url = this.contentWindow.location.href;
+						var index = url.substring(url.indexOf('?index') + 6);
+						this.contentWindow.geocodeSubset = addressesForGeocode[index];
+						this.contentWindow.geocodeAddresses();
+					});
+		        }
+		    }
+		    else {
+		    	var n = 0;
+		    	for (var i = 0, len = geocodeSubset.length; i < len; i++) {
+		            var geocoder = new google.maps.Geocoder();
+		            geocoder.geocode({ 'address': geocodeSubset[i] }, function(results, status) {
+
+						if (status == google.maps.GeocoderStatus.OK) {
+							var geoResult = results[0].geometry.location;
+							parent.addressToGeocodeMap[geocodeSubset[n]] = { lat: geoResult.lat(), lng: geoResult.lng() };
+						}
+
+						n++;
+
+						if (n == len) {
+							var iframeUrl = this.location.href;
+							if (iframeUrl.indexOf('MA_SchedulerGeocode')) {
+								parent.removeIframe(iframeUrl.substring(iframeUrl.indexOf('/apex')));
+							}
+							else {
+								updateLatLongs();
+							}
+						}
+					});
+		        }
+		    }
+		}
+
+		function removeIframe(src) {
+			$('iframe[src="' + src + '"]').remove();
+
+			if ($('iframe[src *= "/apex/MA_SchedulerGeocode"]').length == 0) {
+				updateLatLongs();
+			}
+		}
+
+		function updateLatLongs() {
+			sforce.apex.execute(apexGeocodeController, 'updateGeocodedAddresses', { accIdToAddressString: JSON.stringify(accIdToAddressMap), addressToGeocodeString: JSON.stringify(addressToGeocodeMap) }, processUpdateGeocodesResponse);
+		}
+
+		function processUpdateGeocodesSuccess(response) {
+			if (isBatchResources) {
+				getAutoScheduleGeocoded();
+			}
+			else if (isDailyResource) {
+				MARoutesComp.processRouteStops();
+			}
+		}
+	</script>
+
+</apex:component>

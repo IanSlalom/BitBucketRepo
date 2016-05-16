@@ -8,6 +8,7 @@
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
         <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerFakeDataGenerator</members>
         <members>MA_SchedulerResource</members>
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
@@ -111,6 +112,7 @@
         <members>MA_SchedulerCalendarComp</members>
         <members>MA_SchedulerCancelAppointmentComp</members>
         <members>MA_SchedulerErrorComp</members>
+        <members>MA_SchedulerGeocodeComp</members>
         <members>MA_SchedulerListViewOptionsModalComp</members>
         <members>MA_SchedulerLoaderComp</members>
         <members>MA_SchedulerMainNav</members>
@@ -125,6 +127,7 @@
     </types>
     <types>
         <members>MA_Scheduler</members>
+        <members>MA_SchedulerGeocode</members>
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
