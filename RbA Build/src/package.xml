@@ -191,6 +191,10 @@
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
+        <members>MABatchSchedule__c</members>
+        <members>MA_Scheduler</members>
+        <members>MA_Scheduler_Event__c</members>
+        <members>MA_Scheduler_Settings__c</members>
         <members>Municipality__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
