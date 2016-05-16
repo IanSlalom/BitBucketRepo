@@ -475,10 +475,15 @@ public with sharing class RMS_financialTransactionManager {
                 }else if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
                 	subTypeOfLabor = 'external';
                 }
+                if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCORORecordTypeId){
+					typeOfOrder = 'coroRecordType';
+				}else if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCOROServiceRecordTypeId){
+					typeOfOrder = 'coroService';
+				} 
             }	
             else if(l.RecordTypeId == laborMiscReimbursementRecordTypeId ){
                 typeOfLabor = 'LaborMiscReimbursement';
-            }
+            } 
             
              
             if(typeOfLabor != null){
