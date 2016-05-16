@@ -42,6 +42,14 @@
                 <field>Work_Order_Status__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Appointment_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Appointment_Start_Time__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Confirmed_Appt_w_Customer__c</field>
             </layoutItems>
@@ -75,18 +83,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Original_Appt_Date_Time_Tech_Measure__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Scheduled_Appt_Date_Time_Tech_Measure__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Completed_Appt_Date_Tech_Measure__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Original_Appt_Date_Time_Install__c</field>
             </layoutItems>
             <layoutItems>
@@ -96,6 +92,18 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Completed_Appt_Date_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Original_Appt_Date_Time_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Scheduled_Appt_Date_Time_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Completed_Appt_Date_Tech_Measure__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -122,6 +130,34 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Primary_Service__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>LSWP_Test_Results__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Service_Request_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_Sync_Date_Time__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Tech_Measure_Synced__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Estimated_Ship_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cancel_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reschedule_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -154,45 +190,6 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
-        <style>TwoColumnsLeftToRight</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>MapAnything Fields</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Appointment_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Appointment_Duration__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Appointment_Start_Time__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Appointment_End_Time__c</field>
-            </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Service_Request_Type__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>LSWP_Test_Results__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tech_Measure_Sync_Date_Time__c</field>
-            </layoutItems>
-        </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -240,6 +237,26 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <miniLayout>
+        <fields>Street__c</fields>
+        <fields>City__c</fields>
+        <fields>State__c</fields>
+        <fields>Contact__c</fields>
+        <fields>Account__c</fields>
+        <fields>Work_Order_Type__c</fields>
+        <fields>LSWP_Test_Results__c</fields>
+        <fields>Service_Request_Type__c</fields>
+        <fields>Appointment_Date__c</fields>
+        <fields>Appointment_Start_Time__c</fields>
+    </miniLayout>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>MA_Scheduler_Event__c.RbA_Work_Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Assigned_Resources__c.Work_Order__c</relatedList>
+    </relatedLists>
     <relatedLists>
         <customButtons>Task.Add_Service_Task</customButtons>
         <fields>TASK.SUBJECT</fields>
@@ -248,7 +265,6 @@
         <fields>TASK.STATUS</fields>
         <fields>EVENT.START_DATE_TIME</fields>
         <fields>TASK.TYPE</fields>
-        <fields>TASK.CREATED_DATE</fields>
         <relatedList>RelatedActivityList</relatedList>
     </relatedLists>
     <relatedLists>
