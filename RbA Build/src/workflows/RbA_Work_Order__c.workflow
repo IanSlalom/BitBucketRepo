@@ -80,6 +80,31 @@
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
+        <fullName>Notify WO Owner of Cancelled Order</fullName>
+        <actions>
+            <name>Cancelled_Order</name>
+            <type>Task</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Cancelled</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Actions,Visit</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>notEqual</operation>
+            <value>Service</value>
+        </criteriaItems>
+        <description>This order has been Cancelled. Please address any open activities on this work order</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
         <fullName>PaintStainInstallReminder</fullName>
         <active>true</active>
         <criteriaItems>
@@ -215,4 +240,15 @@
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Tech Measure</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
+    <tasks>
+        <fullName>Cancelled_Order</fullName>
+        <assignedToType>owner</assignedToType>
+        <description>This order has been Cancelled. Please address any open activities on this work order</description>
+        <dueDateOffset>1</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <priority>Normal</priority>
+        <protected>false</protected>
+        <status>Open</status>
+        <subject>Cancelled Order</subject>
+    </tasks>
 </Workflow>

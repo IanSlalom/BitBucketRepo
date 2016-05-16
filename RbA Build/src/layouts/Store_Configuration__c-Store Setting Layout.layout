@@ -74,6 +74,10 @@
                 <behavior>Edit</behavior>
                 <field>Service_Work_Order_Queue_ID__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Service_Material_Owner__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

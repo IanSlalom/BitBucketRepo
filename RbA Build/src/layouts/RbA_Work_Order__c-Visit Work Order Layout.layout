@@ -31,14 +31,6 @@
                 <behavior>Edit</behavior>
                 <field>Opportunity__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Service_Request_Type__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tech_Measure_Sync_Date_Time__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -48,6 +40,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Work_Order_Status__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Confirmed_Appt_w_Customer__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -127,10 +123,6 @@
                 <behavior>Edit</behavior>
                 <field>Primary_Service__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>LSWP_Test_Results__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -187,7 +179,20 @@
                 <field>Appointment_End_Time__c</field>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Service_Request_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>LSWP_Test_Results__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_Sync_Date_Time__c</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -240,10 +245,10 @@
         <fields>TASK.SUBJECT</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>Service_Type__c</fields>
-        <fields>Non_Stock_Material__c</fields>
         <fields>TASK.STATUS</fields>
         <fields>EVENT.START_DATE_TIME</fields>
         <fields>TASK.TYPE</fields>
+        <fields>TASK.CREATED_DATE</fields>
         <relatedList>RelatedActivityList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -267,6 +272,11 @@
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>RbA_Skill__c</fields>
+        <relatedList>Work_Order_Required_Skill__c.RbA_Work_Order__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>

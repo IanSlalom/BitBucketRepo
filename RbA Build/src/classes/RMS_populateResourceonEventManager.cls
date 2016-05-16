@@ -1,3 +1,24 @@
+/*******************************************************//**
+
+@class  RMS_populateResourceonEventManager
+
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@brief When an event is created for a work order, user selects
+who should be the assignee. If user selects, "Primary Resource" checkbox,
+this class will search for the Resource record where the Event Assignee =
+Resource RbA User and populates the Resource record onto the Event. 
+
+@version    2016-05-11 Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
+
 public with sharing class RMS_populateResourceonEventManager {
     
     public void populateResourceonUpdate(List<Event> listOld, List<Event> listNew, Map<Id, Event> mapOld, Map<Id, Event> mapNew){

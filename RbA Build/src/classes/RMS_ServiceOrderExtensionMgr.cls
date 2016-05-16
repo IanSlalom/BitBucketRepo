@@ -1,3 +1,22 @@
+/*******************************************************//**
+
+@class  RMS_ServiceOrderExtensionMgr
+
+@brief  code for driving the create service request process. This controller
+is used for RMS_createServiceRequestRedirect, RMS_createServiceOrderP1, and 
+RMS_createServiceOrderP2. Note that there is a separate controller for the 
+case where the Account is legacy and does not have any Asset records.
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@version    2016-4-19  Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
 public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public final Order o;   
@@ -18,6 +37,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         this.o = (Order)stdController.getRecord();
         
+        
+        //these aggregate result lists are used to count the number of Orders 
+        //and assets for the related Account to determine where the user is taken
+        //on the redirect page --> P1 or Legacy P1
+        
         List<AggregateResult> results=[select COUNT (Id) 
                                        FROM Order 
                                        WHERE AccountId = :aid 
@@ -33,6 +57,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         listOI=new list<OrderItem>();
         
+        
+        //finding the Assets of the related Account to populate on P2 list
+        //code then finds the products for each of the Assets and then
+        //displays the Service Products for each Product availble to select
+        //for the Service Request
         List<id> assetIds=new List<id>();
         for(Asset a : [SELECT    Id,Product2.RecordTypeId
                        FROM Asset 
@@ -51,6 +80,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                           FROM Asset 
                           WHERE Id = :assetIds
                           ORDER BY Name];
+        
+        //Mapping Assets to Products, grabbing ids
         Map<Id,Id> assetIdToProductIdMap = new Map<Id,Id>();
         for(Asset a: selectedAssets){
             assetIdToProductIdMap.put(a.Id,a.Product2Id);
@@ -93,6 +124,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     //Universal Methods
     public PageReference customDelete(){
+        //deletes the order and redirects to delete confirmation page
         delete o;
         
         PageReference deletePage = Page.RMS_DeletePage;
@@ -104,6 +136,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     
     //Redirect Page Methods
+    
+    //grabbing those aggregate result calculcations
     Public Integer getnumorders() {
         return num_orders;
     }
@@ -123,7 +157,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         if ( slid == null ) slid = '';
     }
     
-    
+    //order is automatically saved on the redirect page, this is 
+    //to populate all required fields and parent object records
+    //which we either do not want in the UI or need populated
+    //in order to make the UI work (i.e. Account)
+    //
     public PageReference saveOrder(){
         
         try{
@@ -139,6 +177,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 ].Id;
             }
             
+            //populates the Account, a standard price book which is needed
+            //to create orderitems, store, sets record type, and status
             o.AccountId = aid;
             o.Pricebook2Id = standardPriceBookId;
             o.Store_Location__c = slid;                              
@@ -146,6 +186,12 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             o.Status = 'New';           
             upsert o;
             
+            
+            //if the Account has at least 1 sold order, user is taken to the Select an Order
+            //page. If the Account does not have an order, but has assets (legacy), user is taken to
+            //Page 2 where they select the Service Products. If the Account does not have any orders
+            //or any assets, user is taken to the legacy page where all Service Products are displayed
+            //for selection 
             PageReference newPage;
             
             If (num_orders > 0){
@@ -154,6 +200,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 If (num_assets > 0){
                     newPage = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id); 
                 } else{
+                    Contact_History__c ch = new Contact_History__c();
+                    ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true];
+                    o.BillToContactId = ch.Contact__c;
+                    upsert o;
                     newPage = new PageReference('/apex/RMS_ServiceRequestLegacyP1?id='+ o.Id + '&retUrl=' + o.Id);
                 }
             }
@@ -172,29 +222,48 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Page 1 Methods    
     Id rt = Schema.SObjectType.Order.RecordTypeInfosByName.get('CORO Record Type').RecordTypeId;
     
-    
+    //grabbing all Sold Orders from the related Account and displaying them as a picklist for selection
     public List<selectOption> getOrds() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
-        for (Order orders : [SELECT Id, OrderNumber, EffectiveDate, Status 
+        for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
                              FROM Order 
                              WHERE Status NOT IN('Draft', 'Tech Measure Needed', 'Tech Measure Scheduled', 'Ready to Order', 'Order Released', 'Install Needed')
                              AND RecordTypeId = :rt 
                              AND AccountId = :o.AccountId 
                              ORDER BY Order.OrderNumber DESC]) { 
-                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.EffectiveDate + ' - ' + orders.Status)); //for all records found - add them to the picklist options
+                                 options.add(new selectOption(orders.Id, orders.OrderNumber + ' - ' + orders.Activated_Date__c + ' - ' + orders.Status)); //for all records found - add them to the picklist options
                              }
         options.add(new selectOption('', 'None')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
         return options; //return the picklist options        
     }               
     
+    //save method for P1 to P2
     public PageReference saveP2(){
         try{      
             
+            //find the Sales Tax from the Store Location and set on Order
             Account sl = new Account();
             sl = [SELECT Store_Location__r.Sales_Tax__c FROM Account WHERE id =: o.AccountId];
             if(sl != null){
                 o.Sales_Tax_Percent__c = sl.Store_Location__r.Sales_Tax__c;    
             }
+            
+            //populate Bill to Contact, either from related Sold Order or the Primary
+            //Contact for the Account based on Contact History. This is 
+            //a failsafe to ensure Bill to Contact is always populated on P2 which is
+            //necessary for all of the UI elements rerendering.           
+            Order bc = new Order();
+            Contact_History__c ch = new Contact_History__c();
+            
+            if(o.Sold_Order__c != null){
+                bc = [Select BilltoContactId FROM Order WHERE id =: o.Sold_Order__c];
+                if(bc != null){
+                    o.BillToContactId = bc.BilltoContactId;
+                }
+            } else {
+                ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true LIMIT 1];
+                o.BillToContactId = ch.Contact__c;
+            }            
             
             upsert o;
             
@@ -212,6 +281,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Page 2 Methods 
     //
     public PageReference saveClose(){
+        
         PageReference pageRef = null;
         
         try{           
@@ -227,7 +297,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             
             
-            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
             for(Id assetID : AssetToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
                     if(wrapper.isSelected){
@@ -260,21 +332,105 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                     }
                 }        
             }
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            //convert the selectOption value to picklist value, set on Ordre
             o.Service_Type__c = propPickValSelected;
+            
+
             upsert o;
             system.debug(listOI);
+            
+            //inserts the OrderItems
             insert listOi;
             pageRef = new PageReference('/' + o.id);
             pageRef.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
             listOI.clear();
         }
         
         return pageRef;
-    }        
+    }    
     
+    //add product page
+        public PageReference saveNewProducts(){
+        
+        PageReference pageRef = null;
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
+            
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.isSelected){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Id];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        //oi.Parent_Order_Item__c = oa.Product2Id; 
+                        oi.Charge_Cost_To__c = wrapper.cost;
+                        oi.Primary_Reason__c = wrapper.primary;
+                        oi.Secondary_Reason__c = wrapper.secondary;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+                        
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            upsert o;
+            system.debug(listOI);
+            
+            //inserts the OrderItems
+            insert listOi;
+            pageRef = new PageReference('/' + o.id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+        }
+        
+        return pageRef;
+    }       
     
+    //product wrapper for creating table of Service Products
     public class ProductWrapper{
         public Product2 product{get;set;}
         public Boolean isSelected{get;set;}        
@@ -292,6 +448,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             this.description = description;
         }
         
+        //creates the three dependent picklists
         public List<SelectOption> getCosts()
         {
             List<SelectOption> options = new List<SelectOption>();
@@ -477,6 +634,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
     }
     
+    //method for creating Service Type picklist, defaulted to JIP when appropriate, hiding
+    //JIP as a value when appropriate
     Public string propPickValSelected { get; set; }
     public List<SelectOption> getPickLstValue()
     {

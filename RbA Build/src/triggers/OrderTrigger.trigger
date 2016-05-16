@@ -41,8 +41,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
         RMS_backOfficeChecklistManager backOfficeCheckListManager = new RMS_backOfficeChecklistManager();
         RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
-        RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(Trigger.isExecuting,Trigger.size);
-        RMS_setBilltoContact billtoContactManager = new RMS_setBilltoContact();        
+        RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(Trigger.isExecuting,Trigger.size);       
         RMS_ServiceProductPickup customerPickup = new RMS_ServiceProductPickup();
         List<SObject> accounts = new List<SObject>();
            
@@ -56,8 +55,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         
         if(Trigger.isUpdate && Trigger.isBefore){
             UtilityMethods.checkLockedByStatus(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Order');
-            workOrderCreationManager.createWorkOrderOnOrderActivation(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-            billtoContactManager.setBilltoContact(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);            
+            workOrderCreationManager.createWorkOrderOnOrderActivation(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);            
             handler.onBeforeUpdate(Trigger.oldMap, Trigger.newMap);
         }
           
@@ -83,6 +81,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
             financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             customerPickup.customerPickup(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
                          accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        	handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
         }
                     
         //After Delete

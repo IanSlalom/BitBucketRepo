@@ -124,13 +124,26 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension customController  = new RMS_prodConfigExtension(stdController);
 				
 	
-		OrderItem oi2 = [SELECT Id, Specialty_Shape__c, PricebookentryId, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
+		OrderItem oi2 = [SELECT Id, Purchase_Order__c, NSPR__c, Specialty_Shape__c, PricebookentryId, Verify_Item_Configuration__c from OrderItem where Order.Id =: soldOrder.Id];
+		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id, Status__c = 'New');
+		insert po;
+
 
 		// Set up controller with order line id only
 		PageReference pageRef2 = Page.RMS_prodConfigEdit;
 		Test.setCurrentPage(pageRef2);
+		ApexPages.currentPage().getParameters().put('mode','e');
 		ApexPages.StandardController stdController2 = new ApexPages.StandardController(oi2);
 		RMS_prodConfigExtension customController2  = new RMS_prodConfigExtension(stdController2);
+		System.assertEquals(customController2.mode,'e');
+		oi2.Purchase_Order__c = po.Id;
+		update oi2;
+		customController2  = new RMS_prodConfigExtension(stdController2);
+		System.assertEquals(customController2.mode,'v');
+		po.Status__c = 'Confirmed';
+		update po;
+		customController2  = new RMS_prodConfigExtension(stdController2);
+		System.assertEquals(customController2.mode,'r');
 
 		// Set up controller with pricebook and order ids
 		PageReference pageRef3 = Page.RMS_prodConfigEdit;

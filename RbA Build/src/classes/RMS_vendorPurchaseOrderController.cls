@@ -63,6 +63,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean electronicOrder{get;set;}
   public boolean showInventoryWriteOff{get;set;}
   public boolean relatedOrderClosed{get;set;}
+  public boolean showCancelPO{get;set;}
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -365,6 +366,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     system.debug(orderId);
     showInventoryWriteOff = false;
     relatedOrderClosed = false;
+    showCancelPO = false;
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
@@ -442,7 +444,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
       orderStatus = this.po.Status__c;
         		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
-      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
+      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder && !costPurchaseOrder);
+
+      if(electronicOrder){
+        if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
+          showCancelPO = true;
+        }
+      }else{
+        if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected' || po.Status__c == 'Released' || po.Status__c == 'Confirmed'){
+          showCancelPO = true;
+        }
+      }
+
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
             	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && !electronicOrder)  ?  'con'    :
             	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && electronicOrder)  ?  'rbacon'  :
@@ -451,7 +464,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';
-
+      		
     System.debug('RELATED ORDER STATUS ' + relatedOrder.Status);
     if(relatedOrder.Status == 'Job Closed'){
       status = 'rec';
@@ -735,6 +748,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
     for(OrderItemWrapper oiw : orderItemWrapperByVendor){
       OrderItem oi = oiw.orderItem;
       oi.Purchase_Order__c = po.id;
+      //JETT 2083 Set Date fields if quantity fields are not null
+      if(oi.Quantity_To_Receive__c != null){
+          oi.Date_Received__c = System.Today();
+        }if(oi.Quantity_To_Write_Off__c != null){
+          oi.Date_Written_Off__c = System.Today();
+        }if(oi.Vendor_Credit_To_Receive__c != null){
+          oi.Date_Vendor_Credit__c = System.Today();
+        }
 //      oi.GL_Account__c = glAccount;
 //      oi.Intercompany_AP_Account__c = intercompanyAccount;
       orderItemsToUpdateList.add(oi);
@@ -921,8 +942,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 	for (OrderItem oi : itemsToReceive) {
       Asset productAsset;
-      if (oi.Installed_Product_Asset__c == null && oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) { 
-      			productAsset = new Asset(
+      if (oi.Installed_Product_Asset__c == null && oi.Quantity_To_Receive__c != null) { 
+      		productAsset = new Asset(
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
@@ -933,6 +954,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       Sold_Order__c    = oi.OrderId,
                       Store_Location__c = oi.Order.Store_Location__c,
                       Unit_Wholesale_Cost__c = oi.Unit_Wholesale_Cost__c,
+                      RecordTypeId    = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset'),
                       Vendor__c 		=  selectedVendor,
                       Original_Order_Product__c = oi.Id
                     );
@@ -941,10 +963,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
       			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
       		}
-      		// Sets the product Asset to the correct record type based on the type of PO we are on
-      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
-										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
-														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
+// TODO: Add this after Anthony updates the financial trigger to handle record types
+//      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
+//										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
+//														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
       } 
       else if (oi.Installed_Product_Asset__c != null){
@@ -965,8 +987,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		productAsset.Quantity =  (productAsset.Quantity == null) 
                           ?   oi.Quantity_To_Receive__c 
                           :  oi.Quantity_To_Receive__c + productAsset.Quantity;
-             
-      		productAsset.Date_Received__c = oi.Date_Received__c;
+          //JETT 2083 set Asset Received Date to Today   
+      		productAsset.Date_Received__c = System.today();
       		
                   																		
 			if ((productAsset.Quantity > oi.Quantity && !overReceivingAllowed)) {
@@ -1089,8 +1111,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		productAsset.Quantity_Written_Off__c =  (productAsset.Quantity_Written_Off__c == null) 
                           ?   oi.Quantity_To_Write_Off__c 
                           :  oi.Quantity_To_Write_Off__c + productAsset.Quantity_Written_Off__c;
-             
-      		productAsset.Date_Written_Off__c = oi.Date_Written_Off__c;
+          
+          //JETT 2083 Date Written off set to Today   
+      		productAsset.Date_Written_Off__c = System.Today();
       		
                   																		
 			if ((productAsset.Quantity_Written_Off__c > oi.Quantity)) {
@@ -1182,8 +1205,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		productAsset.Vendor_Credit__c =  (productAsset.Vendor_Credit__c == null) 
                           ?   oi.Vendor_Credit_to_Receive__c 
                           :  oi.Vendor_Credit_to_Receive__c + productAsset.Vendor_Credit__c;
-             
-      		productAsset.Date_Vendor_Credit__c = oi.Date_Vendor_Credit__c;
+          
+          //JETT 2083 Date of Vendor Credit set to Today's date   
+      		productAsset.Date_Vendor_Credit__c = System.today();
       		
                   																		
 			if ((productAsset.Vendor_Credit__c > oi.Total_Wholesale_Cost__c)) {

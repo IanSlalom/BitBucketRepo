@@ -50,6 +50,15 @@ public class RMS_prodConfigExtension {
 		jobClosed = false;			
 		mode = ApexPages.currentPage().getParameters().get('mode');
 		if (mode == null) mode = 'v';
+		if(mode == 'e' && !newOrderItem && orderLineItem.Purchase_Order__c != null){
+			Purchase_Order__c relatedPO = [Select Status__c from Purchase_Order__c where Id =: orderLineItem.Purchase_Order__c];
+			if(relatedPO.Status__c != 'In Progress' && relatedPO.Status__c != 'Rejected'){
+				mode = 'v';
+			}
+			if(relatedPO.Status__c == 'Released' || relatedPO.Status__c == 'Confirmed'){
+				mode = 'r';
+			}
+		}
 //		if (mode == 'v') productSelected = true;
 		
 		// If this is a new order item, retrieve the order and pricebook id from the url params
@@ -81,11 +90,13 @@ public class RMS_prodConfigExtension {
 									WHERE Order_Product__c =: oiId];
 		}
 
-		Order o = [Select Status from Order where Id =: orderId];
-		if(o.Status == 'Job Closed'){
-			jobClosed = true;
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_CLOSED)); 
-			mode = 'v';
+		if(orderId != null){
+			Order o = [Select Status from Order where Id =: orderId];
+			if(o.Status == 'Job Closed'){
+				jobClosed = true;
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.ORDER_CLOSED)); 
+				mode = 'v';
+			}
 		}
 	}
 
