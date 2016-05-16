@@ -663,14 +663,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Interior_Extension_Jamb_Kit__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Exterior_Door_Jamb__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Exterior_Frame_Depth__c</field>
             </layoutItems>
             <layoutItems>
@@ -682,10 +674,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Door_Sill_Color__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Exterior_Keyed_Lock__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -996,10 +984,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Exterior_Keyed_Lock_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Standard_Size_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

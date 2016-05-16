@@ -361,17 +361,14 @@
 
 		<apex:pageBlockSection title="Door Fields" columns="2" rendered="{!prodConfig.mpc != null}">
 			 
-			<apex:inputField value="{!OrderItem.isStandardSize__c}"  required="{!prodConfig.mpc.Standard_Size_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isStandardSize"/>
-            <apex:outputField value="{!OrderItem.isStandardSize__c}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid="isStandardSize" />
-			
 			<apex:inputField value="{!OrderItem.Aluminum_Sill_Support__c}"  required="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="AluminiumSillSupport"/>
             <apex:outputField value="{!OrderItem.Aluminum_Sill_Support__c}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid="AluminiumSillSupport"/>
 			
 			<apex:inputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}"  required="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
-			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Standard_Size_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Standard_Size_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
-            <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
 			<apex:inputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}"  required="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
@@ -403,12 +400,6 @@
             	<apex:selectOptions value="{!DoorSillColorItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" id="outDoorSillColor" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Disabled' || mode != 'e'}" />
-			 
-		    <apex:selectList value="{!OrderItem.Exterior_Keyed_Lock__c}" label="Exterior Keyed Lock" size="1" id="ExteriorKeyedLock" required="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
-            	<apex:selectOptions value="{!ExteriorKeyedLockItems}"/>
-            </apex:selectList>
-            <apex:outputField value="{!OrderItem.Exterior_Keyed_Lock__c}" label="Exterior Keyed Lock" id="outExteriorKeyedLock" rendered="{!prodConfig.mpc.Exterior_Keyed_Lock_Control__c == 'Disabled' || mode != 'e'}" />
-			  
 		  
 		</apex:pageBlockSection> 
 		

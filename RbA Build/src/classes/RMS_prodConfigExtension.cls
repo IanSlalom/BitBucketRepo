@@ -915,30 +915,6 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Interior Pre Finish Items  *****************/
-	private static transient List<SelectOption> lInteriorExtensionJambKitItems;
-	public List<SelectOption> InteriorExtensionJambKitItems{
-		get
-		{   
-			if (lInteriorExtensionJambKitItems == null) {
-				lInteriorExtensionJambKitItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Extension_Jamb_Kit__c);
-			}
-			return lInteriorExtensionJambKitItems;
-		}
-	}
-	
-	/******* Exterior Door Jamb Items  *****************/
-	private static transient List<SelectOption> lExteriorDoorJambItems;
-	public List<SelectOption> ExteriorDoorJambItems{
-		get
-		{   
-			if (lExteriorDoorJambItems == null) {
-				lExteriorDoorJambItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Door_Jamb__c);
-			}
-			return lExteriorDoorJambItems;
-		}
-	}
-	
 	/******* Exterior Frame Depth Items  *****************/
 	private static transient List<SelectOption> lExteriorFrameDepthItems;
 	public List<SelectOption> ExteriorFrameDepthItems{
@@ -962,20 +938,6 @@ public class RMS_prodConfigExtension {
 			return lDoorSillColorItems;
 		}
 	} 
-	
-	/******* Exterior Keyed Lock Items  *****************/
-	private static transient List<SelectOption> lExteriorKeyedLockItems;
-	public List<SelectOption> ExteriorKeyedLockItems{
-		get
-		{   
-			if (lExteriorKeyedLockItems == null) {
-				lExteriorKeyedLockItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Keyed_Lock__c);
-			}
-			return lExteriorKeyedLockItems;
-		}
-	} 
-	
-
 
 	/*******************************************************
 					enterProduct method
