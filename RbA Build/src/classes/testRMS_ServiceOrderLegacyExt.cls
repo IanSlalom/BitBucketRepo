@@ -37,10 +37,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         insert dwellingsToInsert;        
         
  		List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
 		contactsToInsert.add(contact1);
-        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
+        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
 		contactsToInsert.add(contact2);
+        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+		contactsToInsert.add(contact3);
         insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
@@ -91,10 +93,22 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
                                   recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                                  );
         ordersToInsert.add(order2);
+        
+        Order o =  new Order(     Name='Service Order 1', 
+                             AccountId = dwelling1.id, 
+                             EffectiveDate= Date.Today(), 
+                             Store_Location__c = store1.Id,                               
+                             Status ='Draft', 
+                             Sold_Order__c = order1.Id,
+                             BilltoContactId = contact1.id,
+                             Service_Type__c = 'Job in Progress',                                             
+                             Pricebook2Id = pricebookId
+                            );
+        ordersToInsert.add(o);
         insert ordersToInsert;
         
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order1.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order1.id, Quote_Accepted__c = false, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
         insert orderItemMaster;
         
         List<Asset> assetsToInsert = new List<Asset>();
@@ -134,20 +148,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         insert assetsToInsert;  
         
         
-        
-        Order o =  new Order(     Name='Service Order 1', 
-                             AccountId = dwelling1.id, 
-                             EffectiveDate= Date.Today(), 
-                             Store_Location__c = store1.Id,                               
-                             Status ='Draft', 
-                             Sold_Order__c = order1.Id,
-                             BilltoContactId = contact1.id,
-                             Service_Type__c = 'Job in Progress',                                             
-                             Pricebook2Id = pricebookId
-                            );
-        insert o;
-        
-        OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
+        OrderItem serviceOrderItem = new OrderItem(Quote_Accepted__c = false, Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
         insert serviceOrderItem;
     }
     
@@ -156,12 +157,14 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Sold Order 1'];        
         
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt TE = new RMS_ServiceOrderLegacyExt(sc);
         Pagereference pr = TE.customDelete();        
         Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
         System.Assertequals(delOrd.isdeleted, true);
+        Test.stopTest();  
                         
     }
     
@@ -169,14 +172,15 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         createTestRecords();
         
         Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
-        
+
+            Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt TE = new RMS_ServiceOrderLegacyExt(sc);
         list<SelectOption> testoptions = TE.getPickLstValue();
         
         system.assertEquals(3,testoptions.size());
-        
+        Test.stopTest();  
     }
     
     
@@ -188,6 +192,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -196,7 +201,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption primOpt : TE.getPrimaries()){
             primOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperLocal(){
@@ -206,6 +211,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -214,6 +221,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption primOpt : TE.getPrimaries()){
             primOpt.getValue();
         }  
+        Test.stopTest();  
         
     }
     
@@ -224,6 +232,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -232,7 +241,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperInstallation(){
@@ -242,6 +251,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -250,7 +261,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperManagement(){
@@ -260,6 +271,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -268,7 +280,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperOE(){
@@ -278,6 +290,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -286,7 +299,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperSales(){
@@ -296,6 +309,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -304,7 +318,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperService(){
@@ -314,6 +328,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -321,7 +337,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         TE.primary = 'Service';
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
-        }  
+        } 
+        Test.stopTest();  
         
     }
     
@@ -332,6 +349,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+       
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -340,7 +359,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperTechMeasure(){
@@ -350,6 +369,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -358,7 +379,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperWarehouse(){
@@ -368,6 +389,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -376,7 +399,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testProductWrapperHomeOwner(){
@@ -386,6 +409,8 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
+        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -394,7 +419,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         for(SelectOption secOpt : TE.getSecondaries()){
             secOpt.getValue();
         }  
-        
+        Test.stopTest();  
     }
     
     static testmethod void testDependentPicklist(){
@@ -405,7 +430,7 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         Boolean isSelected = true;
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
-        
+        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -414,12 +439,13 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
         list<SelectOption> secondaryoptions = TE.getSecondaries();
         String cost = TE.getCost();
         String primary = TE.getPrimary();
-        String secondary = TE.getSecondary();        
+        String secondary = TE.getSecondary();
+		String description = TE.getDescription();        
         
-        system.assertEquals(null,cost);
-        system.assertEquals(null,primary);
-        system.assertEquals(null,secondary);
-        
+        system.assertEquals('-- Select --',cost);
+        system.assertEquals('-- Select --',primary);
+        system.assertEquals('-- Select --',secondary);
+        Test.stopTest();  
         
         
     }

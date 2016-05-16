@@ -41,6 +41,7 @@
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createContactHistoryManager</members>
+        <members>RMS_createContactHistoryManagerTests</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -83,14 +84,14 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>TaskTriggerHandler</members>
+        <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
         <members>editableTaskListExt</members>
         <members>eventTest</members>
-        <members>TaskTriggerHandler</members>
-        <members>TaskTriggerHandlerTests</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
@@ -263,6 +264,7 @@
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
+        <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
@@ -342,7 +344,7 @@
         <members>ServiceText</members>
         <members>SiteSamples</members>
         <members>TechMeasureText</members>
-         <members>jquery</members>
+        <members>jquery</members>
         <members>jquery_TableSorterZip</members>
         <members>jquery_tableSorter</members>
         <members>jqueryautocomplete</members>

@@ -134,11 +134,12 @@ public with sharing class testRMS_OrderItemExtension {
         PricebookEntry pricebookEntryServ = [SELECT Id FROM PricebookEntry WHERE Product2Id = :servProduct.id];
         OrderItem orderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = order.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100);
         
-        
+        Test.startTest();
         Test.setCurrentPage(Page.RMS_editServiceProduct);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
         RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
-        Pagereference pr = TE.saveCloseTab();        
+        Pagereference pr = TE.saveCloseTab(); 
+        Test.stopTest();
 // TODO: fix assertion
 //        system.assertEquals(true, ApexPages.hasMessages());
         

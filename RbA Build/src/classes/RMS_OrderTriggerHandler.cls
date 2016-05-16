@@ -127,7 +127,7 @@ public with sharing class RMS_OrderTriggerHandler {
     Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
     for(Order o: newMap.values()){   
       if(o.RecordTypeId == COROServiceId && o.Status != oldMap.get(o.Id).Status &&
-          (o.Status == 'Closed' || o.Status == 'Submitted for Warranty' && o.Invoice_Subtotal__c > 0)){
+          (o.Status == 'Closed' || o.Status == 'Warranty Submitted' && o.Invoice_Subtotal__c > 0)){
           o.Revenue_Recognized_Date__c = System.Today();
       }
     }
@@ -138,7 +138,7 @@ public with sharing class RMS_OrderTriggerHandler {
     List<Task> tasksToInsert = new List<Task>();
     for(Order o: newMap.values()){ 
       if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
-        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId));
+        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId, Subject = 'On Hold'));
       }
     }
     if(!tasksToInsert.isEmpty()){

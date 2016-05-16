@@ -1,11 +1,33 @@
+/*******************************************************//**
+
+@class  RMS_ServiceProductPickup
+
+@brief  Service Requests have Service Products (Orders and OrderItems)
+A checkbox exists on the Service Request, Customer Pickup - All, which indicates
+that the Customer will pick up all Service Products. On the Service Product there is
+a Yes/No Picklist for Customer Pickup. Should the Service Request be marked
+as Customer Pickup - All as true, all Service Products with the quote accepted will have
+Customer Pickup picklist set to Yes.
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@version    2016-5-10  Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
+
 public class RMS_ServiceProductPickup {
     
     public void customerPickup(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
         
-        List<OrderItem> childRecords = [Select Id, OrderId, Quote_Accepted__c, Customer_Pickup__c 
+        List<OrderItem> childRecords = [Select Id, OrderId, Quote_Accepted__c, Customer_Pickup__c,Order.Customer_Pickup_All__c 
                                                 FROM OrderItem WHERE Quote_Accepted__c = TRUE AND OrderId IN: Trigger.newMap.keySet()];
         
-        Map<Id,OrderItem> orderMap = new Map<Id,OrderItem>([select Id,Order.Customer_Pickup_All__c from OrderItem where id in:childRecords]);
+        Map<Id,OrderItem> orderMap = new Map<Id,OrderItem>([select Id from OrderItem where id in:childRecords]);
         
         for(OrderItem child :childRecords){
             if(!orderMap.IsEmpty()){   
