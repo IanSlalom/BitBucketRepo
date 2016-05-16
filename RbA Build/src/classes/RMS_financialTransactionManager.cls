@@ -437,10 +437,11 @@ public with sharing class RMS_financialTransactionManager {
         
         //map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborFTL = linkFinacialTransactions(extraFieldsList, 'Service Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborExternalFTL = linkFinacialTransactions(extraFieldsList, 'Service External Labor');
-        
+     
         
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecInternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecExternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized External Labor');
+        map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborPostRecExternalFTL = linkFinacialTransactions(extraFieldsList, 'Post Recognized Service External Labor');
         
         map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFTL = linkFinacialTransactions(extraFieldsList, 'Misc Reimbursement');
         map<Id, String> laborIdToMiscReimbursementGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
@@ -500,18 +501,31 @@ public with sharing class RMS_financialTransactionManager {
                         if(typeOfOrder == 'coroService'){
                 			//DO NOT CREATE SERVICE INTERNAL LABOR FINANCIAL TRANSACTIONS
                 			continue;
-                			//errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborFTL.get(l.id) , errorMessage, 'Service Internal Labor');
-		                }else 
-		               
-		                if(typeOfOrder == 'coroRecordType'){
+		                }else if(typeOfOrder == 'coroRecordType'){
 	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborFTL.get(l.id) , errorMessage, 'Internal Labor');
 	                    }
                 	}
-                }else if(typeOfLabor == 'PostRecLabor'){
+                }
+                
+                //POST RECOGNIZED LABOR
+                else if(typeOfLabor == 'PostRecLabor'){
                     if(subTypeOfLabor == 'external'){
-                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
+ 						if(typeOfOrder == 'coroService'){
+	                		errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized Service External Labor');
+		                }else if(typeOfOrder == 'coroRecordType'){
+	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
+	                	}                   
                     }else if(subTypeOfLabor == 'internal'){
-                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecInternalFTL.get(l.id) , errorMessage, 'Post Recognized Internal Labor');
+                        if(typeOfOrder == 'coroService'){
+                			//DO NOT CREATE POST RECOGNIZED SERVICE EXTERNAL LABOR FINANCIAL TRANSACTIONS
+                			continue;
+		                }else if(typeOfOrder == 'coroRecordType'){
+	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecInternalFTL.get(l.id) , errorMessage, 'Post Recognized Internal Labor');
+	                    }
+                        
+                        
+                        
+                        
                     }
                 }else if( typeOfLabor == 'LaborMiscReimbursement'){
                     errorMessage = checkFinacialTransationForErrors(laborIdToMiscReimbursementFTL.get(l.id) , errorMessage, 'Misc Reimbursement');
@@ -556,14 +570,16 @@ public with sharing class RMS_financialTransactionManager {
                                     */
                                 }
                             }else if(typeOfLabor == 'PostRecLabor'){
-                                    newJE.Type__c = 'Post Recognized Labor';
                                 if(subTypeOfLabor == 'external'){
+				                    newJE.Type__c = 'Post Recognized External Labor';
+				                    
                                     newJE.Amount__c = l.External_Labor_Amount__c;
                                     newJE.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                     
                                     newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
                                     newJE.Credit_General_Ledger_Account__c = laborIdToLaborPostRecExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
-                                }else if(subTypeOfLabor == 'internal'){
+                                }else if(subTypeOfLabor == 'internal'){  
+                                    newJE.Type__c = 'Post Recognized Internal Labor';
                                     newJe.Amount__c = l.Internal_Cost__c;
                                     
                                     newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecInternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
@@ -583,7 +599,7 @@ public with sharing class RMS_financialTransactionManager {
                         //there is an error message
                         mapNew.get(l.id).addError(errorMessage, FALSE);
                     }
-                }else{
+                }else{ 
                     //there is a related journal entry
                     if(errorMessage == null || errorMessage == ''){
                         if(laborIdToJournalEntryMap.get(l.id).size() == 1){
