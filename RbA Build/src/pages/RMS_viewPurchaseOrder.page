@@ -186,9 +186,13 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
 				
 				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != ''}">
-					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
+					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
+						<apex:facet name="header">Item</apex:facet> 
+					</apex:column>
 					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:200px" value="{!oiw.orderItem.Description}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Description}">
+						<apex:facet name="header">Item Description</apex:facet> 
+					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
 					<apex:column style="width:100px" rendered="{!costPurchaseOrder == false}">
@@ -197,7 +201,9 @@ function prepareList(parent,child,isSubselectOptional){
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Remake__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}"/>
+					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
+						<apex:facet name="header">Cost</apex:facet> 
+					</apex:column>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
