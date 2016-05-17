@@ -611,12 +611,12 @@
             screenType();
         }else if(ruleName == 'grilleStyle'){
             grilleStyle();
-        }else if(ruleName == 'grillePattern0'){
-            grillePattern(0);
         }else if(ruleName == 'grillePattern1'){
             grillePattern(1);
         }else if(ruleName == 'grillePattern2'){
             grillePattern(2);
+        }else if(ruleName == 'grillePattern3'){
+            grillePattern(3);
         }else if(ruleName == 'interiorColor'){
             interiorColor('White');
             interiorColor('Dark Bronze');
@@ -680,15 +680,15 @@
     
     function grilleStyle(){ 
         if(j$("select[data-jsid='grilleStyle']").val() == 'No Grilles'){
-            j$("select[data-jsid='grillePattern0']").val(null);
-            j$("select[data-jsid='grillePattern0']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").hide();
             j$("select[data-jsid='grillePattern1']").val(null);
             j$("select[data-jsid='grillePattern1']").hide();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
             j$("select[data-jsid='grillePattern2']").val(null);
             j$("select[data-jsid='grillePattern2']").hide();
 			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern3']").val(null);
+            j$("select[data-jsid='grillePattern3']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
@@ -697,12 +697,12 @@
 			
 			
         }else{
-            j$("select[data-jsid='grillePattern0']").show();
-			j$("label[for='"+j$("select[data-jsid='grillePattern0']").attr("id")+"']").show();
             j$("select[data-jsid='grillePattern1']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").show();
             j$("select[data-jsid='grillePattern2']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern3']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
             j$("input[data-jsid='wideBar']").show();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
             j$("table[data-jsid='sashGrilleTabPanel']").show();
