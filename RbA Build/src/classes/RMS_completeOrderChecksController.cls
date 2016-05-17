@@ -15,7 +15,7 @@
 public with sharing class RMS_completeOrderChecksController {
 
     public list<Back_Office_Check__c> selectedChecks {get;set;}
-    public Id ordId;
+    public Id ordId{get;set;}
     //selected
     public RMS_completeOrderChecksController(ApexPages.StandardSetController controller) {
         //controller.setPageSize(20);

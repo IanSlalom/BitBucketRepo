@@ -23,14 +23,94 @@
     </apex:form>
     <input id="hiddenElementId" type="hidden" />
 	<script type="text/javascript">
-	window.onload = setFocus
-	function setFocus()
-	{
-	         document.getElementById("hiddenElementId").focus();
-	         sforce.console.setTabTitle('Edit Checks');
-	         
-	}
-	</script>
+    //JETT-2143 Added console tab functions
+      var j$ = jQuery.noConflict();
+
+        //The callback function that closeTab will call once it's got the ID for its tab
+        var callCloseTab= function callCloseTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+
+        function closeTab() {
+
+            if(sforce.console.isInConsole()) {
+                sforce.console.refreshPrimaryTabById( primaryTabId, false,
+                    function()
+                    {
+                        if ( subTabId ) sforce.console.closeTab( subTabId );
+                    }
+                );
+                return false;
+            }
+            else {
+                location.href='/{!ordId}'; 
+            }
+
+        
+        };
+
+        function openNewSubTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            sforce.console.refreshPrimaryTabById( primaryTabId, false);
+            sforce.console.openSubtab
+            (   /*  Enclosing Primary Tab Id    */  primaryTabId,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Id of Subtab to override    */  subTabId,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }
+
+        function openNewPrimaryTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            //  otherwise open the new subtab
+            sforce.console.openPrimaryTab
+            (   /*  Enclosing Primary Tab Id    */  null,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }   
+        var primaryTabId = null;
+        var subTabId = null;
+        var previousOnload  = window.onload;
+
+        window.onload = function()
+        {
+        
+            //  perform the previously registered 'onload' function, if any
+            if ( previousOnload ) previousOnload();
+
+            //  get the id's of both the primary tab and this subtab
+            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
+
+            document.getElementById("hiddenElementId").focus();
+            //  set the title of this subtab
+            sforce.console.setTabTitle( 'Edit Checks' );
+
+        };
+        
+
+    </script>
     
     
     <!--
