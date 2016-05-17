@@ -396,6 +396,29 @@
 			 	  
 		  
 		</apex:pageBlockSection> 
+	        <apex:pageBlockSection title="Sash 4 Fields" columns="1" html-data-jsid="glazing4Section" rendered="{!numSashes >=4 && masterProduct.Family == 'Door'}">
+	            <apex:selectList value="{!OrderItem.Glazing_S4__c}" label="Glazing S4" size="1" id="glazing4"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing4" onChange="callRule('glazing4')" >
+	                <apex:selectOptions value="{!glazingItems}"/>
+	            </apex:selectList>
+	             <apex:selectList value="{!OrderItem.Glass_Pattern_S4__c}" label="Glass Pattern S4" size="1" id="glassPattern4"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern4" >
+	                <apex:selectOptions value="{!GlassPatternItems}"/>
+	            </apex:selectList>
+	            <apex:inputField value="{!OrderItem.Tempered_S4__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered4" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered4"/>
+	            <apex:outputField value="{!OrderItem.Tempered_S4__c}" id="outtempered" rendered="{!prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outtempered4"/>
+
+	             <apex:selectList value="{!OrderItem.Grille_Pattern_S4__c}" label="Pattern S4" size="1" id="grillePattern4" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern4" onChange="callRule('grillePattern4')">
+                        <apex:selectOptions value="{!grillePatternItems}"/>
+                   </apex:selectList>
+                <apex:selectList value="{!OrderItem.Lites_Wide_S4__c}" label="Grille Lites Wide S4" size="1" id="lightsWide4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide4">
+                        <apex:selectOptions value="{!litesWideItems}"/>
+                  </apex:selectList>
+                <apex:selectList value="{!OrderItem.Lites_High_S4__c}" label="Grille Lites High S4" size="1" id="lightsHigh4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh4">
+                        <apex:selectOptions value="{!litesHighItems}"/>
+                   </apex:selectList>
+                <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S4__c}" cols="50" rows="5" id="customGrilleDetails4" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="customGrilleDetails4" />
+            	<apex:outputText value="{!OrderItem.Custom_Grille_Details_S4__c}"  id="outcustomGrilleDetails2" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outcustomGrilleDetails4" />   
+
+	        </apex:pageBlockSection>
 		
 
 		<hr></hr>
@@ -477,32 +500,8 @@
 	            <apex:inputField value="{!OrderItem.Tempered_S3__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' &&  numSashes >=3}"  html-data-jsid="tempered3"/>
 	            <apex:outputField value="{!OrderItem.Tempered_S3__c}" id="outtempered3" rendered="{!(prodConfig.mpc.Tempered_S3_Control__c == 'Disabled'  || mode != 'e') &&  numSashes >=3}" html-data-jsid="outtempered3"/>
 
-
 	        </apex:pageBlockSection>
 
-	        <apex:pageBlockSection title="Sash 4 Fields" columns="1" html-data-jsid="glazing4Section" rendered="{!numSashes >=4 && masterProduct.Family == 'Door'}">
-	            <apex:selectList value="{!OrderItem.Glazing_S4__c}" label="Glazing S4" size="1" id="glazing4"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing4" onChange="callRule('glazing4')" >
-	                <apex:selectOptions value="{!glazingItems}"/>
-	            </apex:selectList>
-	             <apex:selectList value="{!OrderItem.Glass_Pattern_S4__c}" label="Glass Pattern S4" size="1" id="glassPattern4"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern4" >
-	                <apex:selectOptions value="{!GlassPatternItems}"/>
-	            </apex:selectList>
-	            <apex:inputField value="{!OrderItem.Tempered_S4__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered4" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered4"/>
-	            <apex:outputField value="{!OrderItem.Tempered_S4__c}" id="outtempered" rendered="{!prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outtempered4"/>
-
-	             <apex:selectList value="{!OrderItem.Grille_Pattern_S4__c}" label="Pattern S4" size="1" id="grillePattern4" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern4" onChange="callRule('grillePattern4')">
-                        <apex:selectOptions value="{!grillePatternItems}"/>
-                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_Wide_S4__c}" label="Grille Lites Wide S4" size="1" id="lightsWide4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide4">
-                        <apex:selectOptions value="{!litesWideItems}"/>
-                  </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S4__c}" label="Grille Lites High S4" size="1" id="lightsHigh4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh4">
-                        <apex:selectOptions value="{!litesHighItems}"/>
-                   </apex:selectList>
-                <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S4__c}" cols="50" rows="5" id="customGrilleDetails4" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="customGrilleDetails4" />
-            	<apex:outputText value="{!OrderItem.Custom_Grille_Details_S4__c}"  id="outcustomGrilleDetails2" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outcustomGrilleDetails4" />   
-
-	        </apex:pageBlockSection>
         </apex:pageBlockSection>        
           <apex:pageBlockSection title="Order Information" columns="2">
 			<apex:outputField value="{!OrderItem.Order.Name}"/>
