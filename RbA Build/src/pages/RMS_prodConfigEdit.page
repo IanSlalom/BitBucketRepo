@@ -588,10 +588,10 @@
         exteriorColor('Dark Bronze');
         screenType();
         grilleStyle();
-        grillePattern(0);
         grillePattern(1);
         grillePattern(2);
         grillePattern(3);
+        grillePattern(4);
         glazing(0);
         glazing(1);
         glazing(2);
@@ -617,6 +617,8 @@
             grillePattern(2);
         }else if(ruleName == 'grillePattern3'){
             grillePattern(3);
+        }else if(ruleName == 'grillePattern4'){
+            grillePattern(4);
         }else if(ruleName == 'interiorColor'){
             interiorColor('White');
             interiorColor('Dark Bronze');
@@ -689,6 +691,9 @@
             j$("select[data-jsid='grillePattern3']").val(null);
             j$("select[data-jsid='grillePattern3']").hide();
 			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern4']").val(null);
+            j$("select[data-jsid='grillePattern4']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").hide();
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
@@ -703,6 +708,8 @@
 			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").show();
             j$("select[data-jsid='grillePattern3']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
+            j$("select[data-jsid='grillePattern4']").show();
+			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").show();
             j$("input[data-jsid='wideBar']").show();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
             j$("table[data-jsid='sashGrilleTabPanel']").show();
@@ -719,10 +726,10 @@
 			j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").show()
 			
         }
-        grillePattern(0);
         grillePattern(1);
         grillePattern(2);
         grillePattern(3);
+        grillePattern(4);
     }
 
     function grillePattern(sashnumber){
