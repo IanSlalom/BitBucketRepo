@@ -381,14 +381,10 @@
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" id="outinteriorPreFinish" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Disabled' || mode != 'e'}" />
 			
-			<apex:selectList value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" size="1" id="InteriorExtensionJambKit" required="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="InteriorExtensionJambKit">
-            	<apex:selectOptions value="{!InteriorExtensionJambKitItems}"/>
-            </apex:selectList>
+			<apex:inputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="InteriorExtensionJambKit" required="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="outInteriorExtensionJambKit" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />
 			
-			<apex:selectList value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" size="1" id="ExteriorDoorJamb" required="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ExteriorDoorJamb">
-            	<apex:selectOptions value="{!ExteriorDoorJambItems}"/>
-            </apex:selectList>
+			<apex:inputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="ExteriorDoorJamb" required="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="outExteriorDoorJamb" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />
 			
 			<apex:selectList value="{!OrderItem.Exterior_Frame_Depth__c}" label="Exterior Frame Depth" size="1" id="ExteriorFrameDepth" required="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ExteriorFrameDepth">
