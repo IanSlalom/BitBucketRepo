@@ -444,7 +444,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       orderStatus = this.po.Status__c;
         		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
-      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder);
+      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder && !costPurchaseOrder);
 
       if(electronicOrder){
         if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){

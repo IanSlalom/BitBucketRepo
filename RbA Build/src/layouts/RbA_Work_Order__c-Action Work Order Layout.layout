@@ -64,6 +64,10 @@
                 <behavior>Edit</behavior>
                 <field>Municipality_Contact__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Municipality_Contact_Phone__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

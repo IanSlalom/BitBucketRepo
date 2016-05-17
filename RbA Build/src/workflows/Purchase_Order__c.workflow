@@ -14,9 +14,9 @@
         <fullName>Set_PO_Number</fullName>
         <description>Uses an auto-number and the abbreviation field on the PO to create the PO Name.</description>
         <field>Name</field>
-        <formula>IF( ISBLANK(Store_Abbreviation__c), &apos;XX&apos;, Store_Abbreviation__c) &amp;  
-&apos;-&apos; &amp;
-PO_System_Number__c</formula>
+        <formula>IF( ISBLANK(Store_Abbreviation__c), &apos;XX&apos;, LEFT(Store_Abbreviation__c,2)) &amp; 
+PO_System_Number__c &amp; 
+IF( ISBLANK(Store_Abbreviation__c), &apos;X&apos;, RIGHT(Store_Abbreviation__c,1))</formula>
         <name>Set PO Number</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
