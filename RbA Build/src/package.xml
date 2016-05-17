@@ -8,6 +8,7 @@
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
         <members>MA_SchedulerEvent</members>
+        <members>MA_SchedulerFakeDataGenerator</members>
         <members>MA_SchedulerResource</members>
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
@@ -41,6 +42,7 @@
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createContactHistoryManager</members>
+        <members>RMS_createContactHistoryManagerTests</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -72,8 +74,6 @@
         <members>RMS_prodConfigRedirectExtensionTest</members>
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
-        <members>RMS_serviceRequestTests</members>
-        <members>RMS_setBilltoContact</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
@@ -110,6 +110,7 @@
         <members>MA_SchedulerCalendarComp</members>
         <members>MA_SchedulerCancelAppointmentComp</members>
         <members>MA_SchedulerErrorComp</members>
+        <members>MA_SchedulerGeocodeComp</members>
         <members>MA_SchedulerListViewOptionsModalComp</members>
         <members>MA_SchedulerLoaderComp</members>
         <members>MA_SchedulerMainNav</members>
@@ -124,6 +125,7 @@
     </types>
     <types>
         <members>MA_Scheduler</members>
+        <members>MA_SchedulerGeocode</members>
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
@@ -187,6 +189,10 @@
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
+        <members>MABatchSchedule__c</members>
+        <members>MA_Scheduler</members>
+        <members>MA_Scheduler_Event__c</members>
+        <members>MA_Scheduler_Settings__c</members>
         <members>Municipality__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
@@ -274,6 +280,7 @@
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
+        <members>Resource__c-Resource Layout</members>
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>

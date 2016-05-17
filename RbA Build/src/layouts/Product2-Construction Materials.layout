@@ -25,7 +25,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Units__c</field>
+                <field>Unit_of_Measure__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

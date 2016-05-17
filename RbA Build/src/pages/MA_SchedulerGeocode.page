@@ -1,0 +1,5 @@
+<apex:page >
+	<apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
+
+	<c:MA_SchedulerGeocodeComp />
+</apex:page>

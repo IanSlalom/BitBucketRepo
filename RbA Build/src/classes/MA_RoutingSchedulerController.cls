@@ -1,4186 +1,602 @@
 global with sharing class MA_RoutingSchedulerController {
 
-    //private static final string ESRIClientID = 'zoqjF8KMFWmkuXPF';
-    //private static final string ESRIClientSecret = '8661390e1d4643039882f35836ccceb4';
-    private static final string ESRIClientID = 'GQMPeLvcxxRRDozD';
-    private static final string ESRIClientSecret = '482931042ffb4018a88007a05e75acc0';
-    private static final string ArcGISauth = 'https://www.arcgis.com/sharing/rest/oauth2/token/';
-    private static Set<Id> rId; // = new Set<Object>();
     private static Map<String, Object> configs = new Map<String,Object>();
-    private static Map<Id, Object> evConfigs = new Map<Id,Object>();
-    //private static Map<String, String> storeSettings;
-    //private static Map<String, List<Object>> objLists; //objLists = new Map<String, List<Object>>();
-    //private static Map<String, Map<String, Object>> master  = new  Map<String, Map<String, Object>>();
     private static Map<String, Object> master  = new  Map<String, Object>();
+
     public RbA_Work_Order__c tempWo {get;set;}
 
-
-    public MA_RoutingSchedulerController(){
-        Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
-        tempWo = new RbA_Work_Order__c(RecordTypeId = visitRecordTypeId);
+    public MA_RoutingSchedulerController() {
+        try {
+            Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
+            tempWo = new RbA_Work_Order__c(RecordTypeId = visitRecordTypeId);
+        }
+        catch(Exception e) {
+            tempWo = new RbA_Work_Order__c();
+        }
     }
     
-     webService static String getESRIToken()
-     {
-        String error = 'An error occured with your request. Please check your internet connection.';
-        String returnRes;
+    webService static String getESRIToken(String storeId, Boolean isVerification, String clientId, String clientSecret) {
         Http h = new Http();
+        String esriClientId;
+        String esriClientSecret;
         HttpRequest req = new HttpRequest();
         HttpResponse res = new HttpResponse();
-        req.setEndpoint(ArcGISauth);
-        req.setMethod('POST');
-        req.setBody('client_id=' + EncodingUtil.urlEncode(ESRIClientID,'UTF-8')+'&client_secret='+EncodingUtil.urlEncode(ESRIClientSecret,'UTF-8')+'&grant_type='+'client_credentials'+'&expiration='+'8000');
-        try{
-            res = h.send(req);
-            System.debug(res.getBody());
+        String arcGISauth = 'https://www.arcgis.com/sharing/rest/oauth2/token/';
+        
+        if (isVerification) {
+            esriClientId = clientId;
+            esriClientSecret = clientSecret;
         }
-        catch(System.CalloutException e){
-            System.debug('Callout error: '+ e);
-            System.debug(res.toString());
+        else {
+            for (MA_Scheduler_Settings__c settings : [SELECT Settings__c FROM MA_Scheduler_Settings__c WHERE Store_Id__c = :storeId AND Resource_Id__c = null]) {
+                if (String.isNotBlank(settings.Settings__c)) {
+                    Map<String, Object> storeSettings = (Map<String, Object>)JSON.deserializeUntyped(settings.Settings__c);
+                    esriClientId = (String)storeSettings.get('esriClientId');
+                    esriClientSecret = (String)storeSettings.get('esriClientSecret');
+                }
+
+                if (String.isNotBlank(esriClientId) || String.isNotBlank(esriClientSecret)) {
+                    break;
+                }
+            }
         }
-        //return returnRes;
-        return res.getBody();
+
+        if (String.isNotBlank(esriClientId) && String.isNotBlank(esriClientSecret)) {
+            req.setEndpoint(arcGISauth);
+            req.setMethod('POST');
+            req.setBody('client_id=' + EncodingUtil.urlEncode(esriClientId,'UTF-8') + '&client_secret=' + EncodingUtil.urlEncode(esriClientSecret,'UTF-8') + '&grant_type=' + 'client_credentials' + '&expiration=' + '8000');
+            
+            try {
+                res = h.send(req);
+            }
+            catch (System.CalloutException e) {}
+        
+            return res.getBody();
+        }
+
+        Map<String, Object> responseMap = new Map<String, Object> {
+            'error' => new Map<String, String> {
+                'error' => 'MISSING CREDENTIALS',
+                'message' => 'Your ESRI credentials have not been configured for this store.  Please go to settings and complete the setup.'
+            }
+        };
+        return JSON.serialize(responseMap);
     }
     
-    webService static String getRecords(String dt, String storeId, String workOrderType)
-    {
-        List<Object> eventList = new List<Object>();
-        List<Object> MAeventList = new List<Object>();
-        List<Object> settings = new List<Object>();
-        List<Object> WOList = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        try
-        {
-            if(String.isNotBlank(dt) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType))
-            {
-                Date d = Date.valueOf(dt);
-                DateTime dateT = (DateTime)d;
-                Long milliTime = dateT.getTime();
-                master.put('defaultdate', milliTime);
-                //Set up Depots first for the day
-                depotSettings(dt, storeId, workOrderType);
-                //Set up Resources and Routes with skills second for the day
-                setupResource(dt, storeId, workOrderType);
-                //Set up breaks and WOs that have been assigned to Resources/Routes for the day
-                setupEvents(dt, storeId, workOrderType);
-                //Set up breaks and WOs that have been assigned to Resources/Routes for the day
-                setupMAEvents(dt, storeId, workOrderType);
-                //Set up rest of work orders that are not assigned for the day
-                setupWO(dt, storeId, workOrderType);
-                //Success is true
-                master.put('success', true);
+    webservice static String retrieveResourceRouteRecords(Id resourceId, String dayString, Id storeId) {
+        try {
+            Integer sequence = 0;
+            List<Object> features = new List<Object>();
+            Map<String, Object> stopObj = new Map<String, Object>();
+            Map<String, Object> geometry =  new Map<String, Object>();
+            Map<String, Object> attributes = new Map<String, Object>();
+            String storeTimezone = MA_SchedulerUtilities.retrieveStoreTimezone(storeId);
+            //Store_Configuration__c store = [SELECT Id, Store__c, Name, Store__r.ShippingLongitude, Store__r.ShippingLatitude FROM Store_Configuration__c WHERE Id = :storeId LIMIT 1];
+            Date day = Date.parse(dayString);
+            DateTime startDateTime = DateTime.newInstanceGmt(day, Time.newInstance(0, 0, 0, 0));
 
-                system.debug(master);
+            if (String.isNotBlank(storeTimezone)) {
+                startDateTime = MA_SchedulerUtilities.convertGmtToTimezone(startDateTime, storeTimezone, null);
+            }
+            DateTime endDateTime = startDateTime.addDays(1);
+            
+            Long milliTime = startDateTime.getTime();
+            master.put('defaultdate', milliTime);
+           
+            /*
+            if (store.Store__r.ShippingLongitude != null && store.Store__r.ShippingLatitude != null) {
+                geometry.put('x', store.Store__r.ShippingLongitude);
+                geometry.put('y',  store.Store__r.ShippingLatitude);
+            
+                attributes.put('Name', '{"storeId":"' + store.Id + '","Name":"' + store.Name + '"}');
+                attributes.put('RouteName', resourceId);
+                attributes.put('Sequence', sequence);
+                attributes.put('Attr_TravelTime', 10);
+                attributes.put('CurbApproach', 3);
                 
+                stopObj.put('attributes', attributes);
+                stopObj.put('geometry', geometry);
+                features.add(stopObj);
+                sequence++;
             }
-            else
-            {
-                List<Object> errorFeatures = new List<Object>();
-                Map<String, Object> errors = new Map<String, Object>();
-                errors.put('success', false);
-                String e = String.isNotBlank(dt) ? ' No Date selected. Select a Date on the calendar to optimize.' : null; 
-                String e2 = String.isNotBlank(storeId) ? ' No store has been selected.' : null;
-                errors.put('dt', e);
-                errors.put('storeId', e2);
-                errorFeatures.add(errors);
-                objLists.put('errors', errorFeatures);
-                master.put('error', objLists);
-                master.put('success', false);
+            */
+            
+            List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, RbA_Work_Order__c, RbA_Work_Order__r.Name,
+                                                        RbA_Work_Order__r.Appointment_Duration__c, RbA_Work_Order__r.Account__c,
+                                                        RbA_Work_Order__r.Account__r.ShippingLatitude, RbA_Work_Order__r.Account__r.ShippingLongitude,
+                                                        Date__c, StartDateTime__c, EndDateTime__c
+                                                        FROM MA_Scheduler_Event__c WHERE Resource__c = :resourceId AND RbA_Work_Order__c != null
+                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime ORDER BY StartDateTime__c]; 
+            
+            for (MA_Scheduler_Event__c maEvent : maEventList) {
+                stopObj = new Map<String, Object>();
+                geometry =  new Map<String, Object>();
+                attributes = new Map<String, Object>();
+
+                if (maEvent.RbA_Work_Order__r.Account__r.ShippingLongitude != null && maEvent.RbA_Work_Order__r.Account__r.ShippingLatitude != null) {
+                    geometry.put('x', maEvent.RbA_Work_Order__r.Account__r.ShippingLongitude);
+                    geometry.put('y',  maEvent.RbA_Work_Order__r.Account__r.ShippingLatitude);
+               
+                    DateTime maEndDateTime = maEvent.EndDateTime__c;
+                    DateTime maStartDateTime = maEvent.StartDateTime__c;
+
+                    if (String.isNotBlank(storeTimezone)) {
+                        maEndDateTime = MA_SchedulerUtilities.convertTimezoneToTimezone(maEndDateTime, null, storeTimezone);
+                        maStartDateTime = MA_SchedulerUtilities.convertTimezoneToTimezone(maStartDateTime, null, storeTimezone);
+                    }
+
+                    Long serviceTime = maEndDateTime.getTime() - maStartDateTime.getTime();
+                    serviceTime = (Integer)(serviceTime / 1000) / 60;
+                    
+                    attributes.put('Name', '{"woId":"' + maEvent.RbA_Work_Order__c + '","maEventId":"' + maEvent.Id + '","woName":"' + maEvent.RbA_Work_Order__r.Name + '"}');
+                    attributes.put('TimeWindowStart', maStartDateTime.getTime());
+                    attributes.put('TimeWindowEnd', maEndDateTime.getTime());
+                    attributes.put('RouteName', resourceId);
+                    attributes.put('Sequence', sequence);
+                    attributes.put('Attr_TravelTime', serviceTime);
+                    attributes.put('CurbApproach', 3);
+                    stopObj.put('attributes', attributes);
+                    stopObj.put('geometry', geometry);
+                    features.add(stopObj);
+                    sequence++;
+                }
             }
+
+            master.put('stops', new Map<String, Object> { 'features' => features });
+            master.put('success', true);
         }
-        catch(Exception ex)
-        {
-            List<Object> errorFeatures = new List<Object>();
-            Map<String, Object> errors = new Map<String, Object>();
-            errors.put('success', false);
-            errors.put('RecordsError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
-            master.put('success', false);
+        catch(Exception ex) {
+            MA_SchedulerUtilities.createErrorResponse(ex, master);
         }
+
         return JSON.serialize(master);
     }
 
-    //webService static String processConfirmBatch(List<MA_Scheduler_Event__c> maEvList, List<Event> sfEvList, String dt){
-    webService static String processConfirmBatch(List<MA_Scheduler_Event__c> maEvList, String sfEvListString, String storeId, String offsetPageMinutes, String dt){
-        System.savepoint sp = Database.setSavepoint();
-        Map<String, Object> response  = new  Map<String, Object>();
+    webService static String processConfirmBatch(String woToResIdsMapString, Id storeId, String batchDateString, String primaryResourceMapString) {
+        System.Savepoint sp = Database.setSavepoint();
+        Map<String, Object> response = new Map<String, Object>();
 
-        System.debug(maEvList);
-        System.debug(sfEvListString);
+        try {
+            Date batchDate = Date.valueOf(batchDateString);
+            List<Event> sfEventsToCreate = new List<Event>();
+            Map<Id, Id> resourceIdToUserIdMap = new Map<Id, Id>();
+            Map<Id, Set<Id>> oldWoToResIdsMap = new Map<Id, Set<Id>>();
+            Map<Id, Set<Id>> maEventsAlreadyCreatedFor = new Map<Id, Set<Id>>();
+            String storeTimezone = MA_SchedulerUtilities.retrieveStoreTimezone(storeId);
+            List<MA_Scheduler_Event__c> maEventsToCreate = new List<MA_Scheduler_Event__c>();
+            Map<Id, MA_Scheduler_Event__c> woToMaEventMap = new Map<Id, MA_Scheduler_Event__c>();
+            Map<Id, MA_Scheduler_Event__c> maEventsToDelete = new Map<Id, MA_Scheduler_Event__c>();
+            List<Assigned_Resources__c> assignedResourcesToCreate = new List<Assigned_Resources__c>();
+            List<Assigned_Resources__c> assignedResourcesToDelete = new List<Assigned_Resources__c>();
+            Map<Id, Id> primaryResourceMap = (Map<Id, Id>)JSON.deserialize(primaryResourceMapString, Map<Id, Id>.class);
+            Map<Id, Set<Id>> woToResIdsMap = (Map<Id, Set<Id>>)JSON.deserialize(woToResIdsMapString, Map<Id, Set<Id>>.class);
 
-         List<Event> sfEvList;
-        if (String.isNotBlank(sfEvListString)) {
-            sfEvList = (List<Event>)JSON.deserialize(sfEvListString, List<Event>.class);
-        }
-        System.debug(sfEvList);
-
-        if(maEvList.isEmpty() && String.isNotBlank(dt))
-        {
-
-            //qeury the MABAtchable record by dt date to create events
-            response.put('ListEmpty', true);
-
-        }
-        else
-        {
-            try
-            {
-
-                String storeTimezone = MA_SchedulerUtilities.retrieveStoreTimezone(storeId);
-
-                for (MA_Scheduler_Event__c maEvent : maEvList) {
-                    maEvent.Estimated_Start_Date_Time__c = MA_SchedulerUtilities.convertGmtToTimezone(maEvent.Estimated_Start_Date_Time__c, storeTimezone, offsetPageMinutes);
-                    maEvent.Estimated_End_Date_Time__c = MA_SchedulerUtilities.convertGmtToTimezone(maEvent.Estimated_End_Date_Time__c, storeTimezone, offsetPageMinutes);
+            for (Id woId : woToResIdsMap.keySet()) {
+                List<Id> assignedResourceIds = new List<Id>(woToResIdsMap.get(woId));
+                if (assignedResourceIds.size() > 1) {
+                    assignedResourceIds.remove(0);
                 }
+                woToResIdsMap.put(woId, new Set<Id>(assignedResourceIds));
+            }
 
-                for (Event sfEvent : sfEvList) {
-                    sfEvent.StartDateTime = MA_SchedulerUtilities.convertGmtToTimezone(sfEvent.StartDateTime, storeTimezone, offsetPageMinutes);
-                    sfEvent.EndDateTime = MA_SchedulerUtilities.convertGmtToTimezone(sfEvent.EndDateTime, storeTimezone, offsetPageMinutes);
+            for (Assigned_Resources__c res : [SELECT Id, Work_Order__c, Scheduled_Resource__c FROM Assigned_Resources__c WHERE Work_Order__c IN :woToResIdsMap.keySet()]) {
+                Set<Id> assignedResourceIds = woToResIdsMap.get(res.Work_Order__c);
+                                    
+                if (!assignedResourceIds.contains(res.Scheduled_Resource__c)) {
+                    assignedResourcesToDelete.add(res);
                 }
-
-
-
-                List<Object> errors = new List<Object>();
-                List<Object> success = new List<Object>();
-                Database.UpsertResult[] upsertEx;
-                upsertEx = database.upsert(maEvList, false);
-                for (Database.UpsertResult sr: upsertEx){
-                    if(sr.isSuccess()){
-                        system.debug('Update Succeeded. MAEvent Id: '+ sr.getId());
+                else {
+                    if (!oldWoToResIdsMap.containsKey(res.Work_Order__c)) {
+                        oldWoToResIdsMap.put(res.Work_Order__c, new Set<Id>());
                     }
-                    else{
-                        Database.rollback(sp);
-                        for(database.Error err: sr.getErrors()){
-                            system.debug('The following error has occured. ');
-                            system.debug(err.getStatusCode() + ': ' + err.getMessage());
-                            system.debug('Error fields: ' + err.getFields());
-                            
+                    oldWoToResIdsMap.get(res.Work_Order__c).add(res.Scheduled_Resource__c);
+                }
+            }
+            delete assignedResourcesToDelete;
+
+            for (MA_Scheduler_Event__c maEvent : [SELECT Id, Name, RbA_Work_Order__c, RbA_Work_Order__r.Name, Resource__c, StartDateTime__c, EndDateTime__c, Date__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c IN :woToResIdsMap.keySet() AND Date__c = :batchDate]) {
+                Set<Id> assignedResourceIds = woToResIdsMap.get(maEvent.RbA_Work_Order__c);
+                woToMaEventMap.put(maEvent.RbA_Work_Order__c, maEvent);
+
+                if (!assignedResourceIds.contains(maEvent.Resource__c)) {
+                    maEventsToDelete.put(maEvent.Id, maEvent);
+                }
+                else {
+                    if (!maEventsAlreadyCreatedFor.containsKey(maEvent.RbA_Work_Order__c)) {
+                        maEventsAlreadyCreatedFor.put(maEvent.RbA_Work_Order__c, new Set<Id>());
+                    }
+                    maEventsAlreadyCreatedFor.get(maEvent.RbA_Work_Order__c).add(maEvent.Resource__c);
+                }
+            }
+
+            List<Event> sfEventsToDelete = [SELECT Id FROM Event WHERE MA_Scheduler_Event__c IN :maEventsToDelete.keySet()];
+            for (Event ev : sfEventsToDelete) {
+                ev.Type = 'Rescheduled';
+            }
+            delete sfEventsToDelete;
+
+            for (Id woId : woToResIdsMap.keySet()) {
+                if (woId.getSobjectType() == Schema.RbA_Work_Order__c.SObjectType) {
+                    Id primaryResourceId = primaryResourceMap.get(woId);
+                    Set<Id> assignedResourceIds = woToResIdsMap.get(woId);
+                    Set<Id> assignedResourceIdsAlreadyCreated = oldWoToResIdsMap.containsKey(woId) ? oldWoToResIdsMap.get(woId) : new Set<Id>();
+                    assignedResourceIds.removeAll(assignedResourceIdsAlreadyCreated);
+
+                    Set<Id> assignedResourceIdsEvents = woToResIdsMap.get(woId);
+                    Set<Id> assignedResourceIdsAlreadyCreatedEvents = maEventsAlreadyCreatedFor.containsKey(woId) ? maEventsAlreadyCreatedFor.get(woId) : new Set<Id>();
+                    assignedResourceIdsEvents.removeAll(assignedResourceIdsAlreadyCreatedEvents);
+                    MA_Scheduler_Event__c tempEvent = woToMaEventMap.get(woId);
+
+                    if (tempEvent != null) {
+                        for (Id resourceId : assignedResourceIdsEvents) {
+                            resourceIdToUserIdMap.put(resourceId, null);
+                            MA_Scheduler_Event__c maEvent = new MA_Scheduler_Event__c(
+                                RbA_Work_Order__c = tempEvent.RbA_Work_Order__c,
+                                StartDateTime__c = tempEvent.StartDateTime__c,
+                                EndDateTime__c = tempEvent.EndDateTime__c,
+                                Name = tempEvent.RbA_Work_Order__r.Name,
+                                Date__c = tempEvent.Date__c,
+                                Resource__c = resourceId.getSobjectType() == Schema.Resource__c.SObjectType ? resourceId : null
+                            );
+                            maEventsToCreate.add(maEvent);
+                        }
+                    }
+
+                    for (Id resourceId : assignedResourceIds) {
+                        if (resourceId.getSobjectType() == Schema.Resource__c.SObjectType) {
+                            Assigned_Resources__c assignedRes = new Assigned_Resources__c(
+                                Work_Order__c = woId,
+                                Scheduled_Resource__c = resourceId,
+                                IsPrimary__c = primaryResourceId == resourceId || assignedResourceIds.size() == 1
+                            );
+                            assignedResourcesToCreate.add(assignedRes);
                         }
                     }
                 }
-                Database.SaveResult[] insertEx;
-                insertEx = database.insert(sfEvList, false);
-                for (Database.SaveResult sr: insertEx){
-                    if(sr.isSuccess()){
-                        system.debug('Insert Succeeded. SF Event ID: '+ sr.getId());
-                        success.add(sr);
-                    }
-                    else{
-                        for(database.Error err: sr.getErrors()){
-                            //if (err.getStatusCode() != 'OP_WITH_INVALID_USER_TYPE_EXCEPTION') {
-                            if (err.getMessage() != 'Operation not valid for this user type') {
-                                Database.rollback(sp);
-                            }
-                            system.debug('The following error has occured. ');
-                            system.debug(err.getStatusCode() + ': ' + err.getMessage());
-                            system.debug('Error fields: ' + err.getFields());
-                            errors.add(sr);
-                        }
-                    }
+            }
+            insert assignedResourcesToCreate;
+            insert maEventsToCreate;
+            delete maEventsToDelete.values();
+
+            for (Resource__c res : [SELECT Id, RbA_User__c FROM Resource__c WHERE Id IN :resourceIdToUserIdMap.keySet()]) {
+                resourceIdToUserIdMap.put(res.Id, res.RbA_User__c);
+            }
+
+            for (MA_Scheduler_Event__c maEvent : maEventsToCreate) {
+                Id userId = resourceIdToUserIdMap.get(maEvent.Resource__c);
+                if (userId != null) {
+                    Event sfEvent = new Event(
+                        StartDateTime = maEvent.StartDateTime__c,
+                        EndDateTime = maEvent.EndDateTime__c,
+                        WhatId = maEvent.RbA_Work_Order__c,
+                        MA_Scheduler_Event__c = maEvent.Id,
+                        Subject = maEvent.Name,
+                        OwnerId = userId
+                    );
+                    sfEventsToCreate.add(sfEvent);
                 }
-                response.put('success', true);
-                //response.put('response', success);
-                //response.put('error', errors);
             }
-            catch(DMLException ex){
-                Database.rollback(sp);
-                system.debug('Error+++ '+ ex);
-                system.debug(maEvList);
-                system.debug(sfEvList);
-            }
+            insert sfEventsToCreate;
+
+            response.put('success', true);
         }
-        
+        catch(Exception ex) {
+            Database.rollBack(sp);
+            MA_SchedulerUtilities.createErrorResponse(ex, response);
+        }
+
         return JSON.serialize(response);
     }
     
-    private static void setupResource(String dt, String storeId, String workOrderType)
-    {
-        //List<Object> routes = new List<Object>();
-        //List<sObject> resourceList = new List<sObject>();
-        List<Object> features = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        rId = new Set<Id>();
-        try
-        {
-            for(List<SObject> l : [SELECT Id,Name, Active__c, Available_Time_Window__c, Crew_Size__c, RbA_User__c, Resource_Type__c, Retail_Location__c,(SELECT Id, Name, RbA_Skill__c, Type__c FROM Resource_Skills__r) FROM Resource__c WHERE  Retail_Location__c =: storeId AND Active__c =: true AND Resource_Type__c =: workOrderType Limit 25])
-            {
-                for(SObject res : l)
-                {
-                    Map<String, Object> obj = new Map<String, Object>();
-                    Map<String, Object> attributes = new Map<String, Object>();
-                    //Set of UserId that need to be used for grabbing events
-                    //rId = new Set<Id>();
-                    rId.add((ID)res.get('RbA_User__c'));
-                    //attributes
-                    //attributes.put('Name', res.get('Id'));
-                    attributes.put('Name', '{"resId":"'+ res.get('Id')+'",'+'"userId":"'+res.get('RbA_User__c')+'"}');
+    webService static String getRecords(String dateString, String storeId, String workOrderType, String offsetPageMinutes) {
+        try {
+            if(String.isNotBlank(dateString) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType)) {
+                Date dateToCheck = Date.valueOf(dateString);
+	            DateTime dateTimeToCheck = (DateTime)dateToCheck;
+            	configs = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrderType);
+	            String storeTimezone = (String)configs.get('storeTimezone');
+				
+				Integer offset = MA_SchedulerUtilities.determineTimezoneOffset(dateTimeToCheck, storeTimezone);
+				Integer offsetMinutes = MA_SchedulerUtilities.determineOffsetMinutesFromTimezoneOffset(offset);
 
-                    if(configs.containsKey((String)res.get('Retail_Location__c')))
-                    {
-                        attributes.put('StartDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}');
-                        attributes.put('EndDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}');
-                         attributes.put('StartDepotServiceTime', 15);
-                        attributes.put('EndDepotServiceTime', 15);
-                    }
-                    else
-                    {
-                        attributes.put('StartDepotName','{"storeID":"'+res.get('Retail_Location__c')+'"}');
-                        attributes.put('EndDepotName', '{"storeID":"'+res.get('Retail_Location__c')+'"}'); 
-                        attributes.put('StartDepotServiceTime', 10);
-                        attributes.put('EndDepotServiceTime', 10);
-                    }
+				if (String.isNotBlank(offsetPageMinutes)) {
+					offsetMinutes += Integer.valueOf(offsetPageMinutes);
+				}
+				master.put('offsetResponseMinutes', offsetMinutes);
 
-                    if(configs.containsKey((String)res.get('Id')))
-                    {
-                        //Deseralize resource configs settings
-                        
+                setupDepots(storeId);
+                Map<Id, Id> userIdToResourceIdMap = setupRoutes(dateToCheck, storeId, storeTimezone, workOrderType, new Set<Id>());
+                setupOrders(dateToCheck, storeId, storeTimezone, workOrderType, userIdToResourceIdMap.values());
+				setupBreaks(dateToCheck, storeTimezone, userIdToResourceIdMap);
 
-                        //JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
-                        //MA_SchedulerSettings ma = new MA_SchedulerSettings(parser);                       
-                        //system.debug(ma);
-                        //system.debug(ma.storeHours);
-                        //system.debug(ma.timezone);
-                        //system.debug(ma.resourceHours);
-
-                        //ma.MA_SchedulerSettings(JSONParser((String)configs.get((String)res.get('Id'))));
-                        //ma.MA_SchedulerSettings(JSONParser parser) = (Map<String, Object>)JSON.deserialize((String)configs.get((String)res.get('Id')) , Map<String, Object>.class);
-                        //JSONParser parser = JSON.createParser((String)configs.get((String)res.get('Id')));
-                        //ma.MA_SchedulerSettings(parser);
-                        
-
-                        /*attributes.put('EarliestStartTime');
-                        attributes.put('LatestStartTime');
-                        attributes.put('ArriveDepartDelay');
-                        attributes.put('Capacities');
-                        attributes.put('FixedCost');
-                        attributes.put('CostPerUnitTime');
-                        attributes.put('CostPerUnitDistance');
-                        attributes.put('OverTimeStartTime');
-                        attributes.put('MaxOrderCount');
-                        attributes.put('MaxTotalTime');
-                        attributes.put('MaxTotalTravelTime');
-                        attributes.put('MaxTotalDistance');*/
-                        //configs.get((String)res.get('Id')).Settings__c = (String)attributes;
-
-
-                        //attributes = configs.get((String)res.get('Id'));
-
-                    }
-                    else
-                    {
-                        system.debug('There is no resources settings for this resource');
-                        /*
-                        attributes.put('EarliestStartTime');
-                        attributes.put('LatestStartTime');
-                        attributes.put('ArriveDepartDelay');
-                        attributes.put('Capacities');
-                        attributes.put('FixedCost');
-                        attributes.put('CostPerUnitTime');
-                        attributes.put('CostPerUnitDistance');
-                        attributes.put('OverTimeStartTime');
-                        attributes.put('MaxOrderCount');
-                        attributes.put('MaxTotalTime');
-                        attributes.put('MaxTotalTravelTime');
-                        attributes.put('MaxTotalDistance');*/
-                        //configs.put((String)res.get('Id'), attributes);
-                    }
-                    String skills;
-                    if((List<Resource_Skill__c>)res.getSObjects('Resource_Skills__r') != null && !((List<Resource_Skill__c>)res.getSObjects('Resource_Skills__r')).isEmpty())
-                    {
-                        List<Object> skillIds = new List<Object>();
-                        for(Resource_Skill__c skill : (List<Resource_Skill__c>)res.getSObjects('Resource_Skills__r'))
-                        {
-                            //skills += skill.RbA_Skill__c + '';
-                            system.debug(skill.RbA_Skill__c);
-                            skillIds.add(skill.RbA_Skill__c);
-
-                        }
-                        skillIds.add(((String)res.get('Resource_Type__c')).deleteWhitespace());
-                        skills = String.join(skillIds, ' ');
-                        //skills = skills.replaceAll('(\\s+)', ' ');
-                        attributes.put('SpecialtyNames', skills);
-                    }
-                    else
-                    {
-                        List<Object> skillIds = new List<Object>();
-                        skillIds.add(((String)res.get('Resource_Type__c')).deleteWhitespace());
-                        skills = String.join(skillIds, ' ');
-                        attributes.put('SpecialtyNames', skills);
-
-                        if(master.containsKey('error'))
-                        {
-                            Map<String, Object> tempError = (Map<String, Object>)master.get('error');
-                            List<Object> tempErrors = (List<Object>)tempError.get('errors');
-                            Map<String, Object> errors = new Map<String, Object>();
-                            errors.put((String)res.get('Id'), (String)res.get('Name') + ': Resource Skills: No skills on Resource.');
-                            tempErrors.add(errors);
-                            //system.debug(tempFeat);
-                        }
-                        else
-                        {
-                            Map<String, Object> errors = new Map<String, Object>();
-                            List<Object> errorFeatures = new List<Object>();
-                            Map<String, List<Object>> objListsErrors = new Map<String, List<Object>>();
-                            errors.put((String)res.get('Id'), (String)res.get('Name') + ': Resource Skills: No skills on Resource.');
-                            errorFeatures.add(errors);
-                            objListsErrors.put('errors', errorFeatures);
-                            master.put('error', objListsErrors);
-                        }
-                    }
-                    //attributes.put('AssignmentRule');
-
-                    configs.put((String)res.get('RbA_User__c'), attributes);
-                    obj.put('attributes', attributes);
-                    features.add(obj);
-                }
+                master.put('success', true);
+                master.put('defaultdate', dateTimeToCheck.getTime());
             }
-            objLists.put('features', features);
-            master.put('routes', objLists);
+            else {
+	            master.put('success', false);
+	            master.put('error', 'You must select a date and work order type before proceeding');
+            }
         }
-        catch(Exception ex)
-        {
-            List<Object> errorFeatures = new List<Object>();
-            Map<String, Object> errors = new Map<String, Object>();
-            objLists = new Map<String, List<Object>>();
-            errors.put('success', false);
-            errors.put('RouteError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
+        catch(Exception ex) {
+            master.put('success', false);
+            master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
         }
-        
+
+        return JSON.serialize(master);
+    }
+
+    private static void setupDepots(String storeId) {
+        try {
+            Store_Configuration__c storeConfig = [SELECT Id, Name, Store__c, Store__r.ShippingLongitude, Store__r.ShippingLatitude
+        											FROM Store_Configuration__c WHERE Id = :storeId LIMIT 1];
+
+            Map<String, Object> depotObj = new Map<String, Object>();
+            Map<String, Object> geometry = new Map<String, Object>();
+            Map<String, Object> attributes = new Map<String, Object>();
+            
+            geometry.put('x', storeConfig.Store__r.ShippingLongitude);
+            geometry.put('y', storeConfig.Store__r.ShippingLatitude);
+
+            attributes.put('Name', '{"storeID":"' + storeConfig.Id + '"}');
+
+            depotObj.put('attributes', attributes);
+            depotObj.put('geometry', geometry);
+
+            List<Object> features = new List<Object> {depotObj};
+            master.put('depots', new Map<String, Object> { 'features' => features });
+        }
+        catch(Exception ex) {
+            master.put('success', false);
+            master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
+        }
     }
     
-    private static void setupEvents(String dt, String storeId, String workOrderType)
-    {
-        List<Object> features = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        try
-        {
-            for(List<SObject> l : [SELECT Id, OwnerId, Type, MA_Scheduler_Event__c, StartDateTime, EndDateTime, ActivityDate, DurationInMinutes, WhoId, WhatId, ActivityDateTime FROM Event WHERE OwnerId =: rId AND ActivityDate =: Date.valueOf(dt) AND MA_Scheduler_Event__c = null])
-            {
-                for(SObject ev : l)
-                {
-                    Map<String, Object> obj = new Map<String, Object>();
-                    Map<String, Object> attributes = new Map<String, Object>();
+    private static Map<Id, Id> setupRoutes(Date dateToCheck, String storeId, String storeTimezone, String workOrderType, Set<Id> resourceIds) {
+        Map<Id, Id> userIdToResourceIdMap = new Map<Id, Id>();
+        try {
+        	List<Object> features = new List<Object>();
+        	Map<Id, Map<String, Object>> resourceHours = new Map<Id, Map<String, Object>>();
+        	Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrderType);
 
-                    if(configs.containsKey((String)ev.get('OwnerId')))
-                    {
-                        if(ev.get('MA_Scheduler_Event__c') == null)
-                        {
-                            system.debug(configs);
-                            system.debug((Map<String, Object>)configs.get((String)ev.get('OwnerId')));
-                            attributes.put('RouteName', ((Map<String, Object>)configs.get((String)ev.get('OwnerId'))).get('Name'));
-                            //attributes.put('RouteName', '{"resId":"'+ res.get('Id')+'",'+'"userId":"'+res.get('RbA_User__c')+'"}');
-                            //attributes.put('Precedence',);
-                            attributes.put('ServiceTime', ev.get('DurationInMinutes'));
-                            
-                            attributes.put('TimeWindowStart', ((DateTime)ev.get('StartDateTime')).getTime());
-                            attributes.put('TimeWindowEnd', ((DateTime)ev.get('EndDateTime')).getTime());
-                            //attributes.put('MaxViolationTime',);
-                            //attributes.put('MaxCumulWorkTime',);
-                            //attributes.put('IsPaid',);
-                            //attributes.put('Sequence',);
-                        }
-                        else
-                        {
-                            //This is WO related event
-                            //Add to Map<Id, String> of maybe of Resource - OwnerId, WO Id - *WhatId
-                            configs.put((Id)ev.get('WhatId'), ev);
-                            //evConfigs.put((Id)ev.get('WhatId'), ev);
-                        }
-                    }
-                    else
-                    {
-                        //This event is not related to any of our resources/users
-                        //Do something else with this
+        	if (configs != null) {
+        		resourceHours = (Map<Id, Map<String, Object>>)configs.get('resourceHours');
+        	}
+            
+            List<Resource__c> resourceList;
+            if (resourceIds != null && !resourceIds.isEmpty()) {
+                resourceList = [SELECT Id, Name, RbA_User__c, Retail_Location__c,
+                                    (SELECT Id, RbA_Skill__c FROM Resource_Skills__r)
+                                    FROM Resource__c WHERE Id IN :resourceIds];
+            }
+            else {
+                resourceList = [SELECT Id, Name, RbA_User__c, Retail_Location__c,
+            						(SELECT Id, RbA_Skill__c FROM Resource_Skills__r)
+            						FROM Resource__c WHERE Retail_Location__c = :storeId AND Active__c = true AND Resource_Type__c IN : resourceTypes];
+            }
 
+            for (Resource__c resource : resourceList) {
+                Boolean isExclueded = false;
+                Map<String, Object> attributes = new Map<String, Object>();
+                Map<String, Object> resourceObj = new Map<String, Object>();
+                Map<String, Object> resourceHoursMap = new Map<String, Object>();
+				
+                DateTime dateTimeToCheck = (DateTime)dateToCheck;
+                String dayOfWeek = dateTimeToCheck.format('EEEE', storeTimezone);
+
+                userIdToResourceIdMap.put(resource.RbA_User__c, resource.Id);
+                attributes.put('Name', '{"resId":"' + resource.Id + '","userId":"' + resource.RbA_User__c + '"}');
+                attributes.put('EndDepotName', '{"storeID":"' + resource.Retail_Location__c + '"}');
+
+                if (resourceHours.containsKey(resource.Id)) {
+					resourceHoursMap = resourceHours.get(resource.Id);
+				}
+				else {
+					MA_Scheduler_Settings__c storeSettings = (MA_Scheduler_Settings__c)configs.get('storeSettings');
+					if (storeSettings != null) {
+						Map<String, Object> storeSettingsMap = (Map<String, Object>)JSON.deserializeUntyped(storeSettings.Settings__c);
+						resourceHoursMap = (Map<String, Object>)storeSettingsMap.get('storeHours');
+					}
+				}
+
+		        if (resourceHoursMap.containsKey(dayOfWeek)) {
+		            List<Object> daysHoursList = (List<Object>)resourceHoursMap.get(dayOfWeek);
+		            Map<String, Object> dayHoursMap = (Map<String, Object>)daysHoursList[0];
+		            DateTime resourceEndDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindowMilitary(dateToCheck, (String)dayHoursMap.get('end'), storeTimezone);
+		            DateTime resourceStartDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindowMilitary(dateToCheck, (String)dayHoursMap.get('start'), storeTimezone);
+                    Long milliDiff = resourceEndDateTime.getTime() - resourceStartDateTime.getTime();
+                    Integer resourceDuration = (Integer)(milliDiff / 1000) / 60;
+
+		            attributes.put('AssignmentRule', 1);
+		            attributes.put('LatestStartTime', resourceEndDateTime.getTime());
+		            attributes.put('EarliestStartTime', resourceStartDateTime.getTime());
+                	attributes.put('MaxTotalTime', resourceDuration);
+		        }
+		        else {
+		        	attributes.put('AssignmentRule', 2);
+		        }
+
+                if (resource.Resource_Skills__r != null && !resource.Resource_Skills__r.isEmpty()) {
+                    Set<Id> skillIds = new Set<Id>();
+                    for (Resource_Skill__c skill : resource.Resource_Skills__r) {
+                        skillIds.add(skill.RbA_Skill__c);
                     }
-                    //configs.put((String)s.get('Store_Id__c'), (String)s.get('Settings__c'));
-                    obj.put('attributes', attributes);
-                    features.add(obj);
+                    attributes.put('SpecialtyNames', String.join(new List<Id>(skillIds), ' '));
+                }
+                else {
+                    attributes.put('SpecialtyNames', '');
                 }
                 
+                resourceObj.put('attributes', attributes);
+                features.add(resourceObj);
             }
-            objLists.put('features', features);
-            master.put('breaks', objLists); 
+
+            if (!resourceIds.isEmpty() && master.containsKey('routes') && ((Map<String, Object>)master.get('routes')).containsKey('features')) {
+                Map<String, Object> routes = (Map<String, Object>)master.get('routes');
+                features.addAll((List<Object>)routes.get('features'));
+            }
+
+            master.put('routes', new Map<String, Object> { 'features' => features });
         }
-       catch(Exception ex)
-        {
-            Map<String, Object> errors = new Map<String, Object>();
-            List<Object> errorFeatures = new List<Object>();
-            objLists = new Map<String, List<Object>>();
-            errors.put('success', false);
-            errors.put('EventError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
+        catch(Exception ex) {
+            master.put('success', false);
+            master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
         }
+
+        return userIdToResourceIdMap;
     }
-    private static void setupMAEvents(String dt, String storeId, String workOrderType)
-    {
-        //List<Object> MAevents = new List<Object>();
-        List<Object> features = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        try{
-            for(List<SObject> l : [SELECT Id, Name, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.Active__c, Resource__r.Available_Time_Window__c, Resource__r.Crew_Size__c, Resource__r.RbA_User__c, Resource__r.Resource_Type__c, Resource__r.Retail_Location__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__r.Appointment_Date__c =: Date.valueOf(dt) AND RbA_Work_Order__r.Work_Order_Type__c =: workOrderType])
-            {
-                for(SObject MAev : l)
-                {
-                    configs.put((Id)MAev.get('RbA_Work_Order__c'), MAev);
-                    //evConfigs.put((Id)MAev.get('RbA_Work_Order__c'), MAev); 
+
+    private static void setupOrders(Date dateToCheck, String storeId, String storeTimezone, String workOrderType, List<Id> resourceIdsList) {
+        try {
+        	Set<Id> workOrderIds = new Set<Id>();
+            Set<Id> extraResourceIds = new Set<Id>();
+            List<Object> features = new List<Object>();
+            Set<Id> resourceIds = new Set<Id>(resourceIdsList);
+        	DateTime startDateTime = DateTime.newInstance(dateToCheck, Time.newInstance(0, 0, 0, 0));
+        	startDateTime = MA_SchedulerUtilities.convertTimezoneToTimezone(startDateTime, null, storeTimezone);
+        	DateTime endDateTime = startDateTime.addDays(1);
+            
+            Map<Id, MA_Scheduler_Event__c> maEventsMap = new Map<Id, MA_Scheduler_Event__c>([SELECT Id, Name, Event_Sequence__c, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.RbA_User__c
+                                    				        									FROM MA_Scheduler_Event__c WHERE StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime
+                                    				        									AND (RbA_Work_Order__r.Work_Order_Type__c = :workOrderType OR Resource__c IN :resourceIds)
+                                                                                                AND RbA_Work_Order__c != null]);
+
+            for (MA_Scheduler_Event__c maEvent : maEventsMap.values()) {
+                if (maEvent.Resource__c != null && !resourceIds.contains(maEvent.Resource__c)) {
+                    extraResourceIds.add(maEvent.Resource__c);
                 }
             }
-        }
-       catch(Exception ex)
-        {
-            Map<String, Object> errors = new Map<String, Object>();
-            List<Object> errorFeatures = new List<Object>();
-            objLists = new Map<String, List<Object>>();
-            errors.put('success', false);
-            errors.put('MAEventError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
-        }
-    }
-    private static void setupWO(String dt, String storeId, String workOrderType)
-    {
-        List<Object> features = new List<Object>();
-        List<Object> featuresGeoCode = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        Map<String, List<Object>> objListsGeoCode = new Map<String, List<Object>>();
-        try
-        {
-            for(List<SObject> l : [SELECT Id, Name, Appointment_Date__c, Appointment_Duration__c, Appointment_Start_Time__c, Appointment_End_Time__c, Alternate_End_Time__c, Alternate_Start_Time__c, Zip__c, Recommended_Crew_Size__c, Street__c, State__c, City__c,Country__c, Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c, Account__r.ShippingLatitude, Account__r.ShippingLongitude,(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)FROM RbA_Work_Order__c WHERE Appointment_Date__c =: Date.valueOf(dt) AND Account__r.Store_Location__r.Active_Store_Configuration__c =: storeId AND Work_Order_Type__c =: workOrderType])
-            {
-                system.debug(l);
-                for(SObject wo : l)
-                {
-                    system.debug(wo);
-                    Map<String, Object> obj = new Map<String, Object>();
-                    Map<String, Object> geoCodeObj = new Map<String, Object>();
-                    Map<String, Object> geometry =  new Map<String, Object>();
-                    Map<String, Object> attributes = new Map<String, Object>();
-                    Map<String, Object> geoCodeAddress = new Map<String, Object>();
+
+            if (!extraResourceIds.isEmpty()) {
+                setupRoutes(dateToCheck, storeId, storeTimezone, workOrderType, extraResourceIds);
+
+                maEventsMap.putAll(new Map<Id, MA_Scheduler_Event__c>([SELECT Id, Name, Event_Sequence__c, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.RbA_User__c
+                                                                        FROM MA_Scheduler_Event__c WHERE StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime
+                                                                        AND Resource__c IN :extraResourceIds AND Id NOT IN :maEventsMap.keySet() AND RbA_Work_Order__c != null]));
+            }
+
+            List<MA_Scheduler_Event__c> maEventsList = maEventsMap.values();
+
+            for (MA_Scheduler_Event__c maEvent : maEventsList) {
+				workOrderIds.add(maEvent.RbA_Work_Order__c);
+			}
+
+			Map<Id, RbA_Work_Order__c> workOrderList = new Map<Id, RbA_Work_Order__c>([SELECT Id, Name, Account__r.ShippingLongitude, Account__r.ShippingLatitude, Appointment_Duration__c, Work_Order_Type__c,
+                                                                                        Contact__c, Contact__r.LastName, Contact__r.FirstName, City__c, State__c, Tech_Measure_Synced__c,
+                                                                                        LSWP_Test_Results__c, Service_Request_Type__c, Total_Days__c,
+																						(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)
+																						FROM RbA_Work_Order__c WHERE Id IN :workOrderIds]);
+                
+            for (MA_Scheduler_Event__c maEvent : maEventsList) {
+                Map<String, Object> orderObj = new Map<String, Object>();
+                Map<String, Object> geometry =  new Map<String, Object>();
+                Map<String, Object> attributes = new Map<String, Object>();
+            	RbA_Work_Order__c workOrder = workOrderList.get(maEvent.RbA_Work_Order__c);
+                String multiDayOrder = maEvent.Event_Sequence__c != null && workOrder.Total_Days__c > 1 ? ' ' + maEvent.Event_Sequence__c + (workOrder.Total_Days__c != null ? ' of ' + workOrder.Total_Days__c : '') : '';
+
+                geometry.put('x', workOrder.Account__r.ShippingLongitude);
+                geometry.put('y',  workOrder.Account__r.ShippingLatitude);
+
+                attributes.put('Name', '{"woId":"' + workOrder.Id + '","maEventId":"' + maEvent.Id
+                                            + '","woName":"' + workOrder.Name + '","woType":"' + workOrder.Work_Order_Type__c.toLowerCase().deleteWhitespace()
+                                            + '","city":"' + workOrder.City__c + '","state":"' + workOrder.State__c
+                                            + '","contactName":"' + workOrder.Contact__r.LastName + ', ' + workOrder.Contact__r.FirstName
+                                            + '","isSynced":' + workOrder.Tech_Measure_Synced__c + ',"isLswp":' + workOrder.LSWP_Test_Results__c
+                                            + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder + '"}');
+				attributes.put('AssignmentRule', 3);
+                attributes.put('CurbApproach', 3);
                     
-                    //Stuff to be GeoCode - Need to see hwo we want to GeoCode everything **If latlngs are avaiable we can create the geometry here
-                    //if(((RbA_Work_Order__c)wo.get('Account__r.ShippingLatitude')) != null && ((RbA_Work_Order__c)wo.get('Account__r.ShippingLongitude')) != null)
-                    RbA_Work_Order__c rb = (RbA_Work_Order__c)wo;
-                    if(rb.Account__r.ShippingLongitude != null && rb.Account__r.ShippingLatitude != null)
-                    {
-                        geometry.put('x', rb.Account__r.ShippingLongitude);
-                        geometry.put('y',  rb.Account__r.ShippingLatitude);
-                        obj.put('geometry', geometry);
+                endDateTime = maEvent.EndDateTime__c;
+                startDateTime = maEvent.StartDateTime__c;
+
+                Long milliDiff = endDateTime.getTime() - startDateTime.getTime();
+                Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
+
+                attributes.put('ServiceTime', serviceTime);
+                attributes.put('TimeWindowEnd1', endDateTime.getTime());
+                attributes.put('TimeWindowStart1', startDateTime.getTime());
+	            attributes.put('MaxViolationTime1', 0);
+
+                if (workOrder.Work_Order_Required_Skills__r != null && !workOrder.Work_Order_Required_Skills__r.isEmpty()) {
+                    Set<Id> skillIds = new Set<Id>();
+                    for (Work_Order_Required_Skill__c woSkill : workOrder.Work_Order_Required_Skills__r) {
+                        skillIds.add(woSkill.RbA_Skill__c);
                     }
-                    else
-                    {
-                        //Add Blank geometry object
-                        geometry.put('x', rb.Account__r.ShippingLongitude);
-                        //geometry.put('x', '');
-                        geometry.put('y', rb.Account__r.ShippingLongitude);
-                        //geometry.put('y','');
-                        obj.put('geometry', geometry);
-
-                        //Create geoCode object to geocode later
-                        geoCodeAddress.put('id', rb.Id);
-                        geoCodeAddress.put('city', rb.City__c);
-                        geoCodeAddress.put('state', rb.State__c);
-                        geoCodeAddress.put('country', rb.Country__c);
-                        geoCodeAddress.put('zip', rb.Zip__c);
-                        geoCodeAddress.put('street', rb.Street__c);
-                        geoCodeObj.put(rb.Id, geoCodeAddress);
-                        featuresGeoCode.add(geoCodeObj);
-                        if(master.containsKey('geocode'))
-                        {
-                            Map<String, Object> tempGeo = (Map<String, Object>)master.get('geocode');
-                            List<Object> tempFeat = (List<Object>)tempGeo.get('features');
-                            tempFeat.add(geoCodeObj);
-                            //system.debug(tempFeat);
-                        }
-                        else
-                        {
-                            objListsGeoCode.put('features', featuresGeoCode);
-                            master.put('geocode', objListsGeoCode);
-                        }
-                    }
-                    
-                    //Attributes stuff
-                    if(configs.containsKey(rb.Id))
-                    {
-                        MA_Scheduler_Event__c maEvent = (MA_Scheduler_Event__c)configs.get(rb.Id);
-
-                        attributes.put('Name', '{"woId":"'+ rb.Id+'",'+'"MAevId":"'+maEvent.Id+ '",' +'"woName":"'+rb.Name+ '",' +'"userId":"'+ maEvent.Resource__r.RbA_User__c+'"}');
-                        //attributes.put('Name', rb.Id);
-                        attributes.put('WOName', rb.Name);
-                        attributes.put('ServiceTime', rb.Appointment_Duration__c * 60);
-                        attributes.put('TimeWindowStart1', maEvent.StartDateTime__c);
-                        attributes.put('TimeWindowEnd1', maEvent.EndDateTime__c);
-                        //attributes.put('TimeWindowEnd1', ((Map<String, Object>)configs.get(rb.Id)).get('StartDateTime__c'));
-                        attributes.put('TimeWindowStart2', rb.Alternate_Start_Time__c);
-                        attributes.put('TimeWindowEnd2', rb.Alternate_End_Time__c);
-                        //attributes.put('MaxViolationTime1', 0);
-                        //attributes.put('MaxViolationTime2', );
-                        //attributes.put('DeliveryQuantities', );
-                        //attributes.put('PickupQuantities', );
-                        //attributes.put('Revenue', );
-                        String skills;
-                        if(rb.Work_Order_Required_Skills__r != null || !rb.Work_Order_Required_Skills__r.isEmpty())
-                        {
-                            List<Object> skillIds = new List<Object>();
-                            for(Work_Order_Required_Skill__c woSkills : rb.Work_Order_Required_Skills__r)
-                            {
-                                //skills += woSkills.RbA_Skill__c + '';
-                                system.debug(woSkills.RbA_Skill__c);
-                                skillIds.add(woSkills.RbA_Skill__c);
-
-                            }
-                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
-
-                            //MA_Scheduler_Event__c evMa = (MA_Scheduler_Event__c)configs.get(rb.Id);
-                            //skillIds.add(maEvent.Resource__r.Resource_Type__c.deleteWhitespace());
-                            skills = String.join(skillIds, ' ');
-                            attributes.put('SpecialtyNames', skills);
-                        }
-                        else
-                        {
-                            List<Object> skillIds = new List<Object>();
-                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
-                            skills = String.join(skillIds, ' ');
-                            attributes.put('SpecialtyNames', skills);
-
-                            if(master.containsKey('error'))
-                            {
-                                Map<String, Object> tempError = (Map<String, Object>)master.get('error');
-                                List<Object> tempErrors = (List<Object>)tempError.get('errors');
-                                Map<String, Object> errors = new Map<String, Object>();
-                                errors.put(rb.Name, 'WorkOrder Skills: No skills on workOrder.');
-                                tempErrors.add(errors);
-                                //system.debug(tempFeat);
-                            }
-                            else
-                            {
-                                Map<String, Object> errors = new Map<String, Object>();
-                                List<Object> errorFeatures = new List<Object>();
-                                Map<String, List<Object>> objListsErrors = new Map<String, List<Object>>();
-                                errors.put(rb.Name, 'WorkOrder Skills: No skills on workOrder.');
-                                errorFeatures.add(errors);
-                                objListsErrors.put('errors', errorFeatures);
-                                master.put('error', objListsErrors);
-                            }
-                        }
-                        
-                        //There may be need to be settings for this as well
-                        attributes.put('CurbApproach', 3);
-                        if(maEvent.Resource__c != null)
-                        {
-                            attributes.put('AssignmentRule', 3);
-                            //attributes.put('RouteName', maEvent.Resource__c);
-                            attributes.put('RouteName', '{"resId":"'+ maEvent.Resource__c+'",'+'"userId":"'+maEvent.Resource__r.RbA_User__c+'"}');
-                            //attributes.put('Sequence', '');
-                        }
-                        else
-                        {
-                            attributes.put('AssignmentRule', 3);
-                            attributes.put('RouteName', '');
-                            attributes.put('Sequence', '');
-                        }
-                    }
-                    else
-                    {
-                        attributes.put('Name', '{"woId":"'+ rb.Id+'",'+'"woName":"'+rb.Name+'"}');
-                        //attributes.put('Name', rb.Id);
-                        attributes.put('WOName', rb.Name);
-                        attributes.put('ServiceTime', rb.Appointment_Duration__c * 60);
-                        attributes.put('TimeWindowStart1', rb.Appointment_Start_Time__c);
-                        attributes.put('TimeWindowEnd1', rb.Appointment_End_Time__c);
-                        //attributes.put('TimeWindowEnd1', rb.Appointment_Start_Time__c);
-                        attributes.put('TimeWindowStart2', rb.Alternate_Start_Time__c);
-                        attributes.put('TimeWindowEnd2', rb.Alternate_End_Time__c);
-                        //attributes.put('MaxViolationTime1', 30);
-                        //attributes.put('MaxViolationTime2', );
-                        //attributes.put('DeliveryQuantities', );
-                        //attributes.put('PickupQuantities', );
-                        //attributes.put('Revenue', );
-                        String skills;
-                        if(rb.Work_Order_Required_Skills__r != null || !rb.Work_Order_Required_Skills__r.isEmpty())
-                        {
-                            List<Object> skillIds = new List<Object>();
-                            for(Work_Order_Required_Skill__c woSkills : rb.Work_Order_Required_Skills__r)
-                            {
-                                system.debug(woSkills.RbA_Skill__c);
-                                skillIds.add(woSkills.RbA_Skill__c);
-                            }
-                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
-                            skills = String.join(skillIds, ' ');
-                            attributes.put('SpecialtyNames', skills);
-                        }
-                        else
-                        {
-                            List<Object> skillIds = new List<Object>();
-                            skillIds.add(rb.Work_Order_Type__c.deleteWhitespace());
-                            skills = String.join(skillIds, ' ');
-                            attributes.put('SpecialtyNames', skills);
-
-                            //Error No skills on the WorkOrder
-                            if(master.containsKey('error'))
-                            {
-                                Map<String, Object> tempError = (Map<String, Object>)master.get('error');
-                                List<Object> tempErrors = (List<Object>)tempError.get('errors');
-                                Map<String, Object> errors = new Map<String, Object>();
-                                errors.put(rb.Name, 'WorkOrder Skills: No skills on workOrder.');
-                                tempErrors.add(errors);
-                                //system.debug(tempFeat);
-                            }
-                            else
-                            {
-                                Map<String, Object> errors = new Map<String, Object>();
-                                List<Object> errorFeatures = new List<Object>();
-                                Map<String, List<Object>> objListsErrors = new Map<String, List<Object>>();
-                                errors.put(rb.Name, 'WorkOrder Skills: No skills on workOrder.');
-                                errorFeatures.add(errors);
-                                objListsErrors.put('errors', errorFeatures);
-                                master.put('error', objListsErrors);
-                            }
-                        }
-                        
-                        //Need some testing with Assignment Rules // Maybe some configs to the user
-                        attributes.put('AssignmentRule', 3);
-                        
-                        //There may be need to be settings for this as well
-                        attributes.put('CurbApproach', 3);
-                        attributes.put('RouteName', '');
-                        attributes.put('Sequence', '');
-                    }
-
-
-                    //configs.put((String)s.get('Store_Id__c'), (String)s.get('Settings__c'));
-                    obj.put('attributes', attributes);
-                    obj.put('geometry', geometry);
-                    features.add(obj); 
+                    attributes.put('SpecialtyNames', String.join(new List<Id>(skillIds), ' '));
                 }
+                else {
+                	attributes.put('SpecialtyNames', '');
+                }
+                
+                if (maEvent.Resource__c != null) {
+                    attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
+                }
+                else {
+                    attributes.put('RouteName', null);
+                }
+                
+                orderObj.put('attributes', attributes);
+                orderObj.put('geometry', geometry);
+                features.add(orderObj); 
             }
-            system.debug(features);
-            objLists.put('features', features);
-            master.put('orders', objLists);
+            
+            master.put('orders', new Map<String, Object> { 'features' => features });
         }
-        catch(Exception ex)
-        {
-            Map<String, Object> errors = new Map<String, Object>();
-            List<Object> errorFeatures = new List<Object>();
-            objLists = new Map<String, List<Object>>();
-            errors.put('success', false);
-            errors.put('WOError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
+        catch(Exception ex) {
+            master.put('success', false);
+            master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
         }
     }
-    private static void depotSettings(String dt, String storeId, String workOrderType)
-    {
-        List<Object> features = new List<Object>();
-        List<Object> featuresGeoCode = new List<Object>();
-        Map<String, List<Object>> objLists = new Map<String, List<Object>>();
-        Map<String, List<Object>> objListsGeoCode = new Map<String, List<Object>>();
-        try
-        {
-            Date d = Date.valueOf(dt);
-            DateTime dateT = (DateTime)d;
-            String dayOfWeek = dateT.format('EEEE', 'America/New_York');
-            Map<Id, sObject> settings = new Map<Id, sObject>([SELECT Id, Store__c, Name, Store__r.BillingCity, Store__r.BillingStreet, Store__r.BillingStateCode, Store__r.BillingState, Store__r.BillingPostalCode, Store__r.BillingCountry, Store__r.BillingLongitude, Store__r.BillingLatitude FROM Store_Configuration__c WHERE Id =: storeId LIMIT 1]);
-            for(List<SObject> l : [SELECT Id, Name, Resource_Id__c, Store_Id__c, Settings__c FROM MA_Scheduler_Settings__c WHERE  Store_Id__c =: storeId])
-            {
-                for(SObject s : l)
-                {
-                    Map<String, Object> obj = new Map<String, Object>();
-                    Map<String, Object> geoCodeObj = new Map<String, Object>();
-                    Map<String, Object> geometry = new Map<String, Object>();
-                    Map<String, Object> attributes = new Map<String, Object>();
-                    //Store settings
-                    if(settings.containsKey((String)s.get('Store_Id__c')) && s.get('Resource_Id__c') == null)
-                    {
-                        Store_Configuration__c storeConfig = (Store_Configuration__c)settings.get((String)s.get('Store_Id__c'));
 
-                        if(storeConfig.Store__r.BillingLatitude == null || storeConfig.Store__r.BillingLongitude == null)
-                        {
-                            Map<String, Object> geoCodeAddress = new Map<String, Object>();
-                            geoCodeAddress.put('id', storeConfig.Id /*settings.get((String)s.get('Store_Id__c')).get('Store__c')*/);
-                            geoCodeAddress.put('storeAcct', storeConfig.Store__c);
-                            geoCodeAddress.put('city', storeConfig.Store__r.BillingCity);
-                            geoCodeAddress.put('state', storeConfig.Store__r.BillingState);
-                            geoCodeAddress.put('country', storeConfig.Store__r.BillingCountry);
-                            geoCodeAddress.put('zip', storeConfig.Store__r.BillingPostalCode);
-                            geoCodeAddress.put('street', storeConfig.Store__r.BillingStreet);
-                            geoCodeObj.put(storeConfig.Id, geoCodeAddress);
-                            featuresGeoCode.add(geoCodeObj);
-                            //objLists.put('features', features);
-                            //master.put('geocode', objLists);
-                            geometry.put('x', '');
-                            geometry.put('y', '');
-                            attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
-                            //System.debug(geoCodeAddress);
+    private static void setupBreaks(Date dateToCheck, String storeTimezone, Map<Id, Id> userIdToResourceIdMap) {
+        try {
+            List<Object> features = new List<Object>();
+            DateTime startDateTime = DateTime.newInstance(dateToCheck, Time.newInstance(0, 0, 0, 0));
+            startDateTime = MA_SchedulerUtilities.convertTimezoneToTimezone(startDateTime, null, storeTimezone);
+            DateTime endDateTime = startDateTime.addDays(1);
 
-                        }
-                        else
-                        {
-                            geometry.put('x', storeConfig.Store__r.BillingLongitude);
-                            geometry.put('y', storeConfig.Store__r.BillingLatitude);
-                            //Add to obj
-                            //obj.put('geometry', geometry);
-                            //Set Depot name as StoreId
-                            attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
-                            //attributes.put('Name', '{"storeID":"'+storeConfig.Id+'"}');
-                        }
-                          
-                        JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
-                        MA_SchedulerSettings ma = new MA_SchedulerSettings(parser);                       
-                        //MA_SchedulerSettings ma = (MA_SchedulerSettings)JSON.deserialize((String)s.get('Settings__c') , MA_SchedulerSettings.class);
-                        system.debug(ma);
-                        system.debug(ma.storeHours);
-                        system.debug(ma.timezone);
-                        system.debug(ma.resourceHours);
-                        //attributes.put('TimeWindowStart1', parser.getText());
-                        //attributes.put('TimeWindowEnd1', ma.storeHours.Monday);
-                        
-                        /*Boolean storeFlag = false;
-                        JSONParser parser = JSON.createParser((String)s.get('Settings__c'));
-                        while (!storeFlag && parser.nextToken() != null)
-                        {
-                            if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) && (parser.getText() == 'timezone'))
-                            {
-                                parser.nextToken();
-                                dayOfWeek = dateT.format('EEEE', parser.getText());
-                            }
-                            if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) && (parser.getText() == 'storeHours'))
-                            {
-                                //storeFlag = true;
-                                parser.nextToken();
-                                while (!storeFlag && parser.nextToken() != JSONToken.END_OBJECT)
-                                {
-                                  if ((parser.getCurrentToken() == JSONToken.FIELD_NAME) && parser.getText() == dayOfWeek.toLowercase())
-                                   {
-                                        parser.nextToken();
-                                        //system.debug(parser.getText());
-                                        if(parser.getCurrentToken() == JSONToken.START_ARRAY)
-                                        {
-                                            while(!storeFlag && parser.nextToken() != JSONToken.END_ARRAY)
-                                            {
-                                                //system.debug(parser.getText());
-                                                if((parser.getCurrentToken() == JSONToken.FIELD_NAME) && parser.getText() == 'start'){
-                                                    parser.nextToken();
-                                                    attributes.put('TimeWindowStart1', parser.getText());
-                                                }
-                                                else if((parser.getCurrentToken() == JSONToken.FIELD_NAME) && parser.getText() == 'end'){
-                                                    parser.nextToken();
-                                                    attributes.put('TimeWindowEnd1', parser.getText());
-                                                    //break;
-                                                    storeFlag = true;
-                                                }
-                                            }
-                                            //storeFlag = true;
-                                        }
-                                        else
-                                        {
-                                            //system.debug(parser.getText());
-                                           if((parser.getCurrentToken() == JSONToken.FIELD_NAME) && parser.getText() == 'start'){
-                                                parser.nextToken();
-                                                attributes.put('TimeWindowStart1', parser.getText());
-                                            }
-                                            else if((parser.getCurrentToken() == JSONToken.FIELD_NAME) && parser.getText() == 'end'){
-                                                parser.nextToken();
-                                                attributes.put('TimeWindowEnd1', parser.getText());
-                                                //break;
-                                                storeFlag = true;
-                                            }
-                                        }
-                                    }
-                                    else if ((parser.getCurrentToken() == JSONToken.FIELD_NAME)) {
-                                        while (parser.nextToken() != JSONToken.END_ARRAY) {}
-                                    }
-                                }
-                            }
-                        }*/
-                        //configs.put((String)s.get('Store_Id__c'), (String)s.get('Settings__c'));
-                        configs.put((String)s.get('Store_Id__c'), s);
-                        obj.put('attributes', attributes);
-                        obj.put('geometry', geometry);
-                        features.add(obj);
-                    }
-                    else
-                    {
-                        //Resource settings
-                        if(s.get('Resource_Id__c') != null){
-                            //configs.put((String)s.get('Resource_Id__c'), (String)s.get('Settings__c'));
-                            configs.put((String)s.get('Resource_Id__c'), s);
-                        }
-                        //Store Settings
-                        else{
-                            //configs.put((String)s.get('Store_Id__c'), (String)s.get('Settings__c'));
-                            configs.put((String)s.get('Store_Id__c'), s);
-                        }
-                    }
-                }
+            List<Event> sfEventList = [SELECT Id, OwnerId, StartDateTime, EndDateTime, DurationInMinutes
+                                        FROM Event WHERE OwnerId IN :userIdToResourceIdMap.keySet()
+                                        AND StartDateTime < :endDateTime AND EndDateTime > :startDateTime AND MA_Scheduler_Event__c = null];
+            
+            for (Event sfEvent : sfEventList) {
+                Map<String, Object> breakObj = new Map<String, Object>();
+                Map<String, Object> attributes = new Map<String, Object>();
+
+                attributes.put('RouteName', '{"resId":"' + userIdToResourceIdMap.get(sfEvent.OwnerId) + '","userId":"' + sfEvent.OwnerId + '"}');
+                attributes.put('ServiceTime', sfEvent.DurationInMinutes);
+                attributes.put('TimeWindowEnd', sfEvent.EndDateTime.getTime());
+                attributes.put('TimeWindowStart', sfEvent.StartDateTime.getTime());
+
+                breakObj.put('attributes', attributes);
+                features.add(breakObj);
             }
-            objListsGeoCode.put('features', featuresGeoCode);
-            master.put('geocode', objListsGeoCode); 
-            objLists.put('features', features);
-            master.put('depots', objLists);
+
+            List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, Resource__r.RbA_User__c, StartDateTime__c, EndDateTime__c
+                                                        FROM MA_Scheduler_Event__c WHERE Resource__c IN :userIdToResourceIdMap.values()
+                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime AND RbA_Work_Order__c = null];
+            
+            for (MA_Scheduler_Event__c maEvent : maEventList) {
+                Map<String, Object> breakObj = new Map<String, Object>();
+                Map<String, Object> attributes = new Map<String, Object>();
+
+                attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
+                attributes.put('TimeWindowEnd', maEvent.EndDateTime__c.getTime());
+                attributes.put('TimeWindowStart', maEvent.StartDateTime__c.getTime());
+
+                Long milliDiff = maEvent.EndDateTime__c.getTime() - maEvent.StartDateTime__c.getTime();
+                Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
+                attributes.put('ServiceTime', serviceTime);
+
+                breakObj.put('attributes', attributes);
+                features.add(breakObj);
+            }
+
+            master.put('breaks', new Map<String, Object> { 'features' => features }); 
         }
-        catch(Exception ex)
-        {
-            Map<String, Object> errors = new Map<String, Object>();
-            List<Object> errorFeatures = new List<Object>();
-            objLists = new Map<String, List<Object>>();
-            errors.put('success', false);
-            errors.put('DepotError', ex.getLineNumber() + ': ' + ex.getMessage());
-            errorFeatures.add(errors);
-            objLists.put('errors', errorFeatures);
-            master.put('error', objLists);
+        catch(Exception ex) {
+            master.put('success', false);
+            master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
         }
-    }
-    
-    
-    
-    private class SR{
-        Integer wkid;
-        private SR(){
-            wkid= 4326;
-        }
-    } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /************************************************/
-    /*                                              */
-    /*      THIS IS JUST A BUFFER CLASS             */
-    /*      TO GET TEST COVERAGE UP FOR             */
-    /*      EARLIER DEPLOYMENTS                     */
-    /*                                              */
-    /*      THIS CLASS WILL BE REMOVED              */
-    /*      AND ACTUAL TEST COVERAGE WILL           */
-    /*      BE INCLUDED IN FINAL DEPLOYMENTS        */
-    /*                                              */
-    /************************************************/
-
-    public static void testCoverageBuffer() {
-        Integer i = 0;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
     }
 
 }

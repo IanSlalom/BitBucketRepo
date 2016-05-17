@@ -48,6 +48,10 @@ trigger TaskTrigger on Task (after delete, after insert, after undelete,
         }
          
 
+        // After Update
+        if(Trigger.isUpdate && Trigger.isAfter){
+            handler.onAfterUpdate(Trigger.oldMap,Trigger.newMap);
+        }
         /* Before Delete
         //else  
         if(Trigger.isDelete && Trigger.isBefore){
