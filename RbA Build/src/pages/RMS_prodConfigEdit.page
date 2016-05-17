@@ -257,20 +257,20 @@
  <!--             <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenVeneerTypeItems}"/>
             </apex:selectList>
-       --> 	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
+       --> 	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Grille Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Pattern {!sashFieldName}" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
+            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Grille Pattern S1" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
             	<apex:selectOptions value="{!grillePatternItems}"/>
             </apex:selectList>
 
-                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide {!sashFieldName}" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsWide1" >
+                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide S1" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsWide1" >
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High {!sashFieldName}" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsHigh1" >
+                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High S1" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="LightsHigh1" >
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details {!sashFieldName}" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="customGrilleDetails1"  />
+                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details S1" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="customGrilleDetails1"  />
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="outwideBar" rendered="{!prodConfig.mpc.Wide_Bar_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
@@ -278,7 +278,7 @@
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
             <apex:outputField value="{!OrderItem.Brickmould_Applied__c}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbrickmouldApplied"/>
 
-                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
+                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Grille Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
                         <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
                 <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide2">
