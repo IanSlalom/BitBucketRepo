@@ -21,6 +21,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Account__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Contact__c</field>
             </layoutItems>
             <layoutItems>
@@ -150,10 +154,10 @@
         <fields>TASK.SUBJECT</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>Service_Type__c</fields>
-        <fields>Non_Stock_Material__c</fields>
         <fields>TASK.STATUS</fields>
         <fields>EVENT.START_DATE_TIME</fields>
         <fields>TASK.TYPE</fields>
+        <fields>TASK.CREATED_DATE</fields>
         <relatedList>RelatedActivityList</relatedList>
     </relatedLists>
     <relatedLists>
