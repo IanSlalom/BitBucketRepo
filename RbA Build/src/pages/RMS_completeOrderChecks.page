@@ -6,8 +6,8 @@
         <apex:pageBlock title="Edit Stage and Close Date" mode="edit">
             <apex:pageMessages />
             <apex:pageBlockButtons location="top">
-                <apex:commandButton value="Save" action="{!save}" id="saveButton" oncomplete="closeTab();return false"/>
-                <apex:commandButton value="Cancel" action="{!cancel}" oncomplete="closeTab();return false"/>
+                <apex:commandButton value="Save" action="{!save}" id="saveButton" onComplete="closeTab()"/>
+                <apex:commandButton value="Cancel" onComplete="closeTab()"/>
             </apex:pageBlockButtons>
             <apex:pageBlockTable value="{!selectedChecks}" var="boc">
                 <apex:column value="{!boc.Name}"/>

@@ -46,8 +46,7 @@ public with sharing class RMS_completeOrderChecksController {
                 update order;
             }
         }
-    	PageReference newPage = New PageReference('/'+ordId);
-		newPage.setRedirect(true);
-		return newPage;
+        //JETT-2143 Removed page redirect from controller, tab closing/page redirection is handled by vf page instead.
+        return null;
     }
 }
