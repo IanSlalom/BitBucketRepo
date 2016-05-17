@@ -1,28 +1,3 @@
-/*******************************************************//**
-
-@class  RMS_createContactHistoryManager
-
-@brief  When a Contact is created, a Contact History record is created. 
-Primary Contact and Primary Dwelling for Contact are passed from Contact
-to Contact History. Should a Contact have their Account change, a Contact
-History record is created as well. This means each Contact has at least one
-Contact History record. They should have a Contact History record for each
-Account they have had populated in the "Account" field over time.
-
-Note: Contact related list on the Account page is actually the list of Contact Histories
-in order to view all Contacts who have lived at that Dwelling. The "New Contact" button; h
-however brings user to "Create Contact" page.
-
-@author  Brianne Wilson (Slalom.BLW)
-
-@version    2016-4-19  Slalom.BLW
-Created.
-
-
-@copyright  (c)2016 Slalom.  All Rights Reserved. 
-Unauthorized use is prohibited.
-
-***********************************************************/
 public with sharing class RMS_createContactHistoryManager {
 
     Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
@@ -59,17 +34,19 @@ public with sharing class RMS_createContactHistoryManager {
         //TODO: Moving contacts code needs to be corrected, currently not verifying that the contact to be moved is a detail to the correct account
         for(Contact c: mapContactToNewAccount.keySet()){
             boolean insertNewHistory = true;
-            for(Contact_History__c hist: mapAccountToHistories.get(mapContactToNewAccount.get(c))){
-                if(hist.Contact__c == c.Id){
-                    hist.Type__c = 'Current Resident';
-                    insertNewHistory = false;
-                }else if(hist.Contact__c == c.Spouse__c){
-                    hist.Type__c = 'Current Resident';
-                }else if(hist.Type__c == 'Current Resident'){
-                    hist.Type__c = 'Past Resident';
-                    contactsToMove.add(hist.Contact__c);
+            if(mapAccountToHistories.containsKey(mapContactToNewAccount.get(c))){
+                for(Contact_History__c hist: mapAccountToHistories.get(mapContactToNewAccount.get(c))){
+                    if(hist.Contact__c == c.Id){
+                        hist.Type__c = 'Current Resident';
+                        insertNewHistory = false;
+                    }else if(hist.Contact__c == c.Spouse__c){
+                        hist.Type__c = 'Current Resident';
+                    }else if(hist.Type__c == 'Current Resident'){
+                        hist.Type__c = 'Past Resident';
+                        contactsToMove.add(hist.Contact__c);
+                    }
+                    historiesToUpsert.add(hist);
                 }
-                historiesToUpsert.add(hist);
             }
             if(insertNewHistory){
                 historiesToUpsert.add(new Contact_History__c(
