@@ -52,6 +52,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Card_Title__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Down_Payment_Terms__c</field>
             </layoutItems>
             <layoutItems>

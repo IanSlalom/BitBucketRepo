@@ -77,6 +77,10 @@
                 <behavior>Edit</behavior>
                 <field>Sales_Width_Fraction__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>EJ_Kerf__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

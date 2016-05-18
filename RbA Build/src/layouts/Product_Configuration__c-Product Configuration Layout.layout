@@ -54,6 +54,26 @@
                 <behavior>Edit</behavior>
                 <field>Is_Leg_Height_L_or_R_Leg_Height_Control__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Leg_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>EJ_Kerf_Control__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
