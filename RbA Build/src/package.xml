@@ -73,7 +73,7 @@
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
         <members>RMS_salesOrderManager</members>
-        <members>RMS_salesOrderManagerTest</members>       
+        <members>RMS_salesOrderManagerTest</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
@@ -88,8 +88,6 @@
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
-        <members>editableTaskList</members>
-        <members>editableTaskListExt</members>
         <members>eventTest</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
