@@ -15,7 +15,7 @@
 public with sharing class RMS_completeOrderChecksController {
 
     public list<Back_Office_Check__c> selectedChecks {get;set;}
-    public Id ordId;
+    public Id ordId{get;set;}
     //selected
     public RMS_completeOrderChecksController(ApexPages.StandardSetController controller) {
         //controller.setPageSize(20);
@@ -46,8 +46,7 @@ public with sharing class RMS_completeOrderChecksController {
                 update order;
             }
         }
-    	PageReference newPage = New PageReference('/'+ordId);
-		newPage.setRedirect(true);
-		return newPage;
+        //JETT-2143 Removed page redirect from controller, tab closing/page redirection is handled by vf page instead.
+        return null;
     }
 }

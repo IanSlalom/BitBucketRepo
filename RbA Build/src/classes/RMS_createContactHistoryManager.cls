@@ -14,8 +14,8 @@ in order to view all Contacts who have lived at that Dwelling. The "New Contact"
 however brings user to "Create Contact" page.
 
 @author  Brianne Wilson (Slalom.BLW)
-
 @version    2016-4-19  Slalom.BLW
+
 Created.
 
 
@@ -59,17 +59,19 @@ public with sharing class RMS_createContactHistoryManager {
         //TODO: Moving contacts code needs to be corrected, currently not verifying that the contact to be moved is a detail to the correct account
         for(Contact c: mapContactToNewAccount.keySet()){
             boolean insertNewHistory = true;
-            for(Contact_History__c hist: mapAccountToHistories.get(mapContactToNewAccount.get(c))){
-                if(hist.Contact__c == c.Id){
-                    hist.Type__c = 'Current Resident';
-                    insertNewHistory = false;
-                }else if(hist.Contact__c == c.Spouse__c){
-                    hist.Type__c = 'Current Resident';
-                }else if(hist.Type__c == 'Current Resident'){
-                    hist.Type__c = 'Past Resident';
-                    contactsToMove.add(hist.Contact__c);
+            if(mapAccountToHistories.containsKey(mapContactToNewAccount.get(c))){
+                for(Contact_History__c hist: mapAccountToHistories.get(mapContactToNewAccount.get(c))){
+                    if(hist.Contact__c == c.Id){
+                        hist.Type__c = 'Current Resident';
+                        insertNewHistory = false;
+                    }else if(hist.Contact__c == c.Spouse__c){
+                        hist.Type__c = 'Current Resident';
+                    }else if(hist.Type__c == 'Current Resident'){
+                        hist.Type__c = 'Past Resident';
+                        contactsToMove.add(hist.Contact__c);
+                    }
+                    historiesToUpsert.add(hist);
                 }
-                historiesToUpsert.add(hist);
             }
             if(insertNewHistory){
                 historiesToUpsert.add(new Contact_History__c(
