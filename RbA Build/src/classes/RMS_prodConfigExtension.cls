@@ -182,7 +182,7 @@ public class RMS_prodConfigExtension {
 				return null;
 			
 			// retrieves fields from the master product makeability based on the master product id  
-			lMasterProduct = [SELECT Id, Name
+			lMasterProduct = [SELECT Id, Name, Family
 															FROM Product2
 															WHERE Id =: masterProductId
 					
@@ -328,6 +328,21 @@ public class RMS_prodConfigExtension {
 			else
 				sashFieldName = 'S1';
 			return sashFieldName;
+		}	
+		private set;		  
+	}
+
+	/******* property for the number of Sashes  *****************/
+	public  Integer numSashes  {
+		get
+		{   
+			if (numSashes != null) return numSashes;
+			if (prodConfig.mpc.Number_of_Sashes__c != null && prodConfig.mpc.Number_of_Sashes__c.isNumeric()){
+				numSashes = Integer.valueOf(prodConfig.mpc.Number_of_Sashes__c);
+			}else{
+				numSashes = 0;
+			}
+			return numSashes;
 		}	
 		private set;		  
 	}
@@ -926,29 +941,6 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Interior Pre Finish Items  *****************/
-	private static transient List<SelectOption> lInteriorExtensionJambKitItems;
-	public List<SelectOption> InteriorExtensionJambKitItems{
-		get
-		{   
-			if (lInteriorExtensionJambKitItems == null) {
-				lInteriorExtensionJambKitItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Extension_Jamb_Kit__c);
-			}
-			return lInteriorExtensionJambKitItems;
-		}
-	}
-	
-	/******* Exterior Door Jamb Items  *****************/
-	private static transient List<SelectOption> lExteriorDoorJambItems;
-	public List<SelectOption> ExteriorDoorJambItems{
-		get
-		{   
-			if (lExteriorDoorJambItems == null) {
-				lExteriorDoorJambItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Door_Jamb__c);
-			}
-			return lExteriorDoorJambItems;
-		}
-	}
 	
 	/******* Exterior Frame Depth Items  *****************/
 	private static transient List<SelectOption> lExteriorFrameDepthItems;
@@ -974,17 +966,6 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 	
-	/******* Exterior Keyed Lock Items  *****************/
-	private static transient List<SelectOption> lExteriorKeyedLockItems;
-	public List<SelectOption> ExteriorKeyedLockItems{
-		get
-		{   
-			if (lExteriorKeyedLockItems == null) {
-				lExteriorKeyedLockItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Keyed_Lock__c);
-			}
-			return lExteriorKeyedLockItems;
-		}
-	} 
 	
 
 
@@ -1234,6 +1215,16 @@ public class RMS_prodConfigExtension {
 			oI.Glazing_S3__c = null;	
 			oI.Glass_Pattern_S3__c = null; 
 			oI.Tempered_S3__c = false;
+		}
+		//If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2' || newProdConfig.Number_of_Sashes__c == '3'){
+			oI.Grille_Pattern_S4__c = null;
+			oI.Lites_Wide_S4__c = null;	
+			oI.Lites_High_S4__c = null;	
+			oI.Custom_Grille_Details_S4__c	= null;
+			oI.Glazing_S4__c = null;	
+			oI.Glass_Pattern_S4__c = null; 
+			oI.Tempered_S4__c = false;
 		}
 
 		return oI;

@@ -35,6 +35,42 @@
                 <behavior>Edit</behavior>
                 <field>NSPR_Number__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>isTechMeasureComplete__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Leg_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Whole_Inch__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Whole_Inch__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Meet_Rail_Dimension__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>EJ_Kerf__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -182,6 +218,22 @@
                 <behavior>Readonly</behavior>
                 <field>Product_Type__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Class__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Family__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Category__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Sub_Category__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -255,6 +307,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Description</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Unit_of_Measure__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
@@ -416,6 +472,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Glass_Pattern_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Glazing_S1__c</field>
             </layoutItems>
             <layoutItems>
@@ -428,6 +488,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Glazing_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Tempered_S1__c</field>
             </layoutItems>
             <layoutItems>
@@ -437,6 +501,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Tempered_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S4__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -568,8 +636,10 @@
                 <behavior>Edit</behavior>
                 <field>Grille_Pattern_S3__c</field>
             </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Pattern_S4__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Apply_to_All_Sashes_Grilles__c</field>
@@ -594,6 +664,8 @@
                 <behavior>Edit</behavior>
                 <field>Wide_Bar__c</field>
             </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Lites_High_S1__c</field>
@@ -630,6 +702,18 @@
                 <behavior>Readonly</behavior>
                 <field>Lites_High_Wide_Total_S3__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_High_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_Wide_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Lites_High_Wide_Total_S4__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -650,6 +734,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Custom_Grille_Details_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S4__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

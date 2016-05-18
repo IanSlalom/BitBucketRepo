@@ -17,7 +17,11 @@ public with sharing class RMS_mobileAppRequestHelper {
 	private static final String QLI_WHERE_CLAUSE = 'from QuoteLineItem where QuoteId in :quoteIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
 	// fields unique to Order line items
-	private static final String OLI_QUERY_START = 'SELECT Cancelled__c, Cancelled_Date__c, Charge_Cost_To__c, Parent_Order_Item__c, OrderItemNumber, OrderId, QuoteLineItemId, Height_Inches__c, Height_Fraction__c, NSPR__c, NSPR_Number__c, Sill_Angle__c, Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c';
+	private static final String OLI_QUERY_START = 'SELECT Cancelled__c, Cancelled_Date__c, Charge_Cost_To__c, isTechMeasureComplete__c, Parent_Order_Item__c, ' + 
+	'OrderItemNumber, OrderId, QuoteLineItemId, Height_Inches__c, Height_Fraction__c, NSPR__c, NSPR_Number__c, Sill_Angle__c, ' + 
+	'Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c, Unit_of_Measure__c,' +
+	'Meet_Rail_Dimension__c, Is_Height_L_or_R_Leg_Height__c, Leg_Height_Interior_Whole_Inch__c, Leg_Height_Interior_Fraction__c,' +
+	'Leg_Height_Exterior_Whole_Inch__c, Leg_Height_Exterior_Fraction__c, Is_Leg_Height_L_or_R_Leg_Height__c';
 	private static final String OLI_WHERE_CLAUSE = 'from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
   /* @method: findAppointments(Id userId)
@@ -261,7 +265,12 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
   public Map<Id, OpportunityContainer> populateOpportunityStructure(List<Id> oppIds) {
     Map<Id, OpportunityContainer> ocMap = new Map<Id, OpportunityContainer>();
-    Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity> ([SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, Pricebook2Id, Window_Problems__c, rSuite_Id__c FROM Opportunity WHERE Id IN :oppIds]);
+    Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity> (
+    [SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, 
+    Pricebook2Id, Window_Problems__c, rSuite_Id__c,
+    rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c,
+    First_Selected_Quote__c, Second_Selected_Quote__c
+    FROM Opportunity WHERE Id IN :oppIds]);
 
     // get the quotes
     Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
@@ -407,7 +416,9 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
     public Map<Id, Order> queryOrders(List<Id> opptyIds){
     Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
-      Discount_Amount__c, Installation_Date__c, Install_Notes__c, Reason__c, Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c
+      Discount_Amount__c, Installation_Date__c, Install_Notes__c, Reason__c, 
+      Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c, 
+      Comments_and_Questions__c, Estimated_Install_Duration__c
       from Order where OpportunityId in :opptyIds and isDeleted = false]);
 
     return orderMap;

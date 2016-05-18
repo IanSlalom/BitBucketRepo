@@ -40,6 +40,18 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Product_Family__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Category__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Product_Sub_Category__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Subtotal</field>
             </layoutItems>
             <layoutItems>
@@ -64,6 +76,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sales_Width_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>EJ_Kerf__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -207,10 +223,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Number_of_Panels__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>isStandardSize__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -449,33 +461,28 @@
         <label>Grilles</label>
         <layoutColumns>
             <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <emptySpace>true</emptySpace>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Custom_Grille_Details_S1__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Custom_Grille_Details_S2__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Custom_Grille_Details_S3__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Grille_Style__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Grille_Pattern__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Pattern_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Pattern_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Pattern_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Pattern_S4__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -488,6 +495,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Perm_Applied_Int_Wood_Grille__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Wide_Bar__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -502,6 +513,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Lites_High_Wide_Total_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Lites_High_Wide_Total_S4__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -529,10 +544,40 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Wide_Bar__c</field>
+                <field>Lites_High_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Lites_Wide_S4__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>false</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Custom Grille Details</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Details_S4__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns/>
+        <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -554,6 +599,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Glass_Pattern_S4__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Glazing_S1__c</field>
             </layoutItems>
             <layoutItems>
@@ -563,6 +612,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Glazing_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Glazing_S4__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -581,6 +634,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Tempered_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tempered_S4__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
