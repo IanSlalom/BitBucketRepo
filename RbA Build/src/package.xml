@@ -73,9 +73,7 @@
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
         <members>RMS_salesOrderManager</members>
-        <members>RMS_salesOrderManagerTest</members>
-        <members>RMS_serviceRequestTests</members>
-        <members>RMS_setBilltoContact</members>
+        <members>RMS_salesOrderManagerTest</members>       
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
