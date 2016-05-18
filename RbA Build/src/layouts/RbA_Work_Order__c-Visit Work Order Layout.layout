@@ -61,12 +61,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Details to Schedule</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Num_of_Windows__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -81,6 +76,10 @@
         <editHeading>true</editHeading>
         <label>Assignment</label>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Appointment_Duration__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Original_Appt_Date_Time_Install__c</field>
@@ -250,12 +249,8 @@
         <fields>Appointment_Start_Time__c</fields>
     </miniLayout>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>MA_Scheduler_Event__c.RbA_Work_Order__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Assigned_Resources__c.Work_Order__c</relatedList>
+        <fields>RbA_Skill__c</fields>
+        <relatedList>Work_Order_Required_Skill__c.RbA_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
         <customButtons>Task.Add_Service_Task</customButtons>
@@ -287,12 +282,15 @@
         <relatedList>Labor__c.Related_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <relatedList>RelatedEntityHistoryList</relatedList>
+        <fields>NAME</fields>
+        <relatedList>Assigned_Resources__c.Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>RbA_Skill__c</fields>
-        <relatedList>Work_Order_Required_Skill__c.RbA_Work_Order__c</relatedList>
+        <relatedList>MA_Scheduler_Event__c.RbA_Work_Order__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
