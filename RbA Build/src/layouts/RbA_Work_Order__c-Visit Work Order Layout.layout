@@ -82,18 +82,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Original_Appt_Date_Time_Install__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Scheduled_Appt_Date_Time_Install__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Completed_Appt_Date_Install__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Original_Appt_Date_Time_Tech_Measure__c</field>
             </layoutItems>
             <layoutItems>
@@ -103,6 +91,18 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Completed_Appt_Date_Tech_Measure__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Original_Appt_Date_Time_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Scheduled_Appt_Date_Time_Install__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Completed_Appt_Date_Install__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -282,11 +282,16 @@
         <relatedList>Labor__c.Related_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
+        <fields>Resource__c.NAME</fields>
+        <fields>Resource__c.Active__c</fields>
         <relatedList>Assigned_Resources__c.Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
+        <fields>StartDateTime__c</fields>
         <relatedList>MA_Scheduler_Event__c.RbA_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
