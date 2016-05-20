@@ -339,7 +339,7 @@
         <members>RbA_Operational_Reporting/Orders_Job_in_Progress</members>
         <members>RbA_Operational_Reporting/Orders_On_Hold</members>
         <members>RbA_Operational_Reporting/Orders_Order_Released</members>
-        <members>RbA_Operational_Reporting/Orders_Ready_to_Orderrep</members>ort
+        <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
