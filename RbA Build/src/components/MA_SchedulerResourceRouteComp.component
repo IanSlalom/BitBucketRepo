@@ -1,6 +1,5 @@
 <apex:component >
     
-    <!-- <apex:includeScript value="//maps.googleapis.com/maps/api/js" /> -->
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
     <apex:includeScript value="/soap/ajax/34.0/apex.js" />
 
@@ -9,18 +8,18 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 100%;
+            height: auto;
+            overflow: auto;
         }
 
         #resourceMap {
-            display: inline-block;
-            height: 400px;
-            width: 800px;
+            height: calc(100vh - 186px);
+            width: auto;
         }
 
         #resourceCalendar {
-            display: inline-block;
-            width: 400px;
+            width: 460px;
+            float: left;
             vertical-align: top;
         }
         
@@ -29,23 +28,201 @@
     <script>
         $ = jQuery.noConflict();
 
+        var storeLat;
+        var storeLng;
+        var RouteLine;
         var resourceMap;
+        var MapMarkers = [];
+        var defaultLat = 44.986656;
+        var defaultLng = -93.258133;
+        var isDailyResource = false;
+        var resourceRouteEvents = [];
+        var initializingResourceRouteComp = false;
         var apexSchedulingController = 'MA_SchedulerController';
-        var processResourceRouteResponse = { onSuccess: processBookingSuccess, onFailure: processResourceRouteSuccess };
+        var apexRoutingController = 'MA_RoutingSchedulerController';
+        
+        var MARoutesComp =  { 
+            master : {},
+            colorArray : ["#FF0000", "#0000ff", "#989900", "#00b300", "#ff4da6", "#4da6ff", "#e67200", "#ffff00", "#7575a3", "#99ccff", "#1affc6", "#00e6ac","#669999", "#3399ff", "#ff4dd2", "#ffb31a", "#33ff33","#00ff00", "#e67300", "#ff1a1a"],
+            startGeocodingRes : function() {
+                isDailyResource = true
+                var resourceId = $('#resourceRoute').attr('resource-id');
+                var resourceCalDate = $('#resourceCalendar').fullCalendar('getDate').format('YYYY-MM-DD');
+                retrieveAccountsForGeocode(resourceCalDate, $('#storeSelect').val(), null , resourceId);
+            },
+            processRouteStops : function() {
+                try{
+                    var response;
+                    if (isBatchResources) {
+                        var resourceId = $('#resourceRoute').attr('resource-id');
+                        if (MARoutesComp.master.hasOwnProperty(resourceId)){
+                            response = MARoutesComp.master[resourceId];
+                            MARoutesComp.mapRoutes(response.geometry.paths);
+                            MARoutesComp.placeMarkers(response.out_stops);
+                        }
+                    }
+                    else {
+                        var mainCalendarDate = $('#resourceCalendar').fullCalendar('getDate');
+                        
+                        response = sforce.apex.execute(apexRoutingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), dayString: mainCalendarDate.format('MM/DD/YYYY'), storeId: $('#storeSelect').val()});
+                                   
+                        response = JSON.parse(response);
+                        MARoutesComp.master = response;
+
+                        async.waterfall([
+                            async.apply(MAschedRoutes.getEsriToken, MARoutesComp.master),
+                            MAschedRoutes.getScheduledRoutes
+                        ], 
+                        function (err, result) {
+                            try {
+                                if (err) {
+                                    if (!result.success) {
+                                         handleError('Route Error : Unable to complete resource routing. ', result.error ? result.error.message : result.message);
+                                    }
+                                    else if (result.data.error) {
+                                         handleError('Route Error :' + result.data.error.code + result.data.error.message, result.message ? result.data.error : result.data.error.message);
+                                    }
+                                    else if (result.data.code == 403) {
+                                         handleError('Route Error : User does not have access to server. Check client Id & Secret. Unable to complete resource routing. ', result.message);
+                                    }
+                                    else {
+                                        handleError('Route Error : Unable to complete resource routing. ', result.message ? result.message : result.error.message);
+                                    }
+                                }
+                                else {
+                                    MARoutesComp.mapRoutes(result.data.routes.features);
+                                    MARoutesComp.placeMarkers(result.data.stops.features);
+                                    $('#loaderModal').hide();
+                                }
+                            }
+                            catch(e) {
+                                handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
+                            }
+                        });
+                    }
+                }
+                catch(e) {
+                    handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
+                }    
+            }, 
+            mapRoutes : function(routes) {
+                try {
+                    for (x = 0, len = routes.length; x < len; x++) {
+                        coordinateArray = [];
+                        var route = routes[x];
+
+                        if (!isBatchResources) {
+                            route = route.geometry.paths;
+                        }
+
+                        for (i = 0, len2 = route.length; i < len2; i++) {
+                            if (!isBatchResources) {
+                                for (z = 0, len3 = route[i].length; z < len3; z++) {
+                                    var cord = {
+                                        lat: route[i][z][1],
+                                        lng: route[i][z][0]
+                                    };
+                                    coordinateArray.push(cord);
+                                }
+                            }
+                            else {
+                                var cord = {
+                                    lat: route[i][1],
+                                    lng: route[i][0]
+                                };
+                                coordinateArray.push(cord);
+                            }
+                        }
+
+                        RouteLine = new google.maps.Polyline({
+                          path: coordinateArray,
+                          geodesic: true,
+                          strokeColor: 'blue',
+                          strokeOpacity: 1.0,
+                          strokeWeight: 4
+                        });
+                        RouteLine.setMap(resourceMap);
+                    }
+                }
+                catch(e) {}
+            },
+            placeMarkers : function(markers) {
+                try {
+                    for (i = 0, markerLength = markers.length; i < markerLength; i++ ) {
+                        var marker
+                        if (isBatchResources) {
+                            marker = baseOrders[i];
+                        }
+                        else {
+                            marker = markers[i];
+                        }
+
+                        var mapMarker = new google.maps.Marker({
+                            position:{
+                                lat: parseFloat(marker.geometry.y),
+                                lng: parseFloat(marker.geometry.x)
+                            }, 
+                            labelAnchor: new google.maps.Point(5, 45),
+                            labelInBackground: false,
+                            label: marker.attributes.Sequence.toString(),
+                            visible: true
+                        });
+
+                        MapMarkers.push(mapMarker);
+                        MARoutesComp.setMapMarkersOnAll(resourceMap);
+                    }
+                }
+                catch(e){}
+            },
+            setMapMarkersOnAll : function(map) {
+                for (var i = 0; i < MapMarkers.length; i++) {
+                    MapMarkers[i].setMap(map);
+                }
+            },
+            deleteMarkers : function() {
+                MARoutesComp.setMapMarkersOnAll(null);
+                MapMarkers = [];
+
+                if (RouteLine != undefined && RouteLine != null) {
+                    RouteLine.setMap(null);
+                    RouteLine = null;
+                }
+            }
+        }
+        
+        var processRouteStopsResponse = { onSuccess: MARoutesComp.processRouteStops, onFailure: processResponseError };
+        var processResourceRouteResponse = { onSuccess: processResourceRouteSuccess, onFailure: processResponseError };
 
         $(function() {
             sforce.connection.sessionId = '{!$Api.Session_Id}';
         });
 
         function initializeRouteComp() {
+            initializingResourceRouteComp = true;
             initializeRoute();
             initResourceCalendar();
         }
 
         function initializeRoute() {
+            storeLat = null;
+            storeLng = null;
+            var storeId = $('#storeSelect').val();
+            var qryStr = 'SELECT Id, Store__c, Store__r.ShippingLongitude, Store__r.ShippingLatitude FROM Store_Configuration__c WHERE Id = \'' + storeId + '\' Limit 1';
+            var storeLocation = sforce.connection.query(qryStr);
+
+            if (storeLocation.done == 'true' && storeLocation.size == 1) {
+                storeLat = parseFloat(storeLocation.records.Store__r.ShippingLatitude);
+                storeLng = parseFloat(storeLocation.records.Store__r.ShippingLongitude);
+            }
+                
+            if (storeLat == null || storeLng == null) {
+                storeLat = defaultLat;
+                storeLng = defaultLng;
+            }
+
             if (resourceMap == null) {
-                var lat = 33.7700;
-                var lng = -84.3700;
+                var lat = storeLat;
+                var lng = storeLng;
 
                 var mapOptions = {
                     center: new google.maps.LatLng(lat, lng),
@@ -58,7 +235,6 @@
 
         function initResourceCalendar() {
             $('#resourceCalendar').fullCalendar({
-                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                 header: {
                     left: 'title',
                     center: '',
@@ -71,59 +247,124 @@
                     }
                 },
                 defaultView: 'agendaDay',
-                //defaultTimedEventDuration: '02:00:00',
-                //forceEventDuration: true,
-                //timezone: 'local',
                 timezone: 'UTC',
-                //eventOverlap: false,
-                //timezone: false,
-                /*
-                businessHours: [
-                    {
-                        start: '12:00',
-                        end: '19:00',
-                        dow: [2,4,6]
-                    },
-                    {
-                        start: '09:00',
-                        end: '15:00',
-                        dow: [1,3,5]
-                    }
-                ],
-                */
                 lazyFetching: false,
                 handleWindowResize: true,
                 allDaySlot: false,
                 slotEventOverlap: true,
                 height: 500,
                 events: function(start, end, timezone, callback) {
-                    retrieveResourceRouteRecords(start, end, timezone, callback);
-                    callback([]);
+                    $('#loaderModal').show();
+                    if (initializingResourceRouteComp) {
+                        initializingResourceRouteComp = false;
+                        callback([]);
+                    }
+                    else if (resourceRouteEvents.length > 0) {
+                        callback(resourceRouteEvents);
+                        resourceRouteEvents = [];
+                        $('#loaderModal').hide();
+                    }
+                    else {
+                        MARoutesComp.deleteMarkers();
+                        MARoutesComp.startGeocodingRes();
+                        retrieveResourceRouteRecords(start, end, timezone, callback);
+                        callback([]);
+                    }
+                    $("body").addClass('overflow-hidden');
+                },
+                eventAfterRender: function(event, element, view) {
+                    if (event.city != '' && event.city != undefined && event.city != null) {
+                        $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
+                    }
+
+                    if (event.resourceNamesText != '' && event.resourceNamesText != undefined && event.resourceNamesText != null) {
+                        $(element).find('.fc-title').before('<div class="resourceNamesTextDiv">' + event.resourceNamesText + '</div>');
+                    }
+
+                    if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
+                        $(element).find('.fc-title').after('<div class="eventNameDiv">' + event.contactName + '</div>');
+                    }
+
+                    if (event.multiDayOrder != '' || event.isLswp || event.isJip) {
+                        var strongTextDiv = '<div class="importantEventText">';
+                        if (event.multiDayOrder != '') {
+                            strongTextDiv += '<span class="multiDayOrder">' + event.multiDayOrder + '</span>';
+                        }
+
+                        if (event.isLswp) {
+                            strongTextDiv += '<span class="lswpSpan">LSWP</span>';
+                        }
+
+                        if (event.isJip) {
+                            strongTextDiv += '<span class="jipSpan">JIP</span>';
+                        }
+
+                        strongTextDiv += '</div>';
+                        $(element).find('.fc-title').after(strongTextDiv);
+                    }
                 }
             });
+
+            var mainCalendarDate = $('#calendar').fullCalendar('getDate');
+
+            if (mainCalendarDate.format('MM/DD/YYYY') == $('#resourceCalendar').fullCalendar('getDate').format('MM/DD/YYYY')) {
+                $('#resourceCalendar').fullCalendar('refetchEvents');
+            }
+            else {
+                $('#resourceCalendar').fullCalendar('gotoDate', mainCalendarDate);
+            }
         }
 
         function retrieveResourceRouteRecords(start, end, timezone, callback) {
             end = new Date(end.add(2, 'days'));
             start = new Date(start.add(-2, 'days'));
 
-            console.log($('#resourceRoute').attr('resource-id'));
-            console.log(start.toISOString());
-            console.log(end.toISOString());
-
-            //sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startString: start.toISOString(), endString: end.toISOString() }, processResourceRouteResponse);
-
             sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startEpoch: start.getTime(), endEpoch: end.getTime(), storeId: $('#storeSelect').val() }, processResourceRouteResponse);
         }
 
         function processResourceRouteSuccess(response) {
-            console.log(response);
             response = JSON.parse(response);
+
+            if (response.success) {
+                for(var i = 0, len = response.customEvents.length; i < len; i++) {
+                    var record = response.customEvents[i];
+                    resourceRouteEvents.push({
+                        id: record.workOrderId,
+                        resourceId: record.resourceId,
+                        title: record.title,
+                        start: record.startDateTimeOffset,
+                        end: record.endDateTimeOffset,
+                        className: record.className,
+                        url: record.url,
+                        contactName: record.contactName,
+                        eventType: record.eventType,
+                        missingResource: record.missingResource,
+                        resourceNamesText: record.resourceNamesText,
+                        city: record.city,
+                        state: record.state,
+                        isSynced: record.isSynced,
+                        isLswp: record.isLswp,
+                        isJip: record.isJip,
+                        multiDayOrder: record.multiDayOrder
+                    });
+                }
+
+                $('#resourceCalendar').fullCalendar('refetchEvents');
+            }
+            else {
+                handleError('MA_SchedulerResourceRouteComp : retrieveResourceRouteRecords' + apexSchedulingController, response);
+            }
         }
 
         function closeResourceRoute() {
-            $('#resourceRouteModal').hide();
+            isDailyResource = false;
+            MARoutesComp.deleteMarkers();
+            $('#resourceRouteModal').removeClass("ma-left-in");
+            $("body").removeClass('overflow-hidden');
+            $('body').css('overflow','auto');
+            $('#resourceCalendar').fullCalendar('destroy');
         }
+
     </script>
 
     <div id="resourceRouteModal" class="ma-modal">
