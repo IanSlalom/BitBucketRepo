@@ -213,10 +213,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Permanently_Applied_Interior_Wood_Grille__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>GBG_Wide_Bar__c</field>
             </layoutItems>
             <layoutItems>
