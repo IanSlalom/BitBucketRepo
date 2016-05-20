@@ -302,6 +302,11 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 					SaveTest
 	*******************************************************/
 	static testmethod void SaveTest(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		createTestRecords();
 
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
@@ -423,6 +428,10 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 					MiscButtonTest
 	*******************************************************/
 	static testmethod void MiscButtonTest(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		createTestRecords();
 
 		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];

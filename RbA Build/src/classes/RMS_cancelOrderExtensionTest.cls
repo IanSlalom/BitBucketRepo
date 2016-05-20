@@ -117,6 +117,10 @@ private class RMS_cancelOrderExtensionTest {
     *******************************************************/
     static testmethod void CancelOrderTest(){
 
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
         Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
 
         // Set up controller with an order Id

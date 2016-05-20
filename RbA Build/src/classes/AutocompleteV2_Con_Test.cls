@@ -35,15 +35,15 @@ private class AutocompleteV2_Con_Test{
         //create some test account
         List<Account> accountList = new List<Account>();
         for(Integer i =0 ; i < 200 ; i++){
-            accountList.add(new Account(Name='Test'+i));
+            accountList.add(new Account(Name='Autocomplete'+i));
         }
         //insert test records
         insert accountList;
         Test.startTest();
         
         	// assert the account size + 1 since it adds a select item
-            System.assertEquals(accountList.size()+1,AutoCompleteV2_Con.getData('Account','Name','Id','T','Id != null','').size());
-            System.assertEquals(1, AutoCompleteV2_Con.getData('Account','Name','Id','Test111', 'Id != null', '').size());
+            System.assertEquals(accountList.size()+1,AutoCompleteV2_Con.getData('Account','Name','Id','Autocomplete','Id != null','').size());
+            System.assertEquals(1, AutoCompleteV2_Con.getData('Account','Name','Id','Autocomplete111', 'Id != null', '').size());
             System.assertEquals(0, AutoCompleteV2_Con.getData('Account','Name','Id','xxxxxxx', '', '').size());
             AutoCompleteV2_Con controller = new AutoCompleteV2_Con ();
             controller.setTargetFieldVar(accountList[0].Id);

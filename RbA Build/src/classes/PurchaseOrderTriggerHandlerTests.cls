@@ -78,6 +78,10 @@ private class PurchaseOrderTriggerHandlerTests {
 	}
 
 	@isTest static void testeupdateOrderStatusToOrderReleased() {
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
@@ -130,6 +134,11 @@ private class PurchaseOrderTriggerHandlerTests {
 	}
 
 	@isTest static void testeupdateOrderStatusToInstallNeeded() {
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
@@ -182,6 +191,10 @@ private class PurchaseOrderTriggerHandlerTests {
 	}
 
 	@isTest static void testupdateHasPOCheckbox() {
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		PurchaseOrderTriggerHandler handler = new PurchaseOrderTriggerHandler(false,200);
 
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];

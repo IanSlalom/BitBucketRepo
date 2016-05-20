@@ -158,6 +158,10 @@ private class UtilityMethodsTest {
 	*******************************************************/
 	static testMethod void checkLockedTest() {
 
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		TestUtilityMethods utility = new TestUtilityMethods();
 		
 		utility.createOrderTestRecords();
@@ -280,13 +284,14 @@ private class UtilityMethodsTest {
 		
 		utility.createOrderTestRecords();
 
-		Order soldOrder = [SELECT Id, Name, Status FROM Order WHERE Name = 'Sold Order 1'];
+		Order soldOrder = [SELECT Id, Name, Status, AccountId FROM Order WHERE Name = 'Sold Order 1'];
 		Account store = [SELECT Id, Active_Store_Configuration__c from Account Where Name = '77 - Twin Cities, MN'];
 
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
 		RbA_Work_Order__c visitWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
 															                Sold_Order__c = soldOrder.Id,
-															                Work_Order_Type__c = 'Tech Measure'  
+															                Work_Order_Type__c = 'Tech Measure',
+															                Account__c = soldOrder.AccountId  
 															                    );
     	insert visitWorkOrder;
     	System.assertEquals(UtilityMethods.completeWorkOrders(soldOrder.Id), 'success');

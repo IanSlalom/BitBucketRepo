@@ -75,6 +75,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerRetrieveEvents() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -109,6 +111,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerRetrieveHolidays() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
 		MA_SchedulerFakeDataGenerator.createFakeSetting(true, storeConfig.Id, null, false);
@@ -120,6 +124,7 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerRetrieveNonGeocodedAddresses() {
+
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(false);
 		store.ShippingLongitude = null;
 		store.ShippingLatitude = null;
@@ -184,6 +189,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerCreateResourceEvent() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -202,6 +209,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerRetrieveResourceRouteRecords() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -227,6 +236,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerRetrieveAvailableResources() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -276,6 +287,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerCheckAvailability() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -327,6 +340,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerCancelWorkOrder() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -345,6 +360,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerSaveAssignedResources() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -380,6 +397,8 @@ private class MA_SchedulerTESTS {
 	}
 
 	@isTest static void testMaSchedulerScheduleWorkOrder() {
+		TestUtilityMethods utility = new TestUtilityMethods();
+		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
