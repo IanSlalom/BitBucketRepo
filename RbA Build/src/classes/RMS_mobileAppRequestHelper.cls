@@ -19,7 +19,9 @@ public with sharing class RMS_mobileAppRequestHelper {
 	// fields unique to Order line items
 	private static final String OLI_QUERY_START = 'SELECT Cancelled__c, Cancelled_Date__c, Charge_Cost_To__c, isTechMeasureComplete__c, Parent_Order_Item__c, ' + 
 	'OrderItemNumber, OrderId, QuoteLineItemId, Height_Inches__c, Height_Fraction__c, NSPR__c, NSPR_Number__c, Sill_Angle__c, ' + 
-	'Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c, Unit_of_Measure__c';
+	'Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c, Unit_of_Measure__c,' +
+	'Meet_Rail_Dimension__c, Is_Height_L_or_R_Leg_Height__c, Leg_Height_Interior_Whole_Inch__c, Leg_Height_Interior_Fraction__c,' +
+	'Leg_Height_Exterior_Whole_Inch__c, Leg_Height_Exterior_Fraction__c, Is_Leg_Height_L_or_R_Leg_Height__c';
 	private static final String OLI_WHERE_CLAUSE = 'from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
   /* @method: findAppointments(Id userId)

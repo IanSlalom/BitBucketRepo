@@ -88,8 +88,6 @@
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
-        <members>editableTaskList</members>
-        <members>editableTaskListExt</members>
         <members>eventTest</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
@@ -217,6 +215,8 @@
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
         <members>Asset-Asset Layout</members>
+        <members>Assigned_Resources__c-Assigned Resource Layout</members>
+        <members>Assigned_Skill__c-Assigned Skill Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Business_Adjustment__c-Business Adjustment Layout</members>
@@ -246,6 +246,9 @@
         <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Labor__c-Labor Layout</members>
         <members>Labor__c-Misc Reimbursement Layout</members>
+        <members>MABatchSchedule__c-MABatchSchedule Layout</members>
+        <members>MA_Scheduler_Event__c-MA Scheduler Event Layout</members>
+        <members>MA_Scheduler_Settings__c-MA Scheduler Settings Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -274,12 +277,14 @@
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>Quote_Financing__c-Quote Financing Layout</members>
+        <members>RbA_Skills__c-Skill Layout</members>
         <members>RbA_Work_Order__c-Action Work Order Layout</members>
         <members>RbA_Work_Order__c-LSWP Work Order Layout</members>
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
+        <members>Resource_Skill__c-Resource Skill Layout</members>
         <members>Resource__c-Resource Layout</members>
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
@@ -298,9 +303,11 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Task-Task Layout</members>
         <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
+        <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>

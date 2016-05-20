@@ -27,6 +27,10 @@
                 <behavior>Edit</behavior>
                 <field>Unit_of_Measure__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>isStandard__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
