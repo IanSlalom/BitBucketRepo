@@ -18,6 +18,10 @@ Unauthorized use is prohibited.
 public with sharing class testRMS_viewServiceOrderProductsCtlr {
     
     static testmethod void createTestRecords() {
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
