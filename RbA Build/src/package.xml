@@ -10,6 +10,7 @@
         <members>MA_SchedulerEvent</members>
         <members>MA_SchedulerFakeDataGenerator</members>
         <members>MA_SchedulerResource</members>
+        <members>MA_SchedulerRouteTESTS</members>
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
         <members>MA_SchedulerUtilities</members>
@@ -85,6 +86,7 @@
         <members>RMS_viewServiceOrderProductsCtlr</members>
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
+        <members>Temp_RoutingSchedulerController</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
@@ -348,7 +350,6 @@
         <members>RbA_Operational_Reporting/Report_7300_On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
-        <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
@@ -356,6 +357,7 @@
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
+        <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
         <members>RbA_Operational_Reporting/Rpt_Business_Adjustment_Reconciliation</members>
