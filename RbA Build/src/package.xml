@@ -86,7 +86,6 @@
         <members>RMS_viewServiceOrderProductsCtlr</members>
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
-        <members>Temp_RoutingSchedulerController</members>
         <members>TestUtilityMethods</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
