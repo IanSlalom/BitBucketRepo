@@ -183,190 +183,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Order.AccountId</members>
-        <members>Order.AccountNumber</members>
-        <members>Order.Account_Manager__c</members>
-        <members>Order.ActivatedById</members>
-        <members>Order.ActivatedDate</members>
-        <members>Order.Activated_Date__c</members>
-        <members>Order.Amount_Due__c</members>
-        <members>Order.Amount_Financed__c</members>
-        <members>Order.Amount_Paid__c</members>
-        <members>Order.Amount_Refunded__c</members>
-        <members>Order.Amount_due_on_Account__c</members>
-        <members>Order.Balance_Due__c</members>
-        <members>Order.Bay_Bow_Cost_Rollup__c</members>
-        <members>Order.Bay_Bow_Rollup__c</members>
-        <members>Order.Bay_Bow_Sales_Rollup__c</members>
-        <members>Order.BillToContactId</members>
-        <members>Order.Bill_to_Contact_Home_Phone__c</members>
-        <members>Order.Billable_Tax_Amount__c</members>
-        <members>Order.BillingAddress</members>
-        <members>Order.Billing_Address__c</members>
-        <members>Order.Billing_Date__c</members>
-        <members>Order.Comments_and_Questions__c</members>
-        <members>Order.CompanyAuthorizedById</members>
-        <members>Order.CompanyAuthorizedDate</members>
-        <members>Order.ContractEndDate</members>
-        <members>Order.ContractId</members>
-        <members>Order.ContractName</members>
-        <members>Order.CustomerAuthorizedById</members>
-        <members>Order.CustomerAuthorizedDate</members>
-        <members>Order.Customer_Pickup_All__c</members>
-        <members>Order.Customer_Service_Manager__c</members>
-        <members>Order.Date_Cancelled__c</members>
-        <members>Order.Date_Sat_Survey_Run__c</members>
-        <members>Order.Days_Open__c</members>
-        <members>Order.Description</members>
-        <members>Order.Discount_Amount__c</members>
-        <members>Order.Door_Cost_Rollup__c</members>
-        <members>Order.Door_Rollup_Including_Entry_Doors__c</members>
-        <members>Order.Door_Rollup__c</members>
-        <members>Order.Door_Sales_Rollup__c</members>
-        <members>Order.EffectiveDate</members>
-        <members>Order.EndDate</members>
-        <members>Order.Entry_Door_Cost_Rollup__c</members>
-        <members>Order.Entry_Door_Rollup__c</members>
-        <members>Order.Entry_Door_Sales_Rollup__c</members>
-        <members>Order.Estimated_Install_Duration__c</members>
-        <members>Order.Estimated_Ship_Date__c</members>
-        <members>Order.FF_Cost_Rollup__c</members>
-        <members>Order.FF_Rollup__c</members>
-        <members>Order.FF_Sales_Rollup__c</members>
-        <members>Order.Finance_Program_Fees__c</members>
-        <members>Order.Financed_Order__c</members>
-        <members>Order.HOA_Status__c</members>
-        <members>Order.HOS_Survey_Link__c</members>
-        <members>Order.Historical_Status__c</members>
-        <members>Order.IF_Rollup_Cost__c</members>
-        <members>Order.IF_Rollup_Sales__c</members>
-        <members>Order.IF_Rollup__c</members>
-        <members>Order.Install_Complete_Date__c</members>
-        <members>Order.Install_Day_of_Appmt__c</members>
-        <members>Order.Install_Notes__c</members>
-        <members>Order.Install_Order_Status__c</members>
-        <members>Order.Install_Ship_Date_Conflict__c</members>
-        <members>Order.Installation_Date_Complete__c</members>
-        <members>Order.Installation_Date__c</members>
-        <members>Order.Installation_Margin__c</members>
-        <members>Order.Invoice_Notes__c</members>
-        <members>Order.Invoice_Subtotal__c</members>
-        <members>Order.IsReductionOrder</members>
-        <members>Order.Job_Close_Date__c</members>
-        <members>Order.Jobs__c</members>
-        <members>Order.LSWP_Status__c</members>
-        <members>Order.LSWP_Test_Results__c</members>
-        <members>Order.Labor_Cost_Percentage__c</members>
-        <members>Order.Labor__c</members>
-        <members>Order.Lead_Safe_Work_Practices_Reqd__c</members>
-        <members>Order.Lead_Service_Tech__c</members>
-        <members>Order.Lead_Stainer__c</members>
-        <members>Order.Lead_Tech_Measure__c</members>
-        <members>Order.Margin_Percentage__c</members>
-        <members>Order.Material_Application_Pct__c</members>
-        <members>Order.Mileage__c</members>
-        <members>Order.Misc_Amount__c</members>
-        <members>Order.Name</members>
-        <members>Order.Non_Sufficient_Funds__c</members>
-        <members>Order.Number_Open_Events_on_WOs__c</members>
-        <members>Order.Offsite_Storage__c</members>
-        <members>Order.OpportunityId</members>
-        <members>Order.OrderReferenceNumber</members>
-        <members>Order.Order_Owner__c</members>
-        <members>Order.Order_Processed_Date__c</members>
-        <members>Order.OriginalOrderId</members>
-        <members>Order.Original_Crew__c</members>
-        <members>Order.Original_Stainer__c</members>
-        <members>Order.Original_Tech_Measure__c</members>
-        <members>Order.Other_Cost_Rollup__c</members>
-        <members>Order.Other_Sales_Rollup__c</members>
-        <members>Order.OwnerId</members>
-        <members>Order.Owner_Name_Phone__c</members>
-        <members>Order.Owner_Name__c</members>
-        <members>Order.Paint_Stain_Status__c</members>
-        <members>Order.Payments_Received__c</members>
-        <members>Order.Permit_Cost__c</members>
-        <members>Order.Permit_Status__c</members>
-        <members>Order.Pivotal_Id__c</members>
-        <members>Order.PoDate</members>
-        <members>Order.PoNumber</members>
-        <members>Order.Post_Install_Call__c</members>
-        <members>Order.Primary_Installer__c</members>
-        <members>Order.Primary_Service__c</members>
-        <members>Order.Primary_Tech_Measure__c</members>
-        <members>Order.Prior_Status__c</members>
-        <members>Order.Product_Cost_Percent__c</members>
-        <members>Order.Product_Cost__c</members>
-        <members>Order.QuoteId</members>
-        <members>Order.Quote_Notes__c</members>
-        <members>Order.Quote_Subtotal__c</members>
-        <members>Order.Reason__c</members>
-        <members>Order.Reinstall_Date__c</members>
-        <members>Order.Renovate_Right_Booklet_Signed_Date__c</members>
-        <members>Order.Renovation_Record_Keeping__c</members>
-        <members>Order.Retail_Subtotal__c</members>
-        <members>Order.Retail_Total__c</members>
-        <members>Order.Revenue_Post_Date__c</members>
-        <members>Order.Revenue_Recognized_Date__c</members>
-        <members>Order.Revenue_Recognized__c</members>
-        <members>Order.Sales_Rep__c</members>
-        <members>Order.Sales_Tax_Percent__c</members>
-        <members>Order.Sales_Tax__c</members>
-        <members>Order.Save_Reason__c</members>
-        <members>Order.Secondary_Save_Reason__c</members>
-        <members>Order.Sent_to_Baan_Date__c</members>
-        <members>Order.Sent_to_Baan__c</members>
-        <members>Order.Series_2_Cost_Rollup__c</members>
-        <members>Order.Series_2_Rollup__c</members>
-        <members>Order.Series_2_Sales_Rollup__c</members>
-        <members>Order.Service_Installation_Complete_Date__c</members>
-        <members>Order.Service_Status__c</members>
-        <members>Order.Service_Type__c</members>
-        <members>Order.Service_initiated_By__c</members>
-        <members>Order.ShipToContactId</members>
-        <members>Order.ShippingAddress</members>
-        <members>Order.Shipping_Address__c</members>
-        <members>Order.Sold_Order_JIP_Eligible__c</members>
-        <members>Order.Sold_Order_Scheduled_Date__c</members>
-        <members>Order.Sold_Order__c</members>
-        <members>Order.Stainer2__c</members>
-        <members>Order.Stainer__c</members>
-        <members>Order.Store_Location__c</members>
-        <members>Order.Survey_Sent__c</members>
-        <members>Order.Tax_Amount__c</members>
-        <members>Order.Tech_Measure_Date__c</members>
-        <members>Order.Tech_Measure_Phone__c</members>
-        <members>Order.Tech_Measure_Status__c</members>
-        <members>Order.Time_Cancelled__c</members>
-        <members>Order.Time_Draft__c</members>
-        <members>Order.Time_Install_Complete__c</members>
-        <members>Order.Time_Install_Needed__c</members>
-        <members>Order.Time_Install_Scheduled__c</members>
-        <members>Order.Time_Job_Close__c</members>
-        <members>Order.Time_Job_in_Progress__c</members>
-        <members>Order.Time_On_Hold__c</members>
-        <members>Order.Time_Order_Released__c</members>
-        <members>Order.Time_Ready_to_Order__c</members>
-        <members>Order.Time_Tech_Measure_Needed__c</members>
-        <members>Order.Time_Tech_Measure_Scheduled__c</members>
-        <members>Order.Time_from_Sold__c</members>
-        <members>Order.Time_in_Draft__c</members>
-        <members>Order.TotalAmount</members>
-        <members>Order.Total_Jobsite_Hours__c</members>
-        <members>Order.Type</members>
-        <members>Order.Type_image__c</members>
-        <members>Order.Unique_Job_Identifier__c</members>
-        <members>Order.Validate_Service_Order__c</members>
-        <members>Order.Warranty_Date_Accepted__c</members>
-        <members>Order.Warranty_Date_Submitted__c</members>
-        <members>Order.Warranty_Reimbursement_Amount__c</members>
-        <members>Order.Windows_Series_2_FF_IF_Rollup__c</members>
-        <members>Order.hasPO__c</members>
-        <members>Order.of_Visits__c</members>
-        <members>Order.rSuite_Id__c</members>
-        <name>CustomField</name>
-    </types>
-    <types>
         <members>Discount__c</members>
         <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
@@ -499,33 +315,12 @@
         <name>Layout</name>
     </types>
     <types>
-        <members>Order.Activated_Orders</members>
-        <members>Order.Activated_Orders_Install_Needed</members>
-        <members>Order.AllActivatedOrders</members>
-        <members>Order.AllDraftOrders</members>
-        <members>Order.AllOrders</members>
-        <members>Order.All_Orders</members>
-        <members>Order.DraftOrders</members>
-        <members>Order.DraftOrdersNeedTechMeasure</members>
-        <members>Order.Order_Timestamps</members>
-        <members>Order.Orders_Install_Estimated_Date_Conflict</members>
-        <members>Order.Sales_Draft_to_Review</members>
-        <members>Order.Unassigned_Order_TwinCity</members>
-        <name>ListView</name>
-    </types>
-    <types>
         <members>Schedule_Install_TwinCity</members>
         <members>Schedule_Permit_TwinCity</members>
         <members>Schedule_Tech_TwinCity</members>
         <members>Unassigned_Order_TwinCity</members>
         <members>Unassigned_Twin_City</members>
         <name>Queue</name>
-    </types>
-    <types>
-        <members>Order.ARO_Record_Type</members>
-        <members>Order.CORO_Record_Type</members>
-        <members>Order.CORO_Service</members>
-        <name>RecordType</name>
     </types>
     <types>
         <members>RbA_Operational_Reporting</members>
@@ -601,33 +396,6 @@
         <members>orderIconNonConsole</members>
         <members>select2</members>
         <name>StaticResource</name>
-    </types>
-    <types>
-        <members>Order.CannotCloseServiceRequest_WO_Open_Events</members>
-        <members>Order.DiscountAmtCannotGreaterRetailSubtotal</members>
-        <members>Order.Refund_Amount_Less_Than_Payment</members>
-        <members>Order.Save_Reason_Required</members>
-        <members>Order.Validate_Service_Request</members>
-        <name>ValidationRule</name>
-    </types>
-    <types>
-        <members>Order.Add_Product</members>
-        <members>Order.Cancel_Order</members>
-        <members>Order.Conga_Composer_CoversheetTesting</members>
-        <members>Order.Conga_Composer_InvoiceTesting</members>
-        <members>Order.Conga_Composer_Order_Invoice</members>
-        <members>Order.Conga_Composer_RbA_Coversheet</members>
-        <members>Order.Conga_Composer_RbA_LSWP</members>
-        <members>Order.Conga_Composer_RbA_Post_Install_Review</members>
-        <members>Order.Conga_Composer_RbA_Service_Invoice</members>
-        <members>Order.Create_Service_Request</members>
-        <members>Order.Job_Closed</members>
-        <members>Order.New_Visit_Work_Order</members>
-        <members>Order.On_Hold</members>
-        <members>Order.Order_Processed</members>
-        <members>Order.Rec_Revenue</members>
-        <members>Order.Update_Service_Type</members>
-        <name>WebLink</name>
     </types>
     <types>
         <members>Account</members>
