@@ -32,6 +32,10 @@
                 <behavior>Edit</behavior>
                 <field>Vendor_Account_Type__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Inactive_Date__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -388,8 +388,15 @@ public with sharing class MA_SchedulerUtilities {
     }
 
     public static void createEvents(RbA_Work_Order__c workOrder, Map<String, Object> storeBookingWindows, String storeTimezone, DateTime tempStart, DateTime tempEnd, Integer tempTotalMinutes, Set<Id> assignedResourceIds, Set<Id> maEventsAlreadyCreatedFor, Map<Id, Id> resourceToUserMap) {
+        Id primaryResourceUserId;
         List<Event> sfEventsToCreate = new List<Event>();
         List<MA_Scheduler_Event__c> maEventsToCreate = new List<MA_Scheduler_Event__c>();
+        Id woEventRecTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Event' AND DeveloperName = 'Work_Order_Event'].Id;
+
+        for (Assigned_Resources__c primaryResource : [SELECT Id, Scheduled_Resource__r.RbA_User__c FROM Assigned_Resources__c WHERE Work_Order__c = :workOrder.Id AND IsPrimary__c = true]) {
+            primaryResourceUserId = primaryResource.Scheduled_Resource__r.RbA_User__c;
+            break;
+        }
         
         if (!storeBookingWindows.isEmpty()) {
             Map<String, Map<String, Object>> latestHours = determineEarliestStartAndLatestEndHours(storeBookingWindows);
@@ -464,13 +471,18 @@ public with sharing class MA_SchedulerUtilities {
 
         for (MA_Scheduler_Event__c maEvent : maEventsToCreate) {
             if (maEvent.Resource__c != null && resourceToUserMap.get(maEvent.Resource__c) != null) {
+                Id ownerId = resourceToUserMap.get(maEvent.Resource__c);
+
                 Event sfEvent = new Event(
+                    OwnerId = ownerId,
                     Subject = maEvent.Name,
+                    RecordTypeId = woEventRecTypeId,
                     WhatId = maEvent.RbA_Work_Order__c,
                     MA_Scheduler_Event__c = maEvent.Id,
+                    Type = workOrder.Work_Order_Type__c,
                     EndDateTime = maEvent.EndDateTime__c,
                     StartDateTime = maEvent.StartDateTime__c,
-                    OwnerId = resourceToUserMap.get(maEvent.Resource__c)
+                    Primary_Resource__c = ownerId == primaryResourceUserId
                 );
                 sfEventsToCreate.add(sfEvent);
             }

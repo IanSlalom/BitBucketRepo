@@ -155,9 +155,9 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void customDeleteTest(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Sold Order 1'];        
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c FROM Order WHERE Name = 'Sold Order 1'];                
         
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt TE = new RMS_ServiceOrderLegacyExt(sc);
@@ -170,10 +170,10 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     
         static testmethod void testOptionList(){
         createTestRecords();
-        
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
 
-            Test.startTest();  
+            Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+            
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt TE = new RMS_ServiceOrderLegacyExt(sc);
@@ -187,12 +187,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperManufacturer(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,pricebook2id,Service_Type__c,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        
-        Test.startTest();  
+                
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -207,12 +207,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperLocal(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        
-        Test.startTest();  
+         
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -228,11 +228,11 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperGoodwill(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
-        OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        Test.startTest();  
+        OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id]; 
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -247,12 +247,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperInstallation(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -267,11 +267,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperManagement(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        Test.startTest();  
+
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -286,11 +287,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperOE(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        Test.startTest();  
+
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -305,11 +307,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperSales(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        Test.startTest();  
+
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -324,12 +327,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperService(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -345,12 +348,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperStaining(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
        
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -365,12 +368,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperTechMeasure(){
         createTestRecords();
         
+         Test.startTest(); 
         Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -385,12 +388,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperWarehouse(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
-        
-        Test.startTest();  
+                
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -405,12 +408,12 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     static testmethod void testProductWrapperHomeOwner(){
         createTestRecords();
         
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+         Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [SELECT id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, OrderId FROM OrderItem WHERE OrderId =: order.id];
         
-        Test.startTest();  
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);        
@@ -424,13 +427,14 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     
     static testmethod void testDependentPicklist(){
         createTestRecords();
-        
-        Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         Boolean isSelected = true;
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
-        Test.startTest();  
+
         Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderLegacyExt.ProductWrapper TE = new RMS_ServiceOrderLegacyExt.ProductWrapper(prod);
@@ -453,8 +457,9 @@ public with sharing class testRMS_ServiceOrderLegacyExt {
     
     static testmethod void saveClosetest(){
         createTestRecords();
-		Test.startTest();
-        Order order = [SELECT Id,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
+		
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
         Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];

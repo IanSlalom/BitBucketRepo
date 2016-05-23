@@ -72,6 +72,7 @@
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
+        <members>RMS_reactivateResource</members>
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
         <members>RMS_vendorPurchaseOrderController</members>

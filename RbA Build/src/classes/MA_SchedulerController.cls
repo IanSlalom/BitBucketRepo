@@ -78,12 +78,18 @@ global with sharing class MA_SchedulerController {
         Map<String, Object> response = new Map<String, Object>();
         
         try {
-            List<Resource__c> resourceList = new List<Resource__c>();
+            Set<Id> validProfileIds = new Set<Id>();
+            Set<String> validProfileNames = new Set<String> { 'System Administrator', 'Sys Admin' };
             Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, null);
-            resourceList = [SELECT Id, Name, Resource_Type__c FROM Resource__c WHERE Retail_Location__c = :storeId AND Resource_Type__c != 'Scheduler' ORDER BY Resource_Type__c ASC, Name ASC];
+            List<Resource__c> resourceList = [SELECT Id, Name, Resource_Type__c FROM Resource__c WHERE Retail_Location__c = :storeId AND Resource_Type__c != 'Scheduler' ORDER BY Resource_Type__c ASC, Name ASC];
+
+            for (Profile profile : [SELECT Id FROM Profile WHERE Name IN :validProfileNames]) {
+                validProfileIds.add(profile.Id);
+            }
 
             response.put('success', true);
             response.put('resourceList', resourceList);
+            response.put('showEsriCredentials', validProfileIds.contains(UserInfo.getProfileId()));
             response.put('storeSettings', (MA_Scheduler_Settings__c)maSettingsMap.get('storeSettings'));
             response.put('resourceSettingsMap', (Map<Id, MA_Scheduler_Settings__c>)maSettingsMap.get('resourceSettingsMap'));
         }
@@ -1002,34 +1008,7 @@ global with sharing class MA_SchedulerController {
                         assignedResourcesToDelete.add(assignedResource);
                     }
                 }
-            }
-            
-            if (workOrder.Appointment_Date__c != null && String.isNotBlank(workOrder.Appointment_Start_Time__c) && (String.isNotBlank(workOrder.Appointment_End_Time__c) || workOrder.Appointment_Duration__c != null)) {
-                List<Event> newSfEvents = new List<Event>();
-                Set<Id> maEventsAlreadyCreatedFor = new Set<Id>();
-                List<MA_Scheduler_Event__c> newMaEvents = new List<MA_Scheduler_Event__c>();
-                DateTime endDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_End_Time__c, storeTimezone);
-                DateTime startDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_Start_Time__c, storeTimezone);
-                
-                Map<Id, MA_Scheduler_Event__c> maEventsAlreadyCreated = new Map<Id, MA_Scheduler_Event__c>(
-                    (List<MA_Scheduler_Event__c>)Database.query('SELECT Id, Resource__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c = :workOrderId AND Resource__c IN :assignedResourceIds' + (isSingleDay ? ' AND Date__c = :eventSchedulerDate' : ''))
-                );
 
-                for (MA_Scheduler_Event__c maEvent : maEventsAlreadyCreated.values()) {
-                    maEventsAlreadyCreatedFor.add(maEvent.Resource__c);
-                }
-
-                Integer tempTotalMinutes = workOrder.Appointment_Duration__c == null ? 0 : (Integer)(workOrder.Appointment_Duration__c * 60);
-                DateTime tempEnd = startDateTime.addMinutes(tempTotalMinutes);
-                if (tempTotalMinutes == 0) {
-                    tempEnd = endDateTime;
-                }
-
-                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap);
-                update workOrder;
-            }
-
-            if (!isSingleDay) {
                 for (Id resourceId : assignedResourceIds) {
                     if (!alreadyAssignedResourceIds.contains(resourceId)) {
                         newAssignedResources.add(
@@ -1056,6 +1035,31 @@ global with sharing class MA_SchedulerController {
 
                     update incorrectPrimaryResources;
                 }
+            }
+            
+            if (workOrder.Appointment_Date__c != null && String.isNotBlank(workOrder.Appointment_Start_Time__c) && (String.isNotBlank(workOrder.Appointment_End_Time__c) || workOrder.Appointment_Duration__c != null)) {
+                List<Event> newSfEvents = new List<Event>();
+                Set<Id> maEventsAlreadyCreatedFor = new Set<Id>();
+                List<MA_Scheduler_Event__c> newMaEvents = new List<MA_Scheduler_Event__c>();
+                DateTime endDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_End_Time__c, storeTimezone);
+                DateTime startDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_Start_Time__c, storeTimezone);
+                
+                Map<Id, MA_Scheduler_Event__c> maEventsAlreadyCreated = new Map<Id, MA_Scheduler_Event__c>(
+                    (List<MA_Scheduler_Event__c>)Database.query('SELECT Id, Resource__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c = :workOrderId AND Resource__c IN :assignedResourceIds' + (isSingleDay ? ' AND Date__c = :eventSchedulerDate' : ''))
+                );
+
+                for (MA_Scheduler_Event__c maEvent : maEventsAlreadyCreated.values()) {
+                    maEventsAlreadyCreatedFor.add(maEvent.Resource__c);
+                }
+
+                Integer tempTotalMinutes = workOrder.Appointment_Duration__c == null ? 0 : (Integer)(workOrder.Appointment_Duration__c * 60);
+                DateTime tempEnd = startDateTime.addMinutes(tempTotalMinutes);
+                if (tempTotalMinutes == 0) {
+                    tempEnd = endDateTime;
+                }
+
+                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap);
+                update workOrder;
             }
 
             response.put('success', true);
