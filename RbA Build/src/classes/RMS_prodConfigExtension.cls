@@ -1216,7 +1216,7 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S3__c = null; 
 			oI.Tempered_S3__c = false;
 		}
-		//If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
+		//JETT-2171 If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2' || newProdConfig.Number_of_Sashes__c == '3'){
 			oI.Grille_Pattern_S4__c = null;
 			oI.Lites_Wide_S4__c = null;	
