@@ -29,6 +29,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}
     public static final Id serviceProductRecordTypeId = UtilityMethods.RecordTypeFor('Product2','Service_Product');
     public Boolean hasValidationErrors {get{return ApexPages.hasMessages(ApexPages.Severity.ERROR);}}
+    public String baseURL{get;set;}
+    public String cancelUpdateURL{get;set;}
+    Public string propPickValSelected2 { get; set; }
+    public String updateSTURL{get;set;}
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
@@ -36,7 +40,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
         
         this.o = (Order)stdController.getRecord();
-        
+        propPickValSelected2 = o.Service_Type__c;
+        baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
+        cancelUpdateURL = '/' + o.Id;
+        updateSTURL = '/apex/RMS_updateServiceType?id=' + o.Id;
         
         //these aggregate result lists are used to count the number of Orders 
         //and assets for the related Account to determine where the user is taken
@@ -339,7 +346,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //convert the selectOption value to picklist value, set on Ordre
             o.Service_Type__c = propPickValSelected;
             
-
+            
             upsert o;
             system.debug(listOI);
             
@@ -357,7 +364,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     }    
     
     //add product page
-        public PageReference saveNewProducts(){
+    public PageReference saveNewProducts(){
         
         PageReference pageRef = null;
         
@@ -409,7 +416,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                     }
                 }        
             }
-                        
+            
             
             //checkbox on Order set to true, needed to ensure we validate required fields, but
             //only when the entire request is filled out and not during a rerender.
@@ -672,6 +679,58 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public void setpropPickValSelected(String propPickValSelected) {
         this.propPickValSelected = propPickValSelected;
+    }
+    
+    //RMS_updateServiceType Methods
+        public List<SelectOption> getPickLstValue2()
+    {
+        List<SelectOption> options = new List<SelectOption>();
+        Schema.DescribeFieldResult fieldResult = Order.Service_Type__c.getDescribe();
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+        
+        Order od = new order();
+        od = [SELECT Sold_Order_JIP_Eligible__c 
+              FROM Order 
+              WHERE Id =:o.id];            
+        IF (od.Sold_Order_JIP_Eligible__c){
+            for(Schema.PicklistEntry f : ple){
+                if(f.getValue() == 'Job In Progress' || f.getValue() == 'Save'){
+                    options.add(new SelectOption(f.getLabel(), f.getValue()));                          
+                }                      
+            }
+        }
+        ELSE{
+           // options.add(new SelectOption('--None--','--None--')); 
+            for(Schema.PicklistEntry f : ple){
+                if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
+                    options.add(new SelectOption(f.getLabel(), f.getValue()));
+                }
+            } 
+        }
+        
+        return options;           
+    }
+    
+    public String getpropPickValSelected2() {
+        return propPickValSelected2;
+    }
+    
+    public void setpropPickValSelected2(String propPickValSelected2) {
+        this.propPickValSelected2 = propPickValSelected2;
+    }
+    
+    public PageReference saveST(){
+        PageReference pageRef = null;
+        try{
+            o.Service_Type__c = propPickValSelected2;
+            upsert o;
+            pageRef = new PageReference('/' + o.id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+        }
+        
+        return pageRef;
     }
     
 }

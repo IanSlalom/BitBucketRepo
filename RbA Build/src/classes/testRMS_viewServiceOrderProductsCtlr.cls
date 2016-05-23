@@ -110,13 +110,13 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
     static testmethod void testWrapper(){
         createTestRecords();
         
+         Test.startTest(); 
         Order order = [SELECT Id,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Service Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
         Product2 prod = [SELECT id FROM Product2 WHERE Id = :pbe.Product2Id];
         OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
 
-        Test.startTest();
         Test.setCurrentPage(Page.RMS_viewServiceOrderProducts);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_viewServiceOrderProductsCtlr.OrderItemWrapper TE = new RMS_viewServiceOrderProductsCtlr.OrderItemWrapper(oi);
@@ -129,8 +129,9 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
  static testmethod void testController() {
     createTestRecords();
          
+      Test.startTest(); 
     Order order = [SELECT Id,AccountId,pricebook2id,RecordTypeId,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Service Order 1']; 
-     Test.startTest();
+
      RMS_viewServiceOrderProductsCtlr controller = new RMS_viewServiceOrderProductsCtlr(new ApexPages.StandardController(order));
     System.assert(controller.OrderItemWrappers.size() == 1);
     OrderItem orderItemServ = [Select Id from OrderItem where Pricebookentry.Product2.Name = 'service'];
