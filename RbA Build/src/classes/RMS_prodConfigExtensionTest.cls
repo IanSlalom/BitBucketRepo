@@ -111,6 +111,10 @@ private class RMS_prodConfigExtensionTest {
 					ConstructorTest
 	*******************************************************/
 	static testmethod void ConstructorTest(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		createTestRecords();
 
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
