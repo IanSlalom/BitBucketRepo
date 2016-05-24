@@ -190,7 +190,7 @@
             }
         }
         
-        var processRouteStopsResponse = { onSuccess: MARoutesComp.processRouteStops, onFailure: processResponseError };
+        //var processRouteStopsResponse = { onSuccess: MARoutesComp.processRouteStops, onFailure: processResponseError };
         var processResourceRouteResponse = { onSuccess: processResourceRouteSuccess, onFailure: processResponseError };
 
         $(function() {
@@ -349,7 +349,9 @@
                     });
                 }
 
-                $('#resourceCalendar').fullCalendar('refetchEvents');
+                if (resourceRouteEvents.length > 0) {
+                    $('#resourceCalendar').fullCalendar('refetchEvents');
+                }
             }
             else {
                 handleError('MA_SchedulerResourceRouteComp : retrieveResourceRouteRecords' + apexSchedulingController, response);

@@ -76,6 +76,7 @@
         <members>RMS_reactivateResource</members>
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
+        <members>RMS_serviceRequestListViewMgr</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
@@ -121,6 +122,7 @@
         <members>MA_SchedulerStylingComp</members>
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <members>RMS_orderHistoryComponent</members>
+        <members>RMS_requestListViewComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -129,6 +131,7 @@
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
+        <members>RMS_ServiceRequestListView</members>
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addServiceProduct</members>
         <members>RMS_cancelOrder</members>
@@ -140,6 +143,7 @@
         <members>RMS_createServiceRequestRedirect</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
+        <members>RMS_editServiceRequest</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
@@ -156,6 +160,7 @@
         <members>RMS_viewRelatedWorkOrdersVisit</members>
         <members>RMS_viewServiceOrderProducts</members>
         <members>RMS_viewServiceOrders</members>
+        <members>RMS_viewServiceRequest</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -199,7 +204,7 @@
         <members>Product_Configuration__c</members>
         <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
-        <members>RbA_Work_Order__c</members>
+        <members>Service_Request</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
         <name>CustomTab</name>

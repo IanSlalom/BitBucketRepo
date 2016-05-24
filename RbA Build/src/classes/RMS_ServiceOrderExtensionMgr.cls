@@ -13,7 +13,6 @@ case where the Account is legacy and does not have any Asset records.
 Created.
 
 
-@copyright  (c)2016 Slalom.  All Rights Reserved. 
 Unauthorized use is prohibited.
 
 ***********************************************************/
@@ -33,10 +32,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public String cancelUpdateURL{get;set;}
     Public string propPickValSelected2 { get; set; }
     public String updateSTURL{get;set;}
+    public String editRedirect{get;set;}
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'AccountId','PriceBook2Id','Service_Type__c'});           
+            stdController.addFields(new List<String>{'AccountId','PriceBook2Id','Service_Type__c','Id'});           
         }
         
         this.o = (Order)stdController.getRecord();
@@ -44,6 +44,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         cancelUpdateURL = '/' + o.Id;
         updateSTURL = '/apex/RMS_updateServiceType?id=' + o.Id;
+        editRedirect ='/apex/RMS_editServiceRequest?id='+o.Id;
         
         //these aggregate result lists are used to count the number of Orders 
         //and assets for the related Account to determine where the user is taken
@@ -732,5 +733,20 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         return pageRef;
     }
+    
+        public PageReference cancelOrder(){
+        PageReference pageRef = null;
+        try{
+            o.Status = 'Cancelled';
+            upsert o;
+            pageRef = new PageReference('/' + o.id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+        }
+        
+        return pageRef;
+    }
+       
     
 }
