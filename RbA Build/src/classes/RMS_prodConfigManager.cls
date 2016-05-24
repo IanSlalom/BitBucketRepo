@@ -133,6 +133,9 @@ public with sharing class RMS_prodConfigManager {
 			
 			}
 		}
+
+		orderLineItem.Extended_Width_Warning__c = false;
+		orderLineItem.Extended_Height_Warning__c = false;
 		// Check for maximum width makeability 
 		if (masterProductConfig.Max_Width__c != null) {
 			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Max_Width_Fractions__c))) {
@@ -148,7 +151,7 @@ public with sharing class RMS_prodConfigManager {
 				if(masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null){
 					if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
 					 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) < (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ){
-						masterProductConfig.Width_Message__c = fillInErrorRuleValues(RMS_errorMessages.WIDTH_WARNING_MESSAGE, enteredValue, requiredValue);
+						orderLineItem.Extended_Width_Warning__c = true;
 					}
 				}else{ 		
 					
@@ -175,7 +178,8 @@ public with sharing class RMS_prodConfigManager {
 				if(masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null){
 					if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
 					 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) < (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ){
-						masterProductConfig.Height_Message__c = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_WARNING_MESSAGE, enteredValue, requiredValue);
+						orderLineItem.Extended_Height_Warning__c = true;			
+						
 					}
 				}else{ 
 					String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_ABOVE_MAX, enteredValue, requiredValue);

@@ -98,6 +98,13 @@ public class RMS_prodConfigExtension {
 				mode = 'v';
 			}
 		}
+
+		if(ApexPages.currentPage().getParameters().get('extWidthWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extWidthWarning'))); 
+		}
+		if(ApexPages.currentPage().getParameters().get('extHeightWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extHeightWarning'))); 
+		}
 	}
 
 	/******* public properties  *****************/
@@ -1106,6 +1113,12 @@ public class RMS_prodConfigExtension {
 	Map<String, String> m = p.getParameters();
     m.put('mode', 'v');
     m.put('id', orderLineItem.Id);
+    if(orderLineItem.Extended_Width_Warning__c){
+		m.put('extWidthWarning',masterProductConfig.Width_Message__c);
+	}
+    if(orderLineItem.Extended_Height_Warning__c){
+    	m.put('extHeightWarning',masterProductConfig.Height_Message__c);
+    }
 	p.setRedirect(true);
 
 	return p;	}
