@@ -275,6 +275,11 @@ private class RMS_prodConfigManagerTest {
 		prodConfig.United_Inch_Maximum__c = 30;
 		prodConfig.Glass_Square_Ft_Max__c = 1.56;
 		prodConfig.Rectangular_Area_Limitation__c = 1.56;
+
+		// Set the extended height / width
+		prodConfig.Extended_Max_Height__c = 15;
+		prodConfig.Extended_Max_Width__c = 15;
+		
 		
 		// Set the width & height to 14 15/16
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
@@ -419,7 +424,7 @@ private class RMS_prodConfigManagerTest {
 		// verify cap errors are thrown
 		System.Assert(returnMessage.contains(RMS_errorMessages.HEIGHT_TO_WIDTH_CAP));
 		System.Assert(returnMessage.contains(RMS_errorMessages.WIDTH_TO_HEIGHT_CAP));
-		System.Assert(returnMessage.contains(RMS_errorMessages.EXTENDED_MAX));
+		//System.Assert(returnMessage.contains(RMS_errorMessages.EXTENDED_MAX));
 	}
 
 	/*******************************************************
@@ -433,25 +438,39 @@ private class RMS_prodConfigManagerTest {
 		Pricing_Configuration__c priceConfig = [SELECT Id FROM Pricing_Configuration__c WHERE Name = 'Pricing Config'];
 		Product2 childProd = [SELECT Id FROM Product2 WHERE Name = 'Child Product'];
 
-		// Set the caps
+		// Set the peak height min and max
 		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
-		prodConfig.Peak_Height__c = 0.8;
+		//prodConfig.Peak_Height__c = 0.8;
+		prodConfig.Peak_Height_Min__c = 0.5;
+		prodConfig.Peak_Height_Max__c = 1.5;
 
-		// Set the width below the cap and the height above
+		// Set the difference between left and right leg at 10 inches, and Width at 5.5
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
-		soldOrderItem.Width_Inches__c = 59;
-		soldOrderItem.Width_Fraction__c = '15/16';
-		soldOrderItem.Height_Inches__c = 59;
-		soldOrderItem.Height_Fraction__c = '15/16';
-		soldOrderItem.Left_Leg_Inches__c = 80;
+		soldOrderItem.Width_Inches__c = 5;
+		soldOrderItem.Width_Fraction__c = '8/16';
+		soldOrderItem.Height_Inches__c = 5;
+		
+		
+		soldOrderItem.Left_Leg_Inches__c = 40;
 		soldOrderItem.Left_Leg_Fraction__c = '5/16';
-		soldOrderItem.Right_Leg_Inches__c = 80;
+		soldOrderItem.Right_Leg_Inches__c = 50;
 		soldOrderItem.Right_Leg_Fraction__c = '5/16';
 
 		// check the makeability
 		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+		system.debug(returnMessage);
 
-		// TODO: Asserts
+		// assert peak height max error message is included
+		System.assert(returnMessage.contains(RMS_ErrorMessages.PEAK_HEIGHT_MAX));
+		System.assert(!returnMessage.contains(RMS_ErrorMessages.PEAK_HEIGHT_MIN));
+
+		soldOrderItem.Left_Leg_Inches__c = 49;
+		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
+
+		// assert peak height min error message is included
+		System.assert(!returnMessage.contains(RMS_ErrorMessages.PEAK_HEIGHT_MAX));
+		System.assert(returnMessage.contains(RMS_ErrorMessages.PEAK_HEIGHT_MIN));
+
 	}
 
 	/*******************************************************

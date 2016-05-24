@@ -375,13 +375,36 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/*** Color Configuration Records *********/
+	private static transient List<Color_Configuration__c> lColorConfigs;
+	public List<Color_Configuration__c> colorConfigs{
+		get
+		{
+			if(lColorConfigs == null){
+				lColorConfigs = [Select Exterior_Color__c, Interior_Color__c, Product_Configuration__c from Color_Configuration__c WHERE Product_Configuration__c =: masterProductConfig.Id];
+			}
+			return lColorConfigs;
+		}
+	}
+
 	/******* Set up Exterior Color Items  *****************/
 	private static transient List<SelectOption> lExteriorColorItems;
 	public List<SelectOption> exteriorColorItems{
 		get
 		{   
 			if (lExteriorColorItems == null) {
-				lExteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Color__c);
+				Set<String> extColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Exterior_Color__c != null){
+						extColors.add(cc.Exterior_Color__c);
+					}
+				}
+				String extColorsString = '';
+				for(String color: extColors){
+					extColorsString += color + ';';
+				}
+				lExteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(extColorsString);
+
 			}			   
 			return lExteriorColorItems;
 		}
@@ -392,9 +415,23 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> interiorColorItems{
 		get
 		{   
-			if (lInteriorColorItems == null) {
-				lInteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Color__c);
-			}
+			if (interiorColorItems == null) {
+				Set<String> intColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Interior_Color__c != null){
+						for (String c : cc.Interior_Color__c.split(';')) {
+					   		intColors.add(c);
+					   	}
+					}
+				}
+				String intColorsString = '';
+				for(String color: intColors){
+					intColorsString += color + ';';
+				}
+
+				lInteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(intColorsString);
+
+			}			   
 			return lInteriorColorItems;
 		}
 	}
