@@ -392,6 +392,7 @@
         <members>Order</members>
         <members>PaintStainText</members>
         <members>ServiceOrder</members>
+        <members>ServiceRequestIcon</members>
         <members>ServiceText</members>
         <members>SiteSamples</members>
         <members>TechMeasureText</members>

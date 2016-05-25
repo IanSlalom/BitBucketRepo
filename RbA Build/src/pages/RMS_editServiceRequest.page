@@ -4,7 +4,6 @@
     
     <script type="text/javascript">
     window.onload = function() {
-        objectIcon();
         testSetTabTitle();
     };
     
@@ -13,20 +12,6 @@
         sforce.console.setTabTitle('{!Order.OrderNumber}')
     }
     
-    function objectIcon() {
-        var inconsole = document.getElementById("j_id0:j_id4:nonConsole");
-        var console = document.getElementById("j_id0:j_id4:Console");
-        
-        inconsole.style.display = 'none';
-        console.style.display = 'none';
-        
-        if (sforce.console.isInConsole()) { 
-            document.getElementById("j_id0:j_id4:Console").style.display = 'block';            
-        } else { 
-            document.getElementById("j_id0:j_id4:nonConsole").style.display = 'block';            
-        }
-        
-    }
     
     function callGenerateConsoleURL(urlPart, theTabName) {
         if(sforce.console.isInConsole()) {
@@ -46,8 +31,7 @@
     <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
         <div class="row" style="padding-top: 9px;">            
             <div width="25%" style="float: left;">
-                <apex:image id="nonConsole" value="{!$Resource.orderIconNonConsole}" width="33" height="33" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
-                <apex:image id="Console" value="{!$Resource.ConsoleOrderIcon}" width="33" height="33" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>                
+                <apex:image id="nonConsole" value="{!$Resource.ServiceRequestIcon}" width="33" height="33" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>                
             </div>
             <div width="75%" style="padding-top: 4px; margin-left: 37px;">
                 <apex:outputText style="font-size: 2em; font-weight: normal;" value="Service Request {!Order.OrderNumber}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
