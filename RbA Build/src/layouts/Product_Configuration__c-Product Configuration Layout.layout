@@ -283,10 +283,6 @@
                 <behavior>Edit</behavior>
                 <field>Minimum_Leg_Height_Fractions__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Peak_Height__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -296,6 +292,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Specialty_Width_to_Height_Ratio_Max__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Peak_Height_Min__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Peak_Height_Max__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -892,7 +896,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Perm_Applied_Int_Wood_Grille_Control__c</field>
+                <field>Applied_Grilles_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
