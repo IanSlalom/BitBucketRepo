@@ -18,14 +18,27 @@ public class RMS_serviceRequestListViewMgr {
     }
     public String listId {get;set;}
     
-        Public string propPickValSelected { get; set; }
+    Public string propPickValSelected { get; set; }
     
-        public List<SelectOption> getPickLstValue()
+    public List<SelectOption> getPickLstValue()
     {
         List<SelectOption> options = new List<SelectOption>(); 
+        options.add(new SelectOption(' ','------------- SELECT -------------'));
         options.add(new SelectOption('Service Requests - All','Service Requests - All'));
         options.add(new SelectOption('Service Requests - New','Service Requests - New'));
-        options.add(new SelectOption('Service Requests - Product Ordered','Service Requests - Product Ordered'));        
+        options.add(new SelectOption('Service Requests - Service Scheduled','Service Requests - Service Scheduled'));
+        options.add(new SelectOption('Service Requests - Customer Call Back','Service Requests - Customer Call Back'));
+        options.add(new SelectOption('Service Requests - Product Ordered','Service Requests - Product Ordered'));     
+        options.add(new SelectOption('Service Requests-Service To Be Scheduled','Service Requests-Service To Be Scheduled'));
+        options.add(new SelectOption('Service Requests - To Be Ordered','Service Requests - To Be Ordered'));   
+        options.add(new SelectOption('Service Requests - Service On Hold','Service Requests - Service On Hold'));
+        options.add(new SelectOption('Service Requests - Seasonal Service','Service Requests - Seasonal Service'));
+        options.add(new SelectOption('Service Requests - Seasonal Service','Service Requests - Service Complete'));
+        options.add(new SelectOption('Service Requests - Warranty Submitted','Service Requests - Warranty Submitted'));
+        options.add(new SelectOption('Service Requests - Warranty Accepted','Service Requests - Warranty Accepted'));
+        options.add(new SelectOption('Service Requests - Warranty Rejected','Service Requests - Warranty Rejected'));
+        options.add(new SelectOption('Service Requests - Cancelled','Service Requests - Cancelled'));
+        options.add(new SelectOption('Service Requests - Closed','Service Requests - Closed'));
         return options;
     }
     
@@ -37,5 +50,5 @@ public class RMS_serviceRequestListViewMgr {
         this.propPickValSelected = propPickValSelected;
     }
     
-
+    
 }

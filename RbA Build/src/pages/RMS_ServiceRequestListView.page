@@ -1,4 +1,13 @@
 <apex:page controller="RMS_serviceRequestListViewMgr">
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+     <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script type="text/javascript">
+
+
+    </script>
+    
     <style>
         img.pageTitleIcon{
         display:none;
@@ -8,32 +17,28 @@
         font-size: 1.1em;
         }
         
-        #j_id0:j_id2:out1:ALL:j_id11:OrderList_wrapper {
-        display: none;
-        }
-        
     </style>
     
     
     <br/>
     <br/>
-    <apex:pageBlock >
+        <apex:pageBlock >
         
         <apex:pageBlockSection >
             <apex:form >
                 <apex:outputLabel style="font-weight: bold; margin-right: 10px;">Select View: </apex:outputLabel>
-                <apex:selectList id="selectView" required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 150px;" label="Select View:">
+                <apex:selectList id="selectView" required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 225px;" label="Select View:">
                     <apex:selectOptions value="{!PickLstValue}" />
-                    <apex:actionSupport event="onchange" rerender="out1" />
+                    <apex:actionSupport event="onchange"/>
                 </apex:selectList> 
             </apex:form>
         </apex:pageBlockSection>
         
+        
         <br/>
         <apex:pageBlockSection id="out1" columns="1">
-            <c:RMS_requestListViewComponent listViewName="{!propPickValSelected}" id="dynamic" rendered="{!IF(propPickValSelected!=' ',true,false)}"/>
-            <c:RMS_requestListViewComponent listViewName="Service Requests - All" id="ALL"/>
-            <!--<c:RMS_requestListViewComponent listViewName="Service Reqeusts - Product Ordered" id="PO"/>-->
+            <c:RMS_requestListViewComponent listViewName="{!propPickValSelected}" id="dynamic"/>          	
         </apex:pageBlockSection>
     </apex:pageBlock>
+
 </apex:page>
