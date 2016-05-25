@@ -658,7 +658,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Permanently_Applied_Interior_Wood_Grille__c</field>
+                <field>Perm_Applied_Int_Wood_Grille__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
