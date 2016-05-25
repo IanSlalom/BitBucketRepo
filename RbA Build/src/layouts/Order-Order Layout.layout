@@ -390,6 +390,7 @@
         <fields>NAME</fields>
         <fields>Store_Finance_Program__c.NAME</fields>
         <fields>Amount_Financed__c</fields>
+        <fields>Expiration_Date__c</fields>
         <relatedList>Order_Financing__c.Related_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
