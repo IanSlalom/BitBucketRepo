@@ -658,6 +658,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Permanently_Applied_Interior_Wood_Grille__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Applied_Grilles__c</field>
             </layoutItems>
             <layoutItems>
