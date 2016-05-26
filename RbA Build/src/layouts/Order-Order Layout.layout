@@ -37,6 +37,10 @@
                 <behavior>Edit</behavior>
                 <field>Estimated_Install_Duration__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Unique_Identifier__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
