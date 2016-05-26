@@ -320,4 +320,52 @@ private class RMS_OrderTriggerHandlerTests {
 		System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
 		Test.stopTest();
 	}
+
+	@isTest static void testUpdateUniqueIdentifier(){
+		Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		Decimal orderNumBeforeUpdate = store.Active_Store_Configuration__r.Order_Number__c; 
+		System.assertNotEquals(store.Store_Number__c, null);
+		System.assertNotEquals(store.Active_Store_Configuration__r.Order_Number__c, null);
+		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
+								 from Order where accountId =: dwelling.Id 
+												  and Name = 'InstallScheduled'];
+		System.assertEquals(soldOrder.size(),1);
+
+		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+													Service_Type__c = 'Draft' );
+		Order newOrder2 = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+													Service_Type__c = 'Draft' );
+		List<Order> oList = new List<Order>{newOrder,newOrder2};
+		insert oList;
+		Test.startTest();
+		newOrder.Status = 'Ready to Order';
+		newOrder2.Status = 'Ready to Order';
+		update oList;
+		Test.stopTest();
+		oList= [Select Id, Unique_Identifier__c, Status from Order where Id in: oList];
+		String uniqueIDString = store.Store_Number__c + store.Active_Store_Configuration__r.Order_Number__c.toPlainString();
+        while(uniqueIdString.length() < 11){
+          uniqueIdString = uniqueIdString.substring(0,4) + '0' + uniqueIdString.substring(4);
+        }
+       
+		String uniqueIDString2 = store.Store_Number__c + (store.Active_Store_Configuration__r.Order_Number__c + 1).toPlainString();
+        while(uniqueIdString2.length() < 11){
+          uniqueIdString2 = uniqueIdString2.substring(0,4) + '0' + uniqueIdString2.substring(4);
+        }
+
+        for(Order o: oList){
+        	System.debug('UNIQUE ID' + o.Unique_Identifier__c);
+        	system.debug(uniqueIdString);
+        	system.debug(uniqueIdString2);
+        	System.assert(o.Unique_Identifier__c == uniqueIdString || o.Unique_Identifier__c == uniqueIdString2 );
+        }
+
+		store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		System.assertEquals(store.Active_Store_Configuration__r.Order_Number__c, orderNumBeforeUpdate + oList.size());
+		
+	}
+
 }
