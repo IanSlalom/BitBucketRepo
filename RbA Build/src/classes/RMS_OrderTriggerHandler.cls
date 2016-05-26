@@ -5,6 +5,7 @@ public with sharing class RMS_OrderTriggerHandler {
   private integer BatchSize = 0;
 
   public Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+  public ID CORORecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
 
   public RMS_OrderTriggerHandler(boolean isExecuting, integer size){
     m_isExecuting = isExecuting;
@@ -151,7 +152,7 @@ public with sharing class RMS_OrderTriggerHandler {
   public void updateUniqueIdentifier(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     List<Order> ordersToProcess = new List<Order>();
     for(Order o: newMap.values()){   
-      if(o.RecordTypeId == COROServiceId && o.Status != oldMap.get(o.Id).Status &&
+      if(o.RecordTypeId == CORORecordTypeId && o.Status != oldMap.get(o.Id).Status &&
           o.Status != 'Cancelled' && oldMap.get(o.Id).Status == 'Draft'){
           ordersToProcess.add(o); 
       }
