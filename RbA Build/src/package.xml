@@ -278,6 +278,7 @@
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
+        <members>Resource__c-Resource Layout</members>
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
