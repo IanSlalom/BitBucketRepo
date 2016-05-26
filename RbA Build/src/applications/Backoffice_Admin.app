@@ -10,4 +10,6 @@
     <tab>Finance_Program__c</tab>
     <tab>RbA_Work_Order__c</tab>
     <tab>RbA_Skills__c</tab>
+    <tab>Resource__c</tab>
+    <tab>Service_Request</tab>
 </CustomApplication>
