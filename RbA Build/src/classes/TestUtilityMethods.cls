@@ -90,7 +90,7 @@ public with sharing class TestUtilityMethods {
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
         	Location_Number__c = '777',
-        	Order_Number__c = 1
+        	Order_Number__c = 0000001
         	);
     	insert storeConfig;
 
@@ -149,7 +149,7 @@ public with sharing class TestUtilityMethods {
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
-        	Order_Number__c = 1
+        	Order_Number__c = 0000001
         	);
     	insert storeConfig;
 

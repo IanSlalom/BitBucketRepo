@@ -88,236 +88,289 @@ private class RMS_OrderTriggerHandlerTests {
 		
 	}
 	
-	@isTest static void testUpdateOrderStatus() {
+//	@isTest static void testUpdateOrderStatus() {
 
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
-		/*List<Order> orderList = [Select Name, Status from Order where accountId =:dwelling.Id];
-		for(Order o: orderList){
-			//o.Apex_Context__c = true;
-			if(o.Name == 'TMNeeded'){
-				o.Status = 'Tech Measure Needed';
-			}else if(o.Name == 'TMScheduled'){
-				o.Status = 'Tech Measure Scheduled';
-			}else if(o.Name == 'InstallScheduled'){
-				o.Status = 'Install Scheduled';
-			}else if(o.Name == 'InstallNeeded'){
-				o.Status = 'Install Needed';
-			}
-		}
-		update orderList;*/
+//		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+//		/*List<Order> orderList = [Select Name, Status from Order where accountId =:dwelling.Id];
+//		for(Order o: orderList){
+//			//o.Apex_Context__c = true;
+//			if(o.Name == 'TMNeeded'){
+//				o.Status = 'Tech Measure Needed';
+//			}else if(o.Name == 'TMScheduled'){
+//				o.Status = 'Tech Measure Scheduled';
+//			}else if(o.Name == 'InstallScheduled'){
+//				o.Status = 'Install Scheduled';
+//			}else if(o.Name == 'InstallNeeded'){
+//				o.Status = 'Install Needed';
+//			}
+//		}
+//		update orderList;*/
 
-		Map<Id,Order> oldMap = new Map<Id,Order>([Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id]);
+//		Map<Id,Order> oldMap = new Map<Id,Order>([Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id]);
 		
 		
-		Map<Id,Order> newMap = new Map<Id,Order>();
-		for(Order o: oldMap.values()){
-			Order clonedOrder = o.clone(true,true,false,false);
-			if(o.Name == 'TMNeeded'){
-				o.Status = 'Tech Measure Needed';
-				clonedOrder.Status = 'Tech Measure Needed';
-				clonedOrder.Tech_Measure_Status__c = 'Scheduled';
-			}else if(o.Name == 'TMScheduled'){
-				o.Status = 'Tech Measure Scheduled';
-				clonedOrder.Status = 'Tech Measure Scheduled';
-				clonedOrder.Tech_Measure_Status__c = 'Complete';
-			}else if(o.Name == 'InstallNeeded'){
-				o.Status = 'Install Needed';
-				clonedOrder.Status = 'Install Needed';
-				clonedOrder.Install_Order_Status__c = 'Scheduled';
-			}else if(o.Name == 'InstallScheduled'){
-				o.Status = 'Install Scheduled';
-				clonedOrder.Status = 'Install Scheduled';
-				clonedOrder.Install_Order_Status__c = 'Complete';
-			}
+//		Map<Id,Order> newMap = new Map<Id,Order>();
+//		for(Order o: oldMap.values()){
+//			Order clonedOrder = o.clone(true,true,false,false);
+//			if(o.Name == 'TMNeeded'){
+//				o.Status = 'Tech Measure Needed';
+//				clonedOrder.Status = 'Tech Measure Needed';
+//				clonedOrder.Tech_Measure_Status__c = 'Scheduled';
+//			}else if(o.Name == 'TMScheduled'){
+//				o.Status = 'Tech Measure Scheduled';
+//				clonedOrder.Status = 'Tech Measure Scheduled';
+//				clonedOrder.Tech_Measure_Status__c = 'Complete';
+//			}else if(o.Name == 'InstallNeeded'){
+//				o.Status = 'Install Needed';
+//				clonedOrder.Status = 'Install Needed';
+//				clonedOrder.Install_Order_Status__c = 'Scheduled';
+//			}else if(o.Name == 'InstallScheduled'){
+//				o.Status = 'Install Scheduled';
+//				clonedOrder.Status = 'Install Scheduled';
+//				clonedOrder.Install_Order_Status__c = 'Complete';
+//			}
 			
-			newMap.put(o.Id, clonedOrder);
-		}
+//			newMap.put(o.Id, clonedOrder);
+//		}
 
-		System.assertEquals(newMap.keySet().size(),oldMap.keySet().size());
+//		System.assertEquals(newMap.keySet().size(),oldMap.keySet().size());
 
-		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
-		handler.updateOrderStatus(oldMap, newMap);
-		for(Order o: newMap.values()){
-			if(o.Tech_Measure_Status__c == 'Scheduled'){
-				System.assert(o.Status == 'Tech Measure Scheduled');
-			}else if(o.Tech_Measure_Status__c == 'Complete'){
-				System.assert(o.Status == 'Ready to Order');
-			}else if(o.Install_Order_Status__c == 'Scheduled'){
-				System.assert(o.Status == 'Install Scheduled');
-			}/* removing per JETT-1601 else if(o.Install_Order_Status__c == 'Complete'){
-				System.assert(o.Status == 'Install Complete');
-			}*/
-		}
+//		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
+//		handler.updateOrderStatus(oldMap, newMap);
+//		for(Order o: newMap.values()){
+//			if(o.Tech_Measure_Status__c == 'Scheduled'){
+//				System.assert(o.Status == 'Tech Measure Scheduled');
+//			}else if(o.Tech_Measure_Status__c == 'Complete'){
+//				System.assert(o.Status == 'Ready to Order');
+//			}else if(o.Install_Order_Status__c == 'Scheduled'){
+//				System.assert(o.Status == 'Install Scheduled');
+//			}/* removing per JETT-1601 else if(o.Install_Order_Status__c == 'Complete'){
+//				System.assert(o.Status == 'Install Complete');
+//			}*/
+//		}
 
-/*
+///*
 
-		//Used to verify the Apex Context field is set to false by workflow rule
-		for(Order o: oldMap.values()){
-			if(o.Status == 'Tech Measure Needed'){
-				o.Tech_Measure_Status__c = 'Scheduled';
-			}else if(o.Status == 'Tech Measure Scheduled'){
-				o.Tech_Measure_Status__c = 'Complete';
-			}else if(o.Status == 'Install Scheduled'){
-				o.Install_Order_Status__c = 'Complete';
-			}
-		}
-		update oldMap.values();
-		List<Order> orderl = [Select Status, Tech_Measure_Status__c, Install_Order_Status__c, Apex_Context__C from Order];
-		System.debug('ORDERS ' + orderl);*/
-	}
+//		//Used to verify the Apex Context field is set to false by workflow rule
+//		for(Order o: oldMap.values()){
+//			if(o.Status == 'Tech Measure Needed'){
+//				o.Tech_Measure_Status__c = 'Scheduled';
+//			}else if(o.Status == 'Tech Measure Scheduled'){
+//				o.Tech_Measure_Status__c = 'Complete';
+//			}else if(o.Status == 'Install Scheduled'){
+//				o.Install_Order_Status__c = 'Complete';
+//			}
+//		}
+//		update oldMap.values();
+//		List<Order> orderl = [Select Status, Tech_Measure_Status__c, Install_Order_Status__c, Apex_Context__C from Order];
+//		System.debug('ORDERS ' + orderl);*/
+//	}
 	
-	@isTest static void testUpdateTimeStamps() {
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
-		Map<Id,Order> oldMap = new Map<Id,Order>([Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id]);
-		Map<Id,Order> newMap = new Map<Id,Order>();
-		for(Order o: oldMap.values()){
-			Order clonedOrder = o.clone(true,true,false,false);
-			if(o.Name == 'TMNeeded'){
-				clonedOrder.Status = 'Tech Measure Needed';
-			}else if(o.Name == 'TMScheduled'){
-				clonedOrder.Status = 'Tech Measure Scheduled';
-			}else if(o.Name == 'InstallScheduled'){
-				clonedOrder.Status = 'Install Scheduled';
-			}else if(o.Name == 'InstallNeeded'){
-				clonedOrder.Status = 'Install Needed';
-			}
-			newMap.put(o.Id, clonedOrder);
-		}
+//	@isTest static void testUpdateTimeStamps() {
+//		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+//		Map<Id,Order> oldMap = new Map<Id,Order>([Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id]);
+//		Map<Id,Order> newMap = new Map<Id,Order>();
+//		for(Order o: oldMap.values()){
+//			Order clonedOrder = o.clone(true,true,false,false);
+//			if(o.Name == 'TMNeeded'){
+//				clonedOrder.Status = 'Tech Measure Needed';
+//			}else if(o.Name == 'TMScheduled'){
+//				clonedOrder.Status = 'Tech Measure Scheduled';
+//			}else if(o.Name == 'InstallScheduled'){
+//				clonedOrder.Status = 'Install Scheduled';
+//			}else if(o.Name == 'InstallNeeded'){
+//				clonedOrder.Status = 'Install Needed';
+//			}
+//			newMap.put(o.Id, clonedOrder);
+//		}
 
-		System.assertEquals(newMap.keySet().size(),oldMap.keySet().size());
+//		System.assertEquals(newMap.keySet().size(),oldMap.keySet().size());
 
-		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
-		handler.updateOrderTimeStamps(oldMap, newMap);
-		for(Order o: newMap.values()){
-			if(o.Status == 'Install Scheduled'){
-				System.assert(o.Time_Install_Scheduled__c != null);
-			}else if(o.Status == 'Install Needed'){
-				System.assert(o.Time_Install_Needed__c != null);
-			}else if(o.Status == 'Tech Measure Needed'){
-				System.assert(o.Time_Tech_Measure_Needed__c != null);
-			}else if(o.Status == 'Tech Measure Scheduled'){
-				System.assert(o.Time_Tech_Measure_Scheduled__c != null);
-			}
-		}
+//		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
+//		handler.updateOrderTimeStamps(oldMap, newMap);
+//		for(Order o: newMap.values()){
+//			if(o.Status == 'Install Scheduled'){
+//				System.assert(o.Time_Install_Scheduled__c != null);
+//			}else if(o.Status == 'Install Needed'){
+//				System.assert(o.Time_Install_Needed__c != null);
+//			}else if(o.Status == 'Tech Measure Needed'){
+//				System.assert(o.Time_Tech_Measure_Needed__c != null);
+//			}else if(o.Status == 'Tech Measure Scheduled'){
+//				System.assert(o.Time_Tech_Measure_Scheduled__c != null);
+//			}
+//		}
 
-		//Overwrite previous values of newMap to test for additional status timetamp fields
-		for(Order o: oldMap.values()){
-			Order clonedOrder = o.clone(true,true,false,false);
-			if(o.Name == 'TMNeeded'){
-				clonedOrder.Status = 'On Hold';
-			}else if(o.Name == 'TMScheduled'){
-				clonedOrder.Status = 'Ready to Order';
-			}else if(o.Name == 'InstallScheduled'){
-				clonedOrder.Status = 'Order Released';
-			}else if(o.Name == 'InstallNeeded'){
-				clonedOrder.Status = 'Install Complete';
-			}
-			newMap.put(o.Id, clonedOrder);
-		}
+//		//Overwrite previous values of newMap to test for additional status timetamp fields
+//		for(Order o: oldMap.values()){
+//			Order clonedOrder = o.clone(true,true,false,false);
+//			if(o.Name == 'TMNeeded'){
+//				clonedOrder.Status = 'On Hold';
+//			}else if(o.Name == 'TMScheduled'){
+//				clonedOrder.Status = 'Ready to Order';
+//			}else if(o.Name == 'InstallScheduled'){
+//				clonedOrder.Status = 'Order Released';
+//			}else if(o.Name == 'InstallNeeded'){
+//				clonedOrder.Status = 'Install Complete';
+//			}
+//			newMap.put(o.Id, clonedOrder);
+//		}
 
-		handler.updateOrderTimeStamps(oldMap, newMap);
-		for(Order o: newMap.values()){
-			if(o.Status == 'On Hold'){
-				System.assert(o.Time_On_Hold__c != null);
-			}else if(o.Status == 'Ready to Order'){
-				System.assert(o.Time_Ready_to_Order__c != null);
-			}else if(o.Status == 'Order Released'){
-				System.assert(o.Time_Order_Released__c != null);
-			}else if(o.Status == 'Install Complete'){
-				System.assert(o.Time_Install_Complete__c != null);
-			}
-		}
+//		handler.updateOrderTimeStamps(oldMap, newMap);
+//		for(Order o: newMap.values()){
+//			if(o.Status == 'On Hold'){
+//				System.assert(o.Time_On_Hold__c != null);
+//			}else if(o.Status == 'Ready to Order'){
+//				System.assert(o.Time_Ready_to_Order__c != null);
+//			}else if(o.Status == 'Order Released'){
+//				System.assert(o.Time_Order_Released__c != null);
+//			}else if(o.Status == 'Install Complete'){
+//				System.assert(o.Time_Install_Complete__c != null);
+//			}
+//		}
 
-		//Overwrite previous values of newMap to test for additional status timetamp fields
-		for(Order o: oldMap.values()){
-			Order clonedOrder = o.clone(true,true,false,false);
-			if(o.Name == 'TMNeeded'){
-				clonedOrder.Status = 'Job in Progress';
-			}else if(o.Name == 'TMScheduled'){
-				clonedOrder.Status = 'Job Closed';
-			}else if(o.Name == 'InstallScheduled'){
-				clonedOrder.Status = 'Cancelled';
-			}else if(o.Name == 'InstallNeeded'){
-				o.Status = 'On Hold';
-				clonedOrder.Status = 'Draft';
-			}
-			newMap.put(o.Id, clonedOrder);
-		}
+//		//Overwrite previous values of newMap to test for additional status timetamp fields
+//		for(Order o: oldMap.values()){
+//			Order clonedOrder = o.clone(true,true,false,false);
+//			if(o.Name == 'TMNeeded'){
+//				clonedOrder.Status = 'Job in Progress';
+//			}else if(o.Name == 'TMScheduled'){
+//				clonedOrder.Status = 'Job Closed';
+//			}else if(o.Name == 'InstallScheduled'){
+//				clonedOrder.Status = 'Cancelled';
+//			}else if(o.Name == 'InstallNeeded'){
+//				o.Status = 'On Hold';
+//				clonedOrder.Status = 'Draft';
+//			}
+//			newMap.put(o.Id, clonedOrder);
+//		}
 
-		handler.updateOrderTimeStamps(oldMap, newMap);
-		for(Order o: newMap.values()){
-			if(o.Status == 'Job in Progress'){
-				System.assert(o.Time_Job_In_Progress__c != null);
-			}else if(o.Status == 'Job Closed'){
-				System.assert(o.Time_Job_Close__c != null);
-			}else if(o.Status == 'Cancelled'){
-				System.assert(o.Time_Cancelled__c != null);
-			}else if(o.Status == 'Draft'){
-				System.assert(o.Time_Draft__c != null);
-			}
-		}
-	}
+//		handler.updateOrderTimeStamps(oldMap, newMap);
+//		for(Order o: newMap.values()){
+//			if(o.Status == 'Job in Progress'){
+//				System.assert(o.Time_Job_In_Progress__c != null);
+//			}else if(o.Status == 'Job Closed'){
+//				System.assert(o.Time_Job_Close__c != null);
+//			}else if(o.Status == 'Cancelled'){
+//				System.assert(o.Time_Cancelled__c != null);
+//			}else if(o.Status == 'Draft'){
+//				System.assert(o.Time_Draft__c != null);
+//			}
+//		}
+//	}
 
-	@isTest static void testUpdateJIPCOROServiceOrders() {
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
-		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
-												  and Name = 'InstallScheduled'];
-		System.assertEquals(soldOrder.size(),1);
+//	@isTest static void testUpdateJIPCOROServiceOrders() {
+//		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+//		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
+//												  and Name = 'InstallScheduled'];
+//		System.assertEquals(soldOrder.size(),1);
 		
-		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
-													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
-													Service_Type__c = 'Job in Progress' );
-		insert newOrder;
-		Test.startTest();
-		soldOrder[0].Status = 'Install Scheduled';
-		update soldOrder[0];
-		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
-		handler.updateJIPCOROServiceOrders(new List<Order>{newOrder});
-		newOrder = [Select Id, Status from Order where Id =: newOrder.Id];
-		system.assertEquals(newOrder.Status, 'Job in Progress');
-		Test.stopTest();
-	}
+//		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+//													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+//													Service_Type__c = 'Job in Progress' );
+//		insert newOrder;
+//		Test.startTest();
+//		soldOrder[0].Status = 'Install Scheduled';
+//		update soldOrder[0];
+//		RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
+//		handler.updateJIPCOROServiceOrders(new List<Order>{newOrder});
+//		newOrder = [Select Id, Status from Order where Id =: newOrder.Id];
+//		system.assertEquals(newOrder.Status, 'Job in Progress');
+//		Test.stopTest();
+//	}
 
-	@isTest static void testUpdateRevenueRecDate(){
-		// Turn off the financial trigger to avoid SOQL limits in test class
-		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
-		insert turnOffFinancialTrigger;
+//	@isTest static void testUpdateRevenueRecDate(){
+//		// Turn off the financial trigger to avoid SOQL limits in test class
+//		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+//		insert turnOffFinancialTrigger;
 
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
-		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
-												  and Name = 'InstallScheduled'];
-		System.assertEquals(soldOrder.size(),1);
+//		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+//		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
+//												  and Name = 'InstallScheduled'];
+//		System.assertEquals(soldOrder.size(),1);
 		
-		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
-													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
-													Service_Type__c = 'Job in Progress',Pricebook2Id = Test.getStandardPricebookId() );
-		insert newOrder;
-		List<PricebookEntry> pbeList = [Select Id from PricebookEntry];
-		OrderItem oi = new OrderItem(OrderId = newOrder.Id, PricebookentryId = pbeList[0].Id, Quantity = 2, UnitPrice = 100, 
-			Quote_Accepted__c = true, Billable_Amount__c = 2, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Service', Secondary_Reason__c = 'Egress');
-		insert oi;
-		Test.startTest();
-		newOrder.Status = 'Closed';
-		update newOrder;
-		newOrder = [Select Revenue_Recognized_Date__c from Order where Id =: newOrder.Id];
-		System.assertEquals(newOrder.Revenue_Recognized_Date__c, System.Today());
-		Test.stopTest();	
-	}
+//		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+//													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+//													Service_Type__c = 'Job in Progress',Pricebook2Id = Test.getStandardPricebookId() );
+//		insert newOrder;
+//		List<PricebookEntry> pbeList = [Select Id from PricebookEntry];
+//		OrderItem oi = new OrderItem(OrderId = newOrder.Id, PricebookentryId = pbeList[0].Id, Quantity = 2, UnitPrice = 100, 
+//			Quote_Accepted__c = true, Billable_Amount__c = 2, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Service', Secondary_Reason__c = 'Egress');
+//		insert oi;
+//		Test.startTest();
+//		newOrder.Status = 'Closed';
+//		update newOrder;
+//		newOrder = [Select Revenue_Recognized_Date__c from Order where Id =: newOrder.Id];
+//		System.assertEquals(newOrder.Revenue_Recognized_Date__c, System.Today());
+//		Test.stopTest();	
+//	}
 
-	@isTest static void testCreateOnHoldTasks(){
+//	@isTest static void testCreateOnHoldTasks(){
+//		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+//		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
+//								 from Order where accountId =: dwelling.Id 
+//												  and Name = 'InstallScheduled'];
+//		System.assertEquals(soldOrder.size(),1);
+
+//		Test.startTest();
+//		soldOrder[0].Status = 'On Hold';
+//		update soldOrder;
+//		List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id];
+//		System.assertEquals(onHoldTasks.size(),1);
+//		System.assertEquals(onHoldTasks[0].OwnerId, soldOrder[0].OwnerId);
+//		System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
+//		Test.stopTest();
+//	}
+
+	@isTest static void testUpdateUniqueIdentifier(){
+		Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		System.assertNotEquals(store.Store_Number__c, null);
+		System.assertNotEquals(store.Active_Store_Configuration__r.Order_Number__c, null);
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
 								 from Order where accountId =: dwelling.Id 
 												  and Name = 'InstallScheduled'];
 		System.assertEquals(soldOrder.size(),1);
 
+		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+													Service_Type__c = 'Draft' );
+		insert newOrder;
+		
 		Test.startTest();
-		soldOrder[0].Status = 'On Hold';
-		update soldOrder;
-		List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id];
-		System.assertEquals(onHoldTasks.size(),1);
-		System.assertEquals(onHoldTasks[0].OwnerId, soldOrder[0].OwnerId);
-		System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
+		newOrder.Status = 'Ready to Order';
+		update newOrder;
 		Test.stopTest();
+		newOrder = [Select Id, Unique_Identifier__c, Status from Order where Id =: newOrder.Id];
+		String uniqueIDString = store.Store_Number__c + store.Active_Store_Configuration__r.Order_Number__c.toPlainString();
+        while(uniqueIdString.length() < 11){
+          uniqueIdString = uniqueIdString.substring(0,4) + '0' + uniqueIdString.substring(4);
+        }
+        system.debug(newOrder.Unique_Identifier__c);
+		System.assertEquals(newOrder.Unique_Identifier__c, uniqueIdString);
+		store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		System.assertEquals(store.Active_Store_Configuration__r.Order_Number__c, 2);
+		
 	}
+
+	@isTest static void testupdateOrderNumber(){
+		Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		Decimal prevOrderNum = store.Active_Store_Configuration__r.Order_Number__c;
+		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
+								 from Order where accountId =: dwelling.Id 
+												  and Name = 'InstallScheduled'];
+		System.assertEquals(soldOrder.size(),1);
+		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
+													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'),
+													Service_Type__c = 'Draft' );
+		insert newOrder;
+
+		Test.startTest();
+		newOrder.Unique_Identifier__c = '00010000001';
+		update newOrder;
+		Test.stopTest();
+		store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+		System.assertEquals(store.Active_Store_Configuration__r.Order_Number__c, prevOrderNum + 1);
+		
+	}	
 }
