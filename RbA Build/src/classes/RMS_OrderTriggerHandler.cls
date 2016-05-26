@@ -36,7 +36,6 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public void OnAfterUpdate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     createOnHoldTasks(oldMap, newMap);
-    updateOrderNumber(oldMap,newMap);
   }
 
   /*  
@@ -174,6 +173,7 @@ public with sharing class RMS_OrderTriggerHandler {
 
     //Lock the Store Configuration records to prevent another transaction from altering the Order Number
     Map<Id,Store_Configuration__c> configsToLock = new Map<Id,Store_Configuration__c>([Select Id, Order_Number__c from Store_Configuration__c where Id in: storeConfigIds for update]);
+
     for(Order o: [SELECT Id, Store_Location__r.Store_Number__c, Store_Location__r.Active_Store_Configuration__c FROM Order  WHERE Id in: ordersToProcess 
                   AND Store_Location__r.Store_Number__c != null AND Store_Location__r.Active_Store_Configuration__c in: configsToLock.keyset()]){
         String storeNum = o.Store_Location__r.Store_Number__c;
@@ -185,30 +185,12 @@ public with sharing class RMS_OrderTriggerHandler {
           uniqueIdString = uniqueIdString.substring(0,4) + '0' + uniqueIdString.substring(4);
         }
         newMap.get(o.Id).Unique_Identifier__c = uniqueIdString;
+        configsToLock.get(o.Store_Location__r.Active_Store_Configuration__c).Order_Number__c +=1;
     }
+    update configsToLock.values();
   }
 
-  public void updateOrderNumber(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
-    List<Order> ordersToProcess = new List<Order>();
-    for(Order o: newMap.values()){   
-      if(o.RecordTypeId == COROServiceId && o.Unique_Identifier__c != oldMap.get(o.Id).Unique_Identifier__c){
-          ordersToProcess.add(o); 
-      }
-    }
-
-    Set<Id> storeConfigIds = new Set<Id>();
-    if(!ordersToProcess.isEmpty()){
-      for(Order o: [SELECT Id, Store_Location__r.Active_Store_Configuration__c FROM Order  WHERE Id in: ordersToProcess]){
-        storeConfigIds.add(o.Store_Location__r.Active_Store_Configuration__c);
-      }
-      List<Store_Configuration__c> configsToUpdate = [Select Id, Order_Number__c from Store_Configuration__c where Id in: storeConfigIds for update];
-      for(Store_Configuration__c config : configsToUpdate){
-        config.Order_Number__c += 1;
-      }
-      update configsToUpdate;
-
-    }
-
-  }
+  
+  
   
 }
