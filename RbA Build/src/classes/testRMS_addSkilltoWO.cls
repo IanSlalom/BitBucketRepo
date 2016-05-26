@@ -95,6 +95,10 @@ public with sharing class testRMS_addSkilltoWO {
             Name = 'Skill 2'
         );
         skillsToInsert.add(rs2);
+        RbA_Skills__c rs3 = new RbA_Skills__c(
+            Name = 'Install'
+        );
+        skillsToInsert.add(rs3);
         insert skillsToInsert;
         
         List<Product_Skill__c> pskills = new List<Product_Skill__c>();
@@ -122,8 +126,20 @@ public with sharing class testRMS_addSkilltoWO {
             Work_Order_Type__c = 'Install'
         );
         wosToInsert.add(rwo);
+        
+        RbA_Work_Order__c rwo2 = new RbA_Work_Order__c(
+            recordTypeId=UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c'),
+            Account__c = dwelling1.id,
+            Contact__c = contact1.id,
+            Work_Order_Status__c = 'To be Scheduled',
+            Work_Order_Type__c = 'Install'
+        );
+        wosToInsert.add(rwo2);
+        
         insert wosToInsert;
         
+        rwo2.Sold_Order__c = order.Id;
+        update rwo2;
         
     }
     

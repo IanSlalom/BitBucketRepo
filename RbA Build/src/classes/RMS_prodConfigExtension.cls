@@ -98,6 +98,13 @@ public class RMS_prodConfigExtension {
 				mode = 'v';
 			}
 		}
+
+		if(ApexPages.currentPage().getParameters().get('extWidthWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extWidthWarning'))); 
+		}
+		if(ApexPages.currentPage().getParameters().get('extHeightWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extHeightWarning'))); 
+		}
 	}
 
 	/******* public properties  *****************/
@@ -182,7 +189,7 @@ public class RMS_prodConfigExtension {
 				return null;
 			
 			// retrieves fields from the master product makeability based on the master product id  
-			lMasterProduct = [SELECT Id, Name
+			lMasterProduct = [SELECT Id, Name, Family
 															FROM Product2
 															WHERE Id =: masterProductId
 					
@@ -331,6 +338,21 @@ public class RMS_prodConfigExtension {
 		}	
 		private set;		  
 	}
+
+	/******* property for the number of Sashes  *****************/
+	public  Integer numSashes  {
+		get
+		{   
+			if (numSashes != null) return numSashes;
+			if (prodConfig.mpc.Number_of_Sashes__c != null && prodConfig.mpc.Number_of_Sashes__c.isNumeric()){
+				numSashes = Integer.valueOf(prodConfig.mpc.Number_of_Sashes__c);
+			}else{
+				numSashes = 0;
+			}
+			return numSashes;
+		}	
+		private set;		  
+	}
 	
 	/******* Set up ProductMaster PickList Items  *****************/
 	private static transient List<SelectOption> lMasterProductItems;
@@ -360,13 +382,36 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/*** Color Configuration Records *********/
+	private static transient List<Color_Configuration__c> lColorConfigs;
+	public List<Color_Configuration__c> colorConfigs{
+		get
+		{
+			if(lColorConfigs == null){
+				lColorConfigs = [Select Exterior_Color__c, Interior_Color__c, Product_Configuration__c from Color_Configuration__c WHERE Product_Configuration__c =: masterProductConfig.Id];
+			}
+			return lColorConfigs;
+		}
+	}
+
 	/******* Set up Exterior Color Items  *****************/
 	private static transient List<SelectOption> lExteriorColorItems;
 	public List<SelectOption> exteriorColorItems{
 		get
 		{   
 			if (lExteriorColorItems == null) {
-				lExteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Color__c);
+				Set<String> extColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Exterior_Color__c != null){
+						extColors.add(cc.Exterior_Color__c);
+					}
+				}
+				String extColorsString = '';
+				for(String color: extColors){
+					extColorsString += color + ';';
+				}
+				lExteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(extColorsString);
+
 			}			   
 			return lExteriorColorItems;
 		}
@@ -377,9 +422,23 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> interiorColorItems{
 		get
 		{   
-			if (lInteriorColorItems == null) {
-				lInteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Color__c);
-			}
+			if (interiorColorItems == null) {
+				Set<String> intColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Interior_Color__c != null){
+						for (String c : cc.Interior_Color__c.split(';')) {
+					   		intColors.add(c);
+					   	}
+					}
+				}
+				String intColorsString = '';
+				for(String color: intColors){
+					intColorsString += color + ';';
+				}
+
+				lInteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(intColorsString);
+
+			}			   
 			return lInteriorColorItems;
 		}
 	}
@@ -926,29 +985,6 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
-	/******* Interior Pre Finish Items  *****************/
-	private static transient List<SelectOption> lInteriorExtensionJambKitItems;
-	public List<SelectOption> InteriorExtensionJambKitItems{
-		get
-		{   
-			if (lInteriorExtensionJambKitItems == null) {
-				lInteriorExtensionJambKitItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Extension_Jamb_Kit__c);
-			}
-			return lInteriorExtensionJambKitItems;
-		}
-	}
-	
-	/******* Exterior Door Jamb Items  *****************/
-	private static transient List<SelectOption> lExteriorDoorJambItems;
-	public List<SelectOption> ExteriorDoorJambItems{
-		get
-		{   
-			if (lExteriorDoorJambItems == null) {
-				lExteriorDoorJambItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Door_Jamb__c);
-			}
-			return lExteriorDoorJambItems;
-		}
-	}
 	
 	/******* Exterior Frame Depth Items  *****************/
 	private static transient List<SelectOption> lExteriorFrameDepthItems;
@@ -974,17 +1010,6 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 	
-	/******* Exterior Keyed Lock Items  *****************/
-	private static transient List<SelectOption> lExteriorKeyedLockItems;
-	public List<SelectOption> ExteriorKeyedLockItems{
-		get
-		{   
-			if (lExteriorKeyedLockItems == null) {
-				lExteriorKeyedLockItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Keyed_Lock__c);
-			}
-			return lExteriorKeyedLockItems;
-		}
-	} 
 	
 
 
@@ -1088,6 +1113,12 @@ public class RMS_prodConfigExtension {
 	Map<String, String> m = p.getParameters();
     m.put('mode', 'v');
     m.put('id', orderLineItem.Id);
+    if(orderLineItem.Extended_Width_Warning__c){
+		m.put('extWidthWarning',masterProductConfig.Width_Message__c);
+	}
+    if(orderLineItem.Extended_Height_Warning__c){
+    	m.put('extHeightWarning',masterProductConfig.Height_Message__c);
+    }
 	p.setRedirect(true);
 
 	return p;	}
@@ -1234,6 +1265,16 @@ public class RMS_prodConfigExtension {
 			oI.Glazing_S3__c = null;	
 			oI.Glass_Pattern_S3__c = null; 
 			oI.Tempered_S3__c = false;
+		}
+		//JETT-2171 If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
+		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2' || newProdConfig.Number_of_Sashes__c == '3'){
+			oI.Grille_Pattern_S4__c = null;
+			oI.Lites_Wide_S4__c = null;	
+			oI.Lites_High_S4__c = null;	
+			oI.Custom_Grille_Details_S4__c	= null;
+			oI.Glazing_S4__c = null;	
+			oI.Glass_Pattern_S4__c = null; 
+			oI.Tempered_S4__c = false;
 		}
 
 		return oI;

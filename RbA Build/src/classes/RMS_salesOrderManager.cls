@@ -70,6 +70,8 @@ public with sharing class RMS_salesOrderManager {
 			List<OpportunityContactRole> primaryContacts = [select Id, ContactId, OpportunityId, Contact.FirstName, Contact.LastName, isPrimary
 				from OpportunityContactRole where OpportunityId in :closedWonOpportunitiesIds and isPrimary = true];
 
+			//Get the attachments for the closed Opportunities
+			List<Attachment> attachments = [Select Id, Name, Body, ParentId,OwnerId, Description, IsPrivate from Attachment Where ParentId in: closedWonOpportunitiesIds];
 			// create the orders from the quotes
 			List<Order> newOrders = createOrders(soldQuoteList, primaryContacts);
 			if (newOrders.size() > 0) {
@@ -94,6 +96,19 @@ public with sharing class RMS_salesOrderManager {
 					List<Order_Financing__c> ofList = createOrderFinancing(qfList, newOrders);
 					if (ofList.size() > 0) {
 						insert ofList;
+					}
+				}
+
+				//Insert the new attachments to the orders and delete the old attachments
+				if(attachments.size() > 0){
+					try{
+						List<Attachment> attList = reparentAttachments(newOrders,attachments);
+						if(attList.size() > 0){
+							insert attList;
+							delete attachments;
+						}
+					}catch(Exception e){
+						System.debug('Exception occurred reparenting attachments in RMS_salesOrderManager.cls: ' + e.getMessage());
 					}
 				}
 			}
@@ -253,4 +268,31 @@ public with sharing class RMS_salesOrderManager {
 		}
 		return ofList;
 	}	 
+
+	/* @method: reparentAttachments(List<Order> orderList, List<Attachment> attachmentList)
+	 * @param: List<Order> orderList - list of Orders for attachments to reparent to
+	 * @param: List<Attachment> attachmentList - list of Attachments for the closed Opportunities
+	 * @return: List<Attachment> a list of Attachments to insert
+	 */
+	public List<Attachment> reparentAttachments(List<Order> orderList, List<Attachment> attachmentList){
+
+		List<Attachment> attachmentsToInsert = new List<Attachment>();
+		Map<Id,Order> mapOpportunityIdToOrder = new Map<Id,Order>();
+		for(Order o: orderList){
+			mapOpportunityIdToOrder.put(o.OpportunityId,o);
+		}
+		for(Attachment a: attachmentList){
+			if(mapOpportunityIdToOrder.containsKey(a.ParentId)){
+				attachmentsToInsert.add(new Attachment(Name = a.Name, 
+														Body = a.Body, 
+														OwnerId = a.OwnerId, 
+														ParentId = mapOpportunityIdToOrder.get(a.ParentId).Id, 
+														IsPrivate = a.IsPrivate,
+														Description = a.Description ));
+			}
+		}
+		
+		return attachmentsToInsert;
+
+	}
 }

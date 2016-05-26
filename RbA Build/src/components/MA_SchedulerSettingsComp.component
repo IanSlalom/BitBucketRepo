@@ -168,6 +168,13 @@
                         $('.esri-verify-success').show();
                     }
 
+                    if (response.showEsriCredentials) {
+                        $('.esriCredentials').show();
+                    }
+                    else {
+                        $('.esriCredentials').hide();
+                    }
+
                 	var storeHours = jsonSettings['storeHours'];
                 	if (storeHours != undefined && storeHours != null) {
 	                	for (var dayOfWeek in storeHours) {
@@ -622,7 +629,7 @@
 
         function closeSettingsModal() {
             $('#storeSettingsId, #timezoneOptions, #storeSettingsEsri #esriClientId, #storeSettingsEsri #esriClientSecret').val('');
-            $('#settingsModal').hide();
+            $('#settingsModal, .esriCredentials').hide();
 
             if (!isBatchResources) {
                 $('#loaderModal').hide();
@@ -1011,8 +1018,8 @@
 	                                        </div> 
 	                                    </div>
 	                                </div> 
-	                                <div class="ma-section-title background--dark-gray">Esri License Key</div>
-	                                <div id="storeSettingsEsri">
+	                                <div class="ma-section-title background--dark-gray esriCredentials">Esri License Key</div>
+	                                <div id="storeSettingsEsri" class="esriCredentials">
                 						<div class="">
                                             <div>
                     						    <label class="ma-input-label">Client Id:</label>

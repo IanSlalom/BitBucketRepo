@@ -122,7 +122,6 @@ public with sharing class testRMS_assignServiceTaskOwner {
     }
     
     static testmethod void assignServiceTaskOwner(){
-        createTestRecords();
         
         RbA_Work_Order__c order = [SELECT Id FROM RbA_Work_Order__c WHERE Work_Order_Type__c = 'Service']; 
         

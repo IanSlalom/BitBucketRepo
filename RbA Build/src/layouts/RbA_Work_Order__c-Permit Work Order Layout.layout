@@ -5,7 +5,7 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Basics</label>
+        <label>Information Details</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>

@@ -279,6 +279,10 @@ private class RMS_OrderTriggerHandlerTests {
 	}
 
 	@isTest static void testUpdateRevenueRecDate(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
 		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
 												  and Name = 'InstallScheduled'];
