@@ -176,8 +176,11 @@ public with sharing class RMS_OrderTriggerHandler {
     Map<Id,Store_Configuration__c> configsToLock = new Map<Id,Store_Configuration__c>([Select Id, Order_Number__c from Store_Configuration__c where Id in: storeConfigIds for update]);
     for(Order o: [SELECT Id, Store_Location__r.Store_Number__c, Store_Location__r.Active_Store_Configuration__c FROM Order  WHERE Id in: ordersToProcess 
                   AND Store_Location__r.Store_Number__c != null AND Store_Location__r.Active_Store_Configuration__c in: configsToLock.keyset()]){
-       
-        String uniqueIDString = o.Store_Location__r.Store_Number__c + configsToLock.get(o.Store_Location__r.Active_Store_Configuration__c).Order_Number__c.toPlainString();
+        String storeNum = o.Store_Location__r.Store_Number__c;
+        while(storeNum.length()<4){
+          storeNum = '0'+storeNum;
+        }
+        String uniqueIDString = storeNum + configsToLock.get(o.Store_Location__r.Active_Store_Configuration__c).Order_Number__c.toPlainString();
         while(uniqueIdString.length() < 11){
           uniqueIdString = uniqueIdString.substring(0,4) + '0' + uniqueIdString.substring(4);
         }
