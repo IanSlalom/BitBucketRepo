@@ -109,7 +109,7 @@ public with sharing class testRMS_OrderItemExtension {
     
     static testmethod void saveCloseTabTest(){
         createTestRecords();
-        
+        Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
         OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c FROM OrderItem WHERE OrderId =: order.id];        
         
@@ -120,12 +120,13 @@ public with sharing class testRMS_OrderItemExtension {
         OrderItem oi = [select id,Charge_Cost_To__c from OrderItem where id =: orderItem.id All rows];
         System.Assertequals(oi.Charge_Cost_To__c, 'Local - Remake');
         system.assertEquals(false, ApexPages.hasMessages());
-                        
+          Test.stopTest();              
     }
     
     static testmethod void saveCloseTabTestError(){
         createTestRecords();
         
+        Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
         Id pricebookId = Test.getStandardPricebookId();
@@ -134,7 +135,7 @@ public with sharing class testRMS_OrderItemExtension {
         PricebookEntry pricebookEntryServ = [SELECT Id FROM PricebookEntry WHERE Product2Id = :servProduct.id];
         OrderItem orderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = order.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100);
         
-        Test.startTest();
+        
         Test.setCurrentPage(Page.RMS_editServiceProduct);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
         RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);

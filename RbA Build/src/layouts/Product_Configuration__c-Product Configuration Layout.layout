@@ -54,6 +54,26 @@
                 <behavior>Edit</behavior>
                 <field>Is_Leg_Height_L_or_R_Leg_Height_Control__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Leg_Height_L_or_R_Leg_Height__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Exterior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Leg_Height_Interior_Fraction__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>EJ_Kerf_Control__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -263,10 +283,6 @@
                 <behavior>Edit</behavior>
                 <field>Minimum_Leg_Height_Fractions__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Peak_Height__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -276,6 +292,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Specialty_Width_to_Height_Ratio_Max__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Peak_Height_Min__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Peak_Height_Max__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -663,14 +687,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Interior_Extension_Jamb_Kit__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Exterior_Door_Jamb__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Exterior_Frame_Depth__c</field>
             </layoutItems>
             <layoutItems>
@@ -682,10 +698,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Door_Sill_Color__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Exterior_Keyed_Lock__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -888,6 +900,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Applied_Grilles_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Right_Leg_Fraction_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -996,10 +1012,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Exterior_Keyed_Lock_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Standard_Size_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

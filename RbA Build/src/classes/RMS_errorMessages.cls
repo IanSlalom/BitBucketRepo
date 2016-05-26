@@ -5,7 +5,6 @@ public with sharing class RMS_errorMessages {
 	*******************************************************/
 	public static final String SHIP_DATE_REQUIRED = 'Please enter an estimated ship date before changing the status to Received.'; 
 	public static final String UNIT_COST_REQUIRED = 'Please enter a unit cost for all products before changing the status to Received.';
-	public static final String DATA_LOADING_CUSTOM_SETTING_REQUIRED = 'Please populate the \'Data Loading Profile ID\' in Custom Settings.';
 	public static final String ADD_PRODUCT_FIELDS_REQUIRED = 'Please enter an item name and quantity before adding a new product.';
 	public static final String PRICEBOOK_ENTRY_NOT_FOUND = 'A pricebook entry could not be found for this product. Please contact your system admin for help.';
 	public static final String ADD_PRODUCT_EXCEPTION = 'The system was unable to add the item to the purchase order. Please contact your system admin for help.';
@@ -52,6 +51,8 @@ public with sharing class RMS_errorMessages {
 	public static final String WIDTH_TO_HEIGHT_CAP = '&bull; The width and height you entered exceeds the width to height cap.';
 	public static final String EXTENDED_MAX = '&bull; The height and width you entered exceeds the extended max height & width.';
 	public static final String PEAK_HEIGHT = '&bull; The left and right leg difference is greater then the width times the product\'s peak height.'; 
+	public static final String PEAK_HEIGHT_MAX = '&bull; The left and right leg difference is greater than the width times the product\'s peak height max.'; 
+	public static final String PEAK_HEIGHT_MIN = '&bull; The left and right leg difference is less than the width times the product\'s peak height min.'; 
 	public static final String GLASS_MAX_SQ_FEET = '&bull; The height and width you have entered[enteredValue] exceeds the max square feet[requiredValue] allowed for this product.';
 	public static final String RECTANGULAR_AREA_LIMITATION = '&bull; The height and width you have entered[enteredValue] exceeds the rectangular area limitation[requiredValue] allowed for this product.';
 	public static final String WIDTH_TO_HEIGHT_RATIO_MAX = '&bull; The height and width you have entered[enteredValue] exceeds the width to height ratio max[requiredValue] for this product.';
@@ -163,6 +164,8 @@ public with sharing class RMS_errorMessages {
 	/*******************************************************
 					Misc Errors 
 	*******************************************************/
+	public static final String CUSTOM_SETTING_REQUIRED = 'Require custom settings are missing: \'Data Loading Profile ID\' or \'Unassigned Account Id\'.';
+	public static final String DATA_LOADING_CUSTOM_SETTING_REQUIRED = 'Please populate the \'Data Loading Profile ID\' in Custom Settings.';
 	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
 	public static final String FIELD_IS_LOCKED = '&bull;The [field] field can not be changed in the current status.';
 	public static final String WORK_ORDERS_WITH_OPEN_EVENTS = 'Please close appointments within any Tech Measure or Install Work Orders before cancelling this order.';

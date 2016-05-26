@@ -166,10 +166,12 @@ global with sharing class MA_RoutingSchedulerController {
             List<MA_Scheduler_Event__c> maEventsToCreate = new List<MA_Scheduler_Event__c>();
             Map<Id, MA_Scheduler_Event__c> woToMaEventMap = new Map<Id, MA_Scheduler_Event__c>();
             Map<Id, MA_Scheduler_Event__c> maEventsToDelete = new Map<Id, MA_Scheduler_Event__c>();
+            List<Assigned_Resources__c> assignedResourcesToUpdate = new List<Assigned_Resources__c>();
             List<Assigned_Resources__c> assignedResourcesToCreate = new List<Assigned_Resources__c>();
             List<Assigned_Resources__c> assignedResourcesToDelete = new List<Assigned_Resources__c>();
             Map<Id, Id> primaryResourceMap = (Map<Id, Id>)JSON.deserialize(primaryResourceMapString, Map<Id, Id>.class);
             Map<Id, Set<Id>> woToResIdsMap = (Map<Id, Set<Id>>)JSON.deserialize(woToResIdsMapString, Map<Id, Set<Id>>.class);
+            Id woEventRecTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Event' AND DeveloperName = 'Work_Order_Event'].Id;
 
             for (Id woId : woToResIdsMap.keySet()) {
                 List<Id> assignedResourceIds = new List<Id>(woToResIdsMap.get(woId));
@@ -194,7 +196,7 @@ global with sharing class MA_RoutingSchedulerController {
             }
             delete assignedResourcesToDelete;
 
-            for (MA_Scheduler_Event__c maEvent : [SELECT Id, Name, RbA_Work_Order__c, RbA_Work_Order__r.Name, Resource__c, StartDateTime__c, EndDateTime__c, Date__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c IN :woToResIdsMap.keySet() AND Date__c = :batchDate]) {
+            for (MA_Scheduler_Event__c maEvent : [SELECT Id, Name, RbA_Work_Order__c, RbA_Work_Order__r.Name, RbA_Work_Order__r.Work_Order_Type__c, Resource__c, StartDateTime__c, EndDateTime__c, Date__c, Event_Sequence__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c IN :woToResIdsMap.keySet() AND Date__c = :batchDate]) {
                 Set<Id> assignedResourceIds = woToResIdsMap.get(maEvent.RbA_Work_Order__c);
                 woToMaEventMap.put(maEvent.RbA_Work_Order__c, maEvent);
 
@@ -232,6 +234,7 @@ global with sharing class MA_RoutingSchedulerController {
                             resourceIdToUserIdMap.put(resourceId, null);
                             MA_Scheduler_Event__c maEvent = new MA_Scheduler_Event__c(
                                 RbA_Work_Order__c = tempEvent.RbA_Work_Order__c,
+                                Event_Sequence__c = tempEvent.Event_Sequence__c,
                                 StartDateTime__c = tempEvent.StartDateTime__c,
                                 EndDateTime__c = tempEvent.EndDateTime__c,
                                 Name = tempEvent.RbA_Work_Order__r.Name,
@@ -247,7 +250,7 @@ global with sharing class MA_RoutingSchedulerController {
                             Assigned_Resources__c assignedRes = new Assigned_Resources__c(
                                 Work_Order__c = woId,
                                 Scheduled_Resource__c = resourceId,
-                                IsPrimary__c = primaryResourceId == resourceId || assignedResourceIds.size() == 1
+                                IsPrimary__c = primaryResourceId == resourceId || assignedResourceIds.size() + assignedResourceIdsAlreadyCreated.size() == 1
                             );
                             assignedResourcesToCreate.add(assignedRes);
                         }
@@ -256,7 +259,18 @@ global with sharing class MA_RoutingSchedulerController {
             }
             insert assignedResourcesToCreate;
             insert maEventsToCreate;
-            delete maEventsToDelete.values();
+
+            for (Assigned_Resources__c res : [SELECT Id, Work_Order__c, Scheduled_Resource__c, IsPrimary__c FROM Assigned_Resources__c WHERE Work_Order__c IN :woToResIdsMap.keySet()]) {
+                Id primaryResourceId = primaryResourceMap.get(res.Work_Order__c);
+                Set<Id> assignedResourceIds = woToResIdsMap.get(res.Work_Order__c);
+                Boolean isPrimary = res.Scheduled_Resource__c == primaryResourceId || assignedResourceIds.size() == 1;
+
+                if (res.isPrimary__c != isPrimary) {
+                    res.isPrimary__c = isPrimary;
+                    assignedResourcesToUpdate.add(res);
+                }
+            }
+            update assignedResourcesToUpdate;
 
             for (Resource__c res : [SELECT Id, RbA_User__c FROM Resource__c WHERE Id IN :resourceIdToUserIdMap.keySet()]) {
                 resourceIdToUserIdMap.put(res.Id, res.RbA_User__c);
@@ -265,18 +279,26 @@ global with sharing class MA_RoutingSchedulerController {
             for (MA_Scheduler_Event__c maEvent : maEventsToCreate) {
                 Id userId = resourceIdToUserIdMap.get(maEvent.Resource__c);
                 if (userId != null) {
+                    Id primaryResourceId = primaryResourceMap.get(maEvent.RbA_Work_Order__c);
+                    Set<Id> assignedResourceIds = woToResIdsMap.get(maEvent.RbA_Work_Order__c);
+                    MA_Scheduler_Event__c tempEvent = woToMaEventMap.get(maEvent.RbA_Work_Order__c);
+
                     Event sfEvent = new Event(
                         StartDateTime = maEvent.StartDateTime__c,
                         EndDateTime = maEvent.EndDateTime__c,
                         WhatId = maEvent.RbA_Work_Order__c,
                         MA_Scheduler_Event__c = maEvent.Id,
                         Subject = maEvent.Name,
-                        OwnerId = userId
+                        OwnerId = userId,
+                        RecordTypeId = woEventRecTypeId,
+                        Type = tempEvent.RbA_Work_Order__r.Work_Order_Type__c,
+                        Primary_Resource__c = maEvent.Resource__c == primaryResourceId || assignedResourceIds.size() == 1
                     );
                     sfEventsToCreate.add(sfEvent);
                 }
             }
             insert sfEventsToCreate;
+            delete maEventsToDelete.values();
 
             response.put('success', true);
         }

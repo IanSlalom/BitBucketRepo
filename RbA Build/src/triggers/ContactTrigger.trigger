@@ -25,9 +25,9 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
     //CHECK IF DATA LOADING PROFILE 
     if(RMS_Settings_map.get('Data Loading Profile ID') == null || RMS_Settings_map.get('Unassigned Account Id') == null){
         if(Trigger.isDelete){
-            Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+            Trigger.old[0].addError(RMS_ErrorMessages.CUSTOM_SETTING_REQUIRED);
         }else{
-            Trigger.new[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
+            Trigger.new[0].addError(RMS_ErrorMessages.CUSTOM_SETTING_REQUIRED);
         }
     }
     //IF NOT DATA LOADING PROFILE RUN LOGIC
