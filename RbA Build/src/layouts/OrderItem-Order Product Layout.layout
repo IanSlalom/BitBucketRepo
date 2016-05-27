@@ -662,6 +662,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Applied_Grilles__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Wide_Bar__c</field>
             </layoutItems>
         </layoutColumns>

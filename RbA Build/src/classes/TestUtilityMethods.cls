@@ -35,6 +35,7 @@ public with sharing class TestUtilityMethods {
 		insert customSetting1;
 		
 		Account store1 = createStoreAccount('77 - Twin Cities, MN');
+		store1.Store_Number__c = '0123';
 		insert store1;
 
 		Account masterAccount = new Account(name = 'Unassigned Account');
@@ -88,8 +89,8 @@ public with sharing class TestUtilityMethods {
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
-        	Location_Number__c = '777'
-        	
+        	Location_Number__c = '777',
+        	Order_Number__c = 0000001
         	);
     	insert storeConfig;
 
@@ -133,6 +134,7 @@ public with sharing class TestUtilityMethods {
 		insert LSWP_Work_Order_Queue;
 
 		Account store1 = createStoreAccount('77 - Twin Cities, MN');
+		store1.Store_Number__c = '0123';
 		insert store1;
 		
     	Store_Configuration__c storeConfig = new Store_Configuration__c(
@@ -146,8 +148,8 @@ public with sharing class TestUtilityMethods {
         	Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-        	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id
-        	
+        	LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
+        	Order_Number__c = 0000001
         	);
     	insert storeConfig;
 

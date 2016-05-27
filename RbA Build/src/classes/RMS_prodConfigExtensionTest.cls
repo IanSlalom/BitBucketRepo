@@ -291,6 +291,10 @@ private class RMS_prodConfigExtensionTest {
 		
 		update prodConfig;
 
+		List<Color_Configuration__c> ccList = new List<Color_Configuration__c>{ new Color_Configuration__c(Product_Configuration__c = prodConfig.Id, Exterior_Color__c = 'White', Interior_Color__c = 'White;Red'),
+																				new Color_Configuration__c(Product_Configuration__c = prodConfig.Id, Exterior_Color__c = 'Red', Interior_Color__c = 'Red;Black')};
+		insert ccList;
+ 
 		// Set up controller with order line id only
 		PageReference pageRef = Page.RMS_prodConfigEdit;
 		Test.setCurrentPage(pageRef);
@@ -323,7 +327,7 @@ private class RMS_prodConfigExtensionTest {
 
 		// Verify the interior color picklist items
 		List<SelectOption> interiorColItems = ext.interiorColorItems;
-		System.AssertEquals(3, interiorColItems.size());
+		System.AssertEquals(4, interiorColItems.size());
 
 		// Verify the glazing picklist items
 		List<SelectOption> glazItems = ext.glazingItems;
