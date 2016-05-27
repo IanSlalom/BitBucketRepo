@@ -185,8 +185,11 @@ public with sharing class RMS_OrderTriggerHandler {
         while(uniqueIdString.length() < 11){
           uniqueIdString = uniqueIdString.substring(0,4) + '0' + uniqueIdString.substring(4);
         }
-        newMap.get(o.Id).Unique_Identifier__c = uniqueIdString;
-        configsToLock.get(o.Store_Location__r.Active_Store_Configuration__c).Order_Number__c +=1;
+        if(newMap.get(o.Id).Unique_Identifier__c == null){
+          newMap.get(o.Id).Unique_Identifier__c = uniqueIdString;
+          configsToLock.get(o.Store_Location__r.Active_Store_Configuration__c).Order_Number__c +=1;
+        }
+        
     }
     update configsToLock.values();
   }
