@@ -20,7 +20,7 @@ public with sharing class RMS_acceptInvite {
     public void acceptInvite(List<Event> listNew, Map<Id, Event> mapNew){
         
         List<EventRelation> childRecords = [Select Id, EventId, Status                                    
-                                            FROM EventRelation WHERE EventId IN: Trigger.newMap.keySet()];
+                                            FROM EventRelation WHERE EventId IN: Trigger.newMap.keySet() AND IsInvitee = true];
         
         system.debug(childRecords);
         
@@ -30,7 +30,8 @@ public with sharing class RMS_acceptInvite {
         for(EventRelation child :childRecords){
             
             
-            child.Status = 'Accepted';                      
+            child.Status = 'Accepted';  
+
         }                              
         
         
