@@ -34,6 +34,7 @@
         <members>RMS_ServiceProductPickup</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
+        <members>RMS_acceptInvite</members>
         <members>RMS_addSkilltoWO</members>
         <members>RMS_assignServiceTaskOwner</members>
         <members>RMS_backOfficeChecklistManager</members>
