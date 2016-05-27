@@ -1,4 +1,5 @@
 <apex:page standardController="Order" tabStyle="Order" sidebar="true" extensions="RMS_ServiceOrderExtensionMgr">
+        <apex:pageMessages escape="false"/>
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
     <apex:includeScript value="/support/console/26.0/integration.js"/>
     
@@ -83,6 +84,9 @@
                 <apex:inputField value="{!Order.BillingStateCode}" label="Billing State"/>
                 <apex:inputField value="{!Order.ShippingPostalCode}"/>
                 <apex:inputField value="{!Order.BillingPostalCode}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Additional Details" collapsible="false" columns="1">                
+            	<apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
