@@ -231,7 +231,7 @@ function prepareList(parent,child,isSubselectOptional){
 			 
 
 				</apex:pageBlockTable>
-            <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new'}">
+            <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new' && costPurchaseOrder}">
                 <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
 
 
@@ -271,7 +271,7 @@ function prepareList(parent,child,isSubselectOptional){
 							<apex:inputField value="{!noi.Unit_Wholesale_Cost__c}" style="width:100px" />
 					</apex:column>
 				</apex:pageBlockTable>				  
-				<apex:commandButton action="{!addProduct}" value="Add {!productText}"/>
+				<apex:commandButton action="{!addProduct}" value="Save"/>
 			</apex:pageBlockSection> 
 
 			</apex:outputPanel>	
