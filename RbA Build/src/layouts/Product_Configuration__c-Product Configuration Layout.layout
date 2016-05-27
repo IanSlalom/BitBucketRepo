@@ -798,19 +798,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Glass_Pattern_S1_Control__c</field>
+                <field>Glass_Pattern_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Glass_Pattern_S2_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Glazing_S1_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Glazing_S2_Control__c</field>
+                <field>Glazing_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -944,11 +936,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Tempered_S1_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tempered_S2_Control__c</field>
+                <field>Tempered_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
