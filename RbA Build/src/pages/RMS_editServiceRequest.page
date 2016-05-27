@@ -1,4 +1,5 @@
 <apex:page standardController="Order" tabStyle="Order" sidebar="true" extensions="RMS_ServiceOrderExtensionMgr">
+        <apex:pageMessages escape="false"/>
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
     <apex:includeScript value="/support/console/26.0/integration.js"/>
     
