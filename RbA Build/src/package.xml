@@ -338,6 +338,7 @@
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
+        <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
@@ -377,6 +378,7 @@
     </types>
     <types>
         <members>Assets_with_Purchase_Orders</members>
+        <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_Order_Products</members>
         <name>ReportType</name>
