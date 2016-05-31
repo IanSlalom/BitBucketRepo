@@ -963,10 +963,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
       			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
       		}
-// TODO: Add this after Anthony updates the financial trigger to handle record types
-//      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
-//										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
-//														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
+      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
+										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
+														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
       } 
       else if (oi.Installed_Product_Asset__c != null){

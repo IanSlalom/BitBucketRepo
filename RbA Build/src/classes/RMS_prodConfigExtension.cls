@@ -387,6 +387,8 @@ public class RMS_prodConfigExtension {
 	public List<Color_Configuration__c> colorConfigs{
 		get
 		{
+			if (masterProductConfig == null) return new List<Color_Configuration__c>();
+			
 			if(lColorConfigs == null){
 				lColorConfigs = [Select Exterior_Color__c, Interior_Color__c, Product_Configuration__c from Color_Configuration__c WHERE Product_Configuration__c =: masterProductConfig.Id];
 			}
