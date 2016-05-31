@@ -806,8 +806,17 @@ global with sharing class MA_SchedulerController {
 
                                 if (tempStart == bw.startDateTime) {
                                     List<String> tempList = new List<String>(windowsSpannedToCheck);
-                                    tempList.remove(0);
-                                    badSlots.addAll(tempList);
+                                    String slotName = dayOfWeek + ' - ' + tempStart + ' - ';
+
+                                    for (Integer x = tempList.size() - 1; x >= 0; x--) {
+                                        String windowSpan = tempList[x];
+                                        Integer indexOfEndTime = windowSpan.lastIndexOf(' - ');
+                                        windowSpan = windowSpan.substring(0, indexOfEndTime);
+
+                                        if (windowSpan >= slotName) {
+                                            badSlots.add(tempList[x]);
+                                        }
+                                    }
                                 }
                             }
                             else if (!remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)).containsAll(windowsSpannedToCheck)) {
@@ -876,7 +885,7 @@ global with sharing class MA_SchedulerController {
                     unAvailableSlots.remove(index);
                 }
             }
-
+            
             if (nextAvailable && bookingWindows.size() > 5) {
                 bookingWindows = new List<MA_SchedulerBookingWindow> {
                     bookingWindows[0],
