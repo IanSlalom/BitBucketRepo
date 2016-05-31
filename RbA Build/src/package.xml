@@ -90,6 +90,8 @@
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
+        <members>UserTriggerHandler</members>
+        <members>UserTriggerHandlerTest</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>eventTest</members>
@@ -180,6 +182,7 @@
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
+        <members>UserTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
