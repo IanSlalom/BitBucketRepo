@@ -213,6 +213,7 @@
         <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
+        <members>Resource__c</members>
         <members>Service_Request</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
@@ -390,6 +391,7 @@
         <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_Order_Products</members>
+        <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
     <types>
