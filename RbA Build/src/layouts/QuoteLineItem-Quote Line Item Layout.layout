@@ -498,6 +498,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Applied_Grilles__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Perm_Applied_Int_Wood_Grille__c</field>
             </layoutItems>
             <layoutItems>

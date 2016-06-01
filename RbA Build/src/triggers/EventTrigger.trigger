@@ -34,7 +34,7 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         //HANDLERS AND MANAGERS        
         List<SObject> wkorders = new List<SObject>();
         RMS_populateResourceonEventManager populateResourceonEventManager = new RMS_populateResourceonEventManager();
-            
+        RMS_acceptInvite acceptInvite = new RMS_acceptInvite();
         // Before Insert
         
         if(Trigger.isInsert && Trigger.isBefore){
@@ -56,8 +56,9 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
 
         // After Insert
         else if(Trigger.isInsert && Trigger.isAfter){
-            
+            acceptInvite.acceptInvite(Trigger.new, Trigger.newMap);
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            
         } 
          
         // After Update

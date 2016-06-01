@@ -154,7 +154,8 @@
                     <apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
    <!--  TODO:   temporarily commented out                    <apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" />  -->
               <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
-                  <apex:outputText value=""/>
+                    <apex:inputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == true}"/>
+  <!--              <apex:outputText value=""/> -->   
                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
                     <apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>

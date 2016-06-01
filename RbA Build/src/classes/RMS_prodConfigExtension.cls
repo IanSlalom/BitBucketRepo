@@ -98,6 +98,13 @@ public class RMS_prodConfigExtension {
 				mode = 'v';
 			}
 		}
+
+		if(ApexPages.currentPage().getParameters().get('extWidthWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extWidthWarning'))); 
+		}
+		if(ApexPages.currentPage().getParameters().get('extHeightWarning') !=null){
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extHeightWarning'))); 
+		}
 	}
 
 	/******* public properties  *****************/
@@ -375,13 +382,38 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/*** Color Configuration Records *********/
+	private static transient List<Color_Configuration__c> lColorConfigs;
+	public List<Color_Configuration__c> colorConfigs{
+		get
+		{
+			if (masterProductConfig == null) return new List<Color_Configuration__c>();
+			
+			if(lColorConfigs == null){
+				lColorConfigs = [Select Exterior_Color__c, Interior_Color__c, Product_Configuration__c from Color_Configuration__c WHERE Product_Configuration__c =: masterProductConfig.Id];
+			}
+			return lColorConfigs;
+		}
+	}
+
 	/******* Set up Exterior Color Items  *****************/
 	private static transient List<SelectOption> lExteriorColorItems;
 	public List<SelectOption> exteriorColorItems{
 		get
 		{   
 			if (lExteriorColorItems == null) {
-				lExteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Color__c);
+				Set<String> extColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Exterior_Color__c != null){
+						extColors.add(cc.Exterior_Color__c);
+					}
+				}
+				String extColorsString = '';
+				for(String color: extColors){
+					extColorsString += color + ';';
+				}
+				lExteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(extColorsString);
+
 			}			   
 			return lExteriorColorItems;
 		}
@@ -392,9 +424,23 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> interiorColorItems{
 		get
 		{   
-			if (lInteriorColorItems == null) {
-				lInteriorColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Color__c);
-			}
+			if (interiorColorItems == null) {
+				Set<String> intColors = new Set<String>();
+				for(Color_Configuration__c cc: ColorConfigs){
+					if(cc.Interior_Color__c != null){
+						for (String c : cc.Interior_Color__c.split(';')) {
+					   		intColors.add(c);
+					   	}
+					}
+				}
+				String intColorsString = '';
+				for(String color: intColors){
+					intColorsString += color + ';';
+				}
+
+				lInteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(intColorsString);
+
+			}			   
 			return lInteriorColorItems;
 		}
 	}
@@ -1069,6 +1115,12 @@ public class RMS_prodConfigExtension {
 	Map<String, String> m = p.getParameters();
     m.put('mode', 'v');
     m.put('id', orderLineItem.Id);
+    if(orderLineItem.Extended_Width_Warning__c){
+		m.put('extWidthWarning',masterProductConfig.Width_Message__c);
+	}
+    if(orderLineItem.Extended_Height_Warning__c){
+    	m.put('extHeightWarning',masterProductConfig.Height_Message__c);
+    }
 	p.setRedirect(true);
 
 	return p;	}
@@ -1216,7 +1268,7 @@ public class RMS_prodConfigExtension {
 			oI.Glass_Pattern_S3__c = null; 
 			oI.Tempered_S3__c = false;
 		}
-		//If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
+		//JETT-2171 If Prod Config -> Number of Sashes = 1 or 2 or 3 , clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == '1' || newProdConfig.Number_of_Sashes__c == '2' || newProdConfig.Number_of_Sashes__c == '3'){
 			oI.Grille_Pattern_S4__c = null;
 			oI.Lites_Wide_S4__c = null;	

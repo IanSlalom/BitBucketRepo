@@ -158,10 +158,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
   {
     get
     {
-      if ( storeVendors != null) return storeVendors;
+//      if ( storeVendors != null) return storeVendors;
       if (storeLocation == null) return null;
       storeVendors = new Set<Id>();
-      for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocation.Id AND Vendor__c != null]) {
+//      for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocation.Id AND Vendor__c != null]) {
+      for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c IN : storeLocationSet AND Vendor__c != null]) {
         storeVendors.add(sv.Vendor__c);
       }
       
@@ -335,6 +336,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public Boolean newPurchaseOrder {get;set;}
   public Boolean costPurchaseOrder {get;set;}
   public Boolean servicePurchaseOrder {get;set;}
+  public Set<Id> storeLocationSet {get;set;}
   
   //public variables to be used in new PO
   public list<SelectOption> availableVendors = new list<SelectOption>();
@@ -367,6 +369,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     showInventoryWriteOff = false;
     relatedOrderClosed = false;
     showCancelPO = false;
+    storeLocationSet = new Set<Id>();
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
@@ -405,24 +408,33 @@ public with sharing class RMS_vendorPurchaseOrderController {
 //      po.Store_Abbreviation__c = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c;
 //      po.Store_Location__c = storeLocation.Id;
 
-	  User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+//	  User currentUser = [SELECT Store_Locations__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
 
       // If a test is running just set the user's abbreviation, otherwise get it from the current user
-      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
-      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
-      							:	currentUser.User_Abbreviation__c;
+//      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
+//      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
+ //     							:	currentUser.User_Abbreviation__c;
 
       for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
       									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
       									Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
       									FROM Order WHERE Id = :orderId]){
 
-      showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
-      relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
-			// Determine if this is a service order
-			servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
+      	showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
+      	relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
+	  // Determine if this is a service order
+	  	servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
 			
-			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
+	  	// If the PO's store location hasn't been set yet and the order's store location is not null, set it to that value
+      	if (thisOrder.Store_Location__c != null)
+        	po.Store_Location__c = thisOrder.Store_Location__r.Id;
+		    storeLocation = thisOrder.Store_Location__r;
+		    storeLocationSet.add(thisOrder.Store_Location__c);
+			relatedOrder = thisOrder;
+			if (thisOrder.Store_Location__r.Active_Store_Configuration__c != null) 
+            	storeLocationNumber = thisOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
+
+/*			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
 										(servicePurchaseOrder) 	? 'S' : 'P';
 
 			String storeAbbreviation;
@@ -437,7 +449,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
             }
             if (storeAbbreviation == null) storeAbbreviation = 'X';
           	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
+            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;*/
       }
 			
 	  // Determine the purchase order status so we know what to display on the page.
@@ -558,43 +570,42 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     
     
-    // For Cost POs, pulls the current user's store location and recovers the abbreviation
-    if (costPurchaseOrder && storeLocation == null) {
-
-	  User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+    // For Cost POs, pulls the current user's multiple store locations and puts them in a set so the related
+    // vendors can be selected
+    if (costPurchaseOrder) {
+	  String storeLocationText;
+	  User currentUser = [SELECT Store_Locations__c, Default_Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
 
       // If a test is running just set the store name, otherwise get it from the current user
+      String storeLocationNames = (Test.isRunningTest()) ?   '77 - Twin Cities, MN' 
+      														: currentUser.Store_Locations__c;
+
+	  // Build text string to be used in dynamic soql below
+      if (String.isNotBlank(storeLocationNames)) {
+	      storeLocationText = '(';
+    	  for (String storeText : storeLocationNames.split(';')) {
+      	  	storeLocationText += '\'' + storeText + '\',';
+      	  }
+      	  storeLocationText = storeLocationText.substring(0,storeLocationText.length()-1) + ')';
+      }
+      
+        for (Account store : Database.query('SELECT Id FROM Account WHERE Name IN ' +storeLocationText )){
+        	storeLocationSet.add(store.Id);
+        }
+		if (storeLocationSet == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+        }
+      // If a test is running just set the store name, otherwise get it from the current user
       String storeLocationName = (Test.isRunningTest()) ?   '77 - Twin Cities, MN' 
-      														: currentUser.Store_Location__c;
-
-      // If a test is running just set the user's abbreviation, otherwise get it from the current user
-      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
-      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
-      							:	currentUser.User_Abbreviation__c;
-
-      String typeAbbreviation = (costPurchaseOrder) ? 'C' : 'P';
+      														: currentUser.Default_Store_Location__c;
 
       if (String.isNotBlank(storeLocationName)) {
-        for (Account store : [SELECT Id, Active_Store_Configuration__c, Active_Store_Configuration__r.Store_Abbreviation__c, Active_Store_Configuration__r.Location_Number__c FROM Account WHERE Name =: storeLocationName]){
-			String storeAbbreviation;
+        for (Account store : [SELECT Id FROM Account WHERE Name =: storeLocationName]){
           	storeLocation = store;
-            po.Store_Location__c = storeLocation.Id;
-			if (store.Active_Store_Configuration__c != null) {
-				storeAbbreviation = store.Active_Store_Configuration__r.Store_Abbreviation__c;
-            	storeLocationNumber = storeLocation.Active_Store_Configuration__r.Location_Number__c;
-			}
-
-            if (storeAbbreviation == null) storeAbbreviation = 'X';
-          	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
-
-        }
-		if (storeLocation == null) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
+            po.Store_Location__c = store.Id;
         }
       }
     }
-
 
     //JETT-712 
     if(newPurchaseOrder && !costPurchaseOrder && !servicePurchaseOrder && relatedOrder.Status != 'Ready to Order'){
@@ -662,6 +673,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
         return null;
       }
 
+      if(po.Store_Location__c == null){
+        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'Please select a Store Location'));
+        return null;
+      }
+
+	  // Set the store abbreviation field so that the Cost PO can be named correctly
+	  setStoreAbbreviation();
       po.Name = 'PlaceHolderPOName';
       po.Vendor__c = selectedVendor; 
 
@@ -795,6 +813,43 @@ public with sharing class RMS_vendorPurchaseOrderController {
     return null;
     
   }
+  
+
+
+	/*******************************************************
+			setStoreAbbreviation method
+	*******************************************************/
+	public void setStoreAbbreviation() {
+ 
+		// Retrive the current user
+		User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+
+		// If a test is running just set the user's abbreviation, otherwise get it from the current user
+		String userAbbreviation = (Test.isRunningTest()) ?   'A' 
+								: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
+								:	currentUser.User_Abbreviation__c;
+
+		// Set the type of PO
+		String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
+										(servicePurchaseOrder) 	? 'S' : 'P';
+
+		String storeAbbreviation;
+			
+		// Query the store location to retrieve the store abbreviation and location number
+		for (Account storeLocAccount : [SELECT 	Id, Name, Active_Store_Configuration__r.Store_Abbreviation__c, 
+										Active_Store_Configuration__c, Active_Store_Configuration__r.Location_Number__c
+										FROM Account WHERE Id = :po.Store_Location__c]){
+			if (storeLocAccount.Active_Store_Configuration__c != null) {
+				storeAbbreviation = storeLocAccount.Active_Store_Configuration__r.Store_Abbreviation__c;
+				storeLocationNumber = storeLocAccount.Active_Store_Configuration__r.Location_Number__c;
+			}
+		}
+		// Set a default store abbreviation if it's null
+		if (storeAbbreviation == null) storeAbbreviation = 'X';
+		
+		// concatanate the store abbreviation and user abbreviation
+		po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;
+	}
 
   /*******************************************************
           addproduct method
@@ -963,10 +1018,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
       			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
       		}
-// TODO: Add this after Anthony updates the financial trigger to handle record types
-//      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
-//										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
-//														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
+      		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
+										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
+														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
       } 
       else if (oi.Installed_Product_Asset__c != null){

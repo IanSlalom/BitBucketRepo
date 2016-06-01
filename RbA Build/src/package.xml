@@ -10,6 +10,7 @@
         <members>MA_SchedulerEvent</members>
         <members>MA_SchedulerFakeDataGenerator</members>
         <members>MA_SchedulerResource</members>
+        <members>MA_SchedulerRouteTESTS</members>
         <members>MA_SchedulerSettings</members>
         <members>MA_SchedulerTESTS</members>
         <members>MA_SchedulerUtilities</members>
@@ -33,6 +34,7 @@
         <members>RMS_ServiceProductPickup</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
+        <members>RMS_acceptInvite</members>
         <members>RMS_addSkilltoWO</members>
         <members>RMS_assignServiceTaskOwner</members>
         <members>RMS_backOfficeChecklistManager</members>
@@ -72,8 +74,10 @@
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
+        <members>RMS_reactivateResource</members>
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
+        <members>RMS_serviceRequestListViewMgr</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
@@ -83,9 +87,12 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>RMS_viewServiceRequestCtrlr</members>
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
+        <members>UserTriggerHandler</members>
+        <members>UserTriggerHandlerTest</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>editableTaskList</members>
@@ -121,6 +128,8 @@
         <members>MA_SchedulerStylingComp</members>
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <members>RMS_orderHistoryComponent</members>
+        <members>RMS_requestListViewComponent</members>
+        <members>RMS_soldOrderHistoryComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -129,6 +138,7 @@
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
+        <members>RMS_ServiceRequestListView</members>
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addServiceProduct</members>
         <members>RMS_cancelOrder</members>
@@ -140,6 +150,7 @@
         <members>RMS_createServiceRequestRedirect</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
+        <members>RMS_editServiceRequest</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
@@ -156,6 +167,7 @@
         <members>RMS_viewRelatedWorkOrdersVisit</members>
         <members>RMS_viewServiceOrderProducts</members>
         <members>RMS_viewServiceOrders</members>
+        <members>RMS_viewServiceRequest</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -174,6 +186,7 @@
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
+        <members>UserTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -200,6 +213,7 @@
         <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
+        <members>Service_Request</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
         <name>CustomTab</name>
@@ -217,6 +231,8 @@
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
         <members>Asset-Asset Layout</members>
+        <members>Assigned_Resources__c-Assigned Resource Layout</members>
+        <members>Assigned_Skill__c-Assigned Skill Layout</members>
         <members>Back_Office_Check__c-Back Office Check Layout</members>
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Business_Adjustment__c-Business Adjustment Layout</members>
@@ -246,6 +262,9 @@
         <members>Journal_Entry__c-Journal Entry Layout</members>
         <members>Labor__c-Labor Layout</members>
         <members>Labor__c-Misc Reimbursement Layout</members>
+        <members>MABatchSchedule__c-MABatchSchedule Layout</members>
+        <members>MA_Scheduler_Event__c-MA Scheduler Event Layout</members>
+        <members>MA_Scheduler_Settings__c-MA Scheduler Settings Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -278,12 +297,14 @@
         <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Quote_Discount__c-Quote Discount Layout</members>
         <members>Quote_Financing__c-Quote Financing Layout</members>
+        <members>RbA_Skills__c-Skill Layout</members>
         <members>RbA_Work_Order__c-Action Work Order Layout</members>
         <members>RbA_Work_Order__c-LSWP Work Order Layout</members>
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
         <members>Refund__c-Refund Layout</members>
+        <members>Resource_Skill__c-Resource Skill Layout</members>
         <members>Resource__c-Resource Layout</members>
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
@@ -302,9 +323,11 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Task-Task Layout</members>
         <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
+        <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
@@ -324,14 +347,47 @@
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
+        <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
+        <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
+        <members>RbA_Operational_Reporting/Order_Status_Report</members>
+        <members>RbA_Operational_Reporting/Ordering_and_Install_Status_Report</members>
+        <members>RbA_Operational_Reporting/Orders_Draft</members>
+        <members>RbA_Operational_Reporting/Orders_Install_Complete</members>
+        <members>RbA_Operational_Reporting/Orders_Install_Needed</members>
+        <members>RbA_Operational_Reporting/Orders_Install_Scheduled</members>
+        <members>RbA_Operational_Reporting/Orders_Job_in_Progress</members>
+        <members>RbA_Operational_Reporting/Orders_On_Hold</members>
+        <members>RbA_Operational_Reporting/Orders_Order_Released</members>
+        <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
+        <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
+        <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
+        <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
+        <members>RbA_Operational_Reporting/Report_7001_Service_Requests_by_Status</members>
+        <members>RbA_Operational_Reporting/Report_7300_On_Hold_Tracking</members>
+        <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
+        <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
+        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
+        <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
+        <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
+        <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
+        <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
+        <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
+        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
+        <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
+        <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
+        <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
+        <members>RbA_Operational_Reporting/Rpt_Business_Adjustment_Reconciliation</members>
+        <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
         <name>Report</name>
     </types>
     <types>
+        <members>Assets_with_Purchase_Orders</members>
+        <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_Order_Products</members>
         <name>ReportType</name>
@@ -351,6 +407,7 @@
         <members>Order</members>
         <members>PaintStainText</members>
         <members>ServiceOrder</members>
+        <members>ServiceRequestIcon</members>
         <members>ServiceText</members>
         <members>SiteSamples</members>
         <members>TechMeasureText</members>

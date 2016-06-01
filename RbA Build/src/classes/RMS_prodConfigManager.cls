@@ -133,10 +133,12 @@ public with sharing class RMS_prodConfigManager {
 			
 			}
 		}
+
+		orderLineItem.Extended_Width_Warning__c = false;
+		orderLineItem.Extended_Height_Warning__c = false;
 		// Check for maximum width makeability 
 		if (masterProductConfig.Max_Width__c != null) {
 			if ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Max_Width_Fractions__c))) {
-				
 				String enteredValue = String.ValueOf(orderLineItem.Width_Inches__c);
 				if(orderLineItem.Width_Fraction__c != null){
 					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Width_Fraction__c);
@@ -145,9 +147,21 @@ public with sharing class RMS_prodConfigManager {
 				if(masterProductConfig.Max_Width_Fractions__c != null){
 					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Max_Width_Fractions__c);
 				}
-				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_ABOVE_MAX, enteredValue, requiredValue);
 
-				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+				if(masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null){
+					if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
+					 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) < (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ){
+						orderLineItem.Extended_Width_Warning__c = true;
+					}else{
+						String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_ABOVE_MAX, enteredValue, requiredValue);
+						errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+					}
+				}else{ 		
+					
+					String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.WIDTH_ABOVE_MAX, enteredValue, requiredValue);
+
+					errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+				}
 
 			}
 		}
@@ -163,9 +177,22 @@ public with sharing class RMS_prodConfigManager {
 				if(masterProductConfig.Max_Height_Fractions__c != null){
 					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Max_Height_Fractions__c);
 				}
-				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_ABOVE_MAX, enteredValue, requiredValue);
-		
-				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+
+				if(masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null){
+					if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) < (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
+					 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) < (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ){
+						orderLineItem.Extended_Height_Warning__c = true;			
+						
+					}else{
+						String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_ABOVE_MAX, enteredValue, requiredValue);
+			
+						errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+					}
+				}else{ 
+					String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.HEIGHT_ABOVE_MAX, enteredValue, requiredValue);
+			
+					errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+				}
 			}
 		}
 		// Check for maximum united inches 
@@ -217,24 +244,31 @@ public with sharing class RMS_prodConfigManager {
 		} 
 
 		// Check for extended max height/width
-		if (masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null) {
-			if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
-				 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ) 
-			{	
-				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.EXTENDED_MAX : errorMessage + '<BR>' + RMS_errorMessages.EXTENDED_MAX;
+		//if (masterProductConfig.Extended_Max_Height__c != null && masterProductConfig.Extended_Max_Width__c != null) {
+		//	if (((orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c)) > (masterProductConfig.Extended_Max_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Height_Fractions__c))) &&
+		//		 ((orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) > (masterProductConfig.Extended_Max_Width__c + UtilityMethods.calculateFraction(masterProductConfig.Extended_Max_Width_Fractions__c))) ) 
+		//	{	
+		//		errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.EXTENDED_MAX : errorMessage + '<BR>' + RMS_errorMessages.EXTENDED_MAX;
+		//	}
+		//}
+
+		// Check for peak height min/max
+		if(orderLineItem.Width_Inches__c != null && orderLineItem.Left_Leg_Inches__c != null && orderLineItem.Right_Leg_Inches__c != null){
+			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
+			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
+			if(masterProductConfig.Peak_Height_Min__c != null){
+				if(((leftLeg - rightleg).abs()) < ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height_Min__c )){
+					errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.PEAK_HEIGHT_MIN : errorMessage + '<BR>' + RMS_errorMessages.PEAK_HEIGHT_MIN;
+				}
+			}
+
+			if(masterProductConfig.Peak_Height_Max__c != null){
+				if(((leftLeg - rightleg).abs()) > ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height_Max__c )){
+					errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.PEAK_HEIGHT_MAX : errorMessage + '<BR>' + RMS_errorMessages.PEAK_HEIGHT_MAX;
+				}
 			}
 		}
 
-		// Check for peak height
-		if(masterProductConfig.Peak_Height__c != null && orderLineItem.Width_Inches__c != null){
-			
-			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
-			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
-			
-			if(((leftLeg - rightleg).abs()) < ((orderLineItem.Width_Inches__c+ UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c)) * masterProductConfig.Peak_Height__c )){
-				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.PEAK_HEIGHT : errorMessage + '<BR>' + RMS_errorMessages.PEAK_HEIGHT;
-			}
-		}
 		
 		//Check for glass sq feet max
 		// Check for glass square footage
@@ -669,7 +703,7 @@ public with sharing class RMS_prodConfigManager {
 		} 
 
 		//Grille Pattern Configuration S1
-		if(orderLineItem.Grille_Pattern_S1__c != null && orderLineItem.Sash_Ratio__c != null){
+		if(orderLineItem.Grille_Pattern_S1__c != null ){
 			List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = [SELECT 	Sash_Ratio__c,
 																							Grille_Pattern__c,
 																							Min_Width_Inches__c,
@@ -679,7 +713,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Grille_Pattern_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Grille_Pattern__c =: orderLineItem.Grille_Pattern_S1__c
-																							AND Sash_Ratio__C =: orderLineItem.Sash_Ratio__c];
+																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 
@@ -706,7 +740,7 @@ public with sharing class RMS_prodConfigManager {
 		} 
 
 		//Grille Pattern Configuration S2
-		if(orderLineItem.Grille_Pattern_S2__c != null && orderLineItem.Sash_Ratio__c != null){
+		if(orderLineItem.Grille_Pattern_S2__c != null ){
 			List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = [SELECT 	Sash_Ratio__c,
 																							Grille_Pattern__c,
 																							Min_Width_Inches__c,
@@ -716,7 +750,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Grille_Pattern_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Grille_Pattern__c =: orderLineItem.Grille_Pattern_S1__c
-																							AND Sash_Ratio__C =: orderLineItem.Sash_Ratio__c];
+																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 
@@ -743,7 +777,7 @@ public with sharing class RMS_prodConfigManager {
 		} 
 
 		//Glazing Configuration S1
-		if(orderLineItem.Glazing_S1__c != null && orderLineItem.Sash_Ratio__c != null){
+		if(orderLineItem.Glazing_S1__c != null){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
 																							Max_Width_Inches__c,
@@ -753,7 +787,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S1__c
-																							AND Sash_Ratio__C =: orderLineItem.Sash_Ratio__c];
+																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 
@@ -780,7 +814,7 @@ public with sharing class RMS_prodConfigManager {
 		} 
 
 		//Glazing Configuration S2
-		if(orderLineItem.Glazing_S2__c != null && orderLineItem.Sash_Ratio__c != null){
+		if(orderLineItem.Glazing_S2__c != null ){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
 																							Max_Width_Inches__c,
@@ -790,7 +824,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S2__c
-																							AND Sash_Ratio__C =: orderLineItem.Sash_Ratio__c];
+																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 
@@ -817,7 +851,7 @@ public with sharing class RMS_prodConfigManager {
 		} 
  
 		//Glazing Configuration S3
-		if(orderLineItem.Glazing_S3__c != null && orderLineItem.Sash_Ratio__c != null){
+		if(orderLineItem.Glazing_S3__c != null){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
 																							Max_Width_Inches__c,
@@ -827,7 +861,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S3__c
-																							AND Sash_Ratio__C =: orderLineItem.Sash_Ratio__c];
+																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
 

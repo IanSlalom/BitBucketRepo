@@ -273,7 +273,7 @@
                    <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details S1" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}"  rendered ="{!numSashes >= 1}" html-data-jsid="customGrilleDetails1"/>
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="outwideBar" rendered="{!prodConfig.mpc.Wide_Bar_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:inputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" required="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
+            <apex:inputField value="{!OrderItem.Applied_Grilles__c}" required="{!prodConfig.mpc.Applied_Grilles_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
             <apex:outputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="outpermanentlyAppliedInteriorWoodGrille" />
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
             <apex:outputField value="{!OrderItem.Brickmould_Applied__c}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbrickmouldApplied"/>
@@ -973,7 +973,7 @@
     function specialtyWindow(){
 			var $element = j$('.select2-chosen').text();
 
-            if($element == 'Specialty Window'){
+            if($element.includes('Specialty Window')){
                j$("select[data-jsid='specialtyWindow']").show();
 				j$("label[for='"+j$("select[data-jsid='specialtyWindow']").attr("id")+"']").show();
             }else{
