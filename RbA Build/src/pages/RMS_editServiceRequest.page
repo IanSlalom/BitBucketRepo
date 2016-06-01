@@ -1,11 +1,12 @@
 <apex:page standardController="Order" tabStyle="Order" sidebar="true" extensions="RMS_ServiceOrderExtensionMgr">
-        <apex:pageMessages escape="false"/>
+    <apex:pageMessages escape="false"/>
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
     <apex:includeScript value="/support/console/26.0/integration.js"/>
     
     <script type="text/javascript">
     window.onload = function() {
         testSetTabTitle();
+        changeIconforConsole();
     };
     
     function testSetTabTitle() {
@@ -24,7 +25,20 @@
             
         }       
     }
-
+    
+    function changeIconforConsole() {
+        document.getElementById("j_id0:j_id76:nonConsole").style.display = 'none';
+        document.getElementById("j_id0:j_id76:Console").style.display = 'none';
+        
+        if(sforce.console.isInConsole()) {
+            document.getElementById("j_id0:j_id76:Console").style.display = 'block';
+            document.getElementById("j_id0:j_id76:nonConsole").style.display = 'none';
+        }else {
+            document.getElementById("j_id0:j_id76:nonConsole").style.display = 'block';
+            document.getElementById("j_id0:j_id76:Console").style.display = 'none';
+        }
+    }
+    
     
     
     </script>           
@@ -86,9 +100,69 @@
                 <apex:inputField value="{!Order.BillingPostalCode}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Additional Details" collapsible="false" columns="1">                
-            	<apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
+                <apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
-
+    
+    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}">
+        <div class="row" style="padding-top: 9px;">            
+            <div width="25%" style="float: left;">
+                <apex:image id="nonConsole" value="{!$Resource.orderIconNonConsole}" width="33" height="33"/>                
+                <apex:image id="Console" value="{!$Resource.ConsoleOrderIcon}" width="33" height="33"/>                                
+            </div>
+            <div width="75%" style="padding-top: 4px; margin-left: 37px;">
+                <apex:outputText style="font-size: 2em; font-weight: normal;" value="Order{!Order.OrderNumber}">
+                </apex:outputText>                
+            </div>
+        </div>
+        
+        <apex:pageBlock mode="edit" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="Save"/>                
+                <apex:commandButton action="{!cancel}" value="Cancel"/>
+            </apex:pageBlockButtons>  
+            <apex:pageBlockSection title="Order Information" collapsible="false" columns="2" >
+                <apex:outputField value="{!Order.OrderNumber}"/>
+                <apex:outputField value="{!Order.OwnerId}"/>
+                <apex:inputField value="{!Order.Name}"/>                
+                <apex:inputField value="{!Order.Status}"/>
+                <apex:inputField value="{!Order.AccountId}"/>
+                <apex:inputField value="{!Order.Reason__c}"/>
+                <apex:inputField value="{!Order.BilltoContactId}"/>
+                <apex:inputField value="{!Order.EffectiveDate}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Order Details" collapsible="false" columns="2" >
+                <apex:inputField value="{!Order.Store_Location__c}"/>
+                <apex:outputField value="{!Order.Payments_Received__c}"/>
+                <apex:inputField value="{!Order.OpportunityId}"/>                
+                <apex:inputField value="{!Order.QuoteId}"/>
+            </apex:pageBlockSection> 
+            <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
+                <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>
+                <apex:inputField value="{!Order.BillingCountryCode}" label="Billing Country"/>
+                <apex:inputField value="{!Order.ShippingStreet}"/>
+                <apex:inputField value="{!Order.BillingStreet}"/>
+                <apex:inputField value="{!Order.ShippingCity}"/>
+                <apex:inputField value="{!Order.BillingCity}"/>
+                <apex:inputField value="{!Order.ShippingStateCode}" label="Shipping State"/>
+                <apex:inputField value="{!Order.BillingStateCode}" label="Billing State"/>
+                <apex:inputField value="{!Order.ShippingPostalCode}"/>
+                <apex:inputField value="{!Order.BillingPostalCode}"/>
+            </apex:pageBlockSection> 
+            <apex:pageBlockSection title="System Information" collapsible="false" columns="2">                
+                <apex:inputField value="{!Order.rSuite_Id__c}"/>
+                <apex:outputField value="{!Order.RecordTypeId}"/>                
+                <apex:inputField value="{!Order.Pivotal_Id__c}"/>
+                <apex:inputField value="{!Order.hasPO__c}"/>                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Additional Details" collapsible="false" columns="2">
+                <apex:inputField value="{!Order.Order_Processed_Date__c}"/>
+                <apex:inputField value="{!Order.Non_Sufficient_Funds__c}"/>
+                <apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
+                <apex:inputField value="{!Order.Estimated_Ship_Date__c}"/>
+            </apex:pageBlockSection>            
+        </apex:pageBlock>
+    </apex:form>
+    
 </apex:page>
