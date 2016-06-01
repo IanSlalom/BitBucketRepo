@@ -822,7 +822,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	public void setStoreAbbreviation() {
  
 		// Retrive the current user
-		User currentUser = [SELECT Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+		User currentUser = [SELECT User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
 
 		// If a test is running just set the user's abbreviation, otherwise get it from the current user
 		String userAbbreviation = (Test.isRunningTest()) ?   'A' 
