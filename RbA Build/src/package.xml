@@ -87,6 +87,7 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>RMS_viewServiceRequestCtrlr</members>
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
@@ -126,6 +127,7 @@
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <members>RMS_orderHistoryComponent</members>
         <members>RMS_requestListViewComponent</members>
+        <members>RMS_soldOrderHistoryComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
