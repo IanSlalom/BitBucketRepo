@@ -7,16 +7,28 @@
         <field>Order$Account</field>
     </columns>
     <columns>
-        <field>Order$Retail_Total__c</field>
+        <field>Order.OrderItems$OrderItemNumber</field>
+    </columns>
+    <columns>
+        <field>Order.OrderItems$Product_Name__c</field>
+    </columns>
+    <columns>
+        <field>Order.OrderItems$Unit_Id__c</field>
     </columns>
     <columns>
         <field>Order.OrderItems$UnitPrice</field>
     </columns>
     <columns>
+        <field>Order$Retail_Total__c</field>
+    </columns>
+    <columns>
+        <field>Order.OrderItems$Total_Retail_Price__c</field>
+    </columns>
+    <columns>
         <field>Order$Type</field>
     </columns>
     <columns>
-        <field>Order$Owner_Name_Phone__c</field>
+        <field>Order$Bill_to_Contact_Home_Phone__c</field>
     </columns>
     <columns>
         <field>Order$EffectiveDate</field>
@@ -29,12 +41,6 @@
     </columns>
     <columns>
         <field>Order.OrderItems$Room__c</field>
-    </columns>
-    <columns>
-        <field>Order.OrderItems$OrderItemNumber</field>
-    </columns>
-    <columns>
-        <field>Order.OrderItems$Product_Name__c</field>
     </columns>
     <columns>
         <field>Order.OrderItems$Product_Type__c</field>

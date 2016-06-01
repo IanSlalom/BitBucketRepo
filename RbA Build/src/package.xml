@@ -261,8 +261,12 @@
         <members>Payment__c-Deposit Layout</members>
         <members>Payment__c-Misc Cash Receipt Layout</members>
         <members>Pricebook2-Price Book Layout</members>
+        <members>Pricing_Configuration__c-200400 Doors Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
         <members>Product2-Master Product Layout</members>
