@@ -61,12 +61,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Frame Options</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>EJ_Frame_Price__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -83,14 +78,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Brickmould_Traditional_Price__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Overfit_Brickmold_Price__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Overfit_Chamfered_Edge_Price__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -195,18 +182,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Interior_Wood_Only__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Interior_Wood_and_GBG__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Simulated_Divided_Light__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Full_Divided_Light__c</field>
             </layoutItems>
         </layoutColumns>
@@ -252,15 +227,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Aluminum_Screen__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Aluminum_Screen_Half__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Aluminum_Dual__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
