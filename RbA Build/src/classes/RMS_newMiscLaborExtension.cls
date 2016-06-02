@@ -50,7 +50,7 @@ public with sharing class RMS_newMiscLaborExtension {
 
 			// If a test is running just set the store name, otherwise get it from the current user
 			String storeLocationName = (Test.isRunningTest()) ? 	testStoreLocation :
-																	[SELECT Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Store_Location__c;
+																	[SELECT Default_Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Default_Store_Location__c;
 
 
 			if (String.isBlank(storeLocationName)) {

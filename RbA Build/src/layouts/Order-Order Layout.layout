@@ -37,10 +37,6 @@
                 <behavior>Edit</behavior>
                 <field>Estimated_Install_Duration__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Unique_Identifier__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -311,38 +307,6 @@
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Visit Work Orders</label>
-        <layoutColumns>
-            <layoutItems>
-                <height>200</height>
-                <page>RMS_viewRelatedWorkOrdersVisit</page>
-                <showLabel>false</showLabel>
-                <showScrollbars>false</showScrollbars>
-                <width>100%</width>
-            </layoutItems>
-        </layoutColumns>
-        <style>OneColumn</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
-        <label>Actions Work Orders</label>
-        <layoutColumns>
-            <layoutItems>
-                <height>200</height>
-                <page>RMS_viewRelatedWorkOrdersActions</page>
-                <showLabel>false</showLabel>
-                <showScrollbars>true</showScrollbars>
-                <width>100%</width>
-            </layoutItems>
-        </layoutColumns>
-        <style>OneColumn</style>
-    </layoutSections>
-    <layoutSections>
-        <customLabel>true</customLabel>
-        <detailHeading>true</detailHeading>
-        <editHeading>true</editHeading>
         <label>Order Products</label>
         <layoutColumns>
             <layoutItems>
@@ -394,7 +358,6 @@
         <fields>NAME</fields>
         <fields>Store_Finance_Program__c.NAME</fields>
         <fields>Amount_Financed__c</fields>
-        <fields>Expiration_Date__c</fields>
         <relatedList>Order_Financing__c.Related_Order__c</relatedList>
     </relatedLists>
     <relatedLists>

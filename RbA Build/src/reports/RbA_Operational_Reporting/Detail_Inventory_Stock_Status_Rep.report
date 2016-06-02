@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Asset$Name</field>
+    </columns>
+    <columns>
+        <field>Asset$Purchase_Order__c</field>
+    </columns>
+    <columns>
+        <field>Asset$Contact</field>
+    </columns>
+    <columns>
+        <field>Asset$Product2</field>
+    </columns>
+    <columns>
+        <field>Asset$Variant_Number__c</field>
+    </columns>
+    <columns>
+        <field>Asset$Date_Received__c</field>
+    </columns>
+    <columns>
+        <field>Asset$Quantity</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Asset$Unit_Wholesale_Cost__c</field>
+    </columns>
+    <columns>
+        <field>Asset.Journal_Entries__r$Debit_General_Ledger_Account__c</field>
+    </columns>
+    <description>BO4002 Detail Inventory Stock Status Report</description>
+    <filter>
+        <criteriaItems>
+            <column>Asset$RecordType</column>
+            <operator>equals</operator>
+            <value>Asset.Installed_Products</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <name>Detail Inventory Stock Status Rep</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Assets_with_without_Journal_Entries__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Asset$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

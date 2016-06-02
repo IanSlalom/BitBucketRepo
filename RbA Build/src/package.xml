@@ -34,6 +34,7 @@
         <members>RMS_ServiceProductPickup</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
+        <members>RMS_acceptInvite</members>
         <members>RMS_addSkilltoWO</members>
         <members>RMS_assignServiceTaskOwner</members>
         <members>RMS_backOfficeChecklistManager</members>
@@ -86,9 +87,12 @@
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
+        <members>RMS_viewServiceRequestCtrlr</members>
         <members>TaskTriggerHandler</members>
         <members>TaskTriggerHandlerTests</members>
         <members>TestUtilityMethods</members>
+        <members>UserTriggerHandler</members>
+        <members>UserTriggerHandlerTest</members>
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>eventTest</members>
@@ -123,6 +127,7 @@
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <members>RMS_orderHistoryComponent</members>
         <members>RMS_requestListViewComponent</members>
+        <members>RMS_soldOrderHistoryComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -179,6 +184,7 @@
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
+        <members>UserTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -204,6 +210,8 @@
         <members>Product_Configuration__c</members>
         <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
+        <members>RbA_Work_Order__c</members>
+        <members>Resource__c</members>
         <members>Service_Request</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
@@ -271,8 +279,12 @@
         <members>Payment__c-Deposit Layout</members>
         <members>Payment__c-Misc Cash Receipt Layout</members>
         <members>Pricebook2-Price Book Layout</members>
+        <members>Pricing_Configuration__c-200400 Doors Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
         <members>Product2-Master Product Layout</members>
@@ -334,6 +346,7 @@
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
+        <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
@@ -373,8 +386,10 @@
     </types>
     <types>
         <members>Assets_with_Purchase_Orders</members>
+        <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_Order_Products</members>
+        <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
     <types>
