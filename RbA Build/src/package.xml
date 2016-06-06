@@ -394,7 +394,7 @@
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
-        <members>Orders_with_All_Fields_Clone</members>
+        <members>Orders_with_All_FieldsClone</members>
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Purchase_Orders_with_Order_Products</members>
