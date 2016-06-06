@@ -167,15 +167,19 @@
     <tab>standard-Contact</tab>
     <tab>standard-Opportunity</tab>
     <tab>standard-Order</tab>
+    <tab>Service_Request</tab>
     <tab>Purchase_Order__c</tab>
     <tab>Payment__c</tab>
     <tab>Labor__c</tab>
     <tab>RbA_Work_Order__c</tab>
+    <tab>MA_Scheduler</tab>
     <tab>standard-Dashboard</tab>
-    <tab>Service_Request</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
+        </mapping>
+        <mapping>
+            <tab>MA_Scheduler</tab>
         </mapping>
         <mapping>
             <tab>Payment__c</tab>
