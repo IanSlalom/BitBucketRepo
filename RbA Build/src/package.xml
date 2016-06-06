@@ -342,12 +342,14 @@
     </types>
     <types>
         <members>RbA_Operational_Reporting</members>
+        <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
+        <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
         <members>RbA_Operational_Reporting/Order_Status_Report</members>
@@ -368,6 +370,9 @@
         <members>RbA_Operational_Reporting/Report_7300_On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
+        <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
+        <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
+        <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
@@ -378,6 +383,7 @@
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
+        <members>RbA_Operational_Reporting/Rpt_3600_Orders_Released_btw_Rel_Dates</members>
         <members>RbA_Operational_Reporting/Rpt_Business_Adjustment_Reconciliation</members>
         <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
@@ -388,7 +394,10 @@
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
+        <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
+        <members>Orders_with_Purchase_Orders</members>
+        <members>Orders_with_RbA_Work_Orders_with_Activities</members>
         <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
