@@ -15,12 +15,14 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     public string serviceOrderPermitRecordTypeId{get;set;}
     public string serviceOrderLSWPRecordTypeId{get;set;}
     public string serviceOrderPaintStainRecordTypeId{get;set;}
-    
+    public string serviceOrderCollectionsRecordTypeId{get;set;}
+
     public string serviceOrderVisitRecordTypeURL{get;set;}
     public string serviceOrderActionsRecordTypeURL{get;set;}
     public string serviceOrderLSWPRecordTypeURL{get;set;}
     public string serviceOrderPaintStainRecordTypeURL{get;set;}
     public string serviceOrderPermitRecordTypeURL{get;set;}
+    public string serviceOrderCollectionsRecordTypeURL{get;set;}
     
     public boolean displayButtonsOnPage{get;set;}
     
@@ -45,7 +47,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
         serviceOrderPermitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
         serviceOrderLSWPRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
         serviceOrderPaintStainRecordTypeId = UtilityMethods.retrieveRecordTypeId('Paint_Stain', 'RbA_Work_Order__c');
-        
+        serviceOrderCollectionsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Collections', 'RbA_Work_Order__c');
         
         
         String ordId = ord.id;
@@ -57,6 +59,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
                         'Sold_Order__c, '+                        
                         'Type_image__c, '+
                         'Confirmed_Appt_w_Customer__c, '+
+                        'Scheduled_Install_Date_Formula__c, '+
+                        'Work_Order_Scheduling_Status__c, ' +
                         'Work_Order_Status__c, '+
                         'Owner.Name, '+
                         'Work_Order_Type__c, '+
@@ -74,8 +78,8 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
             woQuery = woQuery+' AND (RecordTypeId = :serviceOrderActionsRecordTypeId';
             woQuery = woQuery+' OR RecordTypeId = :serviceOrderPermitRecordTypeId';
             woQuery = woQuery+' OR RecordTypeId = :serviceOrderLSWPRecordTypeId';
-            woQuery = woQuery+' OR RecordTypeId = :serviceOrderPaintStainRecordTypeId)';
-            
+            woQuery = woQuery+' OR RecordTypeId = :serviceOrderPaintStainRecordTypeId';
+            woQuery = woQuery+' OR RecordTypeId = :serviceOrderCollectionsRecordTypeId)';
             
         }
         system.debug('ads woQuery: '+woQuery);
@@ -158,12 +162,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
         
         serviceOrderPermitRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=permit'+endURL;
                                                                 
-                                            
-                                            
-         
-         
-        
-
+        serviceOrderCollectionsRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=collections'+endURL;                                    
          
     }
 
