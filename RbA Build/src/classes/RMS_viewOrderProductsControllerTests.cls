@@ -21,6 +21,7 @@ private class RMS_viewOrderProductsControllerTests {
 	@testSetup static void setupData() {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
+
 		//Account acc = utility.createAccount('1');
 		//insert acc;
 		Account dwelling = utility.createDwellingAccount('Dwelling Account');
@@ -70,6 +71,7 @@ private class RMS_viewOrderProductsControllerTests {
 	
 	@isTest static void testController() {
 		Order order = [select Id,Pricebook2Id,RecordTypeId from Order where Name ='Sold Order 1'];
+		Test.startTest();
 		RMS_viewOrderProductsController controller = new RMS_viewOrderProductsController(new ApexPages.StandardController(order));
 		System.assert(controller.OrderItemWrappers.size() == 1);
 		OrderItem orderItemMaster = [Select Id from OrderItem where Pricebookentry.Product2.Name = 'master'];
@@ -82,6 +84,15 @@ private class RMS_viewOrderProductsControllerTests {
 		controller.orderItemToToggle = orderItemMaster.Id;
 		controller.toggleShowRelatedItems();
 		System.assertEquals(controller.OrderItemWrappers[0].showRelatedItems,true);
+		Id cancelledItem = controller.OrderItemWrappers[0].RelatedItems[1].Id;
+		controller.orderItemToCancel = cancelledItem;
+		controller.cancelOrderItem();
+		//Assert the item is set to cancelled status and removed from the orderItemWrapper list.
+		OrderItem item = [Select Status__c from OrderItem where Id =: cancelledItem];
+		System.assertEquals(item.Status__c, 'Cancelled');
+		System.assertEquals(controller.OrderItemWrappers[0].relatedItems.size(),1);
+		Test.stopTest();
+
 	}
 	
 }
