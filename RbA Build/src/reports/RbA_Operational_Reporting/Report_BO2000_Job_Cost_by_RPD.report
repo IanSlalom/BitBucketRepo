@@ -33,7 +33,7 @@
     <aggregates>
         <calculatedFormula>Order.Product_Cost__c:SUM / Order.Retail_Total__c:SUM</calculatedFormula>
         <datatype>percent</datatype>
-        <description>Product Cost / Retail Total</description>
+        <description>Product Cost %</description>
         <developerName>FORMULA4</developerName>
         <isActive>true</isActive>
         <isCrossBlock>false</isCrossBlock>
@@ -168,23 +168,23 @@
     </columns>
     <filter>
         <criteriaItems>
-            <column>Order$Primary_Installer__c</column>
-            <operator>notEqual</operator>
-            <value></value>
-        </criteriaItems>
-        <criteriaItems>
             <column>Order$RecordType</column>
             <operator>equals</operator>
             <value>Order.CORO_Record_Type</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Sales_Rep__c</column>
+            <operator>notEqual</operator>
+            <value></value>
         </criteriaItems>
     </filter>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Order$Primary_Installer__c</field>
+        <field>Order$Sales_Rep__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Report BO2000 Lead Installer</name>
+    <name>Report BO2000 Job Cost by RPD</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -192,7 +192,7 @@
     <reportType>Orders_with_All_Fields__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
-    <sortColumn>Order$Retail_Total__c</sortColumn>
+    <sortColumn>Order$Retail_Subtotal__c</sortColumn>
     <sortOrder>Asc</sortOrder>
     <timeFrameFilter>
         <dateColumn>Order$Revenue_Recognized_Date__c</dateColumn>
