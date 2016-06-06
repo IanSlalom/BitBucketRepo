@@ -409,11 +409,6 @@
             <table>Order.OrderItems</table>
         </columns>
         <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Service__c</field>
-            <table>Order.OrderItems</table>
-        </columns>
-        <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>OrderItemNumber</field>
             <table>Order.OrderItems</table>

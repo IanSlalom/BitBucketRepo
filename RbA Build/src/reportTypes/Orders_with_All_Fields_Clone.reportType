@@ -4,7 +4,7 @@
     <category>other</category>
     <deployed>true</deployed>
     <description>Order object with all fields</description>
-    <label>Orders with All Fields</label>
+    <label>Orders with All Fields Clone</label>
     <sections>
         <columns>
             <checkedByDefault>false</checkedByDefault>
@@ -619,31 +619,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Store_Location__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Installation_Date_Complete__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Installation_Margin__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Order_Owner__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Payments_Received__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Windows_Series_2_FF_IF_Rollup__c</field>
             <table>Order</table>
         </columns>
         <masterLabel>Orders</masterLabel>
