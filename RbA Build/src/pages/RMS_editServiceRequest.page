@@ -27,15 +27,15 @@
     }
     
     function changeIconforConsole() {
-        document.getElementById("j_id0:j_id76:nonConsole").style.display = 'none';
-        document.getElementById("j_id0:j_id76:Console").style.display = 'none';
+        document.getElementById("j_id0:j_id77:nonConsole").style.display = 'none';
+        document.getElementById("j_id0:j_id77:Console").style.display = 'none';
         
         if(sforce.console.isInConsole()) {
-            document.getElementById("j_id0:j_id76:Console").style.display = 'block';
-            document.getElementById("j_id0:j_id76:nonConsole").style.display = 'none';
+            document.getElementById("j_id0:j_id77:Console").style.display = 'block';
+            document.getElementById("j_id0:j_id77:nonConsole").style.display = 'none';
         }else {
-            document.getElementById("j_id0:j_id76:nonConsole").style.display = 'block';
-            document.getElementById("j_id0:j_id76:Console").style.display = 'none';
+            document.getElementById("j_id0:j_id77:nonConsole").style.display = 'block';
+            document.getElementById("j_id0:j_id77:Console").style.display = 'none';
         }
     }
     
@@ -83,6 +83,7 @@
                 <apex:inputField value="{!Order.QuoteId}"/>
                 <apex:inputField value="{!Order.Quote_Notes__c}"/>
                 <apex:inputField value="{!Order.Customer_Pickup_All__c}"/>
+                <apex:inputField value="{!Order.AR_Reason__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.Sold_Order__c}"/>
@@ -137,6 +138,7 @@
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
                 <apex:inputField value="{!Order.OpportunityId}"/>                
                 <apex:inputField value="{!Order.QuoteId}"/>
+                <apex:inputField value="{!Order.AR_Reason__c}"/>
             </apex:pageBlockSection> 
             <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>

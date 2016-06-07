@@ -376,15 +376,19 @@ global with sharing class MA_RoutingSchedulerController {
     private static Map<Id, Id> setupRoutes(Date dateToCheck, String storeId, String storeTimezone, String workOrderType, Set<Id> resourceIds) {
         Map<Id, Id> userIdToResourceIdMap = new Map<Id, Id>();
         try {
-        	List<Object> features = new List<Object>();
+        	List<Resource__c> resourceList;
+            List<Object> features = new List<Object>();
         	Map<Id, Map<String, Object>> resourceHours = new Map<Id, Map<String, Object>>();
         	Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrderType);
+            
+            DateTime dateTimeToCheck = DateTime.newInstance(dateToCheck, Time.newInstance(0, 0, 0, 0));
+            dateTimeToCheck = MA_SchedulerUtilities.convertTimezoneToTimezone(dateTimeToCheck, null, storeTimezone);
+            String dayOfWeek = dateTimeToCheck.format('EEEE', storeTimezone);
 
         	if (configs != null) {
         		resourceHours = (Map<Id, Map<String, Object>>)configs.get('resourceHours');
         	}
             
-            List<Resource__c> resourceList;
             if (resourceIds != null && !resourceIds.isEmpty()) {
                 resourceList = [SELECT Id, Name, RbA_User__c, Retail_Location__c,
                                     (SELECT Id, RbA_Skill__c FROM Resource_Skills__r)
@@ -397,13 +401,9 @@ global with sharing class MA_RoutingSchedulerController {
             }
 
             for (Resource__c resource : resourceList) {
-                Boolean isExclueded = false;
                 Map<String, Object> attributes = new Map<String, Object>();
                 Map<String, Object> resourceObj = new Map<String, Object>();
                 Map<String, Object> resourceHoursMap = new Map<String, Object>();
-				
-                DateTime dateTimeToCheck = (DateTime)dateToCheck;
-                String dayOfWeek = dateTimeToCheck.format('EEEE', storeTimezone);
 
                 userIdToResourceIdMap.put(resource.RbA_User__c, resource.Id);
                 attributes.put('Name', '{"resId":"' + resource.Id + '","userId":"' + resource.RbA_User__c + '"}');
@@ -578,32 +578,42 @@ global with sharing class MA_RoutingSchedulerController {
 
             List<Event> sfEventList = [SELECT Id, OwnerId, StartDateTime, EndDateTime, DurationInMinutes
                                         FROM Event WHERE OwnerId IN :userIdToResourceIdMap.keySet()
-                                        AND StartDateTime < :endDateTime AND EndDateTime > :startDateTime AND MA_Scheduler_Event__c = null];
+                                        AND StartDateTime < :endDateTime AND EndDateTime > :startDateTime AND MA_Scheduler_Event__c = null
+                                        ORDER BY StartDateTime ASC];
             
+            Integer i = 1;
             for (Event sfEvent : sfEventList) {
                 Map<String, Object> breakObj = new Map<String, Object>();
                 Map<String, Object> attributes = new Map<String, Object>();
 
                 attributes.put('RouteName', '{"resId":"' + userIdToResourceIdMap.get(sfEvent.OwnerId) + '","userId":"' + sfEvent.OwnerId + '"}');
                 attributes.put('ServiceTime', sfEvent.DurationInMinutes);
-                attributes.put('TimeWindowEnd', sfEvent.EndDateTime.getTime());
+                //attributes.put('TimeWindowEnd', sfEvent.EndDateTime.getTime());
+                attributes.put('TimeWindowEnd', sfEvent.StartDateTime.getTime());
                 attributes.put('TimeWindowStart', sfEvent.StartDateTime.getTime());
+                attributes.put('Precedence', i);
+                attributes.put('MaxViolationTime', 0);
 
                 breakObj.put('attributes', attributes);
                 features.add(breakObj);
+                i++;
             }
 
             List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, Resource__r.RbA_User__c, StartDateTime__c, EndDateTime__c
                                                         FROM MA_Scheduler_Event__c WHERE Resource__c IN :userIdToResourceIdMap.values()
-                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime AND RbA_Work_Order__c = null];
+                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime AND RbA_Work_Order__c = null
+                                                        ORDER BY StartDateTime__c ASC];
             
             for (MA_Scheduler_Event__c maEvent : maEventList) {
                 Map<String, Object> breakObj = new Map<String, Object>();
                 Map<String, Object> attributes = new Map<String, Object>();
 
                 attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
-                attributes.put('TimeWindowEnd', maEvent.EndDateTime__c.getTime());
+                //attributes.put('TimeWindowEnd', maEvent.EndDateTime__c.getTime());
+                attributes.put('TimeWindowEnd', maEvent.StartDateTime__c.getTime());
                 attributes.put('TimeWindowStart', maEvent.StartDateTime__c.getTime());
+                attributes.put('Precedence', i);
+                attributes.put('MaxViolationTime', 0);
 
                 Long milliDiff = maEvent.EndDateTime__c.getTime() - maEvent.StartDateTime__c.getTime();
                 Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
@@ -611,6 +621,7 @@ global with sharing class MA_RoutingSchedulerController {
 
                 breakObj.put('attributes', attributes);
                 features.add(breakObj);
+                i++;
             }
 
             master.put('breaks', new Map<String, Object> { 'features' => features }); 

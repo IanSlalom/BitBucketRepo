@@ -37,6 +37,14 @@
                 <behavior>Edit</behavior>
                 <field>Estimated_Install_Duration__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Unique_Identifier__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Total_Materials_Applied__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -75,6 +83,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>QuoteId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AR_Reason__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -358,6 +370,7 @@
         <fields>NAME</fields>
         <fields>Store_Finance_Program__c.NAME</fields>
         <fields>Amount_Financed__c</fields>
+        <fields>Finance_Program_Expiration_Date__c</fields>
         <relatedList>Order_Financing__c.Related_Order__c</relatedList>
     </relatedLists>
     <relatedLists>

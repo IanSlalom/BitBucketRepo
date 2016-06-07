@@ -89,7 +89,7 @@
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
-                                <apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
+                                <!--<apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
                                     <apex:outputPanel layout="block" styleClass="requiredInput">
                                         <apex:outputPanel layout="block" styleClass="requiredBlock" />
                                         <apex:selectList size="1" value="{!wrapper.cost}" required="true">
@@ -114,7 +114,7 @@
                                             <apex:selectOptions value="{!wrapper.secondaries}"/>
                                         </apex:selectList>
                                     </apex:outputPanel>
-                                </apex:column> 
+                                </apex:column> -->
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
                                 </apex:column>

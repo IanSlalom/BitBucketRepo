@@ -690,4 +690,42 @@ String secondary = 'Customer Satisfaction';*/
         
         Test.stopTest();       
     }
+    
+    private testMethod static void testSuccess() {
+        RMS_serviceRequestListViewMgr con = new RMS_serviceRequestListViewMgr();
+        String propPickValSelected = con.getpropPickValSelected(); 
+        con.listName = 'Service Requests - All';
+        con.propPickValSelected = 'Service Requests - All';
+        for(SelectOption listView : con.getPickLstValue()){
+            listView.getValue();
+        } 
+        System.assert(con.listId != null);
+    }
+    
+    private testMethod static void testFailure() {
+        RMS_serviceRequestListViewMgr con = new RMS_serviceRequestListViewMgr();
+        con.listName = 'BADLISTNAME';
+        System.assert(con.listId == null);
+        
+    }
+    
+    static testmethod void listView(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];               
+        
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestListView);
+        //ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_serviceRequestListViewMgr TE = new RMS_serviceRequestListViewMgr();
+        String propPickValSelected = TE.getpropPickValSelected();   
+        TE.propPickValSelected = 'Service Requests - All';
+        for(SelectOption listView : TE.getPickLstValue()){
+            listView.getValue();
+        } 
+        
+        
+        Test.stopTest();       
+    }
 }
