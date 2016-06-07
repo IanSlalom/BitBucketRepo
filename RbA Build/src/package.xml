@@ -343,6 +343,9 @@
     <types>
         <members>RbA_Operational_Reporting</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
@@ -398,6 +401,8 @@
         <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
+        <members>Payments_with_All_Order_Fields</members>
+        <members>Payments_with_or_without_Journal_Entries</members>
         <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
