@@ -414,6 +414,7 @@
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
         <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
+        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
