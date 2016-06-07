@@ -50,8 +50,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>AR_Reason__c</field>
-                <behavior>Readonly</behavior>
-                <field>AR_Age__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
