@@ -2,14 +2,14 @@
 
 @trigger OrderItemTrigger
 
-@brief	trigger framework to secure order of operation
+@brief  trigger framework to secure order of operation
 
 @author  Anthony Strafaccia (Slalom.ADS)
 
-@version	2016-3/3  Slalom.ADS
+@version    2016-3/3  Slalom.ADS
 Created.
 
-@see		OrderItemTriggerTest
+@see        OrderItemTriggerTest
 
 @copyright  (c)2016 Slalom.  All Rights Reserved.
 Unauthorized use is prohibited.
@@ -24,7 +24,7 @@ trigger OrderItemTrigger on OrderItem (after delete, after insert, after undelet
                                            //GET ALL RMS SETTINGS CUSTOM SETTINGS
                                            map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
                                            
-                                           //CHECK IF DATA LOADING PROFILE	
+                                           //CHECK IF DATA LOADING PROFILE  
                                            if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
                                                if(Trigger.isDelete){
                                                    Trigger.old[0].addError(RMS_ErrorMessages.DATA_LOADING_CUSTOM_SETTING_REQUIRED);
@@ -35,8 +35,7 @@ trigger OrderItemTrigger on OrderItem (after delete, after insert, after undelet
                                            //IF NOT DATA LOADING PROFILE RUN LOGIC
                                            else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
                                                //HANDLERS AND MANAGERS
-                                               RMS_OrderItemManager orderItemManager = new RMS_OrderItemManager();
-                                               RMS_createCharges createCharges = new RMS_createCharges();
+                                               RMS_OrderItemManager orderItemManager = new RMS_OrderItemManager();                                               
                                                List<SObject> orders = new List<SObject>();
                                                /*     
 // Before Insert
@@ -59,8 +58,7 @@ financialTransactionManager.onBeforeDeletePayment(Trigger.old, Trigger.oldMap);
 */ 
                                                // After Insert
                                                else if(Trigger.isInsert && Trigger.isAfter){
-                                                   orderItemManager.setUpChangeHistoryOnCreate(Trigger.new, Trigger.newMap);
-                                                   createCharges.createCharge(Trigger.new, Trigger.newMap);
+                                                   orderItemManager.setUpChangeHistoryOnCreate(Trigger.new, Trigger.newMap);                                                   
                                                } 
                                                /* 
 // After Update
@@ -82,7 +80,7 @@ handler.onAfterDelete(Trigger.old, Trigger.oldMap);
 else if(Trigger.isUnDelete){
 financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
 }
-update orders;		
+update orders;      
 */
                                            }
                                            
