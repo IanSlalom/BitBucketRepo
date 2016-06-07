@@ -91,8 +91,8 @@
         }
         
         tr.dataRow.odd {
- 		   background-color: #F0F0F6;
-		}
+           background-color: #F0F0F6;
+        }
         
         td#bodyCell {
         background-color: white;
@@ -101,9 +101,10 @@
         td#sidebarCell{
         background-color: white;
         }
+
     </style>
     
-    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}">
+    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}" >
         <div class="listHoverLinksbw" style="visibility: visible;">
             <a href="#head_01B6100000A4a5g_ep_j_id0_j_id8" class="linklet">Order Products</a><span class="pipe"> | </span>
             <a href="#j_id0:j_id96:j_id97" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
@@ -163,14 +164,20 @@
                 <apex:outputField value="{!Order.EffectiveDate}"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
                 <apex:outputField value="{!Order.Type_image__c}"/>
-                <apex:outputField value="{!Order.Service_Type__c}"/>
+                <apex:outputField value="{!Order.Service_Type__c}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton" 
+                        hideOnEdit="editButton" event="ondblclick" 
+                         resetFunction="resetInlineEdit" disabled="false"/>
+                </apex:outputField>
                 <apex:outputField value="{!Order.Store_Location__c}"/>
                 <apex:outputField value="{!Order.Service_initiated_By__c}"/>
                 <apex:outputField value="{!Order.Mileage__c}"/>
                 <apex:outputField value="{!Order.Status}"/>
+                <apex:outputField value="{!Order.Reimbursement_Mileage__c}"/>
                 <apex:outputField value="{!Order.Total_Jobsite_Hours__c}"/>
-                <br/>
+                <apex:outputField value="{!Order.Total_Procedure_Time__c}"/>
                 <apex:outputField value="{!Order.of_Visits__c}"/>
+                <apex:outputField value="{!Order.Reimbursement_Labor__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
                 <apex:outputField value="{!Order.Description}"/>
@@ -186,7 +193,7 @@
                 <apex:outputField value="{!Order.Billable_Tax_Amount__c}"/>
                 <apex:outputField value="{!Order.Customer_Pickup_All__c}"/>
                 <apex:outputField value="{!Order.Sales_Tax__c}"/>
-                <br/>
+                <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
                 <br/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
@@ -242,9 +249,10 @@
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
             <apex:pageBlockTable value="{!visitWOs}" var="s">
                 <apex:column headervalue=" "><apex:outputLink value="/{!s.id}">View</apex:outputLink></apex:column>
-                <apex:column headerValue="Work Order Status" value="{!s.Work_Order_Type__c}"/>
+                <apex:column headerValue="Work Order Type" value="{!s.Work_Order_Type__c}"/>
                 <apex:column headerValue="Work Order Status" value="{!s.Work_Order_Status__c}"/>
                 <apex:column headerValue="Scheduled Date/Time" value="{!s.Confirmed_Appt_w_Customer__c}"/>
+                <apex:column headerValue="Appointment Duration" value="{!s.Appointment_Duration__c}"/>
                 <apex:column headerValue="Owner" value="{!s.Owner.Name}"/> 
             </apex:pageBlockTable> 
         </apex:pageBlock>
@@ -256,7 +264,7 @@
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
             <apex:pageBlockTable value="{!actionWOs}" var="t">
                 <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
-                <apex:column headerValue="Work Order Status" value="{!t.Work_Order_Type__c}"/>
+                <apex:column headerValue="Work Order Type" value="{!t.Work_Order_Type__c}"/>
                 <apex:column headerValue="Work Order Status" value="{!t.Work_Order_Status__c}"/>
                 <apex:column headerValue="Scheduled Date/Time" value="{!t.Confirmed_Appt_w_Customer__c}"/>
                 <apex:column headerValue="Owner" value="{!t.Owner.Name}"/> 
@@ -281,7 +289,7 @@
 
     <apex:relatedList list="Assets__r" id="ast"/>
     <apex:relatedList list="Journal_Entries__r" id="je"/>
-    <apex:relatedList list="Business_Adjustments__r" id="ba"/>    
+    <apex:relatedList list="Business_Adjustments__r" id="ba"/>       
     <apex:relatedList list="OpenActivities" id="oa" />
     <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
     <apex:relatedList subject="{!Order}" list="CombinedAttachments" id="nat"/>

@@ -16,6 +16,9 @@
         <field>Order.Primary_Installer__c</field>
     </columns>
     <columns>
+        <field>Order.Lead_Service_Tech__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order.Jobs__c</field>
     </columns>
@@ -40,14 +43,15 @@
         <field>Order.Series_2_Rollup__c</field>
     </columns>
     <columns>
+        <field>Order.Finance_Program_Fees__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order.Entry_Door_Rollup__c</field>
     </columns>
     <columns>
-        <field>Order.Estimated_Ship_Date__c</field>
-    </columns>
-    <columns>
-        <field>Order.Retail_Total__c</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>ORDER_TOTAL_AMOUNT</field>
     </columns>
     <format>Tabular</format>
     <name>Report BO3000 Detail Backlog</name>

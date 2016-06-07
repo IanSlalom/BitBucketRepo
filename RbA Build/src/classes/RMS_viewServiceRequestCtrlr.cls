@@ -66,7 +66,7 @@ public class RMS_viewServiceRequestCtrlr {
     List<RbA_Work_Order__c> visitWOs;
     public List<RbA_Work_Order__c> getvisitWOs() {
         if(ordRecId != null) {
-            visitWOs = [SELECT Id, Work_Order_Status__c,Work_Order_Type__c,Confirmed_Appt_w_Customer__c,Owner.Name
+            visitWOs = [SELECT Id, Work_Order_Status__c,Work_Order_Type__c,Confirmed_Appt_w_Customer__c,Appointment_Duration__c, Owner.Name
                         FROM RbA_Work_Order__c 
                         WHERE RecordType.DeveloperName = 'Visit' AND Sold_Order__r.id=:ordRecId];
         }
