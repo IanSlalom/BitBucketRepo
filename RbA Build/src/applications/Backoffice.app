@@ -180,6 +180,9 @@
             <tab>Labor__c</tab>
         </mapping>
         <mapping>
+            <tab>MA_Scheduler</tab>
+        </mapping>
+        <mapping>
             <tab>Payment__c</tab>
         </mapping>
         <mapping>
