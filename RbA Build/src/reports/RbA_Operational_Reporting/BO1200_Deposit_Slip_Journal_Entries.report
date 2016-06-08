@@ -16,6 +16,9 @@
         <field>Payment__c$Name</field>
     </columns>
     <columns>
+        <field>Payment__c.Journal_Entries__r$Type__c</field>
+    </columns>
+    <columns>
         <field>Payment__c.Journal_Entries__r$Debit_General_Ledger_Account__c</field>
     </columns>
     <columns>
@@ -33,11 +36,6 @@
         </criteriaItems>
     </filter>
     <format>Summary</format>
-    <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>Payment__c.Journal_Entries__r$Type__c</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsDown>
     <name>BO1200 Deposit Slip Journal Entries</name>
     <params>
         <name>co</name>
