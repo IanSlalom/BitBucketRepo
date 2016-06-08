@@ -161,7 +161,7 @@
                 <apex:commandButton onclick="callGenerateConsoleURL('{!editRedirect}','Edit');return false" id="editRedirect" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
                 <apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled',true,false)}"/>
                 <apex:commandButton onclick="callGenerateConsoleURL('{!updateSTURL}', 'Update Service Type');return false" id="updateST" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
-                <apex:commandButton value="RbA Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
+                <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
                 <apex:outputField value="{!Order.AccountId}"/>
