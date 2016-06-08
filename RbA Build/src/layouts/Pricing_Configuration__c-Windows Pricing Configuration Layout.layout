@@ -211,10 +211,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Hardware__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Quantity_Formula__c</field>
             </layoutItems>
             <layoutItems>
@@ -248,15 +244,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Lifts_Pulls__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Extra_Lift_or_Pull__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Finger_Lifts__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -295,18 +283,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Simulated_Divided_Light__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Full_Divided_Light__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>FDL_Permanently_Applied_Interior__c</field>
-            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>GBG_Wide_Bar__c</field>
@@ -348,15 +328,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Aluminum_Screen__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Aluminum_Screen_Half__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Aluminum_Dual__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

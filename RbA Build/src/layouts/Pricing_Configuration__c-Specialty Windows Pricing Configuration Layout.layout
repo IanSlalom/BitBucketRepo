@@ -247,10 +247,6 @@
                 <behavior>Edit</behavior>
                 <field>Applied_Grilles__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>FDL_Permanently_Applied_Interior__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>

@@ -21,6 +21,26 @@
         <template>RbA_Email_Templates/PaintStainInstallReminder</template>
     </alerts>
     <fieldUpdates>
+        <fullName>Set_Appointment_Duration_1_hour</fullName>
+        <description>Set Appointment Duration to 1</description>
+        <field>Appointment_Duration__c</field>
+        <formula>1</formula>
+        <name>Set Appointment Duration 1 hour</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Appointment_Duration_4_Hours</fullName>
+        <description>Set Default Appointment Duration to 4 hours</description>
+        <field>Appointment_Duration__c</field>
+        <formula>4</formula>
+        <name>Set Appointment Duration 4 Hours</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Completed_Date_Install</fullName>
         <field>Completed_Appt_Date_Install__c</field>
         <formula>Today()</formula>
@@ -43,6 +63,33 @@
         <field>Completed_Appt_Date_Tech_Measure__c</field>
         <formula>Today()</formula>
         <name>Set Completed Date - Tech Measure</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Original_Appt_Date_Time_Install</fullName>
+        <field>Original_Appt_Date_Time_Install__c</field>
+        <formula>Scheduled_Appt_Date_Time_Install__c</formula>
+        <name>Set Original Appt Date/Time - Install</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Original_Appt_Date_Time_Service</fullName>
+        <field>Original_Appt_Date_Time_Service__c</field>
+        <formula>Scheduled_Appt_Date_Time_Service__c</formula>
+        <name>Set Original Appt Date/Time - Service</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Original_Appt_Date_Time_Tech_Measu</fullName>
+        <field>Original_Appt_Date_Time_Tech_Measure__c</field>
+        <formula>Scheduled_Appt_Date_Time_Tech_Measure__c</formula>
+        <name>Set Original Appt Date/Time - Tech Measu</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
@@ -130,6 +177,36 @@
         </workflowTimeTriggers>
     </rules>
     <rules>
+        <fullName>Set Appointment Duration 1 Hour</fullName>
+        <actions>
+            <name>Set_Appointment_Duration_1_hour</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure,Service</value>
+        </criteriaItems>
+        <description>Set Appointment Duration for 1 hour for Tech Measure and Service.</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Appointment Duration 4 Hours</fullName>
+        <actions>
+            <name>Set_Appointment_Duration_4_Hours</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </criteriaItems>
+        <description>Set Appointment Duration for 4 hours for Install</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
         <fullName>Set Install WO Completed Date</fullName>
         <actions>
             <name>Set_Completed_Date_Install</name>
@@ -147,6 +224,45 @@
             <value>Appt Complete / Closed</value>
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Install</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Original Appt Date%2FTime - Install</fullName>
+        <actions>
+            <name>Set_Original_Appt_Date_Time_Install</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Install__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Original Appt Date%2FTime - Service</fullName>
+        <actions>
+            <name>Set_Original_Appt_Date_Time_Service</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Service__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Original Appt Date%2FTime - Tech Measure</fullName>
+        <actions>
+            <name>Set_Original_Appt_Date_Time_Tech_Measu</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Tech_Measure__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>

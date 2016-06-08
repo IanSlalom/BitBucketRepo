@@ -43,17 +43,10 @@
                 <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
                 <apex:commandButton action="{!saveCloseTab}" value="Save" />                
             </apex:pageBlockButtons>
-            <apex:pageBlockSection title="Product Information" columns="2">
+            <apex:pageBlockSection title="Product Information" columns="1">
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/> 
-                <apex:inputField value="{!OrderItem.Charge_Cost_To__c}"/> 
                 <apex:inputField value="{!OrderItem.Installed_Product_Asset__r.Variant_Number__c}"/>
-                <apex:inputField value="{!OrderItem.Primary_Reason__c}"/>
                 <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
-                <apex:inputField value="{!OrderItem.Secondary_Reason__c}"/>
-                <apex:inputField value="{!OrderItem.Service_Sympton__c}"/>
-                <td></td>
-                <apex:inputField value="{!OrderItem.Problem_Component__c}"/>
-                <td></td>
                 <apex:inputField value="{!OrderItem.Service_Product_Note__c}" style="width: 289px; height: 90px;" label="Internal Notes"/> 
             </apex:pageBlockSection>            
             <apex:pageBlockSection title="Order Information" columns="2">
@@ -74,11 +67,7 @@
                 <apex:inputField value="{!OrderItem.Quote_Accepted__c}"/>                 
                 <apex:outputField value="{!OrderItem.Billable_Amount__c}"/>
                 <apex:inputField value="{!OrderItem.Customer_Pickup__c}"/>                
-            </apex:pageBlockSection>   
-            <apex:pageBlockSection title="Service Warranty" columns="1">
-                <apex:inputField value="{!OrderItem.Service_Procedure_Code__c}"/>
-                <apex:inputField value="{!OrderItem.Warranty_Quantity__c}"/>                
-            </apex:pageBlockSection>             
+            </apex:pageBlockSection>              
         </apex:pageBlock>
     </apex:form>
 </apex:page>

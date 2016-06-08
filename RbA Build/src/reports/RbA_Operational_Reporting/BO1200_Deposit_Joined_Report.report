@@ -24,6 +24,9 @@
             <field>Payment__c$Order__c.BillToContact</field>
         </columns>
         <columns>
+            <field>Payment__c.Journal_Entries__r$Date_Sent_to_BaanERP__c</field>
+        </columns>
+        <columns>
             <field>Payment__c$Number__c</field>
         </columns>
         <columns>
@@ -48,9 +51,7 @@
         <sortOrder>Asc</sortOrder>
         <timeFrameFilter>
             <dateColumn>Payment__c$Payment_Date__c</dateColumn>
-            <endDate>2016-01-09</endDate>
-            <interval>INTERVAL_CUSTOM</interval>
-            <startDate>2016-01-09</startDate>
+            <interval>INTERVAL_LAST30</interval>
         </timeFrameFilter>
     </block>
     <block>
@@ -90,18 +91,16 @@
         <scope>organization</scope>
         <timeFrameFilter>
             <dateColumn>Payment__c.Journal_Entries__r$Date__c</dateColumn>
-            <endDate>2016-01-09</endDate>
-            <interval>INTERVAL_CUSTOM</interval>
-            <startDate>2016-01-09</startDate>
+            <interval>INTERVAL_LAST30</interval>
         </timeFrameFilter>
     </block>
     <blockInfo>
         <blockId xsi:nil="true"/>
         <joinTable>Payment__c</joinTable>
     </blockInfo>
-    <description>Deposit Joined Report</description>
+    <description>BO1200 Deposit Joined Report</description>
     <format>MultiBlock</format>
-    <name>Deposit Joined Report</name>
+    <name>BO1200 Deposit Joined Report</name>
     <reportType>Payments_with_All_Order_Fields_and_Journal_Entries__c</reportType>
     <showDetails>true</showDetails>
 </Report>
