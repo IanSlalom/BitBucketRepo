@@ -58,6 +58,11 @@
     }
     
     
+    function printServiceInvoice() { 
+        window.open('{!URLFOR($Action.Order.Conga_Composer_RbA_Service_Invoice,Order.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
+    
+    
     </script>
     <style>
         td.searchCell {
@@ -107,8 +112,8 @@
     <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}" >
         <div class="listHoverLinksbw" style="visibility: visible;">
             <a href="#head_01B6100000A4a5g_ep_j_id0_j_id8" class="linklet">Order Products</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id96:j_id97" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id96:j_id106" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
+            <a href="#j_id0:j_id99:j_id100" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
+            <a href="#j_id0:j_id99:j_id110" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
             <a href="#j_id0:boc" class="linklet">Back Office Checks</a><span class="pipe"> | </span>
             <a href="#j_id0:dis" class="linklet">Order Discounts</a><span class="pipe"> | </span>
             <a href="#j_id0:odf" class="linklet">Order Financing</a><span class="pipe"> | </span>
@@ -121,7 +126,7 @@
             <a href="#j_id0:oa" class="linklet">Open Activities</a><span class="pipe"> | </span>
             <a href="#j_id0:ah" class="linklet">Activity History</a><span class="pipe"> | </span>
             <a href="#j_id0:nat" class="linklet">Notes and Attachments</a><span class="pipe"> | </span>
-            <a href="j_id0:fh2" class="linklet">Order History</a>            
+            <a href="#j_id0:fh2:j_id151:j_id153" class="linklet">Order History</a>            
         </div>
     </apex:form>
     
@@ -138,9 +143,9 @@
             </div>
         </div>
         <div class="listHoverLinksbw" style="visibility: visible;">
-            <a href="#j_id0:j_id96:j_id97" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id96:j_id106" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id115" class="linklet">Service Request Products</a><span class="pipe"> | </span>
+            <a href="#j_id0:j_id99:j_id100" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
+            <a href="#j_id0:j_id99:j_id110" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
+            <a href="#j_id0:j_id119" class="linklet">Service Request Products</a><span class="pipe"> | </span>
             <a href="#j_id0:po" class="linklet">Purchase Orders</a><span class="pipe"> | </span>
             <a href="#j_id0:pm" class="linklet">Payments</a><span class="pipe"> | </span>
             <a href="#j_id0:ast" class="linklet">Assets</a><span class="pipe"> | </span>
@@ -156,6 +161,7 @@
                 <apex:commandButton onclick="callGenerateConsoleURL('{!editRedirect}','Edit');return false" id="editRedirect" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
                 <apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled',true,false)}"/>
                 <apex:commandButton onclick="callGenerateConsoleURL('{!updateSTURL}', 'Update Service Type');return false" id="updateST" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
+                <apex:commandButton value="RbA Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
                 <apex:outputField value="{!Order.AccountId}"/>
@@ -195,7 +201,7 @@
                 <apex:outputField value="{!Order.Sales_Tax__c}"/>
                 <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
-                <br/>
+                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">

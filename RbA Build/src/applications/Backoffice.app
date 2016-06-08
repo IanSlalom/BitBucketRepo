@@ -174,6 +174,7 @@
     <tab>RbA_Work_Order__c</tab>
     <tab>MA_Scheduler</tab>
     <tab>standard-Dashboard</tab>
+    <tab>standard-report</tab>
     <workspaceMappings>
         <mapping>
             <tab>Labor__c</tab>
@@ -207,6 +208,9 @@
         </mapping>
         <mapping>
             <tab>standard-Order</tab>
+        </mapping>
+        <mapping>
+            <tab>standard-report</tab>
         </mapping>
     </workspaceMappings>
 </CustomApplication>
