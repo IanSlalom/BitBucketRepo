@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Retail_Price_Change__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RbA_Work_Order__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

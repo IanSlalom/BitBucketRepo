@@ -83,7 +83,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Cross_Reference__c</field>
+                <field>isInactive__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
