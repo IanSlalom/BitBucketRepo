@@ -25,10 +25,16 @@ public with sharing class RMS_viewPCCtrlr {
             stdController.addFields(new List<String>{'Name'});
         }
         this.p = (Procedure_Code__c)stdController.getRecord();
+        
+        Schema.DescribeSObjectResult pc = Procedure_Code_Assignment__c.sObjectType.getDescribe();
+        String procCodePrefix = pc.getKeyPrefix();  
+        
+        Schema.DescribeSObjectResult ss = Service_Symptom_Assignment__c.sObjectType.getDescribe();
+        String servSympPrefix = ss.getKeyPrefix();
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        addServiceSymptomURL = '/a19/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name=Enter Symptom Here';
-        addServiceProductURL = '/a1H/e?'+ssSP+'='+p.Name+'&'+ssSP+'_lkid='+p.id+'&Name='+p.name;
+        addServiceSymptomURL = '/'+servSympPrefix+'/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name=Enter Symptom Here';
+        addServiceProductURL = '/'+procCodePrefix+'/e?'+ssSP+'='+p.Name+'&'+ssSP+'_lkid='+p.id+'&Name='+p.name;
         
     }
 

@@ -29,12 +29,16 @@ public with sharing class RMS_serviceWarrantyManager {
         this.p = (Product2)stdController.getRecord();
         
 
+        Schema.DescribeSObjectResult sp = Service_Product__c.sObjectType.getDescribe();
+        String servProdKeyPrefix = sp.getKeyPrefix();
         
+        Schema.DescribeSObjectResult pc = Procedure_Code_Assignment__c.sObjectType.getDescribe();
+        String procCodePrefix = pc.getKeyPrefix();                        
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        addServiceProductURL = '/a16/e?'+spMP+'='+p.Name+'&'+spMP+'_lkid='+p.id+'&Name=Enter Product Name Here';
-        addMasterProductURL = '/a16/e?'+spSP+'='+p.Name+'&'+spSP+'_lkid='+p.id+'&Name='+p.Name;
-        addProcedureCodeURL = '/a1H/e?'+pcSP+'='+p.Name+'&'+pcSP+'_lkid='+p.id+'&Name=Enter Code Here';
+        addServiceProductURL = '/'+servProdKeyPrefix+'/e?'+spMP+'='+p.Name+'&'+spMP+'_lkid='+p.id+'&Name=Enter Product Name Here';
+        addMasterProductURL = '/'+servProdKeyPrefix+'/e?'+spSP+'='+p.Name+'&'+spSP+'_lkid='+p.id+'&Name='+p.Name;
+        addProcedureCodeURL = '/'+procCodePrefix+'/e?'+pcSP+'='+p.Name+'&'+pcSP+'_lkid='+p.id+'&Name=Enter Code Here';
         
         
     }
