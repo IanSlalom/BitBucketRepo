@@ -38,8 +38,10 @@
         <field>Order.Entry_Door_Rollup__c</field>
     </columns>
     <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>ORDER_TOTAL_AMOUNT</field>
+        <field>Order.Estimated_Ship_Date__c</field>
+    </columns>
+    <columns>
+        <field>Order.Retail_Total__c</field>
     </columns>
     <format>Tabular</format>
     <name>Report BO3000 Order Backlog Installation</name>
