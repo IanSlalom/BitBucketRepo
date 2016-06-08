@@ -36,6 +36,8 @@
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_acceptInvite</members>
         <members>RMS_addSkilltoWO</members>
+        <members>RMS_addWarranties</members>
+        <members>RMS_addWarrantiesExt</members>
         <members>RMS_assignServiceTaskOwner</members>
         <members>RMS_backOfficeChecklistManager</members>
         <members>RMS_backOfficeChecklistManagerTest</members>
@@ -78,14 +80,18 @@
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
         <members>RMS_serviceRequestListViewMgr</members>
+        <members>RMS_serviceWarrantyManager</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
         <members>RMS_viewOrderProductsControllerTests</members>
         <members>RMS_viewOrdersController</members>
         <members>RMS_viewOrdersControllerTests</members>
+        <members>RMS_viewPCCtrlr</members>
+        <members>RMS_viewPCLCtrlr</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
+        <members>RMS_viewSSLCtrlr</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
         <members>RMS_viewServiceRequestCtrlr</members>
         <members>TaskTriggerHandler</members>
@@ -139,6 +145,7 @@
         <members>RMS_ServiceRequestListView</members>
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addServiceProduct</members>
+        <members>RMS_addWarrantytoSP</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
@@ -160,12 +167,17 @@
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewCOROOrders</members>
         <members>RMS_viewOrderProducts</members>
+        <members>RMS_viewProblemComponent</members>
+        <members>RMS_viewProcedureCode</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
+        <members>RMS_viewServiceOrderItem</members>
         <members>RMS_viewServiceOrderProducts</members>
         <members>RMS_viewServiceOrders</members>
+        <members>RMS_viewServiceProduct</members>
         <members>RMS_viewServiceRequest</members>
+        <members>RMS_viewServiceSymptomList</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -185,6 +197,7 @@
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>warrantyTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -195,6 +208,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>Charge__c</members>
         <members>Discount__c</members>
         <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
@@ -207,14 +221,25 @@
         <members>Municipality__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
+        <members>Problem_Component_Config__c</members>
+        <members>Problem_Component_List__c</members>
+        <members>Problem_Component__c</members>
+        <members>Procedure_Code_Assignment__c</members>
+        <members>Procedure_Code__c</members>
         <members>Product_Configuration__c</members>
         <members>Product_Skill__c</members>
         <members>Purchase_Order__c</members>
+        <members>RbA_Skills__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Resource__c</members>
+        <members>Service_Product__c</members>
         <members>Service_Request</members>
+        <members>Service_Symptom_Assignment__c</members>
+        <members>Service_Symptom_List__c</members>
+        <members>Service_Symptom__c</members>
         <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
+        <members>Warranty__c</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -236,6 +261,7 @@
         <members>Back_Office_Checklist_Configuration__c-Back Office Checklist Layout</members>
         <members>Business_Adjustment__c-Business Adjustment Layout</members>
         <members>Change_History__c-Change History Layout</members>
+        <members>Charge__c-Charge Layout</members>
         <members>Color_Configuration__c-Color Configuration Layout</members>
         <members>Contact-Contact Layout</members>
         <members>Contact-Contractor Contact Layout</members>
@@ -247,6 +273,7 @@
         <members>Discount__c-Discount Layout</members>
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
+        <members>Event-Work Order Event Page Layout</members>
         <members>Finance_Program_Tier__c-Installment Loan</members>
         <members>Finance_Program_Tier__c-SAC%2FNIWP Page Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
@@ -285,6 +312,11 @@
         <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
+        <members>Problem_Component_Config__c-Problem Component Config Layout</members>
+        <members>Problem_Component_List__c-Problem Component List Layout</members>
+        <members>Problem_Component__c-Problem Component Layout</members>
+        <members>Procedure_Code_Assignment__c-Product Procedure Code Layout</members>
+        <members>Procedure_Code__c-Procedure Code Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
         <members>Product2-Master Product Layout</members>
@@ -307,6 +339,10 @@
         <members>Resource__c-Resource Layout</members>
         <members>Sash_Configuration__c-Sash Configuration Layout</members>
         <members>Screen_Configuration__c-Screen Configuration Layout</members>
+        <members>Service_Product__c-Service Product Layout</members>
+        <members>Service_Symptom_Assignment__c-Procedure Code Assignment Layout</members>
+        <members>Service_Symptom_List__c-Product Service Symptom Layout</members>
+        <members>Service_Symptom__c-Service Symptom Layout</members>
         <members>Specialty_Grille_Configuration__c-Grille Configuration Layout</members>
         <members>Specialty_Grille_Control__c-Specialty Grille Control Layout</members>
         <members>Store_Configuration__c-Store Setting Layout</members>
@@ -326,6 +362,7 @@
         <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>
         <members>Vendor_Product__c-Vendor Product Layout</members>
+        <members>Warranty__c-Warranty Layout</members>
         <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
@@ -343,10 +380,10 @@
     <types>
         <members>RbA_Operational_Reporting</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
-        <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
-        <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
-        <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
@@ -378,6 +415,7 @@
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
         <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
+        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
@@ -397,6 +435,8 @@
         <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
+        <members>Payments_with_All_Order_Fields</members>
+        <members>Payments_with_or_without_Journal_Entries</members>
         <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
@@ -429,6 +469,7 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Charge__c</members>
         <members>Discount__c</members>
         <members>Event</members>
         <members>Municipality_Match__c</members>
@@ -436,11 +477,21 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Financing__c</members>
+        <members>Problem_Component_Config__c</members>
+        <members>Problem_Component_List__c</members>
+        <members>Problem_Component__c</members>
+        <members>Procedure_Code_Assignment__c</members>
+        <members>Procedure_Code__c</members>
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Resource__c</members>
+        <members>Service_Product__c</members>
+        <members>Service_Symptom_Assignment__c</members>
+        <members>Service_Symptom_List__c</members>
+        <members>Service_Symptom__c</members>
         <members>Store_Finance_Program__c</members>
         <members>Task</members>
+        <members>Warranty__c</members>
         <name>Workflow</name>
     </types>
     <version>33.0</version>

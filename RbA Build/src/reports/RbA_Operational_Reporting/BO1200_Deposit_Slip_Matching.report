@@ -34,6 +34,9 @@
         <field>Payment__c$Order__c</field>
     </columns>
     <columns>
+        <field>Payment__c$Order__c.Unique_Identifier__c</field>
+    </columns>
+    <columns>
         <field>Payment__c$Payment_Date__c</field>
     </columns>
     <columns>
@@ -52,6 +55,7 @@
         <aggregateTypes>Sum</aggregateTypes>
         <field>Payment__c$Payment_Amount__c</field>
     </columns>
+    <description>BO1200 Deposit Slip Matching Report</description>
     <filter>
         <criteriaItems>
             <column>Payment__c$RecordType</column>
@@ -65,7 +69,7 @@
         <field>Payment__c$Payment_Method__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Deposit Slip Report</name>
+    <name>BO1200 Deposit Slip Matching</name>
     <params>
         <name>co</name>
         <value>1</value>

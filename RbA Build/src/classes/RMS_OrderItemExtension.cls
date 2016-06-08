@@ -16,6 +16,8 @@
 public class RMS_OrderItemExtension {
 
     public final OrderItem o;
+    public String baseURL{get;set;}
+    public String editURL{get;set;}
     //public List<Order> parent {get;set;}
     
     public RMS_OrderItemExtension(ApexPages.StandardController stdController) {
@@ -24,6 +26,8 @@ public class RMS_OrderItemExtension {
         }
         
         this.o = (OrderItem)stdController.getRecord();
+        baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
+        editURL ='/apex/RMS_editServiceProduct?id='+o.Id;
            
         
         
