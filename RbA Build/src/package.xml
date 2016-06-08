@@ -208,6 +208,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>Charge__c</members>
         <members>Discount__c</members>
         <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>

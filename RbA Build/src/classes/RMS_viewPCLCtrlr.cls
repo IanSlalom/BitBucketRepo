@@ -25,8 +25,11 @@ public with sharing class RMS_viewPCLCtrlr {
         }
         this.p = (Problem_Component_List__c)stdController.getRecord();
 
+        Schema.DescribeSObjectResult prc = Problem_Component_Config__c.sObjectType.getDescribe();
+        String probCompPrefix = prc.getKeyPrefix(); 
+        
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        addServiceSymptomURL = '/a1C/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name='+p.Name;        
+        addServiceSymptomURL = '/'+probCompPrefix+'/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name='+p.Name;        
         
     }
 

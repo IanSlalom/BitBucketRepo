@@ -28,9 +28,15 @@ public with sharing class RMS_viewSSLCtrlr {
         }
         this.p = (Service_Symptom_List__c)stdController.getRecord();
         
+        Schema.DescribeSObjectResult prc = Problem_Component_Config__c.sObjectType.getDescribe();
+        String probCompPrefix = prc.getKeyPrefix(); 
+        
+        Schema.DescribeSObjectResult ss = Service_Symptom_Assignment__c.sObjectType.getDescribe();
+        String servSympPrefix = ss.getKeyPrefix();  
+        
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        addProcedureCodeURL = '/a19/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name='+p.Name;        
-        addProblemComponentURL = '/a1C/e?'+pcSS+'='+p.Name+'&'+pcSS+'_lkid='+p.id+'&Name=Enter Component';        
+        addProcedureCodeURL = '/'+servSympPrefix+'/e?'+ssPC+'='+p.Name+'&'+ssPC+'_lkid='+p.id+'&Name='+p.Name;        
+        addProblemComponentURL = '/'+probCompPrefix+'/e?'+pcSS+'='+p.Name+'&'+pcSS+'_lkid='+p.id+'&Name=Enter Component';        
         
     
     
