@@ -67,9 +67,9 @@
     </columns>
     <filter>
         <criteriaItems>
-            <column>Journal_Entry__c.Type__c</column>
+            <column>FK_CUST_RECORDTYPE</column>
             <operator>equals</operator>
-            <value>Deposit,Final Payment</value>
+            <value>Payment__c.Deposit</value>
         </criteriaItems>
     </filter>
     <format>Summary</format>
@@ -88,8 +88,6 @@
     <showDetails>true</showDetails>
     <timeFrameFilter>
         <dateColumn>Journal_Entry__c.Date__c</dateColumn>
-        <endDate>2016-01-09</endDate>
-        <interval>INTERVAL_CUSTOM</interval>
-        <startDate>2016-01-09</startDate>
+        <interval>INTERVAL_LAST30</interval>
     </timeFrameFilter>
 </Report>
