@@ -52,6 +52,8 @@
         <members>RMS_editableTaskList</members>
         <members>RMS_editableTaskListExt</members>
         <members>RMS_errorMessages</members>
+        <members>RMS_eventManager</members>
+        <members>RMS_eventManagerTest</members>
         <members>RMS_financialTransactionManager</members>
         <members>RMS_financialTransactionManagerTest</members>
         <members>RMS_mobileAppAPIController</members>

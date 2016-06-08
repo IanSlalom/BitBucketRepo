@@ -1079,9 +1079,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
 //    if (orderToAssetMap.size() > 0) {
       for (OrderItem oi : itemsToReceive) {
+		list<Received_Product__c> recivedProducts = new list<Received_Product__c>();
 		if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
         	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
+        	
+    		Received_Product__c rp = new Received_Product__c(	Asset__c = 	orderToAssetMap.get(oi.Id).Id, 
+																Quantity__c = oi.Quantity_To_Receive__c, 
+																Amount__c = oi.Unit_Wholesale_Cost__c , 
+																Date__c = oi.Date_Received__c
+															);
+			recivedProducts.add(rp);
 		}
+		  
+		
+		try{
+	    	upsert recivedProducts;
+	    } catch (Exception e){
+	    	System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController while upserting recived Products in the receiveLineItems method:' + e);
+	    	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+	    }
+    
         oi.Quantity_To_Receive__c = null;
         oi.Date_Received__c = null;
         finalOrderItems.add(oi);
@@ -1109,7 +1126,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     					(allReceived)					?	'Received'				:
     														'';
     return finalOrderItems;
-
+	
   }
 
 
