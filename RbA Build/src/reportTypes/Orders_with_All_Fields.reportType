@@ -223,6 +223,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Amount_Financed__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>OrderReferenceNumber</field>
             <table>Order</table>
         </columns>
@@ -644,6 +649,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Windows_Series_2_FF_IF_Rollup__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Days_On_Hold__c</field>
             <table>Order</table>
         </columns>
         <masterLabel>Orders</masterLabel>

@@ -30,6 +30,25 @@
         <masterLabel>Labor Cost %</masterLabel>
         <scale>0</scale>
     </aggregates>
+    <aggregates>
+        <calculatedFormula>Order.Product_Cost__c:SUM / Order.Retail_Total__c:SUM</calculatedFormula>
+        <datatype>percent</datatype>
+        <description>Product Cost %</description>
+        <developerName>FORMULA4</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Product Cost %</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <aggregates>
+        <calculatedFormula>Order.Amount_Financed__c:SUM / Order.Retail_Total__c:SUM</calculatedFormula>
+        <datatype>percent</datatype>
+        <developerName>FORMULA5</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Finance Fees %</masterLabel>
+        <scale>2</scale>
+    </aggregates>
     <columns>
         <field>Order$OrderNumber</field>
     </columns>
@@ -45,11 +64,11 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Door_Rollup__c</field>
+        <field>Order$IF_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Entry_Door_Rollup__c</field>
+        <field>Order$Door_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -57,11 +76,11 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$IF_Rollup__c</field>
+        <field>Order$Series_2_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Series_2_Rollup__c</field>
+        <field>Order$Entry_Door_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -69,11 +88,11 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Door_Sales_Rollup__c</field>
+        <field>Order$IF_Rollup_Sales__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Entry_Door_Sales_Rollup__c</field>
+        <field>Order$Door_Sales_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -81,11 +100,11 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$IF_Rollup_Sales__c</field>
+        <field>Order$Series_2_Sales_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Series_2_Sales_Rollup__c</field>
+        <field>Order$Entry_Door_Sales_Rollup__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -93,35 +112,11 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$FF_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Door_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Entry_Door_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Bay_Bow_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$IF_Rollup_Cost__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Series_2_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Other_Cost_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Retail_Subtotal__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Discount_Amount__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -129,7 +124,39 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Discount_Amount__c</field>
+        <field>Order$Amount_Financed__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$FF_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$IF_Rollup_Cost__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Door_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Bay_Bow_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Series_2_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Entry_Door_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Other_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Product_Cost__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -165,7 +192,7 @@
     <reportType>Orders_with_All_Fields__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
-    <sortColumn>Order$IF_Rollup__c</sortColumn>
+    <sortColumn>Order$Retail_Subtotal__c</sortColumn>
     <sortOrder>Asc</sortOrder>
     <timeFrameFilter>
         <dateColumn>Order$Revenue_Recognized_Date__c</dateColumn>

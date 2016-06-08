@@ -4,47 +4,50 @@
         <field>ORDER_NUMBER</field>
     </columns>
     <columns>
+        <field>Order.Unique_Identifier__c</field>
+    </columns>
+    <columns>
+        <field>ORDER_EFFECTIVE_DATE</field>
+    </columns>
+    <columns>
+        <field>ORDER_BILLING_FIRST_NAME</field>
+    </columns>
+    <columns>
+        <field>ORDER_BILLING_LAST_NAME</field>
+    </columns>
+    <columns>
         <field>Order.Primary_Installer__c</field>
     </columns>
     <columns>
-        <field>Order.Lead_Service_Tech__c</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Retail_Subtotal__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Jobs__c</field>
+        <field>Order.Discount_Amount__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.FF_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.IF_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Door_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Bay_Bow_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Series_2_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Entry_Door_Rollup__c</field>
-    </columns>
-    <columns>
-        <field>Order.Estimated_Ship_Date__c</field>
-    </columns>
-    <columns>
         <field>Order.Retail_Total__c</field>
     </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Permit_Cost__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Amount_Financed__c</field>
+    </columns>
+    <description>Report BO3000 - Detailed Backlog Report</description>
+    <filter>
+        <criteriaItems>
+            <column>ORDER_STATUS</column>
+            <operator>notEqual</operator>
+            <value>Job Closed</value>
+        </criteriaItems>
+    </filter>
     <format>Tabular</format>
-    <name>Report BO3000 Order Backlog Installation</name>
+    <name>Report BO3000 - Detailed Backlog Report</name>
     <params>
         <name>co</name>
         <value>1</value>

@@ -11,6 +11,10 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Days_On_Hold__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Retail_Total__c</field>
     </columns>
     <columns>
@@ -18,9 +22,6 @@
     </columns>
     <columns>
         <field>Order$Primary_Tech_Measure__c</field>
-    </columns>
-    <columns>
-        <field>Order$ActivatedDate</field>
     </columns>
     <columns>
         <field>Order$Reason__c</field>
