@@ -9,7 +9,10 @@
     <tab>standard-Opportunity</tab>
     <tab>standard-Order</tab>
     <tab>Purchase_Order__c</tab>
+    <tab>Payment__c</tab>
     <tab>Labor__c</tab>
+    <tab>RbA_Work_Order__c</tab>
+    <tab>Service_Request</tab>
     <tab>standard-report</tab>
     <tab>standard-Dashboard</tab>
 </CustomApplication>
