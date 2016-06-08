@@ -38,6 +38,7 @@ public class RMS_prodConfigExtension {
 	public String mode {get; set;}	// viewing mode
 	public Id poId {get; set;}	// purchase order linked to the order product
 	public List<Change_History__c> changeHistoryRecords{get;set;}
+	public Boolean isMiscJob {get;set;}
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -45,6 +46,7 @@ public class RMS_prodConfigExtension {
 
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		this.orderLineItem = (OrderItem)stdController.getRecord();
+		isMiscJob = false;
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';
 		jobClosed = false;			
@@ -73,7 +75,7 @@ public class RMS_prodConfigExtension {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, 
 											PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, 
-											Purchase_Order__c, Verify_Item_Configuration__c 
+											Purchase_Order__c, Verify_Item_Configuration__c, PricebookEntry.Product2.RecordType.DeveloperName 
 											From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
@@ -82,6 +84,11 @@ public class RMS_prodConfigExtension {
 					oiId = orderItem.Id;
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
+					//JETT-2213 Do not allow editing of Misc Job and Unit Charges orderitems after creation
+					if(orderItem.PricebookEntry.Product2.RecordType.DeveloperName == 'Misc_Job_and_Unit_Charges'){
+						isMiscJob = true;
+						mode ='v';
+					}
 					enterProduct();
 
 				}

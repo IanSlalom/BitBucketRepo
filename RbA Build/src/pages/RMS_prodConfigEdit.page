@@ -149,17 +149,20 @@
             <apex:commandButton action="{!close}" value="Close" oncomplete="closeTab();return false"/>
        </apex:pageBlockButtons>
 
-        <apex:pageBlockSection title="Unit Configuration" columns="2">
+ 		<apex:pageBlockSection title="Quantity Configuration" columns="2">
+ 			<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" rendered="{!mode == 'e'}"/>   
+ 			<apex:outputField value="{!OrderItem.Quantity}" label="Quantity" id="outQuantity" rendered="{!mode != 'e'}"/>   
+            <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled' && mode == 'e'}"/>
+            <apex:outputField value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="outunitId" rendered="{!prodConfig.mpc.Unit_Id_Control__c == 'Disabled' || mode != 'e'}"/>           
+ 		</apex:pageBlockSection> 
+
+        <apex:pageBlockSection title="Unit Configuration" columns="2"  rendered="{!prodConfig.mpc != null}">
  <!--        <apex:pageBlockSection title="Unit Configuration" columns="2" rendered="{!prodConfig.mpc != null}">
  			    <apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" html-data-jsid="quantity"/>   
                 <apex:outputLabel value="Quantity"></apex:outputLabel>
 
  -->    		
- 				<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" rendered="{!mode == 'e'}"/>   
- 				<apex:outputField value="{!OrderItem.Quantity}" label="Quantity" id="outQuantity" rendered="{!mode != 'e'}"/>   
-               <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled' && mode == 'e'}"/>
-               <apex:outputField value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="outunitId" rendered="{!prodConfig.mpc.Unit_Id_Control__c == 'Disabled' || mode != 'e'}"/>
-            	<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
+ 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 	<apex:selectOptions value="{!frameTypeItems}"/>
             	</apex:selectList>               
             	<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ejFrame" /> 
@@ -295,7 +298,6 @@
             <apex:outputText value="{!OrderItem.Hubs__c}" label="Hubs" id="outhubs"  rendered="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputText value="{!OrderItem.Spokes__c}" label="Spokes" id="outspokes"  rendered="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" />
-
         </apex:pageBlockSection>
 
 
@@ -515,6 +517,8 @@
 			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
 			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode == 'e'  || mode == 'r'}"/>
 			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'  && mode != 'r'}"/>
+			<apex:inputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!mode == 'e'  || mode == 'r'}"/>
+			<apex:outputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!mode != 'e'  && mode != 'r'}"/>
 			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr" onChange="callRule('nspr')"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
             <apex:outputField value="{!OrderItem.Tax__c}" />
