@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
-        <field>Account.Assets$Purchase_Order__c</field>
-    </columns>
-    <columns>
         <field>Account.Assets$Vendor__c</field>
     </columns>
     <columns>
@@ -16,7 +13,12 @@
         <field>Account.Assets.Received_Products__r$Extended__c</field>
     </columns>
     <description>Report BO4000 - Receivings Posting Summary</description>
-    <format>Tabular</format>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Account.Assets$Purchase_Order__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
     <name>Report BO4000 - Receivings Posting Summa</name>
     <params>
         <name>co</name>
