@@ -10,6 +10,8 @@ public class RMS_viewServiceRequestCtrlr {
     public string serviceOrderLSWPRecordTypeURL{get;set;}
     public string serviceOrderPaintStainRecordTypeURL{get;set;}
     public string serviceOrderPermitRecordTypeURL{get;set;}
+    public string serviceOrderCollectionsRecordTypeId{get;set;}
+    public string serviceOrderCollectionsRecordTypeURL{get;set;}
     
     public id ordRecId;
     
@@ -60,6 +62,7 @@ public class RMS_viewServiceRequestCtrlr {
         serviceOrderLSWPRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=lswp'+endURL;        
         serviceOrderPaintStainRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=paintStain'+endURL;         
         serviceOrderPermitRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=permit'+endURL;
+        serviceOrderCollectionsRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=collections'+endURL;                                    
         
     }
     
@@ -98,4 +101,7 @@ public class RMS_viewServiceRequestCtrlr {
         
         return pageRef;
     }
+    
+    
+    
 }
