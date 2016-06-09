@@ -1,0 +1,35 @@
+<apex:page standardController="Order" extensions="RMS_viewServiceRequestCtrlr" showHeader="false" sidebar="false">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        testOpenSubtab();
+        
+    };
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('');
+    };
+    
+    window.setTimeout(autosave,1000);
+    function autosave()
+    {         
+        orderRedirect();
+    }    
+    
+    </script>
+    <p style="text-align: center; margin-top: 100px; margin-bottom: 500px;">
+        <apex:image id="theImage" value="{!$Resource.LoadingPage}" width="140"/>
+    </p>
+    <apex:form id="theForm">    
+        <apex:actionFunction name="orderRedirect" action="{!orderRedirect}"/>
+    </apex:form>   
+</apex:page>

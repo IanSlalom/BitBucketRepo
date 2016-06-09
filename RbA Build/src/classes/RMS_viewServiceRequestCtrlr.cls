@@ -16,10 +16,13 @@ public class RMS_viewServiceRequestCtrlr {
     public id ordRecId;
     
     public RMS_viewServiceRequestCtrlr(ApexPages.StandardController stdController) {
+        if(!test.isRunningTest()){
+            stdController.addFields(new List<String>{'RecordType','Id','RecordType.Name'});           
+        }
         
         this.o = (Order)stdController.getRecord();
         
-        ordRecId = [select id from Order where id = :ApexPages.currentPage().getParameters().get('id')].id;
+        ordRecId = [select id, RecordType.Name, RecordTypeId from Order where id = :ApexPages.currentPage().getParameters().get('id')].id;
         
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         updateSTURL = '/apex/RMS_updateServiceType?id=' + o.Id;
@@ -29,7 +32,7 @@ public class RMS_viewServiceRequestCtrlr {
         String workOrderKeyPrefix = r.getKeyPrefix();
         
         String ordId = o.id;
-        list<Order> theOrd = [SELECT Id, AccountId, Status, Store_Location__c, OrderNumber, OpportunityId, BillToContactId, RecordTypeId FROM Order WHERE Id =:ordId ];
+        list<Order> theOrd = [SELECT Id, AccountId, Status, RecordType.Name, Store_Location__c, OrderNumber, OpportunityId, BillToContactId, RecordTypeId FROM Order WHERE Id =:ordId ];
         
         list<Account> relatedAccount = [SELECT  Name,
                                         ShippingStreet,
@@ -101,6 +104,25 @@ public class RMS_viewServiceRequestCtrlr {
         
         return pageRef;
     }
+    
+    public PageReference orderRedirect(){
+        PageReference newPage = null;
+
+            
+            
+            If (o.RecordType.Name == 'CORO Service'){
+                newPage = new PageReference('/apex/RMS_viewServiceRequest?id='+ o.Id);
+            } else {
+                newPage = new PageReference('/'+ o.Id);
+            	newPage.getParameters().put('nooverride','1');
+            }
+            
+            newPage.setRedirect(true);
+            return newPage;
+       
+        
+    }    
+    
     
     
     
