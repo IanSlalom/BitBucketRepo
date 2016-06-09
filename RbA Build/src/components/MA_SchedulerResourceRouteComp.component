@@ -33,8 +33,8 @@
         var RouteLine;
         var resourceMap;
         var MapMarkers = [];
-        var defaultLat = 44.986656;
-        var defaultLng = -93.258133;
+        var defaultLat = 33.9353499;    // 44.986656;
+        var defaultLng = -84.3448638;   // -93.258133;
         var isDailyResource = false;
         var resourceRouteEvents = [];
         var initializingResourceRouteComp = false;
@@ -107,6 +107,8 @@
             }, 
             mapRoutes : function(routes) {
                 try {
+                    var bounds = new google.maps.LatLngBounds();
+
                     for (x = 0, len = routes.length; x < len; x++) {
                         coordinateArray = [];
                         var route = routes[x];
@@ -118,19 +120,21 @@
                         for (i = 0, len2 = route.length; i < len2; i++) {
                             if (!isBatchResources) {
                                 for (z = 0, len3 = route[i].length; z < len3; z++) {
-                                    var cord = {
+                                    var cord = new google.maps.LatLng({
                                         lat: route[i][z][1],
                                         lng: route[i][z][0]
-                                    };
+                                    });
                                     coordinateArray.push(cord);
+                                    bounds.extend(cord);
                                 }
                             }
                             else {
-                                var cord = {
+                                var cord = new google.maps.LatLng({
                                     lat: route[i][1],
                                     lng: route[i][0]
-                                };
+                                });
                                 coordinateArray.push(cord);
+                                bounds.extend(cord);
                             }
                         }
 
@@ -142,6 +146,10 @@
                           strokeWeight: 4
                         });
                         RouteLine.setMap(resourceMap);
+                    }
+
+                    if (!bounds.isEmpty()) {
+                        resourceMap.fitBounds(bounds);
                     }
                 }
                 catch(e) {}
@@ -169,14 +177,19 @@
                         });
 
                         MapMarkers.push(mapMarker);
-                        MARoutesComp.setMapMarkersOnAll(resourceMap);
                     }
+                    
+                    MARoutesComp.setMapMarkersOnAll(resourceMap);
                 }
                 catch(e){}
             },
             setMapMarkersOnAll : function(map) {
                 for (var i = 0; i < MapMarkers.length; i++) {
                     MapMarkers[i].setMap(map);
+                }
+
+                if (MapMarkers.length == 1 && map != null) {
+                    map.setCenter(MapMarkers[0].position);
                 }
             },
             deleteMarkers : function() {
@@ -215,7 +228,7 @@
                 storeLng = parseFloat(storeLocation.records.Store__r.ShippingLongitude);
             }
                 
-            if (storeLat == null || storeLng == null) {
+            if (storeLat == null || storeLng == null || isNaN(storeLat) || isNaN(storeLng)) {
                 storeLat = defaultLat;
                 storeLng = defaultLng;
             }
@@ -235,6 +248,7 @@
 
         function initResourceCalendar() {
             $('#resourceCalendar').fullCalendar({
+                schedulerLicenseKey: '0947007917-fcs-1462891368',
                 header: {
                     left: 'title',
                     center: '',

@@ -397,28 +397,44 @@
                             var record = response.values[i].attributes;
                             if (record.Name != undefined && record.Name != null && record.Name != '') {
 
-                                workOrderInfo = JSON.parse(record.Name) ;
                                 routeInfo = JSON.parse(record.RouteName);
+                                var waitTime = record.WaitTime * 60 * 1000;
 
-                                if (!workOrderInfo.storeID) {
+                                try {
+                                    workOrderInfo = JSON.parse(record.Name) ;
+
+                                    if (!workOrderInfo.storeID) {
+                                        eventListToRender.push({
+                                            id: workOrderInfo.woId,
+                                            resourceId: routeInfo.resId,
+                                            title: workOrderInfo.woName,
+                                            start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            className: 'maEvent',
+                                            url: '/' + workOrderInfo.woId,
+                                            contactName: workOrderInfo.contactName,
+                                            eventType: workOrderInfo.woType,
+                                            missingResource: false,
+                                            resourceNamesText: '',
+                                            city: workOrderInfo.city,
+                                            state: workOrderInfo.state,
+                                            isSynced: workOrderInfo.isSynced,
+                                            isLswp: workOrderInfo.isLswp,
+                                            isJip: workOrderInfo.isJip,
+                                            multiDayOrder: workOrderInfo.multiDayOrder
+                                        });
+                                    }
+                                }
+                                catch(ex) {
                                     eventListToRender.push({
-                                        id: workOrderInfo.woId,
+                                        id: record.Name + routeInfo.resId + record.ArriveTime,
                                         resourceId: routeInfo.resId,
-                                        title: workOrderInfo.woName,
-                                        start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                        title: record.Name,
+                                        start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
                                         end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
-                                        className: 'maEvent',
-                                        url: '/' + workOrderInfo.woId,
-                                        contactName: workOrderInfo.contactName,
-                                        eventType: workOrderInfo.woType,
-                                        missingResource: false,
-                                        resourceNamesText: '',
-                                        city: workOrderInfo.city,
-                                        state: workOrderInfo.state,
-                                        isSynced: workOrderInfo.isSynced,
-                                        isLswp: workOrderInfo.isLswp,
-                                        isJip: workOrderInfo.isJip,
-                                        multiDayOrder: workOrderInfo.multiDayOrder
+                                        className: 'personalEvent',
+                                        eventType: 'personal',
+                                        missingResource: false
                                     });
                                 }
                             }
@@ -432,6 +448,7 @@
                     closeScheduleOptimizeModal();
                 }
                 catch(e) {
+                    console.log(e);
                     handleError('Error : processBatchOrdersSuccess', e);
                 }
             },

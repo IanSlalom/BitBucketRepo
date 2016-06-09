@@ -63,8 +63,8 @@ public with sharing class RMS_salesOrderManager {
 			// add other needed fields 
 			qliQuery = qliQuery + 'Quote.OpportunityId';
 			// add the from and where clause
-			qliQuery = qliQuery + ' FROM QuoteLineItem WHERE QuoteId in :soldQuoteList';
-			// run the query
+			qliQuery = qliQuery + ' FROM QuoteLineItem WHERE QuoteId in :soldQuoteList AND isDeleted = false';
+			// run the query 
 		 	List<QuoteLineItem> qliList= Database.query(qliQuery);
 
 			List<OpportunityContactRole> primaryContacts = [select Id, ContactId, OpportunityId, Contact.FirstName, Contact.LastName, isPrimary

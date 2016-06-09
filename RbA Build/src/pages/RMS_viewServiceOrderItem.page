@@ -1,0 +1,105 @@
+<apex:page standardController="OrderItem" showHeader="true" tabStyle="OrderItem" sidebar="true" extensions="RMS_OrderItemExtension">
+    
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+     <script type="text/javascript">
+    window.onload = function() {
+        testSetTabTitle();       
+    };
+    
+    function testSetTabTitle() {
+        //Set the current tab's title
+        sforce.console.setTabTitle('{!OrderItem.OrderItemNumber}')
+    }
+    
+    //The callback function that openSubtab will call once it's got the ID for its primary tab
+    var callOpenSubtab = function callOpenSubtab(result) {
+        sforce.console.openSubtab(result.id, 
+                                  theURL, true, tabName);
+        theURL = '';
+        tabName= '';
+    };
+    
+    function openSubtab(urlPart, theTabName) {
+        if(sforce.console.isInConsole()){
+            theURL = urlPart;
+            tabName = theTabName;
+            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+        }else{
+            top.location.href = '/'+urlPart;
+        }
+    }
+    
+    
+    var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+        sforce.console.openConsoleUrl(result.id, 
+                                      result.consoleUrl, 
+                                      true 
+                                      // (optional)tabLabels:String, 
+                                      // (optional)tabNames:String, 
+                                      // (optional)callback:Function
+                                     );
+    };
+    
+    function callGenerateConsoleURL(urlPart, theTabName) {
+        if(sforce.console.isInConsole()) {
+            tabName = theTabName;
+            var orderURL = '/'+'{!OrderItem.Id}';
+            sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+        }else{
+            top.location.href = '{!baseUrl}'+urlPart;
+            
+        }       
+    }
+    
+    
+    </script>
+    <apex:form >
+        <div class="row" style="padding-top: 9px;">            
+            <div width="25%" style="float: left;">
+                <apex:image id="nonConsole" value="{!$Resource.ServiceRequestIcon}" width="33" height="33"/>                
+            </div>
+            <div width="75%" style="padding-top: 4px; margin-left: 37px; margin-bottom: 15px;">
+                <apex:outputText style="font-size: 2em; font-weight: normal;" value="Service Product {!OrderItem.OrderItemNumber}">
+                </apex:outputText>                
+            </div>
+        </div>
+        <apex:pageBlock mode="maindetail" tabStyle="OrderItem">
+            <apex:pageBlockButtons >                
+                <apex:commandButton onclick="callGenerateConsoleURL('{!editURL}','Edit');return false" id="editURL" value="Edit Product"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Product Information" columns="1">
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/> 
+                <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.Variant_Number__c}"/>
+                <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
+                <apex:outputField value="{!OrderItem.Service_Product_Note__c}" style="width: 289px; height: 90px;" label="Internal Notes"/> 
+                <apex:outputField value="{!OrderItem.OrderId}" label="Service Request"/>
+                <apex:outputField value="{!OrderItem.Total_Procedure_Time__c}"/>
+            </apex:pageBlockSection>            
+            <apex:pageBlockSection title="Order Information" columns="2">
+                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName" label="Unit"/>    
+                <apex:outputField value="{!OrderItem.Measurement_Notes__c }" style="width: 289px; height: 90px;"/>
+                <apex:outputField value="{!OrderItem.Quanity_Ordered__c}"/>
+                <apex:outputField value="{!OrderItem.Purchase_Order__c}" label="Purchase Order #"/>  
+                <apex:outputField value="{!OrderItem.MTO_Source_Code__c}"/>
+                <apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
+                <apex:outputField value="{!OrderItem.Defect_Code__c}"/>           
+                <apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
+                <apex:outputField value="{!OrderItem.Multiple_Remakes__c}"/> 
+                <apex:outputField value="{!OrderItem.Total_Wholesale_Cost__c}"/>
+                <apex:outputField value="{!OrderItem.Description}" label="Description"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Quote/Billing Information" columns="2">
+                <apex:outputField value="{!OrderItem.Quote_Amount__c}"/>
+                <apex:outputField value="{!OrderItem.Quote_Accepted__c}"/>                 
+                <apex:outputField value="{!OrderItem.Billable_Amount__c}"/>
+                <apex:outputField value="{!OrderItem.Customer_Pickup__c}"/>                
+            </apex:pageBlockSection>              
+        </apex:pageBlock>
+    </apex:form>
+    
+    <apex:relatedList list="Charges__r"/>
+    <apex:relatedList list="Service_Symptoms__r"/>
+    <apex:relatedList list="Problem_Components__r"/>
+    <apex:relatedList list="Warranties__r"/>
+</apex:page>

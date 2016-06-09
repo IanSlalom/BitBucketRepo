@@ -74,8 +74,8 @@ display: none;
       <apex:inputField value="{!task.WhatId}" style="width: 100px;"/>
     </apex:column>-->
         <apex:column headerValue="Assigned To" id="assigned">
-      <apex:inputField value="{!task.Assigned_To__c}" styleClass="hideDropdown" id="assign"/>
-    </apex:column>
+            <apex:inputField value="{!task.Assigned_To__c}" styleClass="hideDropdown" id="assign"/>
+        </apex:column>
     <apex:column headerValue="Subject" width="500px;">
       <apex:inputField value="{!task.Subject}" style="width: 500px;"/>
     </apex:column>

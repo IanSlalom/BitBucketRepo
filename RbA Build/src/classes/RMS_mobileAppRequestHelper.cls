@@ -13,7 +13,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 	public static map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 	private static String SHARED_FIELDS;
 	// fields unique to Quote line items
-	private static final String QLI_QUERY_START = 'SELECT LineNumber, QuoteId, Subtotal, TotalPrice, Parent_Quote_Line_Item__c';
+	private static final String QLI_QUERY_START = 'SELECT LineNumber, QuoteId, Subtotal, TotalPrice, Parent_Quote_Line_Item__c, isInactive__c, isDeleted';
 	private static final String QLI_WHERE_CLAUSE = 'from QuoteLineItem where QuoteId in :quoteIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
 	// fields unique to Order line items
@@ -272,8 +272,8 @@ public with sharing class RMS_mobileAppRequestHelper {
     First_Selected_Quote__c, Second_Selected_Quote__c
     FROM Opportunity WHERE Id IN :oppIds]);
 
-    // get the quotes
-    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
+    // get the quotes 
+    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
 	List<Id> quoteIds = new List<Id> (quoteMap.keySet());
     // get the quote line items
 	String qliQuery = this.buildQLIQuery();
@@ -286,7 +286,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     // build the quote containers
     List<QuoteContainer> qcList = new List<QuoteContainer>();
     for (Quote q : quoteMap.values()) {
-      QuoteContainer qc = new QuoteContainer();
+      QuoteContainer qc = new QuoteContainer(); 
       qc.aQuote = q;
       qc.quoteLineItems = new List<QuoteLineItem>();
       for (QuoteLineItem qli : qliList) {
