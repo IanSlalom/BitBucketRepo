@@ -74,6 +74,9 @@ public with sharing class RMS_createWorkOrderController {
 			if(permit != null && permit != '' && permit != 'null'){
 				wo.Municipality__c = permit;
 			}		
+		}else if(woType == 'collections'){
+			woRTid = UtilityMethods.retrieveRecordTypeId('Collections', 'RbA_Work_Order__c');
+			wo.RecordTypeId = woRTid;
 		}
 	}
 	
