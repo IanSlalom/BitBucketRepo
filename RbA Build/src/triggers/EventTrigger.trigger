@@ -35,23 +35,24 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         List<SObject> wkorders = new List<SObject>();
         RMS_populateResourceonEventManager populateResourceonEventManager = new RMS_populateResourceonEventManager();
         RMS_acceptInvite acceptInvite = new RMS_acceptInvite();
+        RMS_eventManager eventManager = new RMS_eventManager();
+
         // Before Insert
-        
         if(Trigger.isInsert && Trigger.isBefore){
             populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
         
         //  Before Update
-        
         if(Trigger.isUpdate && Trigger.isBefore){
             populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);    
         }
          
 
         // Before Delete
-        //else  
+        //else   
         if(Trigger.isDelete && Trigger.isBefore){
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            eventManager.createChangeHistoryOnDelete(Trigger.old, Trigger.oldmap);
         }
 
         // After Insert

@@ -79,8 +79,6 @@
     <showDetails>true</showDetails>
     <timeFrameFilter>
         <dateColumn>Payment__c$Payment_Date__c</dateColumn>
-        <endDate>2016-01-09</endDate>
-        <interval>INTERVAL_CUSTOM</interval>
-        <startDate>2016-01-09</startDate>
+        <interval>INTERVAL_LAST30</interval>
     </timeFrameFilter>
 </Report>
