@@ -434,6 +434,7 @@
         <name>Report</name>
     </types>
     <types>
+        <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
