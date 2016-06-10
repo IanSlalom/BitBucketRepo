@@ -167,8 +167,9 @@
                 <apex:outputField value="{!Order.Sales_Tax__c}"/>
                 <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
-                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+                <apex:outputField value="{!Order.AR_Age__c}"/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
+                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">
                 <apex:outputField value="{!Order.Sold_Order__c}"/>
