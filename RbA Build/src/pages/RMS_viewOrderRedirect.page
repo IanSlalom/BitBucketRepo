@@ -16,7 +16,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('');
+        sforce.console.setTabTitle('{!Order.OrderNumber}');
     };
     
     window.setTimeout(autosave,1000);
