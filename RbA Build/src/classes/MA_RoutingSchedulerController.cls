@@ -3,6 +3,10 @@ global with sharing class MA_RoutingSchedulerController {
     private static Map<String, Object> configs = new Map<String,Object>();
     private static Map<String, Object> master  = new  Map<String, Object>();
 
+    private static Map<Id, Long> routeEndMap = new Map<Id, Long>();
+    private static Map<Id, Long> routeStartMap = new Map<Id, Long>();
+    private static Map<Id, Long> routeLastBreakEndMap = new Map<Id, Long>();
+
     public RbA_Work_Order__c tempWo {get;set;}
 
     public MA_RoutingSchedulerController() {
@@ -71,7 +75,6 @@ global with sharing class MA_RoutingSchedulerController {
             Map<String, Object> geometry =  new Map<String, Object>();
             Map<String, Object> attributes = new Map<String, Object>();
             String storeTimezone = MA_SchedulerUtilities.retrieveStoreTimezone(storeId);
-            //Store_Configuration__c store = [SELECT Id, Store__c, Name, Store__r.ShippingLongitude, Store__r.ShippingLatitude FROM Store_Configuration__c WHERE Id = :storeId LIMIT 1];
             Date day = Date.parse(dayString);
             DateTime startDateTime = DateTime.newInstanceGmt(day, Time.newInstance(0, 0, 0, 0));
 
@@ -82,24 +85,6 @@ global with sharing class MA_RoutingSchedulerController {
             
             Long milliTime = startDateTime.getTime();
             master.put('defaultdate', milliTime);
-           
-            /*
-            if (store.Store__r.ShippingLongitude != null && store.Store__r.ShippingLatitude != null) {
-                geometry.put('x', store.Store__r.ShippingLongitude);
-                geometry.put('y',  store.Store__r.ShippingLatitude);
-            
-                attributes.put('Name', '{"storeId":"' + store.Id + '","Name":"' + store.Name + '"}');
-                attributes.put('RouteName', resourceId);
-                attributes.put('Sequence', sequence);
-                attributes.put('Attr_TravelTime', 10);
-                attributes.put('CurbApproach', 3);
-                
-                stopObj.put('attributes', attributes);
-                stopObj.put('geometry', geometry);
-                features.add(stopObj);
-                sequence++;
-            }
-            */
             
             List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, RbA_Work_Order__c, RbA_Work_Order__r.Name,
                                                         RbA_Work_Order__r.Appointment_Duration__c, RbA_Work_Order__r.Account__c,
@@ -312,7 +297,7 @@ global with sharing class MA_RoutingSchedulerController {
     
     webService static String getRecords(String dateString, String storeId, String workOrderType, String offsetPageMinutes) {
         try {
-            if(String.isNotBlank(dateString) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType)) {
+            if(String.isNotBlank(dateString) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType) && workOrderType != '--None--') {
                 Date dateToCheck = Date.valueOf(dateString);
 	            DateTime dateTimeToCheck = (DateTime)dateToCheck;
             	configs = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrderType);
@@ -409,6 +394,17 @@ global with sharing class MA_RoutingSchedulerController {
                 attributes.put('Name', '{"resId":"' + resource.Id + '","userId":"' + resource.RbA_User__c + '"}');
                 attributes.put('EndDepotName', '{"storeID":"' + resource.Retail_Location__c + '"}');
 
+                if (resource.Resource_Skills__r != null && !resource.Resource_Skills__r.isEmpty()) {
+                    Set<Id> skillIds = new Set<Id>();
+                    for (Resource_Skill__c skill : resource.Resource_Skills__r) {
+                        skillIds.add(skill.RbA_Skill__c);
+                    }
+                    attributes.put('SpecialtyNames', String.join(new List<Id>(skillIds), ' '));
+                }
+                else {
+                    attributes.put('SpecialtyNames', '');
+                }
+
                 if (resourceHours.containsKey(resource.Id)) {
 					resourceHoursMap = resourceHours.get(resource.Id);
 				}
@@ -432,24 +428,14 @@ global with sharing class MA_RoutingSchedulerController {
 		            attributes.put('LatestStartTime', resourceEndDateTime.getTime());
 		            attributes.put('EarliestStartTime', resourceStartDateTime.getTime());
                 	attributes.put('MaxTotalTime', resourceDuration);
-		        }
-		        else {
-		        	attributes.put('AssignmentRule', 2);
-		        }
-
-                if (resource.Resource_Skills__r != null && !resource.Resource_Skills__r.isEmpty()) {
-                    Set<Id> skillIds = new Set<Id>();
-                    for (Resource_Skill__c skill : resource.Resource_Skills__r) {
-                        skillIds.add(skill.RbA_Skill__c);
-                    }
-                    attributes.put('SpecialtyNames', String.join(new List<Id>(skillIds), ' '));
-                }
-                else {
-                    attributes.put('SpecialtyNames', '');
-                }
                 
-                resourceObj.put('attributes', attributes);
-                features.add(resourceObj);
+                    resourceObj.put('attributes', attributes);
+                    features.add(resourceObj);
+
+                    routeLastBreakEndMap.put(resource.Id, 0);
+                    routeEndMap.put(resource.Id, resourceEndDateTime.getTime());
+                    routeStartMap.put(resource.Id, resourceStartDateTime.getTime());
+		        }
             }
 
             if (!resourceIds.isEmpty() && master.containsKey('routes') && ((Map<String, Object>)master.get('routes')).containsKey('features')) {
@@ -572,6 +558,7 @@ global with sharing class MA_RoutingSchedulerController {
     private static void setupBreaks(Date dateToCheck, String storeTimezone, Map<Id, Id> userIdToResourceIdMap) {
         try {
             List<Object> features = new List<Object>();
+            List<EsriBreak> esriBreaksList = new List<EsriBreak>();
             DateTime startDateTime = DateTime.newInstance(dateToCheck, Time.newInstance(0, 0, 0, 0));
             startDateTime = MA_SchedulerUtilities.convertTimezoneToTimezone(startDateTime, null, storeTimezone);
             DateTime endDateTime = startDateTime.addDays(1);
@@ -580,23 +567,9 @@ global with sharing class MA_RoutingSchedulerController {
                                         FROM Event WHERE OwnerId IN :userIdToResourceIdMap.keySet()
                                         AND StartDateTime < :endDateTime AND EndDateTime > :startDateTime AND MA_Scheduler_Event__c = null
                                         ORDER BY StartDateTime ASC];
-            
-            Integer i = 1;
+
             for (Event sfEvent : sfEventList) {
-                Map<String, Object> breakObj = new Map<String, Object>();
-                Map<String, Object> attributes = new Map<String, Object>();
-
-                attributes.put('RouteName', '{"resId":"' + userIdToResourceIdMap.get(sfEvent.OwnerId) + '","userId":"' + sfEvent.OwnerId + '"}');
-                attributes.put('ServiceTime', sfEvent.DurationInMinutes);
-                //attributes.put('TimeWindowEnd', sfEvent.EndDateTime.getTime());
-                attributes.put('TimeWindowEnd', sfEvent.StartDateTime.getTime());
-                attributes.put('TimeWindowStart', sfEvent.StartDateTime.getTime());
-                attributes.put('Precedence', i);
-                attributes.put('MaxViolationTime', 0);
-
-                breakObj.put('attributes', attributes);
-                features.add(breakObj);
-                i++;
+                esriBreaksList.add(new EsriBreak(sfEvent));
             }
 
             List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, Resource__r.RbA_User__c, StartDateTime__c, EndDateTime__c
@@ -605,23 +578,46 @@ global with sharing class MA_RoutingSchedulerController {
                                                         ORDER BY StartDateTime__c ASC];
             
             for (MA_Scheduler_Event__c maEvent : maEventList) {
+                esriBreaksList.add(new EsriBreak(maEvent));
+            }
+            
+            Integer i = 1;
+            for (EsriBreak eBrake : esriBreaksList) {
                 Map<String, Object> breakObj = new Map<String, Object>();
                 Map<String, Object> attributes = new Map<String, Object>();
 
-                attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
-                //attributes.put('TimeWindowEnd', maEvent.EndDateTime__c.getTime());
-                attributes.put('TimeWindowEnd', maEvent.StartDateTime__c.getTime());
-                attributes.put('TimeWindowStart', maEvent.StartDateTime__c.getTime());
-                attributes.put('Precedence', i);
-                attributes.put('MaxViolationTime', 0);
+                Id resourceId = eBrake.resourceId;
+                if (String.isBlank(resourceId)) {
+                    resourceId = userIdToResourceIdMap.get(eBrake.userId);
+                }
 
-                Long milliDiff = maEvent.EndDateTime__c.getTime() - maEvent.StartDateTime__c.getTime();
-                Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
-                attributes.put('ServiceTime', serviceTime);
+                Long routeLastBreakEnd = routeLastBreakEndMap.get(resourceId);
+                Long earliestStart = routeStartMap.get(resourceId);
+                Long latestEnd = routeEndMap.get(resourceId);
+                Long startEpoch = eBrake.startEpoch;
+                Long endEpoch = eBrake.endEpoch;
+                endEpoch = endEpoch <= latestEnd ? endEpoch : latestEnd;
 
-                breakObj.put('attributes', attributes);
-                features.add(breakObj);
-                i++;
+                if (routeLastBreakEnd < endEpoch && startEpoch < latestEnd && endEpoch > earliestStart) {
+                    startEpoch = startEpoch >= earliestStart ? startEpoch : earliestStart;
+                    startEpoch = startEpoch > routeLastBreakEnd ? startEpoch : routeLastBreakEnd + 1;
+
+                    attributes.put('RouteName', '{"resId":"' + resourceId + '","userId":"' + eBrake.userId + '"}');
+                    attributes.put('TimeWindowEnd', startEpoch);
+                    attributes.put('TimeWindowStart', startEpoch);
+                    attributes.put('Precedence', i);
+                    attributes.put('MaxViolationTime', 0);
+
+                    Long milliDiff = endEpoch - startEpoch;
+                    Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
+                    attributes.put('ServiceTime', serviceTime);
+
+                    breakObj.put('attributes', attributes);
+                    features.add(breakObj);
+                    i++;
+
+                    routeLastBreakEndMap.put(resourceId, endEpoch);
+                }
             }
 
             master.put('breaks', new Map<String, Object> { 'features' => features }); 
@@ -629,6 +625,27 @@ global with sharing class MA_RoutingSchedulerController {
         catch(Exception ex) {
             master.put('success', false);
             master.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
+        }
+    }
+
+    private class EsriBreak {
+
+        private Id userId;
+        private Id resourceId;
+        private Long endEpoch;
+        private Long startEpoch;
+
+        private EsriBreak(Event sfEvent) {
+            userId = sfEvent.OwnerId;
+            endEpoch = sfEvent.EndDateTime.getTime();
+            startEpoch = sfEvent.StartDateTime.getTime();
+        }
+
+        private EsriBreak(MA_Scheduler_Event__c maEvent) {
+            resourceId = maEvent.Resource__c;
+            userId = maEvent.Resource__r.RbA_User__c;
+            endEpoch = maEvent.EndDateTime__c.getTime();
+            startEpoch = maEvent.StartDateTime__c.getTime();
         }
     }
 
