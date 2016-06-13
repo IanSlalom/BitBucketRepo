@@ -88,6 +88,10 @@
                 <behavior>Edit</behavior>
                 <field>AR_Reason__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>AR_Age__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -324,6 +328,38 @@
             <layoutItems>
                 <height>200</height>
                 <page>RMS_viewOrderProducts</page>
+                <showLabel>false</showLabel>
+                <showScrollbars>true</showScrollbars>
+                <width>100%</width>
+            </layoutItems>
+        </layoutColumns>
+        <style>OneColumn</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Visit Work Orders</label>
+        <layoutColumns>
+            <layoutItems>
+                <height>200</height>
+                <page>RMS_viewRelatedWorkOrdersVisit</page>
+                <showLabel>false</showLabel>
+                <showScrollbars>true</showScrollbars>
+                <width>100%</width>
+            </layoutItems>
+        </layoutColumns>
+        <style>OneColumn</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Action Work Orders</label>
+        <layoutColumns>
+            <layoutItems>
+                <height>200</height>
+                <page>RMS_viewRelatedWorkOrdersActions</page>
                 <showLabel>false</showLabel>
                 <showScrollbars>true</showScrollbars>
                 <width>100%</width>

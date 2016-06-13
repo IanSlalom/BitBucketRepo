@@ -121,7 +121,8 @@
                                     solve_succeeded: function(callback) {
                                         MAschedRoutes.getResults(res.results.solve_succeeded.paramUrl, res.jobId, function(responseS) {
                                             if(!responseS.value){
-                                                callback(false, {success: false, error: responseS});
+                                                //callback(false, {success: false, error: responseS});
+                                                callback(false, {success: false, error: 'The problem could not be solved'});
                                             }
                                             else{
                                                 MAschedRoutes.batchResponse['solve_succeeded'] = responseS;
@@ -361,6 +362,21 @@
                     if (!response.success) {
                         handleError('Error : getRBAWorkOrders', response);
                     }
+                    else if (response.orders.features.length == 0) {
+                        response['success'] = false;
+                        response['error'] = 'No Work Orders found for selected criteria';
+                        handleError('', response);
+                    }
+                    else if (response.routes.features.length == 0) {
+                        response['success'] = false;
+                        response['error'] = 'No Resources found for selected date';
+                        handleError('', response);
+                    }
+                    else if (response.depots.features.length == 0) {
+                        response['success'] = false;
+                        response['error'] = 'No Store Address found';
+                        handleError('', response);
+                    }
                     
                     callback(!response.success, response);
                 }
@@ -578,11 +594,14 @@
                 function (err, result) {
                     if (err) {
                         hideResourceBatch({ batch: false });
-                        if(result.code == 403){
-                             handleError('Batch Error : User does not have access to server. Check client Id & Secret. Unable to complete scheduling. ', result.message);
+                        if (result.code == 403) {
+                             handleError('Batch Error : User does not have access to server. Check client Id & Secret. Unable to complete scheduling', result.message);
                         }
-                        else{
-                            handleError('Batch Error : Unable to complete scheduling. ', result.message ? result.message : result.error.message);
+                        else if (!result.message && result.error && !result.error.message) {
+                            handleError('', result);
+                        }
+                        else {
+                            handleError('Batch Error : Unable to complete scheduling', result.message ? result.message : result.error.message);
                         }
                     }
                     else {

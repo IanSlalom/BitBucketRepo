@@ -418,7 +418,9 @@ public with sharing class RMS_mobileAppRequestHelper {
     Map<Id, Order> orderMap = new Map<Id, Order>([SELECT Id, AccountId, Name, OpportunityId,
       Discount_Amount__c, Installation_Date__c, Install_Notes__c, Reason__c, 
       Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c, 
-      Comments_and_Questions__c, Estimated_Install_Duration__c
+      Comments_and_Questions__c, Estimated_Install_Duration__c,
+	  Sales_Rep__c, Sales_Rep_Email__c, Sales_Rep_Phone__c,
+	  Primary_Tech_Measure_Name__c, Primary_Tech_Measure_Phone__c, Primary_Tech_Measure_Email__c
       from Order where OpportunityId in :opptyIds and isDeleted = false]);
 
     return orderMap;
@@ -482,11 +484,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// most everything is updated but we need to add the order details that were generated from any closed won opportunities
 		appts = updateAppts(appts);
 		// process any closed won opportunities by creating work order activities
-/* this is being done in the order trigger now
-		if (appts.getErrors().size() == 0){
-			createWorkOrders(appts);
-		}
-*/		
 	} else {
 		appts.getErrors().add('No Sales Appointments Found');
 	}
