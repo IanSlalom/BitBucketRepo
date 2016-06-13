@@ -92,8 +92,8 @@
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Historical" style="margin-left:20%"/>
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLSWPRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create LSWP" style="margin-left:2%" />
 		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" />
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5" value="Create Permit" style="margin-left:2%"/>
-		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderCollectionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton6" value="Create Collections" style="margin-left:2%"/>
+		<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%"/>
+        <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderCollectionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton6" value="Create Collections" style="margin-left:2%"/>
 	</apex:form>
 		
 			<apex:pageBlockTable title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">

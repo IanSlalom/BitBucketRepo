@@ -84,6 +84,7 @@
                 <apex:inputField value="{!Order.Quote_Notes__c}"/>
                 <apex:inputField value="{!Order.Customer_Pickup_All__c}"/>
                 <apex:inputField value="{!Order.AR_Reason__c}"/>
+                <apex:inputField value="{!Order.Invoice_Notes__c}" style="width: 192px; height:100px;"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.Sold_Order__c}"/>
@@ -139,6 +140,7 @@
                 <apex:inputField value="{!Order.OpportunityId}"/>                
                 <apex:inputField value="{!Order.QuoteId}"/>
                 <apex:inputField value="{!Order.AR_Reason__c}"/>
+                <apex:inputField value="{!Order.Invoice_Notes__c}" style="width: 192px; height:100px;"/>
             </apex:pageBlockSection> 
             <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>

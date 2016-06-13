@@ -108,29 +108,8 @@
         }
 
     </style>
+
     
-    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}" >
-        <div class="listHoverLinksbw" style="visibility: visible;">
-            <a href="#head_01B6100000A4a5g_ep_j_id0_j_id8" class="linklet">Order Products</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id99:j_id100" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id99:j_id110" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:boc" class="linklet">Back Office Checks</a><span class="pipe"> | </span>
-            <a href="#j_id0:dis" class="linklet">Order Discounts</a><span class="pipe"> | </span>
-            <a href="#j_id0:odf" class="linklet">Order Financing</a><span class="pipe"> | </span>
-            <a href="#j_id0:po" class="linklet">Purchase Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:pm" class="linklet">Payments</a><span class="pipe"> | </span>
-            <a href="#j_id0:ref" class="linklet">Refunds</a><span class="pipe"> | </span><br/><br/>
-            <a href="#j_id0:ast" class="linklet">Assets</a><span class="pipe"> | </span>
-            <a href="#j_id0:je" class="linklet">Journal Entries</a><span class="pipe"> | </span>
-            <a href="#j_id0:ba" class="linklet">Business Adjustments</a><span class="pipe"> | </span>         
-            <a href="#j_id0:oa" class="linklet">Open Activities</a><span class="pipe"> | </span>
-            <a href="#j_id0:ah" class="linklet">Activity History</a><span class="pipe"> | </span>
-            <a href="#j_id0:nat" class="linklet">Notes and Attachments</a><span class="pipe"> | </span>
-            <a href="#j_id0:fh2:j_id151:j_id153" class="linklet">Order History</a>            
-        </div>
-    </apex:form>
-    
-    <apex:detail inlineEdit="true" relatedList="false" relatedListHover="false" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}"/>
     
     <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
         <div class="row" style="padding-top: 9px;">            
@@ -141,19 +120,6 @@
                 <apex:outputText style="font-size: 2em; font-weight: normal;" value="Service Request {!Order.OrderNumber}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
                 </apex:outputText>                
             </div>
-        </div>
-        <div class="listHoverLinksbw" style="visibility: visible;">
-            <a href="#j_id0:j_id99:j_id100" class="linklet">Visit Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id99:j_id110" class="linklet">Action Work Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:j_id119" class="linklet">Service Request Products</a><span class="pipe"> | </span>
-            <a href="#j_id0:po" class="linklet">Purchase Orders</a><span class="pipe"> | </span>
-            <a href="#j_id0:pm" class="linklet">Payments</a><span class="pipe"> | </span>
-            <a href="#j_id0:ast" class="linklet">Assets</a><span class="pipe"> | </span>
-            <a href="#j_id0:je" class="linklet">Journal Entries</a><span class="pipe"> | </span>
-            <a href="#j_id0:ba" class="linklet">Business Adjustments</a><span class="pipe"> | </span><br/><br/>
-            <a href="#j_id0:oa" class="linklet">Open Activities</a><span class="pipe"> | </span>
-            <a href="#j_id0:ah" class="linklet">Activity History</a><span class="pipe"> | </span>
-            <a href="#j_id0:fh" class="linklet">Service Request History</a>
         </div>
         
         <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
@@ -201,8 +167,9 @@
                 <apex:outputField value="{!Order.Sales_Tax__c}"/>
                 <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
-                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+                <apex:outputField value="{!Order.AR_Age__c}"/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
+                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">
                 <apex:outputField value="{!Order.Sold_Order__c}"/>
@@ -268,6 +235,7 @@
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLSWPRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create LSWP" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
+            <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderCollectionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton6" value="Create Collections" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
             <apex:pageBlockTable value="{!actionWOs}" var="t">
                 <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
                 <apex:column headerValue="Work Order Type" value="{!t.Work_Order_Type__c}"/>
@@ -284,14 +252,8 @@
         <apex:include pageName="RMS_viewServiceOrderProducts" id="sop"/>    
     </apex:pageBlock>   
     
-    <apex:relatedList list="Back_Office_Checks__r" id="boc" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}"/>
-    <apex:relatedList list="Discount_Applied__r" id="dis" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}"/>    
-    <apex:relatedList list="Order_Financing__r" id="odf" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}"/>    
-    
     <apex:relatedList list="Purchase_Orders__r" id="po"/>    
-    <apex:relatedList list="Payments__r" id="pm"/>
-
-    <apex:relatedList list="Refunds__r" id="ref" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}"/>    
+    <apex:relatedList list="Payments__r" id="pm"/>    
 
     <apex:relatedList list="Assets__r" id="ast"/>
     <apex:relatedList list="Journal_Entries__r" id="je"/>
@@ -300,6 +262,5 @@
     <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
     <apex:relatedList subject="{!Order}" list="CombinedAttachments" id="nat"/>
     <c:RMS_orderHistoryComponent OrderIds="{!Id}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>
-    
-    <c:RMS_soldOrderHistoryComponent OrderIds="{!Id}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}" id="fh2"/>    
+       
 </apex:page>

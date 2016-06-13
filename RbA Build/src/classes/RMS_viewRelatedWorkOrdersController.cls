@@ -59,8 +59,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
                         'Sold_Order__c, '+                        
                         'Type_image__c, '+
                         'Confirmed_Appt_w_Customer__c, '+
-                        'Scheduled_Install_Date_Formula__c, '+
-                        'Work_Order_Scheduling_Status__c, ' +
+                        'Appointment_Duration__c, ' +
                         'Work_Order_Status__c, '+
                         'Owner.Name, '+
                         'Work_Order_Type__c, '+
