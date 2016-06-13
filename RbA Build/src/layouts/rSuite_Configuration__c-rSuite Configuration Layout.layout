@@ -197,6 +197,10 @@
                 <behavior>Edit</behavior>
                 <field>Days_for_Cancellation_Include_Saturdays__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>eGreement_eMail__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -206,6 +210,10 @@
         <editHeading>true</editHeading>
         <label>eGreement Display Options</label>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>isWhyFinancewithRbAEnabled__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>United_Inch__c</field>

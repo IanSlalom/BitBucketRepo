@@ -505,11 +505,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Hardware_Finish_Color__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Hardware_Option__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>

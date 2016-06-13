@@ -750,6 +750,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Lock_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Custom_Grille_Details_Control__c</field>
             </layoutItems>
             <layoutItems>

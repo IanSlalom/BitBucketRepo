@@ -336,6 +336,7 @@
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
+        <members>Received_Product__c-Received Product Layout</members>
         <members>Refund__c-Refund Layout</members>
         <members>Resource_Skill__c-Resource Skill Layout</members>
         <members>Resource__c-Resource Layout</members>
