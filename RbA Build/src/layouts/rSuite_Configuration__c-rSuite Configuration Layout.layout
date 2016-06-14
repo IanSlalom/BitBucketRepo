@@ -11,10 +11,6 @@
                 <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Links_Menu_Title__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -144,6 +140,10 @@
                 <behavior>Edit</behavior>
                 <field>Final_Price__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Links_Menu_Title__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -197,6 +197,10 @@
                 <behavior>Edit</behavior>
                 <field>Days_for_Cancellation_Include_Saturdays__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>eGreement_eMail__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -206,6 +210,10 @@
         <editHeading>true</editHeading>
         <label>eGreement Display Options</label>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>isWhyFinancewithRbAEnabled__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>United_Inch__c</field>

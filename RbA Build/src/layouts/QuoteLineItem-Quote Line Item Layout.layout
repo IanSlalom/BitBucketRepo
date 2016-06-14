@@ -200,6 +200,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Lock__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Door_Sill_Color__c</field>
             </layoutItems>
             <layoutItems>
@@ -340,10 +344,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Handle_Type__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Hardware_Finish_Color__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

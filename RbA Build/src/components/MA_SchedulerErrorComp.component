@@ -5,7 +5,7 @@
         	<div id="error" class="ma-modal-window">
 	        	<div id="errorHeader" class="ma-modal-header">
 	        		<h3>ERROR</h3>
-	        		<span id="errorModalClose" class="floatRight" onclick="$('#errorModal').hide();">
+	        		<span id="errorModalClose" class="floatRight" onclick="$('#errorModal').hide(); closeScheduleOptimizeModal();">
 	        		    <img src="{!URLFOR($Resource.MA_Scheduler, '/images/close_60.png')}" />
 	        		</span>
 	        	</div>

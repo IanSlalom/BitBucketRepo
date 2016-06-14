@@ -337,6 +337,7 @@
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
         <members>RbA_Work_Order__c-Visit Work Order Layout</members>
+        <members>Received_Product__c-Received Product Layout</members>
         <members>Refund__c-Refund Layout</members>
         <members>Resource_Skill__c-Resource Skill Layout</members>
         <members>Resource__c-Resource Layout</members>
@@ -410,6 +411,7 @@
         <members>RbA_Operational_Reporting/Report_7300_On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
+        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
@@ -420,6 +422,7 @@
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
+        <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
@@ -434,6 +437,7 @@
         <name>Report</name>
     </types>
     <types>
+        <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
         <members>Orders_with_All_Fields</members>
