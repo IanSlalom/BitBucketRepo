@@ -126,7 +126,7 @@ function prepareList(parent,child,isSubselectOptional){
 	}
 
 	function printCongaProductPO() { 
-		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Product_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Purchase_Order ,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
 	}
 
 
