@@ -62,7 +62,7 @@ public with sharing class RMS_viewOrderProductsController {
 
     public void loadOrderItems(){
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
-                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId
+                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId, Status__c
                          from OrderItem 
                          where OrderId =: ord.Id 
                          and (PricebookEntry.Product2.RecordTypeId =: masterProductId
@@ -71,10 +71,11 @@ public with sharing class RMS_viewOrderProductsController {
 
         Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
         for(OrderItem oi: [select Id, PricebookEntry.Product2Id,  PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
-                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c, Unit_Id__c 
+                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c, Unit_Id__c, Status__c 
                          from OrderItem 
                          where Parent_Order_Item__c in: orderItems.keySet() 
-                         and PricebookEntry.Product2.RecordTypeId =: miscJobId                                            order by PriceBookEntry.Product2.Name]){
+                         and PricebookEntry.Product2.RecordTypeId =: miscJobId                                            
+                         order by PriceBookEntry.Product2.Name]){
             system.debug(oi);
             if(relatedOrderItems.containsKey(oi.Parent_Order_Item__c)){
                 relatedOrderItems.get(oi.Parent_Order_Item__c).add(oi);

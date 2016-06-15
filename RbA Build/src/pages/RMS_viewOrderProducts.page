@@ -99,7 +99,7 @@
 					</apex:commandButton>
 				</apex:column>
 				<apex:column >
-					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == masterProductId}">
+					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == masterProductId && wrapper.OrderItem.Status__c != 'Cancelled'}">
 					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 					</apex:outputpanel>
 					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId && wrapper.OrderItem.Status__c != 'Cancelled'}">
