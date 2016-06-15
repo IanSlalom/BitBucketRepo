@@ -102,10 +102,13 @@
 					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == masterProductId}">
 					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 					</apex:outputpanel>
-					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId}">
+					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId && wrapper.OrderItem.Status__c != 'Cancelled'}">
 					<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null}">
 						<apex:param name="itemToCancel" assignTo="{!orderItemToCancel}" value="{!wrapper.OrderItem.Id}"/>
 					</apex:commandButton>
+					</apex:outputpanel>
+					<apex:outputpanel rendered="{!wrapper.OrderItem.Status__c == 'Cancelled'}">
+						<apex:outputText >Cancelled</apex:outputText>
 					</apex:outputpanel>
 				</apex:column>
 				<apex:column value="{!wrapper.OrderItem.Unit_Id__c}"/>
@@ -126,9 +129,12 @@
 							<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 							</apex:column>-->
 							<apex:column >  
-								<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null}">
+								<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null && item.Status__c != 'Cancelled'}">
 									<apex:param assignTo="{!orderItemToCancel}" value="{!item.Id}"/>
 								</apex:commandButton>
+								<apex:outputpanel rendered="{!item.Status__c == 'Cancelled'}">
+									<apex:outputText >Cancelled</apex:outputText>
+								</apex:outputpanel>
 							</apex:column>
 							<apex:column headerValue="Product">  
 								<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 

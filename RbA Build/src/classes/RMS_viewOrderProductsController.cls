@@ -65,7 +65,6 @@ public with sharing class RMS_viewOrderProductsController {
                          Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId
                          from OrderItem 
                          where OrderId =: ord.Id 
-                         and Status__c != 'Cancelled' 
                          and (PricebookEntry.Product2.RecordTypeId =: masterProductId
                             or (PricebookEntry.Product2.RecordTypeId =: miscJobId and Parent_Order_Item__c = null)) 
                             order by PricebookEntry.Product2.RecordType.DeveloperName]);
@@ -75,9 +74,7 @@ public with sharing class RMS_viewOrderProductsController {
                          Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c, Unit_Id__c 
                          from OrderItem 
                          where Parent_Order_Item__c in: orderItems.keySet() 
-                         and PricebookEntry.Product2.RecordTypeId =: miscJobId
-                         and Status__c != 'Cancelled'                       
-                         order by PriceBookEntry.Product2.Name]){
+                         and PricebookEntry.Product2.RecordTypeId =: miscJobId                                            order by PriceBookEntry.Product2.Name]){
             system.debug(oi);
             if(relatedOrderItems.containsKey(oi.Parent_Order_Item__c)){
                 relatedOrderItems.get(oi.Parent_Order_Item__c).add(oi);
