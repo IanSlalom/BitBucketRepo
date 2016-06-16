@@ -930,6 +930,7 @@ global with sharing class MA_SchedulerController {
             update workOrder;
 
             MA_SchedulerUtilities.deleteEvents(workOrderId, 'Cancelled', '');
+            delete [SELECT Id FROM Assigned_Resources__c WHERE Work_Order__c = :workOrderId];
 
             response.put('success', true);
         }
