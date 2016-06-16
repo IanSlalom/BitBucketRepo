@@ -750,6 +750,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Lock_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Custom_Grille_Details_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -967,6 +971,10 @@
         <editHeading>true</editHeading>
         <label>Door Controls</label>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Color_Match_Hinges_Control__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Interior_Pre_Finish_Control__c</field>

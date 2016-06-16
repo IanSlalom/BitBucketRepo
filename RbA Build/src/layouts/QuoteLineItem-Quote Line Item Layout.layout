@@ -89,6 +89,10 @@
                 <behavior>Edit</behavior>
                 <field>Pricing_Cross_Reference__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Color_Match_Hinges__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -197,6 +201,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Auxillary_Foot_Lock_Color_Match__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Lock__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -340,10 +348,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Handle_Type__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Hardware_Finish_Color__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -588,7 +592,24 @@
                 <field>Custom_Grille_Details_S4__c</field>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Price_S1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Price_S2__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Price_S3__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Custom_Grille_Price_S4__c</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
