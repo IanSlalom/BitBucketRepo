@@ -18,6 +18,9 @@ private class RMS_mobileAppRequestHelperTest {
 	}
 
 	static testmethod void testFindAppointments(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
 		
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 //		tUtil.setUpConfigsMark();
@@ -51,6 +54,9 @@ private class RMS_mobileAppRequestHelperTest {
 	}
 
 	static testmethod void testResultSalesAppointments(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
 		
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigsMark();
@@ -186,6 +192,9 @@ private class RMS_mobileAppRequestHelperTest {
 	}
 
 	static testmethod void testSaveTechMeasure(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -323,6 +332,10 @@ private class RMS_mobileAppRequestHelperTest {
 	}
 
 	static testmethod void testSaveQuoteLineItemsDiscountsandFinancing(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
 
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigs();
