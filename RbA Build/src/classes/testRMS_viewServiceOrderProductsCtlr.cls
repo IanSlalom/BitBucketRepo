@@ -16,8 +16,9 @@ Unauthorized use is prohibited.
 ***********************************************************/
 @isTest 
 public with sharing class testRMS_viewServiceOrderProductsCtlr {
-    
-    static testmethod void createTestRecords() {
+
+	@testSetup
+	static void createTestRecords(){    
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
