@@ -334,6 +334,7 @@ private class RMS_OrderTriggerHandlerTests {
 								 from Order where accountId =: dwelling.Id 
 												  and Name = 'InstallScheduled'];
 		System.assertEquals(soldOrder.size(),1);
+		Test.startTest();
 
 		Order newOrder = new Order(Sold_Order__c = soldOrder[0].Id,AccountId = dwelling.Id, Name = 'New Order',Store_Location__c = soldOrder[0].store_Location__c, EffectiveDate= Date.Today(), 
 													OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order'),
@@ -343,7 +344,6 @@ private class RMS_OrderTriggerHandlerTests {
 													Service_Type__c = 'Draft' );
 		List<Order> oList = new List<Order>{newOrder,newOrder2};
 		insert oList;
-		Test.startTest();
 		newOrder.Status = 'Ready to Order';
 		newOrder2.Status = 'Ready to Order';
 		update oList;
