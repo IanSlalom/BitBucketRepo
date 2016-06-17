@@ -83,7 +83,7 @@ private class UtilityMethodsTest {
 		
 		map<Id, Store_Configuration__c> myStoreMap = UtilityMethods.mapStoreConfigs(storeIds);
 		
-		System.AssertEquals(myStoreConfig, myStoreMap.get(myStore.Id));
+		System.AssertEquals(myStoreConfig.Id, myStoreMap.get(myStore.Id).Id);
 
 	}
 
