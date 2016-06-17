@@ -54,6 +54,7 @@ private class MA_SchedulerRouteTESTS {
 		RbA_Work_Order__c wo3 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
 		RbA_Work_Order__c wo4 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
 
+		Test.startTest();
 		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
@@ -89,7 +90,6 @@ private class MA_SchedulerRouteTESTS {
 		Resource_Skill__c resSkill4 = MA_SchedulerFakeDataGenerator.createFakeResourceSkill(false, skill.Id, res4.Id);
 		insert new List<Resource_Skill__c> { resSkill1, resSkill2, resSkill3, resSkill4 };
 
-		Test.startTest();
 		String responseString = MA_RoutingSchedulerController.getRecords('1987-01-10', String.valueOf(storeConfig.Id), 'Tech Measure', '0');
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.debug(responseObj);
