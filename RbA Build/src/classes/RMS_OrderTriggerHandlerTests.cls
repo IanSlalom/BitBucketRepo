@@ -322,6 +322,9 @@ private class RMS_OrderTriggerHandlerTests {
 	}
 
 	@isTest static void testUpdateUniqueIdentifier(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
 		Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
 		Decimal orderNumBeforeUpdate = store.Active_Store_Configuration__r.Order_Number__c; 
 		System.assertNotEquals(store.Store_Number__c, null);

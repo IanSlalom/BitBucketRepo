@@ -276,6 +276,7 @@ private class MA_SchedulerTESTS {
 		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 // System assert is getting 3
 //		System.assertEquals(1, ((List<Object>)responseObj.get('availableResources')).size());
+// System assert is getting 0
 		System.assertEquals(2, ((List<Object>)responseObj.get('unAvailableResources')).size());
 
 		delete storeSetting;
