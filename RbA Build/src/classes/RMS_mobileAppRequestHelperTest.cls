@@ -196,10 +196,6 @@ private class RMS_mobileAppRequestHelperTest {
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
 
-		// Turn off the financial trigger to avoid SOQL limits in test class
-		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
-		insert turnOffFinancialTrigger;
-
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigs();
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
