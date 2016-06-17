@@ -75,7 +75,7 @@ private class UtilityMethodsTest {
 		Account myStore = utility.createStoreAccount('mystore');
 		insert myStore;
 		
-		Store_Configuration__c myStoreConfig = new Store_Configuration__c(Store__c = myStore.Id);
+		Store_Configuration__c myStoreConfig = new Store_Configuration__c(Store__c = myStore.Id, Order_Number__c = 1);
 		insert myStoreConfig;
 		
 		List<Id> storeIds = new List<Id>();
@@ -117,7 +117,7 @@ private class UtilityMethodsTest {
 		Account myStore = utility.createStoreAccount('mystore');
 		insert myStore;
 		
-		Store_Configuration__c myStoreConfig = new Store_Configuration__c(Store__c = myStore.Id);
+		Store_Configuration__c myStoreConfig = new Store_Configuration__c(Store__c = myStore.Id, Order_Number__c = 1);
 		insert myStoreConfig;
 		
 		Financial_Account_Number__c finNumber = new Financial_Account_Number__c(Name='123', Account_Type__c='myaccounttype', Store_Configuration__c = myStoreConfig.Id);
