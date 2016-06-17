@@ -103,6 +103,10 @@
                 <field>Discount_Amount__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Change_Order_Total__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Retail_Total__c</field>
             </layoutItems>
