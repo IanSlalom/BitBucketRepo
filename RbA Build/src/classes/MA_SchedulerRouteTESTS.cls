@@ -39,6 +39,10 @@ private class MA_SchedulerRouteTESTS {
 	}
 	
 	@isTest static void testMARoutingSchedulerGetRecords() {
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
