@@ -3,7 +3,10 @@
 private class warrantyTriggerTest {
 
     static testMethod void warrantyTriggerTest() {
-		Warranty__c newWarranty = new Warranty__c();
-		insert newWarranty;
-    }
+         TestUtilityMethods utility = new TestUtilityMethods();       
+         utility.setUpConfigs();
+        Charge__c cct = new Charge__c(Primary_Reason__c = 'Renewal by Andersen');
+        insert cct;
+        Warranty__c newWarranty = new Warranty__c(Charge_Cost_To__c = cct.Id);
+        insert newWarranty;    }
 }
