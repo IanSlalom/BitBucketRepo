@@ -3,6 +3,7 @@
     <types>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
+        <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
@@ -411,6 +412,7 @@
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
+        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
@@ -422,9 +424,8 @@
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
+        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
