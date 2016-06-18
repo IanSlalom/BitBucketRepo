@@ -73,10 +73,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Brickmold_Picture_Frame_Price__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Brickmould_Traditional_Price__c</field>
             </layoutItems>
             <layoutItems>
