@@ -33,16 +33,15 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
         insert contact1;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
-        insert finacialAccountNumber1;
+//        insert finacialAccountNumber1;
         Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '2');
-        insert finacialAccountNumber2;
+		insert new List<Financial_Account_Number__c> {finacialAccountNumber1, finacialAccountNumber2};
         
         Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(  Store_Configuration__c = storeConfig1.id,
                                                                                      Transaction_Type__c = 'Inventory Received - External Vendor',
                                                                                      Debit_Account_Number__c = finacialAccountNumber1.id,
                                                                                      Credit_Account_Number__c = finacialAccountNumber2.id);
-        insert finacialTransaction1;
-        
+		insert finacialTransaction1;
         Product2 masterProduct = new Product2( name = 'master',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product'));
         Product2 servProduct = new Product2( name = 'service',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'),Master_Product__c = masterProduct.Id);        
         
