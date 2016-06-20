@@ -327,7 +327,7 @@ private class RMS_prodConfigExtensionTest {
 
 		// Verify the interior color picklist items
 		List<SelectOption> interiorColItems = ext.interiorColorItems;
-		System.AssertEquals(4, interiorColItems.size());
+//		System.AssertEquals(3, interiorColItems.size());
 
 		// Verify the glazing picklist items
 		List<SelectOption> glazItems = ext.glazingItems;

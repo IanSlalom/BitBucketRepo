@@ -493,7 +493,8 @@ global with sharing class MA_RoutingSchedulerController {
                                                                                         LSWP_Test_Results__c, Service_Request_Type__c, Total_Days__c,
 																						(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)
 																						FROM RbA_Work_Order__c WHERE Id IN :workOrderIds]);
-                
+            
+            Integer sequence = 1;
             for (MA_Scheduler_Event__c maEvent : maEventsList) {
                 Map<String, Object> orderObj = new Map<String, Object>();
                 Map<String, Object> geometry =  new Map<String, Object>();
@@ -510,7 +511,6 @@ global with sharing class MA_RoutingSchedulerController {
                                             + '","contactName":"' + workOrder.Contact__r.LastName + ', ' + workOrder.Contact__r.FirstName
                                             + '","isSynced":' + workOrder.Tech_Measure_Synced__c + ',"isLswp":' + workOrder.LSWP_Test_Results__c
                                             + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder + '"}');
-				attributes.put('AssignmentRule', 3);
                 attributes.put('CurbApproach', 3);
                     
                 endDateTime = maEvent.EndDateTime__c;
@@ -537,9 +537,13 @@ global with sharing class MA_RoutingSchedulerController {
                 
                 if (maEvent.Resource__c != null) {
                     attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
+                    attributes.put('AssignmentRule', 2);
+                    attributes.put('Sequence', sequence);
+                    sequence++;
                 }
                 else {
                     attributes.put('RouteName', null);
+                    attributes.put('AssignmentRule', 3);
                 }
                 
                 orderObj.put('attributes', attributes);

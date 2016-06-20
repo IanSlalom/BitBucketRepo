@@ -216,7 +216,7 @@ private class PurchaseOrderTriggerHandlerTests {
 			}
 		}
 
-
+		test.starttest();
 		handler.updateHasPOCheckbox(poList);
 		orderList = [Select Id, Name, Status, hasPO__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
@@ -256,6 +256,7 @@ private class PurchaseOrderTriggerHandlerTests {
 				system.assertEquals(o.hasPO__c,false);
 			}
 		}
+		test.stoptest();
 	}
 	
 }

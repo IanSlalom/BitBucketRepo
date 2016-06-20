@@ -112,6 +112,15 @@
         <operation>Literal</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Status_to_To_be_scheduled</fullName>
+        <field>Work_Order_Status__c</field>
+        <literalValue>To be scheduled</literalValue>
+        <name>Update Status to To be scheduled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
     <rules>
         <fullName>Last Renovate Right Date Notification</fullName>
         <actions>
@@ -355,6 +364,20 @@
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Tech Measure</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update WO Status%3A To be scheduled</fullName>
+        <actions>
+            <name>Update_Status_to_To_be_scheduled</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>When a WO is cancelled the status needs to be changed to &quot;to be scheduled&quot;</description>
+        <formula>OR(
+ISCHANGED(Cancel_Date__c),
+ISCHANGED ( Cancel_Reason__c )
+)</formula>
+        <triggerType>onAllChanges</triggerType>
     </rules>
     <tasks>
         <fullName>Cancelled_Order</fullName>
