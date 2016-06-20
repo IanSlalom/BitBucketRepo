@@ -21,7 +21,8 @@ public with sharing class RMS_mobileAppRequestHelper {
 	'OrderItemNumber, OrderId, QuoteLineItemId, Height_Inches__c, Height_Fraction__c, NSPR__c, NSPR_Number__c, Sill_Angle__c, ' + 
 	'Variant_Number__c, Unit_Wholesale_Cost__c, Width_Fraction__c, Width_Inches__c, Unit_of_Measure__c,' +
 	'Meet_Rail_Dimension__c, Is_Height_L_or_R_Leg_Height__c, Leg_Height_Interior_Whole_Inch__c, Leg_Height_Interior_Fraction__c,' +
-	'Leg_Height_Exterior_Whole_Inch__c, Leg_Height_Exterior_Fraction__c, Is_Leg_Height_L_or_R_Leg_Height__c';
+	'Leg_Height_Exterior_Whole_Inch__c, Leg_Height_Exterior_Fraction__c, Is_Leg_Height_L_or_R_Leg_Height__c,' +
+	'isJobMaterial__c, isJobConstructionDetail__c' ;
 	private static final String OLI_WHERE_CLAUSE = 'from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
 
   /* @method: findAppointments(Id userId)
@@ -33,6 +34,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     try {
       List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Sales Appointment'];
       List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Tech Measure'];
+//TODO: Validate that these fields are nut null, otherwise this will blow up
       Appointments myAppts = new Appointments();
 
       // process the sales appointments
@@ -57,6 +59,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       return JSON.serialize(myAppts);
     } catch (Exception e) {
       System.debug(LoggingLevel.ERROR, e);
+	  System.debug(LoggingLevel.Error, e.getStackTraceString());
       return JSON.serialize(e);
     }
   }
@@ -80,6 +83,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     for (OpportunityContainer oc: relatedOCs.values()) {
       accountIdList.add(oc.oppty.AccountId);
     }
+//TODO: Validate that these fields are nut null, otherwise this will blow up
     Map<Id, Account> relatedAccountMap = new Map<Id, Account>([SELECT Id, Name, Dwelling_Style__c, Shipping_County__c, ShippingCity, ShippingCountryCode, ShippingLatitude, 
       ShippingLongitude, ShippingPostalCode, ShippingStateCode, ShippingStreet, Year_Built__c, Historical__r.Name, HOA__r.Name 
       FROM Account WHERE Id IN :accountIdList and isDeleted = false]);
@@ -136,6 +140,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 
     // get the work orders
     List<RbA_Work_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Account__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from RbA_Work_Order__c where isDeleted = false and Id in :workOrderIdList];
+//TODO: Validate that these fields are nut null, otherwise this will blow up
 
     // opportunity ids
     // account ids
@@ -147,6 +152,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
 
     // get the accounts
+//TODO: Validate that these fields are nut null, otherwise this will blow up
     Map<Id, Account> relatedAccountMap = new Map<Id, Account>([SELECT Id, Name, Dwelling_Style__c, Shipping_County__c, ShippingCity, ShippingCountryCode, ShippingLatitude, 
       ShippingLongitude, ShippingPostalCode, ShippingStateCode, ShippingStreet, Year_Built__c, Historical__r.Name, HOA__r.Name 
       FROM Account WHERE Id IN :accountIds and isDeleted = false]);
@@ -269,7 +275,8 @@ public with sharing class RMS_mobileAppRequestHelper {
     [SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, 
     Pricebook2Id, Window_Problems__c, rSuite_Id__c,
     rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c,
-    First_Selected_Quote__c, Second_Selected_Quote__c
+    First_Selected_Quote__c, Second_Selected_Quote__c,
+    Sales_Rep_Name__c, Sales_Rep_Email__c, Sales_Rep_Phone__c
     FROM Opportunity WHERE Id IN :oppIds]);
 
     // get the quotes 
