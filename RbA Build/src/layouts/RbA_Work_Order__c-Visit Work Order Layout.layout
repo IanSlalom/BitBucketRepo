@@ -31,18 +31,6 @@
                 <behavior>Edit</behavior>
                 <field>Opportunity__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Estimated_Ship_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Cancel_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Reschedule_Date__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -158,6 +146,26 @@
                 <behavior>Readonly</behavior>
                 <field>Tech_Measure_Synced__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Estimated_Ship_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reschedule_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reschedule_Reason__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cancel_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cancel_Reason__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -257,7 +265,6 @@
         <fields>TASK.SUBJECT</fields>
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>Service_Type__c</fields>
-        <fields>Non_Stock_Material__c</fields>
         <fields>TASK.STATUS</fields>
         <fields>EVENT.START_DATE_TIME</fields>
         <fields>TASK.TYPE</fields>
@@ -297,6 +304,11 @@
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>New</excludeButtons>
+        <fields>Changes__c</fields>
+        <relatedList>Change_History__c.RbA_Work_Order__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>

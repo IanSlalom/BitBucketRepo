@@ -443,6 +443,7 @@
     </relatedLists>
     <relatedLists>
         <customButtons>New_Business_Adjustment</customButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Amount__c</fields>
         <fields>Date__c</fields>

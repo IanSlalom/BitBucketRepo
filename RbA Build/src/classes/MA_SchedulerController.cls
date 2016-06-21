@@ -453,7 +453,6 @@ global with sharing class MA_SchedulerController {
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
 
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
-            Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrder.Work_Order_Type__c);
             Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrder.Work_Order_Type__c);
 
             String storeTimezone = (String)maSettingsMap.get('storeTimezone');
@@ -493,12 +492,12 @@ global with sharing class MA_SchedulerController {
                 requiredSkills.put(skill.RbA_Skill__c, skill.RbA_Skill__r.Name);
             }
 
-            for (Resource__c resource : [SELECT Id, Name, Active__c, RbA_User__c, Crew_Size__c, Rank__c,
+            for (Resource__c resource : [SELECT Id, Name, Active__c, RbA_User__c, Crew_Size__c, Rank__c, Resource_Type__c,
                                             (SELECT Id, RbA_Skill__r.Name FROM Resource_Skills__r WHERE RbA_Skill__c IN :requiredSkills.keySet())
-                                            FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId AND Resource_Type__c IN :resourceTypes)
+                                            FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId)
                                             OR Id IN :assignedResources]) {
 
-                if (!resource.Resource_Skills__r.isEmpty()) {
+                if (!resource.Resource_Skills__r.isEmpty() || assignedResources.contains(resource.Id)) {
                     if (resource.RbA_User__c != null) {
                         availableResourceIdToUserIdMap.put(resource.Id, resource.RbA_User__c);
                     }
@@ -930,6 +929,7 @@ global with sharing class MA_SchedulerController {
             update workOrder;
 
             MA_SchedulerUtilities.deleteEvents(workOrderId, 'Cancelled', '');
+            delete [SELECT Id FROM Assigned_Resources__c WHERE Work_Order__c = :workOrderId];
 
             response.put('success', true);
         }

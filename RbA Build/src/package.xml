@@ -3,6 +3,7 @@
     <types>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
+        <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
@@ -115,6 +116,7 @@
         <members>testRMS_orderHistoryController</members>
         <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
+        <members>warrantyTriggerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -255,6 +257,8 @@
         <members>Account-Account Layout</members>
         <members>Account-Contractor Layout</members>
         <members>Account-Dwelling Layout</members>
+        <members>Account-Finance Company Layout</members>
+        <members>Account-Region Layout</members>
         <members>Account-Store Layout</members>
         <members>Account-Vendor Layout</members>
         <members>Asset-Asset Layout</members>
@@ -312,7 +316,6 @@
         <members>Pricing_Configuration__c-200400 Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
-        <members>Pricing_Configuration__c-Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
         <members>Problem_Component_Config__c-Problem Component Config Layout</members>
@@ -412,6 +415,7 @@
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
+        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
@@ -423,9 +427,8 @@
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
+        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>

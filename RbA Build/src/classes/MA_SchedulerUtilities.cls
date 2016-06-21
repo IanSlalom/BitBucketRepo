@@ -331,7 +331,8 @@ public with sharing class MA_SchedulerUtilities {
 
         for (List<MA_Scheduler_Event__c> maEventList : [SELECT Id, Name, StartDateTime__c, EndDateTime__c, Resource__c, Resource__r.Name, RbA_Work_Order__c, RbA_Work_Order__r.Work_Order_Type__c, RbA_Work_Order__r.Contact__c, RbA_Work_Order__r.Contact__r.FirstName, RbA_Work_Order__r.Contact__r.LastName, Estimated_Start_Date_Time__c, Estimated_End_Date_Time__c,
                                                         RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c, RbA_Work_Order__r.City__c, RbA_Work_Order__r.State__c
-                                                        FROM MA_Scheduler_Event__c WHERE (Resource__c = null AND RbA_Work_Order__r.Work_Order_Type__c = :workOrderType) OR (Resource__c IN :resourceToSkillsMap.keySet() AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime AND Id NOT IN :maEventIdsLinkedToSfEvents)]) {
+                                                        FROM MA_Scheduler_Event__c WHERE ((Resource__c = null AND RbA_Work_Order__r.Work_Order_Type__c = :workOrderType) OR (Resource__c IN :resourceToSkillsMap.keySet() AND Id NOT IN :maEventIdsLinkedToSfEvents))
+                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime]) {
         
             for (MA_Scheduler_Event__c maEvent : maEventList) {
                 MA_SchedulerEvent schedulerEvent = new MA_SchedulerEvent(maEvent, userMap, false);

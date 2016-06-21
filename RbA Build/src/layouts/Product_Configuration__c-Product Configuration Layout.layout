@@ -419,6 +419,10 @@
                 <behavior>Edit</behavior>
                 <field>Hardware_Option__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hardware_Finish_Color__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -835,6 +839,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Hardware_Style_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Hardware_Finish_Color_Control__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
