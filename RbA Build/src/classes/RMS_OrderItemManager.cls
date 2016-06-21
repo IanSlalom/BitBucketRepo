@@ -8,7 +8,7 @@ public with sharing class RMS_OrderItemManager {
 			ch.Order_Product__c = oi.Id;
 			ch.Retail_Price__c = oi.Total_Retail_Price__c;
 			ch.Retail_Price_Change__c =  oi.Total_Retail_Price__c;
-			
+			ch.Responsible_Party__c = oi.Responsible_Party__c;
 			changeHistoryToInsert.add(ch);
 		}
 		insert changeHistoryToInsert;
@@ -119,9 +119,7 @@ public with sharing class RMS_OrderItemManager {
 				
 				Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
 				Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
-				if (newPrice == null) newPrice = 0;
-				if (oldPrice == null) oldPrice = 0;
-				if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
+				
 				rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
 			}  
 			changeHistoryToUpsert.add(rCH);	

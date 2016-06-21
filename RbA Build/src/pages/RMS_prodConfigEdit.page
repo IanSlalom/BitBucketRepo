@@ -527,7 +527,8 @@
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
             <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}" html-data-jsid="verify"/>
-
+            <apex:inputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode == 'e' || mode == 'r'}" required="true"/>
+			<apex:outputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Sales Information" columns="2" rendered="{!prodConfig.mpc != null}">
 
