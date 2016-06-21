@@ -113,8 +113,9 @@ public with sharing class RMS_completeOrderChecksControllerTest {
  		order1.Status = 'Draft';
  		update order1;
  		controller.save();
- 		order1 = [select Id, Status from Order where Id =: order1.Id];
+ 		order1 = [select Id, Status, Order_Processed_Date__c from Order where Id =: order1.Id];
  		System.assertEquals(order1.Status, 'Tech Measure Scheduled');
+ 		System.assertEquals(System.Today(), order1.Order_Processed_Date__c);
 
 	}
 
