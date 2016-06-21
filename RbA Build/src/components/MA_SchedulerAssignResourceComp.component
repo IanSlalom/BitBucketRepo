@@ -453,6 +453,9 @@
                                                         + ' ' + availableResource.resourceName
                                                     + '</td>'
                                                     + '<td>'
+                                                        + availableResource.type
+                                                    + '</td>'
+                                                    + '<td>'
                                                         + ' ' + availableResource.skillsMatchedTotal + ' skills'
                                                     + '</td>'
                                                     + '<td colspan="2" class="headCountCol" headCount="' + (availableResource.headcount != null ? availableResource.headcount : '1') + '">'
@@ -460,7 +463,7 @@
                                                     + '</td>'
                                                 + '</tr>'
                                                 + '<tr class="removableRow hiddenRow' + (!availableResource.isAvailable ? ' deleteTempRow' : '') + '">'
-                                                    + '<td colspan="4">'
+                                                    + '<td colspan="5">'
                                                         + '<div class="matchedSkills">';
 
                                                             availableResourcesTableHtml += '<div class="resourceSkillMatchedHeader">MATCHED SKILLS</div>';
@@ -874,6 +877,7 @@
                     <table id="assignedResourcesAvailableTable">
                         <tr class="headerRow">
                             <th><div id="expandAllAvailableResourcesDiv" class="pointer closed" onclick="toggleExpandAllAvaibleResource(this);"></div>Resource</th>
+                            <th>Primary Type</th>
                             <th>Skills Match</th>
                             <th>Head Count</th>
                             <td><input type="text" class="assignResourceSearch floatRight" onkeyup="availableResourcesSearchFiltering(this);" placeholder="Search" /></td>
