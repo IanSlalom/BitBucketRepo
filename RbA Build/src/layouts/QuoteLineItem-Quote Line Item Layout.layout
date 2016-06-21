@@ -385,6 +385,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Hardware_Finish_Color__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Hardware_Color__c</field>
             </layoutItems>
             <layoutItems>

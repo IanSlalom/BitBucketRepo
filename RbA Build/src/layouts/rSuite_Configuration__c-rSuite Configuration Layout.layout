@@ -197,10 +197,6 @@
                 <behavior>Edit</behavior>
                 <field>Days_for_Cancellation_Include_Saturdays__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>eGreement_eMail__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -280,8 +276,6 @@
                 <behavior>Edit</behavior>
                 <field>Lead_Safe_Work_Practice_Work_Order_Email__c</field>
             </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Paint_Stain_Production_Work_Order_Email__c</field>
@@ -289,6 +283,20 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Primary_Installer_Invoice_Email__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_To_Emails__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_cc_Emails__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_Suspend_Notify_Emails__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

@@ -7,7 +7,8 @@ public class MA_SchedulerFakeDataGenerator {
 
 	public static Store_Configuration__c createFakeStoreConfig(Boolean insertNeeded, Id storeId) {
 		Store_Configuration__c storeConfig = new Store_Configuration__c(
-			Store__c = storeId
+			Store__c = storeId,
+			Order_Number__c = 1
 		);
 
 		if (insertNeeded) {
