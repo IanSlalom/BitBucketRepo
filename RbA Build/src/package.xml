@@ -38,6 +38,7 @@
         <members>RMS_acceptInvite</members>
         <members>RMS_addProblemComponents</members>
         <members>RMS_addProblemComponentsExt</members>
+        <members>RMS_addResponsibility</members>
         <members>RMS_addResponsibilityExt</members>
         <members>RMS_addServiceSymptomExt</members>
         <members>RMS_addSkilltoWO</members>

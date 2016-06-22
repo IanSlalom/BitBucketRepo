@@ -16,7 +16,7 @@ Unauthorized use is prohibited.
 
 ***********************************************************/
 
-public with sharing class RMS_addResponsibilityExt extends RMS_addCharges
+public with sharing class RMS_addResponsibilityExt extends RMS_addResponsibility
 {
     
     
