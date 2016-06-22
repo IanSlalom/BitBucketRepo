@@ -42,7 +42,7 @@ public with sharing class RMS_newLaborRedirectExtension {
 
 		// Get all of the url parameters from the current url and put them in the new url
         Map<String, String> m = p.getParameters();
-        m.putAll(ApexPages.currentPage().getParameters());
+        m.put('retURL', ApexPages.currentPage().getParameters().get('retURL'));
 
 		// If there is a work order, redirect to labor, otherwise redirect to misc reimbursement
 		if (theLabor.Related_Work_Order__c == null) {
