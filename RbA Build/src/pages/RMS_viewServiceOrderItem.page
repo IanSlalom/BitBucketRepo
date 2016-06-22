@@ -1,7 +1,6 @@
 <apex:page standardController="OrderItem" showHeader="true" tabStyle="OrderItem" sidebar="true" extensions="RMS_OrderItemExtension">
-    
-    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
-    <apex:includeScript value="/support/console/26.0/integration.js"/>
+       <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
      <script type="text/javascript">
     window.onload = function() {
         testSetTabTitle();       
