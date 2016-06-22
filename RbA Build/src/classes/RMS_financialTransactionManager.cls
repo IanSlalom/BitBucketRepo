@@ -440,7 +440,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Labor_Complete__c,
                                                     Related_Work_Order__c,
                                                     Related_Work_Order__r.Sold_Order__c,
-                                                    Standard_Hourly_Rate__c,
+                                                    Hourly_Rate__c,
                                                     Store_Location__c,
                                                     Related_Work_Order__r.Sold_Order__r.Store_Location__c,
                                                     Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c,
