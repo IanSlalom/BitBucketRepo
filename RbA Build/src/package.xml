@@ -194,6 +194,7 @@
         <members>RMS_viewServiceOrders</members>
         <members>RMS_viewServiceProduct</members>
         <members>RMS_viewServiceRequest</members>
+        <members>RMS_viewServiceRequestLocked</members>
         <members>RMS_viewServiceSymptomList</members>
         <name>ApexPage</name>
     </types>
