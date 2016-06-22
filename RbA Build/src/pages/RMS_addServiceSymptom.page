@@ -50,37 +50,5 @@
                     	<apex:outputField value="{!Service_Symptom__c.Service_Symptom__c}"/> 
             </apex:pageBlockSection>
         </apex:pageBlock>
-        <!--<apex:pageBlock title="Update Responsibilities: {!OrderItem.Installed_Product_Name__c } - {!OrderItem.Product_Name__c}">
-            <apex:pageBlockButtons location="bottom">
-                <apex:commandButton value="Cancel" action="{!cancel}" />
-                <apex:commandButton value="Save" action="{!save}"/>
-            </apex:pageBlockButtons>-->
-            <!--<apex:pageBlockSection id="childList" columns="1" title="Add Problem Components" collapsible="false" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,false,true)}">
-                <!-- There is a trick to creating a counter when rendering rows in a
-pageBlockTable. You have to define a variable to default to 0,
-and then update that variable inside the table row. This is the
-way that I can leverage smart row deletes
-                <apex:variable var="rowNum" value="{!ZERO}" />
-                <apex:outputLabel value="No Problem Components currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
-                <apex:pageBlockTable value="{!children}" var="war" rendered="{!hasChildren}">
-                    <apex:column headerValue="Problem Component">
-                        <apex:inputField value="{!war.Problem_Component_asgn__c}"/>
-                    </apex:column>      
-                    <!-- Add additional children metadata columns here
-                    <apex:column headerValue=" ">
-                        <!-- This is the second half of the trick to keep track
-of your row index for deletion
-                        <apex:variable var="rowNum" value="{!rowNum + 1}" />
-                        <apex:commandLink value="Delete" action="{!removeFromList}" rerender="childList, messages" immediate="true">
-                            <apex:param name="removeIndex" assignTo="{!removeIndex}" value="{!rowNum}" />
-                        </apex:commandLink>
-                    </apex:column>
-                </apex:pageBlockTable>
-                <!-- Want to specify immediate here and above so validation does
-not occur when you are trying to add/remove rows. Only want
-validation to occur when trying to save
-                <apex:commandButton value="Add Problem Component" action="{!addToList}" rerender="childList, messages" immediate="true" />
-            </apex:pageBlockSection>
-        </apex:pageBlock>-->
     </apex:form>
 </apex:page>

@@ -35,18 +35,18 @@
     
     <apex:form >
         <apex:pageMessages id="messages"/>
-        <apex:pageBlock title="Add Warranties">
+        <apex:pageBlock title="Add Reimbursements">
             <apex:pageBlockButtons >
                 <apex:commandButton value="Cancel" action="{!cancel}" />
                 <apex:commandButton value="Save" action="{!save}"/>
             </apex:pageBlockButtons>
-            <apex:pageBlockSection id="childList" columns="1" title="Warranties" collapsible="false">
+            <apex:pageBlockSection id="childList" columns="1" title="Reimbursements" collapsible="false">
                 <!-- There is a trick to creating a counter when rendering rows in a
 pageBlockTable. You have to define a variable to default to 0,
 and then update that variable inside the table row. This is the
 way that I can leverage smart row deletes -->
                 <apex:variable var="rowNum" value="{!ZERO}" />
-                <apex:outputLabel value="No Warranties currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
+                <apex:outputLabel value="No Reimbursements currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
                 <apex:pageBlockTable value="{!children}" var="war" rendered="{!hasChildren}">
                     <apex:column headerValue="Charge Cost To">
                         <apex:selectList id="charge" value="{!war.Charge_Cost_To__c}" size="1" title="Charge Cost To" required="true">
