@@ -95,10 +95,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>rSuiteEstateFinishExtraLock__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Window_Opening_Control_Device__c</field>
             </layoutItems>
             <layoutItems>
