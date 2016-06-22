@@ -8,7 +8,7 @@ List<Charge__c> newCharge = new list<Charge__c>();
 for(OrderItem oi : listNew){ 
     if(oi.Manufacturer_Replace__c){
         Charge__c ch = new Charge__c(
-            Charge_Cost_To__c = 'Manufacturer - Replace',
+            Charge_Cost_To__c = 'Manufacturing',
             Service_Product__c = oi.Id,
             Service_Request__c = oi.OrderId,
             Validate_Service_Order__c = True);
@@ -18,7 +18,7 @@ for(OrderItem oi : listNew){
 
         if(oi.Local_Remake__c){
         Charge__c ch = new Charge__c(
-            Charge_Cost_To__c = 'Local - Remake',
+            Charge_Cost_To__c = 'Retailer',
             Service_Product__c = oi.Id,
             Service_Request__c = oi.OrderId,
             Validate_Service_Order__c = True);
@@ -28,7 +28,7 @@ for(OrderItem oi : listNew){
 
                 if(oi.Customer_Replace__c){
         Charge__c ch = new Charge__c(
-            Charge_Cost_To__c = 'Customer - Replace',
+            Charge_Cost_To__c = 'Customer',
             Service_Product__c = oi.Id,
             Service_Request__c = oi.OrderId,
             Validate_Service_Order__c = True);

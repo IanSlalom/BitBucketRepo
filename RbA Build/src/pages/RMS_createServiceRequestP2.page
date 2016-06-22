@@ -100,13 +100,13 @@
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
-                                <apex:column headerValue="Manufacturer - Replace" style="border-bottom: 2px solid #ccc;">
+                                <apex:column headerValue="Manufacturing" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputCheckbox value="{!wrapper.manufacturer}"/>
                                 </apex:column>
-                                <apex:column headerValue="Local - Remake" style="border-bottom: 2px solid #ccc;">                                       
+                                <apex:column headerValue="Retailer" style="border-bottom: 2px solid #ccc;">                                       
                                     <apex:inputCheckbox value="{!wrapper.local}"/>
                                 </apex:column>
-                                <apex:column headerValue="Customer - Replace" style="border-bottom: 2px solid #ccc;">
+                                <apex:column headerValue="Customer" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputCheckbox value="{!wrapper.customer}"/>
                                 </apex:column>
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">

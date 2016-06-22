@@ -88,10 +88,10 @@
     <apex:pageBlock >
             <apex:form >
                 
-                <apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%"/>
+                <apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}"/>
             </apex:form>
                 <apex:pageBlockTable title="Service Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
-                    <apex:column >  
+                    <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
                         <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
                     </apex:column>
                     <apex:column headerValue="Product">  

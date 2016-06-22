@@ -1,0 +1,310 @@
+<apex:page standardController="Order" tabStyle="Order" sidebar="true" extensions="RMS_viewServiceRequestCtrlr">
+    <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <apex:includeScript value="{!URLFOR($Resource.jquery_TableSorterZip, 'jquery.tablesorter.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.jquery_TableSorterZip, '/themes/blue/style.css')}"/>    
+    
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        testSetTabTitle();
+        $("table").tablesorter(); 
+    };
+    
+    function testSetTabTitle() {
+        //Set the current tab's title
+        sforce.console.setTabTitle('{!Order.OrderNumber}')
+    }
+    
+    //The callback function that openSubtab will call once it's got the ID for its primary tab
+    var callOpenSubtab = function callOpenSubtab(result) {
+        sforce.console.openSubtab(result.id, 
+                                  theURL, true, tabName);
+        theURL = '';
+        tabName= '';
+    };
+    
+    function openSubtab(urlPart, theTabName) {
+        if(sforce.console.isInConsole()){
+            theURL = urlPart;
+            tabName = theTabName;
+            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+        }else{
+            top.location.href = '/'+urlPart;
+        }
+    }
+    
+    
+    var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+        sforce.console.openConsoleUrl(result.id, 
+                                      result.consoleUrl, 
+                                      true 
+                                      // (optional)tabLabels:String, 
+                                      // (optional)tabNames:String, 
+                                      // (optional)callback:Function
+                                     );
+    };
+    
+    function callGenerateConsoleURL(urlPart, theTabName) {
+        if(sforce.console.isInConsole()) {
+            tabName = theTabName;
+            var orderURL = '/'+'{!Order.Id}';
+            sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+        }else{
+            top.location.href = '{!baseUrl}'+urlPart;
+            
+        }       
+    }
+    
+    
+    function printServiceInvoice() { 
+        window.open('{!URLFOR($Action.Order.Conga_Composer_RbA_Service_Invoice,Order.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
+    
+    function printServiceQuote() { 
+        window.open('{!URLFOR($Action.Order.Conga_Composer_RbA_Service_Quote,Order.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
+    
+    
+    </script>
+    <style>
+        td.searchCell {
+        background-color: transparent;
+        }
+        
+        .bigandBold{
+        font-size: 16px;
+        color:Black !important;
+        font-weight: bold;
+        }
+        
+        .bPageBlock .labelCol, body .print .topics-label {
+        font-size: 100%;
+        }
+        
+        .pbSubheader.brandTertiaryBgr.first.tertiaryPalette {
+        border: none;
+        }
+        
+        .listHoverLinksbw {
+        margin-top: 25px;
+        margin-left: 6px;
+        margin-right: 6px;
+        text-align: center;
+        }
+        
+        a.linklet {
+        padding-left: 4px;
+        padding-right: 4px;
+        }
+        
+        tr.dataRow.odd {
+        background-color: #F0F0F6;
+        }
+        
+        td#bodyCell {
+        background-color: white;
+        }
+        
+        td#sidebarCell{
+        background-color: white;
+        }
+        
+    </style>
+    
+    
+    
+    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
+        <div class="row" style="padding-top: 9px;">            
+            <div width="25%" style="float: left;">
+                <apex:image id="nonConsole" value="{!$Resource.ServiceRequestIcon}" width="33" height="33" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>                
+            </div>
+            <div width="75%" style="padding-top: 4px; margin-left: 37px;">
+                <apex:outputText style="font-size: 2em; font-weight: normal;" value="Service Request {!Order.OrderNumber}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
+                </apex:outputText>                
+            </div>
+        </div>
+        
+        <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
+            <apex:pageBlockButtons >
+            <apex:commandButton onclick="callGenerateConsoleURL('{!editRedirect}','Update Status');return false" id="editRedirect" value="Update Status" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
+<!--<apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled',true,false)}"/>
+<apex:commandButton onclick="callGenerateConsoleURL('{!updateSTURL}', 'Update Service Type');return false" id="updateST" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>-->
+                <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
+                <apex:commandButton value="Print Service Quote" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceQuote()"/>
+            </apex:pageBlockButtons>  
+            <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
+                <apex:outputField value="{!Order.AccountId}"/>
+                <apex:outputField value="{!Order.OwnerId}" label="Service Request Owner"/>
+                <apex:outputField value="{!Order.BilltoContactId}"/>
+                <apex:outputField value="{!Order.EffectiveDate}"/>
+                <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
+                <apex:outputField value="{!Order.Type_image__c}"/>
+                <apex:outputField value="{!Order.Service_Type__c}"/>
+                <apex:outputField value="{!Order.Store_Location__c}"/>
+                <apex:outputField value="{!Order.Service_initiated_By__c}"/>
+                <apex:outputField value="{!Order.Mileage__c}"/>
+                <apex:outputField value="{!Order.Status}"/>
+                <apex:outputField value="{!Order.Reimbursement_Mileage__c}"/>
+                <apex:outputField value="{!Order.Total_Jobsite_Hours__c}"/>
+                <apex:outputField value="{!Order.Total_Procedure_Time__c}"/>
+                <apex:outputField value="{!Order.of_Visits__c}"/>
+                <apex:outputField value="{!Order.Reimbursement_Labor__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
+                <apex:outputField value="{!Order.Description}"/>
+                <apex:outputField value="{!Order.Save_Reason__c}"/>
+                <apex:outputField value="{!Order.Secondary_Save_Reason__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Quote and Billing Details" columns="2" collapsible="true">
+                <apex:outputField value="{!Order.OpportunityId}"/>
+                <apex:outputField value="{!Order.Quote_Subtotal__c}"/>
+                <apex:outputField value="{!Order.QuoteId}"/>
+                <apex:outputField value="{!Order.Invoice_Subtotal__c}"/>
+                <apex:outputField value="{!Order.Quote_Notes__c}"/>
+                <apex:outputField value="{!Order.Billable_Tax_Amount__c}"/>
+                <apex:outputField value="{!Order.Customer_Pickup_All__c}"/>
+                <apex:outputField value="{!Order.Sales_Tax__c}"/>
+                <apex:outputField value="{!Order.AR_Reason__c}"/>
+                <apex:outputField value="{!Order.Payments_Received__c}"/>
+                <apex:outputField value="{!Order.AR_Age__c}"/>
+                <apex:outputField value="{!Order.Amount_Due__c}"/>
+                <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.Sold_Order__c}"/>
+                <apex:outputField value="{!Order.Amount_due_on_Account__c}"/>
+                <apex:outputField value="{!Order.Install_Complete_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Tech_Measure__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Crew__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Stainer__c}"/><br/>
+                <apex:outputField value="{!Order.Lead_Service_Tech__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Address Details" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.Billing_Address__c}"/>
+                <apex:outputField value="{!Order.Shipping_Address__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="System Information" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.CreatedById}"/>
+                <apex:outputField value="{!Order.LastModifiedById}"/>
+                <apex:outputField value="{!Order.Sales_Tax_Percent__c}"/>
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/><br/>
+                <apex:outputField value="{!Order.RecordType.Name}"/><br/>
+                <apex:outputField value="{!Order.hasPO__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Additional Information" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.Primary_Tech_Measure__c}"/>
+                <apex:outputField value="{!Order.Tech_Measure_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Tech_Measure_Status__c}"/>
+                <apex:outputField value="{!Order.Primary_Installer__c}"/>
+                <apex:outputField value="{!Order.Installation_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Install_Order_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Service_Installation_Complete_Date__c}"/>
+                <apex:outputField value="{!Order.Stainer__c}"/>
+                <apex:outputField value="{!Order.Paint_Stain_Status__c}"/>
+                <apex:outputField value="{!Order.Primary_Service__c}"/>
+                <apex:outputField value="{!Order.Service_Status__c}"/>
+                <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>
+                <apex:outputField value="{!Order.HOA_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Historical_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Permit_Status__c}"/><br/>
+                <apex:outputField value="{!Order.LSWP_Status__c}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        
+        
+    </apex:form>
+    
+    <!--Begin Related Lists-->
+    <apex:form >
+        <apex:pageBlock title="Visit Work Orders"> 
+            <!--<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>-->
+            <apex:pageBlockTable value="{!visitWOs}" var="s">
+                <apex:column headervalue=" "><apex:outputLink value="/{!s.id}">View</apex:outputLink></apex:column>
+                <apex:column headerValue="Work Order Type" value="{!s.Work_Order_Type__c}"/>
+                <apex:column headerValue="Work Order Status" value="{!s.Work_Order_Status__c}"/>
+                <apex:column headerValue="Scheduled Date/Time" value="{!s.Confirmed_Appt_w_Customer__c}"/>
+                <apex:column headerValue="Appointment Duration" value="{!s.Appointment_Duration__c}"/>
+                <apex:column headerValue="Owner" value="{!s.Owner.Name}"/> 
+            </apex:pageBlockTable> 
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Action Work Orders">
+            <!-- <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderActionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create HOA/Historical" style="margin-left:20%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
+<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderLSWPRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton3" value="Create LSWP" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
+<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPaintStainRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton4" value="Create Paint/Stain" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
+<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderPermitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton5hehe" value="Create Permit" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>
+<apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderCollectionsRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton6" value="Create Collections" style="margin-left:2%" rendered="{!IF(Order.Status != 'Draft',true,false)}"/>-->
+            <apex:pageBlockTable value="{!actionWOs}" var="t">
+                <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
+                <apex:column headerValue="Work Order Type" value="{!t.Work_Order_Type__c}"/>
+                <apex:column headerValue="Work Order Status" value="{!t.Work_Order_Status__c}"/>
+                <apex:column headerValue="Scheduled Date/Time" value="{!t.Confirmed_Appt_w_Customer__c}"/>
+                <apex:column headerValue="Owner" value="{!t.Owner.Name}"/> 
+            </apex:pageBlockTable> 
+        </apex:pageBlock>    
+    </apex:form>
+    
+    
+    
+    <apex:pageBlock title="Service Products" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
+        <apex:include pageName="RMS_viewServiceOrderProducts" id="sop"/>    
+    </apex:pageBlock>  
+    
+    <apex:pageBlock title="Purchase Orders">           
+        <apex:pageBlockTable value="{!Order.Purchase_Orders__r}" var="t">
+            <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
+            <apex:column headerValue="Purchase Order Number" value="{!t.Name}"/>
+            <apex:column headerValue="Date" value="{!t.Date__c}"/>
+            <apex:column headerValue="Vendor" value="{!t.Vendor__c}"/>
+            <apex:column headerValue="Total" value="{!t.Total__c}"/> 
+            <apex:column headerValue="Status" value="{!t.Status__c}"/> 
+            <apex:column headerValue="Estimated Ship Date" value="{!t.Estimated_Ship_Date__c}"/> 
+        </apex:pageBlockTable> 
+    </apex:pageBlock>  
+    
+    <apex:relatedList list="Payments__r" id="pm"/> 
+    
+    <apex:pageBlock title="Assets">           
+        <apex:pageBlockTable value="{!Order.Assets__r}" var="t">
+            <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
+            <apex:column headerValue="Name" value="{!t.Name}"/>
+            <apex:column headerValue="Serial Number" value="{!t.SerialNumber}"/>
+            <apex:column headerValue="Install Date" value="{!t.InstallDate}"/>
+            <apex:column headerValue="Account Name" value="{!t.Account.Name}"/> 
+            <apex:column headerValue="Contact Name" value="{!t.Contact.Name}"/> 
+            <apex:column headerValue="Product Name" value="{!t.Product2.Name}"/> 
+        </apex:pageBlockTable> 
+    </apex:pageBlock> 
+    
+    <apex:pageBlock title="Journal Entries">           
+        <apex:pageBlockTable value="{!Order.Journal_Entries__r}" var="t">
+            <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
+            <apex:column headerValue="Date" value="{!t.Date__c}"/>
+            <apex:column headerValue="Journal Entry Name" value="{!t.Name}"/>
+            <apex:column headerValue="Type" value="{!t.Type__c}"/>
+            <apex:column headerValue="Debit General Ledger Account" value="{!t.Debit_General_Ledger_Account__c }"/> 
+            <apex:column headerValue="Credit General Ledger Account	" value="{!t.Credit_General_Ledger_Account__c }"/> 
+            <apex:column headerValue="Amount" value="{!t.Amount__c}"/> 
+            <apex:column headerValue="Date Sent to BaanERP" value="{!t.Date_Sent_to_BaanERP__c}"/>             
+        </apex:pageBlockTable> 
+    </apex:pageBlock> 
+    
+    <apex:pageBlock title="Business Adjustments">           
+        <apex:pageBlockTable value="{!Order.Business_Adjustments__r}" var="t">
+            <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
+            <apex:column headerValue="Business Adjustment Name" value="{!t.Name}"/>
+            <apex:column headerValue="Type" value="{!t.Type__c}"/>
+            <apex:column headerValue="Date" value="{!t.Date__c}"/>            
+            <apex:column headerValue="Amount" value="{!t.Amount__c}"/> 
+            <apex:column headerValue="Description" value="{!t.Description__c}"/>             
+        </apex:pageBlockTable> 
+    </apex:pageBlock> 
+           
+    <apex:relatedList list="OpenActivities" id="oa" />
+    <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
+    <apex:relatedList subject="{!Order}" list="CombinedAttachments" id="nat"/>
+    <c:RMS_orderHistoryComponent OrderIds="{!Id}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>   
+</apex:page>
