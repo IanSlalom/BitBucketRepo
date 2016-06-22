@@ -44,6 +44,9 @@ public with sharing class RMS_newPaymentRedirectExtension {
         Map<String, String> m = p.getParameters();
 //        m.putAll(ApexPages.currentPage().getParameters());
         m.put('retURL', ApexPages.currentPage().getParameters().get('retURL'));
+        m.put('CF00N6100000Br7Xu', ApexPages.currentPage().getParameters().get('CF00N6100000Br7Xu'));
+        m.put('CF00N6100000Br7Xu_lkid', ApexPages.currentPage().getParameters().get('CF00N6100000Br7Xu_lkid'));
+
 
 		// If there is an order, redirect to deposit, otherwise redirect to misc cash receipt
 		if (thePayment.Order__c == null) {
