@@ -51,10 +51,10 @@ way that I can leverage smart row deletes -->
                     <apex:column headerValue="Charge Cost To">
                         <apex:inputField value="{!war.Charge_Cost_To__c}"/>
                     </apex:column>      
-                    <apex:column headerValue="Primary Reason">
+                    <apex:column headerValue="Category">
                         <apex:inputField value="{!war.Primary_Reason__c}"/>
                     </apex:column> 
-                    <apex:column headerValue="Secondary Reason">
+                    <apex:column headerValue="What/Where">
                         <apex:inputField value="{!war.Secondary_Reason__c}"/>
                     </apex:column> 
                     <!-- Add additional children metadata columns here -->
