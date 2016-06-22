@@ -22,18 +22,26 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public integer num_orders;
     public integer num_assets;
     public integer sales_tax;
-    public list<OrderItem > listOI{ get; set; }  
+    public list<OrderItem > listOI{ get; set; } 
     public List<Service_Product__c> serviceProducts {get;set;}
     public List<Asset> selectedAssets {get;set;}
     public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');    
-    public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}
-    //public static final Id serviceProductRecordTypeId = UtilityMethods.RecordTypeFor('Product2','Service_Product');
+    public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}   
     public Boolean hasValidationErrors {get{return ApexPages.hasMessages(ApexPages.Severity.ERROR);}}
     public String baseURL{get;set;}
     public String cancelUpdateURL{get;set;}
     Public string propPickValSelected2 { get; set; }
     public String updateSTURL{get;set;}
     public String editRedirect{get;set;}
+    private List<OrderItem> allAccs {get; set;}
+    public List<GroupWrapper> groups {get; set;}
+    public String groupFieldName {get; set;}
+    public List<SelectOption> groupOptions {get; set;}
+    public List<Charge__c> charges {get; set;}
+    public list<OrderItem > listOILegacy{ get; set; }    
+    public List<Product2> selectedProductsLegacy {get;set;}
+    public List<Service_Product__c> serviceProductsLegacy {get;set;}
+    public Map<Id,List<ProductWrapper2>> ProductToProductWrapperMapLegacy{get;set;}
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
@@ -66,7 +74,16 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         listOI=new list<OrderItem>();
         
+        allAccs=[select id, OrderId, Product_Name__c,Installed_Product_Name__c,
+                 (select id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, Service_Product__c, Service_Request__c from Charges__r)
+                 from OrderItem
+                 where OrderId =: o.Id];
         
+        groupFieldName='Installed_Product_Name__c';
+        
+        setupGrouping();
+        groupOptions=new List<SelectOption>();
+        groupOptions.add(new SelectOption('Installed_Product_Name__c', 'Installed_Product_Name__c'));
         //finding the Assets of the related Account to populate on P2 list
         //code then finds the products for each of the Assets and then
         //displays the Service Products for each Product availble to select
@@ -126,6 +143,54 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
         }
         system.debug(AssetToProductWrapperMap);
+        
+        listOILegacy=new list<OrderItem>();
+        
+        List<id> productIds=new List<id>();
+        for(Product2 p : [SELECT    Id
+                          FROM Product2 
+                          WHERE RecordTypeId = :masterProductId]){
+                              productIds.add(p.id);
+                          }        
+        selectedProductsLegacy = [SELECT Id, 
+                                  Name
+                                  FROM Product2
+                                  WHERE Id IN: productIds
+                                  ORDER BY Name];
+        
+        //Map<Id,Id> assetIdToProductIdMap = new Map<Id,Id>();
+        //for(Asset a: selectedAssets){
+        //assetIdToProductIdMap.put(a.Id,a.Product2Id);
+        //}
+        
+        
+        List<Service_Product__c> serviceProductsLegacy = [SELECT    Id,
+                                                          Name,
+                                                          Master_Product__c,
+                                                          Service_Product__c
+                                                          FROM Service_Product__c
+                                                          WHERE Master_Product__c in: selectedProductsLegacy
+                                                          ORDER BY Name];
+        Map<Id,List<ProductWrapper2>> masterProductToProductWrapperMapLegacy = new Map<Id,List<ProductWrapper2>>();
+        
+        for(Service_Product__c prod: serviceProductsLegacy){
+            if(masterProductToProductWrapperMapLegacy.containsKey(prod.Master_Product__c)){
+                masterProductToProductWrapperMapLegacy.get(prod.Master_Product__c).add(new ProductWrapper2(prod));
+            }else{
+                masterProductToProductWrapperMapLegacy.put(prod.Master_Product__c,new List<ProductWrapper2>{new ProductWrapper2(prod)});
+            }
+        }
+        
+        
+        ProductToProductWrapperMapLegacy = new Map<Id, List<ProductWrapper2>>();
+        for(Product2 p: selectedProductsLegacy){
+            if(masterProductToProductWrapperMapLegacy.containsKey(p.Id)){
+                ProductToProductWrapperMapLegacy.put(p.Id,masterProductToProductWrapperMapLegacy.get(p.Id).clone());
+            }else{
+                ProductToProductWrapperMapLegacy.put(p.Id, new List<ProductWrapper2>());
+            }
+        }
+        system.debug(ProductToProductWrapperMapLegacy);
     }
     
     
@@ -276,11 +341,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             
             upsert o;
             
-            PageReference pageRef = new PageReference('/apex/RMS_createserviceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
+            PageReference pageRef = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
             pageRef.setRedirect(true);
             return pageRef;
         }catch(DMLException saveEx){
-            PageReference pageRef = new PageReference('/apex/RMS_createserviceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
+            PageReference pageRef = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
             pageRef.setRedirect(true);
             return pageRef;
         }
@@ -290,8 +355,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Page 2 Methods 
     //
     public PageReference saveClose(){
-        
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{           
             Id standardPriceBookId;  
@@ -329,15 +393,15 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.OrderId = o.Id;
                         oi.PriceBookEntryId = pbe.id;
                         oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
-                        //oi.Parent_Order_Item__c = oa.Product2Id; 
-                        //oi.Charge_Cost_To__c = wrapper.cost;
-                        //oi.Primary_Reason__c = wrapper.primary;
-                        //oi.Secondary_Reason__c = wrapper.secondary;
                         oi.Description = wrapper.description;
-                        listOI.add(oi);                           
+                        listOI.add(oi); 
+                        
                     }
                 }        
             }
@@ -354,16 +418,213 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             
             //inserts the OrderItems
             insert listOi;
-            pageRef = new PageReference('/apex/RMS_viewServiceRequest?id=' + o.id);
-            pageRef.setRedirect(true); 
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id+'&retUrl='+o.Id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             //needed to make sure the collapsed rows stay collapsed when validation error occurs
             listOI.clear();
         }
         
-        return pageRef;
+        return newPage;
     }    
+    
+    //page3 Methods
+    public PageReference regroup()
+    {
+        setupGrouping();
+        return null;
+    }
+    private void setupGrouping()
+    {
+        Map<String, List<OrderItem>> groupedMap=new Map<String, List<OrderItem>>();
+        for (OrderItem acc : allAccs)
+        {
+            String key=String.valueof(acc.get(groupFieldName));
+            if ( (null==key) || (0==key.length()) )
+            {
+                key='Undefined';
+            }
+            
+            List<OrderItem> groupedAccs=groupedMap.get(key);
+            if (null==groupedAccs)
+            {
+                groupedAccs=new List<OrderItem>();
+                groupedMap.put(key, groupedAccs);
+            }
+            
+            groupedAccs.add(acc);
+        }
+        
+        groups=new List<GroupWrapper>();
+        for (String key : groupedMap.keySet())
+        {
+            GroupWrapper gr=new GroupWrapper();
+            groups.add(gr);
+            gr.accs=groupedMap.get(key);
+            gr.groupedVal=key;
+        }
+    }
+    
+    public class GroupWrapper
+    {
+        public List<OrderItem> accs {get; set;}
+        public String groupedVal {get; set;}
+        public Integer count {get {return accs.size(); } set;}
+    }
+    
+    Public PageReference saveCharges()
+    {
+        Savepoint sp = Database.setSavepoint();
+        PageReference pr;
+        
+        // List<Charge__c> ch = [SELECT Id, Charge_Cost_To__c, Service_Product__c, Primary_Reason__c, Secondary_Reason__c FROM Charge__c WHERE Service_Product__c =: allAccs];
+        List<Charge__c> ch = new list<Charge__c>();
+        for(OrderItem oi: allAccs){
+            ch.addAll(oi.Charges__r);
+        }
+        if(ch.size() > 0 ){
+            update ch;  
+            pr = new PageReference('/apex/RMS_viewServiceRequest?id='+o.Id);
+            pr.setRedirect(true);
+            return pr;
+        } else {
+            return null;
+        } 
+    }
+    
+    //Legacy Orders Pages
+    
+    public PageReference saveCloseLegacy(){
+        PageReference pageRef = null;
+        
+        try{
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
+            }
+            
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.isSelected){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];                       
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;                        
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;                        
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOILegacy.add(oi);                           
+                    }
+                }        
+            }
+            o.Validate_Service_Order__c = true;
+            o.Service_Type__c = propPickValSelectedLegacy;
+            upsert o;
+            system.debug(listOILegacy);
+            insert listOiLegacy;
+            pageRef = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id+'&retUrl='+o.Id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            listOILegacy.clear();
+        }
+        
+        return pageRef;
+    }        
+    
+    
+    
+    Public string propPickValSelectedLegacy { get; set; }
+    public List<SelectOption> getPickLstValueLegacy()
+    {
+        List<SelectOption> options = new List<SelectOption>();
+        Schema.DescribeFieldResult fieldResult = Order.Service_Type__c.getDescribe();
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+        
+        Order od = new order();
+        od = [SELECT Sold_Order_JIP_Eligible__c 
+              FROM Order 
+              WHERE Id =:o.id];            
+        IF (od.Sold_Order_JIP_Eligible__c){
+            for(Schema.PicklistEntry f : ple){
+                if(f.getValue() == 'Job In Progress' || f.getValue() == 'Save'){
+                    options.add(new SelectOption(f.getLabel(), f.getValue()));                          
+                }                      
+            }
+        }
+        ELSE{
+            //options.add(new SelectOption('--None--','--None--')); 
+            for(Schema.PicklistEntry f : ple){
+                if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
+                    options.add(new SelectOption(f.getLabel(), f.getValue()));
+                }
+            } 
+        }
+        
+        return options;           
+    }
+    
+    public String getpropPickValSelectedLegacy() {
+        return propPickValSelectedLegacy;
+    }
+    
+    public void setpropPickValSelectedLegacy(String propPickValSelectedLegacy) {
+        this.propPickValSelectedLegacy = propPickValSelectedLegacy;
+    }
+    
+    public class ProductWrapper2{
+        public Service_Product__c product{get;set;}
+        public Boolean isSelected{get;set;}        
+        public Asset asset{get;set;}
+        public Boolean manufacturer {get;set;}
+        public Boolean local {get;set;}
+        public Boolean customer {get;set;}
+        public String description {get;set;}
+        
+        public ProductWrapper2(Service_Product__c prod){
+            product = prod;
+            isSelected = false;  
+            manufacturer = false;
+            local = false;
+            customer = false;
+            description = '';
+        }
+        
+        public String getDescription(){
+            return description;
+        }
+        
+        public void description (String description){
+            this.description = description;
+        }
+        
+    }
+    
     
     //add product page
     public PageReference saveNewProducts(){
@@ -409,10 +670,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
-                        //oi.Parent_Order_Item__c = oa.Product2Id; 
-                        //oi.Charge_Cost_To__c = wrapper.cost;
-                        //oi.Primary_Reason__c = wrapper.primary;
-                        //oi.Secondary_Reason__c = wrapper.secondary;
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
                         oi.Description = wrapper.description;
                         listOI.add(oi);                           
                     }
@@ -428,7 +688,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             
             //inserts the OrderItems
             insert listOi;
-            pageRef = new PageReference('/apex/RMS_viewServiceRequest?id=' + o.id);
+            pageRef = new PageReference('/' + o.id);
             pageRef.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
@@ -460,8 +720,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 }                      
             }
         }
-        ELSE{
-           // options.add(new SelectOption('--None--','--None--')); 
+        ELSE{           
             for(Schema.PicklistEntry f : ple){
                 if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
                     options.add(new SelectOption(f.getLabel(), f.getValue()));
@@ -499,7 +758,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
         }
         ELSE{
-            // options.add(new SelectOption('--None--','--None--')); 
+            
             for(Schema.PicklistEntry f : ple){
                 if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
                     options.add(new SelectOption(f.getLabel(), f.getValue()));
@@ -551,17 +810,17 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         public Service_Product__c product{get;set;}
         public Boolean isSelected{get;set;}        
         public Asset asset{get;set;}
-        // public String cost {get;set;}
-        // public String primary {get;set;}
-        // public String secondary {get;set;}
+        public Boolean manufacturer {get;set;}
+        public Boolean local {get;set;}
+        public Boolean customer {get;set;}
         public String description {get;set;}
         
         public ProductWrapper(Service_Product__c prod){
             product = prod;  
             isSelected = false;
-            // cost = '-- Select --';
-            // primary = '-- Select --';
-            // secondary = '-- Select --';
+            manufacturer = false;
+            local = false;
+            customer = false;
             description = '';
         }
         
@@ -575,7 +834,6 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         
         
-    }
-    
+    }        
     
 }

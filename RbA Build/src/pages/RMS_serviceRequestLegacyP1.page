@@ -1,4 +1,4 @@
-<apex:page standardController="Order" showHeader="false" sidebar="false" extensions="RMS_ServiceOrderLegacyExt">   
+<apex:page standardController="Order" showHeader="false" sidebar="false" extensions="RMS_ServiceOrderExtensionMgr">   
     <apex:pageMessages />
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
     <apex:includeScript value="/support/console/26.0/integration.js"/>
@@ -34,7 +34,7 @@
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
-                <apex:commandButton action="{!saveClose}" value="Save"/>                
+                <apex:commandButton action="{!saveCloseLegacy}" value="Save"/>                
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1">
@@ -42,8 +42,8 @@
                     <apex:outputLabel >Service Type</apex:outputLabel>
                     <apex:outputPanel layout="block" styleClass="requiredInput">
                         <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                        <apex:selectList required="true" title="PickList1" size="1" value="{!propPickValSelected}" style="width: 150px;">
-                            <apex:selectOptions value="{!PickLstValue}" />
+                        <apex:selectList required="true" title="PickList1" size="1" value="{!propPickValSelectedLegacy}" style="width: 150px;">
+                            <apex:selectOptions value="{!PickLstValueLegacy}" />
                             <apex:actionSupport event="onchange" rerender="out1" />
                         </apex:selectList> 
                     </apex:outputPanel> 
@@ -51,7 +51,7 @@
             </apex:pageBlockSection>
             
             <apex:pageBlockSection id="out1">
-                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelectedLegacy != 'Save', false , true)}">
                     <apex:outputLabel value="Primary Save Reason" for="saveReason"></apex:outputLabel>
                     <apex:outputPanel layout="block" styleClass="requiredInput">
                         <apex:outputPanel layout="block" styleClass="requiredBlock" />
@@ -59,7 +59,7 @@
                     </apex:outputPanel>                   
                 </apex:pageBlockSectionItem>
                 <apex:pageblockSectionItem ></apex:pageblockSectionItem>
-                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelected != 'Save', false , true)}">
+                <apex:pageBlockSectionItem rendered="{!IF(propPickValSelectedLegacy != 'Save', false , true)}">
                 <apex:outputLabel value="Secondary Save Reason" for="saveReason2"></apex:outputLabel>
                     <apex:outputPanel layout="block" styleClass="requiredInput">
                     <apex:outputPanel layout="block" styleClass="requiredBlock" />
@@ -78,43 +78,26 @@
             </apex:pageBlockSection>
             
             <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">
-                <apex:pageBlockTable value="{!selectedProducts}" var="product" id="table" width="1000px;" >
+                <apex:pageBlockTable value="{!selectedProductsLegacy}" var="product" id="table" width="1000px;" >
                     <apex:column value="{!product.Name}"/>                    
                     <apex:column breakBefore="true" colspan="10" style="border-bottom: 10px solid #ccc;">
                         <apex:pageBlockSection title="Select Service Products" id="additionalProducts" showheader="true" collapsible="true" columns="1">
-                            <apex:pageBlockTable value="{!ProductToProductWrapperMap[product.Id]}" var="wrapper" border="1">                                
+                            <apex:pageBlockTable value="{!ProductToProductWrapperMapLegacy[product.Id]}" var="wrapper" border="1">                                
                                 <apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
                                     <apex:inputCheckBox value="{!wrapper.isSelected}" />
                                 </apex:column>
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
-                                <!--<apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.cost}" required="true">
-                                            <apex:selectOptions value="{!wrapper.costs}"/>
-                                            <apex:actionSupport event="onchange" reRender="a,b"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
+                                <apex:column headerValue="Manufacturer - Replace" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.manufacturer}"/>
                                 </apex:column>
-                                <apex:column headerValue="Primary Reason" style="border-bottom: 2px solid #ccc;">                                       
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.primary}" id="a" required="true">
-                                            <apex:selectOptions value="{!wrapper.primaries}"/>
-                                            <apex:actionSupport event="onchange" rerender="b"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
+                                <apex:column headerValue="Local - Remake" style="border-bottom: 2px solid #ccc;">                                       
+                                    <apex:inputCheckbox value="{!wrapper.local}"/>
                                 </apex:column>
-                                <apex:column headerValue="Secondary Reason" style="border-bottom: 2px solid #ccc;">
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.secondary}" id="b" required="true">
-                                            <apex:selectOptions value="{!wrapper.secondaries}"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
-                                </apex:column> -->
+                                <apex:column headerValue="Customer - Replace" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.customer}"/>
+                                </apex:column>
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
                                 </apex:column>

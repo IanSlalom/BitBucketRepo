@@ -1,0 +1,86 @@
+<apex:page standardController="Order"
+           extensions="RMS_ServiceOrderExtensionMgr">
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    <script type="text/javascript">
+    window.onload = function() {
+        testOpenSubtab();
+        
+    };
+    
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
+    };        
+    
+    </script>
+    <style>
+        select{
+        width: 170px;
+        }
+        
+        table, th, td {
+        border-top: 1px solid #e0e3e5;
+        border-bottom: 1px solid #e0e3e5;
+        border-collapse: collapse;
+        }        
+        th{
+        border-left: 1px solid #c9cfcf;
+        border-right: 1px solid #c9cfcf;
+        }
+        .headerRow{
+        background: #e4e7e7;
+        border-width: 0 0 1px 1px;
+        border-color: #c9cfcf;
+        color: #000;
+        font-size: .9em;
+        font-weight: bold;
+        padding: 5px 2px 4px 5px;
+        border: 1px solid #c9cfcf 
+        }
+    </style>
+    <apex:form >
+        <apex:pageBlock >
+            <apex:selectList value="{!groupFieldName}" size="1" rendered="false">
+                <apex:selectOptions value="{!groupOptions}" />
+            </apex:selectList>&nbsp;
+            <table width="100%">
+                
+                <apex:repeat value="{!Groups}" var="group">
+                    <tr>
+                        <td colspan="5" style="background-color: #6aafa2; height: 16px; padding-top: 8px; padding-bottom: 4px; padding-left: 16px; font-size: 1.2em;"><b>{!group.GroupedVal}</b></td>
+                    </tr>
+                    <apex:repeat value="{!group.accs}" var="acc">
+                        <tr>                           
+                            <td colspan="3" style="background-color: #cde4e0 ;padding-left: 34px; height: 20px; padding-top: 10px;"><b>Service Product: </b>{!acc.Product_Name__c}</td>
+                        </tr>
+                        <tr class="headerRow" style="height: 26px;">
+                            <th>&nbsp;&nbsp;Charge Cost To</th>
+                            <th>&nbsp;&nbsp;Category</th>
+                            <th>&nbsp;&nbsp;What/Where</th>
+                        </tr>
+                        <apex:repeat value="{!acc.Charges__r}" var="cont">                            
+                            
+                            <tr height="25px;">
+                                <td width="250px;" style="border-left: 1px solid #e0e3e5;"><apex:inputField value="{!cont.Charge_Cost_To__c}"/></td>
+                                <td width="250px;"><apex:inputField value="{!cont.Primary_Reason__c}"/></td>
+                                <td style="border-right: 1px solid #e0e3e5;"><apex:inputField value="{!cont.Secondary_Reason__c}"/></td>
+                            </tr> 
+                        </apex:repeat>
+                    </apex:repeat>
+                </apex:repeat>
+            </table>
+            <div style="text-align: center; margin-top: 5px;">
+                <apex:commandbutton action="{!saveCharges}" value="Complete" id="theButton" />    
+            </div>            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

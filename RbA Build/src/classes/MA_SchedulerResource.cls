@@ -1,5 +1,6 @@
 public with sharing class MA_SchedulerResource implements Comparable {
 
+    public String type;
     public Integer rank;
     public Id resourceId;
     public String headcount;
@@ -17,6 +18,7 @@ public with sharing class MA_SchedulerResource implements Comparable {
         this.resourceId = resource.Id;
         this.resourceName = resource.Name;
         this.isActive = resource.Active__c;
+        this.type = resource.Resource_Type__c;
     	this.rank = (Integer)resource.Rank__c;
         this.skillsMatched = new Map<Id, String>();
         this.headcount = String.valueOf(resource.Crew_Size__c);

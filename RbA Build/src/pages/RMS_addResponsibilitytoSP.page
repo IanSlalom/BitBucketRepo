@@ -1,8 +1,8 @@
 <apex:page standardController="OrderItem"
-           extensions="RMS_addWarrantiesExt"
+           extensions="RMS_addResponsibilityExt"
            showHeader="true" 
            sidebar="false"
-           title="Add Warranties">
+           title="Update Responsibility">
     
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
     <apex:includeScript value="/support/console/26.0/integration.js"/>
@@ -24,7 +24,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Add Warranties');
+        sforce.console.setTabTitle('Add Responsibility');
     };
     
     
@@ -35,36 +35,32 @@
     
     <apex:form >
         <apex:pageMessages id="messages"/>
-        <apex:pageBlock title="Add Reimbursements">
+        <apex:pageBlock title="Update Responsibilities: {!OrderItem.Installed_Product_Name__c } - {!OrderItem.Product_Name__c}">
             <apex:pageBlockButtons >
                 <apex:commandButton value="Cancel" action="{!cancel}" />
                 <apex:commandButton value="Save" action="{!save}"/>
             </apex:pageBlockButtons>
-            <apex:pageBlockSection id="childList" columns="1" title="Reimbursements" collapsible="false">
+            <apex:pageBlockSection id="childList" columns="1" title="Responsibilities" collapsible="false">
                 <!-- There is a trick to creating a counter when rendering rows in a
 pageBlockTable. You have to define a variable to default to 0,
 and then update that variable inside the table row. This is the
 way that I can leverage smart row deletes -->
                 <apex:variable var="rowNum" value="{!ZERO}" />
-                <apex:outputLabel value="No Reimbursements currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
+                <apex:outputLabel value="No Responsibilities currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
                 <apex:pageBlockTable value="{!children}" var="war" rendered="{!hasChildren}">
                     <apex:column headerValue="Charge Cost To">
-                        <apex:selectList id="charge" value="{!war.Charge_Cost_To__c}" size="1" title="Charge Cost To" required="true">
-                            <apex:selectOptions value="{!charges}"></apex:selectOptions>
-                        </apex:selectList>
-                    </apex:column>
-                    <apex:column headerValue="Procedure Code">
-                        <apex:selectList id="proc" value="{!war.Procedure_Code__c}" size="1" title="Procedure Code" required="true">
-                            <apex:selectOptions value="{!procs}"></apex:selectOptions>
-                        </apex:selectList>
-                    </apex:column>
-                    <apex:column headerValue="Quantity">
-                        <apex:inputField value="{!war.Quantity__c}" required="true"/>
-                    </apex:column>               
+                        <apex:inputField value="{!war.Charge_Cost_To__c}"/>
+                    </apex:column>      
+                    <apex:column headerValue="Category">
+                        <apex:inputField value="{!war.Primary_Reason__c}"/>
+                    </apex:column> 
+                    <apex:column headerValue="What/Where">
+                        <apex:inputField value="{!war.Secondary_Reason__c}"/>
+                    </apex:column> 
                     <!-- Add additional children metadata columns here -->
                     <apex:column headerValue=" ">
                         <!-- This is the second half of the trick to keep track
-of your row index for deletion. -->
+of your row index for deletion-->
                         <apex:variable var="rowNum" value="{!rowNum + 1}" />
                         <apex:commandLink value="Delete" action="{!removeFromList}" rerender="childList, messages" immediate="true">
                             <apex:param name="removeIndex" assignTo="{!removeIndex}" value="{!rowNum}" />
@@ -73,8 +69,8 @@ of your row index for deletion. -->
                 </apex:pageBlockTable>
                 <!-- Want to specify immediate here and above so validation does
 not occur when you are trying to add/remove rows. Only want
-validation to occur when trying to save -->
-                <apex:commandButton value="Add Reimburesement" action="{!addToList}" rerender="childList, messages" immediate="true" />
+validation to occur when trying to save-->
+                <apex:commandButton value="Add Responsibility" action="{!addToList}" rerender="childList, messages" immediate="true" />
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
