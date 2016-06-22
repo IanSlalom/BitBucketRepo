@@ -288,28 +288,35 @@ public with sharing class RMS_financialTransactionManager {
                     if(paymentIdToJournalEntryMap.get(p.id) == null || paymentIdToJournalEntryMap.get(p.id).size() == 0 ){
  
                         system.debug('ads p: '+p);
-                        system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
                         
-                        //CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
-                        Decimal paymentTotal = 0;
-                        for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
-                        	if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
-                        		paymentTotal = paymentTotal + payment.Payment_Amount__c;
+                        Journal_Entry__c newJE = new Journal_Entry__c();
+						if(typeOfPayment != 'MiscCashReceipt') {
+                        	//CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
+	                        system.debug('ads p.Order__r.BillToContactId,: '+p.Order__r.BillToContactId);
+                        	Decimal paymentTotal = 0;
+                        	for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
+                        		if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
+                        			paymentTotal = paymentTotal + payment.Payment_Amount__c;
+                        		}
                         	}
-                        }
-                        system.debug('ads temporary paymentTotal 1: '+paymentTotal);
-                        system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
-                        system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
-                        if(paymentTotal > p.Order__r.Retail_Total__c){
-                        	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
-                             mapNew.get(p.id).addError(errorMessage, FALSE);
-                        } 
-                        Journal_Entry__c newJE = new Journal_Entry__c(
-                            Date__c = Datetime.Now(),
-                            Payment__c = p.id,
-                            Order__c = p.Order__c,
-                            Amount__c = p.Payment_Amount__c,
-                            Customer__c = p.Order__r.BillToContactId);
+                        	system.debug('ads temporary paymentTotal 1: '+paymentTotal);
+                        	system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
+                        	system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
+                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+                        	 	errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
+                             	mapNew.get(p.id).addError(errorMessage, FALSE);
+                        	} 
+                            newJE.Date__c = Datetime.Now();
+                            newJE.Payment__c = p.id;
+                            newJE.Order__c = p.Order__c;
+                           	newJE.Amount__c = p.Payment_Amount__c;
+                            newJE.Customer__c = p.Order__r.BillToContactId;
+						// It's a misc cash receipt
+						} else {
+                            newJE.Date__c = Datetime.Now();
+                            newJE.Payment__c = p.id;
+                            newJE.Amount__c = p.Payment_Amount__c;
+						}
                         
                         if(typeOfPayment == 'DepositDeposit'){
                             newJE.Type__c = 'Deposit';
@@ -339,33 +346,40 @@ public with sharing class RMS_financialTransactionManager {
                                 mapNew.get(p.id).addError(errorMessage, FALSE);
                             }else{
                                 
-                                //CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
-                                Decimal paymentTotal = 0;
-		                        for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
-		                        	if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
-		                        		if(payment.Id == p.Id){
-		                        			paymentTotal = paymentTotal + p.Payment_Amount__c;
-		                        		}else{
-			                        		paymentTotal = paymentTotal + payment.Payment_Amount__c;
+								if(typeOfPayment != 'MiscCashReceipt') {
+                                	//CHECK THAT SUM OF PAYMENT TYPES IS NOT GREATER THAN ORDER TOTAL
+                                	Decimal paymentTotal = 0;
+		                        	for(Payment__c payment :orderIdToListOfDFPPayments.get(p.Order__c)){
+		                        		if(payment.Payment_Type__c == 'Deposit' || payment.Payment_Type__c == 'Final Payment'){
+		                        			if(payment.Id == p.Id){
+		                        				paymentTotal = paymentTotal + p.Payment_Amount__c;
+		                        			}else{
+			                        			paymentTotal = paymentTotal + payment.Payment_Amount__c;
+		                        			}
 		                        		}
 		                        	}
-		                        }
-		                        system.debug('ads temporary paymentTotal: '+paymentTotal);
-		                        system.debug('ads temporary p.Order__r.Retail_Total__c: '+p.Order__r.Retail_Total__c);
-		                        if(paymentTotal > p.Order__r.Retail_Total__c){
-		                        	 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
-		                             mapNew.get(p.id).addError(errorMessage, FALSE);
-		                        }
+		                        	system.debug('ads temporary paymentTotal: '+paymentTotal);
+		                        	system.debug('ads temporary p.Order__r.Retail_Total__c: '+p.Order__r.Retail_Total__c);
+		                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+		                        		 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
+		                            	 mapNew.get(p.id).addError(errorMessage, FALSE);
+		                        	}
 		                        
-		                        
-                                //Journal Entry NOT sent to BaanERP, update Journal Entry
-                                system.debug('ads inside not sent to Baan: '+ je);
-                                je.Date__c = Datetime.Now();
-                                je.Payment__c = p.id;
-                                je.Order__c = p.Order__c;
-                                je.Amount__c = p.Payment_Amount__c;
-                                je.Customer__c = p.Order__r.BillToContactId;
-                                
+                                	//Journal Entry NOT sent to BaanERP, update Journal Entry
+                                	system.debug('ads inside not sent to Baan: '+ je);
+                                	je.Date__c = Datetime.Now();
+                                	je.Payment__c = p.id;
+                                	je.Order__c = p.Order__c;
+                                	je.Amount__c = p.Payment_Amount__c;
+                                	je.Customer__c = p.Order__r.BillToContactId;
+								// It's a misc cash receipt
+								} else {
+                        			Journal_Entry__c newJE = new Journal_Entry__c(
+                            		Date__c = Datetime.Now(),
+                            		Payment__c = p.id,
+                            		Amount__c = p.Payment_Amount__c);
+								}
+								
                                 if(typeOfPayment == 'DepositDeposit'){
                                     je.Type__c = 'Deposit';
                                     je.Debit_General_Ledger_Account__c = paymentIdToDepositFTL.get(p.id)[0].Debit_Account_Number__r.Name;
