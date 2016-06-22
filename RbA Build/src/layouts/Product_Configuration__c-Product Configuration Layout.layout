@@ -754,10 +754,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Corrosion_Resistant_Lock_Control__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Custom_Grille_Details_Control__c</field>
             </layoutItems>
             <layoutItems>
@@ -970,6 +966,10 @@
                 <behavior>Edit</behavior>
                 <field>Unit_Id_Control__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Window_Opening_Control_Device_Control__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -1016,6 +1016,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Number_of_Panels_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Hinges_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Lock_Control__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
