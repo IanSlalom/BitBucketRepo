@@ -59,6 +59,11 @@ public with sharing class testRMS_addSkilltoWO {
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
         
+        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
+        List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
+        insert sprods;
+        
         List<Order> ordersToInsert = new List<Order>();
         
         Order order =  new Order(   Name='Sold Order 1', 

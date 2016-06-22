@@ -19,7 +19,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
     
     static testmethod void createTestRecords() {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
-        	insert turnOffFinancialTrigger;
+            insert turnOffFinancialTrigger;
 
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
@@ -76,6 +76,64 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
         //utility.createOrderTestRecords();
+
+        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
+        List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
+        insert sprods;
+        
+
+        Problem_Component_List__c probC1 = new Problem_Component_List__c(name='Prob1');
+        Problem_Component_List__c probC2 = new Problem_Component_List__c(name='Prob2');
+        Problem_Component_List__c probC3 = new Problem_Component_List__c(name='Prob3');
+        List<Problem_Component_List__c> probCs = new List<Problem_Component_List__c>{probC1,probC2,probC3};
+        insert probCs;
+
+        Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
+        Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
+        Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
+        List<Service_Symptom_List__c> ssl = new List<Service_Symptom_List__c>{ssl1,ssl2,ssl3};
+        insert ssl;
+
+        Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
+        List<Procedure_Code__c> procC = new List<Procedure_Code__c>{procC1,procC2,procC3};
+        insert procC;
+
+        Procedure_Code_Assignment__c pca1 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC1.Id);
+        Procedure_Code_Assignment__c pca2 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC2.Id);
+        Procedure_Code_Assignment__c pca3 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC3.Id);
+        Procedure_Code_Assignment__c pca4 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC1.Id); 
+        Procedure_Code_Assignment__c pca5 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC2.Id);        
+        Procedure_Code_Assignment__c pca6 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC3.Id);
+        List<Procedure_Code_Assignment__c> pca = new List<Procedure_Code_Assignment__c>{pca1,pca2,pca3,pca4,pca5,pca6};
+        insert pca;
+
+        Service_Symptom_Assignment__c ssa1 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl1.Id);
+        Service_Symptom_Assignment__c ssa2 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl1.Id);
+        Service_Symptom_Assignment__c ssa3 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl1.Id);
+        Service_Symptom_Assignment__c ssa4 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl2.Id);
+        Service_Symptom_Assignment__c ssa5 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl2.Id);
+        Service_Symptom_Assignment__c ssa6 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl2.Id);
+        Service_Symptom_Assignment__c ssa7 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl3.Id);
+        Service_Symptom_Assignment__c ssa8 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl3.Id);
+        Service_Symptom_Assignment__c ssa9 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl3.Id);
+        List<Service_Symptom_Assignment__c> ssa = new List<Service_Symptom_Assignment__c>{ssa1,ssa2,ssa3,ssa4,ssa5,ssa6,ssa7,ssa8,ssa9};
+        insert ssa;
+
+        Problem_Component_Config__c pcc1 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl1.Id);
+        Problem_Component_Config__c pcc2 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl1.Id);
+        Problem_Component_Config__c pcc3 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl1.Id);
+        Problem_Component_Config__c pcc4 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl2.Id);
+        Problem_Component_Config__c pcc5 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl2.Id);
+        Problem_Component_Config__c pcc6 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl2.Id);
+        Problem_Component_Config__c pcc7 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl3.Id);
+        Problem_Component_Config__c pcc8 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl3.Id);
+        Problem_Component_Config__c pcc9 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl3.Id);
+        List<Problem_Component_Config__c> pcc = new List<Problem_Component_Config__c>{pcc1,pcc2,pcc3,pcc4,pcc5,pcc6,pcc7,pcc8,pcc9};
+        insert pcc;
+
         
         List<Order> ordersToInsert = new List<Order>();
         
@@ -121,6 +179,15 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace',Quote_Accepted__c = FALSE );
         insert orderItemMaster;
+
+        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c='Customer Satisfaction', Service_Product__c=orderItemMaster.Id);
+        insert charge;
+
+        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturer - Replace', Primary_Reason__c = 'Renewal by Andersen', Service_Product__c=orderItemMaster.Id);
+        insert charge2;
+
+        Warranty__C warranty = new Warranty__C(Charge_Cost_To__c=charge2.Id,Procedure_Code__c=pca1.Id,Quantity__c=2, Service_Product__c=orderItemMaster.Id);
+        insert warranty;
         
         List<Asset> assetsToInsert = new List<Asset>();
         Asset asset = new Asset (     Name='Asset1',
@@ -160,9 +227,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Quote_Accepted__c = FALSE, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
         insert serviceOrderItem;
-        
-        Service_Product__c spr = new Service_Product__c(Master_Product__c = masterProduct.Id, Service_Product__c = servProduct.Id, Name = servProduct.Name);
-        insert spr;
+
     }
     
     static testmethod void customDeleteTest(){
@@ -181,6 +246,77 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.stopTest(); 
         
         
+    }
+    
+        static testmethod void customDeleteTest2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c FROM Order WHERE Name = 'Sold Order 1'];                
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Pagereference pr = TE.customDelete();        
+        Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
+        System.Assertequals(delOrd.isdeleted, true);
+        Test.stopTest();  
+        
+    }
+    
+        static testmethod void testOptionList2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        list<SelectOption> testoptions = TE.getPickLstValueLegacy();
+        
+        system.assertEquals(2,testoptions.size());
+        Test.stopTest();  
+    }
+    
+    static testmethod void testDependentPicklist2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c	 = :pbe.Product2Id];
+        Boolean isSelected = true;
+        Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr.ProductWrapper2 TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper2(prod);
+        
+        Test.stopTest();  
+        
+        
+    }
+    
+        static testmethod void saveCloseLegacytest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Boolean hasValidationErrors = false;
+        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
+        Pagereference pr = TE.saveCloseLegacy();        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Service Order 1');
+        Test.stopTest();
     }
     
     static testmethod void saveOrderTest(){

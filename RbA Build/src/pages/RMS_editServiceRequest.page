@@ -65,29 +65,46 @@
                 <apex:inputField value="{!Order.BilltoContactId}"/>
                 <apex:inputField value="{!Order.EffectiveDate}"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
-                <apex:inputField value="{!Order.Store_Location__c}"/>
+                <apex:inputField value="{!Order.Type_image__c}"/>
                 <apex:inputField value="{!Order.Service_Type__c}"/>
-                <apex:inputField value="{!Order.Mileage__c}"/>
+                <apex:inputField value="{!Order.Store_Location__c}"/>
                 <apex:inputField value="{!Order.Service_initiated_By__c}"/>
-                <apex:inputField value="{!Order.Total_Jobsite_Hours__c}"/>
+                <apex:inputField value="{!Order.Mileage__c}"/>
                 <apex:inputField value="{!Order.Status}"/>
+                <apex:inputField value="{!Order.Reimbursement_Mileage__c}"/>
+                <apex:inputField value="{!Order.Total_Jobsite_Hours__c}"/>
+                <apex:inputField value="{!Order.Total_Procedure_Time__c}"/>
                 <apex:inputField value="{!Order.of_Visits__c}"/>
+                <apex:inputField value="{!Order.Reimbursement_Labor__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="false" columns="1">                
                 <apex:inputField value="{!Order.Description}"/>
                 <apex:inputField value="{!Order.Save_Reason__c}"/>
                 <apex:inputField value="{!Order.Secondary_Save_Reason__c}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Quote and Billing Details" columns="1" collapsible="false">
+            <apex:pageBlockSection title="Quote and Billing Details" columns="2" collapsible="false">
                 <apex:inputField value="{!Order.OpportunityId}"/>
+                <apex:inputField value="{!Order.Quote_Subtotal__c}"/>
                 <apex:inputField value="{!Order.QuoteId}"/>
+                <apex:inputField value="{!Order.Invoice_Subtotal__c}"/>
                 <apex:inputField value="{!Order.Quote_Notes__c}"/>
+                <apex:inputField value="{!Order.Billable_Tax_Amount__c}"/>
                 <apex:inputField value="{!Order.Customer_Pickup_All__c}"/>
+                <apex:inputField value="{!Order.Sales_Tax__c}"/>
                 <apex:inputField value="{!Order.AR_Reason__c}"/>
+                <apex:outputField value="{!Order.Payments_Received__c}"/>
+                <apex:inputField value="{!Order.AR_Age__c}"/>
+                <apex:inputField value="{!Order.Amount_Due__c}"/>
                 <apex:inputField value="{!Order.Invoice_Notes__c}" style="width: 192px; height:100px;"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Sold Order Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.Sold_Order__c}"/>
+                <apex:outputField value="{!Order.Amount_due_on_Account__c}"/>
+                <apex:outputField value="{!Order.Install_Complete_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Tech_Measure__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Crew__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Stainer__c}"/><br/>
+                <apex:outputField value="{!Order.Lead_Service_Tech__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
                 <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>
@@ -101,72 +118,33 @@
                 <apex:inputField value="{!Order.ShippingPostalCode}"/>
                 <apex:inputField value="{!Order.BillingPostalCode}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Additional Details" collapsible="false" columns="1">                
+            <apex:pageBlockSection title="Additional Details" collapsible="false" columns="2"> 
+                <apex:outputField value="{!Order.CreatedById}"/>
+                <apex:outputField value="{!Order.LastModifiedById}"/>
+                <apex:outputField value="{!Order.Sales_Tax_Percent__c}"/>
                 <apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
+                <apex:outputField value="{!Order.RecordType.Name}"/><br/>
+                <apex:outputField value="{!Order.hasPO__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Additional Information" collapsible="false" columns="2">
+                <apex:outputField value="{!Order.Primary_Tech_Measure__c}"/>
+                <apex:outputField value="{!Order.Tech_Measure_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Tech_Measure_Status__c}"/>
+                <apex:outputField value="{!Order.Primary_Installer__c}"/>
+                <apex:outputField value="{!Order.Installation_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Install_Order_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Service_Installation_Complete_Date__c}"/>
+                <apex:outputField value="{!Order.Stainer__c}"/>
+                <apex:outputField value="{!Order.Paint_Stain_Status__c}"/>
+                <apex:outputField value="{!Order.Primary_Service__c}"/>
+                <apex:outputField value="{!Order.Service_Status__c}"/>
+                <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>
+                <apex:outputField value="{!Order.HOA_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Historical_Status__c}"/><br/>
+                <apex:outputField value="{!Order.Permit_Status__c}"/><br/>
+                <apex:outputField value="{!Order.LSWP_Status__c}"/>
             </apex:pageBlockSection>
         </apex:pageBlock>
-    </apex:form>
-    
-    <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}">
-        <div class="row" style="padding-top: 9px;">            
-            <div width="25%" style="float: left;">
-                <apex:image id="nonConsole" value="{!$Resource.orderIconNonConsole}" width="33" height="33"/>                
-                <apex:image id="Console" value="{!$Resource.ConsoleOrderIcon}" width="33" height="33"/>                                
-            </div>
-            <div width="75%" style="padding-top: 4px; margin-left: 37px;">
-                <apex:outputText style="font-size: 2em; font-weight: normal;" value="Order{!Order.OrderNumber}">
-                </apex:outputText>                
-            </div>
-        </div>
-        
-        <apex:pageBlock mode="edit" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',false,true)}">
-            <apex:pageBlockButtons >
-                <apex:commandButton action="{!save}" value="Save"/>                
-                <apex:commandButton action="{!cancel}" value="Cancel"/>
-            </apex:pageBlockButtons>  
-            <apex:pageBlockSection title="Order Information" collapsible="false" columns="2" >
-                <apex:outputField value="{!Order.OrderNumber}"/>
-                <apex:outputField value="{!Order.OwnerId}"/>
-                <apex:inputField value="{!Order.Name}"/>                
-                <apex:inputField value="{!Order.Status}"/>
-                <apex:inputField value="{!Order.AccountId}"/>
-                <apex:inputField value="{!Order.Reason__c}"/>
-                <apex:inputField value="{!Order.BilltoContactId}"/>
-                <apex:inputField value="{!Order.EffectiveDate}"/>
-            </apex:pageBlockSection>
-            <apex:pageBlockSection title="Order Details" collapsible="false" columns="2" >
-                <apex:inputField value="{!Order.Store_Location__c}"/>
-                <apex:outputField value="{!Order.Payments_Received__c}"/>
-                <apex:inputField value="{!Order.OpportunityId}"/>                
-                <apex:inputField value="{!Order.QuoteId}"/>
-                <apex:inputField value="{!Order.AR_Reason__c}"/>
-                <apex:inputField value="{!Order.Invoice_Notes__c}" style="width: 192px; height:100px;"/>
-            </apex:pageBlockSection> 
-            <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
-                <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>
-                <apex:inputField value="{!Order.BillingCountryCode}" label="Billing Country"/>
-                <apex:inputField value="{!Order.ShippingStreet}"/>
-                <apex:inputField value="{!Order.BillingStreet}"/>
-                <apex:inputField value="{!Order.ShippingCity}"/>
-                <apex:inputField value="{!Order.BillingCity}"/>
-                <apex:inputField value="{!Order.ShippingStateCode}" label="Shipping State"/>
-                <apex:inputField value="{!Order.BillingStateCode}" label="Billing State"/>
-                <apex:inputField value="{!Order.ShippingPostalCode}"/>
-                <apex:inputField value="{!Order.BillingPostalCode}"/>
-            </apex:pageBlockSection> 
-            <apex:pageBlockSection title="System Information" collapsible="false" columns="2">                
-                <apex:inputField value="{!Order.rSuite_Id__c}"/>
-                <apex:outputField value="{!Order.RecordTypeId}"/>                
-                <apex:inputField value="{!Order.Pivotal_Id__c}"/>
-                <apex:inputField value="{!Order.hasPO__c}"/>                
-            </apex:pageBlockSection>
-            <apex:pageBlockSection title="Additional Details" collapsible="false" columns="2">
-                <apex:inputField value="{!Order.Order_Processed_Date__c}"/>
-                <apex:inputField value="{!Order.Non_Sufficient_Funds__c}"/>
-                <apex:inputField value="{!Order.Revenue_Recognized_Date__c}"/>
-                <apex:inputField value="{!Order.Estimated_Ship_Date__c}"/>
-            </apex:pageBlockSection>            
-        </apex:pageBlock>
-    </apex:form>
+    </apex:form>       
     
 </apex:page>

@@ -69,6 +69,7 @@ public with sharing class testRMS_populateResourceonEventManager {
         update resource1;
         
         vendor1.Inactive_Date__c = system.today()+10;
+        update vendor1;
         
         Resource__c res = [select id,Active__c,RbA_User__r.Contact.Account.Inactive_Date__c from Resource__c where id =: resource1.id];
         
