@@ -53,6 +53,7 @@
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
                 <apex:commandButton action="{!saveNewProducts}" value="Save"/>                
+                <apex:commandButton action="{!saveNewProductsContinue}" value="Continue"/>                
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1" rendered="false">
@@ -102,13 +103,13 @@
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
-                                <apex:column headerValue="Manufacturer - Replace" style="border-bottom: 2px solid #ccc;">
+                                <apex:column headerValue="Manufacturing" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputCheckbox value="{!wrapper.manufacturer}"/>
                                 </apex:column>
-                                <apex:column headerValue="Local - Remake" style="border-bottom: 2px solid #ccc;">                                       
+                                <apex:column headerValue="Retailer" style="border-bottom: 2px solid #ccc;">                                       
                                     <apex:inputCheckbox value="{!wrapper.local}"/>
                                 </apex:column>
-                                <apex:column headerValue="Customer - Replace" style="border-bottom: 2px solid #ccc;">
+                                <apex:column headerValue="Customer" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputCheckbox value="{!wrapper.customer}"/>
                                 </apex:column>                                
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
