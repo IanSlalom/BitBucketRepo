@@ -504,6 +504,7 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Financing__c</members>
+        <members>Payment__c</members>
         <members>Problem_Component_Config__c</members>
         <members>Problem_Component_List__c</members>
         <members>Problem_Component__c</members>
