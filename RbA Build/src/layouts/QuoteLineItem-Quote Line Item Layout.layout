@@ -93,6 +93,14 @@
                 <behavior>Edit</behavior>
                 <field>Color_Match_Hinges__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Window_Opening_Control_Device__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Corrosion_Resistant_Hinges__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

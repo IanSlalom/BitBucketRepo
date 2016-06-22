@@ -34,7 +34,8 @@
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
-                <apex:commandButton action="{!saveClose}" value="Save"/>                
+                <apex:commandButton action="{!save}" value="Save"/>                
+                <apex:commandButton value="Continue" action="{!saveClose}"/>
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1">
@@ -99,32 +100,15 @@
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
-                                <!--<apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.cost}" required="true">
-                                            <apex:selectOptions value="{!wrapper.costs}"/>
-                                            <apex:actionSupport event="onchange" reRender="a,b"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
+                                <apex:column headerValue="Manufacturing" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.manufacturer}"/>
                                 </apex:column>
-                                <apex:column headerValue="Primary Reason" style="border-bottom: 2px solid #ccc;">                                       
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.primary}" id="a" required="true">
-                                            <apex:selectOptions value="{!wrapper.primaries}"/>
-                                            <apex:actionSupport event="onchange" rerender="b"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
+                                <apex:column headerValue="Retailer" style="border-bottom: 2px solid #ccc;">                                       
+                                    <apex:inputCheckbox value="{!wrapper.local}"/>
                                 </apex:column>
-                                <apex:column headerValue="Secondary Reason" style="border-bottom: 2px solid #ccc;">
-                                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
-                                        <apex:selectList size="1" value="{!wrapper.secondary}" id="b" required="true">
-                                            <apex:selectOptions value="{!wrapper.secondaries}"/>
-                                        </apex:selectList>
-                                    </apex:outputPanel>
-                                </apex:column> -->
+                                <apex:column headerValue="Customer" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.customer}"/>
+                                </apex:column>
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
                                 </apex:column>

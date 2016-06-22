@@ -1,0 +1,54 @@
+<apex:page standardController="Service_Symptom__c"
+           extensions="RMS_addServiceSymptomExt"
+           showHeader="true" 
+           sidebar="false"
+           title="Add Service Symptom">
+    
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        // hideSelector();
+        testOpenSubtab();
+        //removeRequiredInput();
+        
+    };
+    
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Add Responsibility');
+    };
+    
+    
+    
+    </script>     
+    
+    
+    
+    <apex:form id="theForm">
+        <apex:pageMessages id="messages"/>
+        <apex:pageBlock mode="edit" tabStyle="Service_Symptom__c" title="Select Service Symptom">
+            <apex:pageBlockSection columns="1">               
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                    <apex:selectList id="ser" value="{!Service_Symptom__c.Service_Symptom__c}" size="1" title="Service Symptom">
+                        <apex:selectOptions value="{!sers}"></apex:selectOptions>
+                      <apex:actionSupport event="onchange" action="{!saveRerender}"/>
+                    </apex:selectList>
+                </apex:outputPanel>
+                <!--<apex:commandButton action="{!saveRerender}" title="Add Problem Components" value="Add Problem Components" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,true,false)}"/>-->
+            </apex:pageBlockSection> 
+                  <apex:pageBlockSection title="Add Problem Components" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,false,true)}">
+                    	<apex:outputField value="{!Service_Symptom__c.Service_Symptom__c}"/> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

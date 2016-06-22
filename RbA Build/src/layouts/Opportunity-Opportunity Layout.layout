@@ -82,14 +82,6 @@
                 <behavior>Edit</behavior>
                 <field>RecordTypeId</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>First_Selected_Quote__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Second_Selected_Quote__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -177,6 +169,10 @@
     </relatedContent>
     <relatedLists>
         <relatedList>RelatedContactRoleList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>RbA_Work_Order__c.Opportunity__c</relatedList>
     </relatedLists>
     <relatedLists>
         <excludeButtons>ChoosePricebook</excludeButtons>

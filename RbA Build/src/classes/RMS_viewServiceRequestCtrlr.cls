@@ -17,7 +17,7 @@ public class RMS_viewServiceRequestCtrlr {
     
     public RMS_viewServiceRequestCtrlr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'RecordType','Id','RecordType.Name'});           
+            stdController.addFields(new List<String>{'RecordType','Id','RecordType.Name','Lock_Service_Request__c'});           
         }
         
         this.o = (Order)stdController.getRecord();
@@ -107,19 +107,23 @@ public class RMS_viewServiceRequestCtrlr {
     
     public PageReference orderRedirect(){
         PageReference newPage = null;
-
-            
-            
-            If (o.RecordType.Name == 'CORO Service'){
-                newPage = new PageReference('/apex/RMS_viewServiceRequest?id='+ o.Id);
+        
+        
+        
+        If (o.RecordType.Name == 'CORO Service'){
+            If(o.Lock_Service_Request__c == TRUE){
+                newPage = new PageReference('/apex/RMS_viewServiceRequestLocked?id='+ o.Id);
             } else {
-                newPage = new PageReference('/'+ o.Id);
-            	newPage.getParameters().put('nooverride','1');
+                newPage = new PageReference('/apex/RMS_viewServiceRequest?id='+ o.Id);                    
             }
-            
-            newPage.setRedirect(true);
-            return newPage;
-       
+        } else {
+            newPage = new PageReference('/'+ o.Id);
+            newPage.getParameters().put('nooverride','1');
+        }
+        
+        newPage.setRedirect(true);
+        return newPage;
+        
         
     }    
     

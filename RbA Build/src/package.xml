@@ -36,6 +36,11 @@
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_acceptInvite</members>
+        <members>RMS_addProblemComponents</members>
+        <members>RMS_addProblemComponentsExt</members>
+        <members>RMS_addResponsibility</members>
+        <members>RMS_addResponsibilityExt</members>
+        <members>RMS_addServiceSymptomExt</members>
         <members>RMS_addSkilltoWO</members>
         <members>RMS_addWarranties</members>
         <members>RMS_addWarrantiesExt</members>
@@ -46,6 +51,7 @@
         <members>RMS_cancelOrderExtensionTest</members>
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
+        <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
         <members>RMS_createWorkOrderController</members>
@@ -109,6 +115,8 @@
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
         <members>testRMS_addSkilltoWO</members>
+        <members>testRMS_addWarranties</members>
+        <members>testRMS_addWarrantiesExt</members>
         <members>testRMS_assignServiceTaskOwner</members>
         <members>testRMS_createContactHistoryMgr</members>
         <members>testRMS_editableTaskList</members>
@@ -148,7 +156,10 @@
         <members>RMS_SavePage</members>
         <members>RMS_ServiceRequestListView</members>
         <members>RMS_addMultipleTasksToWO</members>
+        <members>RMS_addResponsibilitytoSP</members>
         <members>RMS_addServiceProduct</members>
+        <members>RMS_addServiceSymptom</members>
+        <members>RMS_addServiceSymptomP2</members>
         <members>RMS_addWarrantytoSP</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_closeTabPage</members>
@@ -156,6 +167,7 @@
         <members>RMS_createActionsWorkOrder</members>
         <members>RMS_createServiceRequestP1</members>
         <members>RMS_createServiceRequestP2</members>
+        <members>RMS_createServiceRequestP3</members>
         <members>RMS_createServiceRequestRedirect</members>
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
@@ -182,6 +194,7 @@
         <members>RMS_viewServiceOrders</members>
         <members>RMS_viewServiceProduct</members>
         <members>RMS_viewServiceRequest</members>
+        <members>RMS_viewServiceRequestLocked</members>
         <members>RMS_viewServiceSymptomList</members>
         <name>ApexPage</name>
     </types>
@@ -336,6 +349,7 @@
         <members>Quote_Financing__c-Quote Financing Layout</members>
         <members>RbA_Skills__c-Skill Layout</members>
         <members>RbA_Work_Order__c-Action Work Order Layout</members>
+        <members>RbA_Work_Order__c-Collections Work Order Layout</members>
         <members>RbA_Work_Order__c-LSWP Work Order Layout</members>
         <members>RbA_Work_Order__c-Paint %2F Stain Work Order Layout</members>
         <members>RbA_Work_Order__c-Permit Work Order Layout</members>
@@ -365,6 +379,7 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Task-General Task Layout</members>
         <members>Task-Task Layout</members>
         <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
         <members>User-User Layout</members>

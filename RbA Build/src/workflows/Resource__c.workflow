@@ -11,6 +11,15 @@
         <template>RbA_Email_Templates/ResourceInsuranceExpiring</template>
     </alerts>
     <fieldUpdates>
+        <fullName>Duplicate_Catcher_Resource_Record</fullName>
+        <field>Duplicate_Value_Catcher__c</field>
+        <formula>RbA_User__r.Id &amp; Text(Resource_Type__c)</formula>
+        <name>Duplicate Catcher: Resource Record</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Reactivate_Resource</fullName>
         <field>Active__c</field>
         <literalValue>1</literalValue>
@@ -37,6 +46,17 @@
         <operation>Literal</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <rules>
+        <fullName>Duplicate Catcher%3A Resource</fullName>
+        <actions>
+            <name>Duplicate_Catcher_Resource_Record</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Resouce Records cannot have the same user and different resource types</description>
+        <formula>TRUE</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
     <rules>
         <fullName>Reactivate Resource</fullName>
         <actions>

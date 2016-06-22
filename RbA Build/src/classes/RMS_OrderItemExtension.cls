@@ -18,6 +18,9 @@ public class RMS_OrderItemExtension {
     public final OrderItem o;
     public String baseURL{get;set;}
     public String editURL{get;set;}
+    public String addSymptomURL {get;set;}
+    //map<String, Service_Field_Ids__c> Service_Field_Ids_map = Service_Field_Ids__c.getAll();
+    public String ssSP {get;set;}
     //public List<Order> parent {get;set;}
     
     public RMS_OrderItemExtension(ApexPages.StandardController stdController) {
@@ -25,9 +28,11 @@ public class RMS_OrderItemExtension {
             stdController.addFields(new List<String>{'OrderId'});           
         }
         
+        
         this.o = (OrderItem)stdController.getRecord();
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         editURL ='/apex/RMS_editServiceProduct?id='+o.Id;
+        addSymptomURL = '/apex/RMS_addServiceSymptom?ssSP'+'='+o.id;
            
         
         

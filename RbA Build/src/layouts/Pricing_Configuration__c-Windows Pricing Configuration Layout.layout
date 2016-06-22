@@ -20,7 +20,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Base_Installer_Rate__c</field>
+                <field>Base_Installer_Rate_IF__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Base_Installer_Rate_FF__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

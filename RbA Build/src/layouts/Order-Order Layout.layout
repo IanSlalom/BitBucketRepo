@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
+    <customButtons>On_Hold</customButtons>
+    <customButtons>Job_Closed</customButtons>
     <customButtons>Conga_Composer_InvoiceTesting</customButtons>
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
@@ -91,6 +92,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>AR_Age__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Offsite_Storage__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -367,6 +372,12 @@
                 <showLabel>false</showLabel>
                 <showScrollbars>true</showScrollbars>
                 <width>100%</width>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

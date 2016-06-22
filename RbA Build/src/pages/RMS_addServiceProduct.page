@@ -102,6 +102,15 @@
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>
                                 </apex:column>
+                                <apex:column headerValue="Manufacturer - Replace" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.manufacturer}"/>
+                                </apex:column>
+                                <apex:column headerValue="Local - Remake" style="border-bottom: 2px solid #ccc;">                                       
+                                    <apex:inputCheckbox value="{!wrapper.local}"/>
+                                </apex:column>
+                                <apex:column headerValue="Customer - Replace" style="border-bottom: 2px solid #ccc;">
+                                    <apex:inputCheckbox value="{!wrapper.customer}"/>
+                                </apex:column>                                
                                 <apex:column headerValue="Description" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
                                 </apex:column>
