@@ -69,8 +69,8 @@ public with sharing class RMS_OrderItemManager {
 			else {
 				rCH = orderItemIdToListChangeHistory.get(oi.id)[0];
 			}
-			
-			rCH.Responsible_Party__c = oi.Responsible_Party__c;
+
+			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
 
 			Boolean somethingChanged = false;
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
