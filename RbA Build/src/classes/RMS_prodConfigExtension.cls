@@ -75,7 +75,8 @@ public class RMS_prodConfigExtension {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, 
 											PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, 
-											Purchase_Order__c, Verify_Item_Configuration__c, PricebookEntry.Product2.RecordType.DeveloperName 
+											Purchase_Order__c, Verify_Item_Configuration__c, PricebookEntry.Product2.RecordType.DeveloperName,
+											Responsible_Party__c 
 											From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);

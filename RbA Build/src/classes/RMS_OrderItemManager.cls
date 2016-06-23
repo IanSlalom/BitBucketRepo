@@ -8,7 +8,7 @@ public with sharing class RMS_OrderItemManager {
 			ch.Order_Product__c = oi.Id;
 			ch.Retail_Price__c = oi.Total_Retail_Price__c;
 			ch.Retail_Price_Change__c =  oi.Total_Retail_Price__c;
-			
+			ch.Responsible_Party__c = oi.Responsible_Party__c;
 			changeHistoryToInsert.add(ch);
 		}
 		insert changeHistoryToInsert;

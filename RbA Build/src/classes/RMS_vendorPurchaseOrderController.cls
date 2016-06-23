@@ -458,15 +458,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
       electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder && !costPurchaseOrder);
 
-      if(electronicOrder){
-        if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
-          showCancelPO = true;
-        }
-      }else{
-        if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected' || po.Status__c == 'Released' || po.Status__c == 'Confirmed'){
-          showCancelPO = true;
-        }
+      if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
+         showCancelPO = true;
       }
+     
 
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
             	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && !electronicOrder)  ?  'con'    :
