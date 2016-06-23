@@ -22,6 +22,7 @@ public with sharing class RMS_viewOrderProductsController {
     public Id miscJobId {get;set;}
     public Id servProd {get;set;}
     public Id serviceOrderId {get;set;} 
+    public Id changeOrderId {get;set;}
     public String baseURL{get;set;}
     public String reportURL{get;set;}
     public String addProductURL{get;set;}
@@ -39,6 +40,7 @@ public with sharing class RMS_viewOrderProductsController {
         miscJobId =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Misc_Job_and_Unit_Charges');
         servProd =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product');    
         serviceOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Service');
+        changeOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('Change_Order');
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
 
@@ -62,7 +64,8 @@ public with sharing class RMS_viewOrderProductsController {
 
     public void loadOrderItems(){
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
-                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId, Status__c
+                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId, Status__c,
+                         Purchase_Order__r.Status__c
                          from OrderItem 
                          where OrderId =: ord.Id 
                          and (PricebookEntry.Product2.RecordTypeId =: masterProductId
