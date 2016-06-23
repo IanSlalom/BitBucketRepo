@@ -387,6 +387,7 @@
             },
             processBatchRoutesSuccess : function(response) {
                 try {
+                    /*
                     if (response.success) {
                         for (var i = 0, len = response.values.length; i < len; i++) {
                             var record = response.values[i];
@@ -400,6 +401,7 @@
                             }
                         }
                     }
+                    */
                 }
                 catch(e) {
                     handleError('Error : processBatchRoutesSuccess', e);
@@ -424,8 +426,10 @@
                                             id: workOrderInfo.woId,
                                             resourceId: routeInfo.resId,
                                             title: workOrderInfo.woName,
-                                            start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
-                                            end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            //start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            //end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            start: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.startTimeUnix + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            end: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.endTimeUnix), MAschedRoutes.master.offsetResponseMinutes)),
                                             className: 'maEvent',
                                             url: '/' + workOrderInfo.woId,
                                             contactName: workOrderInfo.contactName,

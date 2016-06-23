@@ -49,13 +49,13 @@ way that I can leverage smart row deletes -->
                 <apex:outputLabel value="No Responsibilities currently exist. Click below to Add." rendered="{!NOT(hasChildren)}"/>
                 <apex:pageBlockTable value="{!children}" var="war" rendered="{!hasChildren}">
                     <apex:column headerValue="Charge Cost To">
-                        <apex:inputField value="{!war.Charge_Cost_To__c}"/>
+                        <apex:inputField value="{!war.Charge_Cost_To__c}" required="true"/>
                     </apex:column>      
                     <apex:column headerValue="Category">
-                        <apex:inputField value="{!war.Primary_Reason__c}"/>
+                        <apex:inputField value="{!war.Category__c}" required="true"/>
                     </apex:column> 
                     <apex:column headerValue="What/Where">
-                        <apex:inputField value="{!war.Secondary_Reason__c}"/>
+                        <apex:inputField value="{!war.What_Where__c}" required="true"/>
                     </apex:column> 
                     <!-- Add additional children metadata columns here -->
                     <apex:column headerValue=" ">

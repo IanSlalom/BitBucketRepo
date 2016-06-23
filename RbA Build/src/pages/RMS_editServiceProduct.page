@@ -45,8 +45,8 @@
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/> 
-                <apex:inputField value="{!OrderItem.Installed_Product_Asset__r.Variant_Number__c}"/>
-                <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
                 <apex:inputField value="{!OrderItem.Service_Product_Note__c}" style="width: 289px; height: 90px;" label="Internal Notes"/> 
             </apex:pageBlockSection>            
             <apex:pageBlockSection title="Order Information" columns="2">

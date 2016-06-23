@@ -258,12 +258,14 @@ public with sharing class RMS_WorkOrderCreationManager {
         list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
         Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+        Id changeOrderRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
         Id visitWORecordType = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         
         list<Id> relatedAccountIds = new list<Id>();
         list<id> relatedOpportunityIds = new list<id>();
         
         for(Order o : listNew){
+        	if (o.RecordTypeId == changeOrderRecordTypeId) continue;
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
             	system.debug('****** order: '+o);
@@ -317,6 +319,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
 
         for(Order ord : listNew){ 
+         	if (ord.RecordTypeId == changeOrderRecordTypeId) continue;
             //CHECKING IF CURRENT ORDER'S OPPORTUNITY HAS ANY RELATED TECH MEASURES IF SO, SKIP LOGIC AND ASSIGN THOSE TO THIS WORK ORDER
             system.debug('****** ord ' + ord);
             if(ord.OpportunityId != null && oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId) != null){
