@@ -67,9 +67,9 @@ global with sharing class MA_RoutingSchedulerController {
         return JSON.serialize(responseMap);
     }
     
-    webservice static String retrieveResourceRouteRecords(Id resourceId, String dayString, Id storeId) {
+    webservice static String retrieveResourceRouteRecords(Id resourceId, String dayString, Id storeId, List<Id> resourceStopIds) {
         try {
-            Integer sequence = 0;
+            Integer sequence = 1;
             List<Object> features = new List<Object>();
             Map<String, Object> stopObj = new Map<String, Object>();
             Map<String, Object> geometry =  new Map<String, Object>();
@@ -86,12 +86,23 @@ global with sharing class MA_RoutingSchedulerController {
             Long milliTime = startDateTime.getTime();
             master.put('defaultdate', milliTime);
             
-            List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Resource__c, RbA_Work_Order__c, RbA_Work_Order__r.Name,
-                                                        RbA_Work_Order__r.Appointment_Duration__c, RbA_Work_Order__r.Account__c,
-                                                        RbA_Work_Order__r.Account__r.ShippingLatitude, RbA_Work_Order__r.Account__r.ShippingLongitude,
-                                                        Date__c, StartDateTime__c, EndDateTime__c
-                                                        FROM MA_Scheduler_Event__c WHERE Resource__c = :resourceId AND RbA_Work_Order__c != null
-                                                        AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime ORDER BY StartDateTime__c]; 
+            List<MA_Scheduler_Event__c> maEventList = new List<MA_Scheduler_Event__c>();
+            if (resourceStopIds == null || resourceStopIds.isEmpty()) {
+                maEventList = [SELECT Id, Resource__c, RbA_Work_Order__c, RbA_Work_Order__r.Name,
+                                RbA_Work_Order__r.Appointment_Duration__c, RbA_Work_Order__r.Account__c,
+                                RbA_Work_Order__r.Account__r.ShippingLatitude, RbA_Work_Order__r.Account__r.ShippingLongitude,
+                                Date__c, StartDateTime__c, EndDateTime__c
+                                FROM MA_Scheduler_Event__c WHERE Resource__c = :resourceId AND RbA_Work_Order__c != null
+                                AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime ORDER BY StartDateTime__c];
+            }
+            else {
+                maEventList = [SELECT Id, Resource__c, RbA_Work_Order__c, RbA_Work_Order__r.Name,
+                                RbA_Work_Order__r.Appointment_Duration__c, RbA_Work_Order__r.Account__c,
+                                RbA_Work_Order__r.Account__r.ShippingLatitude, RbA_Work_Order__r.Account__r.ShippingLongitude,
+                                Date__c, StartDateTime__c, EndDateTime__c
+                                FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c IN :resourceStopIds
+                                AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime ORDER BY StartDateTime__c];
+            }
             
             for (MA_Scheduler_Event__c maEvent : maEventList) {
                 stopObj = new Map<String, Object>();
@@ -504,25 +515,28 @@ global with sharing class MA_RoutingSchedulerController {
 
                 geometry.put('x', workOrder.Account__r.ShippingLongitude);
                 geometry.put('y',  workOrder.Account__r.ShippingLatitude);
+                    
+                endDateTime = maEvent.EndDateTime__c;
+                startDateTime = maEvent.StartDateTime__c;
 
                 attributes.put('Name', '{"woId":"' + workOrder.Id + '","maEventId":"' + maEvent.Id
                                             + '","woName":"' + workOrder.Name + '","woType":"' + workOrder.Work_Order_Type__c.toLowerCase().deleteWhitespace()
                                             + '","city":"' + workOrder.City__c + '","state":"' + workOrder.State__c
                                             + '","contactName":"' + workOrder.Contact__r.LastName + ', ' + workOrder.Contact__r.FirstName
                                             + '","isSynced":' + workOrder.Tech_Measure_Synced__c + ',"isLswp":' + workOrder.LSWP_Test_Results__c
-                                            + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder + '"}');
+                                            + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder
+                                            + '","startTimeUnix":' + startDateTime.getTime() + ',"endTimeUnix":' + endDateTime.getTime() + '}');
                 attributes.put('CurbApproach', 3);
-                    
-                endDateTime = maEvent.EndDateTime__c;
-                startDateTime = maEvent.StartDateTime__c;
 
                 Long milliDiff = endDateTime.getTime() - startDateTime.getTime();
                 Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
 
                 attributes.put('ServiceTime', serviceTime);
-                attributes.put('TimeWindowEnd1', endDateTime.getTime());
+                //attributes.put('TimeWindowEnd1', endDateTime.getTime());
+                attributes.put('TimeWindowEnd1', endDateTime.getTime() - (milliDiff / 2));
                 attributes.put('TimeWindowStart1', startDateTime.getTime());
-	            attributes.put('MaxViolationTime1', 0);
+                //attributes.put('MaxViolationTime1', 0);
+	            attributes.put('MaxViolationTime1', serviceTime / 2);
 
                 if (workOrder.Work_Order_Required_Skills__r != null && !workOrder.Work_Order_Required_Skills__r.isEmpty()) {
                     Set<Id> skillIds = new Set<Id>();

@@ -180,10 +180,10 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace',Quote_Accepted__c = FALSE );
         insert orderItemMaster;
 
-        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c='Customer Satisfaction', Service_Product__c=orderItemMaster.Id);
+        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=orderItemMaster.Id);
         insert charge;
 
-        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturer - Replace', Primary_Reason__c = 'Renewal by Andersen', Service_Product__c=orderItemMaster.Id);
+        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=orderItemMaster.Id);
         insert charge2;
 
         Warranty__C warranty = new Warranty__C(Charge_Cost_To__c=charge2.Id,Procedure_Code__c=pca1.Id,Quantity__c=2, Service_Product__c=orderItemMaster.Id);
@@ -225,7 +225,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         assetsToInsert.add(asset2);         
         insert assetsToInsert;                                  
         
-        OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Quote_Accepted__c = FALSE, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
+        OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Quote_Accepted__c = FALSE, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100);
         insert serviceOrderItem;
 
     }
@@ -285,7 +285,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.startTest(); 
         Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
-        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c	 = :pbe.Product2Id];
+        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c     = :pbe.Product2Id];
         Boolean isSelected = true;
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
         

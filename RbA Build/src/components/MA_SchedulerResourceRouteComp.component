@@ -33,6 +33,7 @@
         var RouteLine;
         var resourceMap;
         var MapMarkers = [];
+        var resourceStopIds = [];
         var defaultLat = 33.9353499;    // 44.986656;
         var defaultLng = -84.3448638;   // -93.258133;
         var isDailyResource = false;
@@ -53,6 +54,7 @@
             processRouteStops : function() {
                 try{
                     var response;
+                    /*
                     if (isBatchResources) {
                         var resourceId = $('#resourceRoute').attr('resource-id');
                         if (MARoutesComp.master.hasOwnProperty(resourceId)){
@@ -62,9 +64,10 @@
                         }
                     }
                     else {
+                    */
                         var mainCalendarDate = $('#resourceCalendar').fullCalendar('getDate');
                         
-                        response = sforce.apex.execute(apexRoutingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), dayString: mainCalendarDate.format('MM/DD/YYYY'), storeId: $('#storeSelect').val()});
+                        response = sforce.apex.execute(apexRoutingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), dayString: mainCalendarDate.format('MM/DD/YYYY'), storeId: $('#storeSelect').val(), resourceStopIds: resourceStopIds});
                                    
                         response = JSON.parse(response);
                         MARoutesComp.master = response;
@@ -99,7 +102,7 @@
                                 handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
                             }
                         });
-                    }
+                    //}
                 }
                 catch(e) {
                     handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
@@ -113,12 +116,12 @@
                         coordinateArray = [];
                         var route = routes[x];
 
-                        if (!isBatchResources) {
+                        //if (!isBatchResources) {
                             route = route.geometry.paths;
-                        }
+                        //}
 
                         for (i = 0, len2 = route.length; i < len2; i++) {
-                            if (!isBatchResources) {
+                            //if (!isBatchResources) {
                                 for (z = 0, len3 = route[i].length; z < len3; z++) {
                                     var cord = new google.maps.LatLng({
                                         lat: route[i][z][1],
@@ -127,6 +130,7 @@
                                     coordinateArray.push(cord);
                                     bounds.extend(cord);
                                 }
+                            /*
                             }
                             else {
                                 var cord = new google.maps.LatLng({
@@ -136,6 +140,7 @@
                                 coordinateArray.push(cord);
                                 bounds.extend(cord);
                             }
+                            */
                         }
 
                         RouteLine = new google.maps.Polyline({
@@ -158,12 +163,14 @@
                 try {
                     for (i = 0, markerLength = markers.length; i < markerLength; i++ ) {
                         var marker
+                        /*
                         if (isBatchResources) {
                             marker = baseOrders[i];
                         }
                         else {
+                        */
                             marker = markers[i];
-                        }
+                        //}
 
                         var mapMarker = new google.maps.Marker({
                             position:{
@@ -214,6 +221,7 @@
             initializingResourceRouteComp = true;
             initializeRoute();
             initResourceCalendar();
+            $('#listView').show();
         }
 
         function initializeRoute() {
@@ -280,7 +288,11 @@
                     }
                     else {
                         MARoutesComp.deleteMarkers();
-                        MARoutesComp.startGeocodingRes();
+
+                        if (!isBatchResources) {
+                            MARoutesComp.startGeocodingRes();
+                        }
+
                         retrieveResourceRouteRecords(start, end, timezone, callback);
                         callback([]);
                     }
@@ -327,13 +339,42 @@
             else {
                 $('#resourceCalendar').fullCalendar('gotoDate', mainCalendarDate);
             }
+
+            if (isBatchResources) {
+                $('#resourceCalendar .fc-right').hide();
+            }
+            else {
+                $('#resourceCalendar .fc-right').show();
+            }
         }
 
         function retrieveResourceRouteRecords(start, end, timezone, callback) {
-            end = new Date(end.add(2, 'days'));
-            start = new Date(start.add(-2, 'days'));
+            if (!isBatchResources) {
+                end = new Date(end.add(2, 'days'));
+                start = new Date(start.add(-2, 'days'));
 
-            sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startEpoch: start.getTime(), endEpoch: end.getTime(), storeId: $('#storeSelect').val() }, processResourceRouteResponse);
+                sforce.apex.execute(apexSchedulingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), startEpoch: start.getTime(), endEpoch: end.getTime(), storeId: $('#storeSelect').val() }, processResourceRouteResponse);
+            }
+            else {
+                var resourceEvents = $('#calendar').fullCalendar('getResourceEvents', $('#resourceRoute').attr('resource-id'));
+                for (var i = 0, len = resourceEvents.length; i < len; i++) {
+                    var resourceEvent = resourceEvents[i];
+                    resourceRouteEvents.push(resourceEvent);
+
+                    if (resourceEvent.className.indexOf('maEvent') != -1) {
+                        resourceStopIds.push(resourceEvent.id);
+                    }
+                }
+
+                if (resourceRouteEvents.length > 0) {
+                    $('#resourceCalendar').fullCalendar('refetchEvents');
+                    MARoutesComp.processRouteStops();
+                    resourceStopIds = [];
+                }
+                else {
+                    $('#loaderModal').hide();
+                }
+            }
         }
 
         function processResourceRouteSuccess(response) {
@@ -373,6 +414,10 @@
         }
 
         function closeResourceRoute() {
+            if (isBatchResources) {
+                $('#listView').hide();
+            }
+
             isDailyResource = false;
             MARoutesComp.deleteMarkers();
             $('#resourceRouteModal').removeClass("ma-left-in");

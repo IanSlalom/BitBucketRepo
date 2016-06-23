@@ -75,7 +75,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         listOI=new list<OrderItem>();
         
         allAccs=[select id, OrderId, Product_Name__c,Installed_Product_Name__c,
-                 (select id, Charge_Cost_To__c, Primary_Reason__c, Secondary_Reason__c, Service_Product__c, Service_Request__c from Charges__r)
+                 (select id, Charge_Cost_To__c, Category__c, What_Where__c, Service_Product__c, Service_Request__c from Charges__r)
                  from OrderItem
                  where OrderId =: o.Id];
         
