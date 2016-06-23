@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
         <members>AutocompleteV2_Con_Test</members>
         <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
+        <members>LaborTriggerHandler</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
@@ -202,6 +203,7 @@
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
         <members>BusinessAdjustmentTrigger</members>
+        <members>ChargeTrigger</members>
         <members>ContactTrigger</members>
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
@@ -216,7 +218,6 @@
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
         <members>warrantyTrigger</members>
-        <members>ChargeTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -500,7 +501,6 @@
         <members>Charge__c</members>
         <members>Discount__c</members>
         <members>Event</members>
-        <members>Labor__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
