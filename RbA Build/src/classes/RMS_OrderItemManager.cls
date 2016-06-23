@@ -69,6 +69,9 @@ public with sharing class RMS_OrderItemManager {
 			else {
 				rCH = orderItemIdToListChangeHistory.get(oi.id)[0];
 			}
+
+			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
+
 			Boolean somethingChanged = false;
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
 			for(String oiField : oiFieldsMap.KeySet()){ 
@@ -76,7 +79,7 @@ public with sharing class RMS_OrderItemManager {
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
 				
-				if(oldValue != newValue){
+				if(oldValue != newValue && !oiField.equalsIgnoreCase('Responsible_Party__c')){
 					somethingChanged = true;
 					if(oldValue == null){
 						oldValue = 'none'; 

@@ -394,6 +394,8 @@
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
+        <members>Order-Change Order Layout</members>
+        <members>Task-Collections Task Layout</members>
         <name>Layout</name>
     </types>
     <types>
