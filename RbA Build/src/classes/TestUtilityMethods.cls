@@ -84,7 +84,7 @@ public with sharing class TestUtilityMethods {
         	Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
         	//Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
         	//Action_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-        	
+			Standard_Hourly_Rate__c = 50,        	
         	Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
         	Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
         	HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,

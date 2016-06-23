@@ -5,6 +5,8 @@
         <members>AutocompleteV2_Con_Test</members>
         <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
+        <members>LaborTriggerHandler</members>
+        <members>LaborTriggerHandlerTest</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
@@ -501,7 +503,6 @@
         <members>Charge__c</members>
         <members>Discount__c</members>
         <members>Event</members>
-        <members>Labor__c</members>
         <members>Municipality_Match__c</members>
         <members>Municipality__c</members>
         <members>Order</members>
