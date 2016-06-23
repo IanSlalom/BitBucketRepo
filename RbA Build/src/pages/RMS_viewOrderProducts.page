@@ -90,7 +90,7 @@
 		<apex:pageblockSection columns="1">
 		<apex:form >
 			<apex:commandButton onclick="callGenerateConsoleURL('{!reportURL}', 'Install Materials Report');return false" id="installMaterials" value="Install Materials" style="margin-left:2%"/>
-			<apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!Order.Revenue_Recognized_Date__c == null}"/>
+			<apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!Order.Revenue_Recognized_Date__c == null && Order.RecordTypeId != serviceOrderId && Order.RecordTypeId != changeOrderId}"/>
 		
 			<apex:pageBlockTable title="Order Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
 				<apex:column >  
@@ -99,15 +99,22 @@
 					</apex:commandButton>
 				</apex:column>
 				<apex:column >
-					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == masterProductId}">
+					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == masterProductId && wrapper.OrderItem.Status__c != 'Cancelled'}">
 					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 					</apex:outputpanel>
-					<apex:outputpanel rendered="{!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId}">
+				</apex:column>
+				<apex:column >
+					<apex:outputpanel rendered="{(!wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId || (!wrapper.OrderItem.Purchase_Order__r.Status__c == 'In Process' || !wrapper.OrderItem.Purchase_Order__r.Status__c == 'Rejected'))&& wrapper.OrderItem.Status__c != 'Cancelled'}">
 					<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null}">
 						<apex:param name="itemToCancel" assignTo="{!orderItemToCancel}" value="{!wrapper.OrderItem.Id}"/>
 					</apex:commandButton>
 					</apex:outputpanel>
+					<apex:outputpanel rendered="{!wrapper.OrderItem.Status__c == 'Cancelled'}">
+						<apex:outputText >Cancelled</apex:outputText>
+					</apex:outputpanel>
 				</apex:column>
+
+
 				<apex:column value="{!wrapper.OrderItem.Unit_Id__c}"/>
 				<apex:column headerValue="Product">  
 					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}&mode=v','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
@@ -126,9 +133,12 @@
 							<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','Edit Order Product');return false">Edit</a> 
 							</apex:column>-->
 							<apex:column >  
-								<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null}">
+								<apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null && item.Status__c != 'Cancelled'}">
 									<apex:param assignTo="{!orderItemToCancel}" value="{!item.Id}"/>
 								</apex:commandButton>
+								<apex:outputpanel rendered="{!item.Status__c == 'Cancelled'}">
+									<apex:outputText >Cancelled</apex:outputText>
+								</apex:outputpanel>
 							</apex:column>
 							<apex:column headerValue="Product">  
 								<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 

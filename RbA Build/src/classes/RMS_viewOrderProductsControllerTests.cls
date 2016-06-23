@@ -87,10 +87,9 @@ private class RMS_viewOrderProductsControllerTests {
 		Id cancelledItem = controller.OrderItemWrappers[0].RelatedItems[1].Id;
 		controller.orderItemToCancel = cancelledItem;
 		controller.cancelOrderItem();
-		//Assert the item is set to cancelled status and removed from the orderItemWrapper list.
+		//Assert the item is set to cancelled status
 		OrderItem item = [Select Status__c from OrderItem where Id =: cancelledItem];
 		System.assertEquals(item.Status__c, 'Cancelled');
-		System.assertEquals(controller.OrderItemWrappers[0].relatedItems.size(),1);
 		Test.stopTest();
 
 	}
