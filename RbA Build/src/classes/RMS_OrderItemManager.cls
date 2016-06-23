@@ -76,7 +76,7 @@ public with sharing class RMS_OrderItemManager {
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
 				
-				if(oldValue != newValue){
+				if(oldValue != newValue && !oiField.equalsIgnoreCase('Responsible_Party__c')){
 					somethingChanged = true;
 					if(oldValue == null){
 						oldValue = 'none'; 
