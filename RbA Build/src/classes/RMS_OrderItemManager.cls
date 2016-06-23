@@ -119,7 +119,9 @@ public with sharing class RMS_OrderItemManager {
 				
 				Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
 				Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
-				
+				if (newPrice == null) newPrice = 0;
+				if (oldPrice == null) oldPrice = 0;
+				if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
 				rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
 			}  
 			changeHistoryToUpsert.add(rCH);	
