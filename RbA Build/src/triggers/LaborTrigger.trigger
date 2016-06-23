@@ -33,15 +33,16 @@ trigger LaborTrigger on Labor__c (after delete, after insert, after undelete,
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
         //HANDLERS AND MANAGERS
+        LaborTriggerHandler handler = new LaborTriggerHandler(Trigger.isExecuting,Trigger.size);       
         RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
         List<SObject> wkorders = new List<SObject>();
             
         // Before Insert
-        /*
+        
         if(Trigger.isInsert && Trigger.isBefore){
             handler.onBeforeInsert(Trigger.new);
         }
-        */
+        
         //  Before Update
         /*
         if(Trigger.isUpdate && Trigger.isBefore){
