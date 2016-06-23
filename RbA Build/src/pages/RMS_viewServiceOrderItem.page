@@ -1,7 +1,6 @@
 <apex:page standardController="OrderItem" showHeader="true" tabStyle="OrderItem" sidebar="true" extensions="RMS_OrderItemExtension">
-    
-    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
-    <apex:includeScript value="/support/console/26.0/integration.js"/>
+       <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
      <script type="text/javascript">
     window.onload = function() {
         testSetTabTitle();       
@@ -68,7 +67,7 @@
             <apex:pageBlockButtons >                
                 <apex:commandButton onclick="callGenerateConsoleURL('{!editURL}','Edit');return false" id="editURL" value="Edit Product"/>
                 <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addResponsibilitytoSP?id={!OrderItem.Id}&mode=e','Add Responsibility');return false" value="Add Responsibility"/>
-                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!OrderItem.Id}&mode=e','Add Reimbursement');return false" value="Add Reimbursement" rendered="{!IF(OrderItem.Manufacturer_Replace__c == TRUE,true,false)}"/>
+                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!OrderItem.Id}&mode=e','Add Reimbursement');return false" value="Add Reimbursement" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
                 <apex:commandButton onclick="callGenerateConsoleURL('{!addSymptomURL}','Add Service Symptom');return false" id="addServiceSymptom" value="Add Service Symptom"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
@@ -104,5 +103,5 @@
     <apex:relatedList list="Charges__r"/>
     <apex:relatedList list="Service_Symptoms__r"/>
     <apex:relatedList list="Problem_Components__r"/>
-    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Manufacturer_Replace__c == TRUE,true,false)}"/>
+    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
 </apex:page>
