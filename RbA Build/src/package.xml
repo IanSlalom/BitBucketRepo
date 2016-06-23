@@ -6,6 +6,7 @@
         <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
         <members>LaborTriggerHandler</members>
+        <members>LaborTriggerHandlerTest</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
