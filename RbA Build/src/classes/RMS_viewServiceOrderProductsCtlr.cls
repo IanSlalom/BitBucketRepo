@@ -26,6 +26,7 @@ public with sharing class RMS_viewServiceOrderProductsCtlr {
     public String addProductURL{get;set;}
     public String editOIURL{get;set;}
     public Id orderItemToToggle{get;set;}
+    public integer num_assets;
 
     public RMS_viewServiceOrderProductsCtlr(ApexPages.StandardController stdController) {
         /*if(!test.isRunningTest()){
@@ -47,10 +48,22 @@ public with sharing class RMS_viewServiceOrderProductsCtlr {
             orderItemWrappers.add(new OrderItemWrapper(oi));
         }
         system.debug(orderItemWrappers);
+        
+        List<AggregateResult> results2=[select COUNT (Id) 
+                                        FROM Asset 
+                                        WHERE AccountId = :ord.AccountId];
+        num_assets = (Integer) results2[0].get('expr0');
 
-        system.debug(orderItemWrappers);        
+        system.debug(orderItemWrappers);  
+        
+        
         if(ord.RecordTypeId == serviceOrderId){
-            addProductURL = '/apex/RMS_addServiceProduct?id=' + ord.Id;
+            if(num_assets > 0){
+                addProductURL = '/apex/RMS_addServiceProduct?id=' + ord.Id;                
+            } else {
+              addProductURL = '/apex/RMS_addServiceProductLegacy?id=' + ord.Id;                  
+            }
+
         }else{
             addProductURL = '/apex/rms_ProdConfigEdit?oid='+ord.Id+'&pid='+ord.Pricebook2Id +'&mode=e';
         }

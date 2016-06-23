@@ -160,6 +160,7 @@
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addResponsibilitytoSP</members>
         <members>RMS_addServiceProduct</members>
+        <members>RMS_addServiceProductLegacy</members>
         <members>RMS_addServiceSymptom</members>
         <members>RMS_addServiceSymptomP2</members>
         <members>RMS_addWarrantytoSP</members>
