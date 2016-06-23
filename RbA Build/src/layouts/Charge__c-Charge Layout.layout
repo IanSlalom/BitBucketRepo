@@ -17,11 +17,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Primary_Reason__c</field>
+                <field>Category__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Secondary_Reason__c</field>
+                <field>What_Where__c</field>
             </layoutItems>
             <layoutItems>
                 <emptySpace>true</emptySpace>

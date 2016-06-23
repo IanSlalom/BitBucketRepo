@@ -141,10 +141,10 @@ private class testRMS_addWarrantiesExt
         rwo.UnitPrice = 100;
         insert rwo;
 
-        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c='Customer Satisfaction', Service_Product__c=rwo.Id);
+        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
         insert charge;
 
-        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturer - Replace', Primary_Reason__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
+        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
         insert charge2;
 
         myWarranty1 = new Warranty__c();

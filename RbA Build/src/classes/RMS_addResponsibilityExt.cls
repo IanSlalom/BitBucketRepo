@@ -36,8 +36,8 @@ public with sharing class RMS_addResponsibilityExt extends RMS_addResponsibility
                           Service_Product__r.Product_Name__c,
                           Service_Request__c,                          
                           Charge_Cost_To__c,
-                          Primary_Reason__c,
-                          Secondary_Reason__c,
+                          Category__c,
+                          What_Where__c,
                           Installed_Product__c
                           FROM Charge__c
                           WHERE Service_Product__c =: mysObject.Id];

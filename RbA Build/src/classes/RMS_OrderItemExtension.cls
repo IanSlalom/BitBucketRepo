@@ -25,7 +25,7 @@ public class RMS_OrderItemExtension {
     
     public RMS_OrderItemExtension(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'OrderId'});           
+            stdController.addFields(new List<String>{'OrderId','Service__c'});           
         }
         
         
@@ -55,16 +55,22 @@ public class RMS_OrderItemExtension {
         return null;
     } 
     
-    //public PageReference cancelCloseTab(){
-      //  Order parent = [Select id FROM Order WHERE id = :OrderId];
-       // try{
-        //PageReference savePage = new PageReference('/'+parent.id);
-         //   savePage.setRedirect(true);
-          //  return savePage;
-        //}catch(DMLException ex){
-         //   ApexPages.addMessages(ex);
-       // }
-       // return null;        
-    //}
+    public PageReference orderItemRedirect(){
+        PageReference newPage = null;
+        
+        
+        
+        If (o.Service__c == TRUE){
+                newPage = new PageReference('/apex/RMS_viewServiceOrderItem?id='+ o.Id);                               
+        } else {
+            newPage = new PageReference('/'+ o.Id);
+            newPage.getParameters().put('nooverride','1');
+        }
+        
+        newPage.setRedirect(true);
+        return newPage;
+        
+        
+    }   
     
 }

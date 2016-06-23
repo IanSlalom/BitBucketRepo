@@ -185,6 +185,7 @@
         <members>RMS_updateServiceType</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewCOROOrders</members>
+        <members>RMS_viewOrderItemRedirect</members>
         <members>RMS_viewOrderProducts</members>
         <members>RMS_viewOrderRedirect</members>
         <members>RMS_viewProblemComponent</members>
