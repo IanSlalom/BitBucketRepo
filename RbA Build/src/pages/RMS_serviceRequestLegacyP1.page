@@ -35,7 +35,7 @@
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
                 <apex:commandButton action="{!saveCloseLegacy}" value="Save"/>                
-                <!--<apex:commandButton action="{!saveContinueLegacy}" value="Continue"/>-->
+                <apex:commandButton action="{!saveContinueLegacy}" value="Continue"/>
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1">
