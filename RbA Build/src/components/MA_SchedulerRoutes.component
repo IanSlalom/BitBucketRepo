@@ -428,7 +428,7 @@
                                             title: workOrderInfo.woName,
                                             //start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
                                             //end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
-                                            start: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.startTimeUnix + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
+                                            start: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.startTimeUnix), MAschedRoutes.master.offsetResponseMinutes)),
                                             end: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.endTimeUnix), MAschedRoutes.master.offsetResponseMinutes)),
                                             className: 'maEvent',
                                             url: '/' + workOrderInfo.woId,

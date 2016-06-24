@@ -2,8 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
-    <customButtons>Cancel_Order</customButtons>
-    <customButtons>Conga_Composer_InvoiceTesting</customButtons>
+    <customButtons>Cancel_Order</customButtons>   
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>

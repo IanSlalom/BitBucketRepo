@@ -588,7 +588,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Legacy Orders Pages
     
         public PageReference saveCloseLegacy(){
-        PageReference pageRef;
+        PageReference newPage;
         
         try{
             Id standardPriceBookId;  
@@ -634,22 +634,23 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             insert listOiLegacy;
             
             if(listOiLegacy.Size() > 0){
-                pageRef = new PageReference('/'+o.id);
+                newPage = new PageReference('/'+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
+            newPage.setRedirect(true); 
             
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             listOILegacy.clear();
         }
         
-        return pageRef;
+        return newPage;
     }      
     
     
     public PageReference saveContinueLegacy(){
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{
             Id standardPriceBookId;  
@@ -695,17 +696,19 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             insert listOiLegacy;
             
             if(listOiLegacy.Size() > 0){
-                pageRef = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
+            
+            newPage.setRedirect(true); 
 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             listOILegacy.clear();
         }
         
-        return pageRef;
+        return newPage;
     }        
     
     
@@ -780,7 +783,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //add product pages
     public PageReference saveNewProducts(){
         
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{           
             Id standardPriceBookId;  
@@ -840,22 +843,23 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //inserts the OrderItems
             insert listOi;
             if(listOI.Size() > 0){
-                pageRef = new PageReference('/'+o.id);
+                newPage = new PageReference('/'+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
+            newPage.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             //needed to make sure the collapsed rows stay collapsed when validation error occurs
             listOI.clear();
         }
         
-        return pageRef;
+        return newPage;
     }
     
         public PageReference saveNewProductsContinue(){
         
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{           
             Id standardPriceBookId;  
@@ -915,22 +919,24 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //inserts the OrderItems
             insert listOi;
             if(listOI.Size() > 0){
-                pageRef = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
+            
+            newPage.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             //needed to make sure the collapsed rows stay collapsed when validation error occurs
             listOI.clear();
         }
         
-        return pageRef;
+        return newPage;
     } 
     
     public PageReference saveNewProductsLegacy(){
         
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{           
             Id standardPriceBookId;  
@@ -984,22 +990,24 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //inserts the OrderItems
             insert listOi;
             if(listOI.Size() > 0){
-                pageRef = new PageReference('/'+o.id);
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
+            
+            newPage.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             //needed to make sure the collapsed rows stay collapsed when validation error occurs
             listOI.clear();
         }
         
-        return pageRef;
+        return newPage;
     }  
     
         public PageReference saveNewProductsLegacyContinue(){
         
-        PageReference pageRef = null;
+        PageReference newPage;
         
         try{           
             Id standardPriceBookId;  
@@ -1053,9 +1061,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //inserts the OrderItems
             insert listOi;
             if(listOI.Size() > 0){
-                pageRef = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
             } else {
-                pageRef = new PageReference('/' + o.id);
+                newPage = new PageReference('/' + o.id);
             }
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
@@ -1063,7 +1071,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             listOI.clear();
         }
         
-        return pageRef;
+        return newPage;
     }   
 
     

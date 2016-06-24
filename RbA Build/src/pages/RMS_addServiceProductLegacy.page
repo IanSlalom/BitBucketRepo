@@ -53,7 +53,7 @@
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
                 <apex:commandButton action="{!saveNewProductsLegacy}" value="Save"/>
-                <!--<apex:commandButton action="{!saveNewProductsLegacyContinue}" value="Continue"/>-->                
+                <apex:commandButton action="{!saveNewProductsLegacyContinue}" value="Continue"/>                
             </apex:pageBlockButtons> 
             
             <apex:pageBlockSection columns="1" rendered="false">
