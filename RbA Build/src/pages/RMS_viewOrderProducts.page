@@ -104,7 +104,7 @@
 					</apex:outputpanel>
 				</apex:column>
 				<apex:column >
-					 <apex:outputpanel rendered="{!(wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId || (wrapper.OrderItem.Purchase_Order__r.Status__c == 'In Process' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'Rejected'))&& wrapper.OrderItem.Status__c != 'Cancelled'}">
+					 <apex:outputpanel rendered="{!(wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId || (wrapper.OrderItem.Purchase_Order__r.Status__c == 'In Progress' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'Rejected'))&& wrapper.OrderItem.Status__c != 'Cancelled'}">
                     <apex:commandButton action="{!cancelOrderItem}" value="Cancel" rerender="orderItemsTable" rendered="{!Order.Revenue_Recognized_Date__c == null}">
                         <apex:param name="itemToCancel" assignTo="{!orderItemToCancel}" value="{!wrapper.OrderItem.Id}"/>
                     </apex:commandButton>
