@@ -1065,6 +1065,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             } else {
                 newPage = new PageReference('/' + o.id);
             }
+            
+            newPage.setRedirect(true); 
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             //needed to make sure the collapsed rows stay collapsed when validation error occurs
@@ -1180,6 +1182,20 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         return pageRef;
     }
+    
+        public PageReference cancelP3(){
+        PageReference pageRef = null;
+        try{            
+            upsert o;
+            pageRef = new PageReference('/' + o.id);
+            pageRef.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+        }
+        
+        return pageRef;
+    }
+    
     
     //product wrapper for creating table of Service Products
     public class ProductWrapper{

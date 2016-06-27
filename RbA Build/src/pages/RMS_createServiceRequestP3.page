@@ -19,7 +19,13 @@
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
         sforce.console.setTabTitle('Service Request {!Order.OrderNumber}');
-    };        
+    };
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    }; 
     
     </script>
     <style>
@@ -79,6 +85,7 @@
                 </apex:repeat>
             </table>
             <div style="text-align: center; margin-top: 5px;">
+                 <apex:commandButton value="Cancel" action="{!cancelP3}" immediate="true"/>
                 <apex:commandbutton action="{!saveCharges}" value="Complete" id="theButton" />    
             </div>            
         </apex:pageBlock>
