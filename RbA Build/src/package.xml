@@ -323,6 +323,7 @@
         <members>Opportunity-Opportunity Layout</members>
         <members>OpportunityLineItem-Opportunity Product Layout</members>
         <members>Order-CORO Service Layout</members>
+        <members>Order-Change Order Layout</members>
         <members>Order-Order Layout</members>
         <members>OrderItem-Order Product Layout</members>
         <members>Order_Code_Lookup__c-Order Code Lookup Layout</members>
@@ -384,6 +385,7 @@
         <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
+        <members>Task-Collections Task Layout</members>
         <members>Task-General Task Layout</members>
         <members>Task-Task Layout</members>
         <members>Tech_Measure_Offset_Configuration__c-Tech Measure Offset Configuration Layout</members>
@@ -394,8 +396,6 @@
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
-        <members>Order-Change Order Layout</members>
-        <members>Task-Collections Task Layout</members>
         <name>Layout</name>
     </types>
     <types>
