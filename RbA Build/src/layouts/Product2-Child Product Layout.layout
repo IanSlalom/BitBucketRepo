@@ -97,6 +97,36 @@
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>rSuite Information</label>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cross_Reference__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Unit_Short_Description__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>rSuite_Product_Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Category__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Sub_Category__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns/>
+        <style>TwoColumnsLeftToRight</style>
+    </layoutSections>
+    <layoutSections>
         <customLabel>false</customLabel>
         <detailHeading>true</detailHeading>
         <editHeading>false</editHeading>
