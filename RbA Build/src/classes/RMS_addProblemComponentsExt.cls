@@ -41,7 +41,7 @@ public with sharing class RMS_addProblemComponentsExt extends RMS_addProblemComp
     }
     
     public override sObject initChildRecord()
-    {
+    {     
         Problem_Component__c child = new Problem_Component__c();
         child.Service_Product_lkup__c  = myWO.Service_Product__c; 
         child.Service_Symptom_Validation__c = myWo.Service_Symptom__c;
@@ -53,13 +53,13 @@ public with sharing class RMS_addProblemComponentsExt extends RMS_addProblemComp
     //view problem components as picklist
     public List<selectOption> getProbs() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
+        options.add(new selectOption('', '-- None --')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
         for (Problem_Component_Config__c  probs : [SELECT Id, Name, Problem_Component__c, Service_Symptom__c  
                                                    FROM Problem_Component_Config__c
                                                    WHERE Service_Symptom__c = :myWO.Service_Symptom__c  
                                                    ORDER BY Name ASC]) { 
                                                        options.add(new selectOption(probs.Id, probs.Name));
-                                                   }
-        options.add(new selectOption('', '-- None --')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
+                                                   }        
         return options; //return the picklist options        
     } 
     
