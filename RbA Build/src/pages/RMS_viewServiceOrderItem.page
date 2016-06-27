@@ -1,7 +1,6 @@
 <apex:page standardController="OrderItem" showHeader="true" tabStyle="OrderItem" sidebar="true" extensions="RMS_OrderItemExtension">
-    
-    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
-    <apex:includeScript value="/support/console/26.0/integration.js"/>
+       <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
      <script type="text/javascript">
     window.onload = function() {
         testSetTabTitle();       
@@ -9,7 +8,7 @@
     
     function testSetTabTitle() {
         //Set the current tab's title
-        sforce.console.setTabTitle('{!OrderItem.OrderItemNumber}')
+        sforce.console.setTabTitle('{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}')
     }
     
     //The callback function that openSubtab will call once it's got the ID for its primary tab
@@ -68,13 +67,15 @@
             <apex:pageBlockButtons >                
                 <apex:commandButton onclick="callGenerateConsoleURL('{!editURL}','Edit');return false" id="editURL" value="Edit Product"/>
                 <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addResponsibilitytoSP?id={!OrderItem.Id}&mode=e','Add Responsibility');return false" value="Add Responsibility"/>
-                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!OrderItem.Id}&mode=e','Add Reimbursement');return false" value="Add Reimbursement" rendered="{!IF(OrderItem.Manufacturer_Replace__c == TRUE,true,false)}"/>
+                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!OrderItem.Id}&mode=e','Add Reimbursement');return false" value="Add Reimbursement" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
                 <apex:commandButton onclick="callGenerateConsoleURL('{!addSymptomURL}','Add Service Symptom');return false" id="addServiceSymptom" value="Add Service Symptom"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
-                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/> 
-                <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.Variant_Number__c}"/>
-                <apex:outputField value="{!OrderItem.Installed_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/>
+                                     <!--<a href="#" onClick="callGenerateConsoleURL('/{!OrderItem.Sold_Order_Product_Asset__r.Original_Order_Product__r.Id}','View Order Product');return false">{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}</a> -->
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.Original_Order_Product__c}"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.InstallDate}" label="Manufacture Date"/>
                 <apex:outputField value="{!OrderItem.Service_Product_Note__c}" style="width: 289px; height: 90px;" label="Internal Notes"/> 
                 <apex:outputField value="{!OrderItem.OrderId}" label="Service Request"/>
                 <apex:outputField value="{!OrderItem.Total_Procedure_Time__c}"/>
@@ -104,5 +105,5 @@
     <apex:relatedList list="Charges__r"/>
     <apex:relatedList list="Service_Symptoms__r"/>
     <apex:relatedList list="Problem_Components__r"/>
-    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Manufacturer_Replace__c == TRUE,true,false)}"/>
+    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
 </apex:page>

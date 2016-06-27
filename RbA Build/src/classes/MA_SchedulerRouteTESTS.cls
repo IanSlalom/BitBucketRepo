@@ -17,8 +17,6 @@ private class MA_SchedulerRouteTESTS {
 	}
 
 	@isTest static void testMARoutingSchedulerGETESRIToken() {
-		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
 		MA_Scheduler_Settings__c storeSetting = MA_SchedulerFakeDataGenerator.createFakeSetting(false, storeConfig.Id, null, false);
@@ -39,12 +37,6 @@ private class MA_SchedulerRouteTESTS {
 	}
 	
 	@isTest static void testMARoutingSchedulerGetRecords() {
-		// Turn off the financial trigger to avoid SOQL limits in test class
-		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
-		insert turnOffFinancialTrigger;
-
-		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -54,7 +46,6 @@ private class MA_SchedulerRouteTESTS {
 		RbA_Work_Order__c wo3 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
 		RbA_Work_Order__c wo4 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
 
-		Test.startTest();
 		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
@@ -90,6 +81,7 @@ private class MA_SchedulerRouteTESTS {
 		Resource_Skill__c resSkill4 = MA_SchedulerFakeDataGenerator.createFakeResourceSkill(false, skill.Id, res4.Id);
 		insert new List<Resource_Skill__c> { resSkill1, resSkill2, resSkill3, resSkill4 };
 
+		Test.startTest();
 		String responseString = MA_RoutingSchedulerController.getRecords('1987-01-10', String.valueOf(storeConfig.Id), 'Tech Measure', '0');
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.debug(responseObj);
@@ -98,8 +90,6 @@ private class MA_SchedulerRouteTESTS {
 	}
 
 	@isTest static void testMARoutingSchedulerProcessConfirmBatch() {
-		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -157,8 +147,6 @@ private class MA_SchedulerRouteTESTS {
 	}
 
 	@isTest static void testMARoutingSchedulerRetrieveResourceRouteRecords() {
-		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -182,16 +170,19 @@ private class MA_SchedulerRouteTESTS {
 		insert new List<Resource_Skill__c> { resSkill1 };
 
 		Test.startTest();
-		String responseString = MA_RoutingSchedulerController.retrieveResourceRouteRecords(res1.Id ,'01/10/1987' , storeConfig.Id);
+		String responseString = MA_RoutingSchedulerController.retrieveResourceRouteRecords(res1.Id ,'01/10/1987' , storeConfig.Id, new List<Id>());
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		Object retrieveSuccess = (Object)responseObj.get('success');
+		System.assertEquals(true, retrieveSuccess);
+
+		responseString = MA_RoutingSchedulerController.retrieveResourceRouteRecords(res1.Id ,'01/10/1987' , storeConfig.Id, new List<Id>{res1.Id});
+		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
+		retrieveSuccess = (Object)responseObj.get('success');
 		System.assertEquals(true, retrieveSuccess);
 		Test.stopTest();
 	}
 
 	@isTest static void testMARoutingSchedulerErrorTest() {
-		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigs();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
 
@@ -207,7 +198,7 @@ private class MA_SchedulerRouteTESTS {
 		Object masterSuccessFalse = (Object)responseObjMaster.get('success');
 		System.assertEquals(false, masterSuccessFalse);
 	
-		String responseString3 = MA_RoutingSchedulerController.retrieveResourceRouteRecords(String.valueOf(store.Id),'01/10/1987', String.valueOf(store.Id));
+		String responseString3 = MA_RoutingSchedulerController.retrieveResourceRouteRecords(String.valueOf(store.Id),'01/10/1987', String.valueOf(store.Id), new List<Id>());
 		Map<String, Object> responseObjReRouteRec = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString2);
 		Object masterRouteRecFalse = (Object)responseObjReRouteRec.get('success');
 		System.assertEquals(false, masterRouteRecFalse);

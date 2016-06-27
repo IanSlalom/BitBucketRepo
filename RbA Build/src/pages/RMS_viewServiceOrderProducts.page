@@ -102,12 +102,6 @@
                     <apex:column headerValue="Installed Product">  
                         <a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
                     </apex:column>
-                    <apex:column headerValue="Responsibility">  
-                        <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_addResponsibilitytoSP?id={!wrapper.OrderItem.Id}&mode=e','Add Responsibility');return false">Add</a> 
-                    </apex:column>
-                    <apex:column headerValue="Reimbursement">  
-                        <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!wrapper.OrderItem.Id}&mode=e','Add Resimbursement');return false">Add</a> 
-                    </apex:column>
                 </apex:pageBlockTable>	
     </apex:pageBlock> 
 </apex:page>

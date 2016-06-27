@@ -5,6 +5,8 @@
         <members>AutocompleteV2_Con_Test</members>
         <members>CanvassLeadSheetTriggerTest</members>
         <members>Constants</members>
+        <members>LaborTriggerHandler</members>
+        <members>LaborTriggerHandlerTest</members>
         <members>MA_RoutingSchedulerController</members>
         <members>MA_SchedulerBookingWindow</members>
         <members>MA_SchedulerController</members>
@@ -158,6 +160,7 @@
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addResponsibilitytoSP</members>
         <members>RMS_addServiceProduct</members>
+        <members>RMS_addServiceProductLegacy</members>
         <members>RMS_addServiceSymptom</members>
         <members>RMS_addServiceSymptomP2</members>
         <members>RMS_addWarrantytoSP</members>
@@ -182,6 +185,7 @@
         <members>RMS_updateServiceType</members>
         <members>RMS_vendorPurchaseOrder</members>
         <members>RMS_viewCOROOrders</members>
+        <members>RMS_viewOrderItemRedirect</members>
         <members>RMS_viewOrderProducts</members>
         <members>RMS_viewOrderRedirect</members>
         <members>RMS_viewProblemComponent</members>
@@ -202,6 +206,7 @@
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
         <members>BusinessAdjustmentTrigger</members>
+        <members>ChargeTrigger</members>
         <members>ContactTrigger</members>
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
@@ -389,6 +394,8 @@
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
+        <members>Order-Change Order Layout</members>
+        <members>Task-Collections Task Layout</members>
         <name>Layout</name>
     </types>
     <types>
@@ -504,6 +511,7 @@
         <members>Order</members>
         <members>OrderItem</members>
         <members>Order_Financing__c</members>
+        <members>Payment__c</members>
         <members>Problem_Component_Config__c</members>
         <members>Problem_Component_List__c</members>
         <members>Problem_Component__c</members>

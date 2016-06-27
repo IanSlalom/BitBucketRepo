@@ -1,4 +1,4 @@
-<apex:page standardController="Order"
+<apex:page standardController="Order" showHeader="false" sidebar="false"
            extensions="RMS_ServiceOrderExtensionMgr">
     <apex:pageMessages />
     <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
@@ -70,9 +70,9 @@
                         <apex:repeat value="{!acc.Charges__r}" var="cont">                            
                             
                             <tr height="25px;">
-                                <td width="250px;" style="border-left: 1px solid #e0e3e5;"><apex:inputField value="{!cont.Charge_Cost_To__c}"/></td>
-                                <td width="250px;"><apex:inputField value="{!cont.Primary_Reason__c}"/></td>
-                                <td style="border-right: 1px solid #e0e3e5;"><apex:inputField value="{!cont.Secondary_Reason__c}"/></td>
+                                <td width="250px;" style="border-left: 1px solid #e0e3e5;"><apex:inputField value="{!cont.Charge_Cost_To__c}" required="true"/></td>
+                                <td width="250px;"><apex:inputField value="{!cont.Category__c}" required="true"/></td>
+                                <td style="border-right: 1px solid #e0e3e5;"><apex:inputField value="{!cont.What_Where__c}" required="true"/></td>
                             </tr> 
                         </apex:repeat>
                     </apex:repeat>

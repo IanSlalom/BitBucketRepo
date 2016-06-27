@@ -292,8 +292,8 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Charge_Cost_To__c</fields>
-        <fields>Primary_Reason__c</fields>
-        <fields>Secondary_Reason__c</fields>
+        <fields>Category__c</fields>
+        <fields>What_Where__c</fields>
         <relatedList>Charge__c.Service_Product__c</relatedList>
     </relatedLists>
     <relatedLists>

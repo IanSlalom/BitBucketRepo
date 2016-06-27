@@ -408,7 +408,7 @@
 
             if (parent.length != 0) {
                 parent[0].onclick = function() {
-                    if (!isBatchResources) {
+                    //if (!isBatchResources) {
                         $('#resourceRoute').attr('resource-id', $(parent).closest('tr').attr('data-resource-id'));
                         $('#resourceRoutesName').text($(el).text());
                         initializeRouteComp();
@@ -417,7 +417,7 @@
                         $('#resourceRouteModal').addClass('ma-open');
                         $('#resourceRouteModalOverlay').addClass('ma-in');
                         $('body').css('overflow','hidden');
-                    }
+                    //}
                 };
             }
         }

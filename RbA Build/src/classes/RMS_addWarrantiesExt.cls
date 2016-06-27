@@ -55,11 +55,12 @@ public with sharing class RMS_addWarrantiesExt extends RMS_addWarranties
     
         public List<selectOption> getCharges() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
-        for (Charge__c charges : [SELECT Id, Name, Charge_Cost_To__c,Primary_Reason__c
+        for (Charge__c charges : [SELECT Id, Name, Charge_Cost_To__c,Category__c
                                                         FROM Charge__c 
-                                                        WHERE Service_Product__c = :myWo.Id 
+                                                        WHERE Service_Product__c = :myWo.Id
+                                  						AND What_Where__c = 'Renewal by Andersen'
                                                         ORDER BY Charge__c.Charge_Cost_To__c ASC]) { 
-                                                            options.add(new selectOption(charges.Id, charges.Charge_Cost_To__c + ' - '+ charges.Primary_Reason__c)); //for all records found - add them to the picklist options
+                                                            options.add(new selectOption(charges.Id, charges.Charge_Cost_To__c + ' - '+ charges.Category__c)); //for all records found - add them to the picklist options
                                                         }
         options.add(new selectOption('', '-- None --')); //add the first option of '- None -' in case the user doesn't want to select a value or in case no values are returned from query below
         return options; //return the picklist options        

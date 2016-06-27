@@ -106,17 +106,17 @@
                 <apex:outputField value="{!Order.Original_Stainer__c}"/><br/>
                 <apex:outputField value="{!Order.Lead_Service_Tech__c}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">
-                <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>
+            <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">                
                 <apex:inputField value="{!Order.BillingCountryCode}" label="Billing Country"/>
-                <apex:inputField value="{!Order.ShippingStreet}"/>
+                <apex:inputField value="{!Order.ShippingCountryCode}" label="Shipping Country"/>
                 <apex:inputField value="{!Order.BillingStreet}"/>
-                <apex:inputField value="{!Order.ShippingCity}"/>
+                <apex:inputField value="{!Order.ShippingStreet}"/>
                 <apex:inputField value="{!Order.BillingCity}"/>
-                <apex:inputField value="{!Order.ShippingStateCode}" label="Shipping State"/>
+                <apex:inputField value="{!Order.ShippingCity}"/>
                 <apex:inputField value="{!Order.BillingStateCode}" label="Billing State"/>
-                <apex:inputField value="{!Order.ShippingPostalCode}"/>
+                <apex:inputField value="{!Order.ShippingStateCode}" label="Shipping State"/>
                 <apex:inputField value="{!Order.BillingPostalCode}"/>
+                <apex:inputField value="{!Order.ShippingPostalCode}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Additional Details" collapsible="false" columns="2"> 
                 <apex:outputField value="{!Order.CreatedById}"/>
