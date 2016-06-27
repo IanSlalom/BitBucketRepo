@@ -21,6 +21,8 @@ public with sharing class RMS_financialTransactionManager {
     public Id orderCORORecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
     public Id orderCOROServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
 	public Id orderChangeOrderRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
+    public List<Id> orderRecordTypes = new list<id>{orderCORORecordTypeId,orderCOROServiceRecordTypeId,orderChangeOrderRecordTypeId};
+
 	
 	//CHECK IF DATA LOADING PROFILE	
 	public Boolean turnFinancialTransactionsOff {get{map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll();
@@ -186,10 +188,6 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public void createOrUpdateJournalEntryPayment(list<Payment__c> listNew, map<id,Payment__c> mapNew ){    
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
-       
-       	list<id> orderRecordTypes = new list<id>();
-       	orderRecordTypes.add(orderCORORecordTypeId);
-       	orderRecordTypes.add(orderCOROServiceRecordTypeId);
        	
         list<Payment__c> extraFieldsList = [SELECT  id,
                                                     Order__c,
@@ -416,10 +414,7 @@ public with sharing class RMS_financialTransactionManager {
      Method to create or update Journal Entry for LABOR
     ****************************************************/
     public void createOrUpdateJournalEntryLabor(list<Labor__c> listNew, map<id, Labor__c> mapNew ){
-       	list<id> orderRecordTypes = new list<id>();
-       	orderRecordTypes.add(orderCORORecordTypeId);
-       	orderRecordTypes.add(orderCOROServiceRecordTypeId);
-       	 
+
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
         list<Labor__c> extraFieldsList = [SELECT    id,
                                                     Check_Date__c,
@@ -750,12 +745,7 @@ public with sharing class RMS_financialTransactionManager {
         Id assetInstalledProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
         Id assetServiceProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Service_Products', 'Asset');
         Id assetCostProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Cost_Products', 'Asset');
-        
-       	list<id> orderRecordTypes = new list<id>();
-       	orderRecordTypes.add(orderCORORecordTypeId);
-       	orderRecordTypes.add(orderCOROServiceRecordTypeId);
-       	
-       	
+
         list<Id> RecordTypeIds = new list<Id>();
         RecordTypeIds.add(assetInstalledProductsRecordTypeId);
         RecordTypeIds.add(assetServiceProductsRecordTypeId);
@@ -1648,10 +1638,6 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public void createJournalEntryOrder(list<Order> listNew, map<id, Order> mapNew, map<id, Order> mapOld){ 
     	        
-        list<Id> recordTypes = new list<Id>();
-        recordTypes.add(orderCORORecordTypeId);
-        recordTypes.add(orderCOROServiceRecordTypeId);
-        recordTypes.add(orderChangeOrderRecordTypeId);
         
         boolean hasServiceType = false;
         boolean hasCoroType = false;
@@ -1669,7 +1655,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Invoice_Subtotal__c,
                                                     Install_Complete_Date__c 
                                                     
-                                                    FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :recordTypes];       
+                                                    FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :orderRecordTypes];       
         system.debug('ads extraFieldsList; '+extraFieldsList);
 		
 		
@@ -2443,10 +2429,7 @@ public with sharing class RMS_financialTransactionManager {
     
     public void createOrUpdateJournalEntryRefund(list<Refund__c> listNew, map<id, Refund__c> mapNew, map<id, Refund__c> mapOld, String typeOfCall){
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
-        
-       	list<id> orderRecordTypes = new list<id>();
-       	orderRecordTypes.add(orderCORORecordTypeId);
-       	orderRecordTypes.add(orderCOROServiceRecordTypeId);
+
         
         list<Refund__c> extraFieldsList = [SELECT   id,
                                                     Amount__c,
@@ -2608,9 +2591,6 @@ public with sharing class RMS_financialTransactionManager {
     public void createOrUpdateJournalEntryBusinessAdjustment(list<Business_Adjustment__c> listNew, map<id, Business_Adjustment__c> mapNew, map<id, Business_Adjustment__c> mapOld, String typeOfCall){
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
         
-       	list<id> orderRecordTypes = new list<id>();
-       	orderRecordTypes.add(orderCORORecordTypeId);
-       	orderRecordTypes.add(orderCOROServiceRecordTypeId);
        	
         list<Business_Adjustment__c> extraFieldsList = [SELECT 	id,
 			                                                    Name,
