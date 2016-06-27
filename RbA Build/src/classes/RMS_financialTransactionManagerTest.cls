@@ -1352,6 +1352,156 @@ public with sharing class RMS_financialTransactionManagerTest {
 		Test.stopTest();
 	}
 	
+		static testmethod void positiveCreateChangeOrder(){
+		TestUtilityMethods testMethods = new TestUtilityMethods();
+
+		testMethods.createOrderTestRecords();
+		
+		Account store1 = [SELECT id, Name FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+		store1.Active_Store_Configuration__c = storeConfig1.id;
+		update store1;
+		storeConfig1.Standard_Hourly_Rate__c = 100;
+		update storeConfig1;
+		
+		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');
+		dwelling1.Store_Location__c = store1.id;
+		insert dwelling1;
+		
+		Contact contact1 = testMethods.createContact(dwelling1.id, 'contact1');
+		insert contact1;
+		
+		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
+		insert opp1;
+		Id orderChangeOrderRecordTypeRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
+		
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
+
+
+		soldOrder.RecordTypeId = orderChangeOrderRecordTypeRecordTypeId;
+		soldOrder.Revenue_Recognized_Date__c = null;
+		soldOrder.Status = 'Job Closed';
+		update soldOrder;
+		
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Sold_Order__c = soldOrder.id 
+															                    );
+		insert workOrder1;
+		Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '1');
+		insert finacialAccountNumber1;
+		Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '2');
+		insert finacialAccountNumber2;
+		
+		Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransaction1;
+		
+		Financial_Account_Number__c finacialAccountNumber3 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '3');
+		insert finacialAccountNumber3;
+		Financial_Account_Number__c finacialAccountNumber4 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '4');
+		insert finacialAccountNumber4;
+		
+		Financial_Transaction__c finacialTransactionLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - External Labor',
+																						Debit_Account_Number__c = finacialAccountNumber1.id,
+																						Credit_Account_Number__c = finacialAccountNumber2.id);
+		insert finacialTransactionLabor;
+		
+		Financial_Account_Number__c finacialAccountNumber5 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '5');
+		insert finacialAccountNumber5;
+		Financial_Account_Number__c finacialAccountNumber6 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '6');
+		insert finacialAccountNumber6;
+		
+		Financial_Transaction__c finacialTransaction2 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber3.id,
+																						Credit_Account_Number__c = finacialAccountNumber4.id);
+		insert finacialTransaction2;
+		
+		
+		Financial_Account_Number__c finacialAccountNumber7 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '7');
+		insert finacialAccountNumber7;
+		Financial_Account_Number__c finacialAccountNumber8 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = '8');
+		insert finacialAccountNumber8;
+		
+		Financial_Transaction__c finacialTransaction3 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Refund Deposit',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction3;
+		Financial_Transaction__c finacialTransaction4 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Internal Labor',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction4;
+		
+		Financial_Transaction__c finacialTransaction5 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Gross Sales',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction5;
+		
+		Financial_Transaction__c finacialTransaction6 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Discount',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction6;
+		
+		
+		Financial_Transaction__c finacialTransaction7 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - AR',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction7;
+		Financial_Transaction__c finacialTransaction8 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Finance Fees',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction8;
+
+		Financial_Transaction__c finacialTransaction9 = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - COGS',
+																						Debit_Account_Number__c = finacialAccountNumber7.id,
+																						Credit_Account_Number__c = finacialAccountNumber8.id);
+		insert finacialTransaction9;
+		Profile p = [SELECT Id FROM Profile WHERE Name='System Administrator'];
+
+      User u = new User(Alias = 'adm', Email='admin@test.com',
+
+      EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+
+      LocaleSidKey='en_US', ProfileId = p.Id,
+
+      TimeZoneSidKey='America/Los_Angeles', UserName= UserInfo.getOrganizationId() + System.now().millisecond()+'admin-rba@test.com', Store_Location_Text__c = store1.Name);
+      insert u;
+ 
+
+      System.runAs(u) {
+
+		Test.startTest();
+		Id paymentDespositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
+		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
+												RecordTypeId = paymentDespositRecordTypeId,
+												Payment_Type__c = 'Deposit',
+												Store_Location__c = store1.id,
+												Payment_Amount__c = 100,
+												Payment_Date__c = Date.Today()
+												);
+		insert payment1;
+		List<Journal_Entry__c> je = [Select Id from Journal_Entry__c];
+		Integer numEntries = je.size();
+
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		update soldOrder;
+		je = [Select Id from Journal_Entry__c];
+		System.assertNotEquals(numEntries,je.size());
+		Test.stopTest();
+		}
+	}
 	
 	static testmethod void positiveCreateRefund(){
 		TestUtilityMethods testMethods = new TestUtilityMethods();

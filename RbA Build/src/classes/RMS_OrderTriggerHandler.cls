@@ -6,6 +6,7 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
   public ID CORORecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
+  public ID ChangeOrderRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
 
   public RMS_OrderTriggerHandler(boolean isExecuting, integer size){
     m_isExecuting = isExecuting;
@@ -76,6 +77,9 @@ public with sharing class RMS_OrderTriggerHandler {
         //o.Apex_Context__c = true;
         o.status = 'Install Complete';
       }*/
+      else if(O.Revenue_Recognized_Date__c != null && o.RecordtypeId == ChangeOrderRecordTypeId){
+        o.status = 'Job Closed';
+      }
     }
   }
 
@@ -141,7 +145,7 @@ public with sharing class RMS_OrderTriggerHandler {
     List<Task> tasksToInsert = new List<Task>();
     for(Order o: newMap.values()){ 
       if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
-        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId, Subject = 'On Hold'));
+        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = '', Secondary_Reason__c = '', OwnerId = o.OwnerId, Subject = 'On Hold', RecordtypeId = onHoldTaskID));
       }
     }
     if(!tasksToInsert.isEmpty()){
