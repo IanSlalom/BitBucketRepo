@@ -7,14 +7,14 @@
 @author  Brianne Wilson (Slalom.BLW)
 
 @version    2016-3-9  Slalom.BLW
-    Created.
+Created.
 
 @copyright  (c)2016 Slalom.  All Rights Reserved. 
-            Unauthorized use is prohibited.
+Unauthorized use is prohibited.
 
 ***********************************************************/
 public class RMS_OrderItemExtension {
-
+    
     public final OrderItem o;
     public String baseURL{get;set;}
     public String editURL{get;set;}
@@ -33,7 +33,7 @@ public class RMS_OrderItemExtension {
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         editURL ='/apex/RMS_editServiceProduct?id='+o.Id;
         addSymptomURL = '/apex/RMS_addServiceSymptom?ssSP'+'='+o.id;
-           
+        
         
         
     }
@@ -44,7 +44,7 @@ public class RMS_OrderItemExtension {
             upsert o;
             
             Order parent = [SELECT id FROM Order WHERE id = :o.OrderId];   
-
+            
             
             PageReference savePage = new PageReference('/'+parent.id);
             savePage.setRedirect(true);
@@ -61,7 +61,7 @@ public class RMS_OrderItemExtension {
         
         
         If (o.Service__c == TRUE){
-                newPage = new PageReference('/apex/RMS_viewServiceOrderItem?id='+ o.Id);                               
+            newPage = new PageReference('/apex/RMS_viewServiceOrderItem?id='+ o.Id);                               
         } else {
             newPage = new PageReference('/'+ o.Id);
             newPage.getParameters().put('nooverride','1');
@@ -71,6 +71,40 @@ public class RMS_OrderItemExtension {
         return newPage;
         
         
-    }   
+    }
     
+    public PageReference editOrderItem(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_editServiceProduct?id='+o.id);
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
+    
+    public PageReference cancelOrderItem(){
+        PageReference newPage;
+        newPage = new PageReference('/'+o.id);
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
+    
+    public PageReference addResponsibility(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_addResponsibilitytoSP?id='+o.id+'&mode=e');
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
+
+    public PageReference addWarranty(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_addWarrantytoSP?id='+o.id+'&mode=e');
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
+    
+    public PageReference addServiceSymptom(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_addServiceSymptom?ssSP'+'='+o.id);
+        newPage.setRedirect(true); 
+        return newPage;
+    }     
 }

@@ -31,7 +31,7 @@
                 sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
             }else{
                 //top.location.href = '/'+urlPart;
-                window.open('/'+urlPart);
+                top.location.href = '/'+urlPart;
             }
         }
         
@@ -54,8 +54,7 @@
                 var accountURL = '/'+'{!Account.Id}';
                 sforce.console.generateConsoleUrl([accountURL, urlPart], callOpenConsoleUrl); 
             }else{
-                //location.href = '{!baseUrl}'+urlPart;
-                window.open('{!baseUrl}'+urlPart);
+                top.location.href = '{!baseUrl}'+urlPart;
             
             }       
         }

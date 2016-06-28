@@ -40,7 +40,6 @@ public with sharing class RMS_viewOrdersController {
         strurl = strurl.split('apex/')[1];
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         
-        
         serviceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
         CORORecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
         
@@ -70,7 +69,7 @@ public with sharing class RMS_viewOrdersController {
                   AND 	AccountId =: acc.Id];	 
         
         system.debug(orders);
-        createServiceRequestURL = '/apex/RMS_createServiceRequestRedirect?isdtp=vw&aid='+acc.Id+'&slid='+acc.Store_Location__c; 
+        createServiceRequestURL = '/apex/RMS_createServiceRequestRedirect?aid='+acc.Id+'&slid='+acc.Store_Location__c; 
         
     }
     
