@@ -107,6 +107,7 @@ public class AutoCompleteV2_Con {
       List<String> extraQueriesList = extraQueries.split(';');
       List<String> extraVariablesList = extraVariables.split(';');
        for (String extraQuery : extraQueriesList) {
+        extraQuery = extraQuery.replaceAll('"', '\'');
         Set<Id> accountIds;
          if (extraQuery.contains('IN') )  {
            List<String> stringIds = new List<String>();
