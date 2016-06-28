@@ -13,11 +13,11 @@ public with sharing class RMS_OrderTriggerHandler {
     BatchSize = size;
   }
 
-/*
+
   public void OnBeforeInsert(Order[] newOrders){
-    
+    setPriceBookId(newOrders);
   }
- */
+ 
 
   public void OnAfterInsert(Order[] newOrders){
     updateJIPCOROServiceOrders(newOrders);
@@ -60,6 +60,34 @@ public with sharing class RMS_OrderTriggerHandler {
   public void OnUndelete(Order[] restoredOrders){
 
   }*/
+  
+  public void setPriceBookId(List<Order> newOrders){
+    Id standardPriceBookId = null;
+    if(Test.isRunningTest()){
+      standardPriceBookId = Test.getStandardPricebookId();
+    }else{
+      standardPriceBookId = [Select Id from Pricebook2 where IsStandard = true].Id;
+    }
+    List<Id> soldOrders = new List<Id>();
+     for(Order o: newOrders){
+      if(o.Sold_Order__c != null){
+        soldOrders.add(o.Sold_Order__c);
+      }
+    }
+
+    Map<Id,Order> soldOrderMap = new Map<Id,Order>([Select Id, PriceBook2Id from Order where Id in: soldOrders and Pricebook2Id != null]);
+    for(Order o: newOrders){
+      if( o.PriceBook2Id == null){
+        if(soldOrderMap.containsKey(o.Sold_Order__c)){
+          o.Pricebook2Id = soldOrderMap.get(o.Sold_Order__c).Pricebook2Id;
+        }else{
+          o.PriceBook2Id = standardPriceBookId;
+        }
+      }
+    }
+    
+    
+  }
 
   public void updateOrderStatus(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     for(Order o: newMap.values()){   

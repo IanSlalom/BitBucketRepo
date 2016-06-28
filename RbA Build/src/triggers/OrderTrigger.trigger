@@ -46,11 +46,11 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         List<SObject> accounts = new List<SObject>();
            
         // Before Insert
-        /*
+        
         if(Trigger.isInsert && Trigger.isBefore){
             handler.OnBeforeInsert(Trigger.new);
         }
-        */
+        
         //  Before Update
         
         if(Trigger.isUpdate && Trigger.isBefore){
