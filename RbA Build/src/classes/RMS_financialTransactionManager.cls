@@ -1785,7 +1785,7 @@ public with sharing class RMS_financialTransactionManager {
                         errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
                     }
                     if(orderIdToJournalEntryMap.get(o.id) == null ){ 
-                        errorMessage = RMS_errorMessages.NO_RELATED_DEPOSIT_JOURNAL_ENTRY;
+    //                    errorMessage = RMS_errorMessages.NO_RELATED_DEPOSIT_JOURNAL_ENTRY;
                     }
                     
                     
