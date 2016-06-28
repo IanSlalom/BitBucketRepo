@@ -39,6 +39,7 @@ public class RMS_prodConfigExtension {
 	public Id poId {get; set;}	// purchase order linked to the order product
 	public List<Change_History__c> changeHistoryRecords{get;set;}
 	public Boolean isMiscJob {get;set;}
+	public Boolean relatedChangeOrder{get;set;}
 
 
 	/******* Set up Standard Controller for OrderItem  *****************/
@@ -49,7 +50,8 @@ public class RMS_prodConfigExtension {
 		isMiscJob = false;
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';
-		jobClosed = false;			
+		jobClosed = false;	
+		relatedChangeOrder = false;		
 		mode = ApexPages.currentPage().getParameters().get('mode');
 		if (mode == null) mode = 'v';
 		if(mode == 'e' && !newOrderItem && orderLineItem.Purchase_Order__c != null){
@@ -69,6 +71,7 @@ public class RMS_prodConfigExtension {
 			newOrderItem = true;
 			this.orderLineItem.OrderId = ApexPages.currentPage().getParameters().get('oid');
 			orderId = orderLineItem.OrderId;
+			relatedChangeOrder = [Select RecordType.DeveloperName from Order where Id =: orderId].RecordType.DeveloperName == 'Change_Order';
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
@@ -76,13 +79,14 @@ public class RMS_prodConfigExtension {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, 
 											PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, 
 											Purchase_Order__c, Verify_Item_Configuration__c, PricebookEntry.Product2.RecordType.DeveloperName,
-											Responsible_Party__c 
+											Responsible_Party__c, Order.RecordType.DeveloperName 
 											From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
 					poId = orderItem.Purchase_Order__c;
 					oiId = orderItem.Id;
+					relatedChangeOrder = (orderItem.Order.RecordType.DeveloperName == 'Change_Order');
 					// retrieves an abbreviated status name for use in the vf page
 					ordStat = RMS_prodConfigManager.getOrderStatus(orderItem.Order.Status);
 					//JETT-2213 Do not allow editing of Misc Job and Unit Charges orderitems after creation
@@ -113,6 +117,7 @@ public class RMS_prodConfigExtension {
 		if(ApexPages.currentPage().getParameters().get('extHeightWarning') !=null){
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.WARNING, ApexPages.currentPage().getParameters().get('extHeightWarning'))); 
 		}
+
 	}
 
 	/******* public properties  *****************/
@@ -219,8 +224,15 @@ public class RMS_prodConfigExtension {
 			// Only return active products without a master product
 			productQueries += ' AND IsActive = true AND Master_Product__c = null';
 
+			//JETT-184 If Order is Change Order, only search for products of type Misc Job & Unit Charges
+			if(relatedChangeOrder){
+				//productQueries+=' AND RecordType.DeveloperName = \'Misc_Job_and_Unit_Charges\'';
+				productQueries+=' AND RecordTypeId = "'+UtilityMethods.retrieveRecordTypeId('Misc_Job_and_Unit_Charges', 'Product2')+'"';
+			}
+
 			// The query side of making sure the product id is in the vendor product id set
 			productQueries += ' AND Id IN :';
+
 			return productQueries;
 		}
 		private set;
