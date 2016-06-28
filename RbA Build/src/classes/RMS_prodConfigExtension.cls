@@ -73,6 +73,7 @@ public class RMS_prodConfigExtension {
 			orderId = orderLineItem.OrderId;
 			relatedChangeOrder = [Select RecordType.DeveloperName from Order where Id =: orderId].RecordType.DeveloperName == 'Change_Order';
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
+			this.orderLineItem.Responsible_Party__c = 'Home Owner';
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
@@ -295,7 +296,7 @@ public class RMS_prodConfigExtension {
 			if (masterProductId == '' || masterProductId == null)
 				return null;
 			
-
+				System.debug(priceBookId + '  ' + masterProductId);
 			// Retrieve the pricebookentryId for the master product and the current price book
 			lPriceBookEntryId = [SELECT Id  FROM PricebookEntry
 																	WHERE 	PriceBook2Id =: priceBookId AND
@@ -1093,6 +1094,7 @@ public class RMS_prodConfigExtension {
 //		orderLineItem.unitPrice = RMS_prodConfigManager.calculatePrice(prodConfig);
 		if(orderLineItem.unitPrice == null) orderLineItem.unitPrice = 0;
 		if (newOrderItem) {
+			System.debug('PRICE BOOK ' + priceBookEntryId);
 			orderLineItem.PriceBookEntryId = priceBookEntryId;
 			System.Debug('**********************orderLineItemFinal=' +orderLineItem);
 			insert orderLineItem;
