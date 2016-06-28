@@ -5,6 +5,7 @@
     <customButtons>On_Hold</customButtons>
     <customButtons>Job_Closed</customButtons>
     <customButtons>Conga_Composer_Order_Invoice</customButtons>
+    <customButtons>Change_Order</customButtons>
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>
