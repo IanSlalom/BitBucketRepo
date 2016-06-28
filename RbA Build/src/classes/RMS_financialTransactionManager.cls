@@ -2235,9 +2235,10 @@ public with sharing class RMS_financialTransactionManager {
                                         }else if (o.Discount_Amount__c < 0){
                                             newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                             newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Credit_Account_Number__r.Name;
-											newJE.Amount__c = newJE.Amount__c * 1;
+											newJE.Amount__c = newJE.Amount__c * -1;
                                         }
-                                        journalEntriesToUpsert.add(newJE);
+   										if (newJE.Amount__c != 0)
+                                        	journalEntriesToUpsert.add(newJE);
                                    
                                 }else{
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
@@ -2272,10 +2273,10 @@ public with sharing class RMS_financialTransactionManager {
                                           else if (o.Retail_Total__c < 0){
                                              newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                              newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Credit_Account_Number__r.Name;
-											newJE.Amount__c = newJE.Amount__c * 1;
+											newJE.Amount__c = newJE.Amount__c * -1;
                                           }
-
-                                        journalEntriesToUpsert.add(newJE);
+										if (newJE.Amount__c != 0)
+                                        	journalEntriesToUpsert.add(newJE);
                                     
                                 }else{
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
