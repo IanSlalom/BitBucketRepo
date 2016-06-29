@@ -385,4 +385,20 @@ private class RMS_OrderTriggerHandlerTests {
         
     }
 
+     @isTest static void testSetPriceBookId(){
+        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+        Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+        List<Order> soldOrder = [Select Id, Name, Pricebook2Id, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
+                                 from Order where Name = 'InstallScheduled'];
+        System.assertEquals(soldOrder[0].Pricebook2Id, Test.getStandardPricebookId());
+
+        Test.startTest();
+        Order changeOrder = new Order(Name = 'Change', Sold_Order__c = soldOrder[0].Id, 
+                                    AccountId = dwelling.Id, Store_Location__c = store.Id,EffectiveDate= Date.Today(), Status = 'Draft');
+        insert changeOrder;
+        Test.stopTest();
+        changeOrder = [Select Id, Pricebook2Id from Order where Id =: changeOrder.Id];
+        System.assertEquals(changeOrder.Pricebook2Id, soldOrder[0].Pricebook2Id);
+       
+    }
 }
