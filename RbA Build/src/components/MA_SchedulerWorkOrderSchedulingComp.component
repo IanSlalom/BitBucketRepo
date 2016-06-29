@@ -180,6 +180,11 @@
 
 				endDate = $('#availabilityEndDate').val();
 				endTime = $('#scheduleWorkOrder .endTime').val() + ' ' + $('input[type="radio"][name="availableEndTime"]:checked').val();
+
+				if (startDate == undefined || startDate == null || startDate == '' || endDate == undefined || endDate == null || endDate == '') {
+					handleError('MISSING DATE(S)', { 'error' : 'You must enter a start and end date range before checking availablity'});
+					return;
+				}
 			}
 
 		    var startDateTime = new Date(startDate + ' ' + startTime);
@@ -191,6 +196,7 @@
 
 		function processAvailabilitySuccess(response) {
 		    response = JSON.parse(response);
+		    console.log(response);
 
 		    if (response.success) {
 		    	if (response.nextAvailable) {
