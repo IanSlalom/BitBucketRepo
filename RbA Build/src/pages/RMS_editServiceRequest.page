@@ -5,6 +5,7 @@
     
     <script type="text/javascript">
     window.onload = function() {
+        document.querySelector('option[value=Activated]').remove();
         testSetTabTitle();
         changeIconforConsole();
     };
@@ -13,7 +14,7 @@
         //Set the current tab's title
         sforce.console.setTabTitle('{!Order.OrderNumber}')
     }
-    
+        
     
     function callGenerateConsoleURL(urlPart, theTabName) {
         if(sforce.console.isInConsole()) {
@@ -40,7 +41,6 @@
     }
     
     
-    
     </script>           
     
     <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
@@ -55,6 +55,7 @@
         </div>
         
         <apex:pageBlock mode="edit" tabStyle="Order" rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">
+            
             <apex:pageBlockButtons >
                 <apex:commandButton action="{!save}" value="Save" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />                
                 <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
