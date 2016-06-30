@@ -103,7 +103,7 @@
     </apex:form>
     
     <apex:relatedList list="Charges__r"/>
-    <apex:relatedList list="Service_Symptoms__r"/>
-    <apex:relatedList list="Problem_Components__r"/>
-    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Service_Symptoms__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Problem_Components__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Service_Symptoms__c > 0,true,false)}"/>
 </apex:page>
