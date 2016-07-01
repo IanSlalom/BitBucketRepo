@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used to set a store's settings                            -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component >
     <apex:stylesheet value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/cupertino/jquery-ui.min.css')}" />
     
@@ -95,6 +109,11 @@
                 timeOptions += '<option value="' + times[i] + '">' + times[i] + '</option>';
             }
 
+            /****************************************************************/
+            /*                                                              */
+            /*      fills in the base html for each resource type           */
+            /*                                                              */
+            /****************************************************************/
             for (var i = 0, len = resourceTypes.length; i < len; i++) {
                 var resourceTypeNoSpaces = resourceTypes[i].replace(new RegExp(' ', 'g'), '');
                 var resourceDivId = resourceTypeNoSpaces + 'Settings';
@@ -133,6 +152,11 @@
             tabs = $('#tabs').tabs({});
     	});
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method opens the settings modal                    */
+        /*                                                              */
+        /****************************************************************/
         function openSettingsModal() {
             $('#loarderModal, .addHours').show();
             $('.esri-verify-fail, .esri-verify-success').hide();
@@ -149,6 +173,12 @@
             sforce.apex.execute(apexSettingsController, 'retrieveSettings', { storeId: $('#storeSelect').val() }, processSettingsResponse);
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method retrieves the prior settings                */
+        /*      and populates the settings modal                        */
+        /*                                                              */
+        /****************************************************************/
         function processSettingsSuccess(response) {
             response = JSON.parse(response);
 
@@ -175,7 +205,12 @@
                         $('.esriCredentials').hide();
                     }
 
-                	var storeHours = jsonSettings['storeHours'];
+                	/****************************************************************/
+                    /*                                                              */
+                    /*      populates the store hours section                       */
+                    /*                                                              */
+                    /****************************************************************/
+                    var storeHours = jsonSettings['storeHours'];
                 	if (storeHours != undefined && storeHours != null) {
 	                	for (var dayOfWeek in storeHours) {
 	                		var el = $('#' + dayOfWeek + 'Hours .addHours');
@@ -184,7 +219,12 @@
 	                	}
 	                }
 
-                	for (var x = 0, resourceTypesLen = resourceTypes.length; x < resourceTypesLen; x++) {
+                	/****************************************************************/
+                    /*                                                              */
+                    /*      populates the resource types hours sections             */
+                    /*                                                              */
+                    /****************************************************************/
+                    for (var x = 0, resourceTypesLen = resourceTypes.length; x < resourceTypesLen; x++) {
                 		var resourceType = resourceTypes[x];
                 		var resourceTypeSettings = jsonSettings[resourceType];
 
@@ -205,7 +245,12 @@
 		                }
 	                }
 
-	                var storeHolidays = jsonSettings['storeHolidays'];
+	                /****************************************************************/
+                    /*                                                              */
+                    /*      populates the store holidays section                    */
+                    /*                                                              */
+                    /****************************************************************/
+                    var storeHolidays = jsonSettings['storeHolidays'];
 		            if (storeHolidays != undefined && storeHolidays != null) {
 		            	for (var i = 0, len = storeHolidays.length; i < len; i++) {
 			            	var holiday = storeHolidays[i];
@@ -214,6 +259,11 @@
 		            }
                 }
 
+                /****************************************************************/
+                /*                                                              */
+                /*      populates the resource hours table                      */
+                /*                                                              */
+                /****************************************************************/
                 if (response.resourceList) {
 	                for (var i = 0, len = response.resourceList.length; i < len; i++) {
 	                    resource = response.resourceList[i];
@@ -284,7 +334,13 @@
             }
         }
 
-		function toggleExpandResourceSettings(el) {
+		/****************************************************************/
+        /*                                                              */
+        /*      this method shows/hides the more detailed resource      */
+        /*      row in the resource hours table                         */
+        /*                                                              */
+        /****************************************************************/
+        function toggleExpandResourceSettings(el) {
 			if ($(el).hasClass('closed')) {
 				$(el).closest('tr').next().show();
 				$(el).removeClass('closed').addClass('open');
@@ -295,6 +351,11 @@
 			}
 		}
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method saves the store's settings as a JSON string */
+        /*                                                              */
+        /****************************************************************/
         function saveSettings() {
             $('#loaderModal').show();
 
@@ -307,6 +368,11 @@
                 esriClientSecretVerified: $('.esri-verify-success').is(':visible')
             };
 
+            /****************************************************************/
+            /*                                                              */
+            /*      formats the store's hours as JSON                       */
+            /*                                                              */
+            /****************************************************************/
             var storeHoursRowsPopulated = $('#storeHours .storeHoursGroup .timeDiv');
             if (storeHoursRowsPopulated.length > 0) {
                 var storeHours = {};
@@ -364,6 +430,11 @@
                 }
             }
 
+            /****************************************************************/
+            /*                                                              */
+            /*      formats the resource types hours as JSON                */
+            /*                                                              */
+            /****************************************************************/
             for (var x = 0, resourceTypeLen = resourceTypes.length; x < resourceTypeLen; x++) {
                 var resourceType = resourceTypes[x];
                 var tabDiv = $('.tabDiv[name="' + resourceType + '"]');
@@ -487,6 +558,11 @@
                 }
             }
 
+            /****************************************************************/
+            /*                                                              */
+            /*      formats the store holidays as JSON                      */
+            /*                                                              */
+            /****************************************************************/
             var storeHolidaysArray = [];
             var storeHolidays = $('#storeSettingsHolidayTable .holidayRow');
             for (var i = 0, len = storeHolidays.length; i < len; i++) {
@@ -529,7 +605,12 @@
 
 			settings.push({ Id: storeSettingsId, Store_Id__c: $('#storeSelect').val(), Resource_Id__c: null, Settings__c: JSON.stringify(jsonSettings) });
 
-			var resourceHoursPopulated = $('#resourcesSettingsTable .resourceHoursGroup .timeDiv');
+			/****************************************************************/
+            /*                                                              */
+            /*      formats the resource's hours as JSON                    */
+            /*                                                              */
+            /****************************************************************/
+            var resourceHoursPopulated = $('#resourcesSettingsTable .resourceHoursGroup .timeDiv');
 			if (resourceHoursPopulated.length > 0) {
 				var resourceRows = $('#resourcesSettingsTable .hiddenRow:has(".timeDiv")');
 				for (var x = 0, resourceLen = resourceRows.length; x < resourceLen; x++) {
@@ -602,6 +683,11 @@
             sforce.apex.execute(apexSettingsController, 'saveSettings', { jsonSettings: JSON.stringify(settings) }, processSaveSettingsResponse);
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*  this method converts time strings to numbers for sorting    */
+        /*                                                              */
+        /****************************************************************/
         function createNumForTimeSlotSorting(timeString) {
         	var tempTime = parseInt(timeString.replace(':', '').replace(' am', '').replace(' pm', ''));
 
@@ -616,6 +702,11 @@
         	return tempTime;
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method process the settings save result            */
+        /*                                                              */
+        /****************************************************************/
         function processSaveSettingsSuccess(response) {
             response = JSON.parse(response);
 
@@ -627,6 +718,11 @@
             }
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method closes the settings modal                   */
+        /*                                                              */
+        /****************************************************************/
         function closeSettingsModal() {
             $('#storeSettingsId, #timezoneOptions, #storeSettingsEsri #esriClientId, #storeSettingsEsri #esriClientSecret').val('');
             $('#settingsModal, .esriCredentials').hide();
@@ -636,6 +732,11 @@
             }
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method shows/hides the booking windows for a day   */
+        /*                                                              */
+        /****************************************************************/
         function showHideWindows(el) {
         	if ($(el).text() == '+') {
         		$(el).closest('.bookingWindowGroup').find('.settingsBookingWindows').show();
@@ -649,10 +750,20 @@
         	}
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method removes a booking window row for a day      */
+        /*                                                              */
+        /****************************************************************/
         function removeSettingsBookingWindowRow(el) {
         	$(el).closest('.bookingWindowsInnerGroup').remove();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method adds a booking window row for a day         */
+        /*                                                              */
+        /****************************************************************/
         function addSettingsBookingWindowRow(el, windowObj) {
             var settingsRowNum = 0;
             var bookingWindowGroup = $(el).closest('.bookingWindowGroup');
@@ -731,6 +842,11 @@
             }
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method removes a resources hours row for a day     */
+        /*                                                              */
+        /****************************************************************/
         function removeSettingsHoursRow(el, hoursType) {
         	if (hoursType == 'resource') {
 	            var hoursGroup = $(el).closest('.' + hoursType + 'HoursGroup');
@@ -744,6 +860,12 @@
             $(el).closest('.' + hoursType + 'HoursInnerGroup').remove();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method updates the resource summary row            */
+        /*      when a resources hours change                           */
+        /*                                                              */
+        /****************************************************************/
         function updateResourceColHours(el) {
         	var hoursGroup = $(el).closest('.resourceHoursGroup');
             var dayOfWeekEl = $(hoursGroup).find('.dayOfWeek')[0];
@@ -758,6 +880,11 @@
     		$(el).closest('tr').prev().find('td.' + dayOfWeek + 'ResourceHoursCol').text(startTime + ' ' + startTimeAmPm + ' - ' + endTime + ' ' + endTimeAmPm);
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method adds a resources hours row for a day        */
+        /*                                                              */
+        /****************************************************************/
         function addSettingsHoursRow(el, hoursType, hoursObj) {
             var hoursGroup = $(el).closest('.' + hoursType + 'HoursGroup');
             var dayOfWeekEl = $(hoursGroup).find('.dayOfWeek')[0];
@@ -841,18 +968,33 @@
             $(el).hide();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method show the holiday entry section              */
+        /*                                                              */
+        /****************************************************************/
         function openHolidayExceptionModal() {
             $('#newHolidayExceptionReason, #newHolidayExceptionDate').val('');
             $('#newHolidaySelectionModal').show();
             $('.add-exception-button').hide();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method hides the holiday entry section             */
+        /*                                                              */
+        /****************************************************************/
         function closeHolidayExceptionModal() {
             $('#newHolidayExceptionReason, #newHolidayExceptionDate').val('');
             $('#newHolidaySelectionModal').hide();
             $('.add-exception-button').show();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method adds the new holiday to the holiday table   */
+        /*                                                              */
+        /****************************************************************/
         function addHolidayException(holiday) {
             var holidayDate;
             if (holiday) {
@@ -897,11 +1039,22 @@
             closeHolidayExceptionModal();
         }
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method removes a holiday from the holiday table    */
+        /*                                                              */
+        /****************************************************************/
         function removeHoliday(el) {
         	$(el).closest('tr').remove();
         }
 
-		function resourcesSettingsSearchFiltering(el) {
+		/****************************************************************/
+        /*                                                              */
+        /*      this method filter the resource table through the       */
+        /*      search bar                                              */
+        /*                                                              */
+        /****************************************************************/
+        function resourcesSettingsSearchFiltering(el) {
 			var val = $(el).val().toLowerCase();
 			var resourceNames = $('.resourceSettingsNameCol');
 
@@ -919,6 +1072,11 @@
 			}
 		}
         
+        /****************************************************************/
+        /*                                                              */
+        /*      this method highlights the active tab                   */
+        /*                                                              */
+        /****************************************************************/
         $(document).on('click', '.ma-tab-link', function() {
     		var tab_id = $(this).attr('data-tab');
     		$(this).siblings('.ma-tab-link').removeClass('active');
@@ -927,11 +1085,21 @@
     		$("#"+tab_id).addClass('active');
     	});
 
+        /****************************************************************/
+        /*                                                              */
+        /*      this method verifies the routing service credentials    */
+        /*                                                              */
+        /****************************************************************/
         function verifyEsriLogin() {
             $('#loaderModal').show();
             var response = sforce.apex.execute('MA_RoutingSchedulerController', 'getESRIToken', { storeId: $('#storeSelect').val(), isVerification: true, clientId: $('#esriClientId').val(), clientSecret: $('#esriClientSecret').val() }, verifyEsriResponse);
         }
 
+        /************************************************************************************/
+        /*                                                                                  */
+        /*      this method handles the routing service verification response               */
+        /*                                                                                  */
+        /************************************************************************************/
         function verifyEsriSuccess(response) {
             response = JSON.parse(response);
 

@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used to handle the main calendar                          -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component controller="MA_SchedulerController">
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
     <apex:includeScript value="/soap/ajax/34.0/apex.js" />
@@ -74,6 +88,11 @@
             initCalendar();
         });
 
+        /********************************************************************/
+        /*                                                                  */
+        /*      this method initializes the main calendar                   */
+        /*                                                                  */
+        /********************************************************************/
         function initCalendar() {
             $('#calendar').fullCalendar({
                 schedulerLicenseKey: '0947007917-fcs-1462891368',
@@ -111,6 +130,12 @@
                         labelText: 'Resource',
                         field: 'name',
                         width: '150px',
+                        /********************************************************************/
+                        /*                                                                  */
+                        /*      this method tells the main calendar how to alter            */
+                        /*      the resources html once it is rendered on the calendar      */
+                        /*                                                                  */
+                        /********************************************************************/
                         render: function(resource, el) {
                             if (resource.isUser) {
                                 el.addClass('userResource');
@@ -125,6 +150,11 @@
                         }
                     }
                 ],
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar how to retrieve resources       */
+                /*                                                                          */
+                /****************************************************************************/
                 resources: function(callback) {
                     $('#loaderModal').show();
                     if (viewDestroy || !storeRetrievalProcessed) {
@@ -134,6 +164,11 @@
                         fetchResources(callback);
                     }
                 },
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar how to retrieve events          */
+                /*                                                                          */
+                /****************************************************************************/
                 events: function(start, end, timezone, callback) {
                     $('#loaderModal').show();
                     if (eventListToRender.length > 0) {
@@ -153,6 +188,11 @@
                         fetchWorkOrderEvents(start, end, timezone, callback);
                     }
                 },
+                /************************************************************************************/
+                /*                                                                                  */
+                /*      this method tells the main calendar what to do when an event is clicked     */
+                /*                                                                                  */
+                /************************************************************************************/
                 eventClick: function(calEvent, jsEvent ,view) {
                     jsEvent.preventDefault();
 
@@ -172,6 +212,12 @@
                         $('#eventOptionsModal').css({ position: 'absolute', top: (jsEvent.pageY - 110), left: jsEvent.pageX }).show();
                     }
                 },
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar how to alter an                 */
+                /*      events html once it is rendered on the calendar                     */
+                /*                                                                          */
+                /****************************************************************************/
                 eventAfterRender: function(event, element, view) {
                     if (view.name != 'month') {
                         if (event.city != '' && event.city != undefined && event.city != null) {
@@ -261,6 +307,12 @@
                         $(element).attr('data-start', dataStart);
                     }
                 },
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar what to do when                 */
+                /*      all events have been rendered on the calendar                       */
+                /*                                                                          */
+                /****************************************************************************/
                 eventAfterAllRender: function(view) {
                     var records = $('.userResource > .fc-cell-text, .externalResource > .fc-cell-text');
                     for (var i = 0, len = records.length; i < len; i++) {
@@ -275,55 +327,13 @@
                     };
 
                     $('#loaderModal').hide();
-                    
-                    /*
-                    var legendHtml = '<a class="ma-button dropdown-right" id="calendarLegendTitle" onclick="openCalendarLegend();">'
-                                        + 'Legend'
-                                        + '<div class="dropdown-triangle-legend"></div>'
-                                    + '</a>'
-                                    + '<div id="calendarLegendDrop" style="display:none">'
-                                        + '<div>'
-                                            + '<div class="legend-icon-container">'
-                                                + '<div class="legend-icon legend-icon-techmeasure"></div>'
-                                            + '</div>'
-                                            + '<span>Tech Measure</span>'
-                                        + '</div>'
-                                        + '<div>'
-                                            + '<div class="legend-icon-container">'
-                                                + '<div class="legend-icon legend-icon-install"></div>'
-                                            + '</div>'
-                                            + '<span>Install</span>'
-                                        + '</div>'
-                                        + '<div>'
-                                            + '<div class="legend-icon-container">'
-                                                + '<div class="legend-icon legend-icon-service"></div>'
-                                            + '</div>'
-                                            + '<span>Service</span>'
-                                        + '</div>'
-                                        + '<div>'
-                                            + '<div class="legend-icon-container">'
-                                                + '<div class="legend-icon legend-icon-synced"></div>'
-                                            + '</div>'
-                                            + '<span>Synced</span>'
-                                        + '</div>'
-                                        + '<hr class="hr-legend">'
-                                        + '<div>'
-                                            + '<div class="eventDot hasResource"></div>'
-                                            + '<span>Assigned</span>'
-                                        + '</div>'
-                                        + '<div>'
-                                            + '<div class="eventDot missingResource"></div>'
-                                            + '<span>Unassigned</span>'
-                                        + '</div>'
-                                        + '<div>'
-                                            + '<div class="eventDot holiday"></div>'
-                                            + '<span>Holidays</span>'
-                                        + '</div>'
-                                    + '</div>';
-                    
-                    $('.fc-head .fc-axis').html(legendHtml);
-                    */
                 },
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar what to do when a view          */
+                /*      is destroyed on the calendar (i.e. changed from day to month, etc.) */
+                /*                                                                          */
+                /****************************************************************************/
                 viewDestroy: function(view, element) {
                     previousView = $('#calendar').fullCalendar('getView').name;
                     if (!viewDestroy && previousView == 'timelineDay' && $('.fc-button.fc-timelineDay-button.fc-state-active').length == 0) {
@@ -331,6 +341,12 @@
                         $('#calendar').fullCalendar('refetchResources');
                     }
                 },
+                /****************************************************************************/
+                /*                                                                          */
+                /*      this method tells the main calendar what to do when                 */
+                /*      a time range is selected on the calendar                            */
+                /*                                                                          */
+                /****************************************************************************/
                 select: function(start, end, jsEvent, view, resource) {
                     var endWeekCheck = end;
                     var endMonthCheck = end;
@@ -362,6 +378,11 @@
             $('div.fc-right').prepend('<div class="eventIcon" onclick=""><img src="' + "{!URLFOR($Resource.MA_Scheduler, '/icons/utility/event.svg')}" + '" class="svg mainChangeDate" /></div>');
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method tells the main calendar to go to the resource view      */
+        /*                                                                          */
+        /****************************************************************************/
         function goToResourceView() {
             if (isBatchResources) {
                 newCalendarFilter = true;
@@ -372,12 +393,22 @@
             closeSettingsModal();
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method tells the main calendar to go to the work order view    */
+        /*                                                                          */
+        /****************************************************************************/
         function goToWorkOrderView() {
             $('.fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button').show();
             $('.fc-agendaDay-button').click();
             closeSettingsModal();
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method sets up the on hover event for resources and events     */
+        /*                                                                          */
+        /****************************************************************************/
         function setUpOnHover(el, elementType) {
             var elId;
             if (elementType == 'resource') {
@@ -400,6 +431,11 @@
             }
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method sets up the on click event for resources                */
+        /*                                                                          */
+        /****************************************************************************/
         function setResourceOnClick(el) {
             var parent = $(el).closest('.userResource');
             if (parent.length == 0) {
@@ -408,24 +444,32 @@
 
             if (parent.length != 0) {
                 parent[0].onclick = function() {
-                    //if (!isBatchResources) {
-                        $('#resourceRoute').attr('resource-id', $(parent).closest('tr').attr('data-resource-id'));
-                        $('#resourceRoutesName').text($(el).text());
-                        initializeRouteComp();
-                        $('#resourceRouteModal').show();
-                        $('#resourceRouteModal').addClass('ma-left-in');
-                        $('#resourceRouteModal').addClass('ma-open');
-                        $('#resourceRouteModalOverlay').addClass('ma-in');
-                        $('body').css('overflow','hidden');
-                    //}
+                    $('#resourceRoute').attr('resource-id', $(parent).closest('tr').attr('data-resource-id'));
+                    $('#resourceRoutesName').text($(el).text());
+                    initializeRouteComp();
+                    $('#resourceRouteModal').show();
+                    $('#resourceRouteModal').addClass('ma-left-in');
+                    $('#resourceRouteModal').addClass('ma-open');
+                    $('#resourceRouteModalOverlay').addClass('ma-in');
+                    $('body').css('overflow','hidden');
                 };
             }
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method closes the event options modal                          */
+        /*                                                                          */
+        /****************************************************************************/
         function closeEventOptionsModal() {
             $('#eventOptionsModal').hide();
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method filters the main calendar based on criteria             */
+        /*                                                                          */
+        /****************************************************************************/
         function filterCalendar() {
             var filter = $('#calendarFilter .calendarFilterSelect').val();
             var listViewSelect = $('#listView .listViewportWrapper .listViewport select');
@@ -448,6 +492,11 @@
             $('#calendar').fullCalendar('refetchResources');
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method retrieves the resources for the main calendar           */
+        /*                                                                          */
+        /****************************************************************************/
         function fetchResources(callback) {
             $('#loaderModal').show();
             if (initialLoad || newCalendarFilter) {
@@ -492,6 +541,11 @@
             }
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method processes the resource retrieval for the main calendar  */
+        /*                                                                          */
+        /****************************************************************************/
         function processResourceSuccess(response) {
             response = JSON.parse(response);
 
@@ -514,6 +568,11 @@
             $('#calendar').fullCalendar('refetchEvents');
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method formats the resource response for the main calendar     */
+        /*                                                                          */
+        /****************************************************************************/
         function buildResourceObject(record) {
             var obj = {
                 id: record.Id,
@@ -539,6 +598,11 @@
             return obj;
         }
         
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method retrieves the resource's events for the main calendar   */
+        /*                                                                          */
+        /****************************************************************************/
         function fetchResourceEvents(start, end, timezone, callback) {
             eventListToRender = getBusinessHours();
             if (resourceIds.length == 0) {
@@ -557,6 +621,11 @@
             sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'allEvents', filters: filters, altFilters: altFilters, resourceUserIdToIdMapString: JSON.stringify(resourceUserIdToIdMap), storeId: $('#storeSelect').val() }, processEventsResponse);
         }
         
+        /********************************************************************************/
+        /*                                                                              */
+        /*      this method retrieves the scheduled work orders for the main calendar   */
+        /*                                                                              */
+        /********************************************************************************/
         function fetchWorkOrderEvents(start, end, timezone, callback) {
             if ($('#calendar').fullCalendar('getView') == 'agendaDay') {
                 var dayResource = { 
@@ -587,6 +656,12 @@
             sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'WorkOrder', filters: filters, resourceUserIdToIdMapString: JSON.stringify({}), storeId: $('#storeSelect').val() }, processEventsResponse);
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method processes the event retrieval                           */
+        /*      and formats it for the main calendar                                */
+        /*                                                                          */
+        /****************************************************************************/
         function processEventsSuccess(response) {
             response = JSON.parse(response);
             
@@ -626,12 +701,27 @@
             }
         }
         
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method converts a date time to the correct timezone            */
+        /*      for the main calendar                                               */
+        /*                                                                          */
+        /****************************************************************************/
         function correctForTimezoneOffset(dt) {
             var epoch = Date.parse(dt);
             epoch = epoch + (dt.getTimezoneOffset() * 60 * 1000);
             return new Date(epoch);
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method should retrieve the store's hours and show all          */
+        /*      non working hour time blocks on the calendar as grey                */
+        /*                                                                          */
+        /*      this has not been implemented and defaults to show a                */
+        /*      greying pattern on the calendar                                     */
+        /*                                                                          */
+        /****************************************************************************/
         function getBusinessHours() {
             var events = [];
             if (storeFound) {
@@ -644,10 +734,20 @@
             return events;
         }
         
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method shows/hides the main calendar's legend                  */
+        /*                                                                          */
+        /****************************************************************************/
         function openCalendarLegend() {
             $('#calendarLegendDrop').toggle();
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method shows the popup to create an event on the main calendar */
+        /*                                                                          */
+        /****************************************************************************/
         function showEventCreator(start, end, resource, showDeleteButton, title) {
             $('#calendarEventCreatorResourceId').val(resource.id);
             $('#calendarEventCreatorSubject').val(title);
@@ -670,6 +770,11 @@
             $('#calendarEventCreatorOverlay').addClass('ma-in');
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method saves the event creation/deletion                       */
+        /*                                                                          */
+        /****************************************************************************/
         function saveNewEvent(saveType) {
             $('#loaderModal').show();
 
@@ -693,6 +798,11 @@
             }
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method processes the event creation/deletion results           */
+        /*                                                                          */
+        /****************************************************************************/
         function processSaveNewEventSuccess(response) {
             response = JSON.parse(response);
 
@@ -705,6 +815,11 @@
             }
         }
 
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method closes the event creation popup                         */
+        /*                                                                          */
+        /****************************************************************************/
         function closeEventCreator() {
             $('#loaderModal').hide();
             $('#calendarEventCreatorModal').removeClass('ma-open');
@@ -713,6 +828,11 @@
         }
         
         $(function() {
+            /****************************************************************************/
+            /*                                                                          */
+            /*      this method converts an img to a svg                                */
+            /*                                                                          */
+            /****************************************************************************/
             jQuery('img.svg').each(function() {
                 var $img = jQuery(this);
                 var imgID = $img.attr('id');

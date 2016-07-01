@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used to display a resources route for a day               -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component >
     
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
@@ -34,8 +48,8 @@
         var resourceMap;
         var MapMarkers = [];
         var resourceStopIds = [];
-        var defaultLat = 33.9353499;    // 44.986656;
-        var defaultLng = -84.3448638;   // -93.258133;
+        var defaultLat = 33.9353499;
+        var defaultLng = -84.3448638;
         var isDailyResource = false;
         var resourceRouteEvents = [];
         var initializingResourceRouteComp = false;
@@ -45,69 +59,78 @@
         var MARoutesComp =  { 
             master : {},
             colorArray : ["#FF0000", "#0000ff", "#989900", "#00b300", "#ff4da6", "#4da6ff", "#e67200", "#ffff00", "#7575a3", "#99ccff", "#1affc6", "#00e6ac","#669999", "#3399ff", "#ff4dd2", "#ffb31a", "#33ff33","#00ff00", "#e67300", "#ff1a1a"],
+            /************************************************************/
+            /*                                                          */
+            /*      this method kicks off the geocoding process         */
+            /*                                                          */
+            /************************************************************/
             startGeocodingRes : function() {
                 isDailyResource = true
                 var resourceId = $('#resourceRoute').attr('resource-id');
                 var resourceCalDate = $('#resourceCalendar').fullCalendar('getDate').format('YYYY-MM-DD');
                 retrieveAccountsForGeocode(resourceCalDate, $('#storeSelect').val(), null , resourceId);
             },
+            /************************************************************/
+            /*                                                          */
+            /*      this method retrieves a resources orders for        */
+            /*      a day and send a routing request                    */
+            /*                                                          */
+            /************************************************************/
             processRouteStops : function() {
                 try{
                     var response;
-                    /*
-                    if (isBatchResources) {
-                        var resourceId = $('#resourceRoute').attr('resource-id');
-                        if (MARoutesComp.master.hasOwnProperty(resourceId)){
-                            response = MARoutesComp.master[resourceId];
-                            MARoutesComp.mapRoutes(response.geometry.paths);
-                            MARoutesComp.placeMarkers(response.out_stops);
-                        }
-                    }
-                    else {
-                    */
-                        var mainCalendarDate = $('#resourceCalendar').fullCalendar('getDate');
-                        
-                        response = sforce.apex.execute(apexRoutingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), dayString: mainCalendarDate.format('MM/DD/YYYY'), storeId: $('#storeSelect').val(), resourceStopIds: resourceStopIds});
-                                   
-                        response = JSON.parse(response);
-                        MARoutesComp.master = response;
+                    var mainCalendarDate = $('#resourceCalendar').fullCalendar('getDate');
+                    
+                    response = sforce.apex.execute(apexRoutingController, 'retrieveResourceRouteRecords', { resourceId: $('#resourceRoute').attr('resource-id'), dayString: mainCalendarDate.format('MM/DD/YYYY'), storeId: $('#storeSelect').val(), resourceStopIds: resourceStopIds});
+                               
+                    response = JSON.parse(response);
+                    MARoutesComp.master = response;
 
-                        async.waterfall([
-                            async.apply(MAschedRoutes.getEsriToken, MARoutesComp.master),
-                            MAschedRoutes.getScheduledRoutes
-                        ], 
-                        function (err, result) {
-                            try {
-                                if (err) {
-                                    if (!result.success) {
-                                         handleError('Route Error : Unable to complete resource routing. ', result.error ? result.error.message : result.message);
-                                    }
-                                    else if (result.data.error) {
-                                         handleError('Route Error :' + result.data.error.code + result.data.error.message, result.message ? result.data.error : result.data.error.message);
-                                    }
-                                    else if (result.data.code == 403) {
-                                         handleError('Route Error : User does not have access to server. Check client Id & Secret. Unable to complete resource routing. ', result.message);
-                                    }
-                                    else {
-                                        handleError('Route Error : Unable to complete resource routing. ', result.message ? result.message : result.error.message);
-                                    }
+                    async.waterfall([
+                        async.apply(MAschedRoutes.getEsriToken, MARoutesComp.master),
+                        MAschedRoutes.getScheduledRoutes
+                    ], 
+                    /************************************************************/
+                    /*                                                          */
+                    /*      this method checks the async waterfall's results    */
+                    /*                                                          */
+                    /************************************************************/
+                    function (err, result) {
+                        try {
+                            if (err) {
+                                if (!result.success) {
+                                     handleError('Route Error : Unable to complete resource routing. ', result.error ? result.error.message : result.message);
+                                }
+                                else if (result.data.error) {
+                                     handleError('Route Error :' + result.data.error.code + result.data.error.message, result.message ? result.data.error : result.data.error.message);
+                                }
+                                else if (result.data.code == 403) {
+                                     handleError('Route Error : User does not have access to server. Check client Id & Secret. Unable to complete resource routing. ', result.message);
                                 }
                                 else {
-                                    MARoutesComp.mapRoutes(result.data.routes.features);
-                                    MARoutesComp.placeMarkers(result.data.stops.features);
-                                    $('#loaderModal').hide();
+                                    handleError('Route Error : Unable to complete resource routing. ', result.message ? result.message : result.error.message);
                                 }
                             }
-                            catch(e) {
-                                handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
+                            else {
+                                MARoutesComp.mapRoutes(result.data.routes.features);
+                                MARoutesComp.placeMarkers(result.data.stops.features);
+                                $('#loaderModal').hide();
                             }
-                        });
-                    //}
+                        }
+                        catch(e) {
+                            handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
+                        }
+                    });
                 }
                 catch(e) {
                     handleError('ProcessRouteStops : Unable to get the resources route for the day', e);
                 }    
             }, 
+            /********************************************************************/
+            /*                                                                  */
+            /*      this method places the returned routes onto the map         */
+            /*                                                                  */
+            /********************************************************************/
             mapRoutes : function(routes) {
                 try {
                     var bounds = new google.maps.LatLngBounds();
@@ -115,32 +138,17 @@
                     for (x = 0, len = routes.length; x < len; x++) {
                         coordinateArray = [];
                         var route = routes[x];
-
-                        //if (!isBatchResources) {
-                            route = route.geometry.paths;
-                        //}
+                        route = route.geometry.paths;
 
                         for (i = 0, len2 = route.length; i < len2; i++) {
-                            //if (!isBatchResources) {
-                                for (z = 0, len3 = route[i].length; z < len3; z++) {
-                                    var cord = new google.maps.LatLng({
-                                        lat: route[i][z][1],
-                                        lng: route[i][z][0]
-                                    });
-                                    coordinateArray.push(cord);
-                                    bounds.extend(cord);
-                                }
-                            /*
-                            }
-                            else {
+                            for (z = 0, len3 = route[i].length; z < len3; z++) {
                                 var cord = new google.maps.LatLng({
-                                    lat: route[i][1],
-                                    lng: route[i][0]
+                                    lat: route[i][z][1],
+                                    lng: route[i][z][0]
                                 });
                                 coordinateArray.push(cord);
                                 bounds.extend(cord);
                             }
-                            */
                         }
 
                         RouteLine = new google.maps.Polyline({
@@ -159,18 +167,15 @@
                 }
                 catch(e) {}
             },
+            /********************************************************************/
+            /*                                                                  */
+            /*      this method converts the returned stops into markers        */
+            /*                                                                  */
+            /********************************************************************/
             placeMarkers : function(markers) {
                 try {
                     for (i = 0, markerLength = markers.length; i < markerLength; i++ ) {
-                        var marker
-                        /*
-                        if (isBatchResources) {
-                            marker = baseOrders[i];
-                        }
-                        else {
-                        */
-                            marker = markers[i];
-                        //}
+                        var marker = markers[i];
 
                         var mapMarker = new google.maps.Marker({
                             position:{
@@ -190,6 +195,11 @@
                 }
                 catch(e){}
             },
+            /**************************************************************/
+            /*                                                            */
+            /*      this method places the markers onto the map           */
+            /*                                                            */
+            /**************************************************************/
             setMapMarkersOnAll : function(map) {
                 for (var i = 0; i < MapMarkers.length; i++) {
                     MapMarkers[i].setMap(map);
@@ -199,6 +209,11 @@
                     map.setCenter(MapMarkers[0].position);
                 }
             },
+            /**************************************************************/
+            /*                                                            */
+            /*      this method deletes the markers/routes from the map   */
+            /*                                                            */
+            /**************************************************************/
             deleteMarkers : function() {
                 MARoutesComp.setMapMarkersOnAll(null);
                 MapMarkers = [];
@@ -210,13 +225,17 @@
             }
         }
         
-        //var processRouteStopsResponse = { onSuccess: MARoutesComp.processRouteStops, onFailure: processResponseError };
         var processResourceRouteResponse = { onSuccess: processResourceRouteSuccess, onFailure: processResponseError };
 
         $(function() {
             sforce.connection.sessionId = '{!$Api.Session_Id}';
         });
 
+        /**************************************************************/
+        /*                                                            */
+        /*      this method initializes the route and calendar        */
+        /*                                                            */
+        /**************************************************************/
         function initializeRouteComp() {
             initializingResourceRouteComp = true;
             initializeRoute();
@@ -224,6 +243,11 @@
             $('#listView').show();
         }
 
+        /**************************************************************/
+        /*                                                            */
+        /*      this method initializes the route        */
+        /*                                                            */
+        /**************************************************************/
         function initializeRoute() {
             storeLat = null;
             storeLng = null;
@@ -254,6 +278,11 @@
             }
         }
 
+        /**************************************************************/
+        /*                                                            */
+        /*      this method initializes the calendar                  */
+        /*                                                            */
+        /**************************************************************/
         function initResourceCalendar() {
             $('#resourceCalendar').fullCalendar({
                 schedulerLicenseKey: '0947007917-fcs-1462891368',
@@ -275,6 +304,11 @@
                 allDaySlot: false,
                 slotEventOverlap: true,
                 height: 500,
+                /**************************************************************/
+                /*                                                            */
+                /*      this method tells the calendar how to retrieve events */
+                /*                                                            */
+                /**************************************************************/
                 events: function(start, end, timezone, callback) {
                     $('#loaderModal').show();
                     if (initializingResourceRouteComp) {
@@ -298,6 +332,12 @@
                     }
                     $("body").addClass('overflow-hidden');
                 },
+                /**************************************************************/
+                /*                                                            */
+                /*      this method tells the calendar how to alter           */
+                /*      events html after it is rendered on the calendar      */
+                /*                                                            */
+                /**************************************************************/
                 eventAfterRender: function(event, element, view) {
                     if (event.city != '' && event.city != undefined && event.city != null) {
                         $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
@@ -348,6 +388,11 @@
             }
         }
 
+        /********************************************************************/
+        /*                                                                  */
+        /*      this method retrieves a resources events for the calendar   */
+        /*                                                                  */
+        /********************************************************************/
         function retrieveResourceRouteRecords(start, end, timezone, callback) {
             if (!isBatchResources) {
                 end = new Date(end.add(2, 'days'));
@@ -377,6 +422,12 @@
             }
         }
 
+        /**************************************************************/
+        /*                                                            */
+        /*      this method converts the resources events             */
+        /*      into the necessary format for the calendar            */
+        /*                                                            */
+        /**************************************************************/
         function processResourceRouteSuccess(response) {
             response = JSON.parse(response);
 
@@ -413,6 +464,11 @@
             }
         }
 
+        /**************************************************************/
+        /*                                                            */
+        /*      this method closes the resource route modal           */
+        /*                                                            */
+        /**************************************************************/
         function closeResourceRoute() {
             if (isBatchResources) {
                 $('#listView').hide();

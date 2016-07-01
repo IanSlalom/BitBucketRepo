@@ -1,12 +1,37 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This class holds the utility methods used to throughout the scheduler       */
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 public with sharing class MA_SchedulerUtilities {
 
+    /********************************************************/
+    /*                                                      */
+    /*      generates the error for a webservice response   */
+    /*                                                      */
+    /********************************************************/
     public static void createErrorResponse(Exception ex, Map<String, Object> response) {
         response.put('success', false);
         response.put('error', ex.getLineNumber() + ': ' + ex.getMessage());
         response.put('stackTrace', ex.getStackTraceString());
     }
 
-	public static DateTime createDateTimeFromBookingWindow(Date appointmentDate, String appointmentTime, String timezone) {
+	/****************************************************/
+    /*                                                  */
+    /*      creates a datetime from a date and          */
+    /*      time string based on a timezone             */
+    /*                                                  */
+    /****************************************************/
+    public static DateTime createDateTimeFromBookingWindow(Date appointmentDate, String appointmentTime, String timezone) {
 		List<String> appointmentTimeSplit = appointmentTime.split(' ');
         List<String> timeSplit = appointmentTimeSplit[0].split(':');
         Integer hour = Integer.valueOf(timeSplit[0]);
@@ -28,7 +53,12 @@ public with sharing class MA_SchedulerUtilities {
         return dt;
 	}
 	
-	public static DateTime convertGmtToTimezone(DateTime dtGmt, String timezone, String offsetPageMinutes) {
+	/********************************************************/
+    /*                                                      */
+    /*      creates a GMT datetime to the correct timezone  */
+    /*                                                      */
+    /********************************************************/
+    public static DateTime convertGmtToTimezone(DateTime dtGmt, String timezone, String offsetPageMinutes) {
 		Integer offset = determineTimezoneOffset(dtGmt, timezone);
 		Integer offsetMinutes = determineOffsetMinutesFromTimezoneOffset(offset);
 
@@ -40,6 +70,12 @@ public with sharing class MA_SchedulerUtilities {
 		return dtGmt;
 	}
 
+    /****************************************************/
+    /*                                                  */
+    /*      creates a datetime from a date and          */
+    /*      military time string based on a timezone    */
+    /*                                                  */
+    /****************************************************/
     public static DateTime createDateTimeFromBookingWindowMilitary(Date appointmentDate, String appointmentTime, String timezone) {
         List<String> timeSplit = appointmentTime.split(':');
         Time tm = Time.newInstance(Integer.valueOf(timeSplit[0]), Integer.valueOf(timeSplit[1]), 0, 0);
@@ -51,7 +87,12 @@ public with sharing class MA_SchedulerUtilities {
         return dt;
     }
 	
-	public static DateTime convertTimezoneToTimezone(DateTime dt, String originalTimezone, String newTimezone) {
+	/************************************************************/
+    /*                                                          */
+    /*      creates a datetime from one timezone to another     */
+    /*                                                          */
+    /************************************************************/
+    public static DateTime convertTimezoneToTimezone(DateTime dt, String originalTimezone, String newTimezone) {
 		Integer currentOffset = determineTimezoneOffset(dt, originalTimezone);
 		Integer newOffset = determineTimezoneOffset(dt, newTimezone);
 
@@ -63,7 +104,12 @@ public with sharing class MA_SchedulerUtilities {
 		return dt;
 	}
 
-	public static Integer determineTimezoneOffset(DateTime dt, String timezone) {
+	/****************************************************/
+    /*                                                  */
+    /*      returns the timezone offset for a datetime  */
+    /*                                                  */
+    /****************************************************/
+    public static Integer determineTimezoneOffset(DateTime dt, String timezone) {
 		Integer offset = 0;
 		if (dt != null) {
 			if (String.isNotBlank(timezone)) {
@@ -76,7 +122,12 @@ public with sharing class MA_SchedulerUtilities {
 		return offset;
 	}
 
-	public static Integer determineOffsetMinutesFromTimezoneOffset(Integer offset) {
+	/****************************************************/
+    /*                                                  */
+    /*      converts a timezone offset to total minutes */
+    /*                                                  */
+    /****************************************************/
+    public static Integer determineOffsetMinutesFromTimezoneOffset(Integer offset) {
 		Integer offsetMinutes = 0;
 		if (offset != null) {
 			offsetMinutes = (Integer)(Math.floor(offset / 100) * 60) + Math.mod(offset, 100);
@@ -84,6 +135,11 @@ public with sharing class MA_SchedulerUtilities {
 		return offsetMinutes;
 	}
 
+    /****************************************************/
+    /*                                                  */
+    /*      retrieves the store's timezone              */
+    /*                                                  */
+    /****************************************************/
     public static String retrieveStoreTimezone(Id storeId) {
     	String storeTimezone = UserInfo.getTimeZone().toString();
     	for (MA_Scheduler_Settings__c settings : [SELECT Settings__c FROM MA_Scheduler_Settings__c WHERE Store_Id__c = :storeId AND Resource_Id__c = null]) {
@@ -99,6 +155,12 @@ public with sharing class MA_SchedulerUtilities {
     	return storeTimezone;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      returns all of a store's settings           */
+    /*      in a map                                    */
+    /*                                                  */
+    /****************************************************/
     public static Map<String, Object> retrieveAllStoreSettings(Id storeId, String workOrderType) {
         MA_Scheduler_Settings__c storeSettings;
         List<Object> storeHolidays = new List<Object>();
@@ -142,6 +204,12 @@ public with sharing class MA_SchedulerUtilities {
         return response;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      determines the start and stop for           */
+    /*      each day a store is open                    */
+    /*                                                  */
+    /****************************************************/
     public static Map<String, Map<String, Object>> determineEarliestStartAndLatestEndHours(Map<String, Object> storeBookingWindows) {
     	Map<String, Map<String, Object>> latestHours = new Map<String, Map<String, Object>>();
 
@@ -201,6 +269,12 @@ public with sharing class MA_SchedulerUtilities {
         return latestHours;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      determines all time windows for             */
+    /*      each day a store is open                    */
+    /*                                                  */
+    /****************************************************/
     public static Map<String, Set<String>> determineAllConfiguredHours(Map<String, Object> storeBookingWindows) {
     	Map<String, Set<String>> configuredHours = new Map<String, Set<String>>();
 
@@ -225,6 +299,11 @@ public with sharing class MA_SchedulerUtilities {
     	return configuredHours;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      determines the store's holidays             */
+    /*                                                  */
+    /****************************************************/
     public static Set<String> determineStoreHolidays(List<Object> storeHolidays) {
     	Set<String> storeHolidayDates = new Set<String>();
 
@@ -241,6 +320,12 @@ public with sharing class MA_SchedulerUtilities {
     	return storeHolidayDates;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      maps work order types to available          */
+    /*      resource types                              */
+    /*                                                  */
+    /****************************************************/
     public static Set<String> retrieveResourceTypeFromWorkOrderType(String workOrderType) {
     	Map<String, Set<String>> workOrderTypetoResourceTypesMap = new Map<String, Set<String>> {
     		'Tech Measure' => new Set<String> { 'Tech Measure', 'Tech Measure Manager' },
@@ -255,6 +340,12 @@ public with sharing class MA_SchedulerUtilities {
     	return resourceTypes;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      determines if a resource is working         */
+    /*      certain hours                               */
+    /*                                                  */
+    /****************************************************/
     public static Boolean determineIfResourceWorksSelectedHours(Map<Id, Map<String, Object>> resourceHours, String dayOfWeek, Id resourceId, String storeTimezone, DateTime dayStart, DateTime dayEnd) {
         Map<String, Object> resourceHoursMap = resourceHours.get(resourceId);
         if (resourceHoursMap.containsKey(dayOfWeek)) {
@@ -275,6 +366,11 @@ public with sharing class MA_SchedulerUtilities {
         return true;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      creates the booking windows                 */
+    /*                                                  */
+    /****************************************************/
     public static void createBookingWindows(List<MA_SchedulerBookingWindow> bookingWindows, List<MA_SchedulerBookingWindow> unAvailableSlots, Map<String, Object> storeBookingWindows, Map<Id, Set<Id>> resourceToSkillsMap, Map<Id, Integer> totalSkillsCountMap, DateTime startDateTime, DateTime endDateTime, String storeTimezone, Set<String> storeHolidayDates, Map<Id, Map<String, Object>> resourceHours) {
         if (!storeBookingWindows.isEmpty()) {
             Date day;
@@ -315,6 +411,12 @@ public with sharing class MA_SchedulerUtilities {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      checks all resources availability           */
+    /*      by comparing their scheduled events         */
+    /*                                                  */
+    /****************************************************/
     public static void checkResourceAvailability(List<MA_SchedulerBookingWindow> allBookingWindows, List<MA_SchedulerBookingWindow> unAvailableSlots, Map<Id, Id> userMap, DateTime startDateTime, DateTime endDateTime, Map<Id, Set<Id>> resourceToSkillsMap, String workOrderType, Set<Id> workOrderSkills) {
         Set<Id> workOrderIds = new Set<Id>();
         Set<Id> maEventIdsLinkedToSfEvents = new Set<Id>();
@@ -372,6 +474,11 @@ public with sharing class MA_SchedulerUtilities {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      deletes related events                      */
+    /*                                                  */
+    /****************************************************/
     public static void deleteEvents(Id workOrderId, String deletionReason, String additionalFilters) {
         if (String.isNotBlank(workOrderId)) {
             Map<Id, MA_Scheduler_Event__c> maEventsToDelete = new Map<Id, MA_Scheduler_Event__c>(
@@ -388,6 +495,11 @@ public with sharing class MA_SchedulerUtilities {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      creates necessary events                    */
+    /*                                                  */
+    /****************************************************/
     public static void createEvents(RbA_Work_Order__c workOrder, Map<String, Object> storeBookingWindows, String storeTimezone, DateTime tempStart, DateTime tempEnd, Integer tempTotalMinutes, Set<Id> assignedResourceIds, Set<Id> maEventsAlreadyCreatedFor, Map<Id, Id> resourceToUserMap) {
         Id primaryResourceUserId;
         List<Event> sfEventsToCreate = new List<Event>();
@@ -402,6 +514,11 @@ public with sharing class MA_SchedulerUtilities {
         if (!storeBookingWindows.isEmpty()) {
             Map<String, Map<String, Object>> latestHours = determineEarliestStartAndLatestEndHours(storeBookingWindows);
 
+            /****************************************************/
+            /*                                                  */
+            /*      creates an event for all necessary days     */
+            /*                                                  */
+            /****************************************************/
             if (latestHours != null && !latestHours.isEmpty()) {
                 Integer totalDays = 0;
                 Date tempStartDate = Date.parse(tempStart.format('MM/dd/yyyy', storeTimezone));

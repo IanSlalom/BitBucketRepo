@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used when assigning a resource                            -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component >
     
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
@@ -345,6 +359,11 @@
             sforce.connection.sessionId = '{!$Api.Session_Id}';
         });
 
+        /************************************************************/
+        /*                                                          */
+        /*      this method opens the assign resource modal         */
+        /*                                                          */
+        /************************************************************/
         function showAssignResourceModal(isForcedNextStep, isReassign, isSingleDay, isBatched) {
             closeAssignResourceModal();
             var woToResIds = [];
@@ -384,6 +403,12 @@
             $('body').css('overflow','hidden');
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method populates the work order information and the        */
+        /*      the resource table on the assign resource modal                 */
+        /*                                                                      */
+        /************************************************************************/
         function processResourceAvailablitySuccess(response) {
             response = JSON.parse(response);
 
@@ -427,6 +452,11 @@
                     $('#assignedWorkOrderBusinessPhone').text(workOrder.Contact__r.Phone);
                 }
 
+                /************************************************************/
+                /*                                                          */
+                /*      creates the required skills matched section         */
+                /*                                                          */
+                /************************************************************/
                 if (response.workOrder.Work_Order_Required_Skills__r) {
                     var requiredSkillsHtml = '';
                     var requiredSkillsRecords = response.workOrder.Work_Order_Required_Skills__r.records;
@@ -441,6 +471,11 @@
                     $('#assignResourceSkillsMatchedInnerDiv').append(requiredSkillsHtml);
                 }
 
+                /************************************************************/
+                /*                                                          */
+                /*      creates the resource table information              */
+                /*                                                          */
+                /************************************************************/
                 var availableResourcesTableHtml = '';
                 var availableResources = response.availableResources.concat(response.unAvailableResources);
                 for (var i = 0, len = availableResources.length; i < len; i++) {
@@ -495,6 +530,11 @@
             }
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method adds the resource to the assigned resource section  */
+        /*                                                                      */
+        /************************************************************************/
         function addAvaibleResource(el) {
             var resourceId = $(el).attr('resource-id');
             var resourceName = $(el).attr('resource-name');
@@ -555,6 +595,11 @@
             updateHeadCount();
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*  this method removes the resource from the assigned resource section */
+        /*                                                                      */
+        /************************************************************************/
         function removeAssignedResource(el, isAssignedResource) {
             var resourceId = $(el).attr('resource-id');
             var resourceRow = $('.removableRow .removeResource[resource-id="' + resourceId + '"]').closest('.removableRow');
@@ -597,6 +642,12 @@
             updateHeadCount();
         }
 
+        /************************************************************/
+        /*                                                          */
+        /*      this method updates the total head count in         */
+        /*      the assigned resource section                       */
+        /*                                                          */
+        /************************************************************/
         function updateHeadCount() {
             var totalHeads = 0;
             var preferredHeadCount = $('#assignedWorkOrderPreferredHeadcount').text();
@@ -610,6 +661,11 @@
             updateRequiredSkillsMatchCount();
         }
 
+        /************************************************************/
+        /*                                                          */
+        /*   this method updates the required skills matched count  */
+        /*                                                          */
+        /************************************************************/
         function updateRequiredSkillsMatchCount() {
             var totalMatched = $('#assignResourceSkillsMatched .workOrderSkillCheckmark:visible').length;
             var totalSkills = $('#assignResourceSkillsMatched .requiredSkillMatchedIcon').length;
@@ -617,6 +673,11 @@
             $('#requiredSkillsMatchCount').text('(' + totalMatched + '/' + totalSkills + ')');
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method shows/hides the resources skills matched row        */
+        /*                                                                      */
+        /************************************************************************/
         function toggleExpandAvaibleResource(el) {
             if ($(el).hasClass('closed')) {
                 $(el).closest('.removableRow').next().show();
@@ -632,6 +693,11 @@
             }
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method shows/hides all the resources skills matched rows   */
+        /*                                                                      */
+        /************************************************************************/
         function toggleExpandAllAvaibleResource(el) {
             if ($(el).hasClass('closed')) {
                 $('#assignedResourcesAvailableTable .removableRow.hiddenRow').show();
@@ -643,6 +709,11 @@
             }
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method filters the resource table through the search bar   */
+        /*                                                                      */
+        /************************************************************************/
         function availableResourcesSearchFiltering(el) {
             var val = $(el).val().toLowerCase();
             var resourceRows = $('.assignedResourceRow');
@@ -661,6 +732,11 @@
             }
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method closes the assign resource modal                    */
+        /*                                                                      */
+        /************************************************************************/
         function closeAssignResourceModal() {
             forceAssignmentScheduleCombo = false;
             assignedSkillsToResourcesMap = {};
@@ -677,6 +753,14 @@
             $('body').css('overflow','auto');
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method saves the resource to the work order                */
+        /*                                                                      */
+        /*      if this is the batch results view, then the save is             */
+        /*      only in the page until the batch is confirmed                   */
+        /*                                                                      */
+        /************************************************************************/
         function saveAssignedResources(isBatch) {
             $('#loaderModal').show();
             var assignedResourceIds = [$('#assignResourceWorkOrderId').val()];
@@ -737,6 +821,11 @@
             }
         }
 
+        /************************************************************************/
+        /*                                                                      */
+        /*      this method process the assignment save result                  */
+        /*                                                                      */
+        /************************************************************************/
         function processAssignedResourceSaveSuccess(response) {
             response = JSON.parse(response);
 

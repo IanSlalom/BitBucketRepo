@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used when geocoding records                               -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component >
     
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
@@ -21,6 +35,11 @@
 	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
     	});
 
+        /********************************************/
+        /*											*/
+        /* 		processes the geocode error 		*/
+        /*											*/
+        /********************************************/
         function processGeocodeResponseError(error) {
             if (!error.faultstring) {
                 error = { error: 'Response Error'};
@@ -28,6 +47,11 @@
             handleError('ERROR', error);
         }
 
+        /********************************************/
+        /*											*/
+        /* 		displays a geocode error 	 		*/
+        /*											*/
+        /********************************************/
         function handleGeocodeError(componentName, error) {
             $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
             $('#errorModal').show();
@@ -36,14 +60,26 @@
             $('#loaderModal').hide();
         }
 
-		function retrieveAccountsForGeocode(appointmentDateString, storeId, workOrderType) {
+		/****************************************************/
+        /*													*/
+        /* 		retrieves accounts that need geocoding 		*/
+        /*													*/
+        /****************************************************/
+        function retrieveAccountsForGeocode(appointmentDateString, storeId, workOrderType) {
     		accIdToAddressMap = {};
 			addressesForGeocode = [];
     		addressToGeocodeMap = {};
 			sforce.apex.execute(apexGeocodeController, 'retrieveNonGeocodedAddresses', { appointmentDateString: appointmentDateString, storeId: storeId, workOrderType: workOrderType }, processRetrieveGeocodesResponse);
 		}
 
-		function processRetrieveGeocodesSuccess(response) {
+		/****************************************************/
+        /*													*/
+        /* 		groups account addresses into groups of 10 	*/
+        /* 		and request geocodes if needed otherwise 	*/
+        /* 		return to process that made request 		*/
+        /*													*/
+        /****************************************************/
+        function processRetrieveGeocodesSuccess(response) {
 			response = JSON.parse(response);
 
 			if (response.success) {
@@ -81,19 +117,22 @@
 			}
 			else {
 				handleGeocodeError('MA_SchedulerGeocodeComp : retrieveAccountsForGeocode' + apexSchedulingController, response.error);
-
-				/*
-				if (isBatchResources) {
-					getAutoScheduleGeocoded();
-				}
-				else if (isDailyResource) {
-					MARoutesComp.processRouteStops();
-				}
-				*/
 			}
 		}
 
-		function geocodeAddresses() {
+		/****************************************************/
+        /*													*/
+        /* 		if more than 1 group of 10 addresses 		*/
+        /*		then loop over each group and create 		*/
+        /*		an iFrame for each group and run the 		*/
+        /* 		geocode request from that iFrame for 		*/
+        /*		those 10									*/
+        /* 													*/
+        /*		otherwise run the geocode request for 		*/
+        /* 		the 10 addresses requested 					*/
+        /*													*/
+        /****************************************************/
+        function geocodeAddresses() {
 			if (needsBatching) {
 				for (var i = 0, len = addressesForGeocode.length; i < len; i++) {
 
@@ -139,7 +178,12 @@
 		    }
 		}
 
-		function removeIframe(src) {
+		/****************************************************/
+        /*													*/
+        /* 		kills the related iFrame 					*/
+        /*													*/
+        /****************************************************/
+        function removeIframe(src) {
 			$('iframe[src="' + src + '"]').remove();
 
 			if ($('iframe[src *= "/apex/MA_SchedulerGeocode"]').length == 0) {
@@ -147,11 +191,21 @@
 			}
 		}
 
-		function updateLatLongs() {
+		/****************************************************/
+        /*													*/
+        /* 		updates the geocoded accounts 		 		*/
+        /*													*/
+        /****************************************************/
+        function updateLatLongs() {
 			sforce.apex.execute(apexGeocodeController, 'updateGeocodedAddresses', { accIdToAddressString: JSON.stringify(accIdToAddressMap), addressToGeocodeString: JSON.stringify(addressToGeocodeMap) }, processUpdateGeocodesResponse);
 		}
 
-		function processUpdateGeocodesSuccess(response) {
+		/****************************************************/
+        /*													*/
+        /* 		returns to process that requested geocoding */
+        /*													*/
+        /****************************************************/
+        function processUpdateGeocodesSuccess(response) {
 			if (isBatchResources) {
 				getAutoScheduleGeocoded();
 			}
