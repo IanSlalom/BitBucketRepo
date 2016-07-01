@@ -303,7 +303,6 @@
         <members>Finance_Program_Tier__c-SAC%2FNIWP Page Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
-        <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
         <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
         <members>Global-Global Layout</members>
@@ -334,6 +333,7 @@
         <members>Pricebook2-Price Book Layout</members>
         <members>Pricing_Configuration__c-200400 Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Construction Materials Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>

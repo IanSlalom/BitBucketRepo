@@ -155,10 +155,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Active_Financial_Configuration__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Material_Contact__c</field>
             </layoutItems>
         </layoutColumns>
