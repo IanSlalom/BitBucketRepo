@@ -13,7 +13,7 @@
         <field>Order.Purchase_Orders__r$Released_Timestamp__c</field>
     </columns>
     <columns>
-        <field>Order$Windows_Series_2_FF_IF_Rollup__c</field>
+        <field>Order$Windows_Rollup__c</field>
     </columns>
     <columns>
         <field>Order$Entry_Door_Rollup__c</field>
