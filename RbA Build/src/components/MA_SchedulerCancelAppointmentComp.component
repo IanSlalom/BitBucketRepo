@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used when cancelling an appointment                       -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component controller="MA_SchedulerController">
 
 	<script>
@@ -11,6 +25,11 @@
 	        sforce.connection.sessionId = '{!$Api.Session_Id}';
 	    });
 
+	    /********************************************/
+	    /*											*/
+	    /*		opens the cancellation modal 		*/
+	    /*											*/
+	    /********************************************/
 	    function showCancellationModal() {
 			var workOrderId = $('#eventOptionsRecordId').val();
 
@@ -26,7 +45,12 @@
 			sforce.apex.execute(apexSchedulingController, 'retrieveRecords', {objType: 'WorkOrder', filters: 'Id = \'' + workOrderId + '\''}, processWorkOrderCancellationRetrievalResponse);
 		}
 
-		function processWorkOrderCancellationRetrievalSuccess(response) {
+		/********************************************/
+	    /*											*/
+	    /*		populates the cancellation modal 	*/
+	    /*											*/
+	    /********************************************/
+	    function processWorkOrderCancellationRetrievalSuccess(response) {
 		    response = JSON.parse(response);
 
 		    if (response.success) {
@@ -42,7 +66,12 @@
 		    }
 		}
 
-		function saveCancellation() {
+		/********************************************/
+	    /*											*/
+	    /*		saves the cancellation   	 		*/
+	    /*											*/
+	    /********************************************/
+	    function saveCancellation() {
 		    $('#loaderModal').show();
 
 		    var workOrderId = $('#workOrderCancellationId').val();
@@ -51,7 +80,13 @@
 		    sforce.apex.execute(apexSchedulingController, 'cancelWorkOrder', {workOrderId: workOrderId, cancellationReason: cancellationReason}, processCancellationResponse);
 		}
 
-		function processCancellationSuccess(response) {
+		/********************************************/
+	    /*											*/
+	    /*		refreshes the calendar and 			*/
+	    /*		closes the cancellation modal 		*/
+	    /*											*/
+	    /********************************************/
+	    function processCancellationSuccess(response) {
 		    response = JSON.parse(response);
 
 		    if (response.success) {
@@ -65,7 +100,12 @@
 		    }
 		}
 
-		function closeCancellationModal() {
+		/********************************************/
+	    /*											*/
+	    /*		closes the cancellation modal 		*/
+	    /*											*/
+	    /********************************************/
+	    function closeCancellationModal() {
 		    $('#cancellationModal').fadeOut('fast');
 		    $('#cancellationOverlay').removeClass('ma-in');
 		    $('body').css('overflow', 'auto');

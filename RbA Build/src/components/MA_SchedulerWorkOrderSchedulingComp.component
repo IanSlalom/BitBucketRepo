@@ -1,3 +1,18 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used to schedule a work order to a specific               -->
+<!-- 	  booking window 															  -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component controller="MA_SchedulerController">
 
 	<script>
@@ -31,7 +46,12 @@
 	        $('#scheduleWorkOrder .startTime, #scheduleWorkOrder .endTime').append(timeOptions);
 	    });
 
-	    function showAvailabilityModal(isForcedNextStep, isReschedule) {
+	    /************************************************************/
+        /*                                                  		*/
+        /*      this method opens the check availability modal 		*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function showAvailabilityModal(isForcedNextStep, isReschedule) {
 			var workOrderId;
 			forceScheduleAssignmentCombo = false;
 
@@ -64,7 +84,13 @@
 			sforce.apex.execute(apexSchedulingController, 'retrieveRecords', {objType: 'WorkOrder', filters: 'Id = \'' + workOrderId + '\''}, processWorkOrderRetrievalResponse);
 		}
 
-		function processWorkOrderRetrievalSuccess(response) {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method populates work order 					*/
+        /* 		related fields on the availability modal 			*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function processWorkOrderRetrievalSuccess(response) {
 		    response = JSON.parse(response);
 
 		    if (response.success) {
@@ -155,7 +181,13 @@
 		    }
 		}
 
-		function checkAvailability(nextAvailable) {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method sends request to retrieve 				*/
+        /* 		available booking windows 				 			*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function checkAvailability(nextAvailable) {
 		    $('#loaderModal').show();
 		    $('#availableSlots, #unAvailableSlots').html('');
 
@@ -194,7 +226,14 @@
 			sforce.apex.execute(apexSchedulingController, 'checkAvailability', {workOrderId: $('#workOrderId').val(), startDateTimeEpoch: Date.parse(startDateTime), endDateTimeEpoch: Date.parse(endDateTime), offsetPageMinutes: offsetMinutes, nextAvailable: nextAvailable}, processAvailabilityResponse);
 		}
 
-		function processAvailabilitySuccess(response) {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method process the available booking 			*/
+        /* 		window response and displays the results 			*/
+        /* 		on the availability modal 							*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function processAvailabilitySuccess(response) {
 		    response = JSON.parse(response);
 		    console.log(response);
 
@@ -249,11 +288,22 @@
 		    }
 		}
 
-		function showUnavailableSlots() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method shows/hides the unavailable windows 	*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function showUnavailableSlots() {
 			$('#unAvailableSlotsContainer').toggle();
 		}
 
-		function saveScheduleWorkOrder() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method schedules the work order to the 		*/
+        /*		selected window 									*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function saveScheduleWorkOrder() {
 		    $('#loaderModal').show();
 
 		    var selectedWindow = $('#scheduleWorkOrderModal input[type="radio"][name="bookingWindow"]:checked').val();
@@ -267,7 +317,12 @@
 		    sforce.apex.execute(apexSchedulingController, 'scheduleWorkOrder', {workOrderId: $('#workOrderId').val(), selectedWindow: selectedWindow, rescheduleReason: rescheduleReason}, processBookingResponse);
 		}
 
-		function processBookingSuccess(response) {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method process the save requests results		*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function processBookingSuccess(response) {
 		    response = JSON.parse(response);
 
 		    if (response.success) {
@@ -285,7 +340,12 @@
 		    }
 		}
 
-		function closeScheduleWorkOrderModal() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method closes the availability modal 			*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function closeScheduleWorkOrderModal() {
 			forceScheduleAssignmentCombo = false;
 			$('#availabilityStartDate, #availabilityEndDate').val('');
 		    $('#scheduleWorkOrderModal').fadeOut('fast');
@@ -293,7 +353,14 @@
 		    $('body').css('overflow', 'auto');
 		}
 
-		function inputAvailStart() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method forces the availability checks 			*/
+        /*		start date to be 3 days after a specified 			*/
+        /*		ship date 											*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function inputAvailStart() {
 			if ($('#scheduleWorkOrderShipDateRow').is(':visible') && $('#availabilityStartDate').val() != '') {
 				var inputtedDate = moment(new Date($('#availabilityStartDate').val()));
 				var shipDate = moment(new Date($('#scheduleWorkOrderShipDate').text())).add(3, 'days');
@@ -310,7 +377,14 @@
 		    $('input[type="radio"][name="bookingWindow"]:checked').attr('checked', false);
 		}
 
-		function checkAvailEnd() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method forces the availability checks 			*/
+        /*		end date to be greater than or equal 				*/
+        /* 		to the start date 									*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function checkAvailEnd() {
 			if ($('#availabilityStartDate').val() != '') {
 				var inputtedEndDate = moment(new Date($('#availabilityEndDate').val()));
 				var inputtedStartDate = moment(new Date($('#availabilityStartDate').val()));
@@ -324,7 +398,13 @@
 			}
 		}
 
-		function selectNextAvailable() {
+		/************************************************************/
+        /*                                                  		*/
+        /*      this method shows/hides the 			 			*/
+        /*		check availability and book buttons 	 			*/
+        /*                                                 		 	*/
+        /************************************************************/
+        function selectNextAvailable() {
 		    $('#scheduleSeeAvailBtn').fadeOut(175);
 		    $('#scheduleBookBtn').delay(175).fadeIn(175);
 		    document.getElementById('availabilityEndDate').value = "";

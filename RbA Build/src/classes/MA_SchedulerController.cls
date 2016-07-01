@@ -1,3 +1,18 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This class holds the methods used during the normal flow of the scheduler   */
+/*      Most of them are webservices to allow for asynchronous computation          */
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 global with sharing class MA_SchedulerController {
 
     public static Map<Integer, String> dayNumMap = new Map<Integer, String> {
@@ -12,6 +27,12 @@ global with sharing class MA_SchedulerController {
 
     public RbA_Work_Order__c tempWo {get;set;}
 
+    /****************************************************/
+    /*                                                  */
+    /*      Initializes a temp work order in order      */
+    /*          to utilize its picklist fields          */
+    /*                                                  */
+    /****************************************************/
     global MA_SchedulerController() {
         try {
             Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
@@ -22,6 +43,12 @@ global with sharing class MA_SchedulerController {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      webservice used to query records            */
+    /*      filters are passed in                       */
+    /*                                                  */
+    /****************************************************/
     webService static String retrieveRecords(String objType, String filters, String workOrderType) {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -74,6 +101,11 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to query a store's settings     */
+    /*                                                      */
+    /********************************************************/
     webService static String retrieveSettings(Id storeId) {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -100,6 +132,12 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to get correct timezone         */
+    /*      options used in the settings tab                */
+    /*                                                      */
+    /********************************************************/
     webService static String retrieveTimezoneOptions() {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -120,6 +158,12 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to query the events             */
+    /*      to display on the calendar                      */
+    /*                                                      */
+    /********************************************************/
     webService static String retrieveEvents(String objType, String filters, String altFilters, String resourceUserIdToIdMapString, String storeId) {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -213,6 +257,12 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to get the holidays             */
+    /*      to display on the calendar                      */
+    /*                                                      */
+    /********************************************************/
     webService static String retrieveHolidays(String storeId) {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -238,6 +288,12 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to query the related            */
+    /*      accounts that need geocoding                    */
+    /*                                                      */
+    /********************************************************/
     webservice static String retrieveNonGeocodedAddresses(String appointmentDateString, String storeId, String workOrderType, String resourceId) {
         Map<String, Object> response = new Map<String, Object>();
 
@@ -277,6 +333,13 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to update the related           */
+    /*      accounts that were geocoded with the            */
+    /*      correct latitude and longitude                  */
+    /*                                                      */
+    /********************************************************/
     webservice static String updateGeocodedAddresses(String accIdToAddressString, String addressToGeocodeString) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -311,6 +374,11 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to save a store's settings      */
+    /*                                                      */
+    /********************************************************/
     webService static String saveSettings(String jsonSettings) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -336,6 +404,12 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to create an event for          */
+    /*      a resource from the calendar                    */
+    /*                                                      */
+    /********************************************************/
     webService static String createResourceEvent(String saveType, Id eventId, Id storeId, Id resourceId, String subject, String dateString, String startTime, String endTime) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -375,6 +449,13 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************/
+    /*                                                      */
+    /*      webservice used to get a resources events       */
+    /*      to display on the calendar on the resource      */
+    /*      route tab                                       */
+    /*                                                      */
+    /********************************************************/
     webservice static String retrieveResourceRouteRecords(Id resourceId, String startEpoch, String endEpoch, Id storeId) {
         Map<String, Object> response = new Map<String, Object>();
 
@@ -423,6 +504,13 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************************/
+    /*                                                                  */
+    /*      webservice used to get the available resources              */
+    /*                                                                  */
+    /*      used with the MA_SchedulerAssignResourceComp component      */
+    /*                                                                  */
+    /********************************************************************/
     webService static String retrieveAvailableResources(Id workOrderId, String assignForDay, String woToResIdsString) {
         Map<String, Object> response = new Map<String, Object>();
         
@@ -461,6 +549,13 @@ global with sharing class MA_SchedulerController {
 
             Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
 
+            /************************************************/
+            /*                                              */
+            /*      get all the assigned resources          */
+            /*      and temporarilly set the work orders    */
+            /*      fields if processing for a single day   */
+            /*                                              */
+            /************************************************/
             if (isSingleDay && !workOrder.MA_Scheduler_Events__r.isEmpty()) {
                 for (MA_Scheduler_Event__c maEvent : workOrder.MA_Scheduler_Events__r) {
                     assignedResources.add(maEvent.Resource__c);
@@ -488,6 +583,13 @@ global with sharing class MA_SchedulerController {
 
             assignedResources.addAll(woToResIds);
 
+            /************************************************/
+            /*                                              */
+            /*      get all the resources that were         */
+            /*      previously assigned or have matching    */
+            /*      skills                                  */
+            /*                                              */
+            /************************************************/
             for (Work_Order_Required_Skill__c skill : workOrder.Work_Order_Required_Skills__r) {
                 requiredSkills.put(skill.RbA_Skill__c, skill.RbA_Skill__r.Name);
             }
@@ -505,6 +607,14 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            /************************************************/
+            /*                                              */
+            /*    determine which resources are available   */
+            /*      for the entirety of the work order      */
+            /*      all days must be concurrent             */
+            /*      ther can be no gap between days         */
+            /*                                              */
+            /************************************************/
             if (workOrder.Appointment_Date__c != null && String.isNotBlank(workOrder.Appointment_Start_Time__c) 
                     && (String.isNotBlank(workOrder.Appointment_End_Time__c) || workOrder.Appointment_Duration__c != null)) {
 
@@ -513,6 +623,14 @@ global with sharing class MA_SchedulerController {
                 Set<Id> availableResourcesKeySet = availableResources.keySet();
                 resourceHoursKeySet.retainAll(availableResourcesKeySet);
 
+                /***********************************************************/
+                /*                                                         */
+                /*      determine the end date for the work order          */
+                /*      if the work order last longer than a day           */
+                /*      we will process one day at a time                  */
+                /*      and use the current days end time                  */
+                /*                                                         */
+                /***********************************************************/
                 DateTime endDateTime;
                 Integer totalMinutes = workOrder.Appointment_Duration__c == null ? 0 : (Integer)(workOrder.Appointment_Duration__c * 60);
                 Map<String, Map<String, Object>> latestHours = MA_SchedulerUtilities.determineEarliestStartAndLatestEndHours(storeBookingWindows);
@@ -529,6 +647,14 @@ global with sharing class MA_SchedulerController {
                     endDateTime = startDateTime.addMinutes(totalMinutes);
                 }
 
+                /***********************************************************/
+                /*                                                         */
+                /*      if we could determine the start and end            */
+                /*      times for a day verify that a resource is          */
+                /*      available to work all days from start of day       */
+                /*      till the end of day or the end of the work order   */
+                /*                                                         */
+                /***********************************************************/
                 if (latestHours != null && !latestHours.isEmpty()) {
                     Date tempStartDate = Date.parse(tempStart.format('MM/dd/yyyy', storeTimezone));
                     Date startOfWeek = tempStartDate.toStartOfWeek();
@@ -579,6 +705,12 @@ global with sharing class MA_SchedulerController {
 
                     endDateTime = tempEnd;
                 }
+                /***********************************************************/
+                /*                                                         */
+                /*      otherwise determine if resource is available       */
+                /*      to work the entire work order with no break        */
+                /*                                                         */
+                /***********************************************************/
                 else {
                     Date tempStartDate = Date.parse(startDateTime.format('MM/dd/yyyy', storeTimezone));
                     Date startOfWeek = tempStartDate.toStartOfWeek();
@@ -594,6 +726,12 @@ global with sharing class MA_SchedulerController {
                     }
                 }
 
+                /***********************************************************/
+                /*                                                         */
+                /*      remove resources that already have events          */
+                /*      scheduled between the start and end dates          */
+                /*                                                         */
+                /***********************************************************/
                 for (MA_Scheduler_Event__c maEvent : [SELECT Resource__c FROM MA_Scheduler_Event__c WHERE Resource__c IN :availableResources.keySet() AND RbA_Work_Order__c != :workOrderId AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime]) {
                     maEventIdsAlreadyChecked.add(maEvent.Id);
                     MA_SchedulerResource resource = availableResources.get(maEvent.Resource__c);
@@ -650,6 +788,13 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************************/
+    /*                                                                  */
+    /*      webservice used to determine available booking windows      */
+    /*                                                                  */
+    /*      used with the MA_SchedulerWorkOrderSchedulingComp component */
+    /*                                                                  */
+    /********************************************************************/
     webService static String checkAvailability(Id workOrderId, String startDateTimeEpoch, String endDateTimeEpoch, String offsetPageMinutes, Boolean nextAvailable) {
         Map<String, Object> response = new Map<String, Object>();
 
@@ -696,6 +841,13 @@ global with sharing class MA_SchedulerController {
             startDateTime = MA_SchedulerUtilities.convertGmtToTimezone(startDateTime, storeTimezone, offsetPageMinutes);
             Date startDate = Date.parse(startDateTime.format('MM/dd/yyyy', storeTimezone));
 
+            /****************************************************************************/
+            /*                                                                          */
+            /*      get all resources with matching skills or previously assigned,      */
+            /*      determine resource to skills match, create booking windows,         */
+            /*      and check resources availability                                    */
+            /*                                                                          */
+            /****************************************************************************/
             for (Work_Order_Required_Skill__c rbaSkill : workOrder.Work_Order_Required_Skills__r) {
                 rbaSkillIds.add(rbaSkill.RbA_Skill__c);
             }
@@ -733,6 +885,11 @@ global with sharing class MA_SchedulerController {
             MA_SchedulerUtilities.createBookingWindows(bookingWindows, unAvailableSlots, storeBookingWindows, resourceToSkillsMap, totalSkillsCountMap, startDateTime, endDateTime, storeTimezone, storeHolidayDates, resourceHours);
             MA_SchedulerUtilities.checkResourceAvailability(bookingWindows, unAvailableSlots, userMap, startDateTime, endDateTime, resourceToSkillsMap, workOrder.Work_Order_Type__c, rbaSkillIds);
 
+            /**********************************************************/
+            /*                                                        */
+            /*    remove booking windows with no available resources  */
+            /*                                                        */
+            /**********************************************************/
             if (!assignedResourceIds.isEmpty()) {
                 for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
                     MA_SchedulerBookingWindow bw = bookingWindows[index];
@@ -744,6 +901,11 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            /****************************************************/
+            /*                                                  */
+            /*    create a map of remaining available windows   */
+            /*                                                  */
+            /****************************************************/
             Map<String, Set<String>> remainingSlots = new Map<String, Set<String>>();
             for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
                 MA_SchedulerBookingWindow bw = bookingWindows[index];
@@ -761,6 +923,14 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            /***********************************************************/
+            /*                                                         */
+            /*      if we could determine the start and end            */
+            /*      times for a day verify that all windows are        */
+            /*      available to work all days from start of day       */
+            /*      till the end of day or the end of the work order   */
+            /*                                                         */
+            /***********************************************************/
             if (latestHours != null && !latestHours.isEmpty()) {
                 for (Integer i = 0, len = bookingWindows.size(); i < len; i++) {
                     MA_SchedulerBookingWindow bw = bookingWindows[i];
@@ -854,6 +1024,13 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            /****************************************************/
+            /*                                                  */
+            /*    remove any windows that are outside of        */
+            /*      selected dates or determined to be          */
+            /*      unavailable above                           */
+            /*                                                  */
+            /****************************************************/
             endDateTime = endDateTime.addDays(-7);
             startDateTime = startDateTime.addDays(7);
 
@@ -885,6 +1062,11 @@ global with sharing class MA_SchedulerController {
                 }
             }
             
+            /****************************************************************/
+            /*                                                              */
+            /*    only return first 5 windows if checking next available    */
+            /*                                                              */
+            /****************************************************************/
             if (nextAvailable && bookingWindows.size() > 5) {
                 bookingWindows = new List<MA_SchedulerBookingWindow> {
                     bookingWindows[0],
@@ -909,6 +1091,11 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /***************************************************/
+    /*                                                 */
+    /*      webservice used to cancel work orders      */
+    /*                                                 */
+    /***************************************************/
     webService static String cancelWorkOrder(Id workOrderId, String cancellationReason) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -941,6 +1128,13 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************************/
+    /*                                                                  */
+    /*      webservice used to save assigned resources                  */
+    /*                                                                  */
+    /*      used with the MA_SchedulerAssignResourceComp component      */
+    /*                                                                  */
+    /********************************************************************/
     webService static String saveAssignedResources(String workOrderId, List<Id> assignedResourceIdsList, Id primaryResourceId, String assignForDay) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -990,6 +1184,12 @@ global with sharing class MA_SchedulerController {
             Map<String, Object> storeBookingWindows = (Map<String, Object>)maSettingsMap.get('storeBookingWindows');
             String storeTimezone = (String)maSettingsMap.get('storeTimezone');
             
+            /********************************************************************/
+            /*                                                                  */
+            /*      determine assigned resources removed and delete them        */
+            /*      also create the necessary new assigned resources            */
+            /*                                                                  */
+            /********************************************************************/
             for (Resource__c resource : [SELECT Id, RbA_User__c FROM Resource__c WHERE Id IN :assignedResourceIds]) {
                 if (resource.RbA_User__c != null) {
                     resourceIdToUserIdMap.put(resource.Id, resource.RbA_User__c);
@@ -1033,6 +1233,11 @@ global with sharing class MA_SchedulerController {
                 delete assignedResourcesToDelete;
                 insert newAssignedResources;
 
+                /*****************************************************/
+                /*                                                   */
+                /*     determine the correct primary resource        */
+                /*                                                   */
+                /*****************************************************/
                 List<Assigned_Resources__c> incorrectPrimaryResources = [SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__c WHERE Work_Order__c = :workOrderId
                                                                             AND ((IsPrimary__c = true AND Scheduled_Resource__c != :primaryResourceId)
                                                                                 OR (IsPrimary__c = false AND Scheduled_Resource__c = :primaryResourceId))];
@@ -1046,6 +1251,11 @@ global with sharing class MA_SchedulerController {
                 }
             }
             
+            /********************************************************************/
+            /*                                                                  */
+            /*      create new events; previous events were deleted above       */
+            /*                                                                  */
+            /********************************************************************/
             if (workOrder.Appointment_Date__c != null && String.isNotBlank(workOrder.Appointment_Start_Time__c) && (String.isNotBlank(workOrder.Appointment_End_Time__c) || workOrder.Appointment_Duration__c != null)) {
                 List<Event> newSfEvents = new List<Event>();
                 Set<Id> maEventsAlreadyCreatedFor = new Set<Id>();
@@ -1081,6 +1291,14 @@ global with sharing class MA_SchedulerController {
         return JSON.serialize(response);
     }
 
+    /********************************************************************/
+    /*                                                                  */
+    /*      webservice used to schedule a work order                    */
+    /*      deletes old events and creates new ones                     */
+    /*                                                                  */
+    /*      used with the MA_SchedulerWorkOrderSchedulingComp component */
+    /*                                                                  */
+    /********************************************************************/
     webService static String scheduleWorkOrder(Id workOrderId, String selectedWindow, String rescheduleReason) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
