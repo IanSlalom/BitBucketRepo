@@ -43,9 +43,25 @@ public with sharing class RMS_addWarrantiesExt extends RMS_addWarranties
     
     public List<selectOption> getProcs() {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
-        for (Procedure_Code_Assignment__c procedures : [SELECT Id, Name, Service_Product__c
+        
+        List<Id> ssIds = new List<Id>();
+        for(Service_Symptom__c symptoms : [SELECT Id, Service_Symptom__c, Service_Product__c
+                                          FROM Service_Symptom__c
+                                           WHERE Service_Product__c = :myWO.Id]){
+                                               ssIds.add(symptoms.Service_Symptom__c);
+                                           }
+        
+        List<Id> ssAssign = new List<Id>();
+        for (Service_Symptom_Assignment__c assignments : [Select Id, Service_Symptom__c, Procedure_Code__c
+                                                         FROM Service_Symptom_Assignment__c
+                                                          WHERE Service_Symptom__c =: ssIds]){
+                                                              ssAssign.add(assignments.Procedure_Code__c);
+                                                          }
+        
+        for (Procedure_Code_Assignment__c procedures : [SELECT Id, Name, Service_Product__c, Procedure_Code__c
                                                         FROM Procedure_Code_Assignment__c 
                                                         WHERE Service_Product__c = :myWo.PricebookEntry.Product2Id 
+                                                        AND Procedure_Code__c = : ssAssign
                                                         ORDER BY Procedure_Code_Assignment__c.Name ASC]) { 
                                                             options.add(new selectOption(procedures.Id, procedures.Name)); //for all records found - add them to the picklist options
                                                         }

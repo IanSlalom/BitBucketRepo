@@ -65,10 +65,10 @@
         </div>
         <apex:pageBlock mode="maindetail" tabStyle="OrderItem">
             <apex:pageBlockButtons >                
-                <apex:commandButton onclick="callGenerateConsoleURL('{!editURL}','Edit');return false" id="editURL" value="Edit Product"/>
-                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addResponsibilitytoSP?id={!OrderItem.Id}&mode=e','Add Responsibility');return false" value="Add Responsibility"/>
-                <apex:commandButton onClick="callGenerateConsoleURL('/apex/RMS_addWarrantytoSP?id={!OrderItem.Id}&mode=e','Add Reimbursement');return false" value="Add Reimbursement" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
-                <apex:commandButton onclick="callGenerateConsoleURL('{!addSymptomURL}','Add Service Symptom');return false" id="addServiceSymptom" value="Add Service Symptom"/>
+                <apex:commandButton action="{!editOrderItem}" value="Edit"/>
+                <apex:commandButton action="{!addResponsibility}" value="Add Responsibility"/>
+                <apex:commandButton action="{!addServiceSymptom}" value="Add Service Symptom" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+                <apex:commandButton action="{!addWarranty}" value="Add Reimbursement" rendered="{!IF(OrderItem.Number_Service_Symptoms__c > 0,true,false)}"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/>
@@ -103,7 +103,7 @@
     </apex:form>
     
     <apex:relatedList list="Charges__r"/>
-    <apex:relatedList list="Service_Symptoms__r"/>
-    <apex:relatedList list="Problem_Components__r"/>
-    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Service_Symptoms__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Problem_Components__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
+    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Service_Symptoms__c > 0,true,false)}"/>
 </apex:page>

@@ -1,3 +1,18 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This wrapper class holds the methods used to 				                */
+/* 		standardize events for the calendar 										*/
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 global with sharing class MA_SchedulerEvent {
 
 	public String url;
@@ -30,7 +45,13 @@ global with sharing class MA_SchedulerEvent {
 	public Map<Id, String> assignedResourceMap = new Map<Id, String>();
 	public List<MA_SchedulerEvent> relatedEvents = new List<MA_SchedulerEvent>();
 
-	public MA_SchedulerEvent() {}
+	/****************************************************/
+    /*                                                  */
+    /*      multiple constructors to initialize the     */
+    /*      a MA_SchedulerEvent for various objects     */
+    /*                                                  */
+    /****************************************************/
+    public MA_SchedulerEvent() {}
 
 	public MA_SchedulerEvent(Object obj, String objType) {
 		if (objType == 'storeHoliday') {
@@ -48,7 +69,12 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	public void convertStoreHoliday(Map<String, Object> holiday) {
+	/****************************************************/
+    /*                                                  */
+    /*      standardizes a store holiday 			    */
+    /*                                                  */
+    /****************************************************/
+    public void convertStoreHoliday(Map<String, Object> holiday) {
 		url = '';
 		contactName = '';
 		workOrderId = null;
@@ -65,7 +91,12 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	public void convertStandardEvent(Event sfEvent, Map<Id, Id> userMap) {
+	/****************************************************/
+    /*                                                  */
+    /*      standardizes a Salesforce Event 			*/
+    /*                                                  */
+    /****************************************************/
+    public void convertStandardEvent(Event sfEvent, Map<Id, Id> userMap) {
 		url = '';
 		contactName = '';
 		className = 'sfEvent';
@@ -77,7 +108,12 @@ global with sharing class MA_SchedulerEvent {
 		resourceId = userMap != null && userMap.containsKey(sfEvent.OwnerId) ? userMap.get(sfEvent.OwnerId) : sfEvent.OwnerId;
 	}
 
-	public void convertMASchedulerEvent(MA_Scheduler_Event__c maEvent, Boolean isDisplay) {
+	/****************************************************/
+    /*                                                  */
+    /*      standardizes a MapAnything Event		    */
+    /*                                                  */
+    /****************************************************/
+    public void convertMASchedulerEvent(MA_Scheduler_Event__c maEvent, Boolean isDisplay) {
 		title = maEvent.Name;
 		resourceId = maEvent.Resource__c;
 		endDateTime = maEvent.EndDateTime__c;
@@ -115,7 +151,12 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	private String discoverContactName(RbA_Work_Order__c workOrder) {
+	/****************************************************/
+    /*                                                  */
+    /*      determines the related contact's name	    */
+    /*                                                  */
+    /****************************************************/
+    private String discoverContactName(RbA_Work_Order__c workOrder) {
 		String name = '';
 		if (workOrder != null && String.isNotBlank(workOrder.Contact__c)) {
 			name = workOrder.Contact__r.LastName + (String.isNotBlank(workOrder.Contact__r.FirstName) ? ', ' + workOrder.Contact__r.FirstName : '');
@@ -123,14 +164,29 @@ global with sharing class MA_SchedulerEvent {
 		return name;
 	}
 
-	public void addResource(String resourceName) {
+	/****************************************************/
+    /*                                                  */
+    /*      adds a resource to the event 			    */
+    /*                                                  */
+    /****************************************************/
+    public void addResource(String resourceName) {
 		resourceNames.add(resourceName);
 		if (!resourceNames.isEmpty()) {
 			resourceNamesText = String.join(resourceNames, ', ');
 		}
 	}
 
-	public void createOffsetTimes(String storeTimezone) {
+	/****************************************************/
+    /*                                                  */
+    /*      determines the correct GMT times 		    */
+    /* 		based on the store's timezone 				*/
+    /*													*/
+    /*		this is needed to properly align the 		*/
+    /*		times between Salesforce and the calendar 	*/
+    /*		to be viewed the same from any where 		*/
+    /*                                                  */
+    /****************************************************/
+    public void createOffsetTimes(String storeTimezone) {
 		startDateTimeOffset = DateTime.newInstanceGmt(startDateTime.year(), startDateTime.month(), startDateTime.day(), startDateTime.hour(), startDateTime.minute(), startDateTime.second());
 		endDateTimeOffset = DateTime.newInstanceGmt(endDateTime.year(), endDateTime.month(), endDateTime.day(), endDateTime.hour(), endDateTime.minute(), endDateTime.second());
 
@@ -150,7 +206,16 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	public void setBookingWindowsAvailableResources(List<MA_SchedulerBookingWindow> allBookingWindows) {
+	/****************************************************/
+    /*                                                  */
+    /*      determines if this event is booked 		    */
+    /* 		during a corresponding booking window 		*/
+    /*		and is used to determine if there are 		*/
+    /* 		more events booked/scheduled than there 	*/
+    /*		are available resources 					*/
+    /*                                                  */
+    /****************************************************/
+    public void setBookingWindowsAvailableResources(List<MA_SchedulerBookingWindow> allBookingWindows) {
 		for (MA_SchedulerBookingWindow window : allBookingWindows) {
 			if (startDateTime < window.endDateTime && endDateTime > window.startDateTime) {
 				if (className.contains('maEvent') && String.isBlank(resourceId)) {
@@ -166,7 +231,14 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	public void checkWindowOverbooked(MA_SchedulerBookingWindow window, Set<Id> workOrderSkills) {
+	/****************************************************/
+    /*                                                  */
+    /*      determines if a booking window has		    */
+    /*		been overbooked and does not have 			*/
+    /*		enough remaining skills matched				*/
+    /*                                                  */
+    /****************************************************/
+    public void checkWindowOverbooked(MA_SchedulerBookingWindow window, Set<Id> workOrderSkills) {
 		if (!window.overbooked) {
 			for (Id skillId : workOrderSkills) {
 				if (window.totalSkillsCountMap.containsKey(skillId)) {
@@ -183,7 +255,16 @@ global with sharing class MA_SchedulerEvent {
 		}
 	}
 
-	public void setBookingWindowsOverlappingWorkOrders(List<MA_SchedulerBookingWindow> allBookingWindows, Map<Id, Set<Id>> woToSkillsMap, Set<Id> workOrderSkills) {
+	/****************************************************/
+    /*                                                  */
+    /*      determines if this event is booked 		    */
+    /* 		during a corresponding booking window 		*/
+    /*		and is used to determine if there are 		*/
+    /* 		more events booked/scheduled than there 	*/
+    /*		are available resources 					*/
+    /*                                                  */
+    /****************************************************/
+    public void setBookingWindowsOverlappingWorkOrders(List<MA_SchedulerBookingWindow> allBookingWindows, Map<Id, Set<Id>> woToSkillsMap, Set<Id> workOrderSkills) {
 		for (MA_SchedulerBookingWindow window : allBookingWindows) {
 			if (startDateTime < window.endDateTime && endDateTime > window.startDateTime) {
 				Set<Id> workOrderSkillToCompare = woToSkillsMap.get(workOrderId);

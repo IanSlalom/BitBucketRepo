@@ -6,17 +6,18 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public Id COROServiceId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
   public ID CORORecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order');
+  public ID ChangeOrderRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
 
   public RMS_OrderTriggerHandler(boolean isExecuting, integer size){
     m_isExecuting = isExecuting;
     BatchSize = size;
   }
 
-/*
+
   public void OnBeforeInsert(Order[] newOrders){
-    
+    setPriceBookId(newOrders);
   }
- */
+ 
 
   public void OnAfterInsert(Order[] newOrders){
     updateJIPCOROServiceOrders(newOrders);
@@ -59,6 +60,34 @@ public with sharing class RMS_OrderTriggerHandler {
   public void OnUndelete(Order[] restoredOrders){
 
   }*/
+  
+  public void setPriceBookId(List<Order> newOrders){
+    Id standardPriceBookId = null;
+    if(Test.isRunningTest()){
+      standardPriceBookId = Test.getStandardPricebookId();
+    }else{
+      standardPriceBookId = [Select Id from Pricebook2 where IsStandard = true].Id;
+    }
+    List<Id> soldOrders = new List<Id>();
+     for(Order o: newOrders){
+      if(o.Sold_Order__c != null){
+        soldOrders.add(o.Sold_Order__c);
+      }
+    }
+
+    Map<Id,Order> soldOrderMap = new Map<Id,Order>([Select Id, PriceBook2Id from Order where Id in: soldOrders and Pricebook2Id != null]);
+    for(Order o: newOrders){
+      if( o.PriceBook2Id == null){
+        if(soldOrderMap.containsKey(o.Sold_Order__c)){
+          o.Pricebook2Id = soldOrderMap.get(o.Sold_Order__c).Pricebook2Id;
+        }else{
+          o.PriceBook2Id = standardPriceBookId;
+        }
+      }
+    }
+    
+    
+  }
 
   public void updateOrderStatus(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     for(Order o: newMap.values()){   
@@ -76,6 +105,9 @@ public with sharing class RMS_OrderTriggerHandler {
         //o.Apex_Context__c = true;
         o.status = 'Install Complete';
       }*/
+      else if(O.Revenue_Recognized_Date__c != null && o.RecordtypeId == ChangeOrderRecordTypeId){
+        o.status = 'Job Closed';
+      }
     }
   }
 
@@ -141,7 +173,7 @@ public with sharing class RMS_OrderTriggerHandler {
     List<Task> tasksToInsert = new List<Task>();
     for(Order o: newMap.values()){ 
       if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
-        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = 'PlaceHolder1', Secondary_Reason__c = 'PlaceHolder1', OwnerId = o.OwnerId, Subject = 'On Hold'));
+        tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = '', Secondary_Reason__c = '', OwnerId = o.OwnerId, Subject = 'On Hold', RecordtypeId = onHoldTaskID));
       }
     }
     if(!tasksToInsert.isEmpty()){

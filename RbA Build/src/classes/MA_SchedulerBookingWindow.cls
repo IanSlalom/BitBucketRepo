@@ -1,3 +1,17 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This wrapper class holds the methods used to create booking windows         */
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 global with sharing class MA_SchedulerBookingWindow implements Comparable {
 	
 	public String dayOfWeek;
@@ -15,6 +29,12 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
     public Map<Id, Integer> totalSkillsCountMap = new Map<Id, Integer>();
     public Map<Id, Set<Id>> resourceToSkillsMap = new Map<Id, Set<Id>>();
 
+    /****************************************************/
+    /*                                                  */
+    /*      detemines if window is valid for a day      */
+    /*      and creates the window if so                */
+    /*                                                  */
+    /****************************************************/
     public MA_SchedulerBookingWindow(String dayOfWeek, Date day, Map<String, Object> window, Map<Id, Set<Id>> resourceToSkillsMap, Map<Id, Integer> totalSkillsCountMap, DateTime startDateTime, DateTime endDateTime, String storeTimezone, Map<Id, Map<String, Object>> resourceHours) {
         Date startOfWeek = day.toStartOfWeek();
 
@@ -59,18 +79,31 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
 	            this.totalSkillsCountMap = totalSkillsCountMap.clone();
                 this.endDateTimeFormated = this.endDateTime.format('hh:mm a', storeTimezone);
 	            this.startDateTimeFormated = this.startDateTime.format('MM/dd/yyyy hh:mm a', storeTimezone);
-
+                
 	            checkResourceAvailability(day, resourceHours, startDateTimeTemp, endDateTimeTemp, storeTimezone);
 	        }
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      creates a list of matched skills            */
+    /*      for the booking window                      */
+    /*                                                  */
+    /****************************************************/
     public void determineSkillsMatched() {
     	for (Set<Id> skillsSet : resourceToSkillsMap.values()) {
     		skillsMatched.addAll(skillsSet);
     	}
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      determines which resources are not          */
+    /*      available for this window and removes       */
+    /*      them and their skills match                 */
+    /*                                                  */
+    /****************************************************/
     public void checkResourceAvailability(Date day, Map<Id, Map<String, Object>> resourceHours, DateTime startDateTimeChecked, DateTime endDateTimeChecked, String storeTimezone) {
     	Set<Id> resourceHoursKeySet = resourceHours.keySet();
         Set<Id> resourceSkillsMapKeySet = resourceToSkillsMap.keySet();
@@ -115,6 +148,11 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
     	}
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      used to properly sort a list of windows     */
+    /*                                                  */
+    /****************************************************/
     global Integer compareTo(Object compareTo) {
         MA_SchedulerBookingWindow compareToBookingWindow = (MA_SchedulerBookingWindow)compareTo;
 

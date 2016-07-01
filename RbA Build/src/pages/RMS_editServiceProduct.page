@@ -16,7 +16,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Service Product {!OrderItem.OrderItemNumber}');
+        sforce.console.setTabTitle('{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}')
     }; 
     
     function testCloseTab() {
@@ -40,7 +40,7 @@
     <apex:form >
         <apex:pageBlock mode="edit" title="Service Product">
             <apex:pageBlockButtons >
-                <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
+                <apex:commandButton value="Cancel" action="{!cancelOrderItem}" immediate="true"/>
                 <apex:commandButton action="{!saveCloseTab}" value="Save" />                
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
