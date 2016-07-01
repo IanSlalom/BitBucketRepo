@@ -632,7 +632,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Windows_Series_2_FF_IF_Rollup__c</field>
+            <field>Windows_Rollup__c</field>
             <table>Order</table>
         </columns>
         <masterLabel>Orders</masterLabel>
