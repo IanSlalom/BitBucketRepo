@@ -123,12 +123,13 @@ public with sharing class RMS_viewOrderProductsController {
         }
     }
 
-    public void cancelOrderItem(){
-        System.debug('OI to CANCEL' + orderItemToCancel);
+    public pageReference cancelOrderItem(){
+        /*System.debug('OI to CANCEL' + orderItemToCancel);
         OrderItem o = [Select Id, Status__c from OrderItem where Id =: orderItemToCancel];
         o.Status__c = 'Cancelled';
         update o;
-        loadOrderItems();
+        loadOrderItems();*/
+        return new PageReference('/apex/RMS_CancelOrderLine?id='+orderItemToCancel);
     }
     
 }

@@ -1,0 +1,42 @@
+<apex:page standardController="OrderItem" extensions="RMS_CancelOrderLineController">
+<apex:includeScript value="{!$Resource.jquery}" />
+<script>
+    var j$ = jQuery.noConflict();
+
+        //The callback function that closeTab will call once it's got the ID for its tab
+        var callCloseTab= function callCloseTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+
+        function closeTab() {
+
+            if(sforce.console.isInConsole()) {
+                sforce.console.refreshPrimaryTabById( primaryTabId, false,
+                    function()
+                    {
+                        if ( subTabId ) sforce.console.closeTab( subTabId );
+                    }
+                );
+                return false;
+            }
+            else {
+                location.href='/{!OrderItem.OrderId}'; 
+            }
+
+        
+        };  
+      
+</script>
+	<apex:form >  
+		<apex:pageBlock title="Cancel Order Product">
+		  <apex:pageBlockButtons location="top" >
+            <apex:commandButton action="{!save}" value="Save"  oncomplete="closeTab();return false"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+        </apex:pageBlockButtons>    
+        <apex:pageBlockSection title="Order Product Information">
+			<apex:outputField value="{!OrderItem.Status__c}"/>
+			<apex:inputField value="{!OrderItem.Cancellation_Reason__c}" required="true"/>
+		</apex:pageBlockSection>
+		</apex:pageBlock>
+  	</apex:form>
+</apex:page>
