@@ -567,11 +567,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Unique_Job_Identifier__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Amount_Financed__c</field>
             <table>Order</table>
         </columns>
@@ -632,7 +627,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Windows_Series_2_FF_IF_Rollup__c</field>
+            <field>Windows_Rollup__c</field>
             <table>Order</table>
         </columns>
         <masterLabel>Orders</masterLabel>
