@@ -194,9 +194,11 @@ private class UtilityMethodsTest {
 
 		Payment__c Payment4 = new Payment__c(Order__c = soldOrder.Id, Store_Location__c = store.Id, Payment_Amount__c = 500, Locked__c = true);
 		lockedRecords.add(Payment4);
-
+		try {
 		insert lockedRecords;
-
+		}catch(Exception e){
+		}
+		
 		map<id, sObject> unlockedMap = new map<id, Payment__c>();
 		map<id, sObject> lockedMap = new map<id, Payment__c>();
 		

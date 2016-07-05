@@ -31,7 +31,7 @@ public with sharing class RMS_errorMessages {
 	public static final String ORDER_STATUS_INVALID_FOR_PO_CREATION = 'Purchase Order cannot be created until the Order is in Ready to Order Status.';
 	public static final String PO_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released in the current status.';
 	public static final String PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until all Purchase Order line items have been verified';
-
+	public static final String ORDER_TYPE_STATUS_DATE_INVALID_FOR_PO_CREATION = 'Purchase Order cannot be created for CORO Orders if Revenue Recognized Date is not empty or Order Status is not Ready to Order, Order Released, Install Needed, Install Scheduled, Install Complete, or Job In Progress';
 
 	/*******************************************************
 					Product Configuration Errors

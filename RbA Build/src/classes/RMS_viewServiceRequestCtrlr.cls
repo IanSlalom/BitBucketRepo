@@ -127,7 +127,7 @@ public class RMS_viewServiceRequestCtrlr {
         
     }  
     
-        public PageReference updateServiceType(){
+    public PageReference updateServiceType(){
         PageReference newPage;
         newPage = new PageReference('/apex/RMS_updateServiceType?id='+o.id);
         newPage.setRedirect(true); 

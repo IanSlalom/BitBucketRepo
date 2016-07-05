@@ -103,6 +103,7 @@ private class PurchaseOrderTriggerHandlerTests {
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Released'));
 			}
 		}
+		test.starttest();
 		insert poList;
 
 		Map<Id, Purchase_Order__c> oldMap = new Map<Id, Purchase_Order__c>();
@@ -131,6 +132,7 @@ private class PurchaseOrderTriggerHandlerTests {
 				System.assertEquals('Order Released',o.Status);
 			}
 		}
+		test.stoptest();
 	}
 
 	@isTest static void testeupdateOrderStatusToInstallNeeded() {
@@ -160,8 +162,8 @@ private class PurchaseOrderTriggerHandlerTests {
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Confirmed'));
 			}
 		}
+		test.starttest();
 		insert poList;
-
 		Map<Id, Purchase_Order__c> oldMap = new Map<Id, Purchase_Order__c>();
 		Map<Id, Purchase_Order__c> newMap = new Map<Id, Purchase_Order__c>();
 		for(Purchase_Order__c po: poList){
@@ -188,6 +190,7 @@ private class PurchaseOrderTriggerHandlerTests {
 				System.assertEquals('Install Needed',o.Status);
 			}
 		}
+		test.stoptest();
 	}
 
 	@isTest static void testupdateHasPOCheckbox() {

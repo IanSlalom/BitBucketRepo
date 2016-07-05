@@ -127,6 +127,7 @@
         <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>warrantyTriggerTest</members>
+        <members>RMS_CancelOrderLineController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -200,6 +201,7 @@
         <members>RMS_viewServiceRequest</members>
         <members>RMS_viewServiceRequestLocked</members>
         <members>RMS_viewServiceSymptomList</members>
+        <members>RMS_CancelOrderLine</members>
         <name>ApexPage</name>
     </types>
     <types>

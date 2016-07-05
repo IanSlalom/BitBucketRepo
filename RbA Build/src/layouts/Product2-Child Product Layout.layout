@@ -168,16 +168,6 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Master_Product__c</fields>
-        <relatedList>Service_Product__c.Service_Product__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Description__c</fields>
-        <relatedList>Procedure_Code_Assignment__c.Service_Product__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
         <relatedList>Vendor_Product__c.Product__c</relatedList>
     </relatedLists>
     <relatedLists>

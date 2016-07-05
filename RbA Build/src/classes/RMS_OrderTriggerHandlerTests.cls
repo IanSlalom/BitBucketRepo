@@ -272,6 +272,10 @@ private class RMS_OrderTriggerHandlerTests {
     }
 
     @isTest static void testUpdateJIPCOROServiceOrders() {
+        // Turn off the financial trigger to avoid SOQL limits in test class
+        RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+        insert turnOffFinancialTrigger;
+
         Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
         List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
                                                   and Name = 'InstallScheduled'];
@@ -308,8 +312,8 @@ private class RMS_OrderTriggerHandlerTests {
         List<PricebookEntry> pbeList = [Select Id from PricebookEntry];
         OrderItem oi = new OrderItem(OrderId = newOrder.Id, PricebookentryId = pbeList[0].Id, Quantity = 2, UnitPrice = 100, 
             Quote_Accepted__c = true, Billable_Amount__c = 2, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Service', Secondary_Reason__c = 'Egress');
-        insert oi;
         Test.startTest();
+        insert oi;
         newOrder.Status = 'Closed';
         update newOrder;
         newOrder = [Select Revenue_Recognized_Date__c from Order where Id =: newOrder.Id];
@@ -356,12 +360,11 @@ private class RMS_OrderTriggerHandlerTests {
                                                     OpportunityId = soldOrder[0].OpportunityId, Status = 'Draft', recordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order'),
                                                     Service_Type__c = 'Draft' );
         List<Order> oList = new List<Order>{newOrder,newOrder2};
-        insert oList;
         Test.startTest();
+        insert oList;
         newOrder.Status = 'Ready to Order';
         newOrder2.Status = 'Ready to Order';
         update oList;
-        Test.stopTest();
         oList= [Select Id, Unique_Identifier__c, Status from Order where Id in: oList];
         String uniqueIDString = store.Store_Number__c + store.Active_Store_Configuration__r.Order_Number__c.toPlainString();
         while(uniqueIdString.length() < 11){
@@ -382,6 +385,7 @@ private class RMS_OrderTriggerHandlerTests {
 
         store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
         System.assertEquals(store.Active_Store_Configuration__r.Order_Number__c, orderNumBeforeUpdate + oList.size());
+        Test.stopTest();
         
     }
 

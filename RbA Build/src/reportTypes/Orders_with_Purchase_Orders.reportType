@@ -567,6 +567,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Unique_Identifier__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Amount_Financed__c</field>
             <table>Order</table>
         </columns>
