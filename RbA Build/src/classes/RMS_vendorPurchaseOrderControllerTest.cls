@@ -85,13 +85,17 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 					ConstructorTest
 	*******************************************************/
 	static testmethod void ConstructorTest(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		createTestRecords();
 
 		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
 		System.debug('ORDER REV REC' + soldOrder.Revenue_Recognized_Date__c);
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
-		Test.startTest();
 		// Set up controller with an order Id and no PO Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef);
@@ -102,6 +106,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assertEquals(customController.po.Status__c,'In Progress');
 		Purchase_Order__c po2 = new Purchase_Order__c();
 		insert po2;
+		Test.startTest();
 		System.debug('RELATEDORDER with fields ' + customController.relatedOrder);
 		System.debug(customController.showInventoryWriteOff);
 		System.assertEquals(customController.showInventoryWriteOff,false);
@@ -268,6 +273,10 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 	@isTest
 	static void saveTestDates(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
 		createTestRecords();
 
 		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
@@ -276,6 +285,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		OrderItem soldOrderItem = [SELECT Id,Purchase_Order__c FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];	
 		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
 		upsert soldOrderItem;
+		test.StartTest();
 			// Set up controller with an order Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef);
@@ -297,6 +307,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assertEquals(soldOrderItem.Date_Written_Off__c, System.Today());
 		System.assertEquals(soldOrderItem.Date_Vendor_Credit__c, System.Today());
 
+		test.stopTest();
 	}
 	/*******************************************************
 					SaveTest
@@ -317,6 +328,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		soldOrderItem.Unit_Wholesale_Cost__c = 50;
 		upsert soldOrderItem;
 
+		test.startTest();
 		// Set up controller with an order Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef);
@@ -365,6 +377,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		//TODO: Finish setting up data to add store location to user
 		// Save with a vendor but no PO in the controller
 //		customController2.save();
+		test.stopTest();
 
 	}
 		
@@ -434,6 +447,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		createTestRecords();
 
+		Test.startTest();
 		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id);
@@ -478,6 +492,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.receive();
 		customController.vendorCredit();
 		
+		Test.stopTest();
 	}
 
 	/*******************************************************
