@@ -155,10 +155,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Active_Financial_Configuration__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Material_Contact__c</field>
             </layoutItems>
         </layoutColumns>
@@ -205,11 +201,11 @@
                 <emptySpace>true</emptySpace>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Accounts_Receivable_Contact__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Accounts_Receivable_Contact_Title__c</field>
             </layoutItems>
             <layoutItems>
@@ -376,6 +372,10 @@
         <fields>PRICEBOOK2.LAST_UPDATE</fields>
         <fields>PRICEBOOK2.IS_ACTIVE</fields>
         <relatedList>Pricebook2.Store_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>rSuite_Financing_Option__c.Store_Configuration__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
