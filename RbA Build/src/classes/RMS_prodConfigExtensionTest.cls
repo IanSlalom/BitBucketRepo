@@ -132,7 +132,7 @@ private class RMS_prodConfigExtensionTest {
 		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id, Status__c = 'New');
 		insert po;
 
-
+		test.starttest();
 		// Set up controller with order line id only
 		PageReference pageRef2 = Page.RMS_prodConfigEdit;
 		Test.setCurrentPage(pageRef2);
@@ -158,6 +158,7 @@ private class RMS_prodConfigExtensionTest {
 		RMS_prodConfigExtension customController3  = new RMS_prodConfigExtension(stdController3);
 		System.assert(customController3.changeHistoryRecords.size()>0);
 		System.assert(customController3.changeHistoryRecords[0].Order_Product__c == oi2.Id);
+		test.stoptest();
 
 	}
 

@@ -1,4 +1,17 @@
-//@isTest (SeeAllData = false)
+/************************************************************************************/
+/*                                                                                  */
+/*      This class is used to create fake data for the test classes 				*/
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 public class MA_SchedulerFakeDataGenerator {
 	
 	public static Map<String, Object> deserializeResponse(String responseString) {

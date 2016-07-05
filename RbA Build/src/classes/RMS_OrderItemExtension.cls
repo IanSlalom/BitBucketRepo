@@ -46,7 +46,7 @@ public class RMS_OrderItemExtension {
             Order parent = [SELECT id FROM Order WHERE id = :o.OrderId];   
             
             
-            PageReference savePage = new PageReference('/'+parent.id);
+            PageReference savePage = new PageReference('/'+o.id);
             savePage.setRedirect(true);
             return savePage;
         }catch(DMLException ex){

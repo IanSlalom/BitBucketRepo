@@ -1470,7 +1470,7 @@ public with sharing class RMS_financialTransactionManagerTest {
 		insert finacialTransaction9;
 		Profile p = [SELECT Id FROM Profile WHERE Name='System Administrator'];
 
-      User u = new User(Alias = 'adm', Email='admin@test.com',
+      User u = new User(Alias = 'adm', Email='admin@test.com', Store_Locations__c = '77 - Twin Cities, MN',
 
       EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
 

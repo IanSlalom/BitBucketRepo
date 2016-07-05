@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This is the main page for the scheduler                                     -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:page showHeader="true" sidebar="false">
 
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
@@ -24,10 +38,20 @@
             retrieveTimezoneOptions();
         });
 
+        /***************************************************/
+        /*                                                 */
+        /*    retrieves the available timezone options     */
+        /*                                                 */
+        /***************************************************/
         function retrieveTimezoneOptions() {
             sforce.apex.execute(apexMainPageController, 'retrieveTimezoneOptions', {}, processTimezoneOptionsResponse);
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    set available timezone options in picklist   */
+        /*                                                 */
+        /***************************************************/
         function processTimezoneOptionsSuccess(response) {
             response = JSON.parse(response);
 
@@ -41,10 +65,20 @@
             }
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    retrieves the users associated stores        */
+        /*                                                 */
+        /***************************************************/
         function retrieveStoreIds() {
             sforce.apex.execute(apexMainPageController, 'retrieveRecords', { objType: 'Scheduler' }, processStoreResponse);
         }
 
+        /********************************************************************/
+        /*                                                                  */
+        /*    determines if user is a scheduler or has more than 1 store    */
+        /*                                                                  */
+        /********************************************************************/
         function processStoreSuccess(response) {
             response = JSON.parse(response);
 
@@ -81,11 +115,22 @@
             }
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    overrides certain parameters of the          */
+        /*      standard list view                         */
+        /*                                                 */
+        /***************************************************/
         function initializeListViewAttributes() {
             $('.listButtons li:not(".lastItem"), .x-grid3-td-checkbox').hide();
             $('.listViewportWrapper').ajaxComplete(onListViewLoad());
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    creates the onclick popup for the list view  */
+        /*                                                 */
+        /***************************************************/
         function onListViewLoad() {
             setTimeout(function() {
                 var records = $('.listViewportWrapper .x-grid3-row .x-grid3-col');
@@ -113,10 +158,20 @@
             }, 500);
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    closes the list view popup                   */
+        /*                                                 */
+        /***************************************************/
         function closeListViewOptionsModal() {
             $('#listViewOptionsModal').hide();
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    formats address based on missing data        */
+        /*                                                 */
+        /***************************************************/
         function formatAddress(address) {
             address = address.replace(new RegExp('undefined', 'g'), '').replace(', ,', ',').replace(',  ', ', ');
             if (address.startsWith(', ')) {
@@ -129,6 +184,11 @@
             return address;
         }
 
+        /***************************************************/
+        /*                                                 */
+        /*    process and asynchronous error               */
+        /*                                                 */
+        /***************************************************/
         function processResponseError(error) {
             if (!error.faultstring) {
                 error = { error: 'Response Error'};
@@ -136,6 +196,11 @@
             handleError('ERROR', error);
         }
 
+        /************************************************************/
+        /*                                                          */
+        /*    creates an error message and generates the modal      */
+        /*                                                          */
+        /************************************************************/
         function handleError(componentName, error) {
             $('#errorMessage').text(componentName + ' : ' + (error.error ? error.error : error.faultstring));
             $('#errorModal').show();
@@ -144,6 +209,12 @@
             $('#loaderModal').hide();
         }
         
+        /***************************************************/
+        /*                                                 */
+        /*    closes the calendar event and list view      */
+        /*    popup when clicked off of                    */
+        /*                                                 */
+        /***************************************************/
         $(document).mouseup(function (e) {
             var container = $("#listViewOptionsModal, #eventOptionsModal");
         
@@ -157,6 +228,13 @@
             $('#errorModal').addClass('ma-in');
         });
 
+        /***************************************************/
+        /*                                                 */
+        /*    opens the work order in a new window         */
+        /*    and refreshes the calendar when the          */
+        /*    window is closed                             */
+        /*                                                 */
+        /***************************************************/
         function viewEditWorkOrder(isCalendar) {
             var workOrderId;
             if (isCalendar) {

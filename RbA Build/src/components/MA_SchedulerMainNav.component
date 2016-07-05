@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component controls the main navigation of the scheduler                -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component >
 
   <style>
@@ -17,25 +31,53 @@
   </style>
   
   <script>
+    /****************************************/
+    /*                                      */
+    /*    opens the main page nav panel     */
+    /*                                      */
+    /****************************************/
     function openMainNavModal() {
       $('.main-nav-container').show();
       $('.main-nav-container').addClass('ma-left-in');
       $('.nav-overlay-container').fadeIn(100);
     }
     
+    /****************************************/
+    /*                                      */
+    /*    closes the main page nav panel    */
+    /*                                      */
+    /****************************************/
     function closeMainNavModal() {
       $('.nav-overlay-container').fadeOut(100);
       $('.main-nav-container').removeClass('ma-left-in');
     }
     
+    /****************************************/
+    /*                                      */
+    /*    changes the main text for the     */
+    /*    resource view                     */
+    /*                                      */
+    /****************************************/
     function changeTextResource() {
       document.getElementById('topbar-header-text').innerHTML = 'Resource View';
     }
     
+    /****************************************/
+    /*                                      */
+    /*    changes the main text for the     */
+    /*    settings view                     */
+    /*                                      */
+    /****************************************/
     function changeTextSettings() {
       document.getElementById('topbar-header-text').innerHTML = 'Settings';
     }
     
+    /****************************************/
+    /*                                      */
+    /*    closes the main page nav panel    */
+    /*    when clicked off of               */
+    /*                                      */
+    /****************************************/
     $(document).mouseup(function (e) {
       var container = $(".main-nav-container");
 

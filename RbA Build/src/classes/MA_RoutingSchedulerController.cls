@@ -1,3 +1,18 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This class holds the methods used during the batch scheduling process       */
+/*      Most of them are webservices to allow for asynchronous computation          */
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 global with sharing class MA_RoutingSchedulerController {
 
     private static Map<String, Object> configs = new Map<String,Object>();
@@ -9,6 +24,12 @@ global with sharing class MA_RoutingSchedulerController {
 
     public RbA_Work_Order__c tempWo {get;set;}
 
+    /****************************************************/
+    /*                                                  */
+    /*      Initializes a temp work order in order      */
+    /*          to utilize its picklist fields          */
+    /*                                                  */
+    /****************************************************/
     public MA_RoutingSchedulerController() {
         try {
             Id visitRecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'].Id;
@@ -19,6 +40,12 @@ global with sharing class MA_RoutingSchedulerController {
         }
     }
     
+    /****************************************************/
+    /*                                                  */
+    /*      webservice used to authenticate the         */
+    /*                  routing service                 */
+    /*                                                  */
+    /****************************************************/
     webService static String getESRIToken(String storeId, Boolean isVerification, String clientId, String clientSecret) {
         Http h = new Http();
         String esriClientId;
@@ -67,6 +94,21 @@ global with sharing class MA_RoutingSchedulerController {
         return JSON.serialize(responseMap);
     }
     
+    /****************************************************/
+    /*                                                  */
+    /*      webservice used to retrieve a resources     */
+    /*      stops for a specific day and format         */
+    /*      them into the desired format for the        */
+    /*      routing request                             */
+    /*                                                  */
+    /*      if the request comes from the batch         */
+    /*      scheduling process we pass in the           */
+    /*      assigned work order ids                     */
+    /*      otherwise we query for them                 */
+    /*                                                  */
+    /*      used in conjuction with the                 */
+    /*      MA_SchedulerResourceRouteComp component     */
+    /****************************************************/
     webservice static String retrieveResourceRouteRecords(Id resourceId, String dayString, Id storeId, List<Id> resourceStopIds) {
         try {
             Integer sequence = 1;
@@ -148,6 +190,12 @@ global with sharing class MA_RoutingSchedulerController {
         return JSON.serialize(master);
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      webservice that runs when the               */
+    /*      batch routing results are confirmed         */
+    /*                                                  */
+    /****************************************************/
     webService static String processConfirmBatch(String woToResIdsMapString, Id storeId, String batchDateString, String primaryResourceMapString) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
@@ -169,6 +217,13 @@ global with sharing class MA_RoutingSchedulerController {
             Map<Id, Set<Id>> woToResIdsMap = (Map<Id, Set<Id>>)JSON.deserialize(woToResIdsMapString, Map<Id, Set<Id>>.class);
             Id woEventRecTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Event' AND DeveloperName = 'Work_Order_Event'].Id;
 
+            /************************************************/
+            /*                                              */
+            /*      get all the assigned resources          */
+            /*      for the work orders confirmed           */
+            /*      and delete the ones that were removed   */
+            /*                                              */
+            /************************************************/
             for (Id woId : woToResIdsMap.keySet()) {
                 List<Id> assignedResourceIds = new List<Id>(woToResIdsMap.get(woId));
                 if (assignedResourceIds.size() > 1) {
@@ -192,6 +247,13 @@ global with sharing class MA_RoutingSchedulerController {
             }
             delete assignedResourcesToDelete;
 
+            /************************************************/
+            /*                                              */
+            /*      get all the events                      */
+            /*      for the work orders confirmed           */
+            /*      and delete the ones that were changed   */
+            /*                                              */
+            /************************************************/
             for (MA_Scheduler_Event__c maEvent : [SELECT Id, Name, RbA_Work_Order__c, RbA_Work_Order__r.Name, RbA_Work_Order__r.Work_Order_Type__c, Resource__c, StartDateTime__c, EndDateTime__c, Date__c, Event_Sequence__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c IN :woToResIdsMap.keySet() AND Date__c = :batchDate]) {
                 Set<Id> assignedResourceIds = woToResIdsMap.get(maEvent.RbA_Work_Order__c);
                 woToMaEventMap.put(maEvent.RbA_Work_Order__c, maEvent);
@@ -213,6 +275,12 @@ global with sharing class MA_RoutingSchedulerController {
             }
             delete sfEventsToDelete;
 
+            /************************************************/
+            /*                                              */
+            /*      create the necessary new events         */
+            /*      and assigned resources                  */
+            /*                                              */
+            /************************************************/
             for (Id woId : woToResIdsMap.keySet()) {
                 if (woId.getSobjectType() == Schema.RbA_Work_Order__c.SObjectType) {
                     Id primaryResourceId = primaryResourceMap.get(woId);
@@ -256,6 +324,11 @@ global with sharing class MA_RoutingSchedulerController {
             insert assignedResourcesToCreate;
             insert maEventsToCreate;
 
+            /********************************************************/
+            /*                                                      */
+            /*      determine the correct primary resource          */
+            /*                                                      */
+            /********************************************************/
             for (Assigned_Resources__c res : [SELECT Id, Work_Order__c, Scheduled_Resource__c, IsPrimary__c FROM Assigned_Resources__c WHERE Work_Order__c IN :woToResIdsMap.keySet()]) {
                 Id primaryResourceId = primaryResourceMap.get(res.Work_Order__c);
                 Set<Id> assignedResourceIds = woToResIdsMap.get(res.Work_Order__c);
@@ -268,6 +341,11 @@ global with sharing class MA_RoutingSchedulerController {
             }
             update assignedResourcesToUpdate;
 
+            /************************************************************/
+            /*                                                          */
+            /*      create the necessary new Salesforce events          */
+            /*                                                          */
+            /************************************************************/
             for (Resource__c res : [SELECT Id, RbA_User__c FROM Resource__c WHERE Id IN :resourceIdToUserIdMap.keySet()]) {
                 resourceIdToUserIdMap.put(res.Id, res.RbA_User__c);
             }
@@ -306,6 +384,13 @@ global with sharing class MA_RoutingSchedulerController {
         return JSON.serialize(response);
     }
     
+    /****************************************************/
+    /*                                                  */
+    /*      main webservice called to get               */
+    /*      the data needed for the batch routing       */
+    /*      service and format it correctly             */
+    /*                                                  */
+    /****************************************************/
     webService static String getRecords(String dateString, String storeId, String workOrderType, String offsetPageMinutes) {
         try {
             if(String.isNotBlank(dateString) && String.isNotBlank(storeId) && String.isNotBlank(workOrderType) && workOrderType != '--None--') {
@@ -343,6 +428,15 @@ global with sharing class MA_RoutingSchedulerController {
         return JSON.serialize(master);
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      method used to get the depots               */
+    /*      needed for the batch routing                */
+    /*      service and format them correctly           */
+    /*                                                  */
+    /*      A store is considered a depot               */
+    /*                                                  */
+    /****************************************************/
     private static void setupDepots(String storeId) {
         try {
             Store_Configuration__c storeConfig = [SELECT Id, Name, Store__c, Store__r.ShippingLongitude, Store__r.ShippingLatitude
@@ -369,6 +463,15 @@ global with sharing class MA_RoutingSchedulerController {
         }
     }
     
+    /****************************************************/
+    /*                                                  */
+    /*      method used to get the routes               */
+    /*      needed for the batch routing                */
+    /*      service and format them correctly           */
+    /*                                                  */
+    /*      A Resource is considered a route            */
+    /*                                                  */
+    /****************************************************/
     private static Map<Id, Id> setupRoutes(Date dateToCheck, String storeId, String storeTimezone, String workOrderType, Set<Id> resourceIds) {
         Map<Id, Id> userIdToResourceIdMap = new Map<Id, Id>();
         try {
@@ -464,6 +567,15 @@ global with sharing class MA_RoutingSchedulerController {
         return userIdToResourceIdMap;
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      method used to get the orders               */
+    /*      needed for the batch routing                */
+    /*      service and format them correctly           */
+    /*                                                  */
+    /*      A Work Order is considered an order         */
+    /*                                                  */
+    /****************************************************/
     private static void setupOrders(Date dateToCheck, String storeId, String storeTimezone, String workOrderType, List<Id> resourceIdsList) {
         try {
         	Set<Id> workOrderIds = new Set<Id>();
@@ -573,6 +685,18 @@ global with sharing class MA_RoutingSchedulerController {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      method used to get the breaks               */
+    /*      needed for the batch routing                */
+    /*      service and format them correctly           */
+    /*                                                  */
+    /*      A Salesforce Event not linked to a          */
+    /*      MapAnything Event or a MapAnything Event    */
+    /*      not linked to a Work Order is considered    */
+    /*      a break                                     */
+    /*                                                  */
+    /****************************************************/
     private static void setupBreaks(Date dateToCheck, String storeTimezone, Map<Id, Id> userIdToResourceIdMap) {
         try {
             List<Object> features = new List<Object>();
@@ -646,6 +770,14 @@ global with sharing class MA_RoutingSchedulerController {
         }
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      wrapper class used to standardize           */
+    /*      Salesforce Events and                       */
+    /*      MapAnything Events into breaks for          */
+    /*      the batch routing service                   */
+    /*                                                  */
+    /****************************************************/
     private class EsriBreak {
 
         private Id userId;

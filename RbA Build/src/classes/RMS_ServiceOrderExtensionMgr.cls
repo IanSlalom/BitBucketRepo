@@ -199,11 +199,13 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Universal Methods
     public PageReference customDelete(){
         //deletes the order and redirects to delete confirmation page
-        delete o;
         
-        PageReference deletePage = Page.RMS_DeletePage;
+        
+        PageReference deletePage = new PageReference('/'+ o.AccountId);
         deletePage.setRedirect(true);
+        delete o;
         return deletePage;
+        
         
     }
     
@@ -357,7 +359,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //
     //
     
-        public PageReference saveClose(){
+    public PageReference saveClose(){
         PageReference newPage;
         
         try{           
@@ -587,7 +589,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     //Legacy Orders Pages
     
-        public PageReference saveCloseLegacy(){
+    public PageReference saveCloseLegacy(){
         PageReference newPage;
         
         try{
@@ -702,7 +704,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             
             newPage.setRedirect(true); 
-
+            
         }catch(DMLException ex){
             ApexPages.addMessages(ex);
             listOILegacy.clear();
@@ -857,7 +859,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         return newPage;
     }
     
-        public PageReference saveNewProductsContinue(){
+    public PageReference saveNewProductsContinue(){
         
         PageReference newPage;
         
@@ -1005,7 +1007,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         return newPage;
     }  
     
-        public PageReference saveNewProductsLegacyContinue(){
+    public PageReference saveNewProductsLegacyContinue(){
         
         PageReference newPage;
         
@@ -1075,7 +1077,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         return newPage;
     }   
-
+    
     
     
     //method for creating Service Type picklist, defaulted to JIP when appropriate, hiding
@@ -1169,6 +1171,13 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         return pageRef;
     }
     
+    public PageReference cancelUpdate(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_viewServiceRequest?id='+o.Id);
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
+    
     public PageReference cancelOrder(){
         PageReference pageRef = null;
         try{
@@ -1183,7 +1192,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         return pageRef;
     }
     
-        public PageReference cancelP3(){
+    public PageReference cancelP3(){
         PageReference pageRef = null;
         try{            
             upsert o;
@@ -1226,6 +1235,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         
         
-    }        
+    }    
+    
     
 }

@@ -72,7 +72,7 @@ display: none;
     <apex:pageBlockTable value="{!children}" var="task" rendered="{!hasChildren}">
     <!--<apex:column headerValue="Work Order">
       <apex:inputField value="{!task.WhatId}" style="width: 100px;"/>
-    </apex:column>-->
+    </apex:column>-->     
         <apex:column headerValue="Assigned To" id="assigned">
             <apex:inputField value="{!task.Assigned_To__c}" styleClass="hideDropdown" id="assign"/>
         </apex:column>

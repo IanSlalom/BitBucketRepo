@@ -1,3 +1,17 @@
+/************************************************************************************/
+/*                                                                                  */
+/*      This wrapper class holds the methods used to create resources               */
+/*                                                                                  */
+/*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                                                                                  */
+/*      @version    6/29/2016   MapAnything                                         */
+/*      Created                                                                     */
+/*                                                                                  */
+/*      @copyright (c)2016 MapAnything. All Rights Reserved.                        */
+/*      Unauthorized use is prohibited                                              */
+/*                                                                                  */
+/************************************************************************************/
+
 public with sharing class MA_SchedulerResource implements Comparable {
 
     public String type;
@@ -13,6 +27,11 @@ public with sharing class MA_SchedulerResource implements Comparable {
 	public Map<Id, String> skillsMatched;
     public Map<Id, String> skillsNotMatched;
     
+    /****************************************************/
+    /*                                                  */
+    /*      creates the resource                        */
+    /*                                                  */
+    /****************************************************/
     public MA_SchedulerResource(Resource__c resource, Map<Id, String> requiredSkills, Set<Id> assignedResources) {
         this.isAvailable = true;
         this.resourceId = resource.Id;
@@ -34,6 +53,11 @@ public with sharing class MA_SchedulerResource implements Comparable {
         this.skillsMatchedTotal = this.skillsMatchedCount + '/' + requiredSkills.size();
     }
 
+    /****************************************************/
+    /*                                                  */
+    /*      used to properly sort a list of resources   */
+    /*                                                  */
+    /****************************************************/
     public Integer compareTo(Object compareTo) {
         MA_SchedulerResource compareToResource = (MA_SchedulerResource)compareTo;
 

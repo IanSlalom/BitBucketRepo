@@ -1785,7 +1785,7 @@ public with sharing class RMS_financialTransactionManager {
                         errorMessage = RMS_errorMessages.STORE_LOCATION_IS_BLANK;
                     }
                     if(orderIdToJournalEntryMap.get(o.id) == null ){ 
-                        errorMessage = RMS_errorMessages.NO_RELATED_DEPOSIT_JOURNAL_ENTRY;
+    //                    errorMessage = RMS_errorMessages.NO_RELATED_DEPOSIT_JOURNAL_ENTRY;
                     }
                     
                     
@@ -1812,7 +1812,8 @@ public with sharing class RMS_financialTransactionManager {
                     }
                    
                     
-                    if(orderIdToJournalEntryMap.get(o.id) != null && orderIdToJournalEntryMap.get(o.id).size() != 0 ){      
+//                    if(orderIdToJournalEntryMap.get(o.id) != null && orderIdToJournalEntryMap.get(o.id).size() != 0 ){      
+                    if(true){      
                         if(errorMessage == null || errorMessage == ''){
                             list<Journal_Entry__c> relatedDespoitJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedRevRecognizedDepositJE = new list<Journal_Entry__c>();
@@ -1860,91 +1861,93 @@ public with sharing class RMS_financialTransactionManager {
                            // Boolean alreadyHasJEofTypeRevRecServiceTax = false; 
                             Boolean alreadyHasJEofTypeRevRecServiceAR = false; 
                             
-                            for(Journal_Entry__c je : orderIdToJournalEntryMap.get(o.id)){
-                                if(je.Type__c == 'Deposit'){
-                                    relatedDespoitJE.add(je);
-                                }
-                                if(je.Type__c == 'Internal Labor'){
-                                    relatedInternalLaborJE.add(je);
-                                } 
-                                /*
-                                if(je.Type__c == 'Service Internal Labor'){
-                                    relatedServiceInternalLaborJE.add(je);
-                                }
-                                if(je.Type__c == 'Rev Recognized - ServiceInternal Labor'){
-                                    alreadyHasJEofTypeRevRecServiceInternalLabor = true;   
-                                    relatedRevRecognizedServiceInternalLaborJE.add(je);
-                                }
-                                */
-                                if(je.Type__c == 'External Labor'){
-                                    relatedExternalLaborJE.add(je);
-                                }
-                                if(je.Type__c == 'Service External Labor'){
-                                    relatedServiceExternalLaborJE.add(je);
-                                }
-                                if(je.Type__c == 'Refund - Deposit'){
-                                    relatedRefundDepositJE.add(je);
-                                }
-                                if(je.Type__c != null && je.Type__c.contains('Inventory Received')){
-                                    relatedInventoryRecivedJE.add(je);
-                                }
-                                
-
-                                if(je.Type__c == 'Rev Recognized - Deposit'){
-                                    alreadyHasJEofTypeRevRecDeposit = true; 
-                                    relatedRevRecognizedDepositJE.add(je);
-                                }
-                                /*
-                                if(je.Type__c == 'Rev Recognized - Internal Labor'){
-                                    alreadyHasJEofTypeRevRecInternalLabor = true;   
-                                    relatedRevRecognizedInternalLaborJE.add(je);
-                                }
-                               */
-                                if(je.Type__c == 'Rev Recognized - External Labor'){
-                                    alreadyHasJEofTypeRevRecExternalLabor = true;   
-                                    relatedRevRecognizedExternalLaborJE.add(je);
-                                }
-                                if(je.Type__c == 'Rev Recognized - Service External Labor'){
-                                    alreadyHasJEofTypeRevRecServiceExternalLabor = true;   
-                                    relatedRevRecognizedServiceExternalLaborJE.add(je);
-                                }
-                                if(je.Type__c == 'Rev Recognized - Refund Deposit'){ 
-                                    alreadyHasJEofTypeRevRecRefundDeposit = true;   
-                                    relatedRevRecognizedRefundDepositJE.add(je);
-                                }
-                                if(je.Type__c == 'Rev Recognized - COGS'){
-                                    alreadyHasJEofTypeRevRecCOGS = true; 
-                                    relatedRevRecognizedCOGSJE.add(je);
-                                }
-                             	/*	
-                             	if(je.Type__c == 'Rev Recognized - Service COGS'){
-                                    alreadyHasJEofTypeRevRecServiceCOGS = true; 
-                                    relatedRevRecognizedServiceCOGSJE.add(je);
-                                }
-                             	*/
-                                if(je.Type__c == 'Rev Recognized - Discount'){
-                                    alreadyHasJEofTypeRevRecDiscount = true;    
-                                    relatedRevRecognizedDiscountJE.add(je);
-                                }
-                                if(je.Type__c == 'Rev Recognized - AR'){
-                                    alreadyHasJEofTypeRevRecAR = true;  
-                                    relatedRevRecognizedARJE.add(je);
-                                } 
-                                if(je.Type__c == 'Rev Recognized - Finance Fees'){
-                                    alreadyHasJEofTypeRevRecFinanceFees = true;  
-                                    relatedRevRecognizedFinanceFeesJE.add(je);
-                                }
-								/*
-                                if(je.Type__c == 'Rev Recognized - Service Tax'){
-                                    alreadyHasJEofTypeRevRecServiceTax= true;  
-                                    relatedRevRecognizedServiceTaxJE.add(je);
-                                }
-                             	*/
-                                if(je.Type__c == 'Rev Recognized - Service AR'){
-                                	alreadyHasJEofTypeRevRecServiceAR= true;  
-                                	relatedRevRecognizedServiceARJE.add(je);
-                                }
-	                        }
+                    		if(orderIdToJournalEntryMap.get(o.id) != null && orderIdToJournalEntryMap.get(o.id).size() != 0 ){      
+	                            for(Journal_Entry__c je : orderIdToJournalEntryMap.get(o.id)){
+	                                if(je.Type__c == 'Deposit'){
+	                                    relatedDespoitJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Internal Labor'){
+	                                    relatedInternalLaborJE.add(je);
+	                                } 
+	                                /*
+	                                if(je.Type__c == 'Service Internal Labor'){
+	                                    relatedServiceInternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - ServiceInternal Labor'){
+	                                    alreadyHasJEofTypeRevRecServiceInternalLabor = true;   
+	                                    relatedRevRecognizedServiceInternalLaborJE.add(je);
+	                                }
+	                                */
+	                                if(je.Type__c == 'External Labor'){
+	                                    relatedExternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Service External Labor'){
+	                                    relatedServiceExternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Refund - Deposit'){
+	                                    relatedRefundDepositJE.add(je);
+	                                }
+	                                if(je.Type__c != null && je.Type__c.contains('Inventory Received')){
+	                                    relatedInventoryRecivedJE.add(je);
+	                                }
+	                                
+	
+	                                if(je.Type__c == 'Rev Recognized - Deposit'){
+	                                    alreadyHasJEofTypeRevRecDeposit = true; 
+	                                    relatedRevRecognizedDepositJE.add(je);
+	                                }
+	                                /*
+	                                if(je.Type__c == 'Rev Recognized - Internal Labor'){
+	                                    alreadyHasJEofTypeRevRecInternalLabor = true;   
+	                                    relatedRevRecognizedInternalLaborJE.add(je);
+	                                }
+	                               */
+	                                if(je.Type__c == 'Rev Recognized - External Labor'){
+	                                    alreadyHasJEofTypeRevRecExternalLabor = true;   
+	                                    relatedRevRecognizedExternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - Service External Labor'){
+	                                    alreadyHasJEofTypeRevRecServiceExternalLabor = true;   
+	                                    relatedRevRecognizedServiceExternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - Refund Deposit'){ 
+	                                    alreadyHasJEofTypeRevRecRefundDeposit = true;   
+	                                    relatedRevRecognizedRefundDepositJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - COGS'){
+	                                    alreadyHasJEofTypeRevRecCOGS = true; 
+	                                    relatedRevRecognizedCOGSJE.add(je);
+	                                }
+	                             	/*	
+	                             	if(je.Type__c == 'Rev Recognized - Service COGS'){
+	                                    alreadyHasJEofTypeRevRecServiceCOGS = true; 
+	                                    relatedRevRecognizedServiceCOGSJE.add(je);
+	                                }
+	                             	*/
+	                                if(je.Type__c == 'Rev Recognized - Discount'){
+	                                    alreadyHasJEofTypeRevRecDiscount = true;    
+	                                    relatedRevRecognizedDiscountJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - AR'){
+	                                    alreadyHasJEofTypeRevRecAR = true;  
+	                                    relatedRevRecognizedARJE.add(je);
+	                                } 
+	                                if(je.Type__c == 'Rev Recognized - Finance Fees'){
+	                                    alreadyHasJEofTypeRevRecFinanceFees = true;  
+	                                    relatedRevRecognizedFinanceFeesJE.add(je);
+	                                }
+									/*
+	                                if(je.Type__c == 'Rev Recognized - Service Tax'){
+	                                    alreadyHasJEofTypeRevRecServiceTax= true;  
+	                                    relatedRevRecognizedServiceTaxJE.add(je);
+	                                }
+	                             	*/
+	                                if(je.Type__c == 'Rev Recognized - Service AR'){
+	                                	alreadyHasJEofTypeRevRecServiceAR= true;  
+	                                	relatedRevRecognizedServiceARJE.add(je);
+	                                }
+		                        }
+                    		}
                            
                             system.debug('Method:createJournalEntryOrder relatedDespoitJE: '+relatedDespoitJE);
                             system.debug('Method:createJournalEntryOrder alreadyHasJEofTypeRevRecDeposit: '+alreadyHasJEofTypeRevRecDeposit);
@@ -2229,11 +2232,13 @@ public with sharing class RMS_financialTransactionManager {
                                         if(o.Discount_Amount__c > 0){
                                             newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                             newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Credit_Account_Number__r.Name;
-                                        }else{
+                                        }else if (o.Discount_Amount__c < 0){
                                             newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                             newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDiscountFTL.get(o.id)[0].Credit_Account_Number__r.Name;
+											newJE.Amount__c = newJE.Amount__c * -1;
                                         }
-                                        journalEntriesToUpsert.add(newJE);
+   										if (newJE.Amount__c != 0)
+                                        	journalEntriesToUpsert.add(newJE);
                                    
                                 }else{
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
@@ -2265,11 +2270,13 @@ public with sharing class RMS_financialTransactionManager {
                                              newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                              newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Credit_Account_Number__r.Name;
                                           }
-                                          else{
+                                          else if (o.Retail_Total__c < 0){
                                              newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Debit_Account_Number__r.Name;
                                              newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedARFTL.get(o.id)[0].Credit_Account_Number__r.Name;
+											newJE.Amount__c = newJE.Amount__c * -1;
                                           }
-                                        journalEntriesToUpsert.add(newJE);
+										if (newJE.Amount__c != 0)
+                                        	journalEntriesToUpsert.add(newJE);
                                     
                                 }else{
                                     mapNew.get(o.id).addError(errorMessage, FALSE);

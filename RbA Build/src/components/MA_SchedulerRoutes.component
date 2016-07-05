@@ -1,3 +1,17 @@
+<!--**********************************************************************************-->
+<!--                                                                                  -->
+<!--      This component is used for batch scheduling                                 -->
+<!--                                                                                  -->
+<!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                                                                                  -->
+<!--      @version    6/29/2016   MapAnything                                         -->
+<!--      Created                                                                     -->
+<!--                                                                                  -->
+<!--      @copyright (c)2016 MapAnything. All Rights Reserved.                        -->
+<!--      Unauthorized use is prohibited                                              -->
+<!--                                                                                  -->
+<!--**********************************************************************************-->
+
 <apex:component controller="MA_RoutingSchedulerController" layout="none" >
     
     <apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
@@ -18,6 +32,12 @@
                 editBatch : {}, 
                 routes: {}
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method sends out the route             */
+            /*      scheduling request                          */
+            /*                                                  */
+            /****************************************************/
             getAsyncRouting : function(options, callback) {
                 $('#loaderModal').show();
 
@@ -72,12 +92,24 @@
                     callback(true, {success:false, error: error});
                 })
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method polls the routing service       */
+            /*      until the request is completed              */
+            /*                                                  */
+            /****************************************************/
             checkStatus : function(options, Sdata, callback) {
                 $('#loaderModal').show();
 
                 try {
                     var resultData;
                     async.until(
+                        /****************************************************/
+                        /*                                                  */
+                        /*      1st function - provides exit criteria       */
+                        /*                      for the async process       */
+                        /*                                                  */
+                        /****************************************************/
                         function () {
                             if (Sdata.jobStatus == "esriJobFailed") {
                                 return Sdata.jobStatus == 'esriJobFailed';
@@ -89,6 +121,13 @@
                                 return Sdata.error.code == 403; 
                             }
                         }, 
+                        /****************************************************/
+                        /*                                                  */
+                        /*      2nd function - continuously runs until      */
+                        /*                      exit criteria is meet       */
+                        /*                      from the 1st function       */
+                        /*                                                  */
+                        /****************************************************/
                         function(callback) {
                             $.ajax({
                                 type: "GET",
@@ -112,12 +151,25 @@
                                     callback(error, body);
                                 })
                         },
+                        /****************************************************/
+                        /*                                                  */
+                        /*      3rd function - finish function that runs    */
+                        /*                      once exit criteria is meet  */
+                        /*                      from the 1st function       */
+                        /*                                                  */
+                        /****************************************************/
                         function(err, res) {
                             if (Sdata.error && Sdata.error.code == 403) {
                                 callback(true, {success: false, error: Sdata.error});
                             }
                             else if (res.jobStatus == 'esriJobSucceeded') {
                                 async.series({
+                                    /****************************************************/
+                                    /*                                                  */
+                                    /*      this method determines if the request       */
+                                    /*      was successful or not                       */
+                                    /*                                                  */
+                                    /****************************************************/
                                     solve_succeeded: function(callback) {
                                         MAschedRoutes.getResults(res.results.solve_succeeded.paramUrl, res.jobId, function(responseS) {
                                             if(!responseS.value){
@@ -130,12 +182,24 @@
                                             }
                                         });
                                     },
+                                    /****************************************************/
+                                    /*                                                  */
+                                    /*      this method process the routes returned     */
+                                    /*      from a successful request                   */
+                                    /*                                                  */
+                                    /****************************************************/
                                     out_routes: function(callback) {
                                         MAschedRoutes.getResults(res.results.out_routes.paramUrl, res.jobId,function(responseR) {
                                             MAschedRoutes.processBatchRoutesSuccess({success: true, values: responseR.value.features});
                                             callback(false, {success: true});
                                         });
                                     },
+                                    /****************************************************/
+                                    /*                                                  */
+                                    /*      this method process the directions returned */
+                                    /*      from a successful request                   */
+                                    /*                                                  */
+                                    /****************************************************/
                                     out_directions: function(callback) {
                                         if (options.out_directions){
                                             MAschedRoutes.getResults(res.results.out_directions.paramUrl, res.jobId, function(responseD) {
@@ -146,12 +210,24 @@
                                             callback(false, {success: true, out_directions: false});
                                         }
                                     },
+                                    /****************************************************/
+                                    /*                                                  */
+                                    /*      this method process the stops returned      */
+                                    /*      from a successful request                   */
+                                    /*                                                  */
+                                    /****************************************************/
                                     out_stops: function(callback) {
                                         MAschedRoutes.getResults(res.results.out_stops.paramUrl, res.jobId, function(responseOS) {
                                             MAschedRoutes.processBatchOrdersSuccess({success: true, pendingBatch: false, values: responseOS.value.features});
                                             callback(false, {success: true});
                                         });
                                     },
+                                    /****************************************************/
+                                    /*                                                  */
+                                    /*      this method process the unassigned stops    */
+                                    /*      returned from a successful request          */
+                                    /*                                                  */
+                                    /****************************************************/
                                     out_unassigned_stops: function(callback) {
                                         MAschedRoutes.getResults(res.results.out_unassigned_stops.paramUrl, res.jobId, function(responseU) {
                                             MAschedRoutes.processUnassignedBatch({success: true, values: responseU.value.features});
@@ -159,6 +235,12 @@
                                         });
                                     }
                                 },
+                                /****************************************************************/
+                                /*                                                              */
+                                /*      this method callsback to the async function that kicked */
+                                /*      off the process once everything has been processed      */
+                                /*                                                              */
+                                /****************************************************************/
                                 function(err, results) {
                                     if (err) {
                                         callback(err, results);
@@ -179,6 +261,13 @@
                     callback(true, {success:false, error: e});
                 }
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method retrieves the actual values     */
+            /*      from the different options of a             */
+            /*      successful request                          */
+            /*                                                  */
+            /****************************************************/
             getResults : function(Rdata, jobId, callback) {
                 Rdata = Rdata.replace('results/', '');
                 $.ajax({
@@ -199,6 +288,12 @@
                     callback(error, body);
                 })
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method determines the actual           */
+            /*      route for a specified group of stops        */
+            /*                                                  */
+            /****************************************************/
             getScheduledRoutes : function(options, callback) {
                 $('#loaderModal').show();
 
@@ -258,6 +353,12 @@
                     callback(true, {success: false, error: 'Unable to obtain token. Please check credentials'});
                 }
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method retrieves a valid token         */
+            /*      needed for any routing requests             */
+            /*                                                  */
+            /****************************************************/
             getEsriToken : function(master, callback) {
                 $('#loaderModal').show();
 
@@ -285,6 +386,12 @@
                     callback(true, {success:false, error: e});
                 }
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method determines the actual           */
+            /*      travel mode to use in the routing request   */
+            /*                                                  */
+            /****************************************************/
             getEsriTravelMode : function(callback) {
                 if (!$.isEmptyObject(MAschedRoutes.esriTravelModes)) {
                     callback(MAschedRoutes.esriTravelModes.DrivingTime);
@@ -342,10 +449,21 @@
                     });
                 }
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method kicks off the geocoding process */
+            /*                                                  */
+            /****************************************************/
             startGeocoding : function() {
                 $('#loaderModal').show();
                 retrieveAccountsForGeocode($('#datepicker').val(), $('#storeSelect').val(), $('.batch-assign-wo-container .calendarFilterSelect').val(), null);
             },
+            /****************************************************/
+            /*                                                  */
+            /*      this method grabs all the matching          */
+            /*      work orders to schedule for                 */
+            /*                                                  */
+            /****************************************************/
             getRBAWorkOrders : function(callback) {
                 $('#loaderModal').show();
 
@@ -385,6 +503,11 @@
                     callback(true, {success:false, error: e});
                 }
             },
+            /************************************************************/
+            /*                                                          */
+            /*      this method processes the batch results routes      */
+            /*                                                          */
+            /************************************************************/
             processBatchRoutesSuccess : function(response) {
                 try {
                     /*
@@ -407,6 +530,13 @@
                     handleError('Error : processBatchRoutesSuccess', e);
                 }
             },
+            /************************************************************/
+            /*                                                          */
+            /*      this method processes the batch results stops       */
+            /*      it takes the orders and breaks and formats them     */
+            /*      to a usable format for the calendar                 */
+            /*                                                          */
+            /************************************************************/
             processBatchOrdersSuccess : function(response) {
                 try {
                     var eventType = $('#calendarFilterSelect').val();
@@ -472,9 +602,23 @@
                     handleError('Error : processBatchOrdersSuccess', e);
                 }
             },
+            /************************************************************************/
+            /*                                                                      */
+            /*      this method processes the batch results unassigned stops        */
+            /*                                                                      */
+            /************************************************************************/
             processUnassignedBatch : function(unassigned) {
                 $('#unassignedBatch').hide()
             },
+            /********************************************************************/
+            /*                                                                  */
+            /*      this method processes the batch results cancel/confrim      */
+            /*                                                                  */
+            /*      if confirm, new events will be created for the necessary    */
+            /*      resources and others will be deleted                        */
+            /*      otherwise we just close the batch results view              */
+            /*                                                                  */
+            /********************************************************************/
             processBatchResults : function(options) {
                 $('#loaderModal').show();
 
@@ -529,6 +673,11 @@
                     hideResourceBatch({ batch: false });
                 }
             },
+            /************************************************************/
+            /*                                                          */
+            /*      this method opens the batch options selection modal */
+            /*                                                          */
+            /************************************************************/
             showOptyModal : function(options) {
                 MAschedRoutes.options = $.extend({
                     optimize: options.mainPage
@@ -549,16 +698,21 @@
                 $('#scheduleOptimizeOverlay').addClass('ma-in');
                 $('body').css('overflow','hidden');
             },
+            /************************************************************/
+            /*                                                          */
+            /*      this is just a map of routing service urls          */
+            /*                                                          */
+            /************************************************************/
             externalResources : {
                 'arcGISAPI'           : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblemSync/GPServer/EditVehicleRoutingProblem/execute?',
-                'arcGISAPIaysnc'      :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/submitJob?',
-                'arcGISjobStatus'     :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>?token=<yourToken>&returnMessages=true&f=json',
+                'arcGISAPIaysnc'      : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/submitJob?',
+                'arcGISjobStatus'     : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>?token=<yourToken>&returnMessages=true&f=json',
                 'arcGIScancelJob'     : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/cancel?token=<yourToken>&f=json',
                 'arcGISoutputs'       : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/results/<output_parameter_name>?token=<yourToken>&f=json',
-                'arcGISinputs'        :'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/inputs/<inputParameterName>?token=<yourToken>&f=json',
+                'arcGISinputs'        : 'https://logistics.arcgis.com/arcgis/rest/services/World/VehicleRoutingProblem/GPServer/SolveVehicleRoutingProblem/jobs/<yourJobID>/inputs/<inputParameterName>?token=<yourToken>&f=json',
                 'arcGIStravel'        : 'https://logistics.arcgis.com/arcgis/rest/services/World/Utilities/GPServer/GetTravelModes/execute?',
                 'EsriRoutingAPI'      : 'https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World/solve',
-                'Queue'                 : 'https://product-api-prod.cloudbilt.com/queue/'
+                'Queue'               : 'https://product-api-prod.cloudbilt.com/queue/'
             }
         }
        
@@ -566,6 +720,12 @@
             $('.batchShow').hide();
         });
                     
+        /************************************************************/
+        /*                                                          */
+        /*      this method kicks off the batch scheduling          */
+        /*      process by starting to geocode necessary accounts   */
+        /*                                                          */
+        /************************************************************/
         function getAutoSchedule() {
             isBatchResources = true;
             hideResourceBatch({ batch:isBatchResources, pendingBatch: false });
@@ -587,6 +747,12 @@
             }
         }
                     
+        /************************************************************/
+        /*                                                          */
+        /*      this method kicks off the batch scheduling          */
+        /*      processes next steps once geocoding is complete     */
+        /*                                                          */
+        /************************************************************/
         function getAutoScheduleGeocoded() {
             isBatchResources = true;
             if (MAschedRoutes.options.optimize) {
@@ -623,12 +789,22 @@
             }
         }
     
+        /************************************************************/
+        /*                                                          */
+        /*    this method closes the batch options selection modal  */
+        /*                                                          */
+        /************************************************************/
         function closeScheduleOptimizeModal() {
             $('#scheduleOptimizeModal').hide();
             $('#scheduleOptimizeOverlay').removeClass('ma-in');
             $('body').css('overflow','auto');
         }
 
+        /************************************************************/
+        /*                                                          */
+        /*    this method opens and closes the batch results view   */
+        /*                                                          */
+        /************************************************************/
         function hideResourceBatch(options){
             if(options.batch){
                 goToResourceView();
@@ -651,6 +827,13 @@
             }
         }
 
+        /************************************************************/
+        /*                                                          */
+        /*      this method correctly sets the batch results        */
+        /*      stops times into the correct timezone for           */
+        /*      the calendar                                        */
+        /*                                                          */
+        /************************************************************/
         function correctForTimezoneOffsetRouting(dt, offsetMinutes) {
             if (offsetMinutes == undefined || offsetMinutes == null) {
                 offsetMinutes = 0;
@@ -682,7 +865,7 @@
                         <select id="calendarFilterSelect" onchange="filterCalendar()" class="ma-input calendarFilterSelect">
                             <option value="">--None--</option>
                             <option value="Tech Measure">Tech Measure</option>
-                            <option value="Field Service">Field Service</option>
+                            <option value="Service">Field Service</option>
                         </select>
                     </div>
                 </div>

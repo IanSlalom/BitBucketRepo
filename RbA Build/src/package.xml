@@ -220,6 +220,7 @@
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
         <name>ApexTrigger</name>
     </types>
