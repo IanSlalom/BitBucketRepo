@@ -150,12 +150,11 @@
             <apex:outputPanel id="PurchaseOrderFields"> 
                 <apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false || costPurchaseOrder == true}"> 
                      
-                    <apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" rendered="{! newPurchaseOrder == false}"/>
+                    <apex:outputField value="{!Purchase_Order__c.Name}" label="{!productText} Name" rendered="{! newPurchaseOrder == false}"/>
                     <apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
    <!--  TODO:   temporarily commented out                    <apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" />  -->
               <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
-                    <apex:inputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == true}"/>
-  <!--              <apex:outputText value=""/> -->   
+                  <apex:outputText value=""/>
                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
                     <apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'rbarel' || status == 'rbacon' ||status == 'con' || status == 'rec' || status == 'rej'}"/>
@@ -190,9 +189,7 @@
 
                 <!--  Order Item Table for Normal Editing of Order Items-->
                 <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && !writeOff && !receiving && !vendorCredit}">
-                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
-						<apex:facet name="header">{!productText}</apex:facet> 
-					</apex:column>
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
                         <apex:facet name="header">{!productText} Description</apex:facet> 
@@ -201,6 +198,10 @@
                     </apex:column>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
                     <apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
                         <apex:facet name="header">Retail Price</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
@@ -216,7 +217,7 @@
                             <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
                     </apex:column>
                     <apex:column style="width:100px">
-                        <apex:facet name="header">Cost</apex:facet> 
+                        <apex:facet name="header">Wholesale Cost</apex:facet> 
 <!--  TODO:   temporarily commented out                         <apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rec'}"/>
       -->                      <apex:inputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'new' || status == 'rel' || status == 'rbarel' || status == 'con' || status == 'rej'}"/>
@@ -238,9 +239,7 @@
 
                 <!--  Order Item Table for Receiving Order Items-->
                 <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && receiving == true}">
-                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
-						<apex:facet name="header">{!productText}</apex:facet> 
-					</apex:column>
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
                         <apex:facet name="header">{!productText} Description</apex:facet> 
@@ -248,6 +247,10 @@
                     </apex:column>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
                     <apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
                         <apex:facet name="header">Retail Price</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
@@ -257,7 +260,7 @@
                             <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
                     </apex:column>
                     <apex:column style="width:100px">
-                        <apex:facet name="header">Cost</apex:facet> 
+                        <apex:facet name="header">Wholesale Cost</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
                     </apex:column>
                     <!-- TODO: Add check for ARO and do not show for COROs -->
@@ -290,9 +293,7 @@
 
                 <!--  Order Item Table for Writing Off Order Items-->
                 <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && writeOff == true}">
-                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
-						<apex:facet name="header">{!productText}</apex:facet> 
-					</apex:column>
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
                         <apex:facet name="header">{!productText} Description</apex:facet> 
@@ -300,6 +301,10 @@
                     </apex:column>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
                     <apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
                         <apex:facet name="header">Retail Price</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
@@ -309,7 +314,7 @@
                             <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
                     </apex:column>
                     <apex:column style="width:100px">
-                        <apex:facet name="header">Cost</apex:facet> 
+                        <apex:facet name="header">Wholesale Cost</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
                     </apex:column>
                     <!-- TODO: Add check for ARO and do not show for COROs -->
@@ -342,9 +347,7 @@
 
                 <!--  Order Item Table for Vendor Credit-->
                 <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && vendorCredit == true}">
-                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
-						<apex:facet name="header">{!productText}</apex:facet> 
-					</apex:column>
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}"/>
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
                         <apex:facet name="header">{!productText} Description</apex:facet> 
@@ -352,6 +355,10 @@
                     </apex:column>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
                     <apex:column style="width:50px" rendered="{!costPurchaseOrder == false}">
                         <apex:facet name="header">Retail Price</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
@@ -361,7 +368,7 @@
                             <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" />
                     </apex:column>
                     <apex:column style="width:100px">
-                        <apex:facet name="header">Cost</apex:facet> 
+                        <apex:facet name="header">Wholesale Cost</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" />
                     </apex:column>
                     <!-- TODO: Add check for ARO and do not show for COROs -->

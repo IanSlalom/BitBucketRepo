@@ -23,6 +23,7 @@ public with sharing class RMS_viewOrderProductsController {
     public Id servProd {get;set;}
     public Id serviceOrderId {get;set;} 
     public Id changeOrderId {get;set;}
+    public Id coroOrderId {get;set;}
     public String baseURL{get;set;}
     public String reportURL{get;set;}
     public String addProductURL{get;set;}
@@ -41,6 +42,7 @@ public with sharing class RMS_viewOrderProductsController {
         servProd =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product');    
         serviceOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Service');
         changeOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('Change_Order');
+        coroOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Record_Type');
 
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
 
