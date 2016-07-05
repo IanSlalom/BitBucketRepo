@@ -96,6 +96,7 @@
                     <apex:column value="{!a.Location_Details__c}"/>
                     <apex:column breakBefore="true" colspan="10" style="border-bottom: 10px solid #ccc;">
                         <apex:pageBlockSection title="Select Service Products" id="additionalProducts" showheader="true" collapsible="true" columns="1">
+                            <apex:outputText ><b>Instructions:</b> Select each product by checking the box to the left of the product, then select the responsible party/parties for each.</apex:outputText>
                             <apex:pageBlockTable value="{!AssetToProductWrapperMap[a.Id]}" var="wrapper" border="1">                                
                                 <apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
                                     <apex:inputCheckBox value="{!wrapper.isSelected}" />

@@ -89,6 +89,7 @@
             </apex:pageBlockSection>
             
             <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">
+                                            <apex:outputText ><b>Instructions:</b> Select each product by checking the box to the left of the product, then select the responsible party/parties for each.</apex:outputText>
                 <apex:pageBlockTable value="{!selectedProductsLegacy}" var="product" id="table" width="1000px;" >
                     <apex:column value="{!product.Name}"/>
                     <apex:column breakBefore="true" colspan="10" style="border-bottom: 10px solid #ccc;">

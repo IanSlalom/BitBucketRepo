@@ -37,7 +37,7 @@
     <apex:form id="theForm">
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
-                <apex:commandButton onclick="callGenerateConsoleURL('{!cancelUpdateURL}', 'Cancel');return false" id="cancelUpdate" value="Cancel"/>
+                <apex:commandbutton action="{!cancelUpdate}" value="Cancel"/>
                 <apex:commandButton action="{!saveST}" value="Save"/>                
             </apex:pageBlockButtons> 
             
