@@ -24,6 +24,7 @@
         <members>OrderTriggerHandlerTest</members>
         <members>PurchaseOrderTriggerHandler</members>
         <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
@@ -127,7 +128,6 @@
         <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>warrantyTriggerTest</members>
-        <members>RMS_CancelOrderLineController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -154,6 +154,7 @@
     <types>
         <members>MA_Scheduler</members>
         <members>MA_SchedulerGeocode</members>
+        <members>RMS_CancelOrderLine</members>
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
@@ -201,7 +202,6 @@
         <members>RMS_viewServiceRequest</members>
         <members>RMS_viewServiceRequestLocked</members>
         <members>RMS_viewServiceSymptomList</members>
-        <members>RMS_CancelOrderLine</members>
         <name>ApexPage</name>
     </types>
     <types>
