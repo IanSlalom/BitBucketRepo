@@ -1,7 +1,27 @@
 <apex:page standardController="OrderItem" extensions="RMS_CancelOrderLineController">
 <apex:includeScript value="{!$Resource.jquery}" />
+<apex:includeScript value="/support/console/33.0/integration.js"/>
 <script>
-    var j$ = jQuery.noConflict();
+        var primaryTabId = null;
+        var subTabId = null;
+        var previousOnload  = window.onload;
+
+        window.onload = function()
+        {
+
+            //  perform the previously registered 'onload' function, if any
+            if ( previousOnload ) previousOnload();
+
+            //  get the id's of both the primary tab and this subtab
+            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
+
+            //  set the title of this subtab
+            sforce.console.setTabTitle( 'Cancel Order Product' );
+            console.log(subTabId);
+            console.log(primaryTabId);
+        };
+        var j$ = jQuery.noConflict();
 
         //The callback function that closeTab will call once it's got the ID for its tab
         var callCloseTab= function callCloseTab(result) {
@@ -25,18 +45,19 @@
 
         
         };  
+
       
 </script>
-	<apex:form >  
-		<apex:pageBlock title="Cancel Order Product">
-		  <apex:pageBlockButtons location="top" >
+    <apex:form >  
+        <apex:pageBlock title="Cancel Order Product">
+          <apex:pageBlockButtons location="top" >
             <apex:commandButton action="{!save}" value="Save"  oncomplete="closeTab();return false"/>
             <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
         </apex:pageBlockButtons>    
         <apex:pageBlockSection title="Order Product Information">
-			<apex:outputField value="{!OrderItem.Status__c}"/>
-			<apex:inputField value="{!OrderItem.Cancellation_Reason__c}" required="true"/>
-		</apex:pageBlockSection>
-		</apex:pageBlock>
-  	</apex:form>
+            <apex:outputField value="{!OrderItem.Status__c}"/>
+            <apex:inputField value="{!OrderItem.Cancellation_Reason__c}" required="true"/>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
 </apex:page>
