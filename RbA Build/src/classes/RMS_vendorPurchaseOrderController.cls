@@ -64,6 +64,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean showInventoryWriteOff{get;set;}
   public boolean relatedOrderClosed{get;set;}
   public boolean showCancelPO{get;set;}
+  public boolean revRecNullAndValidStatus {get;set;}
+  public boolean relatedCOROOrder {get;set;}
+
 
   /******* Set up Measurement Fraction Items  *****************/
   private static transient List<SelectOption> lproductItems;
@@ -370,6 +373,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     relatedOrderClosed = false;
     showCancelPO = false;
     storeLocationSet = new Set<Id>();
+    relatedCOROOrder = false;
+    revRecNullAndValidStatus = false;
+    Set<String> validStatuses = new Set<String>{'Ready to Order','Order Released','Install Needed','Install Scheduled','Install Complete','Job In Progress'};
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
@@ -415,13 +421,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
 //      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
  //     							:	currentUser.User_Abbreviation__c;
 
-      for (Order thisOrder : [SELECT 	Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
-      									Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
-      									Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
-      									FROM Order WHERE Id = :orderId]){
+      for (Order thisOrder : [SELECT  Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
+                        Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
+                        Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
+                        FROM Order WHERE Id = :orderId]){
 
-      	showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
-      	relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
+      showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
+      relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
+
+      relatedCOROOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'));
+      if(thisOrder.Revenue_Recognized_Date__c == null && relatedCOROOrder  && validStatuses.contains(thisOrder.Status)){
+        revRecNullAndValidStatus = true;
+      }
+
 	  // Determine if this is a service order
 	  	servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
 			
@@ -605,6 +617,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
     //JETT-712 
     if(newPurchaseOrder && !costPurchaseOrder && !servicePurchaseOrder && relatedOrder.Status != 'Ready to Order'){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_STATUS_INVALID_FOR_PO_CREATION));
+      renderVendorSelection = false;
+    }
+    //JETT-2366
+    if(newPurchaseOrder && relatedCOROOrder && !revRecNullAndValidStatus){
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_TYPE_STATUS_DATE_INVALID_FOR_PO_CREATION));
       renderVendorSelection = false;
     }
   }//end of constructor

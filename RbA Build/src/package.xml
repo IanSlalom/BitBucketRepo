@@ -24,6 +24,7 @@
         <members>OrderTriggerHandlerTest</members>
         <members>PurchaseOrderTriggerHandler</members>
         <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
@@ -153,6 +154,7 @@
     <types>
         <members>MA_Scheduler</members>
         <members>MA_SchedulerGeocode</members>
+        <members>RMS_CancelOrderLine</members>
         <members>RMS_DashboardLinks</members>
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
@@ -300,11 +302,8 @@
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
         <members>Event-Work Order Event Page Layout</members>
-        <members>Finance_Program_Tier__c-Installment Loan</members>
-        <members>Finance_Program_Tier__c-SAC%2FNIWP Page Layout</members>
         <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
-        <members>Financial_Configuration__c-Financial Configuration Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
         <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
         <members>Global-Global Layout</members>
@@ -335,6 +334,7 @@
         <members>Pricebook2-Price Book Layout</members>
         <members>Pricing_Configuration__c-200400 Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Construction Materials Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
@@ -383,7 +383,6 @@
         <members>Store_Finance_Program__c-Bridge Loan Page Layout</members>
         <members>Store_Finance_Program__c-Cash Payment Page Layout</members>
         <members>Store_Finance_Program__c-Installment Loan Page Layout</members>
-        <members>Store_Finance_Program__c-Store Finance Program Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
         <members>Task-Collections Task Layout</members>
@@ -395,6 +394,7 @@
         <members>Warranty__c-Warranty Layout</members>
         <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
+        <members>rSuite_Financing_Option__c-rSuite Financing Option Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
         <name>Layout</name>
