@@ -96,7 +96,7 @@
                                                         <apex:outputText ><b>Instructions:</b> Select each product by checking the box to the left of the product, then select the responsible party/parties for each.</apex:outputText>
                             <apex:pageBlockTable value="{!AssetToProductWrapperMap[a.Id]}" var="wrapper" border="1">                                
                                 <apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
-                                    <apex:inputCheckBox value="{!wrapper.isSelected}" />
+                                    <apex:inputCheckBox value="{!wrapper.isSelected}"/>
                                 </apex:column>
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                                     <apex:outputText value="{!wrapper.product.Name}"/>

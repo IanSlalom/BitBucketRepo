@@ -74,7 +74,7 @@ of your row index for deletion. -->
                 <!-- Want to specify immediate here and above so validation does
 not occur when you are trying to add/remove rows. Only want
 validation to occur when trying to save -->
-                <apex:commandButton value="Add Reimbursement" action="{!addToList}" rerender="childList, messages" immediate="true" />
+                <apex:commandButton value="Add Reimbursement" action="{!addToList}" rerender="childList, messages" immediate="false" />
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
