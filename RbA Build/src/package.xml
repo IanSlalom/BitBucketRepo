@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -121,6 +121,7 @@
         <members>testRMS_addProblemComponentsExt</members>
         <members>testRMS_addResponsibility</members>
         <members>testRMS_addResponsibilityExt</members>
+        <members>testRMS_addServiceSymptomExt</members>
         <members>testRMS_addSkilltoWO</members>
         <members>testRMS_addWarranties</members>
         <members>testRMS_addWarrantiesExt</members>
@@ -132,7 +133,6 @@
         <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>warrantyTriggerTest</members>
-        <members>testRMS_addServiceSymptomExt</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -234,6 +234,7 @@
     <types>
         <members>Backoffice</members>
         <members>Backoffice_Admin</members>
+        <members>Data_Setup</members>
         <members>Homeowner_Resolution</members>
         <members>Renewal_by_Andersen</members>
         <name>CustomApplication</name>
