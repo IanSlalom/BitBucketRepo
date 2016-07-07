@@ -29,25 +29,31 @@
     
     
     
-    </script>     
+    </script>    
+    
+    <style type="text/css">
+        .pbTitle {
+        white-space: nowrap
+        }
+    </style>
     
     
     
     <apex:form id="theForm">
         <apex:pageMessages id="messages"/>
-        <apex:pageBlock mode="edit" tabStyle="Service_Symptom__c" title="Select Service Symptom">
-            <apex:pageBlockSection columns="1">               
-                    <apex:outputPanel layout="block" styleClass="requiredInput">
-                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+        <apex:pageBlock mode="edit" tabStyle="Service_Symptom__c" title="Select Service Symptom for {!$CurrentPage.parameters.oiLabel}">
+            <apex:pageBlockSection columns="1"> 
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
                     <apex:selectList id="ser" value="{!Service_Symptom__c.Service_Symptom__c}" size="1" title="Service Symptom">
                         <apex:selectOptions value="{!sers}"></apex:selectOptions>
-                      <apex:actionSupport event="onchange" action="{!saveRerender}"/>
+                        <apex:actionSupport event="onchange" action="{!saveRerender}"/>
                     </apex:selectList>
                 </apex:outputPanel>
                 <!--<apex:commandButton action="{!saveRerender}" title="Add Problem Components" value="Add Problem Components" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,true,false)}"/>-->
             </apex:pageBlockSection> 
-                  <apex:pageBlockSection title="Add Problem Components" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,false,true)}">
-                    	<apex:outputField value="{!Service_Symptom__c.Service_Symptom__c}"/> 
+            <apex:pageBlockSection title="Add Problem Components" rendered="{!IF(Service_Symptom__c.Service_Symptom__r.Id == null,false,true)}">
+                <apex:outputField value="{!Service_Symptom__c.Service_Symptom__c}"/> 
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>

@@ -3,6 +3,7 @@ public with sharing class RMS_addServiceSymptomExt {
     public final Service_Symptom__c s;
     
     public RMS_addServiceSymptomExt (ApexPages.StandardController stdController) {
+        
         this.s = (Service_Symptom__c)stdController.getRecord();            
         
     }
@@ -23,6 +24,12 @@ public with sharing class RMS_addServiceSymptomExt {
         ssSP = apexpages.currentpage().getparameters().get('ssSP');
         if ( ssSP == null ) ssSP = '';
     }
+    
+    public String oiLabel {get; set;}{
+        oiLabel = apexpages.currentPage().getparameters().get('oiLabel');
+        if(oiLabel == null) oiLabel = '';
+    }
+    
     public PageReference saveRerender(){       
         s.Service_Product__c = ssSp;
         insert s;
