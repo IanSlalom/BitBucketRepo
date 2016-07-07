@@ -1,12 +1,37 @@
+/*************************************************************
+@brief  Test Class for RMS_addResponsibility 
+
+@author  Brianne Wilson (Slalom.BLW)
+
+@version    2016-6-13  Slalom.BLW
+Created.
+
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
 @isTest
-private class testRMS_addWarrantiesExt 
-{
+private class testRMS_addResponsibility 
+{ 
+    /*
+* Mock implementation of abstract class used for testing
+*/
+    private class MockEditableList extends RMS_addResponsibility
+    {
+        public MockEditableList(ApexPages.StandardController stdController)
+        {
+            super(stdController);
+        } 
+    }
+    
     private static OrderItem rwo;
-    private static Warranty__c myWarranty1;
-    private static Warranty__c myWarranty2;
+    private static Charge__c myCharge1;
+    private static Charge__c myCharge2;
     
     private static void setupData()
     {
+        
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
@@ -51,31 +76,31 @@ private class testRMS_addWarrantiesExt
         PricebookEntry pricebookEntryServ2 = utility.createPricebookEntry(pricebookId, servProduct2.id);      
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
-        
+
         Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
         Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
         List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
-            insert sprods;
-        
-        
+        insert sprods;
+
+
         Problem_Component_List__c probC1 = new Problem_Component_List__c(name='Prob1');
         Problem_Component_List__c probC2 = new Problem_Component_List__c(name='Prob2');
         Problem_Component_List__c probC3 = new Problem_Component_List__c(name='Prob3');
         List<Problem_Component_List__c> probCs = new List<Problem_Component_List__c>{probC1,probC2,probC3};
-            insert probCs;
-        
+        insert probCs;
+
         Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
         Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
         Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
         List<Service_Symptom_List__c> ssl = new List<Service_Symptom_List__c>{ssl1,ssl2,ssl3};
-            insert ssl;
-        
+        insert ssl;
+
         Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
         Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
         Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
         List<Procedure_Code__c> procC = new List<Procedure_Code__c>{procC1,procC2,procC3};
-            insert procC;
-        
+        insert procC;
+
         Procedure_Code_Assignment__c pca1 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC1.Id);
         Procedure_Code_Assignment__c pca2 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC2.Id);
         Procedure_Code_Assignment__c pca3 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC3.Id);
@@ -83,8 +108,8 @@ private class testRMS_addWarrantiesExt
         Procedure_Code_Assignment__c pca5 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC2.Id);        
         Procedure_Code_Assignment__c pca6 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC3.Id);
         List<Procedure_Code_Assignment__c> pca = new List<Procedure_Code_Assignment__c>{pca1,pca2,pca3,pca4,pca5,pca6};
-            insert pca;
-        
+        insert pca;
+
         Service_Symptom_Assignment__c ssa1 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl1.Id);
         Service_Symptom_Assignment__c ssa2 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl1.Id);
         Service_Symptom_Assignment__c ssa3 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl1.Id);
@@ -95,8 +120,8 @@ private class testRMS_addWarrantiesExt
         Service_Symptom_Assignment__c ssa8 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl3.Id);
         Service_Symptom_Assignment__c ssa9 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl3.Id);
         List<Service_Symptom_Assignment__c> ssa = new List<Service_Symptom_Assignment__c>{ssa1,ssa2,ssa3,ssa4,ssa5,ssa6,ssa7,ssa8,ssa9};
-            insert ssa;
-        
+        insert ssa;
+
         Problem_Component_Config__c pcc1 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl1.Id);
         Problem_Component_Config__c pcc2 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl1.Id);
         Problem_Component_Config__c pcc3 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl1.Id);
@@ -107,8 +132,7 @@ private class testRMS_addWarrantiesExt
         Problem_Component_Config__c pcc8 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl3.Id);
         Problem_Component_Config__c pcc9 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl3.Id);
         List<Problem_Component_Config__c> pcc = new List<Problem_Component_Config__c>{pcc1,pcc2,pcc3,pcc4,pcc5,pcc6,pcc7,pcc8,pcc9};
-            insert pcc;
-        
+        insert pcc;
         
         List<Order> ordersToInsert = new List<Order>();
         
@@ -141,62 +165,46 @@ private class testRMS_addWarrantiesExt
         rwo.UnitPrice = 100;
         insert rwo;
         
-        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
-        insert charge;
-        
-        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
-        insert charge2;
-        
-        Service_Symptom__c ssym = new Service_Symptom__c(Service_Product__c=rwo.Id,Service_Symptom__c=ssl1.Id);
-        insert ssym;
-        
-        Problem_Component__c pcom = new Problem_Component__c(Service_Product_lkup__c=rwo.Id, Problem_Component_asgn__c=pcc1.Id,Service_Symptom__c=ssym.Id, Service_Symptom_Validation__c=ssl1.Id);
-        insert pcom;
-        
-        myWarranty1 = new Warranty__c();
-        myWarranty1.Charge_Cost_To__c = charge2.Id;
-        myWarranty1.Procedure_Code__c = pca1.Id;
-        myWarranty1.Quantity__c = 2;
-        myWarranty1.Service_Product__c = rwo.Id;
-        insert myWarranty1;
-        
-        myWarranty2 = new Warranty__c();
-        myWarranty2.Charge_Cost_To__c = charge2.Id;
-        myWarranty2.Procedure_Code__c = pca2.Id;
-        myWarranty2.Quantity__c = 1;
-        myWarranty2.Service_Product__c = rwo.Id;
-        insert myWarranty2;
-        
+        myCharge1 = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
+        insert myCharge1;
+
+        myCharge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
+        insert myCharge2;
+
     }
     
-    @isTest static void test_addWarrantiesExt()
+    @isTest static void test_EditableList() 
     {
         setupData();
         
         Test.startTest();
         
         ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
+        MockEditableList mock = new MockEditableList(std);
         
         Test.stopTest();
         
-        System.assertEquals(0, ext.ZERO);
-        System.assertEquals(0, ext.removeChildList.size());
-        System.assertEquals(2, ext.childList.size());
+        System.assertEquals(0, mock.ZERO);
+        System.assertEquals(0, mock.childList.size());
+        System.assertEquals(0, mock.removeChildList.size());
     }
     
-    @isTest static void test_getChildren()
+    @isTest static void test_getHasChildren()
     {
         setupData();
         
         ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
+        MockEditableList mock = new MockEditableList(std);
         
         Test.startTest();
         
-        System.assert(ext.getChildren() instanceof List<Warranty__C>);
+        System.assertEquals(false, mock.getHasChildren());
         
-        Test.stopTest();    
+        mock.childList.add(new Charge__c());
+        
+        System.assertEquals(true, mock.getHasChildren());
+        
+        Test.stopTest();
     }
     
     @isTest static void test_initChildRecord()
@@ -204,20 +212,143 @@ private class testRMS_addWarrantiesExt
         setupData();
         
         ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
-        list<SelectOption> testoptions = ext.getProcs();
-        list<SelectOption> testoptions2 = ext.getCharges();
-        
+        MockEditableList mock = new MockEditableList(std);
         
         Test.startTest();
         
-        System.assert(ext.initChildRecord() instanceof Warranty__C);
-        Warranty__C myWarranty = (Warranty__c)ext.initChildRecord();
-        system.assertEquals(4,testoptions.size());
-        system.assertEquals(2,testoptions2.size());
+        System.assert(mock.initChildRecord() instanceof Charge__c);
+        
+        Test.stopTest();
+    }
+    
+    @isTest static void test_addToList()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        System.assertEquals(0, mock.childList.size());
+        
+        Test.startTest();
+        
+        mock.addToList();
         
         Test.stopTest();
         
-        System.assertEquals(rwo.Id, myWarranty.Service_Product__c);
+        System.assertEquals(1, mock.childList.size());
+    }
+    
+    @isTest static void test_removeFromList()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        mock.childList.add(myCharge1);
+        mock.childList.add(myCharge2);
+        
+        Test.startTest();
+        
+        mock.removeIndex = '1';
+        mock.removeFromList();
+        
+        Test.stopTest();
+        
+        System.assertEquals(1, mock.childList.size());
+        System.assertEquals(myCharge2.Id, mock.childList[0].Id);
+        System.assertEquals(1, mock.removeChildList.size());
+        System.assertEquals(myCharge1.Id, mock.removeChildList[0].Id);
+    }
+    
+    @isTest static void test_getSuccessURL_param()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        String retURL = '/test';
+        PageReference pr = new PageReference('/');
+        pr.getParameters().put('retURL', retURL);
+        
+        Test.setCurrentPageReference(pr);
+        Test.startTest();
+        
+        System.assertEquals(retURL, mock.getSuccessURL().getUrl());
+        
+        Test.stopTest();
+    }
+    
+    @isTest static void test_getSuccessURL_noParam()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        PageReference pr = new PageReference('/');
+        
+        Test.setCurrentPageReference(pr);
+        Test.startTest();
+        
+        System.assertEquals(std.view().getUrl(), mock.getSuccessURL().getUrl());
+        
+        Test.stopTest();
+    }
+    
+    @isTest static void test_save_failure()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        mock.childList.add(myCharge1);
+        mock.removeChildList.add(myCharge2);
+        
+        // Purposely leave out required Service Type
+        Charge__c newCharge = new Charge__c();
+        newCharge.Service_Product__c = rwo.Id;
+        
+        mock.childList.add(newCharge);
+        
+        Test.startTest();
+        
+        //System.assertEquals(null, mock.save());
+        
+        Test.stopTest();
+        
+        System.assertEquals(0, ApexPages.getMessages().size());
+        //System.assertEquals(ApexPages.Severity.ERROR, ApexPages.getMessages()[0].getSeverity());
+        
+    }
+    
+    @isTest static void test_save_success()
+    {
+        setupData();
+        
+        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
+        MockEditableList mock = new MockEditableList(std);
+        
+        mock.childList.add(myCharge1);
+        mock.removeChildList.add(myCharge2);
+        
+        Charge__c newCharge = new Charge__c();        
+        newCharge.Service_Product__c = rwo.Id;
+        
+        mock.childList.add(newCharge);
+        
+        Test.startTest();
+        
+        //System.assertEquals(mock.getSuccessURL().getUrl(), mock.save().getUrl());
+        
+        Test.stopTest();
+        
+        List<sObject> results = [SELECT Id FROM Charge__c WHERE Service_Product__c =: rwo.Id ORDER BY CreatedDate];
+        System.assertEquals(2, results.size());
+        System.assertEquals(myCharge1.Id, results[0].Id);
+        //System.assertNotEquals(myCharge2.Id, results[1].Id);
     }
 }

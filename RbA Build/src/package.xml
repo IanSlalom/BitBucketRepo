@@ -117,6 +117,10 @@
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_addProblemComponents</members>
+        <members>testRMS_addProblemComponentsExt</members>
+        <members>testRMS_addResponsibility</members>
+        <members>testRMS_addResponsibilityExt</members>
         <members>testRMS_addSkilltoWO</members>
         <members>testRMS_addWarranties</members>
         <members>testRMS_addWarrantiesExt</members>
