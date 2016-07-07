@@ -35,7 +35,7 @@
     
     <apex:form >
         <apex:pageMessages id="messages"/>
-        <apex:pageBlock title="Add Reimbursements">
+        <apex:pageBlock title="Add Reimbursements: {!OrderItem.Installed_Product_Name__c } - {!OrderItem.Product_Name__c}">
             <apex:pageBlockButtons >
                 <apex:commandButton value="Cancel" action="{!cancel}" />
                 <apex:commandButton value="Save" action="{!save}"/>
