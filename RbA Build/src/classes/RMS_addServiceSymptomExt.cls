@@ -23,8 +23,7 @@ public with sharing class RMS_addServiceSymptomExt {
         ssSP = apexpages.currentpage().getparameters().get('ssSP');
         if ( ssSP == null ) ssSP = '';
     }
-    public PageReference saveRerender(){
-        //deletes the order and redirects to delete confirmation page        
+    public PageReference saveRerender(){       
         s.Service_Product__c = ssSp;
         insert s;
         
