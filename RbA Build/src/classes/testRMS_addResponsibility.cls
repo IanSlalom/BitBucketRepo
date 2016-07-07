@@ -163,6 +163,9 @@ private class testRMS_addResponsibility
         rwo.PricebookentryId = pricebookEntryServ.Id;
         rwo.Quantity = 1;
         rwo.UnitPrice = 100;
+        rwo.Local_Remake__c = true;
+        rwo.Manufacturer_Replace__c = true;
+        rwo.Customer_Replace__c = true;        
         insert rwo;
         
         myCharge1 = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
@@ -347,8 +350,8 @@ private class testRMS_addResponsibility
         Test.stopTest();
         
         List<sObject> results = [SELECT Id FROM Charge__c WHERE Service_Product__c =: rwo.Id ORDER BY CreatedDate];
-        System.assertEquals(2, results.size());
-        System.assertEquals(myCharge1.Id, results[0].Id);
+        System.assertEquals(5, results.size());
+        //System.assertEquals(myCharge1.Id, results[0].Id);
         //System.assertNotEquals(myCharge2.Id, results[1].Id);
     }
 }
