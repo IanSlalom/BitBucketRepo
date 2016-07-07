@@ -24,7 +24,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Add Responsibility');
+        sforce.console.setTabTitle('Add Service Symptom');
     };
     
     
