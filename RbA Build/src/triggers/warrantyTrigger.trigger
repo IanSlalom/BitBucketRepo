@@ -81,12 +81,11 @@ trigger warrantyTrigger on Warranty__c (after delete, after insert, after undele
        
                     
         //After Delete
-        /*
-        else if(Trigger.isDelete && Trigger.isAfter){
-            handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
-            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+        
+        else if(Trigger.isDelete && Trigger.isAfter){            
+            orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
-        */
+       
         
         // After Undelete 
         /*

@@ -12,96 +12,95 @@
     }); 
     </script>
     
-        <script type="text/javascript">
-        var theURL;
-        var tabName;
-        var primaryTabId;
-        
-        
-        //The callback function that openSubtab will call once it's got the ID for its primary tab
-        var callOpenSubtab = function callOpenSubtab(result) {
-            sforce.console.openSubtab(result.id, 
-               theURL, true, tabName);
-            theURL = '';
-            tabName= '';
-        };
-        function openSubtab(urlPart, theTabName) {
-            if(sforce.console.isInConsole()){
-                theURL = urlPart;
-                tabName = theTabName;
-                sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
-            }else{
-                top.location.href = '/'+urlPart;
-            }
+    <script type="text/javascript">
+    var theURL;
+    var tabName;
+    var primaryTabId;
+    
+    
+    //The callback function that openSubtab will call once it's got the ID for its primary tab
+    var callOpenSubtab = function callOpenSubtab(result) {
+        sforce.console.openSubtab(result.id, 
+                                  theURL, true, tabName);
+        theURL = '';
+        tabName= '';
+    };
+    function openSubtab(urlPart, theTabName) {
+        if(sforce.console.isInConsole()){
+            theURL = urlPart;
+            tabName = theTabName;
+            sforce.console.getEnclosingPrimaryTabId(callOpenSubtab);
+        }else{
+            top.location.href = '/'+urlPart;
         }
+    }
+    
+    
+    var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
+        sforce.console.openConsoleUrl(result.id, 
+                                      result.consoleUrl, 
+                                      true 
+                                      // (optional)tabLabels:String, 
+                                      // (optional)tabNames:String, 
+                                      // (optional)callback:Function
+                                     );
         
-        
-        var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
-            sforce.console.openConsoleUrl(result.id, 
-            result.consoleUrl, 
-            true 
-           // (optional)tabLabels:String, 
-           // (optional)tabNames:String, 
-           // (optional)callback:Function
-            );
+    };
+    
+    function displayResult(result) {
+        if (result.success) {
+            alert('Tab status has been successfully updated');
+        } else {
+            alert('Tab status couldn’t be updated');
+        }
+    }
+    
+    function callGenerateConsoleURL(urlPart, theTabName) {
+        if(sforce.console.isInConsole()) {
+            tabName = theTabName;
+            var orderURL = '/'+'{!Order.AccountId}';
+            sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+        }else{
+            top.location.href = '{!baseUrl}'+urlPart;
             
-        };
-       
-        function displayResult(result) {
-             if (result.success) {
-                 alert('Tab status has been successfully updated');
-             } else {
-                 alert('Tab status couldn’t be updated');
-             }
-        }
-        
-        function callGenerateConsoleURL(urlPart, theTabName) {
-            if(sforce.console.isInConsole()) {
-                tabName = theTabName;
-                var orderURL = '/'+'{!Order.AccountId}';
-                sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
-            }else{
-                top.location.href = '{!baseUrl}'+urlPart;
-            
-            }       
-        }
-        
-        
+        }       
+    }
+    
+    
     </script>
-
-
+    
+    
     <style>
         .dataCell{
-            border-style: solid !important;
-            border-width: 1px !important;
+        border-style: solid !important;
+        border-width: 1px !important;
         } 
         .bigandgreen{
-            font-size: 16px;
-            color: Black !important;
-            font-weight: bold; 
+        font-size: 16px;
+        color: Black !important;
+        font-weight: bold; 
         }     
-         
+        
     </style>
     
-
+    
     
     <apex:pageBlock >
-            <apex:form >
-                
-                <apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}"/>
-            </apex:form>
-                <apex:pageBlockTable title="Service Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
-                    <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
-                        <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
-                    </apex:column>
-                    <apex:column headerValue="Product">  
-                        <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_viewServiceOrderItem?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
-                    </apex:column>                    
-                    <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
-                    <apex:column value="{!wrapper.OrderItem.Quanity_Ordered__c}"/>>
-                    <apex:column headerValue="Installed Product">  
-                        <a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
-                    </apex:column>
-                </apex:pageBlockTable>	
+        <apex:form >                               
+            <apex:commandButton action="{!addProductPage}" value="Add Product" style="margin-left:2%" rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}" />
+        </apex:form>
+        <apex:pageBlockTable title="Service Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
+            <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
+                <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
+            </apex:column>
+            <apex:column headerValue="Product">  
+                <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_viewServiceOrderItem?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
+            </apex:column>                    
+            <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
+            <apex:column value="{!wrapper.OrderItem.Quanity_Ordered__c}"/>>
+            <apex:column headerValue="Installed Product">  
+                <a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
+            </apex:column>
+        </apex:pageBlockTable>	
     </apex:pageBlock> 
 </apex:page>

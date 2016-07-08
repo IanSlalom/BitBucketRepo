@@ -1,9 +1,8 @@
 @isTest
-private class testRMS_addWarrantiesExt 
+private class testRMS_addServiceSymptomExt
 {
-    private static OrderItem rwo;
-    private static Warranty__c myWarranty1;
-    private static Warranty__c myWarranty2;
+    //private static OrderItem rwo;
+    private static Service_Symptom__c mySS1;    
     
     private static void setupData()
     {
@@ -134,8 +133,8 @@ private class testRMS_addWarrantiesExt
         ordersToInsert.add(order2);
         insert ordersToInsert;
         
-        rwo = new OrderItem();
-        rwo.OrderId = Order.id;
+        OrderItem rwo = new OrderItem();
+        rwo.OrderId = Order2.id;
         rwo.PricebookentryId = pricebookEntryServ.Id;
         rwo.Quantity = 1;
         rwo.UnitPrice = 100;
@@ -147,77 +146,30 @@ private class testRMS_addWarrantiesExt
         Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
         insert charge2;
         
-        Service_Symptom__c ssym = new Service_Symptom__c(Service_Product__c=rwo.Id,Service_Symptom__c=ssl1.Id);
-        insert ssym;
+        mySS1 = new Service_Symptom__c(Service_Product__c=rwo.Id,Service_Symptom__c=ssl1.Id);
+        insert mySS1;
         
-        Problem_Component__c pcom = new Problem_Component__c(Service_Product_lkup__c=rwo.Id, Problem_Component_asgn__c=pcc1.Id,Service_Symptom__c=ssym.Id, Service_Symptom_Validation__c=ssl1.Id);
-        insert pcom;
-        
-        myWarranty1 = new Warranty__c();
-        myWarranty1.Charge_Cost_To__c = charge2.Id;
-        myWarranty1.Procedure_Code__c = pca1.Id;
-        myWarranty1.Quantity__c = 2;
-        myWarranty1.Service_Product__c = rwo.Id;
-        insert myWarranty1;
-        
-        myWarranty2 = new Warranty__c();
-        myWarranty2.Charge_Cost_To__c = charge2.Id;
-        myWarranty2.Procedure_Code__c = pca2.Id;
-        myWarranty2.Quantity__c = 1;
-        myWarranty2.Service_Product__c = rwo.Id;
-        insert myWarranty2;
         
     }
     
-    @isTest static void test_addWarrantiesExt()
-    {
-        setupData();
-        
-        Test.startTest();
-        
-        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
-        
-        Test.stopTest();
-        
-        System.assertEquals(0, ext.ZERO);
-        System.assertEquals(0, ext.removeChildList.size());
-        System.assertEquals(2, ext.childList.size());
-    }
     
-    @isTest static void test_getChildren()
-    {
-        setupData();
+    static testmethod void testOptionList(){
+        setupData();                
         
-        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
+        Service_Symptom__c ss = [SELECT Id,Service_Product__c,Service_Symptom__c FROM Service_Symptom__c WHERE id =:mySS1.Id]; 
         
         Test.startTest();
         
-        System.assert(ext.getChildren() instanceof List<Warranty__C>);
+        Test.setCurrentPage(Page.RMS_addServiceSymptom);
+        ApexPages.StandardController sc = new ApexPages.StandardController(ss);
+        RMS_addServiceSymptomExt TE = new RMS_addServiceSymptomExt(sc);
+        list<SelectOption> testoptions = TE.getSers();
         
-        Test.stopTest();    
-    }
-    
-    @isTest static void test_initChildRecord()
-    {
-        setupData();
-        
-        ApexPages.StandardController std = new ApexPages.StandardController(rwo);
-        RMS_addWarrantiesExt ext = new RMS_addWarrantiesExt(std);
-        list<SelectOption> testoptions = ext.getProcs();
-        list<SelectOption> testoptions2 = ext.getCharges();
-        
-        
-        Test.startTest();
-        
-        System.assert(ext.initChildRecord() instanceof Warranty__C);
-        Warranty__C myWarranty = (Warranty__c)ext.initChildRecord();
         system.assertEquals(4,testoptions.size());
-        system.assertEquals(2,testoptions2.size());
         
         Test.stopTest();
         
-        System.assertEquals(rwo.Id, myWarranty.Service_Product__c);
     }
+    
+    
 }

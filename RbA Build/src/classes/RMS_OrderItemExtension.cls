@@ -21,11 +21,12 @@ public class RMS_OrderItemExtension {
     public String addSymptomURL {get;set;}
     //map<String, Service_Field_Ids__c> Service_Field_Ids_map = Service_Field_Ids__c.getAll();
     public String ssSP {get;set;}
+    public String oiLabel {get;set;}
     //public List<Order> parent {get;set;}
     
     public RMS_OrderItemExtension(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
-            stdController.addFields(new List<String>{'OrderId','Service__c'});           
+            stdController.addFields(new List<String>{'OrderId','Service__c', 'Installed_Product_Name__c', 'Product_Name__c'});           
         }
         
         
@@ -103,7 +104,7 @@ public class RMS_OrderItemExtension {
     
     public PageReference addServiceSymptom(){
         PageReference newPage;
-        newPage = new PageReference('/apex/RMS_addServiceSymptom?ssSP'+'='+o.id);
+        newPage = new PageReference('/apex/RMS_addServiceSymptom?ssSP'+'='+o.id+'&oiLabel='+o.Installed_Product_Name__c+': '+o.Product_Name__c);
         newPage.setRedirect(true); 
         return newPage;
     }     

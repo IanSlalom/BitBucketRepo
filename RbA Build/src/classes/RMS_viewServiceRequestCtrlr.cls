@@ -134,7 +134,12 @@ public class RMS_viewServiceRequestCtrlr {
         return newPage;
     } 
     
-    
+        public PageReference editServiceRequest(){
+        PageReference newPage;
+        newPage = new PageReference('/apex/RMS_editServiceRequest?id='+o.id);
+        newPage.setRedirect(true); 
+        return newPage;
+    } 
     
     
 }
