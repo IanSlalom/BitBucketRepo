@@ -29,8 +29,8 @@
         };
 
         function closeTab() {
-
-            if(sforce.console.isInConsole()) {
+            if(j$('.errorMsg').length == 0){
+                if(sforce.console.isInConsole()) {
                 sforce.console.refreshPrimaryTabById( primaryTabId, false,
                     function()
                     {
@@ -42,19 +42,19 @@
             else {
                 location.href='/{!OrderItem.OrderId}'; 
             }
-
+            }
         
         };  
 
       
 </script>
-    <apex:form >  
+    <apex:form id="form">  
         <apex:pageBlock title="Cancel Order Product">
           <apex:pageBlockButtons location="top" >
-            <apex:commandButton action="{!save}" value="Save"  oncomplete="closeTab();return false"/>
-            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+            <apex:commandButton action="{!save}" value="Save"  oncomplete="closeTab();return false" rerender="form"/>
+            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false" rerender="form"/>
         </apex:pageBlockButtons>    
-        <apex:pageBlockSection title="Order Product Information">
+        <apex:pageBlockSection title="Order Product Information" >
             <apex:outputField value="{!OrderItem.Status__c}"/>
             <apex:inputField value="{!OrderItem.Cancellation_Reason__c}" required="true"/>
         </apex:pageBlockSection>
