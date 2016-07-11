@@ -8,6 +8,7 @@ public with sharing class Constants {
 	public static final String CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME = 'Construction_Materials';
 	public static final String MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME = 'Misc_Job_and_Unit_Charges';
 
+
 	// locked Order Fields by Status
 	public static final Map<String, List<String>> lockedOrderFieldMap = new Map<String, List<String>>
 	{'Order Released'=>new String[]
