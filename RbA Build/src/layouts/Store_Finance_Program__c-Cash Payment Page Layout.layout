@@ -23,15 +23,15 @@
                 <behavior>Edit</behavior>
                 <field>Expiration_Date__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>rSuite_Financing_Option__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Store_Configuration__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>rSuite_Financing_Option__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

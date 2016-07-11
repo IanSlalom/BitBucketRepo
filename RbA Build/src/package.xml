@@ -396,7 +396,7 @@
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
         <members>rSuite_Financing_Option__c-rSuite Financing Option Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
-        <members>rSuite_Managed_Documents__c-rSuie Managed Documents Layout</members>
+        <members>rSuite_Managed_Documents__c-rSuite Managed Documents Layout</members>
         <name>Layout</name>
     </types>
     <types>
