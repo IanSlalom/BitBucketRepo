@@ -624,6 +624,56 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* Set up Hardware Finish Color Items  *****************/
+	private static transient List<SelectOption> lHardwareFinishColorItems;
+	public List<SelectOption> hardwareFinishColorItems{
+		get
+		{   
+			if (lHardwareFinishColorItems == null) {
+				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
+			}			   
+			return lHardwareFinishColorItems;
+		}
+	}
+
+	/******* Set up Height Left or Right Items *****************/
+	private static transient List<SelectOption> lLeftOrRightItems;
+	public List<SelectOption> isHeightlOrR{
+		get
+		{   
+			if (lLeftOrRightItems == null) {
+				lLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Height_L_or_R_Leg_Height__c);
+			}			   
+			return lLeftOrRightItems;
+		}
+	}
+
+	/******* Set up Leg Height Left or Right Items *****************/
+	private static transient List<SelectOption> lLegLeftOrRightItems;
+	public List<SelectOption> isLegHeightlOrR{
+		get
+		{   
+			if (lLegLeftOrRightItems == null) {
+				lLegLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height__c);
+			}			   
+			return lLegLeftOrRightItems;
+		}
+	}
+
+	/******* Set up Meet Rail Dimension Items *****************/
+	private static transient List<SelectOption> lMeetRailDimensionItems;
+	public List<SelectOption> meetRailDimension{
+		get
+		{   
+			if (lMeetRailDimensionItems == null) {
+				lMeetRailDimensionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Meet_Rail_Dimension__c);
+			}			   
+			return lMeetRailDimensionItems;
+		}
+	}
+
+
+
 	/******* Set up Hardware Style Items  *****************/
 	private static transient List<SelectOption> lHardwareStyleItems;
 	public List<SelectOption> hardwareStyleItems{
