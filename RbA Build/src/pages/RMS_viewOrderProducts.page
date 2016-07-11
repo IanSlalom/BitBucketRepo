@@ -139,6 +139,7 @@
 		        <apex:column value="{!wrapper.OrderItem.Leg_Height_Interior_Whole_Inch__c}"/> 
 		        <apex:column value="{!wrapper.OrderItem.Meet_Rail_Dimension__c}"/> 
 		        <apex:column value="{!wrapper.OrderItem.EJ_Kerf__c}"/> 
+		        <apex:column value="{!wrapper.OrderItem.Cancellation_Reason__c}"/> 
 		        <apex:column breakBefore="true" colspan="10" >
 					<apex:pageblocksection title="Related Order Items" id="additionalInfo" showheader="true" collapsible="false" columns="1" rendered="{!wrapper.showRelatedItems && wrapper.relatedItems !=null}">
 						<apex:pageBlockTable title="Misc Jobs and Unit Charges" value="{!wrapper.relatedItems}" var="item" style="width:100%;">
@@ -176,6 +177,7 @@
 					        <apex:column value="{!item.Leg_Height_Interior_Whole_Inch__c}"/> 
 					        <apex:column value="{!item.Meet_Rail_Dimension__c}"/> 
 					        <apex:column value="{!item.EJ_Kerf__c}"/>  
+					        <apex:column value="{!item.Cancellation_Reason__c}"/> 
 						</apex:pageBlockTable>
 					</apex:pageblocksection>			
 				</apex:column>
