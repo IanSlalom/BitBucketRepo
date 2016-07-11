@@ -68,6 +68,10 @@
         window.open('{!URLFOR($Action.Order.Conga_Composer_RbA_Service_Quote,Order.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
     }
     
+    function printServiceWO() { 
+        window.open('{!URLFOR($Action.Order.Conga_Composer_RbA_Service_Work_Order,Order.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
+    
     
     </script>
     <style>
@@ -135,6 +139,7 @@
                 <apex:commandButton action="{!updateServiceType}" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
                 <apex:commandButton value="Print Service Quote" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceQuote()"/>
+                <apex:commandButton value="Print Service WO/HSR Form" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceWO()"/>
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
                 <apex:outputField value="{!Order.AccountId}"/>

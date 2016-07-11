@@ -429,7 +429,6 @@ public with sharing class RMS_financialTransactionManager {
                                                     GL_Account__c,
                                                     GL_Account__r.Name,
                                                     Internal_Cost__c,
-                                                    Labor_Complete__c,
                                                     Related_Work_Order__c,
                                                     Related_Work_Order__r.Sold_Order__c,
                                                     Hourly_Rate__c,

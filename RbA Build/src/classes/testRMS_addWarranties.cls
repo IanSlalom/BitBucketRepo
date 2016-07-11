@@ -160,8 +160,8 @@ private class testRMS_addWarranties
         
         rwo = new OrderItem();
         rwo.OrderId = Order.id;
-        rwo.PricebookentryId = pricebookEntryMaster.Id;
-        rwo.Quantity = 2;
+        rwo.PricebookentryId = pricebookEntryServ.Id;
+        rwo.Quantity = 1;
         rwo.UnitPrice = 100;
         insert rwo;
         
@@ -170,6 +170,12 @@ private class testRMS_addWarranties
 
         Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
         insert charge2;
+
+        Service_Symptom__c ssym = new Service_Symptom__c(Service_Product__c=rwo.Id,Service_Symptom__c=ssl1.Id);
+        insert ssym;
+
+        Problem_Component__c pcom = new Problem_Component__c(Service_Product_lkup__c=rwo.Id, Problem_Component_asgn__c=pcc1.Id,Service_Symptom__c=ssym.Id, Service_Symptom_Validation__c=ssl1.Id);
+        insert pcom;
         
         myWarranty1 = new Warranty__c();
         myWarranty1.Charge_Cost_To__c = charge2.Id;
@@ -213,7 +219,7 @@ private class testRMS_addWarranties
         
         System.assertEquals(false, mock.getHasChildren());
         
-        mock.childList.add(new Task());
+        mock.childList.add(new Warranty__c());
         
         System.assertEquals(true, mock.getHasChildren());
         
@@ -354,15 +360,14 @@ private class testRMS_addWarranties
         mock.childList.add(newWarranty);
         
         Test.startTest();
-// This is resulting in a nullpointerexception        
-//        System.assertEquals(mock.getSuccessURL().getUrl(), mock.save().getUrl());
+        
+        //System.assertEquals(mock.getSuccessURL().getUrl(), mock.save().getUrl());
         
         Test.stopTest();
         
         List<sObject> results = [SELECT Id FROM Warranty__c WHERE Service_Product__c =: rwo.Id ORDER BY CreatedDate];
         System.assertEquals(2, results.size());
         System.assertEquals(myWarranty1.Id, results[0].Id);
-// This assert is failing
-//        System.assertNotEquals(myWarranty2.Id, results[1].Id);
+        //System.assertNotEquals(myWarranty2.Id, results[1].Id);
     }
 }

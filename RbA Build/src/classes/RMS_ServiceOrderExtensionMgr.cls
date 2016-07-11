@@ -22,7 +22,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public integer num_orders;
     public integer num_assets;
     public integer sales_tax;
-    public list<OrderItem > listOI{ get; set; } 
+    public list<OrderItem > listOI{ get; set; }  
+    public Integer invalidRequest;
     public List<Service_Product__c> serviceProducts {get;set;}
     public List<Asset> selectedAssets {get;set;}
     public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');    
@@ -357,228 +358,223 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     //Page 2 Methods 
     //
     //
-    //
-    private Boolean isValid() {
-        for(Id assetID : AssetToProductWrapperMap.keySet()){
-            for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
-                if(wrapper.manufacturer || wrapper.customer || wrapper.local){
-                    if(!wrapper.isSelected){
-                        return false;
-                    }else {
-                        return true; 
-                    }
-                }
-                else {
-                    return true;
-                }
-            }
-        }
-        return null;
-    }
-    
-    private Boolean isValidLegacy() {
-        for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
-            for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
-                if(wrapper.manufacturer || wrapper.customer || wrapper.local){
-                    if(!wrapper.isSelected){
-                        return false;
-                    }else {
-                        return true; 
-                    }
-                }
-                else {
-                    return true;
-                }
-            }
-        }
-        return null;
-    }
     
     
     
     public PageReference saveClose(){
         PageReference newPage;
         
-        if (!isValid())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));  
-            return null;
-        }
-        else
-        {
-            
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id assetID : AssetToProductWrapperMap.keySet()){
-                    for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];
-                            
-                            Asset oa = [
-                                SELECT Id,Product2Id,Original_Order_Product__c
-                                FROM Asset
-                                WHERE Id = :assetId];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Sold_Order_Product_Asset__c = assetId; 
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi); 
-                            
-                        }
-                    }        
-                }
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                //convert the selectOption value to picklist value, set on Ordre
-                o.Service_Type__c = propPickValSelected;
-                
-                
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                
-                
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/'+o.id);                
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        }  
-        return null;
-    }
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi); 
+                        
+                    }
+                }        
+            }
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            //convert the selectOption value to picklist value, set on Ordre
+            o.Service_Type__c = propPickValSelected;
+            
+            
+            upsert o;
+            system.debug(listOI);
+            system.debug(invalidRequest);            
+            
+            //inserts the OrderItems  
+            
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/'+o.id);                
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    }  
+    
     
     public PageReference saveContinue(){
         PageReference newPage;
         
-        if (!isValid())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {            
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id assetID : AssetToProductWrapperMap.keySet()){
-                    for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];
-                            
-                            Asset oa = [
-                                SELECT Id,Product2Id,Original_Order_Product__c
-                                FROM Asset
-                                WHERE Id = :assetId];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Sold_Order_Product_Asset__c = assetId; 
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi); 
-                            
-                        }
-                    }        
-                }
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                //convert the selectOption value to picklist value, set on Ordre
-                o.Service_Type__c = propPickValSelected;
-                
-                
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                
-                
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        }            
-        //The rest of your logic
-        return null;
-    }    
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){                    
+                    if(wrapper.isSelected && invalidRequest == 0){                            
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId;                         
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi); 
+                        
+                    }
+                }                
+            }        
+            
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            //convert the selectOption value to picklist value, set on Ordre
+            o.Service_Type__c = propPickValSelected;
+            
+            
+            upsert o;
+            system.debug(listOI); 
+            system.debug(invalidRequest);            
+            
+            //inserts the OrderItems  
+            
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    }  
     
     //page3 Methods
     public PageReference regroup()
@@ -649,146 +645,179 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public PageReference saveCloseLegacy(){
         PageReference newPage;
         
-        if (!isValidLegacy())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            
-            try{
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
-                    for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];                       
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;                        
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;                        
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Description = wrapper.description;
-                            listOILegacy.add(oi);                           
-                        }
-                    }        
-                }
-                o.Validate_Service_Order__c = true;
-                o.Service_Type__c = propPickValSelectedLegacy;
-                upsert o;
-                system.debug(listOILegacy);
-                insert listOiLegacy;
-                
-                if(listOiLegacy.Size() > 0){
-                    newPage = new PageReference('/'+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                newPage.setRedirect(true); 
-                
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                listOILegacy.clear();
+        
+        try{
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        }  
-        return null;
-    }
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];                       
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;                        
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;                        
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOILegacy.add(oi);                           
+                    }
+                }        
+            }
+            
+            o.Validate_Service_Order__c = true;
+            o.Service_Type__c = propPickValSelectedLegacy;
+            upsert o;
+            system.debug(listOILegacy);
+            system.debug(invalidRequest);
+            
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOILegacy.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOILegacy;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOiLegacy.Size() > 0){
+                newPage = new PageReference('/'+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            newPage.setRedirect(true); 
+            
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            listOILegacy.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    }  
+    
     
     
     public PageReference saveContinueLegacy(){
         PageReference newPage;
         
-        if (!isValidLegacy())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            
-            try{
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
-                    for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];                       
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;                        
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;                        
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Description = wrapper.description;
-                            listOILegacy.add(oi);                           
-                        }
-                    }        
-                }
-                o.Validate_Service_Order__c = true;
-                o.Service_Type__c = propPickValSelectedLegacy;
-                upsert o;
-                system.debug(listOILegacy);
-                insert listOiLegacy;
-                
-                if(listOiLegacy.Size() > 0){
-                    newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-                
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                listOILegacy.clear();
+        
+        try{
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        } 
-        return null;
-    }
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];                       
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;                        
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;                        
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOILegacy.add(oi);                           
+                    }
+                }        
+            }
+            o.Validate_Service_Order__c = true;
+            o.Service_Type__c = propPickValSelectedLegacy;
+            upsert o;
+            system.debug(listOILegacy);
+            
+            
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOILegacy.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOILegacy;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOiLegacy.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+            
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            listOILegacy.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    } 
+    
     
     
     
@@ -864,334 +893,394 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         
         PageReference newPage;
         
-        if (!isValid())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id assetID : AssetToProductWrapperMap.keySet()){
-                    for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];
-                            
-                            Asset oa = [
-                                SELECT Id,Product2Id,Original_Order_Product__c
-                                FROM Asset
-                                WHERE Id = :assetId];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Sold_Order_Product_Asset__c = assetId; 
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi);                           
-                        }
-                    }        
-                }
-                
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/'+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+            
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            upsert o;
+            system.debug(listOI);
+            
+            //inserts the OrderItems
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/'+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
         }
-        return null;
+        
+        return newPage;
     }
+    
     
     public PageReference saveNewProductsContinue(){
         
         PageReference newPage;
         
-        if (!isValid())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id assetID : AssetToProductWrapperMap.keySet()){
-                    for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];
-                            
-                            Asset oa = [
-                                SELECT Id,Product2Id,Original_Order_Product__c
-                                FROM Asset
-                                WHERE Id = :assetId];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Sold_Order_Product_Asset__c = assetId; 
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi);                           
-                        }
-                    }        
-                }
-                
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        } 
-        return null;
-    }
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id assetID : AssetToProductWrapperMap.keySet()){
+                for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];
+                        
+                        Asset oa = [
+                            SELECT Id,Product2Id,Original_Order_Product__c
+                            FROM Asset
+                            WHERE Id = :assetId];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Sold_Order_Product_Asset__c = assetId; 
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+            
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            upsert o;
+            system.debug(listOI);
+            
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    } 
+    
     
     public PageReference saveNewProductsLegacy(){
         
         PageReference newPage;
         
-        if (!isValidLegacy())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
-                    for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi);                           
-                        }
-                    }        
-                }
-                
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        }  
-        return null;
-    }
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+            
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            upsert o;
+            system.debug(listOI);
+            
+            //inserts the OrderItems
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    }  
+    
     
     public PageReference saveNewProductsLegacyContinue(){
         
         PageReference newPage;
-        if (!isValidLegacy())
-        {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
-            return null;
-        }
-        else
-        {
-            
-            try{           
-                Id standardPriceBookId;  
-                if(Test.isRunningTest()){
-                    standardPriceBookId = Test.getStandardPricebookId();
-                } else{
-                    standardPriceBookId = [
-                        select Id 
-                        from Pricebook2 
-                        where isStandard=true
-                    ].Id;
-                }
-                
-                
-                //in the wrapper, displaying all Service Products for the Master Products in each
-                //Asset for the Account, a checkbox and three fields appear. For each Service Product
-                //selected...create an OrderItem for the Service Request and populate appropriate fields.
-                for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
-                    for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
-                        if(wrapper.isSelected){
-                            PricebookEntry pbe = [ 
-                                SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
-                                FROM PricebookEntry 
-                                WHERE Pricebook2Id = :standardPriceBookId 
-                                AND isActive = true
-                                AND Product2Id = :wrapper.Product.Service_Product__c];                        
-                            
-                            OrderItem oi = new OrderItem();                                              
-                            oi.UnitPrice = pbe.UnitPrice;
-                            oi.OrderId = o.Id;
-                            oi.PriceBookEntryId = pbe.id;
-                            oi.Quanity_Ordered__c = 1;
-                            oi.Quantity = 1;
-                            oi.Service__c = true;
-                            oi.Manufacturer_Replace__c = wrapper.manufacturer;
-                            oi.Local_Remake__c = wrapper.local;
-                            oi.Customer_Replace__c = wrapper.customer;
-                            oi.Description = wrapper.description;
-                            listOI.add(oi);                           
-                        }
-                    }        
-                }
-                
-                
-                //checkbox on Order set to true, needed to ensure we validate required fields, but
-                //only when the entire request is filled out and not during a rerender.
-                o.Validate_Service_Order__c = true;
-                upsert o;
-                system.debug(listOI);
-                
-                //inserts the OrderItems
-                insert listOi;
-                if(listOI.Size() > 0){
-                    newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
-                } else {
-                    newPage = new PageReference('/' + o.id);
-                }
-                
-                newPage.setRedirect(true); 
-            }catch(DMLException ex){
-                ApexPages.addMessages(ex);
-                //needed to make sure the collapsed rows stay collapsed when validation error occurs
-                listOI.clear();
+        
+        
+        try{           
+            Id standardPriceBookId;  
+            if(Test.isRunningTest()){
+                standardPriceBookId = Test.getStandardPricebookId();
+            } else{
+                standardPriceBookId = [
+                    select Id 
+                    from Pricebook2 
+                    where isStandard=true
+                ].Id;
             }
             
-            return newPage;
-        }   
-        return null;
-    }
+            
+            //in the wrapper, displaying all Service Products for the Master Products in each
+            //Asset for the Account, a checkbox and three fields appear. For each Service Product
+            //selected...create an OrderItem for the Service Request and populate appropriate fields.
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.manufacturer || wrapper.local || wrapper.customer){
+                        if(!wrapper.isSelected){                            
+                            invalidRequest = 1;
+                        } else {
+                            invalidRequest = 0;
+                        } 
+                    }
+                }
+            }
+            
+            for(Id productId : ProductToProductWrapperMapLegacy.keySet()){
+                for(ProductWrapper2 wrapper: ProductToProductWrapperMapLegacy.get(productId)){
+                    if(wrapper.isSelected && invalidRequest == 0){
+                        PricebookEntry pbe = [ 
+                            SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
+                            FROM PricebookEntry 
+                            WHERE Pricebook2Id = :standardPriceBookId 
+                            AND isActive = true
+                            AND Product2Id = :wrapper.Product.Service_Product__c];                        
+                        
+                        OrderItem oi = new OrderItem();                                              
+                        oi.UnitPrice = pbe.UnitPrice;
+                        oi.OrderId = o.Id;
+                        oi.PriceBookEntryId = pbe.id;
+                        oi.Quanity_Ordered__c = 1;
+                        oi.Quantity = 1;
+                        oi.Service__c = true;
+                        oi.Manufacturer_Replace__c = wrapper.manufacturer;
+                        oi.Local_Remake__c = wrapper.local;
+                        oi.Customer_Replace__c = wrapper.customer;
+                        oi.Description = wrapper.description;
+                        listOI.add(oi);                           
+                    }
+                }        
+            }
+            
+            
+            //checkbox on Order set to true, needed to ensure we validate required fields, but
+            //only when the entire request is filled out and not during a rerender.
+            o.Validate_Service_Order__c = true;
+            upsert o;
+            system.debug(listOI);
+            
+            //inserts the OrderItems
+            If(invalidRequest==1){
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Validation Failed: If selecting a responsible party, you must select the checkbox to the left of the Product.'));            
+                return null; 
+                listOI.clear();
+                invalidRequest = 0;
+            }      else {   
+                insert listOi;
+                invalidRequest = 0;
+            }
+            
+            if(listOI.Size() > 0){
+                newPage = new PageReference('/apex/RMS_createServiceRequestP3?id='+o.id);
+            } else {
+                newPage = new PageReference('/' + o.id);
+            }
+            
+            newPage.setRedirect(true); 
+        }catch(DMLException ex){
+            ApexPages.addMessages(ex);
+            //needed to make sure the collapsed rows stay collapsed when validation error occurs
+            listOI.clear();
+            invalidRequest = 0;
+        }
+        
+        return newPage;
+    }   
+    
     
     
     //method for creating Service Type picklist, defaulted to JIP when appropriate, hiding
@@ -1329,6 +1418,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         public Boolean local {get;set;}
         public Boolean customer {get;set;}
         public String description {get;set;}
+        
         
         public ProductWrapper(Service_Product__c prod){
             product = prod;  

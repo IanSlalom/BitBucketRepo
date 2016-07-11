@@ -24,7 +24,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Add Responsibility');
+        sforce.console.setTabTitle('Add Service Symptom');
     };
     
     
@@ -35,7 +35,7 @@
     
     <apex:form id="theForm">
         <apex:pageMessages id="messages"/>
-        <apex:pageBlock mode="edit" tabStyle="Service_Symptom__c" title="Service Symptom">
+        <apex:pageBlock mode="edit" tabStyle="Service_Symptom__c" title="Service Symptom:">
             <apex:pageBlockButtons location="bottom">
                 <apex:commandButton value="Cancel" action="{!cancel}" />
                 <apex:commandButton value="Save" action="{!save}"/>
@@ -47,6 +47,8 @@
                         <apex:selectOptions value="{!sers}"></apex:selectOptions>                     
                     </apex:selectList>
                 </apex:outputPanel>-->
+                <apex:outputField value="{!Service_Symptom__c.Service_Product__r.Installed_Product_Name__c}" label="Insalled Product"/>
+                <apex:outputField value="{!Service_Symptom__c.Service_Product__r.Product_Name__c}" label="Service Product"/>
                 <apex:outputField value="{!Service_Symptom__c.Service_Symptom__c}"/>
             </apex:pageBlockSection>
            
