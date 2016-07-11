@@ -818,6 +818,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Grille_Lites_S2_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Grille_Pattern_Control__c</field>
             </layoutItems>
             <layoutItems>
