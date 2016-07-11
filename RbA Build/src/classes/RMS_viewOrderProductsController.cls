@@ -67,7 +67,9 @@ public with sharing class RMS_viewOrderProductsController {
     public void loadOrderItems(){
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
                          Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Unit_Id__c,PricebookEntry.Product2.RecordTypeId, Status__c,
-                         Purchase_Order__r.Status__c
+                         Purchase_Order__r.Status__c, Color_Match_Hinges__c, Corrosion_Resistant_Hinges__c, Corrosion_Resistant_Lock__c, Hardware_Finish_Color__c, Window_Opening_Control_Device__c,
+                         Is_Height_L_or_R_Leg_Height__c, Is_Leg_Height_L_or_R_Leg_Height__c, Leg_Height_Exterior_Fraction__c, Leg_Height_Exterior_Whole_Inch__c,Leg_Height_Interior_Fraction__c, 
+                         Leg_Height_Interior_Whole_Inch__c, Meet_Rail_Dimension__c, EJ_Kerf__c  
                          from OrderItem 
                          where OrderId =: ord.Id 
                          and (PricebookEntry.Product2.RecordTypeId =: masterProductId
@@ -76,7 +78,10 @@ public with sharing class RMS_viewOrderProductsController {
 
         Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
         for(OrderItem oi: [select Id, PricebookEntry.Product2Id,  PricebookEntry.Product2.Name, Purchase_Order__c, Quantity, Total_Retail_Price__c, 
-                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c, Unit_Id__c, Status__c 
+                         Unit_Wholesale_Cost__c, Total_Wholesale_Cost__c, Variant_Number__c, UnitPrice, Parent_Order_Item__c, Service__c, Unit_Id__c, Status__c,
+                         Purchase_Order__r.Status__c, Color_Match_Hinges__c, Corrosion_Resistant_Hinges__c, Corrosion_Resistant_Lock__c, Hardware_Finish_Color__c, Window_Opening_Control_Device__c,
+                         Is_Height_L_or_R_Leg_Height__c, Is_Leg_Height_L_or_R_Leg_Height__c, Leg_Height_Exterior_Fraction__c, Leg_Height_Exterior_Whole_Inch__c,Leg_Height_Interior_Fraction__c, 
+                         Leg_Height_Interior_Whole_Inch__c, Meet_Rail_Dimension__c, EJ_Kerf__c 
                          from OrderItem 
                          where Parent_Order_Item__c in: orderItems.keySet() 
                          and PricebookEntry.Product2.RecordTypeId =: miscJobId                                            
