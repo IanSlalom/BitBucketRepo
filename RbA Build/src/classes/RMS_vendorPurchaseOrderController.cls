@@ -740,8 +740,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if (checkReceived())
       return null;
 
-    // update the subtotal and upsert the PO
-    updateSubTotal();   
     //JETT-712  
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
       boolean allOrderItemsHaveWholesaleCost = false;
@@ -940,8 +938,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
       System.debug('^^^^^^^^^^^^^^OIW' + OIW);
           
       orderItemWrapperList.add(OIW);
-      // update the subtotal calculation after adding a product and update the PO
-      updateSubTotal();
       
       // update the taxes on all order items     
 	  List<orderItem> allOrderItems = [SELECT 	Id, Unit_Wholesale_Cost__c, Quantity, Discount_Amount__c, Tax__c 
