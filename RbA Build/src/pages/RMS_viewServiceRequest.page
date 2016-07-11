@@ -139,7 +139,7 @@
                 <apex:commandButton action="{!updateServiceType}" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
                 <apex:commandButton value="Print Service Quote" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceQuote()"/>
-                <apex:commandButton value="Print Service Work Order" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceWO()"/>
+                <apex:commandButton value="Print Service WO/HSR Form" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceWO()"/>
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
                 <apex:outputField value="{!Order.AccountId}"/>
