@@ -466,9 +466,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			
 	  // Determine the purchase order status so we know what to display on the page.
       orderStatus = this.po.Status__c;
-        		
+      boolean electronicVendor = false;
+      if(selectedVendor != '' && selectedVendor != null) 
+      	electronicVendor = [SELECT Electronic_Orders__c FROM Account WHERE Id =: selectedVendor].Electronic_Orders__c;
+ 		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
-      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder && !costPurchaseOrder);
+      electronicOrder = (electronicVendor && !servicePurchaseOrder && !costPurchaseOrder);
 
       if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
          showCancelPO = true;
@@ -700,12 +703,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
         // May need to change this. Currently finds the RbA account and standard
         // pricebook and creates an Order and links it to the Cost PO
-        Account renewal = new Account();
-        for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
-        	renewal = ren;
-        }
+//        Account renewal = new Account();
+//        for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
+//        	renewal = ren;
+//        }
+		// For Cost POs, to have order items, we need a dummy order record, so this creates that order 
+		// and links it to the selected vendor  
         String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
-        Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+        Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
         try{
@@ -722,7 +727,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       // Sets the PO's record type
       po.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Cost_Purchase_Order') :
 						(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order') :
-						(selectedVendorName == 'RbA')   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
+						(selectedVendorName.contains('Renewal by Andersen'))   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
 														  UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Product_Purchase_Order');
 
       // checks that the gl and intercompany accounts are available
