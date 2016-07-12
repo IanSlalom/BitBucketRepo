@@ -177,7 +177,6 @@
         <fields>NAME</fields>
         <fields>Installer__c</fields>
         <fields>Hours_Applied__c</fields>
-        <fields>Labor_Complete__c</fields>
         <relatedList>Labor__c.Related_Work_Order__c</relatedList>
     </relatedLists>
     <relatedLists>
