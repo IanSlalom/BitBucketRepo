@@ -2,8 +2,6 @@
 
 @class  RMS_OrderItemExtension
 
-@brief  Controller for RMS_CloseTabPage visualforce page
-
 @author  Brianne Wilson (Slalom.BLW)
 
 @version    2016-3-9  Slalom.BLW

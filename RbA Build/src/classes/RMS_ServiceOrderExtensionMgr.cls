@@ -1381,19 +1381,19 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         return newPage;
     } 
     
-    public PageReference cancelOrder(){
-        PageReference pageRef = null;
-        try{
-            o.Status = 'Cancelled';
-            upsert o;
-            pageRef = new PageReference('/' + o.id);
-            pageRef.setRedirect(true); 
-        }catch(DMLException ex){
-            ApexPages.addMessages(ex);
-        }
+    //public PageReference cancelOrder(){
+      //  PageReference pageRef = null;
+        //try{
+          //  o.Status = 'Cancelled';
+            //upsert o;
+            //pageRef = new PageReference('/' + o.id);
+            //pageRef.setRedirect(true); 
+        //}catch(DMLException ex){
+         //   ApexPages.addMessages(ex);
+        //}
         
-        return pageRef;
-    }
+       // return pageRef;
+    //}
     
     public PageReference cancelP3(){
         PageReference pageRef = null;
