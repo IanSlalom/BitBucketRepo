@@ -36,7 +36,7 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
         //HANDLERS AND MANAGERS
         RMS_OrderItemManager orderItemManager = new RMS_OrderItemManager();
         RMS_createCharges createCharges = new RMS_createCharges();
-        List < SObject > orders = new List < SObject > ();
+        List <SObject> orderItems = new List <SObject> ();
         /*     
         // Before Insert
         if(Trigger.isInsert && Trigger.isBefore){
@@ -60,14 +60,14 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
         else if (Trigger.isInsert && Trigger.isAfter) {
             orderItemManager.setUpChangeHistoryOnCreate(Trigger.new, Trigger.newMap);
             createCharges.createCharge(Trigger.new, Trigger.newMap);
+    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-        /* 
-    // After Update
-    else if(Trigger.isUpdate && Trigger.isAfter){
-    financialTransactionManager.onAfterUpdatePayment(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-    orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-    }
-    
+         
+    	// After Update
+    	else if(Trigger.isUpdate && Trigger.isAfter){
+    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+    	}
+/*    
     
     //After Delete
     
@@ -80,9 +80,9 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
     
     else if(Trigger.isUnDelete){
     financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
-    }
-    update orders;      
-    */
+    }    */
+    update orderItems;      
+
     }
 
 }

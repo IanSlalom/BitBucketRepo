@@ -19,17 +19,16 @@ public with sharing class testRMS_ServiceOrderExtMgr {
     
     static testmethod void createTestRecords() {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
-            insert turnOffFinancialTrigger;
-
+        insert turnOffFinancialTrigger;
+        
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
-        List<Account> dwellingsToInsert = new List<Account>();       
-        
+        List<Account> dwellingsToInsert = new List<Account>();               
         Account dwelling1 = utility.createDwellingAccount('Dwelling Account');
         Account dwelling2 = utility.createDwellingAccount('Dwelling Account 2');
         Account dwelling3 = utility.createDwellingAccount('Dwelling Account 3');
-        Account store1 = [SELECT Id from Account Where Name = '77 - Twin Cities, MN'];
+        Account store1 = [SELECT Id from Account Where Name = '77 - Twin Cities, MN'];        
         Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
         storeConfig1.Sales_Tax__c = 5;
         update storeConfig1;
@@ -62,78 +61,127 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         insert finacialTransaction1;
         
         Product2 masterProduct = new Product2( name = 'master',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product'));
-        Product2 servProduct = new Product2( name = 'service',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'),Master_Product__c = masterProduct.Id);
-        Product2 servProduct2 = new Product2(name = 'service2',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'),Master_Product__c = masterProduct.Id);
+        Product2 servProduct = new Product2( name = 'service',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'));
+        Product2 servProduct2 = new Product2(name = 'service2',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'));
         
         Id pricebookId = Test.getStandardPricebookId();
         system.debug(pricebookId);
         
+        Pricebook2 pricebook1 =  utility.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+        
         List<Product2> products = new List<Product2>{masterProduct,servProduct,servProduct2};
             insert products;
+        
         PricebookEntry pricebookEntryMaster= utility.createPricebookEntry(pricebookId, masterProduct.id);     
         PricebookEntry pricebookEntryServ = utility.createPricebookEntry(pricebookId, servProduct.id);    
         PricebookEntry pricebookEntryServ2 = utility.createPricebookEntry(pricebookId, servProduct2.id);      
+        
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
         //utility.createOrderTestRecords();
-
-        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
-        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
-        List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
-        insert sprods;
         
+        List<Service_Product__c> serviceProductsToInsert = new List<Service_Product__c>();
+        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Record_Name_Unique__c ='service',Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
+        serviceProductsToInsert.add(servProd1);
+        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Record_Name_Unique__c ='service2',Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
+        serviceProductsToInsert.add(servProd2);
+            insert serviceProductsToInsert;
 
+System.assertEquals(serviceProductsToInsert.size() , 2);            
+        
+        List<Problem_Component_List__c> probCsToInsert = new List<Problem_Component_List__c>();
         Problem_Component_List__c probC1 = new Problem_Component_List__c(name='Prob1');
+        probCsToInsert.add(probC1);
         Problem_Component_List__c probC2 = new Problem_Component_List__c(name='Prob2');
+        probCsToInsert.add(probC2);
         Problem_Component_List__c probC3 = new Problem_Component_List__c(name='Prob3');
-        List<Problem_Component_List__c> probCs = new List<Problem_Component_List__c>{probC1,probC2,probC3};
-        insert probCs;
+        probCsToInsert.add(probC3);      
+            insert probCsToInsert;
+            System.assertEquals(probCsToInsert.size() , 3); 
 
+        
+       List<Service_Symptom_List__c> ssToInsert = new List<Service_Symptom_List__c>();
         Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
+        ssToInsert.add(ssl1);
         Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
+        ssToInsert.add(ssl2);
         Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
-        List<Service_Symptom_List__c> ssl = new List<Service_Symptom_List__c>{ssl1,ssl2,ssl3};
-        insert ssl;
-
+        ssToInsert.add(ssl3);        
+            insert ssToInsert;
+System.assertEquals(ssToInsert.size() , 3);             
+        
+        List<Procedure_Code__c> pcToInsert = new List<Procedure_Code__c>();
         Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
+        pcToInsert.add(procC1);
         Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
+        pcToInsert.add(procC2);
         Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
-        List<Procedure_Code__c> procC = new List<Procedure_Code__c>{procC1,procC2,procC3};
-        insert procC;
+        pcToInsert.add(procC3);        
+            insert pcToInsert;
+            System.assertEquals(pcToInsert.size() , 3); 
 
+
+	   List<Procedure_Code_Assignment__c> pcaToInsert = new List<Procedure_Code_Assignment__c>();        
         Procedure_Code_Assignment__c pca1 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC1.Id);
+        pcaToInsert.add(pca1);
         Procedure_Code_Assignment__c pca2 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC2.Id);
+        pcaToInsert.add(pca2);
         Procedure_Code_Assignment__c pca3 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC3.Id);
+        pcaToInsert.add(pca3);
         Procedure_Code_Assignment__c pca4 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC1.Id); 
+        pcaToInsert.add(pca4);
         Procedure_Code_Assignment__c pca5 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC2.Id);        
+        pcaToInsert.add(pca5);
         Procedure_Code_Assignment__c pca6 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC3.Id);
-        List<Procedure_Code_Assignment__c> pca = new List<Procedure_Code_Assignment__c>{pca1,pca2,pca3,pca4,pca5,pca6};
-        insert pca;
-
-        Service_Symptom_Assignment__c ssa1 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa2 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa3 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa4 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa5 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa6 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa7 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl3.Id);
-        Service_Symptom_Assignment__c ssa8 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl3.Id);
-        Service_Symptom_Assignment__c ssa9 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl3.Id);
-        List<Service_Symptom_Assignment__c> ssa = new List<Service_Symptom_Assignment__c>{ssa1,ssa2,ssa3,ssa4,ssa5,ssa6,ssa7,ssa8,ssa9};
-        insert ssa;
-
-        Problem_Component_Config__c pcc1 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc2 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc3 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc4 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc5 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc6 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc7 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl3.Id);
-        Problem_Component_Config__c pcc8 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl3.Id);
-        Problem_Component_Config__c pcc9 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl3.Id);
-        List<Problem_Component_Config__c> pcc = new List<Problem_Component_Config__c>{pcc1,pcc2,pcc3,pcc4,pcc5,pcc6,pcc7,pcc8,pcc9};
-        insert pcc;
-
+        pcaToInsert.add(pca6);        
+            insert pcaToInsert;
+            System.assertEquals(pcaToInsert.size() , 6); 
+        
+        List<Service_Symptom_Assignment__c> ssaToInsert = new List<Service_Symptom_Assignment__c>();
+        Service_Symptom_Assignment__c ssa1 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl1.Id);
+        ssaToInsert.add(ssa1);
+        Service_Symptom_Assignment__c ssa2 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl1.Id);
+        ssaToInsert.add(ssa2);
+        Service_Symptom_Assignment__c ssa3 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl1.Id);
+        ssaToInsert.add(ssa3);
+        Service_Symptom_Assignment__c ssa4 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl2.Id);
+        ssaToInsert.add(ssa4);
+        Service_Symptom_Assignment__c ssa5 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl2.Id);
+        ssaToInsert.add(ssa5);
+        Service_Symptom_Assignment__c ssa6 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl2.Id);
+        ssaToInsert.add(ssa6);
+        Service_Symptom_Assignment__c ssa7 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl3.Id);
+        ssaToInsert.add(ssa7);
+        Service_Symptom_Assignment__c ssa8 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl3.Id);
+        ssaToInsert.add(ssa8);
+        Service_Symptom_Assignment__c ssa9 = new Service_Symptom_Assignment__c(Name='Test',Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl3.Id);
+        ssaToInsert.add(ssa9);
+        
+        insert ssaToInsert;
+        System.assertEquals(ssaToInsert.size() , 9); 
+        
+        List<Problem_Component_Config__c> pccToInsert = new List<Problem_Component_Config__c>();
+        Problem_Component_Config__c pcc1 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC1.Id,Service_Symptom__c=ssl1.Id);
+        pccToInsert.add(pcc1);
+        Problem_Component_Config__c pcc2 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC2.Id,Service_Symptom__c=ssl1.Id);
+        pccToInsert.add(pcc2);
+        Problem_Component_Config__c pcc3 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC3.Id,Service_Symptom__c=ssl1.Id);
+        pccToInsert.add(pcc3);
+        Problem_Component_Config__c pcc4 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC1.Id,Service_Symptom__c=ssl2.Id);
+        pccToInsert.add(pcc4);
+        Problem_Component_Config__c pcc5 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC2.Id,Service_Symptom__c=ssl2.Id);
+        pccToInsert.add(pcc5);
+        Problem_Component_Config__c pcc6 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC3.Id,Service_Symptom__c=ssl2.Id);
+        pccToInsert.add(pcc6);
+        Problem_Component_Config__c pcc7 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC1.Id,Service_Symptom__c=ssl3.Id);
+        pccToInsert.add(pcc7);
+        Problem_Component_Config__c pcc8 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC2.Id,Service_Symptom__c=ssl3.Id);
+        pccToInsert.add(pcc8);
+        Problem_Component_Config__c pcc9 = new Problem_Component_Config__c(Name='Test',Problem_Component__c=probC3.Id,Service_Symptom__c=ssl3.Id);
+        pccToInsert.add(pcc9);        
+            insert pccToInsert;
+        System.assertEquals(pccToInsert.size() , 9); 
         
         List<Order> ordersToInsert = new List<Order>();
         
@@ -142,52 +190,72 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                  BilltoContactId = contact1.id,
                                  EffectiveDate= Date.Today(), 
                                  Store_Location__c = store1.Id,                           
-                                 Status ='Draft', 
-                                 Pricebook2Id = pricebookId,
+                                 Status ='Install Complete', 
+                                 Pricebook2Id = Test.getStandardPricebookId(),
                                  Customer_Pickup_All__c = FALSE,
                                  Installation_Date__c = system.today()-1 
                                 );
         ordersToInsert.add(order);
+
         
         Order order2 =  new Order(   Name='Sold Order 2', 
                                   AccountId = dwelling2.id, 
                                   BilltoContactId = contact2.id,
                                   EffectiveDate= Date.Today(), 
                                   Store_Location__c = store1.Id,                           
-                                  Status ='Draft',
+                                  Status ='Install Complete',
                                   Customer_Pickup_All__c = FALSE,
-                                  Pricebook2Id = pricebookId,
-                                  Installation_Date__c = system.today()-60,
-                                  recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
-                                 );
+                                  Pricebook2Id = Test.getStandardPricebookId(),
+                                  Installation_Date__c = system.today()-60);                                  
         ordersToInsert.add(order2);
+
+              Order order3 =  new Order(   Name='Sold Order 3', 
+                                 AccountId = dwelling1.id, 
+                                 BilltoContactId = contact1.id,
+                                 EffectiveDate= Date.Today(), 
+                                 Store_Location__c = store1.Id,                           
+                                 Status ='Install Complete', 
+                                 Pricebook2Id = Test.getStandardPricebookId(),
+                                 Customer_Pickup_All__c = FALSE,
+                                 Installation_Date__c = system.today()-1 
+                                );
+        ordersToInsert.add(order3);
         
         Order o =  new Order(     Name='Service Order 1', 
                              AccountId = dwelling1.id, 
                              EffectiveDate= Date.Today(), 
                              Store_Location__c = store1.Id,                               
-                             Status ='Draft', 
+                             Status ='New', 
                              Sold_Order__c = order.Id,
                              Customer_Pickup_All__c = FALSE,
                              BilltoContactId = contact1.id,
                              Service_Type__c = 'Job in Progress',                                             
-                             Pricebook2Id = pricebookId
+                             Pricebook2Id = Test.getStandardPricebookId(),
+                             recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                             );
-        ordersToInsert.add(o);
+        ordersToInsert.add(o);       
+        
+        Order so =  new Order(     Name='Service Order 2', 
+                              AccountId = dwelling1.id, 
+                              EffectiveDate= Date.Today(), 
+                              Store_Location__c = store1.Id,                               
+                              Status ='New', 
+                              Sold_Order__c = order.Id,
+                              Customer_Pickup_All__c = FALSE,
+                              BilltoContactId = contact1.id,
+                              Service_Type__c = 'Job in Progress',                                             
+                              Pricebook2Id = Test.getStandardPricebookId(),
+                              recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
+                             );
+        ordersToInsert.add(so);
         insert ordersToInsert;
+
+        System.assertEquals(ordersToInsert.size() , 5); 
         
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace',Quote_Accepted__c = FALSE );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100,Quote_Accepted__c = FALSE );
         insert orderItemMaster;
-
-        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=orderItemMaster.Id);
-        insert charge;
-
-        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=orderItemMaster.Id);
-        insert charge2;
-
-        Warranty__C warranty = new Warranty__C(Charge_Cost_To__c=charge2.Id,Procedure_Code__c=pca1.Id,Quantity__c=2, Service_Product__c=orderItemMaster.Id);
-        insert warranty;
+                
         
         List<Asset> assetsToInsert = new List<Asset>();
         Asset asset = new Asset (     Name='Asset1',
@@ -223,111 +291,41 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                  );
         
         assetsToInsert.add(asset2);         
-        insert assetsToInsert;                                  
+        insert assetsToInsert;  
+        System.assertEquals(assetsToInsert.size() , 2);                                 
         
+        List<OrderItem> orderItemsToInsert = new List<OrderItem>();
         OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Quote_Accepted__c = FALSE, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100);
-        insert serviceOrderItem;
+        orderItemsToInsert.add(serviceOrderItem);
+        System.assertEquals(orderItemsToInsert.size() , 1); 
 
-    }
-    
-    static testmethod void customDeleteTest(){
-        createTestRecords();
+      List<Charge__c> chargesToInsert = new List<Charge__c>();
+        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=serviceOrderItem.Id, Service_Request__c = so.Id, Validate_Service_Order__c=TRUE);
+        chargesToInsert.add(charge);       
+        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=serviceOrderItem.Id, Service_Request__c = so.Id, Validate_Service_Order__c=TRUE);
+        chargesToInsert.add(charge2);
+        insert chargesToInsert;
+        System.assertEquals(chargesToInsert.size() , 2); 
         
-                Test.startTest();
-        Order order = [SELECT Id,Service_Type__c,AccountId FROM Order WHERE Name = 'Sold Order 1'];        
-                       
-        Test.setCurrentPage(Page.RMS_createServiceRequestP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Pagereference pr = TE.customDelete();                    
-        Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
-        System.Assertequals(delOrd.isdeleted, true);
-        
-        Test.stopTest(); 
-        
+        Warranty__C warranty = new Warranty__C(Charge_Cost_To__c=charge2.Id,Procedure_Code__c=pca1.Id,Quantity__c=2, Service_Product__c=serviceOrderItem.Id);
+        insert warranty;
         
     }
     
-        static testmethod void customDeleteTest2(){
-        createTestRecords();
-        
-        Test.startTest(); 
-        Order order = [SELECT Id,AccountId,Service_Type__c FROM Order WHERE Name = 'Sold Order 1'];                
-        
-        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Pagereference pr = TE.customDelete();        
-        Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
-        System.Assertequals(delOrd.isdeleted, true);
-        Test.stopTest();  
-        
-    }
+    //createServiceRequestRedirectMethods
     
-        static testmethod void testOptionList2(){
-        createTestRecords();
-        
-        Test.startTest(); 
-        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
-        
-        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        list<SelectOption> testoptions = TE.getPickLstValueLegacy();
-        
-        system.assertEquals(2,testoptions.size());
-        Test.stopTest();  
-    }
-    
-    static testmethod void testDependentPicklist2(){
-        createTestRecords();
-        
-        Test.startTest(); 
-        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
-        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
-        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c     = :pbe.Product2Id];
-        Boolean isSelected = true;
-        Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
-        
-        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr.ProductWrapper2 TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper2(prod);
-        
-        Test.stopTest();  
-        
-        
-    }
-    
-        static testmethod void saveCloseLegacytest(){
-        createTestRecords();
-        
-        Test.startTest();
-        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
-        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
-        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
-        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
-        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];
-        
-        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Boolean hasValidationErrors = false;
-        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
-        Pagereference pr = TE.saveCloseLegacy();        
-        Order ord = [select id,Name from Order where id =: order.id];
-        System.Assertequals(ord.Name, 'Service Order 1');
-        Test.stopTest();
-    }
     
     static testmethod void saveOrderTest(){
         createTestRecords();
         
-        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
         
         Test.startTest();
         
+        Order order = new Order(AccountId = aid.Id, Store_Location__c = slid.Id, EffectiveDate= Date.Today(), Status ='Install Complete', Pricebook2Id = Test.getStandardPricebookId());
+        insert order;
+            
         Test.setCurrentPage(Page.RMS_createServiceRequestRedirect);
         ApexPages.currentPage().getParameters().put('aid',aid.id);
         ApexPages.currentPage().getParameters().put('slid',slid.id);
@@ -338,14 +336,16 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         String propPickValSelected = TE.getpropPickValSelected();        
         
         Pagereference pr = TE.saveOrder();        
-        Order ord = [select id,Name from Order where id =: order.id];
+        Order ord = [select AccountId from Order where id =: order.id];
         
-        System.Assertequals(ord.Name, 'Sold Order 1');
-        System.assertEquals(2, num_orders);
+        System.Assertequals(ord.AccountId, aid.Id);
+        System.assertEquals(3, num_orders);
         System.assertEquals(1, num_assets);  
         
         Test.stopTest();       
     }
+    
+    
     static testmethod void saveOrderTest2(){
         createTestRecords();
         
@@ -364,7 +364,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                   BilltoContactId = cont.id,
                                   EffectiveDate= Date.Today(), 
                                   Store_Location__c = store1.Id,                           
-                                  Status ='Draft',
+                                  Status ='Install Complete',
+                                  Pricebook2Id = Test.getStandardPricebookId(),
                                   recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                                  );
         insert order2;
@@ -393,7 +394,8 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                   AccountId = acct3.id, 
                                   EffectiveDate= Date.Today(), 
                                   Store_Location__c = store1.Id,                           
-                                  Status ='Draft',
+                                  Status ='New',
+                                  Pricebook2Id = Test.getStandardPricebookId(),
                                   recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
                                  );
         insert order3;
@@ -406,13 +408,32 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         Test.stopTest();
         
-        
     } 
+    
+    
+    //createServiceRequestP1 Methods
+    
+    static testmethod void customDeleteTest(){
+        
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId FROM Order WHERE Name = 'Service Order 1'];        
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Pagereference pr = TE.customDelete();                    
+        Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
+        System.Assertequals(delOrd.isdeleted, true);
+        
+        Test.stopTest();         
+        
+    }
     
     static testmethod void testOptionList(){
         createTestRecords();
         
-        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Service Order 1']; 
         
         Test.startTest();
         
@@ -421,12 +442,82 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         list<SelectOption> testoptions = TE.getOrds();
         
-        system.assertEquals(1,testoptions.size());
+        system.assertEquals(3,testoptions.size());
         
         Test.stopTest();
         
     }
     
+    //with Bill to Contact
+    static testmethod void saveP2test(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order soldOrder = [Select Id, BilltoContactId FROm Order WHERE Name = 'Sold Order 1'];
+        //Order order = [SELECT Id,Service_Type__c,Sales_Tax_Percent__c,AccountId,pricebook2id,BilltoContactId,Name FROM Order WHERE Name = 'Service Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id,Sales_Tax__c FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Contact contact = [Select Id FROM Contact WHERE id =:soldOrder.BilltoContactId];
+
+        Order order =  new Order(   Name='Service Order 3', 
+                                  AccountId = aid.id, 
+                                  EffectiveDate= Date.Today(), 
+                                  Store_Location__c = slid.Id,                           
+                                  Status ='New',
+                                  Pricebook2Id = Test.getStandardPricebookId(),
+                                  recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order')
+                                 );
+        insert order;
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        order.Sold_Order__c = soldOrder.Id;        
+        Pagereference pr = TE.saveP2();        
+        
+        Order ord = [select id,Name,BilltoContactId from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Service Order 3');
+        System.Assertequals(ord.BilltoContactId, contact.id);
+        
+        Test.stopTest();        
+    }
+    
+    static testmethod void saveP2test2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Order order = [SELECT Id,Service_Type__c,Sales_Tax_Percent__c,AccountId,pricebook2id,BilltoContactId,Name FROM Order WHERE Name = 'Service Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id,Sales_Tax__c FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Contact contact = [Select Id FROM Contact WHERE id =:order.BilltoContactId];
+        
+        Order o = New Order (Sold_Order__c = order.Id, 
+                             Service_Type__c = 'Service',
+                             AccountId = aid.id, 
+                             EffectiveDate= Date.Today(), 
+                             Store_Location__c = slid.Id,                           
+                             Status ='New',
+                             Pricebook2Id = Test.getStandardPricebookId(),
+                             BilltoContactId = contact.Id,
+                             recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'));
+        
+        insert o;
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Pagereference pr = TE.saveP2();        
+        Order ord = [select id,Name,BilltoContactId from Order where id =: o.id];        
+        System.Assertequals(ord.BilltoContactId, contact.id);
+        Test.stopTest();        
+    }  
+    
+    
+    
+    //RMS_createServiceRequestP2 Methods
     static testmethod void testOptionListP2(){
         createTestRecords();
         
@@ -444,6 +535,261 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.stopTest();        
     }
     
+    static testmethod void testDependentPicklist(){
+        createTestRecords();
+        
+        
+        Test.startTest();  
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Service_Product__c prod = [SELECT id, Service_Product__c FROM Service_Product__c WHERE Service_Product__c = :pbe.Product2Id];
+        Boolean isSelected = true;
+        Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
+        
+        
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
+        
+        
+        Test.stopTest();
+        
+    }
+    
+    static testmethod void saveClosetest(){
+        createTestRecords();
+        
+        Test.startTest();
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);  
+        String propPickValSelected = TE.getpropPickValSelected();               
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        
+        Pagereference pr = TE.saveClose();        
+        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        
+        Test.stopTest();
+    }
+    
+    static testmethod void saveContinuetest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc); 
+        String propPickValSelected = TE.getpropPickValSelected();               
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 0;
+        
+        Pagereference pr = TE.saveContinue();        
+        
+        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        System.Assertequals(ord.Validate_Service_Order__c, true);
+        //System.Assertequals(0,invalidRequest);
+        
+        Test.stopTest();        
+    }
+    
+    static testmethod void saveContinueInvalidTest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        //OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);  
+        Boolean isSelected = false;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 1;
+        
+        Pagereference pr = TE.saveContinue();        
+        
+        //System.Assertequals(1,invalidRequest);
+        
+        Test.stopTest();        
+    }
+    
+    static testmethod void saveNewProducts(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        
+        Test.setCurrentPage(Page.RMS_addServiceProduct);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        String propPickValSelected = TE.getpropPickValSelected();        
+        
+        Pagereference pr = TE.saveNewProducts();        
+        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        System.Assertequals(ord.Validate_Service_Order__c, true);
+        
+        Test.stopTest();       
+    }
+    
+    static testmethod void saveContinueNewProducts(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        
+        Test.setCurrentPage(Page.RMS_addServiceProduct);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        String propPickValSelected = TE.getpropPickValSelected();        
+        
+        Pagereference pr = TE.saveNewProductsContinue();        
+        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        System.Assertequals(ord.Validate_Service_Order__c, true);
+        
+        Test.stopTest();       
+    }
+    
+    //RMS_addServiceProductLegacy Methods
+    
+    static testmethod void saveNewProductsLegacy(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        
+        Test.setCurrentPage(Page.RMS_addServiceProductLegacy);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        String propPickValSelected = TE.getpropPickValSelected();        
+        
+        Pagereference pr = TE.saveNewProductsLegacy();        
+        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        System.Assertequals(ord.Validate_Service_Order__c, true);
+        
+        Test.stopTest();       
+    }
+    
+    static testmethod void saveNewProductsLegacyContinue(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        
+        
+        Test.setCurrentPage(Page.RMS_addServiceProductLegacy);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        String propPickValSelected = TE.getpropPickValSelected();        
+        
+        Pagereference pr = TE.saveNewProductsLegacyContinue();        
+        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        
+        System.Assertequals(ord.Name, 'Sold Order 1');
+        System.Assertequals(ord.Validate_Service_Order__c, true);
+        
+        Test.stopTest();       
+    }
+    
+    //RMS_createServiceRequestP3 Methods
+    
+  static testmethod void saveChargesTest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
+        Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=oi.Id);
+        insert charge;
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP3);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);         
+        Pagereference pr = TE.saveCharges();        
+        
+        Charge__c ch = [SELECT Charge_Cost_To__c FROM Charge__c WHERE id =: charge.Id];
+        
+        System.Assertequals(ch.Charge_Cost_To__c,'Retailer');
+        
+        
+    }
+    
+        static testmethod void cancelP3Test(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];        
+        Charge__c charge = [Select Id, Service_Request__c,Charge_Cost_To__c, Category__c, What_Where__c, Service_Product__c FROM Charge__c WHERE Charge_Cost_To__c = 'Manufacturing'];
+        
+        Test.setCurrentPage(Page.RMS_createServiceRequestP3);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);         
+        Pagereference pr = TE.cancelP3();                
+        
+    }
+    
+    
+    //RMS_UpdateServiceType Methods
     static testmethod void testServiceType(){
         createTestRecords();
         
@@ -461,70 +807,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         Test.stopTest();        
     }
-
     
-    static testmethod void testDependentPicklist(){
-        createTestRecords();
-        
-        
-        Test.startTest();  
-        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
-        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
-        Service_Product__c prod = [SELECT id, Service_Product__c FROM Service_Product__c WHERE Service_Product__c = :pbe.Product2Id];
-        Boolean isSelected = true;
-        Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
-
-        
-        
-        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr.ProductWrapper TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper(prod);
-       
-        
-        Test.stopTest();
-        
-    }
-    
-    
-    static testmethod void saveP2test(){
-        createTestRecords();
-        
-        Test.startTest(); 
-        Order order = [SELECT Id,Service_Type__c,Sales_Tax_Percent__c,AccountId,pricebook2id,BilltoContactId,Name FROM Order WHERE Name = 'Sold Order 1'];        
-        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
-        Account slid = [Select Id,Sales_Tax__c FROM Account WHERE Name = '77 - Twin Cities, MN'];
-        Contact contact = [Select Id FROM Contact WHERE id =:order.BilltoContactId];
-        
-        
-        Test.setCurrentPage(Page.RMS_createServiceRequestP1);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Pagereference pr = TE.saveP2();        
-        Order ord = [select id,Name,BilltoContactId from Order where id =: order.id];
-        System.Assertequals(ord.Name, 'Sold Order 1');
-        System.Assertequals(ord.BilltoContactId, contact.id);
-        Test.stopTest();        
-    }
-    
-    static testmethod void saveClosetest(){
-        createTestRecords();
-        
-        Test.startTest();
-        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Service Order 1'];        
-        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
-        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
-        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
-        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
-        
-        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
-        ApexPages.StandardController sc = new ApexPages.StandardController(order);
-        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        Pagereference pr = TE.saveClose();        
-        Order ord = [select id,Name from Order where id =: order.id];
-        System.Assertequals(ord.Name, 'Service Order 1');
-        
-        Test.stopTest();
-    }
     
     static testmethod void saveServiceTypePage(){
         createTestRecords();
@@ -548,31 +831,148 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.stopTest();       
     }
     
-    static testmethod void saveNewProducts(){
+        static testmethod void cancelServiceTypeUpdateTest(){
         createTestRecords();
         
-        Test.startTest();
-        Order order = [SELECT Id,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
+        Order order = [SELECT Id,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];        
         Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account'];
         Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
-        Asset asset = [Select Id, Sold_Order__c,Original_Order_Product__c FROM Asset WHERE AccountId =:aid.id];
-        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Charge_Cost_To__c FROM OrderItem WHERE OrderId =:order.Id];        
         
+        Test.startTest();
         
-        Test.setCurrentPage(Page.RMS_createServiceRequestP2);
+        Test.setCurrentPage(Page.RMS_updateServiceType);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
-        String propPickValSelected = TE.getpropPickValSelected();        
+        String propPickValSelected2 = TE.getpropPickValSelected2();        
         
-        Pagereference pr = TE.saveNewProducts();        
-        Order ord = [select id,Name,Validate_Service_Order__c from Order where id =: order.id];
+        Pagereference pr = TE.cancelUpdate();        
+        Order ord = [select id,Name from Order where id =: order.id];
         
         System.Assertequals(ord.Name, 'Sold Order 1');
-        System.Assertequals(ord.Validate_Service_Order__c, true);
         
         Test.stopTest();       
     }
     
+    //RMS_ServiceRequestLegacy1
+    static testmethod void customDeleteTest2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c FROM Order WHERE Name = 'Sold Order 1'];                
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Pagereference pr = TE.customDelete();        
+        Order delOrd = [select id,isdeleted from Order where id =: order.id All rows];
+        System.Assertequals(delOrd.isdeleted, true);
+        Test.stopTest();  
+        
+    }
+    
+    static testmethod void testOptionList2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        list<SelectOption> testoptions = TE.getPickLstValueLegacy();
+        
+        system.assertEquals(2,testoptions.size());
+        Test.stopTest();  
+    }
+    
+    static testmethod void testDependentPicklist2(){
+        createTestRecords();
+        
+        Test.startTest(); 
+        Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
+        PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
+        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c     = :pbe.Product2Id];
+        Boolean isSelected = true;
+        Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr.ProductWrapper2 TE = new RMS_ServiceOrderExtensionMgr.ProductWrapper2(prod);
+        
+        Test.stopTest();          
+        
+    }
+    
+    static testmethod void saveCloseLegacytest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account 3'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Id pricebookId = Test.getStandardPricebookId();
+        Order order = new Order(Name='Service Order 2', 
+                                AccountId = aid.id, 
+                                EffectiveDate= Date.Today(), 
+                                Store_Location__c = slid.Id,                               
+                                Status ='New',                             
+                                Customer_Pickup_All__c = FALSE,                             
+                                Service_Type__c = 'Job in Progress',                                             
+                                Pricebook2Id = Test.getStandardPricebookId(),
+                                recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'));
+        insert order;        
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Boolean hasValidationErrors = false;
+        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 0;
+        Pagereference pr = TE.saveCloseLegacy();        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Service Order 2');
+        Test.stopTest();
+    }
+    
+    
+    static testmethod void saveContinueLegacytest(){
+        createTestRecords();
+        
+        Test.startTest();
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account 3'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Id pricebookId = Test.getStandardPricebookId();
+        Order order = new Order(Name='Service Order 2', 
+                                AccountId = aid.id, 
+                                EffectiveDate= Date.Today(), 
+                                Store_Location__c = slid.Id,                               
+                                Status ='New',                             
+                                Customer_Pickup_All__c = FALSE,                             
+                                Service_Type__c = 'Job in Progress',                                             
+                                Pricebook2Id = Test.getStandardPricebookId(),
+                                recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'));
+        insert order; 
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Boolean hasValidationErrors = false;
+        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 0;
+        Pagereference pr = TE.saveContinueLegacy();        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Service Order 2');
+        Test.stopTest();
+    }    
+    
+    //RMS_serviceRequestListView Methods        
     private testMethod static void testSuccess() {
         RMS_serviceRequestListViewMgr con = new RMS_serviceRequestListViewMgr();
         String propPickValSelected = con.getpropPickValSelected(); 
