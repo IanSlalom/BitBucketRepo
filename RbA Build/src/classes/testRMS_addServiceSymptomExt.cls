@@ -171,5 +171,25 @@ private class testRMS_addServiceSymptomExt
         
     }
     
+    static testmethod void saveRerenderTest(){
+        setupData();     
+        Test.startTest();
+        
+        OrderItem oi = [SELECT Id FROm OrderItem WHERE UnitPrice = 100 Limit 1];
+        Service_Symptom_List__c ssl = [SELECT Name,Id FROM Service_Symptom_List__c WHERE Name = 'SS1'];
+        Service_Symptom__c ss = new Service_Symptom__c();
+        ss.Service_Product__c = oi.Id;
+        ss.Service_Symptom__c = ssl.Id;
+        
+        Test.setCurrentPage(Page.RMS_addServiceSymptom);
+        ApexPages.currentPage().getParameters().put('ssSP',oi.Id);
+        ApexPages.StandardController sc = new ApexPages.StandardController(ss);
+        RMS_addServiceSymptomExt TE = new RMS_addServiceSymptomExt(sc);        
+        TE.saveRerender();
+        
+        Test.stopTest();
+        
+    }
+    
     
 }

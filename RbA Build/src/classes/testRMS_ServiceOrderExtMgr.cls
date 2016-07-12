@@ -17,7 +17,7 @@ Unauthorized use is prohibited.
 @isTest 
 public with sharing class testRMS_ServiceOrderExtMgr {
     
-    static testmethod void createTestRecords() {
+    static testmethod void createTestRecords() {      
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
         insert turnOffFinancialTrigger;
         
@@ -767,6 +767,7 @@ System.assertEquals(ssToInsert.size() , 3);
         Charge__c ch = [SELECT Charge_Cost_To__c FROM Charge__c WHERE id =: charge.Id];
         
         System.Assertequals(ch.Charge_Cost_To__c,'Retailer');
+      Test.stopTest();       
         
         
     }
@@ -784,7 +785,8 @@ System.assertEquals(ssToInsert.size() , 3);
         Test.setCurrentPage(Page.RMS_createServiceRequestP3);
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);         
-        Pagereference pr = TE.cancelP3();                
+        Pagereference pr = TE.cancelP3();    
+Test.stopTest();                   
         
     }
     
@@ -974,6 +976,7 @@ System.assertEquals(ssToInsert.size() , 3);
     
     //RMS_serviceRequestListView Methods        
     private testMethod static void testSuccess() {
+        Test.startTest();       
         RMS_serviceRequestListViewMgr con = new RMS_serviceRequestListViewMgr();
         String propPickValSelected = con.getpropPickValSelected(); 
         con.listName = 'Service Requests - All';
@@ -982,12 +985,15 @@ System.assertEquals(ssToInsert.size() , 3);
             listView.getValue();
         } 
         System.assert(con.listId != null);
+        Test.stopTest();       
     }
     
     private testMethod static void testFailure() {
+        Test.startTest();       
         RMS_serviceRequestListViewMgr con = new RMS_serviceRequestListViewMgr();
         con.listName = 'BADLISTNAME';
         System.assert(con.listId == null);
+        Test.stopTest();
         
     }
     

@@ -269,5 +269,5 @@
     <apex:relatedList list="OpenActivities" id="oa" />
     <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
     <apex:relatedList subject="{!Order}" list="CombinedAttachments" id="nat"/>
-    <c:RMS_orderHistoryComponent OrderIds="{!Id}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>   
+    <c:RMS_orderHistoryComponent OrderHistory="{!Order}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>   
 </apex:page>
