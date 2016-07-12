@@ -62,8 +62,8 @@
     
     <apex:pageBlock title="Related Products" rendered="{!IF(Product2.RecordType.Name == 'Master Product' || Product2.RecordType.Name == 'Service Product',true,false)}">
         <apex:form style="text-align:center; margin-bottom: 5px;">
-        	<apex:commandButton onclick="callGenerateConsoleURL('{!addServiceProductURL}', 'Add Service Product');return false" id="addSProduct" value="Add Service Product" style="margin-left:2%" rendered="{!IF(Product2.RecordType.Name == 'Master Product',true,false)}"/>
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addMasterProductURL}', 'Add Master Product');return false" id="addMProduct" value="Add Master Product" style="margin-left:2%" rendered="{!IF(Product2.RecordType.Name == 'Service Product',true,false)}"/>
+        	<apex:commandButton action="{!addServiceProduct}" value="Add Service Product" id="addSProduct" rendered="{!IF(Product2.RecordType.Name == 'Master Product',true,false)}" style="margin-left:2%"/>
+        	<apex:commandButton action="{!addMasterProduct}" value="Add Master Product" id="addMProduct" rendered="{!IF(Product2.RecordType.Name == 'Service Product',true,false)}" style="margin-left:2%"/>                        
         </apex:form>
         <apex:pageBlockTable title="Service Products" value="{!Product2.Service_Products1__r}" var="item" style="width:100%"  rendered="{!IF(Product2.RecordType.Name == 'Master Product',true,false)}" >
             <apex:column headerValue="Action" width="65px;">
@@ -85,7 +85,7 @@
     
         <apex:pageBlock title="Procedure Codes" rendered="{!IF(Product2.RecordType.Name == 'Service Product',true,false)}" >
         <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addProcedureCodeURL}', 'Assign Procedure Code');return false" id="addPC" value="Assign Procedure Code" style="margin-left:2%"/>
+            <apex:commandButton action="{!addProcedureCode}" value="Assign Procedure Code" id="addPC" style="margin-left:2%"/>            
         </apex:form>
         <apex:pageBlockTable title="Procedure Codes" value="{!Product2.Product_Procedure_Codes1__r}" var="item" style="width:100%">
             <apex:column headerValue="Action" width="65px;">

@@ -131,6 +131,7 @@
         <members>testRMS_editableTaskListExt</members>
         <members>testRMS_orderHistoryController</members>
         <members>testRMS_populateResourceonEventManager</members>
+        <members>testRMS_serviceWarrantyManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>warrantyTriggerTest</members>
         <name>ApexClass</name>
