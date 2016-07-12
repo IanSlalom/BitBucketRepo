@@ -205,7 +205,7 @@ function prepareList(parent,child,isSubselectOptional){
 					</apex:column>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (CONTAINS(selectedVendorName, 'Andersen')) }"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
                     <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
 						<apex:facet name="header">Qty Received</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />

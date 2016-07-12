@@ -127,12 +127,14 @@
         <members>testRMS_addWarrantiesExt</members>
         <members>testRMS_assignServiceTaskOwner</members>
         <members>testRMS_createContactHistoryMgr</members>
+        <members>testRMS_dataSetupClasses</members>
         <members>testRMS_editableTaskList</members>
         <members>testRMS_editableTaskListExt</members>
         <members>testRMS_orderHistoryController</members>
         <members>testRMS_populateResourceonEventManager</members>
         <members>testRMS_serviceWarrantyManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
+        <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
         <name>ApexClass</name>
     </types>

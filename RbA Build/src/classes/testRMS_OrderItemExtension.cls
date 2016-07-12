@@ -116,6 +116,24 @@ public with sharing class testRMS_OrderItemExtension {
         
         OrderItem serviceOrderItem = new OrderItem(Sold_Order_Product_Asset__c = asset.Id, Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
         insert serviceOrderItem;
+        
+        List<Service_Symptom_List__c> ssToInsert = new List<Service_Symptom_List__c>();
+        Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
+        ssToInsert.add(ssl1);
+        Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
+        ssToInsert.add(ssl2);
+        Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
+        ssToInsert.add(ssl3);        
+        insert ssToInsert;
+        System.assertEquals(ssToInsert.size() , 3); 
+        
+        List <Service_Symptom__c> servSympToInsert = new List<Service_Symptom__c>();
+        Service_Symptom__c ss1 = new Service_Symptom__c(Service_Product__c = serviceOrderItem.Id, Service_Symptom__c = ssl1.Id);
+        servSympToInsert.add(ss1);
+        Service_Symptom__c ss2 = new Service_Symptom__c(Service_Product__c = serviceOrderItem.Id, Service_Symptom__c = ssl2.Id);
+        servSympToInsert.add(ss2);
+        insert servSympToInsert;
+        System.assertEquals(servSympToInsert.size(),2);
     }
     
     static testmethod void saveCloseTabTest(){

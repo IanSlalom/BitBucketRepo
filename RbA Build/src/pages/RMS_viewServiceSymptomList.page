@@ -61,8 +61,8 @@
     <apex:detail relatedList="true" relatedListHover="true" inlineEdit="true"/>
     
     <apex:pageBlock title="Problem Components">
-        <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addProblemComponentURL}', 'Assign Problem Component');return false" id="addSProduct" value="Assign Problem Component" style="margin-left:2%"/>
+        <apex:form style="text-align:center; margin-bottom: 5px;"> 
+            <apex:commandButton action="{!addProblemComponent}" value="Assign Problem Component" id="addSProduct" style="margin-left:2%"/>
         </apex:form>
         <apex:pageBlockTable title="Problem Components" value="{!Service_Symptom_List__c.Problem_Component_Config__r}" var="item" style="width:100%" id="problemComponents">
             <apex:column headerValue="Action" width="65px;">
@@ -76,7 +76,7 @@
     
     <apex:pageBlock title="Procedure Codes">
         <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addProcedureCodeURL}', 'Assign Procedure Code');return false" id="addSProduct" value="Assign Procedure Code" style="margin-left:2%"/>
+            <apex:commandButton action="{!addProcedureCode}" value="Assign Procedure Code" style="margin-left:2%"/>
         </apex:form>
         <apex:pageBlockTable title="Procedure Codes" value="{!Service_Symptom_List__c.Procedure_Code_Assignments__r}" var="item" style="width:100%">
             <apex:column headerValue="Action" width="65px;">
