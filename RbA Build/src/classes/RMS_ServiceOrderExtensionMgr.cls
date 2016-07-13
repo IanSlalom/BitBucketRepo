@@ -288,8 +288,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             newPage.setRedirect(true);
             return newPage;
         }catch(DMLException saveEx){
+            ApexPages.addMessages(saveEx);
             PageReference newPage = new PageReference('/apex/RMS_createServiceRequestP1?id='+ o.Id + '&retUrl=' + o.Id);
-            newPage.setRedirect(true);
+            newPage.setRedirect(false);
             return newPage;
         }
         
@@ -348,8 +349,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             pageRef.setRedirect(true);
             return pageRef;
         }catch(DMLException saveEx){
+            ApexPages.addMessages(saveEx);
             PageReference pageRef = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
-            pageRef.setRedirect(true);
+            pageRef.setRedirect(false);
             return pageRef;
         }
         
@@ -1382,17 +1384,17 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     } 
     
     //public PageReference cancelOrder(){
-      //  PageReference pageRef = null;
-        //try{
-          //  o.Status = 'Cancelled';
-            //upsert o;
-            //pageRef = new PageReference('/' + o.id);
-            //pageRef.setRedirect(true); 
-        //}catch(DMLException ex){
-         //   ApexPages.addMessages(ex);
-        //}
-        
-       // return pageRef;
+    //  PageReference pageRef = null;
+    //try{
+    //  o.Status = 'Cancelled';
+    //upsert o;
+    //pageRef = new PageReference('/' + o.id);
+    //pageRef.setRedirect(true); 
+    //}catch(DMLException ex){
+    //   ApexPages.addMessages(ex);
+    //}
+    
+    // return pageRef;
     //}
     
     public PageReference cancelP3(){

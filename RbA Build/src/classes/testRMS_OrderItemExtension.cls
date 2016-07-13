@@ -17,7 +17,7 @@ Unauthorized use is prohibited.
 @isTest 
 public with sharing class testRMS_OrderItemExtension {
     
-    static testmethod void createTestRecords() {
+    static testmethod void createTestRecords() {  
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
         insert turnOffFinancialTrigger;
         
@@ -133,7 +133,7 @@ public with sharing class testRMS_OrderItemExtension {
         Service_Symptom__c ss2 = new Service_Symptom__c(Service_Product__c = serviceOrderItem.Id, Service_Symptom__c = ssl2.Id);
         servSympToInsert.add(ss2);
         insert servSympToInsert;
-        System.assertEquals(servSympToInsert.size(),2);
+        System.assertEquals(servSympToInsert.size(),2);      
     }
     
     static testmethod void saveCloseTabTest(){
