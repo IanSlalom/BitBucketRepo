@@ -740,14 +740,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if (checkReceived())
       return null;
 
-    //JETT-712  
+    //JETT-712 
+    System.Debug('****************po.Status__c=' +po.Status__c); 
+    System.Debug('****************po.Estimated_Ship_Date__c=' +po.Estimated_Ship_Date__c); 
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
       boolean allOrderItemsHaveWholesaleCost = false;
       if (zeroDollarVendor) {
       	 allOrderItemsHaveWholesaleCost = true;
       }
       else {
+    System.Debug('****************orderItemWrapperByVendor=' +orderItemWrapperByVendor); 
 		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+    System.Debug('****************oiw=' +oiw); 
         	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
           		allOrderItemsHaveWholesaleCost = false;
           		break;
@@ -756,6 +760,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         		allOrderItemsHaveWholesaleCost = true;
       	}
       }
+    System.Debug('****************allOrderItemsHaveWholesaleCost=' +allOrderItemsHaveWholesaleCost); 
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
         po.Confirmed_Timestamp__c = System.Now();
