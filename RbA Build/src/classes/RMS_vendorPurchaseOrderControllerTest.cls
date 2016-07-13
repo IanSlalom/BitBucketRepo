@@ -248,15 +248,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Set<Id> vendorProducts = customController.vendorProducts;
 
 		// TODO: Add Assert
-		List<Account> accounts = customController.accounts;
-
-		// TODO: Add Assert
-		List<Contact> contacts = customController.contacts;
-
-		// TODO: Add Assert
-		List<Product2> products = customController.products;
-
-		// TODO: Add Assert
 		List<Cost_Center__c> costCenters = customController.costCenters;
 
 		// TODO: Add Assert
