@@ -129,10 +129,9 @@
         <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
             <apex:pageBlockButtons >
             <apex:commandButton action="{!editServiceRequest}" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
-<!--<apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled',true,false)}"/>
-<apex:commandButton onclick="callGenerateConsoleURL('{!updateSTURL}', 'Update Service Type');return false" id="updateST" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>-->
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
                 <apex:commandButton value="Print Service Quote" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceQuote()"/>
+                <apex:commandButton value="Print Service WO/HSR Form" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceWO()"/>
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Detail" collapsible="false" columns="2" >
                 <apex:outputField value="{!Order.AccountId}"/>
@@ -306,5 +305,5 @@
     <apex:relatedList list="OpenActivities" id="oa" />
     <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
     <apex:relatedList subject="{!Order}" list="CombinedAttachments" id="nat"/>
-    <c:RMS_orderHistoryComponent OrderIds="{!Id}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>   
+    <c:RMS_orderHistoryComponent OrderHistory="{!Order}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="fh"/>   
 </apex:page>
