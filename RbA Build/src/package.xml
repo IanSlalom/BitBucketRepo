@@ -29,6 +29,7 @@
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_OrderDiscountManager</members>
+        <members>RMS_OrderDiscountManagerTest</members>
         <members>RMS_OrderItemExtension</members>
         <members>RMS_OrderItemManager</members>
         <members>RMS_OrderTriggerHandler</members>
