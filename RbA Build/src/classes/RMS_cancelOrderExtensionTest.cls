@@ -98,8 +98,8 @@ private class RMS_cancelOrderExtensionTest {
     
     /*******************************************************
                     NoOrderIdTest
-    *******************************************************//*
-// TODO Fix this too many SOQL Queries error
+    *******************************************************/
+
     static testmethod void NoOrderIdTest(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -117,11 +117,11 @@ private class RMS_cancelOrderExtensionTest {
 		test.stoptest();
 
     }
-// TODO Fix this too many SOQL Queries error
+
     /*******************************************************
                     CancelOrderTest
     *******************************************************/
- /*   static testmethod void CancelOrderTest(){
+    static testmethod void CancelOrderTest(){
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -183,10 +183,10 @@ private class RMS_cancelOrderExtensionTest {
         }
 
         // Verify the sold order is Cancelled
-        soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
-        System.AssertEquals('Cancelled', soldOrderResult.Status);       
-
+        soldOrderResult = [SELECT Id, Status, Date_Cancelled__c FROM Order WHERE Name = 'Sold Order 1'];
+		System.AssertEquals('Cancelled', soldOrderResult.Status);		
+		System.assertEquals(soldOrderResult.Date_Cancelled__c, System.Today());
         Test.stopTest();
 
-    }*/
+    }
 }
