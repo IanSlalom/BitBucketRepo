@@ -265,7 +265,7 @@
                         <apex:facet name="header">Discount Amount</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
                     </apex:column>
-                    <apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
+                    <apex:column style="width:50px" rendered="{! (CONTAINS(selectedVendorName, 'Andersen')) }">
                         <apex:facet name="header">NSPR/SPR</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.NSPR__c}" />
                     </apex:column>
@@ -317,7 +317,7 @@
                         <apex:facet name="header">Discount Amount</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
                     </apex:column>
-                    <apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
+                    <apex:column style="width:50px" rendered="{! (CONTAINS(selectedVendorName, 'Andersen')) }">
                         <apex:facet name="header">NSPR/SPR</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.NSPR__c}" />
                     </apex:column>
@@ -369,7 +369,7 @@
                         <apex:facet name="header">Discount Amount</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.Discount_Amount__c}" />
                     </apex:column>
-                    <apex:column style="width:50px" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }">
+                    <apex:column style="width:50px" rendered="{! (CONTAINS(selectedVendorName, 'Andersen')) }">
                         <apex:facet name="header">NSPR/SPR</apex:facet> 
                             <apex:outputField value="{!oiw.orderItem.NSPR__c}" />
                     </apex:column>

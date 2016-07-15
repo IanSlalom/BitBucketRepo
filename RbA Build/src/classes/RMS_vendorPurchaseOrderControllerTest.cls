@@ -82,9 +82,9 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	}
 	
 	/*******************************************************
-					ConstructorTest
+					ConstructorTest1
 	*******************************************************/
-	static testmethod void ConstructorTest(){
+	static testmethod void ConstructorTest1(){
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -92,10 +92,13 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		createTestRecords();
 
+		Test.startTest();
+
 		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
 		System.debug('ORDER REV REC' + soldOrder.Revenue_Recognized_Date__c);
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c();
+
 		// Set up controller with an order Id and no PO Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
 		Test.setCurrentPage(pageRef);
@@ -104,30 +107,35 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 		System.assert(customController.newPurchaseOrder);
 		System.assertEquals(customController.po.Status__c,'In Progress');
+		System.assertEquals(customController.showInventoryWriteOff,false);
+		customController  = new RMS_vendorPurchaseOrderController(stdController);
+		system.AssertEquals('new', customController.status);
+
+		Test.stopTest();
+	}
+
+	/*******************************************************
+					ConstructorTest2
+	*******************************************************/
+	static testmethod void ConstructorTest2(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		createTestRecords();
+
+		Test.startTest();
+
+		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
+		System.debug('ORDER REV REC' + soldOrder.Revenue_Recognized_Date__c);
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po2 = new Purchase_Order__c();
 		insert po2;
-		Test.startTest();
-		System.debug('RELATEDORDER with fields ' + customController.relatedOrder);
-		System.debug(customController.showInventoryWriteOff);
-		System.assertEquals(customController.showInventoryWriteOff,false);
 
-
-		soldOrder.Status = 'Job Closed';
-		
-		update soldOrder;
-		customController  = new RMS_vendorPurchaseOrderController(stdController);
-		system.AssertEquals(customController.status, 'rec');
-		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		soldOrder.Status = 'Job in Progress';
-// TODO this is failing from the financial triggers. Get with Anthony
-// It's requiring a deposit be on the order. Need to see if we can turn that off	
-//		update soldOrder;
-		customController  = new RMS_vendorPurchaseOrderController(stdController);
-		System.debug('RELATEDORDER with fields ' + customController.relatedOrder);
-		System.debug(customController.showInventoryWriteOff);
-//		System.assertEquals(customController.showInventoryWriteOff,true);
-
+		update soldOrder;
 
 		// Set up controller with no order Id but has a PO Id
 		PageReference pageRef2 = Page.RMS_viewPurchaseOrder;
@@ -139,6 +147,27 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController2.costPurchaseOrder =true;
 		System.assert(customController2.vendorProducts.contains(customController2.productItems[1].getvalue()));
 
+		Test.stopTest();
+	}
+
+	/*******************************************************
+					ConstructorTest3
+	*******************************************************/
+	static testmethod void ConstructorTest3(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		createTestRecords();
+
+		Test.startTest();
+
+		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		soldOrder.Status = 'Job in Progress';
+		update soldOrder;
+		
 		//Set up controller with order Id and PO Id
 		//JETT 2083 verify showCancelPO attribute is set properly TEST JIRA LINK
 		TestUtilityMethods utility = new TestUtilityMethods();
@@ -160,11 +189,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		update po3;
 		customController3  = new RMS_vendorPurchaseOrderController(stdController3);
 		System.assertEquals(customController3.showCancelPO,true);
-		System.debug('VENDOR NAME ' + customController3.selectedVendorName);
-		system.debug(customController3.servicePurchaseOrder);
 		Test.stopTest();
 	}
-
 
 	/*******************************************************
 					PageVariableTest
@@ -222,15 +248,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Set<Id> vendorProducts = customController.vendorProducts;
 
 		// TODO: Add Assert
-		List<Account> accounts = customController.accounts;
-
-		// TODO: Add Assert
-		List<Contact> contacts = customController.contacts;
-
-		// TODO: Add Assert
-		List<Product2> products = customController.products;
-
-		// TODO: Add Assert
 		List<Cost_Center__c> costCenters = customController.costCenters;
 
 		// TODO: Add Assert
@@ -271,6 +288,9 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	
 	}
 
+	/*******************************************************
+					saveTestDates
+	*******************************************************/
 	@isTest
 	static void saveTestDates(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
@@ -310,9 +330,63 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		test.stopTest();
 	}
 	/*******************************************************
-					SaveTest
+					SaveTest1
 	*******************************************************/
-	static testmethod void SaveTest(){
+	static testmethod void SaveTest1(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id,Purchase_Order__c FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];	
+		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
+		soldOrderItem.Unit_Wholesale_Cost__c = 50;
+		upsert soldOrderItem;
+
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+
+		test.startTest();
+		// Save with No Vendor, verify an error message is added
+		customController.save();
+		System.Assert(ApexPages.getMessages() != null);		
+
+		// set the selected vendor to the vendor account id
+		customController.selectedVendor = vendorAccount.Id;
+
+		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
+		customController.orderItemWrapperByVendor = new List<RMS_vendorPurchaseOrderController.OrderItemWrapper>{wrap};
+		//JETT-712 Verify PO Status is updated upon save if Status is Released, Estimated Ship Date is populated, and related OrderItems all have wholesale costs
+		customController.po.Estimated_Ship_Date__c = System.Today();	
+		customController.po.Status__c = 'Released';
+		customController.save();
+		System.assert(customController.po.Status__c == 'Confirmed');
+		
+		//Update post-demo, replaced soql query with checking the order item wrapper for ois with null unit wholesale cost.
+		soldOrderItem.Purchase_Order__c = null;
+		soldOrderItem.Unit_Wholesale_Cost__c = null;
+		update soldOrderItem;
+
+		customController.po.Status__c = 'Released';
+		customController.save();
+		System.assert(customController.po.Status__c != 'Confirmed');
+		test.stopTest();
+
+	}
+		
+	/*******************************************************
+					SaveTest2
+	*******************************************************/
+	static testmethod void SaveTest2(){
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -336,30 +410,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 
-		// Save with No Vendor, verify an error message is added
-		customController.save();
-		System.Assert(ApexPages.getMessages() != null);		
-
-		// set the selected vendor to the vendor account id
-		customController.selectedVendor = vendorAccount.Id;
-
-		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
-		customController.orderItemWrapperList = new List<RMS_vendorPurchaseOrderController.OrderItemWrapper>{wrap};
-		//JETT-712 Verify PO Status is updated upon save if Status is Released, Estimated Ship Date is populated, and related OrderItems all have wholesale costs
-		customController.po.Estimated_Ship_Date__c = System.Today();	
-		customController.po.Status__c = 'Released';
-		customController.save();
-		System.assert(customController.po.Status__c == 'Confirmed');
-		
-		//Update post-demo, replaced soql query with checking the order item wrapper for ois with null unit wholesale cost.
-		soldOrderItem.Purchase_Order__c = null;
-		soldOrderItem.Unit_Wholesale_Cost__c = null;
-		update soldOrderItem;
-
-		customController.po.Status__c = 'Released';
-		customController.save();
-		System.assert(customController.po.Status__c != 'Confirmed');
-
 
 		List<Purchase_Order__c> newPOList = [SELECT Id, Subtotal__c FROM Purchase_Order__c WHERE Order__c =: soldOrder.Id];
 
@@ -376,13 +426,45 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController2.save();
 		//TODO: Finish setting up data to add store location to user
 		// Save with a vendor but no PO in the controller
-//		customController2.save();
+		customController2.save();
 		test.stopTest();
 
 	}
-		
 
+	/*******************************************************
+					UpdateSubTotalTest
+	*******************************************************/
+	static testmethod void UpdateSubTotalTest(){
 
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c();
+		OrderItem soldOrderItem = [SELECT Id,Purchase_Order__c FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];	
+		Product2 testProduct =  [SELECT Id FROM Product2 WHERE Name = 'Test Product'];
+		soldOrderItem.Unit_Wholesale_Cost__c = 50;
+		soldOrderItem.Quantity = 1;
+		upsert soldOrderItem;
+
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+
+		test.startTest();
+		RMS_vendorPurchaseOrderController.OrderItemWrapper wrap = new RMS_vendorPurchaseOrderController.OrderItemWrapper(soldOrderItem,vendorAccount,testProduct);
+		customController.orderItemWrapperByVendor = new List<RMS_vendorPurchaseOrderController.OrderItemWrapper>{wrap};
+		customController.updateSubtotal();
+		test.stopTest();
+
+	}
 	/*******************************************************
 					AddProductTest
 	*******************************************************/
@@ -438,16 +520,15 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	}
 
 	/*******************************************************
-					MiscButtonTest
+					MiscButtonTest1
 	*******************************************************/
-	static testmethod void MiscButtonTest(){
+	static testmethod void MiscButtonTest1(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
 
 		createTestRecords();
 
-		Test.startTest();
 		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
 		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
 		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id);
@@ -457,6 +538,8 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		soldOrderItem.Verify_Item_Configuration__c = false;
 		soldOrderItem.Purchase_Order__c = po.Id;
 		update soldOrderItem;
+
+		Test.startTest();
 		
 		// Set up controller with an order Id
 		PageReference pageRef = Page.RMS_viewPurchaseOrder;
@@ -495,6 +578,44 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Test.stopTest();
 	}
 
+	/*******************************************************
+					MiscButtonTest2
+	*******************************************************/
+	static testmethod void MiscButtonTest2(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		createTestRecords();
+
+		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id);
+		insert po;
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		soldOrderItem.NSPR__c = false;
+		soldOrderItem.Verify_Item_Configuration__c = false;
+		soldOrderItem.Purchase_Order__c = po.Id;
+		update soldOrderItem;
+
+		Test.startTest();
+		
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+	
+		customController.cancelPurchaseOrder();
+		customController.checkReceived();
+		customController.updateCostCenters();
+		customController.writeOff();
+		customController.receive();
+		customController.vendorCredit();
+		
+		Test.stopTest();
+	}
 	/*******************************************************
 					cancelLineItemTest
 	*******************************************************/
@@ -598,7 +719,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	}
 
 	/*******************************************************
-					writeOffLineItemsTest
+					vendorCreditTest
 	*******************************************************/
 	static testmethod void vendorCreditTest(){
 		createTestRecords();
@@ -627,6 +748,9 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
 
 	}
+	/*******************************************************
+					testOrderItemWrapperClass
+	*******************************************************/
 	@isTest
 	public static void testOrderItemWrapperClass(){		
 		createTestRecords();

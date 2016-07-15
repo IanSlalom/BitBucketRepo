@@ -22,12 +22,21 @@
 public with sharing class RMS_newCashReceiptExtension {
 
 	/******* Set up Standard Controller for Payment__c  *****************/
-	private final Payment__c thePayment;
+	private  Payment__c thePayment;
+	private  List<Payment__c> paymentList;
 	
 	public RMS_newCashReceiptExtension(ApexPages.StandardSetController stdController) {
-		this.thePayment = (Payment__c)stdController.getRecord();
-		if (this.thePayment == null)
+		this.paymentList = (List<Payment__c>)stdController.getRecords();
+        	System.Debug('*****************this.paymentList=' +this.paymentList);
+		
+		if (this.paymentList.isEmpty()) {
+			this.paymentList = new List<Payment__c>();
 			this.thePayment = new Payment__c(); 
+			this.paymentList.add(thePayment);
+		}
+		else {
+			this.thePayment = this.paymentList[0];
+		}
 	}
 
 	public String testStoreLocation;
@@ -44,13 +53,13 @@ public with sharing class RMS_newCashReceiptExtension {
         Map<String, String> m = p.getParameters();
         m.putAll(ApexPages.currentPage().getParameters());
 
+        	System.Debug('*****************thePayment.Order__c=' +thePayment.Order__c);
 		// If there is an order, redirect to deposit, otherwise redirect to misc cash receipt
 		if (thePayment.Order__c == null) {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Misc_Cash_Receipt'));
 
 			// If a test is running just set the store name, otherwise get it from the current user
-			String storeLocationName = (Test.isRunningTest()) ? 	testStoreLocation :
-																	[SELECT Default_Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Default_Store_Location__c;
+			String storeLocationName = (Test.isRunningTest()) ? 	testStoreLocation : [SELECT Default_Store_Location__c FROM User WHERE Id =: UserInfo.getUserId()].Default_Store_Location__c;
 
 
 			if (String.isBlank(storeLocationName)) {

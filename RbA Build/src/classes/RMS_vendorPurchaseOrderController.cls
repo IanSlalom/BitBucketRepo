@@ -210,52 +210,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
     set;
   }
-  public List<Account> accounts
-  {
-    get
-    {
-//      if ( accounts != null) return accounts;
-      accounts = new List<Account>();
-      for (Account a : [SELECT Id, Name from Account ]) {
-        accounts.add(a);
-      }
-      return accounts;
-    }
-    set;
-  }
-  
-  public List<Contact> contacts
-  {
-    get
-    {
-//      if ( contacts != null) return contacts;
-      contacts = new List<Contact>();
-      for (Contact a : [SELECT Id, AccountId, Name from Contact ]) {
-        contacts.add(a);
-      }
-      return contacts;
-    }
-    set;
-  }
-  
-  public List<Product2> products
-  {
-    get
-    {
-//      if ( accounts != null) return accounts;
-      products = new List<Product2>();
-      for (Product2 p : [SELECT Id, Name from Product2 ]) {
-        products.add(p);
-      }
-      return products;
-    }
-    set;
-  }
+    
   public List<Cost_Center__c> costCenters
   {
     get
     {
-//      if ( contacts != null) return contacts;
       costCenters = new List<Cost_Center__c>();
       for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
         costCenters.add(cc);
@@ -466,9 +425,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			
 	  // Determine the purchase order status so we know what to display on the page.
       orderStatus = this.po.Status__c;
-        		
+      boolean electronicVendor = false;
+      if(selectedVendor != '' && selectedVendor != null) 
+      	electronicVendor = [SELECT Electronic_Orders__c FROM Account WHERE Id =: selectedVendor].Electronic_Orders__c;
+ 		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
-      electronicOrder = ((selectedVendorName == 'RbA') && !servicePurchaseOrder && !costPurchaseOrder);
+      electronicOrder = (electronicVendor && !servicePurchaseOrder && !costPurchaseOrder);
 
       if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
          showCancelPO = true;
@@ -700,12 +662,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
         // May need to change this. Currently finds the RbA account and standard
         // pricebook and creates an Order and links it to the Cost PO
-        Account renewal = new Account();
-        for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
-        	renewal = ren;
-        }
+//        Account renewal = new Account();
+//        for (Account ren : [SELECT Id FROM Account WHERE Name = 'RbA']) {
+//        	renewal = ren;
+//        }
+		// For Cost POs, to have order items, we need a dummy order record, so this creates that order 
+		// and links it to the selected vendor  
         String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
-        Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = renewal.Id, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+        Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
         try{
@@ -722,29 +686,27 @@ public with sharing class RMS_vendorPurchaseOrderController {
       // Sets the PO's record type
       po.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Cost_Purchase_Order') :
 						(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order') :
-						(selectedVendorName == 'RbA')   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
+						(selectedVendorName.contains('Renewal by Andersen'))   ? UtilityMethods.RecordTypeFor('Purchase_Order__c', 'RbA_Purchase_Order') :
 														  UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Product_Purchase_Order');
 
-      // checks that the gl and intercompany accounts are available
-//      if (!costPurchaseOrder) {
-//        if (checkAccountNumbers(po.Store_Location__c))
-//          return null;
       }                
 //    }
     // check for received status errors
     if (checkReceived())
       return null;
 
-    // update the subtotal and upsert the PO
-    updateSubTotal();   
-    //JETT-712  
+    //JETT-712 
+    System.Debug('****************po.Status__c=' +po.Status__c); 
+    System.Debug('****************po.Estimated_Ship_Date__c=' +po.Estimated_Ship_Date__c); 
     if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
       boolean allOrderItemsHaveWholesaleCost = false;
       if (zeroDollarVendor) {
       	 allOrderItemsHaveWholesaleCost = true;
       }
       else {
+    System.Debug('****************orderItemWrapperByVendor=' +orderItemWrapperByVendor); 
 		for(OrderItemWrapper oiw : orderItemWrapperByVendor){
+    System.Debug('****************oiw=' +oiw); 
         	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
           		allOrderItemsHaveWholesaleCost = false;
           		break;
@@ -753,6 +715,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         		allOrderItemsHaveWholesaleCost = true;
       	}
       }
+    System.Debug('****************allOrderItemsHaveWholesaleCost=' +allOrderItemsHaveWholesaleCost); 
       if(allOrderItemsHaveWholesaleCost){
         po.Status__c = 'Confirmed';
         po.Confirmed_Timestamp__c = System.Now();
@@ -935,8 +898,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
       System.debug('^^^^^^^^^^^^^^OIW' + OIW);
           
       orderItemWrapperList.add(OIW);
-      // update the subtotal calculation after adding a product and update the PO
-      updateSubTotal();
       
       // update the taxes on all order items     
 	  List<orderItem> allOrderItems = [SELECT 	Id, Unit_Wholesale_Cost__c, Quantity, Discount_Amount__c, Tax__c 
@@ -1511,42 +1472,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // It's ok to change the status to Received so return false
     return false;               
   }
-
-  /*******************************************************
-          checkAccountNumbers() method
-  *******************************************************/
-  // Method to ensure that it's ok to change the status to received
-/*  public boolean checkAccountNumbers(Id storeLocationId) {
-    system.debug('*****Checking the account numbers');
-    
-    // If the store location Id is blank, add an error message and return true
-    if (storeLocationId == null) {
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
-      return true;
-    }
-    // If we've already retrieved the account numbers, just return false
-    if (String.isNotBlank(glAccount) && String.isNotBlank(intercompanyAccount)) 
-      return false;
-
-    //Retrieves the financial account numbers for the purchase order's store location
-    Map<String,String> accountNumberMap = UtilityMethods.retrieveAccountNumbers(storeLocationId);
-    glAccount = accountNumberMap.get('Inventory Acct');
-    intercompanyAccount = accountNumberMap.get('Intercompany Accounts Payable');
-      
-    // TODO:  add a check for cost purchase order if the check isn't done before calling the method.May not need to do this
-    // Add an error and return true if either of the account numbers are blank
-    if (String.isBlank(glAccount)) {
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.INVENTORY_GL_ACCOUNT_NOT_FOUND));
-      return true;
-    }
-    if (String.isBlank(intercompanyAccount)) {
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.INTERCOMPANY_AP_ACCOUNT_NOT_FOUND));
-      return true;
-    }
-
-    // The account numbers have been retrieved successfully, so return false
-    return false;               
-  }*/
 
   /*******************************************************
           OrderItemWrapper Class

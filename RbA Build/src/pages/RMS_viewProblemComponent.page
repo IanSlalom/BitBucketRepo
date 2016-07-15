@@ -62,7 +62,7 @@
     
     <apex:pageBlock title="Service Symptoms">
         <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addServiceSymptomURL}', 'Assign Service Symptom');return false" id="addSProduct" value="Assign Service Symptom" style="margin-left:2%"/>
+            <apex:commandButton action="{!addServiceSymptom}" value="Assign Service Symptom" id="addSProduct" style="margin-left:2%"/>            
         </apex:form>
         <apex:pageBlockTable title="Service Symptoms" value="{!Problem_Component_List__c.Problem_Component_Config__r}" var="item" style="width:100%">
             <apex:column headerValue="Action" width="65px;">

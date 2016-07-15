@@ -17,9 +17,9 @@ Unauthorized use is prohibited.
 @isTest 
 public with sharing class testRMS_OrderItemExtension {
     
-    static testmethod void createTestRecords() {
+    static testmethod void createTestRecords() {  
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
-        	insert turnOffFinancialTrigger;
+        insert turnOffFinancialTrigger;
         
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
@@ -61,12 +61,12 @@ public with sharing class testRMS_OrderItemExtension {
             insert pbEntries;
         //utility.createOrderTestRecords();
         //
-
+        
         Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
         Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
         List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
-        insert sprods;
-
+            insert sprods;
+        
         
         List<Order> ordersToInsert = new List<Order>();
         Order order =  new Order(   Name='Sold Order 1', 
@@ -114,8 +114,26 @@ public with sharing class testRMS_OrderItemExtension {
         
         
         
-        OrderItem serviceOrderItem = new OrderItem(Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
+        OrderItem serviceOrderItem = new OrderItem(Sold_Order_Product_Asset__c = asset.Id, Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
         insert serviceOrderItem;
+        
+        List<Service_Symptom_List__c> ssToInsert = new List<Service_Symptom_List__c>();
+        Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
+        ssToInsert.add(ssl1);
+        Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
+        ssToInsert.add(ssl2);
+        Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
+        ssToInsert.add(ssl3);        
+        insert ssToInsert;
+        System.assertEquals(ssToInsert.size() , 3); 
+        
+        List <Service_Symptom__c> servSympToInsert = new List<Service_Symptom__c>();
+        Service_Symptom__c ss1 = new Service_Symptom__c(Service_Product__c = serviceOrderItem.Id, Service_Symptom__c = ssl1.Id);
+        servSympToInsert.add(ss1);
+        Service_Symptom__c ss2 = new Service_Symptom__c(Service_Product__c = serviceOrderItem.Id, Service_Symptom__c = ssl2.Id);
+        servSympToInsert.add(ss2);
+        insert servSympToInsert;
+        System.assertEquals(servSympToInsert.size(),2);      
     }
     
     static testmethod void saveCloseTabTest(){
@@ -131,7 +149,42 @@ public with sharing class testRMS_OrderItemExtension {
         OrderItem oi = [select id,Charge_Cost_To__c from OrderItem where id =: orderItem.id All rows];
         System.Assertequals(oi.Charge_Cost_To__c, 'Local - Remake');
         system.assertEquals(false, ApexPages.hasMessages());
-          Test.stopTest();              
+        Test.stopTest();              
+    }
+    
+    static testmethod void orderRedirectTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewOrderItemRedirect);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        Pagereference pr = TE.orderItemRedirect();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    
+    static testmethod void orderRedirectTest2(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewOrderItemRedirect);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        orderItem.Service__c = false;
+        update orderItem;
+        Pagereference pr = TE.orderItemRedirect();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
     }
     
     static testmethod void saveCloseTabTestError(){
@@ -152,12 +205,96 @@ public with sharing class testRMS_OrderItemExtension {
         RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
         Pagereference pr = TE.saveCloseTab(); 
         Test.stopTest();
-// TODO: fix assertion
-//        system.assertEquals(true, ApexPages.hasMessages());
+        // TODO: fix assertion
+        //        system.assertEquals(true, ApexPages.hasMessages());
         
         
         
     }
+    
+    static testmethod void editOrderItemTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        Pagereference pr = TE.editOrderItem();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    static testmethod void cancelOrderItemTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_editServiceProduct);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        Pagereference pr = TE.cancelOrderItem();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    static testmethod void addResponsibilityTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        Pagereference pr = TE.addResponsibility();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    static testmethod void addWarrantyTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        Pagereference pr = TE.addWarranty();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    static testmethod void addServiceSymptomTest(){
+        createTestRecords();
+        Test.startTest();
+        Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
+        OrderItem orderItem = [SELECT Id,Product_Name__c,Sold_Order_Product_Asset__c,Installed_Product_Name__c,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        
+        Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
+        ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
+        RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
+        String ssSp = orderItem.Id;
+        String oiLabel = orderItem.Installed_Product_Name__c;
+        Pagereference pr = TE.addServiceSymptom();        
+        OrderItem oi = [select id,OrderId from OrderItem where id =: orderItem.id All rows];
+        System.Assertequals(oi.OrderId, order.Id);
+        system.assertEquals(false, ApexPages.hasMessages());
+        Test.stopTest();              
+    }
+    
+    
     
     
     
