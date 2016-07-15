@@ -188,7 +188,8 @@
                 <apex:outputField value="{!Order.CreatedById}"/>
                 <apex:outputField value="{!Order.LastModifiedById}"/>
                 <apex:outputField value="{!Order.Sales_Tax_Percent__c}"/>
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>
+                <apex:outputField value="{!Order.Date_Cancelled__c}"/>
                 <apex:outputField value="{!Order.RecordType.Name}"/><br/>
                 <apex:outputField value="{!Order.hasPO__c}"/>
             </apex:pageBlockSection>
