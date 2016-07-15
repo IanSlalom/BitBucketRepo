@@ -112,9 +112,9 @@ private class RMS_cancelOrderExtensionTest {
         }
 
         // Verify the sold order is Cancelled
-        soldOrderResult = [SELECT Id, Status, Date_Cancelled__c FROM Order WHERE Name = 'Sold Order 1'];
+        soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
         System.AssertEquals('Cancelled', soldOrderResult.Status);       
-        System.AssertEquals(soldOrderResult.Date_Cancelled__c,System.Today());
+
         Test.stopTest();
 
     }
