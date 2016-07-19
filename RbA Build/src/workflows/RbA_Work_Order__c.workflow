@@ -240,36 +240,6 @@
         </workflowTimeTriggers>
     </rules>
     <rules>
-        <fullName>Set Account Address on RbA Work Order</fullName>
-        <actions>
-            <name>Set_Account_City</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Set_Account_Country</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Set_Account_State</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Set_Account_Street</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Set_Account_Zip</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>false</active>
-        <criteriaItems>
-            <field>RbA_Work_Order__c.Opportunity_Create__c</field>
-            <operation>equals</operation>
-            <value>True</value>
-        </criteriaItems>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
         <fullName>Set Appointment Duration 1 Hour</fullName>
         <actions>
             <name>Set_Appointment_Duration_1_hour</name>
