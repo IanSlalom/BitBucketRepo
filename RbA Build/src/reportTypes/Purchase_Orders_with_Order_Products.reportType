@@ -740,11 +740,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Problem_Component__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Product_Class__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
@@ -842,6 +837,7 @@
             <checkedByDefault>false</checkedByDefault>
             <field>Screen_Type__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Sent_to_Baan__c</field>
@@ -859,17 +855,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Service_Procedure_Code__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Service_Product_Note__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Service_Sympton__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <columns>
