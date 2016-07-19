@@ -250,11 +250,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Charge_Cost_To__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Checkrail_Style__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
