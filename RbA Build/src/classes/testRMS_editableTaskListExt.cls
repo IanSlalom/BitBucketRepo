@@ -81,7 +81,7 @@ private class testRMS_editableTaskListExt
         ordersToInsert.add(order2);
         insert ordersToInsert;
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100);
         insert orderItemMaster;
         
         rwo = new RbA_Work_Order__c();
