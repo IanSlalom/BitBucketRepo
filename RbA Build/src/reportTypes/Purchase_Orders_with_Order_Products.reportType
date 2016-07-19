@@ -740,11 +740,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Primary_Reason__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Problem_Component__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
@@ -847,12 +842,6 @@
             <checkedByDefault>false</checkedByDefault>
             <field>Screen_Type__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Secondary_Reason__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Sent_to_Baan__c</field>
