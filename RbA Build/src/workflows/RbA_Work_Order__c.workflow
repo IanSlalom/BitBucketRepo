@@ -21,6 +21,51 @@
         <template>RbA_Email_Templates/PaintStainInstallReminder</template>
     </alerts>
     <fieldUpdates>
+        <fullName>Set_Account_City</fullName>
+        <field>City__c</field>
+        <formula>Account__r.ShippingCity</formula>
+        <name>Set Account City</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Account_Country</fullName>
+        <field>Country__c</field>
+        <formula>Account__r.ShippingCountry</formula>
+        <name>Set Account Country</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Account_State</fullName>
+        <field>State__c</field>
+        <formula>Account__r.ShippingState</formula>
+        <name>Set Account State</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Account_Street</fullName>
+        <field>Street__c</field>
+        <formula>Account__r.ShippingStreet</formula>
+        <name>Set Account Street</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Account_Zip</fullName>
+        <field>Zip__c</field>
+        <formula>Account__r.ShippingPostalCode</formula>
+        <name>Set Account Zip</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Appointment_Duration_1_hour</fullName>
         <description>Set Appointment Duration to 1</description>
         <field>Appointment_Duration__c</field>
@@ -63,6 +108,15 @@
         <field>Completed_Appt_Date_Tech_Measure__c</field>
         <formula>Today()</formula>
         <name>Set Completed Date - Tech Measure</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Headcount_to_2</fullName>
+        <field>Recommended_Crew_Size__c</field>
+        <formula>2</formula>
+        <name>Set Headcount to 2</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
@@ -186,6 +240,36 @@
         </workflowTimeTriggers>
     </rules>
     <rules>
+        <fullName>Set Account Address on RbA Work Order</fullName>
+        <actions>
+            <name>Set_Account_City</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Set_Account_Country</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Set_Account_State</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Set_Account_Street</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Set_Account_Zip</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Opportunity_Create__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
         <fullName>Set Appointment Duration 1 Hour</fullName>
         <actions>
             <name>Set_Appointment_Duration_1_hour</name>
@@ -213,6 +297,21 @@
             <value>Install</value>
         </criteriaItems>
         <description>Set Appointment Duration for 4 hours for Install</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Headcount to 2</fullName>
+        <actions>
+            <name>Set_Headcount_to_2</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </criteriaItems>
+        <description>If WO is Install, set Recommended Crew Size (Headcount) to 2</description>
         <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
@@ -373,10 +472,7 @@
         </actions>
         <active>true</active>
         <description>When a WO is cancelled the status needs to be changed to &quot;to be scheduled&quot;</description>
-        <formula>OR(
-ISCHANGED(Cancel_Date__c),
-ISCHANGED ( Cancel_Reason__c )
-)</formula>
+        <formula>OR( ISCHANGED(Cancel_Date__c), ISCHANGED ( Cancel_Reason__c ) )</formula>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <tasks>

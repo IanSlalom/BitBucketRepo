@@ -433,8 +433,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //only when the entire request is filled out and not during a rerender.
             o.Validate_Service_Order__c = true;
             //convert the selectOption value to picklist value, set on Ordre
+            If(propPickValSelected != null){
             o.Service_Type__c = propPickValSelected;
-            
+            }
             
             upsert o;
             system.debug(listOI);
@@ -541,7 +542,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //only when the entire request is filled out and not during a rerender.
             o.Validate_Service_Order__c = true;
             //convert the selectOption value to picklist value, set on Ordre
-            o.Service_Type__c = propPickValSelected;
+            If(propPickValSelected != null){
+                o.Service_Type__c = propPickValSelected;
+            }
             
             
             upsert o;
@@ -699,7 +702,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             
             o.Validate_Service_Order__c = true;
-            o.Service_Type__c = propPickValSelectedLegacy;
+            
+            If(propPickValSelectedLegacy != null){
+                o.Service_Type__c = propPickValSelectedLegacy;
+            }
+            
             upsert o;
             system.debug(listOILegacy);
             system.debug(invalidRequest);
@@ -787,7 +794,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 }        
             }
             o.Validate_Service_Order__c = true;
-            o.Service_Type__c = propPickValSelectedLegacy;
+            
+            If(propPickValSelectedLegacy != null){
+                o.Service_Type__c = propPickValSelectedLegacy;
+            }
+            
             upsert o;
             system.debug(listOILegacy);
             
@@ -1322,7 +1333,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public void setpropPickValSelected(String propPickValSelected) {
         this.propPickValSelected = propPickValSelected;
-    }
+    }       
+    
+    
     
     //RMS_updateServiceType Methods
     public List<SelectOption> getPickLstValue2()

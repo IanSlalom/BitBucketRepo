@@ -1289,6 +1289,41 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.stopTest();
     }
     
+    
+        static testmethod void saveCloseLegacytest2(){
+        createTestRecords();
+        
+        Test.startTest();
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account 3'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Id pricebookId = Test.getStandardPricebookId();
+        Order order = new Order(Name='Service Order 2', 
+                                AccountId = aid.id, 
+                                EffectiveDate= Date.Today(), 
+                                Store_Location__c = slid.Id,                               
+                                Status ='New',                             
+                                Customer_Pickup_All__c = FALSE,                             
+                                Service_Type__c = 'Job in Progress',                                             
+                                Pricebook2Id = Test.getStandardPricebookId(),
+                                recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'));
+        insert order;        
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Boolean hasValidationErrors = false;
+        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 1;
+        Pagereference pr = TE.saveCloseLegacy();        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Service Order 2');
+        Test.stopTest();
+    }
+    
     static testmethod void saveCloseLegacytestFail(){
         createTestRecords();
         
@@ -1354,7 +1389,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         Boolean hasValidationErrors = false;
-        String propPickValSelectedLegacy = TE.getpropPickValSelectedLegacy();
+
         Boolean isSelected = true;
         Boolean manufacturer = true;
         Boolean local = true;
@@ -1365,6 +1400,40 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         System.Assertequals(ord.Name, 'Service Order 2');
         Test.stopTest();
     }    
+    
+    static testmethod void saveContinueLegacytest2(){
+        createTestRecords();
+        
+        Test.startTest();
+        Account aid = [Select Id FROM Account WHERE Name = 'Dwelling Account 3'];
+        Account slid = [Select Id FROM Account WHERE Name = '77 - Twin Cities, MN'];
+        Id pricebookId = Test.getStandardPricebookId();
+        Order order = new Order(Name='Service Order 2', 
+                                AccountId = aid.id, 
+                                EffectiveDate= Date.Today(), 
+                                Store_Location__c = slid.Id,                               
+                                Status ='New',                             
+                                Customer_Pickup_All__c = FALSE,                             
+                                Service_Type__c = 'Job in Progress',                                             
+                                Pricebook2Id = Test.getStandardPricebookId(),
+                                recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order'));
+        insert order; 
+        
+        Test.setCurrentPage(Page.RMS_serviceRequestLegacyP1);
+        ApexPages.StandardController sc = new ApexPages.StandardController(order);
+        RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
+        Boolean hasValidationErrors = false;
+
+        Boolean isSelected = true;
+        Boolean manufacturer = true;
+        Boolean local = true;
+        Boolean customer = true;
+        Integer invalidRequest = 1;
+        Pagereference pr = TE.saveContinueLegacy();        
+        Order ord = [select id,Name from Order where id =: order.id];
+        System.Assertequals(ord.Name, 'Service Order 2');
+        Test.stopTest();
+    }       
     
     static testmethod void saveContinueLegacytestFail(){
         createTestRecords();
