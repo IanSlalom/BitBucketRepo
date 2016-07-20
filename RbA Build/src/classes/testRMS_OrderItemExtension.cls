@@ -92,7 +92,7 @@ public with sharing class testRMS_OrderItemExtension {
         insert ordersToInsert;
         
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100);
         insert orderItemMaster;
         
         Asset asset = new Asset (     Name='Asset1',
@@ -114,7 +114,7 @@ public with sharing class testRMS_OrderItemExtension {
         
         
         
-        OrderItem serviceOrderItem = new OrderItem(Sold_Order_Product_Asset__c = asset.Id, Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Goodwill', Secondary_Reason__c = 'Customer Satisfaction' );
+        OrderItem serviceOrderItem = new OrderItem(Sold_Order_Product_Asset__c = asset.Id, Installed_Product_Asset__c = asset.Id,OrderId = o.id, Parent_Order_Item__c = orderItemMaster.id, PricebookentryId = pricebookEntryServ.Id, Quanity_Ordered__c = 2, Service__c = true, Quantity = 2, UnitPrice = 100 );
         insert serviceOrderItem;
         
         List<Service_Symptom_List__c> ssToInsert = new List<Service_Symptom_List__c>();
@@ -140,14 +140,13 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_editServiceProduct);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
         RMS_OrderItemExtension TE = new RMS_OrderItemExtension(sc);
         Pagereference pr = TE.saveCloseTab();        
-        OrderItem oi = [select id,Charge_Cost_To__c from OrderItem where id =: orderItem.id All rows];
-        System.Assertequals(oi.Charge_Cost_To__c, 'Local - Remake');
+        OrderItem oi = [select id from OrderItem where id =: orderItem.id All rows];
         system.assertEquals(false, ApexPages.hasMessages());
         Test.stopTest();              
     }
@@ -156,7 +155,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_viewOrderItemRedirect);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
@@ -216,7 +215,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
@@ -232,7 +231,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_editServiceProduct);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
@@ -248,7 +247,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
@@ -264,7 +263,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);
@@ -280,7 +279,7 @@ public with sharing class testRMS_OrderItemExtension {
         createTestRecords();
         Test.startTest();
         Order order = [SELECT Id,AccountId FROM Order WHERE Name = 'Service Order 1'];
-        OrderItem orderItem = [SELECT Id,Product_Name__c,Sold_Order_Product_Asset__c,Installed_Product_Name__c,OrderId,Charge_Cost_To__c,Service__c FROM OrderItem WHERE OrderId =: order.id];        
+        OrderItem orderItem = [SELECT Id,Product_Name__c,Sold_Order_Product_Asset__c,Installed_Product_Name__c,OrderId,Service__c FROM OrderItem WHERE OrderId =: order.id];        
         
         Test.setCurrentPage(Page.RMS_viewServiceOrderItem);
         ApexPages.StandardController sc = new ApexPages.StandardController(OrderItem);

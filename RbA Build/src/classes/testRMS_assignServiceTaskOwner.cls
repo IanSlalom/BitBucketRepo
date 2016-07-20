@@ -89,7 +89,7 @@ public with sharing class testRMS_assignServiceTaskOwner {
         ordersToInsert.add(order2);
         insert ordersToInsert;
         
-        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100, Charge_Cost_To__c = 'Customer-Replace' );
+        OrderItem orderItemMaster = new OrderItem(OrderId = Order.id, PricebookentryId = pricebookEntryMaster.Id, Quantity = 2, UnitPrice = 100);
         insert orderItemMaster;
         
         List<RbA_Work_Order__c> wosToInsert = new List<RbA_Work_Order__c>();
