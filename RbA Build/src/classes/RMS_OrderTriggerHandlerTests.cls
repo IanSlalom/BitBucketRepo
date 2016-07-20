@@ -311,7 +311,7 @@ private class RMS_OrderTriggerHandlerTests {
         insert newOrder;
         List<PricebookEntry> pbeList = [Select Id from PricebookEntry];
         OrderItem oi = new OrderItem(OrderId = newOrder.Id, PricebookentryId = pbeList[0].Id, Quantity = 2, UnitPrice = 100, 
-            Quote_Accepted__c = true, Billable_Amount__c = 2, Charge_Cost_To__c = 'Local - Remake', Primary_Reason__c = 'Service', Secondary_Reason__c = 'Egress');
+            Quote_Accepted__c = true, Billable_Amount__c = 2);
         Test.startTest();
         insert oi;
         newOrder.Status = 'Closed';

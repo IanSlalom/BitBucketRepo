@@ -20,6 +20,15 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_Service_Type_to_Field_Service_For_Co</fullName>
+        <field>Service_Type__c</field>
+        <literalValue>Field Service</literalValue>
+        <name>Set Service Type to Field Service For Co</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Status_to_Closed</fullName>
         <field>Status</field>
         <literalValue>Closed</literalValue>
@@ -63,14 +72,24 @@
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
-        <fullName>Set Sales Tax on Service Order</fullName>
-        <active>false</active>
+        <fullName>Set Service Type to Field Service For Cottage Grove</fullName>
+        <actions>
+            <name>Set_Service_Type_to_Field_Service_For_Co</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
         <criteriaItems>
             <field>Order.RecordTypeId</field>
             <operation>equals</operation>
             <value>CORO Service</value>
         </criteriaItems>
-        <triggerType>onAllChanges</triggerType>
+        <criteriaItems>
+            <field>User.ProfileId</field>
+            <operation>equals</operation>
+            <value>RMS-Service Manager</value>
+        </criteriaItems>
+        <description>Workflow Rule to set Service Request Service Type to Field Service for Cottage Grove Users</description>
+        <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
         <fullName>Set Status to Closed</fullName>

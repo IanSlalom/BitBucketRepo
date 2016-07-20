@@ -62,7 +62,7 @@
     
     <apex:pageBlock title="Service Products">
         <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addServiceProductURL}', 'Assign Service Products');return false" value="Assign Service Products" style="margin-left:2%"/>
+            <apex:commandButton action="{!addServiceProduct}" value="Assign Service Products" style="margin-left:2%"/>
         </apex:form>
         <apex:pageBlockTable title="Service Products" value="{!Procedure_Code__c.Product_Procedure_Codes1__r}" var="item" style="width:100%">
             <apex:column headerValue="Action" width="65px;">
@@ -76,7 +76,7 @@
     
     <apex:pageBlock title="Service Symptoms">
         <apex:form style="text-align:center; margin-bottom: 5px;">            
-            <apex:commandButton onclick="callGenerateConsoleURL('{!addServiceSymptomURL}', 'Assign Service Symptom');return false" id="addSProduct" value="Assign Service Symptom" style="margin-left:2%"/>
+            <apex:commandButton action="{!addServiceSymptom}" id="addSProduct" value="Assign Service Symptom" style="margin-left:2%"/>
         </apex:form>
         <apex:pageBlockTable title="Service Symptoms" value="{!Procedure_Code__c.Procedure_Code_Assignments__r}" var="item" style="width:100%">
             <apex:column headerValue="Action" width="65px;">

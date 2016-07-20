@@ -89,6 +89,10 @@
                 <behavior>Edit</behavior>
                 <field>Date_Received__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Contract_Required_to_Municipality__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

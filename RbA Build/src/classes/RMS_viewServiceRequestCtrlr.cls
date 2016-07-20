@@ -3,8 +3,8 @@ public class RMS_viewServiceRequestCtrlr {
     public final Order o;
     
     Public String baseURL{get;set;}
-    public String updateSTURL{get;set;}
-    public String editRedirect{get;set;}
+    //public String updateSTURL{get;set;}
+    //public String editRedirect{get;set;}
     public string serviceOrderVisitRecordTypeURL{get;set;}
     public string serviceOrderActionsRecordTypeURL{get;set;}
     public string serviceOrderLSWPRecordTypeURL{get;set;}
@@ -22,11 +22,11 @@ public class RMS_viewServiceRequestCtrlr {
         
         this.o = (Order)stdController.getRecord();
         
-        ordRecId = [select id, RecordType.Name, RecordTypeId from Order where id = :ApexPages.currentPage().getParameters().get('id')].id;
+        //ordRecId = [select id, RecordType.Name, RecordTypeId from Order where id = :ApexPages.currentPage().getParameters().get('id')].id;
         
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        updateSTURL = '/apex/RMS_updateServiceType?id=' + o.Id;
-        editRedirect ='/apex/RMS_editServiceRequest?id='+o.Id;
+        //updateSTURL = '/apex/RMS_updateServiceType?id=' + o.Id;
+        //editRedirect ='/apex/RMS_editServiceRequest?id='+o.Id;
         
         Schema.DescribeSObjectResult r = RbA_Work_Order__c.sObjectType.getDescribe();
         String workOrderKeyPrefix = r.getKeyPrefix();
@@ -71,20 +71,20 @@ public class RMS_viewServiceRequestCtrlr {
     
     List<RbA_Work_Order__c> visitWOs;
     public List<RbA_Work_Order__c> getvisitWOs() {
-        if(ordRecId != null) {
+        if(o.Id != null) {
             visitWOs = [SELECT Id, Work_Order_Status__c,Work_Order_Type__c,Confirmed_Appt_w_Customer__c,Appointment_Duration__c, Owner.Name
                         FROM RbA_Work_Order__c 
-                        WHERE RecordType.DeveloperName = 'Visit' AND Sold_Order__r.id=:ordRecId];
+                        WHERE RecordType.DeveloperName = 'Visit' AND Sold_Order__r.id=:o.Id];
         }
         return visitWOs;
     } 
     
     List<RbA_Work_Order__c> actionWOs;
     public List<RbA_Work_Order__c> getactionWOs() {
-        if(ordRecId != null) {
+        if(o.Id != null) {
             actionWOs = [SELECT Id, Work_Order_Status__c,Work_Order_Type__c,Confirmed_Appt_w_Customer__c,Owner.Name
                          FROM RbA_Work_Order__c 
-                         WHERE RecordType.DeveloperName != 'Visit' AND Sold_Order__r.id=:ordRecId];
+                         WHERE RecordType.DeveloperName != 'Visit' AND Sold_Order__r.id=:o.Id];
         }
         return actionWOs;
     } 

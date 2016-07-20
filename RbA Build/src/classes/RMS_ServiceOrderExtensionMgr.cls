@@ -288,8 +288,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             newPage.setRedirect(true);
             return newPage;
         }catch(DMLException saveEx){
+            ApexPages.addMessages(saveEx);
             PageReference newPage = new PageReference('/apex/RMS_createServiceRequestP1?id='+ o.Id + '&retUrl=' + o.Id);
-            newPage.setRedirect(true);
+            newPage.setRedirect(false);
             return newPage;
         }
         
@@ -348,8 +349,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             pageRef.setRedirect(true);
             return pageRef;
         }catch(DMLException saveEx){
+            ApexPages.addMessages(saveEx);
             PageReference pageRef = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id);
-            pageRef.setRedirect(true);
+            pageRef.setRedirect(false);
             return pageRef;
         }
         
@@ -431,8 +433,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //only when the entire request is filled out and not during a rerender.
             o.Validate_Service_Order__c = true;
             //convert the selectOption value to picklist value, set on Ordre
+            If(propPickValSelected != null){
             o.Service_Type__c = propPickValSelected;
-            
+            }
             
             upsert o;
             system.debug(listOI);
@@ -539,7 +542,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //only when the entire request is filled out and not during a rerender.
             o.Validate_Service_Order__c = true;
             //convert the selectOption value to picklist value, set on Ordre
-            o.Service_Type__c = propPickValSelected;
+            If(propPickValSelected != null){
+                o.Service_Type__c = propPickValSelected;
+            }
             
             
             upsert o;
@@ -697,7 +702,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             }
             
             o.Validate_Service_Order__c = true;
-            o.Service_Type__c = propPickValSelectedLegacy;
+            
+            If(propPickValSelectedLegacy != null){
+                o.Service_Type__c = propPickValSelectedLegacy;
+            }
+            
             upsert o;
             system.debug(listOILegacy);
             system.debug(invalidRequest);
@@ -785,7 +794,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 }        
             }
             o.Validate_Service_Order__c = true;
-            o.Service_Type__c = propPickValSelectedLegacy;
+            
+            If(propPickValSelectedLegacy != null){
+                o.Service_Type__c = propPickValSelectedLegacy;
+            }
+            
             upsert o;
             system.debug(listOILegacy);
             
@@ -1320,7 +1333,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     
     public void setpropPickValSelected(String propPickValSelected) {
         this.propPickValSelected = propPickValSelected;
-    }
+    }       
+    
+    
     
     //RMS_updateServiceType Methods
     public List<SelectOption> getPickLstValue2()
@@ -1382,17 +1397,17 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     } 
     
     //public PageReference cancelOrder(){
-      //  PageReference pageRef = null;
-        //try{
-          //  o.Status = 'Cancelled';
-            //upsert o;
-            //pageRef = new PageReference('/' + o.id);
-            //pageRef.setRedirect(true); 
-        //}catch(DMLException ex){
-         //   ApexPages.addMessages(ex);
-        //}
-        
-       // return pageRef;
+    //  PageReference pageRef = null;
+    //try{
+    //  o.Status = 'Cancelled';
+    //upsert o;
+    //pageRef = new PageReference('/' + o.id);
+    //pageRef.setRedirect(true); 
+    //}catch(DMLException ex){
+    //   ApexPages.addMessages(ex);
+    //}
+    
+    // return pageRef;
     //}
     
     public PageReference cancelP3(){

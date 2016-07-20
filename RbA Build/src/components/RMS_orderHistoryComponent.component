@@ -1,6 +1,4 @@
-<apex:component controller="RMS_orderHistoryController">
-    <!-- Attribute Definition -->
-    <apex:attribute name="OrderIds" description="Salesforce Id of the Order whose Order History needs to be rendered" type="Id" required="true" assignTo="{!orderId}" />
+<apex:component controller="RMS_orderHistoryController">    
     
     <style>
         table {
@@ -9,11 +7,15 @@
         
     </style>   
     
-    <!-- Case History Related List -->
+    <apex:attribute name="OrderHistory" description="Object we wish to view the history of" type="SObject" required="true" assignTo="{!myObject}" />    
+    
+    <!-- Object History Related List -->
     <apex:pageBlock title="Service Request History">
-        <apex:pageBlockTable value="{!histories}" var="History" style="background-color: transparent;">
-            <apex:column headerValue="Date" value="{!History.thedate}"/>
-            <apex:column headerValue="User"> <apex:outputLink value="/{!History.userId}"> {!History.who} </apex:outputLink></apex:column>
+        <apex:pageBlockTable value="{!ObjectHistory}" var="History" >
+            <apex:column headerValue="Date"  value="{!History.thedate}"/>
+            <apex:column headerValue="User">
+                <apex:outputLink value="/{!History.userId}"> {!History.who} </apex:outputLink>
+            </apex:column>
             <apex:column headerValue="Action"><apex:outputText escape="false" value="{!History.action}"/></apex:column>
         </apex:pageBlockTable>
     </apex:pageBlock>

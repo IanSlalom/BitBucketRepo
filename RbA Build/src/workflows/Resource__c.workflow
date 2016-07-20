@@ -63,7 +63,7 @@
             <name>Reactivate_Resource</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>false</active>
+        <active>true</active>
         <criteriaItems>
             <field>Resource__c.Active__c</field>
             <operation>equals</operation>
