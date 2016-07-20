@@ -106,6 +106,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>ActivatedDate</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>EffectiveDate</field>
             <table>Order</table>
         </columns>
