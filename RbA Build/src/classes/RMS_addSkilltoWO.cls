@@ -2,13 +2,13 @@
 
 @class  RMS_addSkilltoWO
 
-@brief  For Install and Tech Measure Work Orders, on create, system queries
+@brief  For Install WO, on create, system queries
 the Products of the related Order and finds the Skills assigned
 to each Product. Then for each skill for each product, a Work
 Order Required Skill record is created to denote which skills are 
 required for the Work Order. 
 
-For Install, Tech Measure, AND Service a Skill should always be added for
+For Install AND Tech Measure a Skill should always be added for
 that Work Order Type.
 
 data model: RbA Skill represents each actual "Skill" with the name field
@@ -93,7 +93,7 @@ public with sharing class RMS_addSkilltoWO {
             //then for each RbA Skill in the skillids list, create a 
             //Work Order Required Skill record
             for(RbA_Work_Order__c rwo : listNew){ 
-                If(rwo.Work_Order_Type__c == 'Install' || rwo.Work_Order_Type__c == 'Tech Measure'){
+                If(rwo.Work_Order_Type__c == 'Install'){
                     for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id = :skillIds OR Id =:rsIds] ) {          
                         Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
                             RbA_Work_Order__c = rwo.Id,
@@ -101,6 +101,16 @@ public with sharing class RMS_addSkilltoWO {
                         
                         newWORS.add(ch);
                     }
+                }
+                
+                If(rwo.Work_Order_Type__c == 'Tech Measure'){
+                   for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id =:rsIds] ) {          
+                     Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
+                       RbA_Work_Order__c = rwo.Id,
+                     RbA_Skill__c = r.Id);
+                  
+                    newWORS.add(ch);
+                  }
                 }
                 
                // If(rwo.Work_Order_Type__c == 'Service'){
@@ -166,7 +176,7 @@ public with sharing class RMS_addSkilltoWO {
             //then for each RbA Skill in the skillids list, create a 
             //Work Order Required Skill record
             for(RbA_Work_Order__c rwo : listNew){ 
-                If(rwo.Work_Order_Type__c == 'Install' || rwo.Work_Order_Type__c == 'Tech Measure'){
+                If(rwo.Work_Order_Type__c == 'Install'){
                     If(rwo.Sold_Order__c != null && mapOld.get(rwo.Id).Sold_Order__c != rwo.Sold_Order__c){
                     for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id = :skillIds] ) {          
                         Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(

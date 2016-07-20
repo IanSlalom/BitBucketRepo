@@ -36,7 +36,7 @@ stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
         orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, 
-                                             Variant_Number__c, Charge_Cost_To__c , Primary_Reason__c, Secondary_Reason__c, 
+                                             Variant_Number__c, 
                                              Quanity_Ordered__c, MTO_Source_Code__c, Sold_Order_Product_Asset__r.Name, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
                                              from OrderItem 
                                              where OrderId =: ord.Id 

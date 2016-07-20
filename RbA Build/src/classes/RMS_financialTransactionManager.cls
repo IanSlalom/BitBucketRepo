@@ -771,7 +771,6 @@ public with sharing class RMS_financialTransactionManager {
                                                     Original_Order_Product__c,
                                                     Original_Order_Product__r.Remake__c,
                                                     Original_Order_Product__r.GL_Account__c,
-                                                    Original_Order_Product__r.Charge_Cost_To__c,
                                                     Vendor_Credit__c
                                                     
                                                     FROM Asset WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :RecordTypeIds AND Sold_Order__r.RecordTypeId IN :orderRecordTypes];        
