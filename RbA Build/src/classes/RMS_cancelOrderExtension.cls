@@ -45,6 +45,7 @@ public with sharing class RMS_cancelOrderExtension {
 		// Find the order and cancel it
 		Order theOrder = [Select Id, Name, Status from Order where id =:theId];
 		theOrder.Status = 'Cancelled';
+		theOrder.Date_Cancelled__c = System.Today();
 
 
 		List<RbA_Work_Order__c> workOrdersWithOpenEvents = [Select Id from RbA_Work_Order__c WHERE Sold_Order__c =:theOrder.Id 
