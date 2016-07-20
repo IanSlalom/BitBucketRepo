@@ -414,57 +414,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Scheduled_Appt_Date_Time_Service__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Scheduled_Appt_Date_Time_Tech_Measure__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Scheduled_Installation_Date__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Scheduled_Install_Date_Formula__c</field>
+            <field>Scheduled_Appt_Date_Time_Service__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Work_Order_Scheduling_Status__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Sent_To__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Service_Material_Owner_Id__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Service_Request_Type__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Special_Details_from_Sales__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>State__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Street__c</field>
+            <field>View__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
@@ -474,7 +434,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Tech_Measure_Synced__c</field>
+            <field>Service_Request_Type__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sent_To__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Special_Details_from_Sales__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
@@ -484,12 +454,37 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Testing_documentation_sent_to_Customer__c</field>
+            <field>Tech_Measure_Synced__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Service_Material_Owner_Id__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Work_Order_Scheduling_Status__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Who_Performed_Testing__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Zip__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Test_Results__c</field>
+            <table>Order.Work_Orders1__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Street__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
@@ -523,21 +518,6 @@
             <table>Order.Work_Orders1__r</table>
         </columns>
         <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>View__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Who_Performed_Testing__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Who_Scheduled_Final_Inspection__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Name</field>
             <table>Order.Work_Orders1__r</table>
@@ -550,11 +530,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Work_Order_Type__c</field>
-            <table>Order.Work_Orders1__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Zip__c</field>
             <table>Order.Work_Orders1__r</table>
         </columns>
         <masterLabel>Work Orders</masterLabel>
