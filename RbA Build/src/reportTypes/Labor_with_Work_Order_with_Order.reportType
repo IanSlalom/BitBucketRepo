@@ -1141,11 +1141,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Unique_Job_Identifier__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Validate_Service_Order__c</field>
             <table>Order</table>
         </columns>
