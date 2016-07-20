@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -443,6 +443,7 @@
         <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
+        <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
         <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7001_Service_Requests_by_Status</members>
@@ -454,13 +455,17 @@
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
-        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
+        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>      
+        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedJourn</members>
+        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedPost</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
         <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
+        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Financ</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
+        <members>RbA_Operational_Reporting/Report_BO3001_Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
@@ -478,6 +483,7 @@
         <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
+        <members>Labor_with_Work_Order_with_Order</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
