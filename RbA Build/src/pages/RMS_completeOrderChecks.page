@@ -3,7 +3,7 @@
 	<apex:includeScript value="{!$Resource.jquery}" />
 	
 	<apex:form >
-        <apex:pageBlock title="Edit Stage and Close Date" mode="edit">
+        <apex:pageBlock title="Back Office Checks" mode="edit">
             <apex:pageMessages />
             <apex:pageBlockButtons location="top">
                 <apex:commandButton value="Save" action="{!save}" id="saveButton" onComplete="closeTab()"/>
