@@ -95,6 +95,7 @@ public class RMS_viewServiceRequestCtrlr {
         PageReference pageRef = null;
         try{
             o.Status = 'Cancelled';
+            o.Date_Cancelled__c = system.today();
             upsert o;
             pageRef = new PageReference('/' + o.id);
             pageRef.setRedirect(true); 
