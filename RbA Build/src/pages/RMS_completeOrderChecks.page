@@ -2,12 +2,12 @@
 	<apex:includeScript value="/support/console/28.0/integration.js"/>
 	<apex:includeScript value="{!$Resource.jquery}" />
 	
-	<apex:form >
+	<apex:form id="form" >
         <apex:pageBlock title="Back Office Checks" mode="edit">
             <apex:pageMessages />
             <apex:pageBlockButtons location="top">
-                <apex:commandButton value="Save" action="{!save}" id="saveButton" onComplete="closeTab()"/>
-                <apex:commandButton value="Cancel" onComplete="closeTab()"/>
+                <apex:commandButton value="Save" action="{!save}" id="saveButton" onComplete="closeTab();return false;" rerender="form"/>
+                <apex:commandButton value="Cancel" onComplete="closeTab()" rerender="form"/>
             </apex:pageBlockButtons>
             <apex:pageBlockTable value="{!selectedChecks}" var="boc">
                 <apex:column value="{!boc.Name}"/>
@@ -33,6 +33,7 @@
 
         function closeTab() {
 
+            if(j$('.errorMsg').length == 0){
             if(sforce.console.isInConsole()) {
                 sforce.console.refreshPrimaryTabById( primaryTabId, false,
                     function()
@@ -45,7 +46,7 @@
             else {
                 location.href='/{!ordId}'; 
             }
-
+            }
         
         };
 
