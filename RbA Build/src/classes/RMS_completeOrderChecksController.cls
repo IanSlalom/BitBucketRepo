@@ -27,6 +27,7 @@ public with sharing class RMS_completeOrderChecksController {
     }
     
     public pageReference save(){
+        try{
     	update selectedChecks;
     	Boolean allChecksCompleted = true;
         for(Back_Office_Check__c check : selectedChecks){
@@ -46,6 +47,9 @@ public with sharing class RMS_completeOrderChecksController {
                 }
                 update order;
             }
+        }
+        }catch(Exception e){
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Some Back Office Checks could not be saved. Please check Error Messages above.'));
         }
         //JETT-2143 Removed page redirect from controller, tab closing/page redirection is handled by vf page instead.
         return null;
