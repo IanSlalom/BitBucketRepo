@@ -12,7 +12,7 @@
     <fieldUpdates>
         <fullName>Set_Service_Product_Record_Name_Unique</fullName>
         <field>Record_Name_Unique__c</field>
-        <formula>Service_Product__r.Name +&apos; &apos;+ Master_Product__r.Name</formula>
+        <formula>Service_Product__r.Id +&apos; &apos;+ Master_Product__r.Id</formula>
         <name>Set Service Product Record Name Unique</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>

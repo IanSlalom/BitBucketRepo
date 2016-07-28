@@ -26,6 +26,7 @@
         <members>PurchaseOrderTriggerHandlerTests</members>
         <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
+        <members>RMS_MunicipalityManager</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_OrderDiscountManager</members>
@@ -233,6 +234,7 @@
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
         <name>ApexTrigger</name>
