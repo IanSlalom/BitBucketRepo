@@ -41,6 +41,7 @@
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_acceptInvite</members>
+        <members>RMS_addApplicationNotes</members>
         <members>RMS_addProblemComponents</members>
         <members>RMS_addProblemComponentsExt</members>
         <members>RMS_addResponsibility</members>
@@ -118,9 +119,11 @@
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>eventTest</members>
+        <members>testRMS_MunicipalityManager</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_addApplicationNotes</members>
         <members>testRMS_addProblemComponents</members>
         <members>testRMS_addProblemComponentsExt</members>
         <members>testRMS_addResponsibility</members>
