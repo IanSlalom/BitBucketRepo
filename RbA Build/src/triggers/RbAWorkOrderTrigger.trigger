@@ -35,20 +35,22 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         
         //HANDLERS AND MANAGERS
         RMS_WorkOrderCreationManager workOrderCreationManager = new RMS_WorkOrderCreationManager();
+        RMS_addApplicationNotes applicationNotes = new RMS_addApplicationNotes();
         RMS_addSkilltoWO addSkilltoWO = new RMS_addSkilltoWO();       
         List<SObject> orders = new List<SObject>();
        
         // Before Insert
-        /*
+        
         if(Trigger.isInsert && Trigger.isBefore){
-            handler.OnBeforeInsert(Trigger.new);
+             applicationNotes.populateApplicationNotesCreate(Trigger.new, Trigger.newMap); 
         }
-        */
+        
         
         //  Before Update
-        
+        else
         if(Trigger.isUpdate && Trigger.isBefore){
             workOrderCreationManager.createInstallWorkOrderOnTechMeasureComplete(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            applicationNotes.populateApplicationNotesUpdate(Trigger.old,Trigger.new,Trigger.oldMap,Trigger.newMap);
         }
          
     
@@ -63,8 +65,7 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
        
       else if(Trigger.isInsert && Trigger.isAfter){
             // run the order rollup real-time if the order trigger
-            // hasn't been run yet, otherwise run it @future
-            
+            // hasn't been run yet, otherwise run it @future         
           addSkilltoWO.addSkilltoWO(Trigger.new, Trigger.newMap);         
               if (UtilityMethods.hasOrderTriggerRan())
                 RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
