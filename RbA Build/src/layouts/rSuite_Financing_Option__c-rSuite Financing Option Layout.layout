@@ -87,7 +87,14 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Interest_Rate__c</fields>
+        <fields>Time_Period__c</fields>
+        <fields>Time_Period_Type__c</fields>
+        <fields>Standard_Financing__c</fields>
+        <fields>Active__c</fields>
         <relatedList>Store_Finance_Program__c.rSuite_Financing_Option__c</relatedList>
+        <sortField>NAME</sortField>
+        <sortOrder>Asc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
