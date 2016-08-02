@@ -73,13 +73,16 @@ public with sharing class RMS_OrderItemManager {
 			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
 
 			Boolean somethingChanged = false;
+
+			//JETT-2363 do not show updates to fields in change history, must be lowercase strings
+			Set<String> fieldsToExclude = new Set<String>{'responsible_party__c','commission_amount__c','commission_due__c','total_retail_price__c'};
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
 			for(String oiField : oiFieldsMap.KeySet()){ 
 				string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
 				
-				if(oldValue != newValue && !oiField.equalsIgnoreCase('Responsible_Party__c')){
+				if(oldValue != newValue && !fieldsToExclude.contains(oiField)){
 					somethingChanged = true;
 					if(oldValue == null){
 						oldValue = 'none'; 
