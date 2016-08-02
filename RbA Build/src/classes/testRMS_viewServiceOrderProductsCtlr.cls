@@ -59,7 +59,7 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
             insert pbEntries;
         //utility.createOrderTestRecords();
 
-        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);       
+        Service_Product__c servProd1 = new Service_Product__c(Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);       
         List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1};
         insert sprods;
         
