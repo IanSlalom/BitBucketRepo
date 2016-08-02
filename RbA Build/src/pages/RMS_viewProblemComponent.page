@@ -1,5 +1,0 @@
-<apex:page standardController="Problem_Component_List__c" extensions="RMS_viewPCLCtrlr">
-THIS PAGE IS NOW DEPRECATED. REMOVE FROM VIEW PAGE OVERRIDE
-    
-    
-</apex:page>

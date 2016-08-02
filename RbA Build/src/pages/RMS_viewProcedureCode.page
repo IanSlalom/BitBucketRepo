@@ -1,5 +1,0 @@
-<apex:page standardController="Procedure_Code__c" extensions="RMS_viewPCCtrlr">
-THIS PAGE IS NOW DEPRECATED. REMOVE FROM VIEW PAGE OVERRIDE
-    
-    
-</apex:page>

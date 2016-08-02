@@ -1,3 +1,0 @@
-<apex:page standardController="Service_Symptom_List__c" extensions="RMS_viewSSLCtrlr">
-THIS PAGE IS NOW DEPRECATED. REMOVE FROM VIEW PAGE OVERRIDE
-</apex:page>
