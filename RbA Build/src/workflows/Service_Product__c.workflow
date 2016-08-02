@@ -9,16 +9,6 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
-        <rules>
-        <fullName>Set Service Product Name</fullName>
-        <actions>
-            <name>Set_Service_Product_Name</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>true</active>
-        <formula>true</formula>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
     <rules>
         <fullName>Unique Service Product</fullName>
         <actions>

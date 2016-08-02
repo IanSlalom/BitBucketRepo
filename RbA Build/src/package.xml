@@ -547,6 +547,7 @@
         <members>Purchase_Order__c</members>
         <members>RbA_Work_Order__c</members>
         <members>Resource__c</members>
+        <members>Service_Product__c</members>
         <members>Service_Symptom_Assignment__c</members>
         <members>Service_Symptom_List__c</members>
         <members>Service_Symptom__c</members>
