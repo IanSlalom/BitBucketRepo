@@ -413,6 +413,7 @@
         <members>Warranty__c-Warranty Layout</members>
         <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
+        <members>rSuite_External_Link__c-rSuite External Link Layout</members>
         <members>rSuite_Financing_Option__c-rSuite Financing Option Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuite Managed Documents Layout</members>
