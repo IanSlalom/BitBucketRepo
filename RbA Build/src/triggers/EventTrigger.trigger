@@ -40,11 +40,13 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         // Before Insert
         if(Trigger.isInsert && Trigger.isBefore){
             populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+             populateResourceonEventManager.populateInstallCrew(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
         
         //  Before Update
         if(Trigger.isUpdate && Trigger.isBefore){
             populateResourceonEventManager.populateResourceonUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);    
+            populateResourceonEventManager.populateInstallCrew(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
          
 
@@ -57,14 +59,13 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
 
         // After Insert
         else if(Trigger.isInsert && Trigger.isAfter){
-            acceptInvite.acceptInvite(Trigger.new, Trigger.newMap);
+            acceptInvite.acceptInvite(Trigger.new, Trigger.newMap);            
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
             
         } 
          
         // After Update
-        else if(Trigger.isUpdate && Trigger.isAfter){
-            
+        else if(Trigger.isUpdate && Trigger.isAfter){           
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
         

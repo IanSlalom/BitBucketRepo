@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -26,6 +26,7 @@
         <members>PurchaseOrderTriggerHandlerTests</members>
         <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
+        <members>RMS_MunicipalityManager</members>
         <members>RMS_MunicipalityMatchManager</members>
         <members>RMS_MunicipalityMatchManagerTest</members>
         <members>RMS_OrderDiscountManager</members>
@@ -40,6 +41,7 @@
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_acceptInvite</members>
+        <members>RMS_addApplicationNotes</members>
         <members>RMS_addProblemComponents</members>
         <members>RMS_addProblemComponentsExt</members>
         <members>RMS_addResponsibility</members>
@@ -117,9 +119,11 @@
         <members>UtilityMethods</members>
         <members>UtilityMethodsTest</members>
         <members>eventTest</members>
+        <members>testRMS_MunicipalityManager</members>
         <members>testRMS_OrderItemExtension</members>
         <members>testRMS_ServiceOrderExtMgr</members>
         <members>testRMS_ServiceOrderLegacyExt</members>
+        <members>testRMS_addApplicationNotes</members>
         <members>testRMS_addProblemComponents</members>
         <members>testRMS_addProblemComponentsExt</members>
         <members>testRMS_addResponsibility</members>
@@ -233,6 +237,7 @@
         <members>RefundTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
         <name>ApexTrigger</name>
@@ -257,6 +262,7 @@
         <members>MA_Scheduler_Event__c</members>
         <members>MA_Scheduler_Settings__c</members>
         <members>Municipality__c</members>
+        <members>Order_Code_Lookup__c</members>
         <members>Payment__c</members>
         <members>Pricing_Configuration__c</members>
         <members>Problem_Component_Config__c</members>
@@ -455,7 +461,7 @@
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
-        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>      
+        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedJourn</members>
         <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedPost</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>

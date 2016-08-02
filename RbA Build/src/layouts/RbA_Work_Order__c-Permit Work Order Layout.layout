@@ -58,6 +58,10 @@
                 <behavior>Edit</behavior>
                 <field>Municipality__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Application_Notes__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -231,6 +235,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>RecordTypeId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Pivotal_Id__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
