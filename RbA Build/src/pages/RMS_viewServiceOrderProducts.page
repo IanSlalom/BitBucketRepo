@@ -8,6 +8,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
         $("table").tablesorter(); 
+        sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
         
     }); 
     </script>
@@ -15,12 +16,12 @@
     <script type="text/javascript">
     var theURL;
     var tabName;
-    var primaryTabId;
+    var primaryTabId = null;
     
     
     //The callback function that openSubtab will call once it's got the ID for its primary tab
     var callOpenSubtab = function callOpenSubtab(result) {
-        sforce.console.openSubtab(result.id, 
+        sforce.console.openSubtab(primaryTabId, 
                                   theURL, true, tabName);
         theURL = '';
         tabName= '';
@@ -35,38 +36,17 @@
         }
     }
     
-    
-    var callOpenConsoleUrl = function callOpenConsoleUrl(result) {
-        sforce.console.openConsoleUrl(result.id, 
-                                      result.consoleUrl, 
-                                      true 
-                                      // (optional)tabLabels:String, 
-                                      // (optional)tabNames:String, 
-                                      // (optional)callback:Function
-                                     );
-        
-    };
-    
-    function displayResult(result) {
-        if (result.success) {
-            alert('Tab status has been successfully updated');
-        } else {
-            alert('Tab status couldn’t be updated');
-        }
-    }
-    
-    function callGenerateConsoleURL(urlPart, theTabName) {
+    function openNewSubTab( urlPart, theTabName ){
+        tabName = theTabName;
         if(sforce.console.isInConsole()) {
-            tabName = theTabName;
-            var orderURL = '/'+'{!Order.AccountId}';
-            sforce.console.generateConsoleUrl([orderURL, urlPart], callOpenConsoleUrl); 
+            sforce.console.openSubtab ( primaryTabId, urlPart, true,'Opening Service Product...',null,
+                                       function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                                       null);            
         }else{
             top.location.href = '{!baseUrl}'+urlPart;
             
         }       
     }
-    
-    
     </script>
     
     
@@ -91,15 +71,15 @@
         </apex:form>
         <apex:pageBlockTable title="Service Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
             <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
-                <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
+                <a href="#" onClick="openNewSubTab('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
             </apex:column>
             <apex:column headerValue="Product">  
-                <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_viewServiceOrderItem?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
+                <a href="#" onClick="openNewSubTab('/apex/RMS_viewServiceOrderItem?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
             </apex:column>                    
             <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
             <apex:column value="{!wrapper.OrderItem.Quanity_Ordered__c}"/>>
             <apex:column headerValue="Installed Product">  
-                <a href="#" onClick="callGenerateConsoleURL('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
+                <a href="#" onClick="openNewSubTab('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
             </apex:column>
         </apex:pageBlockTable>	
     </apex:pageBlock> 

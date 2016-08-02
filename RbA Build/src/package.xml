@@ -139,7 +139,6 @@
         <members>testRMS_editableTaskListExt</members>
         <members>testRMS_orderHistoryController</members>
         <members>testRMS_populateResourceonEventManager</members>
-        <members>testRMS_serviceWarrantyManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
@@ -363,9 +362,11 @@
         <members>Procedure_Code__c-Procedure Code Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
+        <members>Product2-Door Components Layout</members>
         <members>Product2-Master Product Layout</members>
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
+        <members>Product2-Service Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
