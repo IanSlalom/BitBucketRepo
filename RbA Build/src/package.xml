@@ -97,18 +97,14 @@
         <members>RMS_salesOrderManager</members>
         <members>RMS_salesOrderManagerTest</members>
         <members>RMS_serviceRequestListViewMgr</members>
-        <members>RMS_serviceWarrantyManager</members>
         <members>RMS_vendorPurchaseOrderController</members>
         <members>RMS_vendorPurchaseOrderControllerTest</members>
         <members>RMS_viewOrderProductsController</members>
         <members>RMS_viewOrderProductsControllerTests</members>
         <members>RMS_viewOrdersController</members>
         <members>RMS_viewOrdersControllerTests</members>
-        <members>RMS_viewPCCtrlr</members>
-        <members>RMS_viewPCLCtrlr</members>
         <members>RMS_viewRelatedWorkOrdersController</members>
         <members>RMS_viewRelatedWorkOrdersControllerTest</members>
-        <members>RMS_viewSSLCtrlr</members>
         <members>RMS_viewServiceOrderProductsCtlr</members>
         <members>RMS_viewServiceRequestCtrlr</members>
         <members>TaskTriggerHandler</members>
@@ -134,12 +130,10 @@
         <members>testRMS_addWarrantiesExt</members>
         <members>testRMS_assignServiceTaskOwner</members>
         <members>testRMS_createContactHistoryMgr</members>
-        <members>testRMS_dataSetupClasses</members>
         <members>testRMS_editableTaskList</members>
         <members>testRMS_editableTaskListExt</members>
         <members>testRMS_orderHistoryController</members>
         <members>testRMS_populateResourceonEventManager</members>
-        <members>testRMS_serviceWarrantyManager</members>
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
@@ -205,18 +199,14 @@
         <members>RMS_viewOrderItemRedirect</members>
         <members>RMS_viewOrderProducts</members>
         <members>RMS_viewOrderRedirect</members>
-        <members>RMS_viewProblemComponent</members>
-        <members>RMS_viewProcedureCode</members>
         <members>RMS_viewPurchaseOrder</members>
         <members>RMS_viewRelatedWorkOrdersActions</members>
         <members>RMS_viewRelatedWorkOrdersVisit</members>
         <members>RMS_viewServiceOrderItem</members>
         <members>RMS_viewServiceOrderProducts</members>
         <members>RMS_viewServiceOrders</members>
-        <members>RMS_viewServiceProduct</members>
         <members>RMS_viewServiceRequest</members>
         <members>RMS_viewServiceRequestLocked</members>
-        <members>RMS_viewServiceSymptomList</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -363,9 +353,11 @@
         <members>Procedure_Code__c-Procedure Code Layout</members>
         <members>Product2-Child Product Layout</members>
         <members>Product2-Construction Materials</members>
+        <members>Product2-Door Components Layout</members>
         <members>Product2-Master Product Layout</members>
         <members>Product2-Misc Job and Unit Charges</members>
         <members>Product2-Product Layout</members>
+        <members>Product2-Service Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
@@ -412,6 +404,7 @@
         <members>Warranty__c-Warranty Layout</members>
         <members>Work_Order_Required_Skill__c-Work Order Required Skill Layout</members>
         <members>rSuite_Configuration__c-rSuite Configuration Layout</members>
+        <members>rSuite_External_Link__c-rSuite External Link Layout</members>
         <members>rSuite_Financing_Option__c-rSuite Financing Option Layout</members>
         <members>rSuite_Holidays__c-rSuite Holidays Layout</members>
         <members>rSuite_Managed_Documents__c-rSuite Managed Documents Layout</members>

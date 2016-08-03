@@ -87,9 +87,9 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         //utility.createOrderTestRecords();
         
         List<Service_Product__c> serviceProductsToInsert = new List<Service_Product__c>();
-        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Record_Name_Unique__c ='service',Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd1 = new Service_Product__c(Record_Name_Unique__c ='service',Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
         serviceProductsToInsert.add(servProd1);
-        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Record_Name_Unique__c ='service2',Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd2 = new Service_Product__c(Record_Name_Unique__c ='service2',Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
         serviceProductsToInsert.add(servProd2);
         insert serviceProductsToInsert;
         
@@ -1243,7 +1243,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         Test.startTest(); 
         Order order = [SELECT Id,AccountId,Service_Type__c,pricebook2id,Name,OrderNumber,Activated_Date__c,Status FROM Order WHERE Name = 'Sold Order 1']; 
         PricebookEntry pbe = [Select Id, Product2Id FROM pricebookentry WHERE name = 'Service'];
-        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c     = :pbe.Product2Id];
+        Service_Product__c prod = [SELECT id,Service_Product__c FROM Service_Product__c WHERE Service_Product__c  = :pbe.Product2Id];
         Boolean isSelected = true;
         Asset asset = [Select Id FROM Asset WHERE Variant_Number__c = '1234ABC'];
         

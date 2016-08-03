@@ -135,7 +135,7 @@
         <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
             <apex:pageBlockButtons >
                 <apex:commandButton action="{!editServiceRequest}" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
-                <apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled',true,false)}"/>
+                <apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled' && Order.Cancel_Eligible__c == TRUE,true,false) }"/>
                 <apex:commandButton action="{!updateServiceType}" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
                 <apex:commandButton value="Print Service Quote" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceQuote()"/>

@@ -66,9 +66,9 @@ public with sharing class testRMS_viewServiceRequestCtrlr {
         //utility.createOrderTestRecords();
         
         List<Service_Product__c> serviceProductsToInsert = new List<Service_Product__c>();
-        Service_Product__c servProd1 = new Service_Product__c(name = 'service', Record_Name_Unique__c ='service',Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd1 = new Service_Product__c(Record_Name_Unique__c ='service',Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
         serviceProductsToInsert.add(servProd1);
-        Service_Product__c servProd2 = new Service_Product__c(name = 'service2', Record_Name_Unique__c ='service2',Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
+        Service_Product__c servProd2 = new Service_Product__c(Record_Name_Unique__c ='service2',Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
         serviceProductsToInsert.add(servProd2);
         insert serviceProductsToInsert;
         
