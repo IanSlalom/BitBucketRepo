@@ -50,24 +50,30 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <customButtons>Assign_Problem_Component</customButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Problem_Component__c</fields>
         <relatedList>Problem_Component_Config__c.Service_Symptom__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <customButtons>Assign_Procedure_Code</customButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Procedure_Code__c.NAME</fields>
+        <fields>Procedure_Code__c.Description__c</fields>
         <fields>Procedure_Code__c.Time_Minutes_Each__c</fields>
         <relatedList>Service_Symptom_Assignment__c.Service_Symptom__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Service_Request__c</fields>
         <fields>Service_Product__c</fields>
-        <fields>NAME</fields>
+        <fields>Service_Product_Text__c</fields>
+        <fields>Installed_Product__c</fields>
+        <fields>Account__c</fields>
         <relatedList>Service_Symptom__c.Service_Symptom__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Problem_Component__c.Service_Symptom_Validation__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

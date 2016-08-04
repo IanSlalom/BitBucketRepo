@@ -314,11 +314,11 @@
         </relatedLists>
         <relatedLists>
             <fields>NAME</fields>
-            <relatedList>Store_Finance_Program__c.Store_Configuration__c</relatedList>
+            <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
         </relatedLists>
         <relatedLists>
             <fields>NAME</fields>
-            <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
+            <relatedList>Store_Finance_Program__c.Store_Configuration__c</relatedList>
         </relatedLists>
     </miniLayout>
     <relatedLists>
@@ -345,6 +345,13 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Discount__c</fields>
+        <fields>Active__c</fields>
+        <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>RECORDTYPE</fields>
         <fields>Finance_Program__c</fields>
         <fields>Finance_Company__c</fields>
         <fields>Active__c</fields>
@@ -355,9 +362,10 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Discount__c</fields>
-        <fields>Active__c</fields>
-        <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
+        <fields>Card_Title__c</fields>
+        <fields>Financing_Type__c</fields>
+        <fields>Option_Order__c</fields>
+        <relatedList>rSuite_Financing_Option__c.Store_Configuration__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -372,10 +380,6 @@
         <fields>PRICEBOOK2.LAST_UPDATE</fields>
         <fields>PRICEBOOK2.IS_ACTIVE</fields>
         <relatedList>Pricebook2.Store_Configuration__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>rSuite_Financing_Option__c.Store_Configuration__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

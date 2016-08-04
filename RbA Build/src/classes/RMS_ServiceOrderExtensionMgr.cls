@@ -116,7 +116,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         List<Service_Product__c> serviceProducts = [SELECT    Id,
                                                     Name,
                                                     Master_Product__c,
-                                                    Service_Product__c
+                                                    Service_Product__c,
+                                                    Service_Product__r.Name
                                                     FROM Service_Product__c
                                                     WHERE Master_Product__c in: assetIdToProductIdMap.values()
                                                     ORDER BY Name];
@@ -168,7 +169,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         List<Service_Product__c> serviceProductsLegacy = [SELECT    Id,
                                                           Name,
                                                           Master_Product__c,
-                                                          Service_Product__c
+                                                          Service_Product__c,
+                                                          Service_Product__r.Name
                                                           FROM Service_Product__c
                                                           WHERE Master_Product__c in: selectedProductsLegacy
                                                           ORDER BY Name];

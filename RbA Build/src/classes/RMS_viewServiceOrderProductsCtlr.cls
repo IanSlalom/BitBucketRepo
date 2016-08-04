@@ -27,6 +27,8 @@ public with sharing class RMS_viewServiceOrderProductsCtlr {
     public String editOIURL{get;set;}
     public Id orderItemToToggle{get;set;}
     public integer num_assets;
+    public String orderURL{get;set;}
+    public String accountURL{get;set;}
     
     public RMS_viewServiceOrderProductsCtlr(ApexPages.StandardController stdController) {
         /*if(!test.isRunningTest()){
@@ -35,7 +37,10 @@ stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         this.ord = (Order)stdController.getRecord();
         
         baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
-        orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, 
+        orderURL = '/'+'{!ord.Id}';
+            accountURL = '/'+'{!ord.AccountId}';
+        
+                orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, 
                                              Variant_Number__c, 
                                              Quanity_Ordered__c, MTO_Source_Code__c, Sold_Order_Product_Asset__r.Name, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
                                              from OrderItem 
@@ -97,6 +102,7 @@ stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         }
         newPage.setRedirect(true); 
         return newPage;
-    } 
+    }
+    
     
 }
