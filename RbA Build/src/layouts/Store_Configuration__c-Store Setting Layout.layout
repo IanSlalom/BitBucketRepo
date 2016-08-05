@@ -191,11 +191,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Invoice_Location_Zip__c</field>
+                <field>Invoice_Location_State__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Invoice_Location_State__c</field>
+                <field>Invoice_Location_Zip__c</field>
             </layoutItems>
             <layoutItems>
                 <emptySpace>true</emptySpace>
