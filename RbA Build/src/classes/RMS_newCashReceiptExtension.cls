@@ -27,16 +27,12 @@ public with sharing class RMS_newCashReceiptExtension {
 	
 	public RMS_newCashReceiptExtension(ApexPages.StandardSetController stdController) {
 		this.paymentList = (List<Payment__c>)stdController.getRecords();
-        	System.Debug('*****************this.paymentList=' +this.paymentList);
-		
-		if (this.paymentList.isEmpty()) {
+        	System.Debug('*****************this.paymentList=' +this.paymentList);	
+
 			this.paymentList = new List<Payment__c>();
 			this.thePayment = new Payment__c(); 
 			this.paymentList.add(thePayment);
-		}
-		else {
-			this.thePayment = this.paymentList[0];
-		}
+
 	}
 
 	public String testStoreLocation;
