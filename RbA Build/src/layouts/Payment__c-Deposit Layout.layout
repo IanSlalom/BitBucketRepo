@@ -19,6 +19,10 @@
                 <behavior>Edit</behavior>
                 <field>Non_Sufficient_Funds__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Bill_to_Contact__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

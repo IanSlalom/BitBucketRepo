@@ -28,14 +28,11 @@ public with sharing class RMS_newMiscLaborExtension {
 	public RMS_newMiscLaborExtension(ApexPages.StandardSetController stdController) {
 		this.LaborList = (List<Labor__c>)stdController.getRecords();
 
-		if (this.LaborList.isEmpty()) {
 			this.LaborList = new List<Labor__c>();
 			this.theLabor = new Labor__c(); 
 			this.LaborList.add(theLabor);
-		}
-		else {
-			this.theLabor = this.LaborList[0];
-		}
+
+
 
 	}
 
