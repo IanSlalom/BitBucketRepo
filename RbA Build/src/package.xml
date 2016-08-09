@@ -478,6 +478,7 @@
         <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
+        <members>RbA_Operational_Reporting/Report_BO1001_Current_Consumer_Deposit</members>
         <name>Report</name>
     </types>
     <types>
