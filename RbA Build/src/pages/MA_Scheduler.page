@@ -3,6 +3,8 @@
 <!--      This is the main page for the scheduler                                     -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -12,16 +14,14 @@
 <!--                                                                                  -->
 <!--**********************************************************************************-->
 
-<apex:page showHeader="true" sidebar="false">
+<apex:page standardController="RbA_Work_Order__c" showHeader="true" sidebar="false">
 
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
     <apex:includeScript value="/soap/ajax/34.0/apex.js" />
 
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
 
-
     <script>
-        $ = jQuery.noConflict();
         var storeFound = false;
         var isIndividual = true;
         var storeRetrievalProcessed = false;
@@ -36,7 +36,41 @@
 
             retrieveStoreIds();
             retrieveTimezoneOptions();
+            checkOnLoadAction();
         });
+
+        /****************************************************/
+        /*                                                  */
+        /*    check if the page came from a custom button   */
+        /*      and perform the necessary start up action   */
+        /*                                                  */
+        /****************************************************/
+        function checkOnLoadAction() {
+            var onLoadAction = null;
+            var onLoadWorkOrderId = null;
+            var urlParams = window.location.search.substr(1).split('&');
+
+            for (var i = 0, len = urlParams.length; i < len; i++) {
+                var param = urlParams[i].split('=');
+                if (param[0] == 'id') {
+                    onLoadWorkOrderId = param[1];
+                }
+                else if (param[0] == 'action') {
+                    onLoadAction = param[1];
+                }
+            }
+
+            if (onLoadWorkOrderId != null) {
+                if (onLoadAction == 'assignResource') {
+                    $('#listViewOptionsRecordId').val(onLoadWorkOrderId);
+                    showAssignResourceModal(false, false, false);
+                }
+                else if (onLoadAction == 'scheduleWorkOrder') {
+                    $('#listViewOptionsRecordId').val(onLoadWorkOrderId);
+                    showAvailabilityModal(false, false);
+                }
+            }
+        }
 
         /***************************************************/
         /*                                                 */
@@ -103,6 +137,7 @@
 
                     if (!isIndividual) {
                         $('.hideIndividual').show();
+                        showHideListView();
                     }
                 }
 
@@ -112,6 +147,24 @@
             }
             else {
                 handleError('MA_Scheduler : retrieveStoreIds' + apexMainPageController, response);
+            }
+        }
+
+        /***************************************************/
+        /*                                                 */
+        /*    determines if the list view should be        */
+        /*      visible when coming from the settings      */
+        /*                                                 */
+        /***************************************************/
+        function showHideListView() {
+            var filter = $('#calendarFilter .calendarFilterSelect').val();
+
+            if (isIndividual || filter == undefined || filter == null || filter == '') {
+                $('#listView').hide();
+            }
+            else {
+                $('#listView').show();
+                $('.listViewportWrapper .refreshListButton').click();
             }
         }
 
@@ -274,7 +327,7 @@
     <c:MA_SchedulerGeocodeComp />
     <c:MA_SchedulerCalendarComp />
 
-    <div id="listView" class="hideIndividual pad-0-10 batchHide">
+    <div id="listView" class="hideIndividual pad-0-10 batchHide" style="display: none;">
         <apex:enhancedList id="unscheduledListView" type="RbA_Work_Order__c" height="300" rowsPerPage="25" customizable="true" oncomplete="initializeListViewAttributes()" />
     </div>
 

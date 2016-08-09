@@ -3,6 +3,8 @@
 <!--      This page is used for geocoding purposes      							  -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -13,7 +15,5 @@
 <!--**********************************************************************************-->
 
 <apex:page >
-	<apex:includeScript value="https://maps.googleapis.com/maps/api/js?client=gme-cloudbiltinc" />
-
-	<c:MA_SchedulerGeocodeComp />
+	<!-- THIS PAGE HAS BEEN DEPRECATED AND IS NO LONGER NEEDED -->
 </apex:page>

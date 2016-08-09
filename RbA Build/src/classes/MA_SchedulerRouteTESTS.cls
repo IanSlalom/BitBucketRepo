@@ -3,6 +3,7 @@
 /*      This class is used to test MA_SchedulerRoutingController 	 				*/
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */
@@ -51,27 +52,19 @@ private class MA_SchedulerRouteTESTS {
 	}
 	
 	@isTest static void testMARoutingSchedulerGetRecords() {
-		//Creating RMS_Settings__c
-    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
-		insert customSetting1;
-		Account masterAccount = new Account(name = 'Unassigned Account');
-		insert masterAccount;
-		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
-		insert customSetting2;
-
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
-		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 1', false);
-		RbA_Work_Order__c wo2 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 2', false);
-		RbA_Work_Order__c wo3 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 3', false );
-		RbA_Work_Order__c wo4 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 4', false );
+		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
+		RbA_Work_Order__c wo2 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
+		RbA_Work_Order__c wo3 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
+		RbA_Work_Order__c wo4 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false );
 
-		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 1', storeConfig.Id);
-		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);
-		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 3', storeConfig.Id);
-		Resource__c res4 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 4', storeConfig.Id);
+		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
+		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
+		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
+		Resource__c res4 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		insert new List<Resource__c> { res1, res2, res3, res4 };
 
 		MA_SchedulerFakeDataGenerator.createFakeSfEvent(true, wo4.Id);
@@ -112,24 +105,15 @@ private class MA_SchedulerRouteTESTS {
 	}
 
 	@isTest static void testMARoutingSchedulerProcessConfirmBatch() {
-		//Creating RMS_Settings__c
-    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
-		insert customSetting1;
-		Account masterAccount = new Account(name = 'Unassigned Account');
-		insert masterAccount;
-		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
-		insert customSetting2;
-
-
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
-		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 1', false);
-		RbA_Work_Order__c wo2 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure 2', false);
+		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
+		RbA_Work_Order__c wo2 = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
 
-		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 1', storeConfig.Id);
-		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);
+		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
+		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure', storeConfig.Id);
 		insert new List<Resource__c> { res1, res2};
 
 		MA_SchedulerFakeDataGenerator.createFakeSfEvent(true, wo.Id);
@@ -178,14 +162,6 @@ private class MA_SchedulerRouteTESTS {
 	}
 
 	@isTest static void testMARoutingSchedulerRetrieveResourceRouteRecords() {
-		//Creating RMS_Settings__c
-    	RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
-		insert customSetting1;
-		Account masterAccount = new Account(name = 'Unassigned Account');
-		insert masterAccount;
-		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
-		insert customSetting2;
-
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);

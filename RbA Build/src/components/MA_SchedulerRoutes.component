@@ -3,6 +3,8 @@
 <!--      This component is used for batch scheduling                                 -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -19,8 +21,6 @@
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/async/async.min.js')}"/>
 
     <script type='text/javascript'>
-
-     $ = jQuery.noConflict();
         var MAschedRoutes = {
             SessionId: '{!$Api.Session_ID}',
             master : {},

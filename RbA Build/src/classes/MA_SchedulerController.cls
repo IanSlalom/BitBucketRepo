@@ -4,6 +4,7 @@
 /*      Most of them are webservices to allow for asynchronous computation          */
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */
@@ -305,7 +306,8 @@ global with sharing class MA_SchedulerController {
                                     + ' WHERE (RbA_Work_Order__r.Account__r.Store_Location__r.Active_Store_Configuration__c = \'' + String.escapeSingleQuotes(storeId) + '\'';
 
             if (String.isNotBlank(workOrderType)) {
-                geoCodeQryStr += ' AND RbA_Work_Order__r.Work_Order_Type__c = \'' + String.escapeSingleQuotes(workOrderType) + '\'';
+                geoCodeQryStr += ' AND (RbA_Work_Order__r.Work_Order_Type__c = \'' + String.escapeSingleQuotes(workOrderType) + '\''
+                                + ' OR RbA_Work_Order__r.Scheduled_As_Type__c = \'' + String.escapeSingleQuotes(workOrderType) + '\')';
             }
 
             geoCodeQryStr += ' AND (DAY_ONLY(StartDateTime__c) = ' + String.escapeSingleQuotes(appointmentDateString) + ' OR DAY_ONLY(EndDateTime__c) = ' + String.escapeSingleQuotes(appointmentDateString) + '))';
@@ -320,7 +322,7 @@ global with sharing class MA_SchedulerController {
                 accIds.add(maEvent.RbA_Work_Order__r.Account__c);
             }
 
-            List<Account> accList = [SELECT Id, ShippingStreet, ShippingCity, ShippingState, ShippingPostalCode
+            List<Account> accList = [SELECT Id, ShippingStreet, ShippingCity, ShippingState, ShippingPostalCode, ShippingCountry
                                         FROM Account WHERE (ShippingLatitude = null OR ShippingLongitude = null) AND (Active_Store_Configuration__c = :storeId OR Id IN :accIds)];
 
             response.put('success', true);
@@ -340,28 +342,27 @@ global with sharing class MA_SchedulerController {
     /*      correct latitude and longitude                  */
     /*                                                      */
     /********************************************************/
-    webservice static String updateGeocodedAddresses(String accIdToAddressString, String addressToGeocodeString) {
+    webservice static String updateGeocodedAddresses(String geocodedAddressesString) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
 
         try {
-            if (String.isNotBlank(accIdToAddressString) && String.isNotBlank(addressToGeocodeString)) {
-                List<Account> accList = new List<Account>();
-                Map<Id, String> accIdToAddressMap = (Map<Id, String>)JSON.deserialize(accIdToAddressString, Map<Id, String>.class);
-                Map<String, Map<String, Decimal>> addressToGeocodeMap = (Map<String, Map<String, Decimal>>)JSON.deserialize(addressToGeocodeString, Map<String, Map<String, Decimal>>.class);
+            if (String.isNotBlank(geocodedAddressesString)) {
+                List<SObject> objList = new List<SObject>();
+                List<Object> geocodedAddresses = (List<Object>)JSON.deserializeUntyped(geocodedAddressesString);
 
-                for (Account acc : [SELECT Id FROM Account WHERE Id IN :accIdToAddressMap.keySet()]) {
-                    String accAddress = accIdToAddressMap.get(acc.Id);
-                    Map<String, Decimal> latLngMap = addressToGeocodeMap.get(accAddress);
+                for(Object obj : geocodedAddresses) {
+                    Map<String, Object> geocodeObj = (Map<String, Object>)obj;
+                    Id objectId = (String)geocodeObj.get('Id');
+                    Schema.SObjectType objectType = objectId.getSobjectType();
+                    SObject objToUpdate = objectType.newSObject(objectId);
 
-                    if (latLngMap != null && !latLngMap.isEmpty()) {
-                        acc.ShippingLatitude = latLngMap.get('lat');
-                        acc.ShippingLongitude = latLngMap.get('lng');
-                        accList.add(acc);
-                    }
+                    //Hard coded account values
+                    objToUpdate.put('ShippingLatitude', (Decimal)geocodeObj.get('lat'));
+                    objToUpdate.put('ShippingLongitude', (Decimal)geocodeObj.get('lng'));
+                    objList.add(objToUpdate);
                 }
-
-                update accList;
+                update objList;
             }
 
             response.put('success', true);
@@ -795,7 +796,7 @@ global with sharing class MA_SchedulerController {
     /*      used with the MA_SchedulerWorkOrderSchedulingComp component */
     /*                                                                  */
     /********************************************************************/
-    webService static String checkAvailability(Id workOrderId, String startDateTimeEpoch, String endDateTimeEpoch, String offsetPageMinutes, Boolean nextAvailable) {
+    webService static String checkAvailability(Id workOrderId, String startDateTimeEpoch, String endDateTimeEpoch, String offsetPageMinutes, Boolean nextAvailable, String altType) {
         Map<String, Object> response = new Map<String, Object>();
 
         try {
@@ -803,6 +804,10 @@ global with sharing class MA_SchedulerController {
                                             (SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r),
                                             (SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__r)
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
+
+            if (String.isNotBlank(altType)) {
+                workOrder.Work_Order_Type__c = altType;
+            }
 
             Set<Id> rbaSkillIds = new Set<Id>();
             Map<Id, Id> userMap = new Map<Id, Id>();
@@ -1080,6 +1085,7 @@ global with sharing class MA_SchedulerController {
             unAvailableSlots.sort();
 
             response.put('success', true);
+            response.put('altType', altType);
             response.put('nextAvailable', nextAvailable);
             response.put('bookingWindows', bookingWindows);
             response.put('unAvailableSlots', unAvailableSlots);
@@ -1299,7 +1305,7 @@ global with sharing class MA_SchedulerController {
     /*      used with the MA_SchedulerWorkOrderSchedulingComp component */
     /*                                                                  */
     /********************************************************************/
-    webService static String scheduleWorkOrder(Id workOrderId, String selectedWindow, String rescheduleReason) {
+    webService static String scheduleWorkOrder(Id workOrderId, String selectedWindow, String rescheduleReason, String scheduledAsType) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
 
@@ -1315,6 +1321,7 @@ global with sharing class MA_SchedulerController {
             workOrder.Appointment_Date__c = Date.parse(windowTextSplit[0]);
             workOrder.Appointment_End_Time__c = windowTextSplit[4] + ' ' + windowTextSplit[5];
             workOrder.Appointment_Start_Time__c = windowTextSplit[1] + ' ' + windowTextSplit[2];
+            workOrder.Scheduled_As_Type__c = String.isBlank(scheduledAsType) ? '' : scheduledAsType;
 
             if (String.isNotBlank(rescheduleReason)) {
                 workOrder.Reschedule_Reason__c = rescheduleReason;
@@ -1327,7 +1334,7 @@ global with sharing class MA_SchedulerController {
             }
 
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
-            Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrder.Work_Order_Type__c);
+            Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, String.isBlank(scheduledAsType) ? workOrder.Work_Order_Type__c : scheduledAsType);
             Map<String, Object> storeBookingWindows = (Map<String, Object>)maSettingsMap.get('storeBookingWindows');
             String storeTimezone = (String)maSettingsMap.get('storeTimezone');
 

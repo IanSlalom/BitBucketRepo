@@ -4,6 +4,7 @@
 /*      Most of them are webservices to allow for asynchronous computation          */
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */
@@ -588,7 +589,9 @@ global with sharing class MA_RoutingSchedulerController {
             
             Map<Id, MA_Scheduler_Event__c> maEventsMap = new Map<Id, MA_Scheduler_Event__c>([SELECT Id, Name, Event_Sequence__c, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.RbA_User__c
                                     				        									FROM MA_Scheduler_Event__c WHERE StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime
-                                    				        									AND (RbA_Work_Order__r.Work_Order_Type__c = :workOrderType OR Resource__c IN :resourceIds)
+                                    				        									AND ((RbA_Work_Order__r.Work_Order_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c = null)
+                                                                                                    OR Resource__c IN :resourceIds
+                                                                                                    OR (RbA_Work_Order__r.Scheduled_As_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c != null))
                                                                                                 AND RbA_Work_Order__c != null]);
 
             for (MA_Scheduler_Event__c maEvent : maEventsMap.values()) {

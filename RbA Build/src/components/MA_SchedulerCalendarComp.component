@@ -3,6 +3,8 @@
 <!--      This component is used to handle the main calendar                          -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -44,8 +46,6 @@
     </style>
 
     <script>
-        $ = jQuery.noConflict();
-
         var resourceIds = [];
         var resourceList = [];
         var resourceUserIds = [];
@@ -478,14 +478,17 @@
             $(availableOptions).css('display', '');
             $(listViewSelect).find('option:not(:contains("' + filter + '"))').css('display', 'none');
 
-            if (availableOptions.length == 0) {
+            if (isIndividual || filter == undefined || filter == null || filter == '' || availableOptions.length == 0) {
                 $('#listView').hide();
             }
             else {
+                $('#listView').show();
+                
                 if ($(listViewSelect).find('option[value="' + $(listViewSelect).val() + '"]').css('display') == 'none') {
                     $(listViewSelect).val($(availableOptions[0]).val())[0].onchange();
                 }
-                $('#listView').show();
+
+                $('.listViewportWrapper .refreshListButton').click();
             }
 
             newCalendarFilter = true;

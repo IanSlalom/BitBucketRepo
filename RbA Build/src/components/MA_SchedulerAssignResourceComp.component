@@ -3,6 +3,8 @@
 <!--      This component is used when assigning a resource                            -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -347,8 +349,6 @@
     </style>
 
     <script>
-        $ = jQuery.noConflict();
-
         var assignedSkillsToResourcesMap = {};
         var forceAssignmentScheduleCombo = false;
         var apexAssignResourcesController = 'MA_SchedulerController';
@@ -524,7 +524,7 @@
 
                 $('.resourceAlreadyAssigned .addResource').click();
 
-                if (workOrder.Work_Order_Type__c == 'Install' && !workOrder.Appointment_Date__c && workOrderTime == '' && $('.resourceAlreadyAssigned').length == 0) {
+                if (/*workOrder.Work_Order_Type__c == 'Install' &&*/ !workOrder.Appointment_Date__c && workOrderTime == '' && $('.resourceAlreadyAssigned').length == 0) {
                     forceAssignmentScheduleCombo = true;
                 }
             }

@@ -3,6 +3,8 @@
 <!--      This component is used when geocoding records                               -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -20,16 +22,21 @@
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
 
 	<script>
-		$ = jQuery.noConflict();
 
     	var geocodeSubset = [];
 		var needsBatching = false;
     	var accIdToAddressMap = {};
     	var addressesForGeocode = [];
-    	var addressToGeocodeMap = {};
+    	
+    	var geocodedAddresses = [];
+		var addressToGeocodeMap = {};
+    	
     	var apexGeocodeController = 'MA_SchedulerController';
+    	var submitGeocodeURL = 'https://maps.mapanythingapis.com/geocoding/v2';
         var processUpdateGeocodesResponse = { onSuccess: processUpdateGeocodesSuccess, onFailure: processGeocodeResponseError };
         var processRetrieveGeocodesResponse = { onSuccess: processRetrieveGeocodesSuccess, onFailure: processGeocodeResponseError };
+
+        var totalAddresses = 0;
 
     	$(function() {
 	    	sforce.connection.sessionId = '{!$Api.Session_Id}';
@@ -41,6 +48,7 @@
         /*											*/
         /********************************************/
         function processGeocodeResponseError(error) {
+        	geocodedAddresses = [];
             if (!error.faultstring) {
                 error = { error: 'Response Error'};
             }
@@ -65,11 +73,11 @@
         /* 		retrieves accounts that need geocoding 		*/
         /*													*/
         /****************************************************/
-        function retrieveAccountsForGeocode(appointmentDateString, storeId, workOrderType) {
+        function retrieveAccountsForGeocode(appointmentDateString, storeId, workOrderType, resourceId) {
     		accIdToAddressMap = {};
 			addressesForGeocode = [];
     		addressToGeocodeMap = {};
-			sforce.apex.execute(apexGeocodeController, 'retrieveNonGeocodedAddresses', { appointmentDateString: appointmentDateString, storeId: storeId, workOrderType: workOrderType }, processRetrieveGeocodesResponse);
+			sforce.apex.execute(apexGeocodeController, 'retrieveNonGeocodedAddresses', { appointmentDateString: appointmentDateString, storeId: storeId, workOrderType: workOrderType, resourceId: resourceId }, processRetrieveGeocodesResponse);
 		}
 
 		/****************************************************/
@@ -79,115 +87,102 @@
         /* 		return to process that made request 		*/
         /*													*/
         /****************************************************/
-        function processRetrieveGeocodesSuccess(response) {
-			response = JSON.parse(response);
+        function processRetrieveGeocodesSuccess(response) 
+		{
+			try{
+				response = JSON.parse(response);
 
-			if (response.success) {
-				var tempAddressList = [];
-				for (var i = 0, len = response.accList.length; i < len; i++) {
-					var acc = response.accList[i];
-					var address = acc.ShippingStreet + ', ' + acc.ShippingCity + ', ' + acc.ShippingState + ' ' + acc.ShippingPostalCode;
-					tempAddressList.push(address);
-					accIdToAddressMap[acc.Id] = address;
+				if (response.success) {
+					totalAddresses = response.accList.length;
 
-					if (tempAddressList.length == 10 || i == len - 1) {
-						addressesForGeocode.push(tempAddressList);
-						tempAddressList = [];
+					if (totalAddresses == 0) {
+						//If nothing needs to be geocoded - Kick off Scheduler
+						if (isBatchResources) {
+							getAutoScheduleGeocoded();
+						}
+						else if (isDailyResource) {
+							MARoutesComp.processRouteStops();
+						}
+						return;
 					}
-				}
 
-				if (addressesForGeocode.length > 0) {
-					if (addressesForGeocode.length > 1) {
-						needsBatching = true;
-					}
-					else {
-						geocodeSubset = addressesForGeocode[0];
+					var batchArray = [];
+					var tempArray = [];
+					var blockSize = 20;
+					
+					for (var i = 0, len = totalAddresses; i < len; i++) {
+						tempArray.push(response.accList[i]);
+
+						if(tempArray.length == blockSize){
+							batchArray.push(tempArray);
+							tempArray = [];
+						}
 					}
 					
-					geocodeAddresses();
+					//Add any reocrds from the last loop that may not have hit ID_CHUNK_SIZE array size
+					if(tempArray.length > 0){
+						batchArray.push(tempArray);
+					}
+
+					var q = async.queue(function (queueOptions, callback) {
+						$('#loaderModal').show();
+
+						$.ajax({
+							url: submitGeocodeURL,
+							type: 'GET',
+							dataType: 'JSON',
+							data: {
+								city: queueOptions.ShippingCity,
+								country: queueOptions.ShippingCountry,
+								street: queueOptions.ShippingStreet,
+								state: queueOptions.ShippingState,
+								postal: queueOptions.ShippingPostalCode
+							}
+						})
+						.done(function(data, textStatus, jqXHR) {
+
+							if (data.success) {
+								if (data.data != null) {
+									var geoResult = data.data;
+									geocodedAddresses.push({
+										Id : queueOptions.Id,
+										lat: geoResult.position.lat, 
+										lng: geoResult.position.lng
+									});
+									addressToGeocodeMap[geoResult.fullAddress] = data.data;
+								}
+							}
+							callback({success:true, data: data});
+						})
+						.fail(function(jqXHR, textStatus, errorThrown ) {
+							processGeocodeResponseError(errorThrown);
+							callback({success:false, message:errorThrown});
+						})
+
+					});
+
+					q.concurrency = 3;
+					for(var x = 0, len = batchArray.length; x < len; x ++){
+						q.push(batchArray[x], function(res){
+							if(!res.success){
+								//This was a bad geocode
+							}
+							else{
+								//Could update the user on how many geocodes are done. 
+							}
+						});
+					}
+					
+					q.drain = function(){
+						updateLatLongs();
+					}
 				}
 				else {
-					if (isBatchResources) {
-						getAutoScheduleGeocoded();
-					}
-					else if (isDailyResource) {
-						MARoutesComp.processRouteStops();
-					}
+					handleGeocodeError('MA_SchedulerGeocodeComp : retrieveAccountsForGeocode' + apexGeocodeController, response.error);
 				}
 			}
-			else {
-				handleGeocodeError('MA_SchedulerGeocodeComp : retrieveAccountsForGeocode' + apexSchedulingController, response.error);
-			}
-		}
-
-		/****************************************************/
-        /*													*/
-        /* 		if more than 1 group of 10 addresses 		*/
-        /*		then loop over each group and create 		*/
-        /*		an iFrame for each group and run the 		*/
-        /* 		geocode request from that iFrame for 		*/
-        /*		those 10									*/
-        /* 													*/
-        /*		otherwise run the geocode request for 		*/
-        /* 		the 10 addresses requested 					*/
-        /*													*/
-        /****************************************************/
-        function geocodeAddresses() {
-			if (needsBatching) {
-				for (var i = 0, len = addressesForGeocode.length; i < len; i++) {
-
-					var iframe = document.createElement("iframe");
-					iframe.src = '/apex/MA_SchedulerGeocode?index' + i;
-					iframe.style.width = "0px";
-					iframe.style.height = "0px";
-					iframe.style.display = 'none';
-					document.body.appendChild(iframe);
-
-					$(iframe).load(function() {
-						var url = this.contentWindow.location.href;
-						var index = url.substring(url.indexOf('?index') + 6);
-						this.contentWindow.geocodeSubset = addressesForGeocode[index];
-						this.contentWindow.geocodeAddresses();
-					});
-		        }
-		    }
-		    else {
-		    	var n = 0;
-		    	for (var i = 0, len = geocodeSubset.length; i < len; i++) {
-		            var geocoder = new google.maps.Geocoder();
-		            geocoder.geocode({ 'address': geocodeSubset[i] }, function(results, status) {
-
-						if (status == google.maps.GeocoderStatus.OK) {
-							var geoResult = results[0].geometry.location;
-							parent.addressToGeocodeMap[geocodeSubset[n]] = { lat: geoResult.lat(), lng: geoResult.lng() };
-						}
-
-						n++;
-
-						if (n == len) {
-							var iframeUrl = this.location.href;
-							if (iframeUrl.indexOf('MA_SchedulerGeocode')) {
-								parent.removeIframe(iframeUrl.substring(iframeUrl.indexOf('/apex')));
-							}
-							else {
-								updateLatLongs();
-							}
-						}
-					});
-		        }
-		    }
-		}
-
-		/****************************************************/
-        /*													*/
-        /* 		kills the related iFrame 					*/
-        /*													*/
-        /****************************************************/
-        function removeIframe(src) {
-			$('iframe[src="' + src + '"]').remove();
-
-			if ($('iframe[src *= "/apex/MA_SchedulerGeocode"]').length == 0) {
-				updateLatLongs();
+			catch(e){
+				handleGeocodeError('MA_SchedulerGeocodeComp : retrieveAccountsForGeocode' + apexGeocodeController, e);
 			}
 		}
 
@@ -197,7 +192,7 @@
         /*													*/
         /****************************************************/
         function updateLatLongs() {
-			sforce.apex.execute(apexGeocodeController, 'updateGeocodedAddresses', { accIdToAddressString: JSON.stringify(accIdToAddressMap), addressToGeocodeString: JSON.stringify(addressToGeocodeMap) }, processUpdateGeocodesResponse);
+			sforce.apex.execute(apexGeocodeController, 'updateGeocodedAddresses', { geocodedAddressesString: JSON.stringify(geocodedAddresses) }, processUpdateGeocodesResponse);
 		}
 
 		/****************************************************/
@@ -212,6 +207,7 @@
 			else if (isDailyResource) {
 				MARoutesComp.processRouteStops();
 			}
+			geocodedAddresses = [];
 		}
 	</script>
 
