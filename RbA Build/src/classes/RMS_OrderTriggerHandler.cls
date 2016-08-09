@@ -137,6 +137,7 @@ public with sharing class RMS_OrderTriggerHandler {
           o.Time_Job_In_Progress__c = now;
         }else if(o.Status == 'Job Closed'){  
           o.Time_Job_Close__c = now;
+          o.Job_Close_Date__c = Date.today();
         }else if(o.Status == 'Cancelled'){
           o.Time_Cancelled__c = now;
         }

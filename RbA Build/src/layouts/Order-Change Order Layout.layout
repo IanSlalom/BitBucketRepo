@@ -3,7 +3,6 @@
     <customButtons>Order_Processed</customButtons>
     <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
-    <customButtons>Change_Order</customButtons>
     <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>

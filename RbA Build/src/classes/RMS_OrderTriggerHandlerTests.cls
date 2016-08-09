@@ -263,6 +263,7 @@ private class RMS_OrderTriggerHandlerTests {
                 System.assert(o.Time_Job_In_Progress__c != null);
             }else if(o.Status == 'Job Closed'){
                 System.assert(o.Time_Job_Close__c != null);
+                System.assertEquals(o.Job_Close_Date__c,Date.today());
             }else if(o.Status == 'Cancelled'){
                 System.assert(o.Time_Cancelled__c != null);
             }else if(o.Status == 'Draft'){
