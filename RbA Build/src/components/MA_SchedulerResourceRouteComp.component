@@ -3,6 +3,8 @@
 <!--      This component is used to display a resources route for a day               -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -40,8 +42,6 @@
     </style>
 
     <script>
-        $ = jQuery.noConflict();
-
         var storeLat;
         var storeLng;
         var RouteLine;
@@ -68,7 +68,7 @@
                 isDailyResource = true
                 var resourceId = $('#resourceRoute').attr('resource-id');
                 var resourceCalDate = $('#resourceCalendar').fullCalendar('getDate').format('YYYY-MM-DD');
-                retrieveAccountsForGeocode(resourceCalDate, $('#storeSelect').val(), null , resourceId);
+                retrieveAccountsForGeocode(resourceCalDate, $('#storeSelect').val(), null, resourceId);
             },
             /************************************************************/
             /*                                                          */
@@ -241,6 +241,7 @@
             initializeRoute();
             initResourceCalendar();
             $('#listView').show();
+            $('.listViewportWrapper .refreshListButton').click();
         }
 
         /**************************************************************/

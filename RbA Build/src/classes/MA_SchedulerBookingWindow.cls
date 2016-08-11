@@ -3,6 +3,7 @@
 /*      This wrapper class holds the methods used to create booking windows         */
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */

@@ -424,6 +424,8 @@
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
+        <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP</members>
+        <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>

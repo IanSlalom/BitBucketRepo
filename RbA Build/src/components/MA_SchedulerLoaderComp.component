@@ -3,6 +3,8 @@
 <!--      This component is used when displaying the loading spinner                  -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -17,6 +19,9 @@
         <div id="loaderContent">
             <div id="loaderImage">
                 <img src="{!URLFOR($Resource.MA_Scheduler, '/images/slds_spinner_inverse.gif')}" />
+                <div style="color: white; padding-top: 5px; font-size: 18px;">
+            		Processing, please be patient ...
+            	</div>
             </div>
         </div>
         <div id="loaderOverlay"></div>

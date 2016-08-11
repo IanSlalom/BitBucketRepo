@@ -3,6 +3,8 @@
 <!--      This component is used to set a store's settings                            -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -76,12 +78,16 @@
         .background-gray {
             background-color: #f4f6f9;
         }
+
+        #settingsModal #showEsriLink, #settingsModal #hideEsriLink {
+            font-size: 8px;
+            color: lightblue;
+            cursor: pointer;
+        }
         
     </style>
     
 	<script>
-    	$ = jQuery.noConflict();
-
     	var tabs;
         var timeOptions = '';
         var storeSettingsMap = {};
@@ -158,11 +164,12 @@
         /*                                                              */
         /****************************************************************/
         function openSettingsModal() {
-            $('#loarderModal, .addHours').show();
+            $('#loarderModal, .addHours, #listView').show();
             $('.esri-verify-fail, .esri-verify-success').hide();
             $('.expandSettingsRow').text('+');
             $('.settingsBookingWindows, #newHolidaySelectionModal').hide();
             $('.storeHoursInnerGroup, .bookingWindowsInnerGroup, .holidayRow, .removableSettingsRow').remove();
+            $('.listViewportWrapper .refreshListButton').click();
             $('li a[href="#storeSettingsTab"]').click();
 
             setTimeout(function(){
@@ -204,6 +211,8 @@
                     else {
                         $('.esriCredentials').hide();
                     }
+
+                    toggleEsriCredentialsVisibility($('#hideEsriLink'));
 
                 	/****************************************************************/
                     /*                                                              */
@@ -725,10 +734,13 @@
         /****************************************************************/
         function closeSettingsModal() {
             $('#storeSettingsId, #timezoneOptions, #storeSettingsEsri #esriClientId, #storeSettingsEsri #esriClientSecret').val('');
-            $('#settingsModal, .esriCredentials').hide();
+            $('#settingsModal, .esriCredentials, .esriCredentialsInputs').hide();
+            toggleEsriCredentialsVisibility($('#hideEsriLink'));
+            $('.esriCredentialsInputs .ma-input').attr('disabled', true);
 
             if (!isBatchResources) {
                 $('#loaderModal').hide();
+                showHideListView();
             }
         }
 
@@ -1114,6 +1126,37 @@
 
             $('#loaderModal').hide();
         }
+
+        /************************************************************************************************/
+        /*                                                                                              */
+        /*      this method handles toggling on and off the visibility of the ESRI credentials          */
+        /*                                                                                              */
+        /************************************************************************************************/
+        function toggleEsriCredentialsVisibility(el) {
+            if ($(el).text() == 'show') {
+                $('.esriCredentialsInputs').show();
+                $('#showEsriLink').hide();
+                $('#hideEsriLink').show();
+
+                $('#storeSettings .ma-modal-settings.compact').animate({ scrollTop: $("#esriClientSecret").offset().top }, 1000);
+            }
+            else if ($(el).text() == 'hide') {
+                $('.esriCredentialsInputs').hide(1000);
+                $('#hideEsriLink').hide();
+                $('#showEsriLink').show();
+
+                $('.esriCredentialsInputs .ma-input').attr('disabled', true);
+            }
+        }
+
+        /************************************************************************************/
+        /*                                                                                  */
+        /*      this method handles unlocking the ESRI credentials for editing              */
+        /*                                                                                  */
+        /************************************************************************************/
+        function unlockEsriCredentials() {
+            $('.esriCredentialsInputs .ma-input').removeAttr('disabled');
+        }
             
     </script>
     
@@ -1186,17 +1229,24 @@
 	                                        </div> 
 	                                    </div>
 	                                </div> 
-	                                <div class="ma-section-title background--dark-gray esriCredentials">Esri License Key</div>
-	                                <div id="storeSettingsEsri" class="esriCredentials">
+	                                <div class="ma-section-title background--dark-gray esriCredentials">
+                                        Esri License Key 
+                                        <span id="showEsriLink" onclick="toggleEsriCredentialsVisibility(this);">show</span>
+                                        <span id="hideEsriLink" onclick="toggleEsriCredentialsVisibility(this);">hide</span>
+                                    </div>
+	                                <div id="storeSettingsEsri" class="esriCredentialsInputs">
                 						<div class="">
-                                            <div>
+                                            <div style="padding-top: 1rem;">
                     						    <label class="ma-input-label">Client Id:</label>
-                                                <input class="ma-input" type="text" id="esriClientId" placeholder="Enter here"></input>
+                                                <input class="ma-input" type="text" id="esriClientId" placeholder="Enter here" disabled="true"></input>
                                             </div>
-                                            <div>
+                                            <div style="padding-top: 1rem;">
                                                 <label class="ma-input-label">Client Secret:</label>
-                                                <input class="ma-input" type="text" id="esriClientSecret" placeholder="Enter here"></input>
+                                                <input class="ma-input" type="password" id="esriClientSecret" placeholder="Enter here" disabled="true"></input>
+                                            </div>
+                                            <div style="padding-top: 1rem;">
                                                 <button class="ma-button ma-button--green" onclick="verifyEsriLogin();">Verify</button>
+                                                <button class="ma-button ma-button--green" onclick="unlockEsriCredentials();">Edit</button>
                                             </div>
                                             <div class="esri-verify-success" style="display: none;"><p>Verified</p></div>
                                             <div class="esri-verify-fail" style="display: none;"><p>Verification Failed</p></div>

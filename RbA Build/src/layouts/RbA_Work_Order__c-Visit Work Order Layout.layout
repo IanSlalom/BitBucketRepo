@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customButtons>Schedule_Work_Order</customButtons>
+    <customButtons>Assign_Work_Order</customButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -216,10 +218,6 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Number_Open_Events_Formula__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Pivotal_Id__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
