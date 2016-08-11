@@ -27,6 +27,10 @@
                 <behavior>Required</behavior>
                 <field>Retail_Location__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Retail_Location_Formula__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
