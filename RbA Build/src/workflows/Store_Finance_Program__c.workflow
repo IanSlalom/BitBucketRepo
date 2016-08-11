@@ -40,10 +40,6 @@
             <name>Update_Finance_Program_Name</name>
             <type>FieldUpdate</type>
         </actions>
-        <actions>
-            <name>Update_Plan_Number</name>
-            <type>FieldUpdate</type>
-        </actions>
         <active>true</active>
         <description>Fires any time a store finance program is updated.</description>
         <formula>true</formula>
