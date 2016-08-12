@@ -16,7 +16,7 @@
     <columns>
         <field>Order.Work_Orders1__r.Labor1__r$Installer__c</field>
     </columns>
-    <description>BO2012 - Internal Labor JIP</description>
+    <description>BO2013 - Internal Labor JIP</description>
     <filter>
         <criteriaItems>
             <column>Order.Work_Orders1__r.Labor1__r$RecordType</column>
@@ -50,7 +50,7 @@
         <field>Order.Work_Orders1__r$Contact__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>BO2012 - Internal Labor JIP</name>
+    <name>BO2013 - Internal Labor JIP</name>
     <params>
         <name>co</name>
         <value>1</value>
