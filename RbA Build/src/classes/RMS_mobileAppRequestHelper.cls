@@ -589,6 +589,11 @@ public with sharing class RMS_mobileAppRequestHelper {
 		}
       }
     }
+	// now set the master product on the qli if its not set - the child product might only be set
+	if (qliList.size() > 0) {
+		qliList = addMasterProducts(qliList);
+	}
+
     // lets set a database save point
     System.SavePoint sp = Database.setSavePoint();
     try {
@@ -642,6 +647,68 @@ public with sharing class RMS_mobileAppRequestHelper {
       System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
     }
     return appts;
+  }
+
+  /* @method: addMasterProducts(List<QuoteLineItem> qlis)
+   * @param: Appointments appts
+   * @return: List<QuoteLineItem> - updated quote line item list - with the master product in the PricebookEntryId field
+   */
+  public List<QuoteLineItem> addMasterProducts(List<QuoteLineItem> qlis) {
+	// get the PBE's for the child products
+	Set<Id> childProductPBESet = new Set<Id>();
+	for (QuoteLineItem qli: qlis) {
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '') {
+			childProductPBESet.add(qli.Child_Product_Pricebook_Entry_Id__c);
+		}
+	}
+	// get the larger child product PBEs with product, master product and Pricebook ids
+	Map<Id, PricebookEntry> cpPBEMap = new Map<Id, PricebookEntry>([
+		select Id, Product2Id, Pricebook2Id, Product2.RecordType.DeveloperName, Product2.Master_Product__c 
+		from PricebookEntry 
+		where Id in :childProductPBESet and Product2.RecordType.DeveloperName = :Constants.CHILD_PRODUCT_RECORD_TYPE_NAME
+		order by Pricebook2Id ASC
+	]);
+	
+	// now group the master products by pricebook
+	Map<Id,List<Id>> pbToMasterProductListMap = new Map<Id,List<Id>>();
+	for (PricebookEntry cpPBE : cpPBEMap.values()) {
+		If (cpPBE.Product2.Master_Product__c != null) {
+			List<Id> masterProductIdList = pbToMasterProductListMap.get(cpPBE.Pricebook2Id);
+			if (masterProductIdList == null) {
+				// create a new list and add it to the map
+				masterProductIdList = new List<Id>();
+				pbToMasterProductListMap.put(cpPBE.Pricebook2Id,masterProductIdList);
+			}
+			// add the master product to the list
+			masterProductIdList.add(cpPBE.Product2.Master_Product__c);
+		}
+	}
+
+	// now select the pbes for the master products and pricebook
+	List<PricebookEntry> mpPBEList = new List<PricebookEntry>();
+	For (Id pbId : pbToMasterProductListMap.keySet()) {
+		List<Id> masterProdIds = pbToMasterProductListMap.get(pbId);
+		List<PricebookEntry> tempList = [
+			select Id, Product2Id, Pricebook2Id from PricebookEntry 
+			where Product2Id in :masterProdIds and Pricebook2Id = :pbId
+		];
+		mpPBEList.addAll(tempList);
+	}
+
+	// finally update the qlis
+	for (QuoteLineItem qli: qlis) {
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '') {
+			PricebookEntry cpPBE = cpPBEMap.get(qli.Child_Product_Pricebook_Entry_Id__c);
+			for (PricebookEntry mpPBE : mpPBEList) {
+				if (mpPBE.Pricebook2Id == cpPBE.Pricebook2Id && mpPBE.Product2Id == cpPBE.Product2.Master_Product__c) {
+					// we have a match
+					qli.PricebookEntryId = mpPBE.Id;
+					break;
+				}
+			}
+		}
+	}
+    return qlis;
   }
 
   /* @method: saveOpportunities(Appointments appts)
