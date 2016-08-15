@@ -17,7 +17,7 @@ private class RMS_mobileAppRequestHelperTest {
   		insert rms; 
 	}
 
-/*	static testmethod void testFindAppointments(){
+	static testmethod void testFindAppointments(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
@@ -51,9 +51,9 @@ private class RMS_mobileAppRequestHelperTest {
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
-	}*/
+	}
 
-/*	static testmethod void testResultSalesAppointments(){
+	static testmethod void testResultSalesAppointments(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
@@ -79,7 +79,7 @@ private class RMS_mobileAppRequestHelperTest {
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
-	}*/
+	}
 
 	static testmethod void testCustomerSearch(){
 		final String firstName = 'firstName';
@@ -191,7 +191,7 @@ private class RMS_mobileAppRequestHelperTest {
 	   	System.assertEquals(apptContainer.salesAppts[0].event.Id, event.Id);
 	}
 
-/*	static testmethod void testSaveTechMeasure(){
+	static testmethod void testSaveTechMeasure(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
@@ -247,7 +247,7 @@ private class RMS_mobileAppRequestHelperTest {
 		appUpdate.tmAppts = new List<RMS_mobileAppRequestHelper.TechMeasureAppointment>{tmApptUpdate};	
 			Test.StopTest();
 
-        System.runAs(u) {*/
+        System.runAs(u) {
 // Had to comment out most of this test becauser we're hitting soql limits.
 /*        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			String input = JSON.serialize(appUpdate);
@@ -272,12 +272,12 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assertEquals(tmoInsertedList.size(),1);
 			//Assert RBA Work Order is updated 
 			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
-			System.assertEquals(rbaUpdatedList.size(),1);
+			System.assertEquals(rbaUpdatedList.size(),1);*/
         }
 	
-	}*/
+	}
 
-/*	static testmethod void testSaveQuotes(){
+	static testmethod void testSaveQuotes(){
 
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigs();
@@ -326,9 +326,9 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assert(quoteToInsert.Id != null);
         }
 	
-	}*/
+	}
 
-/*	static testmethod void testSaveQuoteLineItemsDiscountsandFinancing(){
+	static testmethod void testSaveQuoteLineItemsDiscountsandFinancing(){
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -417,6 +417,6 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assert(financeToInsert.Id != null);
         }
 	
-	}*/
+	}
 
 }
