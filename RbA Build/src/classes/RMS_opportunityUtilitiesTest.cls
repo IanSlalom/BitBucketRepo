@@ -46,14 +46,15 @@ public with sharing class RMS_opportunityUtilitiesTest {
 		opp1.SyncedQuoteId = quote1.id;
 		update opp1;
 
+		test.startTest();		
 		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
 		
 		
 		opp1.StageName = 'Closed Won';
 		update opp1;
-		
+
 		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
-		
+		test.stopTest();
 	}
 	 
 	
