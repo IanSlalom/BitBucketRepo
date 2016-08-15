@@ -39,7 +39,7 @@
             <value>Order.CORO_Record_Type</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Order.Work_Orders1__r.Labor1__r$External_Labor_Amount__c</column>
+            <column>Order.Work_Orders1__r.Labor1__r$Internal_Cost__c</column>
             <operator>greaterThan</operator>
             <value>0</value>
         </criteriaItems>
