@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>ORDER_NUMBER</field>
+    </columns>
+    <columns>
+        <field>ORDER_OWNER</field>
+    </columns>
+    <columns>
+        <field>Order.Revenue_Recognized_Date__c</field>
+    </columns>
+    <columns>
+        <field>Order.Retail_Subtotal__c</field>
+    </columns>
+    <columns>
+        <field>FK_NAME</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order_Discount__c.Discount_Amount__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Order_Discount__c.Status__c</column>
+            <operator>equals</operator>
+            <value>Applied</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Report Discount Analysis</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>OrderCustomEntity$Order_Discount__c@Order_Discount__c.Store_Discount__c</reportType>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Order.Revenue_Recognized_Date__c</dateColumn>
+        <interval>INTERVAL_LAST30</interval>
+    </timeFrameFilter>
+</Report>
