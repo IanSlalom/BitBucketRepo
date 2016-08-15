@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -427,6 +427,7 @@
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
@@ -444,7 +445,6 @@
         <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
-        <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
         <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7001_Service_Requests_by_Status</members>
@@ -452,22 +452,16 @@
         <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
         <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
-        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
-        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedJourn</members>
-        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedPost</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
         <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
-        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Financ</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
-        <members>RbA_Operational_Reporting/Report_BO3001_Summary_Backlog_Report</members>
-        <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
@@ -478,10 +472,6 @@
         <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
-        <members>RbA_Operational_Reporting/Report_BO1001_Current_Consumer_Deposit</members>
-        <members>RbA_Operational_Reporting/BO2013_Internal_Labor_JIP</members>
-        <members>RbA_Operational_Reporting/Report_BO1000_Cash_Receipt_Posting</members>
-        <members>RbA_Operational_Reporting/Report_BO1001_CurrentConDepoService</members>
         <name>Report</name>
     </types>
     <types>
