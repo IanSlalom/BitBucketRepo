@@ -180,10 +180,10 @@ private class UtilityMethodsTest {
 
 		List<Payment__c> lockedRecords = new List<Payment__c>();		
 		List<Payment__c> unlockedRecords = new List<Payment__c>();		
-		Payment__c Payment1 = new Payment__c(Order__c = soldOrder.Id, Store_Location__c = store.Id, Payment_Amount__c = 500, Locked__c = false);
+		Payment__c Payment1 = new Payment__c(Order__c = soldOrder.Id, Store_Location__c = store.Id, Payment_Amount__c = 50, Locked__c = false);
 		unlockedRecords.add(Payment1);
 
-		Payment__c Payment2 = new Payment__c(Order__c = soldOrder.Id, Store_Location__c = store.Id, Payment_Amount__c = 500, Locked__c = false);
+		Payment__c Payment2 = new Payment__c(Order__c = soldOrder.Id, Store_Location__c = store.Id, Payment_Amount__c = 50, Locked__c = false);
 		unlockedRecords.add(Payment2);
 
 		insert unlockedRecords;
@@ -286,6 +286,7 @@ private class UtilityMethodsTest {
 		
 		utility.createOrderTestRecords();
 
+		test.startTest();
 		Order soldOrder = [SELECT Id, Name, Status, AccountId FROM Order WHERE Name = 'Sold Order 1'];
 		Account store = [SELECT Id, Active_Store_Configuration__c from Account Where Name = '77 - Twin Cities, MN'];
 
@@ -299,6 +300,7 @@ private class UtilityMethodsTest {
     	System.assertEquals(UtilityMethods.completeWorkOrders(soldOrder.Id), 'success');
     	visitWorkOrder = [Select Work_Order_Status__c from RbA_Work_Order__c where Id =: visitWorkOrder.Id];
 		System.assertEquals(visitWorkOrder.Work_Order_Status__c,'Appt Complete / Closed');
+		test.stopTest();
 		
 	}
 }

@@ -521,7 +521,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 	/*******************************************************
 					MiscButtonTest1
-	*******************************************************/
+	*******************************************************//*
 	static testmethod void MiscButtonTest1(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -580,7 +580,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 	/*******************************************************
 					MiscButtonTest2
-	*******************************************************/
+	*******************************************************//*
 	static testmethod void MiscButtonTest2(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');

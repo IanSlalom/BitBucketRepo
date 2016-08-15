@@ -29,7 +29,7 @@
         };
 
         function closeTab() {
-            if(j$('.errorMsg').length == 0){
+            if(j$('.messageText').length == 0){
                 if(sforce.console.isInConsole()) {
                 sforce.console.refreshPrimaryTabById( primaryTabId, false,
                     function()
@@ -48,7 +48,9 @@
 
       
 </script>
+
     <apex:form id="form">  
+    <apex:pagemessages />
         <apex:pageBlock title="Cancel Order Product">
           <apex:pageBlockButtons location="top" >
             <apex:commandButton action="{!save}" value="Save"  oncomplete="closeTab();return false" rerender="form"/>

@@ -3,6 +3,7 @@
 /*      This class is used to create fake data for the test classes 				*/
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */

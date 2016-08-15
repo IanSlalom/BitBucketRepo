@@ -419,66 +419,6 @@
         <name>Queue</name>
     </types>
     <types>
-        <members>RbA_Operational_Reporting</members>
-        <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
-        <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
-        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
-        <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
-        <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
-        <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
-        <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
-        <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
-        <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
-        <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
-        <members>RbA_Operational_Reporting/Order_Status_Report</members>
-        <members>RbA_Operational_Reporting/Ordering_and_Install_Status_Report</members>
-        <members>RbA_Operational_Reporting/Orders_Draft</members>
-        <members>RbA_Operational_Reporting/Orders_Install_Complete</members>
-        <members>RbA_Operational_Reporting/Orders_Install_Needed</members>
-        <members>RbA_Operational_Reporting/Orders_Install_Scheduled</members>
-        <members>RbA_Operational_Reporting/Orders_Job_in_Progress</members>
-        <members>RbA_Operational_Reporting/Orders_On_Hold</members>
-        <members>RbA_Operational_Reporting/Orders_Order_Released</members>
-        <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
-        <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
-        <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
-        <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
-        <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
-        <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
-        <members>RbA_Operational_Reporting/Report_7001_Service_Requests_by_Status</members>
-        <members>RbA_Operational_Reporting/Report_7300_On_Hold_Tracking</members>
-        <members>RbA_Operational_Reporting/Report_7500_Scheduled_Installations_by</members>
-        <members>RbA_Operational_Reporting/Report_8000_JIP_Breakdown_by_Create_Da</members>
-        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
-        <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
-        <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
-        <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
-        <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
-        <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
-        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedJourn</members>
-        <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedPost</members>
-        <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_App_Post_JE</members>
-        <members>RbA_Operational_Reporting/Report_BO2010_Service_Labor_Applied_Post</members>
-        <members>RbA_Operational_Reporting/Report_BO2011_Labor_Complete_by_Installer</members>
-        <members>RbA_Operational_Reporting/Report_BO3000_Detail_Backlog</members>
-        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Financ</members>
-        <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
-        <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
-        <members>RbA_Operational_Reporting/Report_BO3001_Summary_Backlog_Report</members>
-        <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
-        <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
-        <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
-        <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
-        <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
-        <members>RbA_Operational_Reporting/Rpt_3600_Orders_Released_btw_Rel_Dates</members>
-        <members>RbA_Operational_Reporting/Rpt_Business_Adjustment_Reconciliation</members>
-        <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
-        <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
-        <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
-        <name>Report</name>
-    </types>
-    <types>
         <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>

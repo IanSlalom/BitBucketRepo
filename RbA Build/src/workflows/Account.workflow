@@ -37,7 +37,7 @@ TODAY()- BLANKVALUE(WorkComp_EmplLiab_ExpireDate__c, DATE(2999, 01, 01))
             <name>Set_Account_Name</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Account.RecordTypeId</field>
             <operation>equals</operation>

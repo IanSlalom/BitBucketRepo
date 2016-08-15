@@ -4,6 +4,7 @@
 /* 		and its related wrapper classes 											*/
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */
@@ -167,18 +168,15 @@ private class MA_SchedulerTESTS {
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		String storeAddress = store.ShippingAddress + ', ' + store.ShippingCity + ', ' + store.ShippingState + ' ' + store.ShippingPostalCode;
 
-		Map<Id, String> accIdToAddressMap = new Map<Id, String> {
-			store.Id => storeAddress
+		Map<String, Object> geocodedAddresses = new Map<String, Object> {
+			'Id' => store.Id,
+			'lat' => lat,
+			'lng' => lng
 		};
 
-		Map<String, Map<String, Decimal>> addressToGeocodeMap = new Map<String, Map<String, Decimal>> {
-			storeAddress => new Map<String, Decimal> {
-				'lat' => lat,
-				'lng' => lng
-			}
-		};
+		List<Object> geocodedAddressesList = new List<Object> { geocodedAddresses };
 
-		String responseString = MA_SchedulerController.updateGeocodedAddresses(JSON.serialize(accIdToAddressMap), JSON.serialize(addressToGeocodeMap));
+		String responseString = MA_SchedulerController.updateGeocodedAddresses(JSON.serialize(geocodedAddressesList));
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.assert((Boolean)responseObj.get('success'));
 
@@ -345,7 +343,7 @@ private class MA_SchedulerTESTS {
 		Integer pageOffset = MA_SchedulerUtilities.determineTimezoneOffset(dt, null);
 		pageOffset = MA_SchedulerUtilities.determineOffsetMinutesFromTimezoneOffset(pageOffset);
 
-		String responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true);
+		String responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true, '');
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 
 		System.assertEquals(5, ((List<Object>)responseObj.get('bookingWindows')).size());
@@ -354,7 +352,7 @@ private class MA_SchedulerTESTS {
 		delete assignedResource;
 		delete maEvent1;
 
-		responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true);
+		responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true, 'Tech Measure');
 		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 
 //		System.assertEquals(5, ((List<Object>)responseObj.get('bookingWindows')).size());
@@ -362,7 +360,7 @@ private class MA_SchedulerTESTS {
 
 		delete storeSetting;
 
-		responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true);
+		responseString = MA_SchedulerController.checkAvailability(wo.Id, startEpoch, endEpoch, String.valueOf(-pageOffset), true, '');
 		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.assertEquals(false, (Boolean)responseObj.get('success'));
 	}
@@ -452,7 +450,7 @@ private class MA_SchedulerTESTS {
 		MA_Scheduler_Settings__c storeSetting = MA_SchedulerFakeDataGenerator.createFakeSetting(false, storeConfig.Id, null, false);
 		insert new List<MA_Scheduler_Settings__c> { resourceSetting1, resourceSetting2, resourceSetting3, storeSetting };
 
-		String responseString = MA_SchedulerController.scheduleWorkOrder(wo.Id, '01/10/1987 10:00 AM - 12:00 PM', 'testing');
+		String responseString = MA_SchedulerController.scheduleWorkOrder(wo.Id, '01/10/1987 10:00 AM - 12:00 PM', 'testing', 'Tech Measure');
 		Map<String, Object> responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		wo = [SELECT Id, Appointment_Start_Time__c, Appointment_End_Time__c, Reschedule_Reason__c FROM RbA_Work_Order__c WHERE Id = :wo.Id];
 		System.assertEquals('testing', wo.Reschedule_Reason__c);

@@ -35,6 +35,7 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
         
         //HANDLERS AND MANAGERS
         RMS_createContactHistoryManager contactHistoryCreationManager = new RMS_createContactHistoryManager();
+		List<SObject> contacts = new List<SObject>();
            
         // Before Insert
         /*
@@ -61,31 +62,29 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
         // After Insert 
         if(Trigger.isInsert && Trigger.isAfter){
             contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);
+			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
             
         } 
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
             contactHistoryCreationManager.createContactHistoryonUpdate(Trigger.oldMap, Trigger.newMap);
+			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
                          
         }
                     
-        //After Delete
-        /*
-        else if(Trigger.isDelete && Trigger.isAfter){
-            handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
-                         
-        }
-        */
-        
-        // After Undelete 
-        /*
-        else if(Trigger.isUnDelete){
-            handler.OnUndelete(Trigger.new);
-                         
-        }
-        */
-        
+		else if(Trigger.isDelete && Trigger.isAfter){
+			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+		}
+		
+		
+		// After Undelete 
+		
+		else if(Trigger.isUnDelete){
+//		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
+			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+		}
+		update contacts;		        
        
     }
 }

@@ -3,6 +3,8 @@
 <!--      This component is used when cancelling an appointment                       -->
 <!--                                                                                  -->
 <!--      @author     Daniel Taylor   (MapAnything)                                   -->
+<!--                  Ethan Rush      (MapAnything)                                   -->
+<!--                  Eric Osborne    (MapAnything)                                   -->
 <!--                                                                                  -->
 <!--      @version    6/29/2016   MapAnything                                         -->
 <!--      Created                                                                     -->
@@ -15,8 +17,6 @@
 <apex:component controller="MA_SchedulerController">
 
 	<script>
-	    $ = jQuery.noConflict();
-
 	    var apexSchedulingController = 'MA_SchedulerController';
 	    var processCancellationResponse = { onSuccess: processCancellationSuccess, onFailure: processResponseError };
 	    var processWorkOrderCancellationRetrievalResponse = { onSuccess: processWorkOrderCancellationRetrievalSuccess, onFailure: processResponseError };

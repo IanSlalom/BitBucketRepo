@@ -3,6 +3,7 @@
 /*      This class is used to test MA_SchedulerRoutingController 	 				*/
 /*                                                                                  */
 /*      @author     Daniel Taylor   (MapAnything)                                   */
+/*                  Ethan Rush      (MapAnything)                                   */
 /*                                                                                  */
 /*      @version    6/29/2016   MapAnything                                         */
 /*      Created                                                                     */
