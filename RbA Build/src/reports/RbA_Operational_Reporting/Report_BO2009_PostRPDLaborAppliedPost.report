@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Order$OrderNumber</field>
+    </columns>
+    <columns>
+        <field>Order$Unique_Identifier__c</field>
+    </columns>
+    <columns>
+        <field>Order.Work_Orders1__r$Contact__c</field>
+    </columns>
+    <columns>
+        <field>Order.Work_Orders1__r.Labor1__r$Date_Applied__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Work_Orders1__r.Labor1__r$External_Labor_Amount__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Work_Orders1__r.Labor1__r$Internal_Cost__c</field>
+    </columns>
+    <description>Report BO2009 - Post RPD Labor Applied Posting Report</description>
+    <filter>
+        <criteriaItems>
+            <column>Order.Work_Orders1__r.Labor1__r$RecordType</column>
+            <operator>equals</operator>
+            <value>Labor__c.Labor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Revenue_Recognized_Date__c</column>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order.Work_Orders1__r.Labor1__r$Applied_after_Order_Rev_Recognized__c</column>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <name>Report BO2009 - PostRPDLaborAppliedPost</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Labor_with_Work_Order_with_Order__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Order$ActivatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

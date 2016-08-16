@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Order$OrderNumber</field>
+    </columns>
+    <columns>
+        <field>Order$BillToContact</field>
+    </columns>
+    <columns>
+        <field>Order$Order_Processed_Date__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Retail_Total__c</field>
+    </columns>
+    <columns>
+        <field>Order$Sales_Rep__c</field>
+    </columns>
+    <columns>
+        <field>Order$Lead_Tech_Measure__c</field>
+    </columns>
+    <columns>
+        <field>Order$Primary_Installer__c</field>
+    </columns>
+    <columns>
+        <field>Order.Activities$ActivityDate</field>
+    </columns>
+    <columns>
+        <field>Order.Activities$Primary_Reason__c</field>
+    </columns>
+    <columns>
+        <field>Order.Activities$Secondary_Reason__c</field>
+    </columns>
+    <description>Report 7300 - On Hold Tracking</description>
+    <filter>
+        <criteriaItems>
+            <column>Order$Status</column>
+            <operator>equals</operator>
+            <value>On Hold</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Order.Activities$Owner</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>On Hold Tracking</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Orders_with_or_without_Activities__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Order$ActivatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>
