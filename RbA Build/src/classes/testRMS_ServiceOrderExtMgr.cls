@@ -44,13 +44,13 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         insert dwellingsToInsert;        
         
         List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id, Primary_Contact__c =true);
         contactsToInsert.add(contact1);
-        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id, Primary_Contact__c =true);
         contactsToInsert.add(contact2);
-        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id, Primary_Contact__c =true);
         contactsToInsert.add(contact3);
-        Contact contact4 = new contact ( FirstName='Contact',LastName='4',AccountId=dwelling4.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact4 = new contact ( FirstName='Contact',LastName='4',AccountId=dwelling4.id, Primary_Contact__c =true);
         contactsToInsert.add(contact4);
         insert contactsToInsert;
         
@@ -310,7 +310,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
                                   PurchaseDate = Date.Today()
                                  );
         
-        assetsToInsert.add(asset3); 		
+        assetsToInsert.add(asset3);         
         
         insert assetsToInsert;  
         System.assertEquals(assetsToInsert.size() , 3);                                 

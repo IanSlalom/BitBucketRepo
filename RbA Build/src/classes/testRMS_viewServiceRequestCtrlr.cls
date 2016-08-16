@@ -25,11 +25,11 @@ public with sharing class testRMS_viewServiceRequestCtrlr {
         insert dwellingsToInsert;        
         
         List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
         contactsToInsert.add(contact1);
-        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact2 = new contact ( FirstName='Contact',LastName='2',AccountId=dwelling2.id);
         contactsToInsert.add(contact2);
-        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id, Primary_Contact__c =true, Primary_Dwelling_for_Contact__c=true );
+        Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id);
         contactsToInsert.add(contact3);
         insert contactsToInsert;
         
@@ -288,7 +288,7 @@ public with sharing class testRMS_viewServiceRequestCtrlr {
         
         Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
         Id lswpRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
-		
+        
         List<RbA_Work_Order__c> wosToInsert = new List<RbA_Work_Order__c>();
         RbA_Work_Order__c wo1 = new RbA_Work_Order__c(RecordTypeId = serviceOrderVisitRecordTypeId, Work_Order_Type__c = 'Tech Measure', Sold_Order__c = o.Id, Account__c = dwelling1.Id, Work_Order_Status__c = 'Scheduled & Assigned', Appointment_Duration__c = 1);
         wosToInsert.add(wo1);

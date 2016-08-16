@@ -19,7 +19,7 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
     
     static testmethod void createTestRecords() {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
-        	insert turnOffFinancialTrigger;
+            insert turnOffFinancialTrigger;
         
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
@@ -31,7 +31,7 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
         dwelling1.Store_Location__c = store1.Id;        
         insert dwelling1;      
         
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id,Primary_Contact__c = true, Primary_Dwelling_for_Contact__c = true);
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
         insert contact1;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
