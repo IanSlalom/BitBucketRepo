@@ -38,6 +38,7 @@
         <members>RMS_ServiceOrderExtensionMgr</members>
         <members>RMS_ServiceOrderLegacyExt</members>
         <members>RMS_ServiceProductPickup</members>
+        <members>RMS_ViewChangeOrdersController</members>
         <members>RMS_WorkOrderCreationManager</members>
         <members>RMS_WorkOrderCreationManagerTest</members>
         <members>RMS_acceptInvite</members>
@@ -168,6 +169,7 @@
         <members>RMS_DeletePage</members>
         <members>RMS_SavePage</members>
         <members>RMS_ServiceRequestListView</members>
+        <members>RMS_ViewChangeOrders</members>
         <members>RMS_addMultipleTasksToWO</members>
         <members>RMS_addResponsibilitytoSP</members>
         <members>RMS_addServiceProduct</members>
