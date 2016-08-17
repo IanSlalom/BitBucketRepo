@@ -24,106 +24,20 @@ Unauthorized use is prohibited.
 
 ***********************************************************/
 public with sharing class RMS_createContactHistoryManager {
-
+    
     Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     Id masterAccountId = RMS_Settings_map.get('Unassigned Account Id').Value__c;
     
-    //JETT-2100 When a Contact is moved to a new Account, any existing Contact Histories are moved to 'Past Resident'
-    //except for Spouse, then update/insert a Contact History for updated contact as 'Current Resident'
-    public void createContactHistoryonUpdate( Map<Id, Contact> mapOld, Map<Id, Contact> mapNew){
-
-        List<Contact_History__c> historiesToUpsert = new list<Contact_History__c>();
-        Map<Contact,Id> mapContactToNewAccount = new Map<Contact,Id>();
-        Map<Id,List<Contact_History__c>> mapAccountToHistories = new Map<Id,List<Contact_History__c>>();
-        Set<Id> spouseIds = new Set<Id>();
-        Set<Id> contactsToMove = new Set<Id>();
-        for(Contact con : mapNew.values()){   
-            //Exclude processing for Contacts that are reparented to the Master Account record
-            if(con.AccountId != null && con.AccountId != masterAccountId && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
-                 mapContactToNewAccount.put(con,con.AccountId);
-                 if(con.Spouse__c != null){
-                    spouseIds.add(con.Spouse__c);
-                 }
-            }
-        }
-
-        for(Contact_History__c hist: [Select Id, Contact__c, Dwelling__c, Type__c from Contact_History__c where Dwelling__c in: mapContactToNewAccount.values()]){
-            if(mapAccountToHistories.containsKey(hist.Dwelling__c)){
-                mapAccountToHistories.get(hist.Dwelling__c).add(hist);
-            }else{
-                 mapAccountToHistories.put(hist.Dwelling__c, new List<Contact_History__c>{hist});
-            }
-        }
-
-        //TODO: Moving contacts code needs to be corrected, currently not verifying that the contact to be moved is a detail to the correct account
-        for(Contact c: mapContactToNewAccount.keySet()){
-            boolean insertNewHistory = true;
-            if(mapAccountToHistories.containsKey(mapContactToNewAccount.get(c))){
-                for(Contact_History__c hist: mapAccountToHistories.get(mapContactToNewAccount.get(c))){
-                    if(hist.Contact__c == c.Id){
-                        hist.Type__c = 'Current Resident';
-                        insertNewHistory = false;
-                    }else if(hist.Contact__c == c.Spouse__c){
-                        hist.Type__c = 'Current Resident';
-                    }else if(hist.Type__c == 'Current Resident'){
-                        hist.Type__c = 'Past Resident';
-                        contactsToMove.add(hist.Contact__c);
-                    }
-                    historiesToUpsert.add(hist);
-                }
-            }
-            if(insertNewHistory){
-                historiesToUpsert.add(new Contact_History__c(
-                    Contact__c = c.Id,
-                    Dwelling__c = c.AccountId,
-                    Primary_Contact__c = c.Primary_Contact__c,
-                    Type__c = 'Current Resident',
-                    Primary_Dwelling_for_Contact__c = c.Primary_Dwelling_for_Contact__c));
-            }
-        }
-        upsert historiesToUpsert;
-
-        //Finally any existing Contacts that are linked to account who have had their Contact History record changed to Past Resident need to get updated to a new account.
-        //After their Contact History records are update to Past Resident, if the Contact has no other Contact History records where they are the Current Resident then
-        //change the Account to the Unassigned Account
-        //else if the do have Current Resident Contact History records on another account then
-        //assign the Contact to the newest (last modified) Current Resident Account
-        List<Contact_History__c> contactsToMoveHistories =  [Select Id, Contact__c, Dwelling__c, LastModifiedDate from Contact_History__c 
-                                                                            Where Contact__c in: contactsToMove and Type__c = 'Current Resident'];
-        Map<Id,Contact_History__c> mapContactIdToLastModifiedCurrentResidentHistory = new Map<Id,Contact_History__c>();
-        for(Contact_History__c hist: contactsToMoveHistories){
-            if(mapContactIdToLastModifiedCurrentResidentHistory.containsKey(hist.Contact__c)){
-                if(hist.LastModifiedDate > mapContactIdToLastModifiedCurrentResidentHistory.get(hist.Contact__c).LastModifiedDate){
-                    mapContactIdToLastModifiedCurrentResidentHistory.put(hist.Contact__c,hist);
-                }
-            }else{
-                mapContactIdToLastModifiedCurrentResidentHistory.put(hist.Contact__c,hist);
-            }
-        }
-
-        //For contacts that are child records of the accounts, reparent them. Exclude the updated contact and the spouse.
-        List<Contact> contactsToUpdate = [Select Id, AccountId from Contact where Id in: contactsToMove];
-        for(Contact c: contactsToUpdate){
-            if(mapContactIdToLastModifiedCurrentResidentHistory.containsKey(c.Id)){
-                c.AccountId = mapContactIdToLastModifiedCurrentResidentHistory.get(c.Id).Dwelling__c;
-            }else{
-            c.AccountId = masterAccountId;
-            }
-        }
-        update contactsToUpdate;
-    }
     
-    //JETT-2100 When a contact is inserted, create a 'Current Resident' contact history for that contact related to the account
-    //If the spouse has a contact history on the account, update type to 'Current Resident'
     public void createContactHistoryonInsert(List<Contact> listNew){
         
         List<Contact_History__c> newContactHistories = new list<Contact_History__c>();        
-
-       
-        Map<Id,Id> mapAccountToSpouse = new Map<Id,Id>();
-        List<Contact_History__c> spouseHistoriesToUpdate = new List<Contact_History__c>();
-
+        
+        
+        Map<Id,Id> mapCurrentPrimary = new Map<Id,Id>();
+        List<Contact_History__c> contactHistoriestoUpdate = new List<Contact_History__c>();
+        
         
         for(Contact con : listNew){ 
             if(con.AccountId != null && con.RecordTypeId == customerContactRecordType){
@@ -131,27 +45,241 @@ public with sharing class RMS_createContactHistoryManager {
                     Contact__c = con.Id,
                     Dwelling__c = con.AccountId,
                     Primary_Contact__c = con.Primary_Contact__c,
-                    Type__c = 'Current Resident',
-                    Primary_Dwelling_for_Contact__c = con.Primary_Dwelling_for_Contact__c);
+                    Type__c = 'Current Resident');
                 
                 newContactHistories.add(ch);
-                if(con.Spouse__c != null){
-                    mapAccountToSpouse.put(con.AccountId, con.Spouse__c);
+                if(con.Primary_Contact__c == True){
+                    mapCurrentPrimary.put(con.AccountId, con.Id);
                 }
             }
         }
-
+        
         insert newContactHistories;
+        
+        for(Contact_History__c contactHistoryList: [SELECT Id, Primary_Contact__c, Type__c FROM Contact_History__c WHERE Primary_Contact__c = TRUE AND Type__c = 'Current Resident' AND Dwelling__c in: mapCurrentPrimary.keySet() AND Contact__c !=: mapCurrentPrimary.values()]){            
+            contactHistoryList.Primary_Contact__c = False;
+            contactHistoriestoUpdate.add(contactHistoryList);            
+        }
+        
+        update contactHistoriestoUpdate;
+        
+    }
+    
+    //If Contact History is Primary, uncheck any others as primary
+    public void primaryContactController(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
+        
+        Map<Id,Id> mapCurrentPrimary = new Map<Id,Id>();
+        List<Contact_History__c> contactHistoriestoUpdate = new List<Contact_History__c>();
+        
+        for(Contact_History__c con : listNew){ 
+            if(con.Primary_Contact__c == True){
+                mapCurrentPrimary.put(con.Dwelling__c, con.Contact__c);
 
-        for(Contact_History__c spouseHistory: [Select Id, Type__c, Dwelling__c, Contact__c from Contact_History__c Where Dwelling__c in: mapAccountToSpouse.keySet() AND Contact__c in :mapAccountToSpouse.values()]){
-            if(spouseHistory.Type__c != 'Current Resident' && mapAccountToSpouse.get(spouseHistory.Dwelling__c) == spouseHistory.Contact__c){
-                spouseHistory.Type__c = 'Current Resident';
-                spouseHistoriesToUpdate.add(spouseHistory);
             }
         }
-
-        update spouseHistoriesToUpdate;
         
+        
+        for(Contact_History__c contactHistoryList: [SELECT Id, Primary_Contact__c, Type__c FROM Contact_History__c WHERE Primary_Contact__c = TRUE AND Type__c = 'Current Resident' AND Dwelling__c in: mapCurrentPrimary.keySet() AND Contact__c !=: mapCurrentPrimary.values()]){            
+            
+            contactHistoryList.Primary_Contact__c = False;           
+            contactHistoriestoUpdate.add(contactHistoryList);            
+        }
+        
+        update contactHistoriestoUpdate;
+        
+    }
+    
+    //If new Contact History indicates to update Account on Contact, do so    
+    public void updateContactAccount(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){
+        
+        List <Id> contact = new List<Id>();
+        List<Id> account = new List<Id>();        
+
+        for(Contact_History__c ch : listNew){
+            If(mapOld.get(ch.Id).Update_Contact_Account__c != mapNew.get(ch.Id).Update_Contact_Account__c){
+                contact.add(ch.Contact__c);   
+                account.add(ch.Dwelling__c);
+            }   
+        }
+        
+        List <Contact> con = [Select ID, AccountId from Contact where Id in :contact];
+        List <Account> acc = [Select Id, Primary_Contact__c from Account WHERE Id in :account];
+        List <Contact> primary = [Select Id, AccountId, Primary_Contact__c FROM Contact WHERE AccountId IN :account AND Id NOT IN :contact AND Primary_Contact__c = TRUE];
+        
+        for (Integer i = 0; i <listNew.size(); i++){
+            if (con.size() > 0){
+                for (Contact z:con){
+                    if (listNew[i].Update_Contact_Account__c == true && mapOld.get(listNew[i].Id).Update_Contact_Account__c == false){
+                        z.AccountId = listNew[i].Dwelling__c;
+                    }
+                    if (listNew[i].Primary_Contact__c == true){
+                        z.Primary_Contact__c = true;
+                    }
+                }
+            }
+            if(acc.size()>0){
+                for(Account a:acc){
+                    if (listNew[i].Primary_Contact__c == true){
+                        a.Primary_Contact__c = listNew[i].Full_Name__c;
+                    }
+                }
+            }
+            if(primary.size()>0){
+                for(Contact c :primary){
+                    if (listNew[i].Primary_Contact__c == true){
+                    	c.Primary_Contact__c = FALSE;
+                    }
+                }
+            } 
+           
+            
+        }
+        update con; 
+        update acc;
+        update primary;
+    }
+    
+    //if Account changes on Contact, verify that there aren't any Contact Histories already for this Contact and Account. If there aren't create one.
+    public void createContactHistoryUpdate(List<Contact> listOld, List<Contact> listNew, Map<Id, Contact> mapOld, Map<Id, Contact> mapNew){
+        
+        List<Contact_History__c> childCH = [SELECT Id, Contact__c, Dwelling__c, Type__c FROM Contact_History__c WHERE Contact__c IN: Trigger.newMap.keySet()];
+        
+        List<Id> relatedAccountIds = new list<Id>();        
+        
+        for(Contact con : listNew){
+            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId){ 
+                relatedAccountIds.add(con.AccountId);
+            }
+        }        
+        
+        Map<Id, Contact_History__c> contactHMap = new Map<Id,Contact_History__c>([SELECT Id from Contact_History__c WHERE Id in:childCH AND Dwelling__c in:relatedAccountIds AND Type__c = 'Current Resident']);
+        
+        List<Contact_History__c> updatedContact = new list<Contact_History__c>();
+        Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
+        
+        for(Contact con : listNew){
+            if(contactHMap.isEmpty()){
+                if(con.AccountId != null && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
+                    updatedContact.add(new Contact_History__c(
+                        Contact__c = con.Id,
+                        Dwelling__c = con.AccountId,
+                        Primary_Contact__c = con.Primary_Contact__c,
+                        Type__c = 'Current Resident'));
+                }
+                
+            }          
+        }
+        insert updatedContact;
+    }
+    
+    //if Make Primary is checked/unchecked on the Contact, uncheck on the Contact History for Contact and Account
+    public void uncheckPrimary(List<Contact> listOld, List<Contact> listNew, Map<Id, Contact> mapOld, Map<Id, Contact> mapNew){                
+        
+        List<Id> relatedAccountIds = new list<Id>();
+        
+        for(Contact con : listNew){
+            if(mapNew.get(con.Id).Primary_Contact__c != mapOld.get(con.Id).Primary_Contact__c){
+                relatedAccountIds.add(con.AccountId);
+            }
+        }
+        List<Contact_History__c> childCH = [SELECT Id, Primary_Contact__c, Contact__c, Dwelling__c, Type__c FROM Contact_History__c WHERE Contact__c IN: Trigger.newMap.keySet() AND Dwelling__c in: relatedAccountIds];
+        Map<Id, Contact_History__c> contactHMap = new Map<Id,Contact_History__c>([SELECT Id from Contact_History__c WHERE Id in:childCH]);          
+
+        List<Account> parentAccount = [SELECT Id, Primary_Contact__c FROM Account WHERE Id in :relatedAccountIds];
+        
+        for(Contact con : listNew){
+            for(Contact_History__c child :childCH){
+                if(!contactHMap.isEmpty()){
+                    if(mapNew.get(child.Contact__c).Primary_Contact__c != mapOld.get(child.Contact__c).Primary_Contact__c){
+                        child.Primary_Contact__c = con.Primary_Contact__c;
+                    }
+                    
+                }  
+            }
+            
+            for(Account parent :parentAccount){
+                if(con.Primary_Contact__c == TRUE){
+                    parent.Primary_Contact__c = con.Full_Name__c;
+                }
+            }
+            
+        }
+        if(childCH.size()>0){
+            update childCH;
+        }
+        
+        if(parentAccount.size()>0){
+            update parentAccount;
+        }
+    }
+    
+    //On Create/Update of Contact History and Type = Past Resident, query all Contact Histories for related Contact where Type = Current Resident. If size == 0, update Account on Contact to Unassigned
+    
+    public void moveContacttoUnassigned(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
+        
+        List<Id> relatedContact = new list<Id>();
+        
+        for(Contact_History__c ch : listNew){
+            if(ch.Type__c == 'Past Resident' && mapOld.get(ch.Id).Type__c != mapNew.get(ch.Id).Type__c){
+                relatedContact.add(ch.Contact__c);
+            }
+        }
+        
+        List<Contact> maptoContact = [SELECT Id,AccountId,Primary_Contact__c FROM Contact WHERE Id in:relatedContact];
+        
+        
+        List<Id> chList = new List<Id>();
+        
+        for(Contact_History__c hist : [SELECT Id, Type__c, Contact__c
+                                       FROM Contact_History__c
+                                       WHERE Contact__c = :relatedContact
+                                       AND Type__c = 'Current Resident']){
+                                           chList.add(hist.Id);
+                                       }
+        
+        List<Contact_History__c> currentResident = [SELECT Id FROM Contact_History__c WHERE Id in:chList];
+        
+        
+        for(Integer i = 0; i <listNew.size(); i++){
+            for(Contact z: maptoContact){
+                if(currentResident.size() > 0){
+                    z.AccountId = z.AccountId;
+                } else {
+                    
+                    z.AccountId = masterAccountId;
+                    z.Primary_Contact__c = FALSE;
+                }
+            }
+        }
+        update maptoContact;
+        
+    }
+    
+    public void uncheckFormerPrimary(List<Contact> listOld, List<Contact> listNew, Map<Id, Contact> mapOld, Map<Id, Contact> mapNew){                
+        
+        List<Id> relatedAccountIds = new list<Id>();
+        
+        for(Contact con : listNew){
+            if((mapNew.get(con.Id).Primary_Contact__c != mapOld.get(con.Id).Primary_Contact__c) && mapNew.get(Con.Id).Primary_Contact__c == True){
+                relatedAccountIds.add(con.AccountId);
+            }
+        }
+        
+        List<Contact> formerPrimary = [SELECT Id, Primary_Contact__c, AccountId FROM Contact WHERE AccountId In:relatedAccountIds AND Primary_Contact__c = TRUE AND Id NOT IN : Trigger.newMap.keySet()];
+        
+        Map<Id, Contact> contactMap = new Map<Id,Contact>([SELECT Id from Contact WHERE Id in:formerPrimary]);          
+        
+        for(Contact con : listNew){
+            for(Contact former :formerPrimary){
+                if(!contactMap.isEmpty()){                    
+                    former.Primary_Contact__c = FALSE;                                   
+                }  
+            }
+            
+        }
+        if(formerPrimary.size()>0){
+            update formerPrimary;
+        }
     }
     
 }

@@ -18,7 +18,7 @@
 
 trigger AccountTrigger on Account (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {
-    
+    	
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 
@@ -36,6 +36,7 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
         //HANDLERS AND MANAGERS
         RMS_MunicipalityMatchManager municipalityMatchManager = new RMS_MunicipalityMatchManager(); 
         RMS_reactivateResource reactivateResource = new RMS_reactivateResource();
+        RMS_addressManager addressManager = new RMS_addressManager();
 
         
         // Before Insert
@@ -67,7 +68,8 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
         // After Update
         
         else if(Trigger.isUpdate && Trigger.isAfter){
-            reactivateResource.reactivateResource(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            reactivateResource.reactivateResource(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);            
+            addressManager.updateContactAddresses(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
         
                     

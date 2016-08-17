@@ -7,20 +7,20 @@
 @author  Brianne Wilson (Slalom.BLW)
 
 @version    2016-04/04  Slalom.BLW
-    Created.
+Created.
 
 @see        ContactTriggerTest
 
 @copyright  (c)2016 Slalom.  All Rights Reserved.
-            Unauthorized use is prohibited.
+Unauthorized use is prohibited.
 
 ***********************************************************/
 
-trigger ContactTrigger on Contact (before insert, before update, before delete, 
-                                            after insert, after undelete, after update, after delete) {
+trigger ContactTrigger on Contact (before insert, before update, before delete, after insert, after undelete, after update, after delete) {
+    
     
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
-    map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
+    map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll();                                                                                                 
     
     //CHECK IF DATA LOADING PROFILE 
     if(RMS_Settings_map.get('Data Loading Profile ID') == null || RMS_Settings_map.get('Unassigned Account Id') == null){
@@ -30,61 +30,64 @@ trigger ContactTrigger on Contact (before insert, before update, before delete,
             Trigger.new[0].addError(RMS_ErrorMessages.CUSTOM_SETTING_REQUIRED);
         }
     }
+    
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
         //HANDLERS AND MANAGERS
         RMS_createContactHistoryManager contactHistoryCreationManager = new RMS_createContactHistoryManager();
-		List<SObject> contacts = new List<SObject>();
-           
-        // Before Insert
-        /*
-        if(Trigger.isInsert && Trigger.isBefore){
-            handler.OnBeforeInsert(Trigger.new);
-        }
-        */
-        //  Before Update
+        RMS_addressManager addressManager =  new RMS_addressManager(); 
         
-        /*
-        if(Trigger.isUpdate && Trigger.isBefore){
-            
-            
+        // Before Insert
+        
+        if(Trigger.isInsert && Trigger.isBefore){
+            addressManager.populateAccountAddressNewContact(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);             
         }
-         */ 
-    
+        
+        //Before Update
+        
+        else
+            if(Trigger.isUpdate && Trigger.isBefore){
+                addressManager.populateAccountAddressNewAccount(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);   
+                contactHistoryCreationManager.uncheckPrimary(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap); 
+                
+            }
+        
+        
         // Before Delete
         /*
-        else if(Trigger.isDelete && Trigger.isBefore){
-            handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
-        }
-        */
+else if(Trigger.isDelete && Trigger.isBefore){
+handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
+}
+*/
         
         // After Insert 
-        if(Trigger.isInsert && Trigger.isAfter){
-            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);
-			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        if(Trigger.isInsert && Trigger.isAfter){       
+            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);     
             
         } 
         
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){
-            contactHistoryCreationManager.createContactHistoryonUpdate(Trigger.oldMap, Trigger.newMap);
-			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-                         
+            contactHistoryCreationManager.createContactHistoryUpdate(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap); 
+            contactHistoryCreationManager.uncheckFormerPrimary(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap); 
+            
         }
-                    
-		else if(Trigger.isDelete && Trigger.isAfter){
-			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
-		}
-		
-		
-		// After Undelete 
-		
-		else if(Trigger.isUnDelete){
-//		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
-			contacts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-		}
-		update contacts;		        
-       
+        
+        /*
+else if(Trigger.isDelete && Trigger.isAfter){
+
+}
+
+
+// After Undelete 
+
+else if(Trigger.isUnDelete){
+
+}
+*/
+        
+        
+        
     }
 }
