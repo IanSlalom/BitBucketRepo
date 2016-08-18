@@ -127,7 +127,7 @@ public with sharing class RMS_createContactHistoryManager {
             if(primary.size()>0){
                 for(Contact c :primary){
                     if (listNew[i].Primary_Contact__c == true){
-                    	c.Primary_Contact__c = FALSE;
+                        c.Primary_Contact__c = FALSE;
                     }
                 }
             } 
@@ -178,7 +178,7 @@ public with sharing class RMS_createContactHistoryManager {
         List<Id> relatedAccountIds = new list<Id>();
         
         for(Contact con : listNew){
-            if(mapNew.get(con.Id).Primary_Contact__c != mapOld.get(con.Id).Primary_Contact__c){
+            if((mapNew.get(con.Id).Primary_Contact__c != mapOld.get(con.Id).Primary_Contact__c)|| mapNew.get(con.Id).Primary_Contact__c == TRUE){
                 relatedAccountIds.add(con.AccountId);
             }
         }
