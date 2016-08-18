@@ -41,6 +41,7 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
         
         //HANDLERS AND MANAGERS
         RMS_reactivateResource reactivateResource = new RMS_reactivateResource();
+        RMS_addressManager addressManager = new RMS_addressManager();
         // Before Insert
         if(Trigger.isInsert && Trigger.isBefore){
             //handler.OnBeforeInsert(Trigger.old, Trigger.new, Trigger.newMap, Trigger.oldMap); 
@@ -70,7 +71,8 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
         // After Update
         
         else if(Trigger.isUpdate && Trigger.isAfter){
-            reactivateResource.reactivateResource(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            reactivateResource.reactivateResource(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);            
+            addressManager.updateContactAddresses(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
         
                     

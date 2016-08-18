@@ -51,7 +51,7 @@ private class RMS_createContactHistoryManagerTests {
 	@isTest
 	static void testcreateContactHistoryonUpdate(){
 		TestUtilityMethods utility = new TestUtilityMethods();
-		Account dwelling = [Select Id from Account Where Name = 'Dwelling Account'];
+		Account dwelling = [Select Id from Account Where Name = '11111, Dwelling Account'];
 
 		//Insert first contact
 		Contact con = new Contact(AccountId = dwelling.Id, recordTypeId = customerContactRecordType, LastName = 'TestCon1');
