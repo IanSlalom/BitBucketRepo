@@ -333,7 +333,14 @@ public with sharing class TestUtilityMethods {
 	}
 
 	public Municipality__c createMunicipality(Id storeId, Id recordTypeId){
-		Municipality__c muni = new Municipality__c(For_Retail_Location__c = storeId, RecordTypeId = recordTypeId);
+		return this.createMunicipality(storeId, recordTypeId, '12345', 'Bedrock', 'Granite', 'MN');
+//        Municipality__c muni = new Municipality__c(For_Retail_Location__c = storeId, RecordTypeId = recordTypeId);
+//		return muni;
+	}
+
+	public Municipality__c createMunicipality(Id storeId, Id recordTypeId, String zip, String city, String county, String state){
+		Municipality__c muni = new Municipality__c(For_Retail_Location__c = storeId, RecordTypeId = recordTypeId, County__c = county, City_Township__c = city,
+                  State__c = state, Name = zip + ',' + city + ' ' + state);
 		return muni;
 	}
 
