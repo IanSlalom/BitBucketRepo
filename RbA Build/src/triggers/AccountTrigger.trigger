@@ -18,10 +18,16 @@
 
 trigger AccountTrigger on Account (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {
-    	
+	// Run for all profiles
+    // Before Insert
+    if(Trigger.isInsert && Trigger.isBefore){
+        RMS_MunicipalityMatchManager municipalityMatchManager = new RMS_MunicipalityMatchManager(); 
+        municipalityMatchManager.matchBuildingPermitMunicipality(Trigger.New);
+    }
+	
+	// Begin logic to filter skip logic by profile    
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
-
     //CHECK IF DATA LOADING PROFILE
     if(RMS_Settings_map.get('Data Loading Profile ID') == null ){
         if(Trigger.isDelete){
@@ -34,14 +40,11 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
         //HANDLERS AND MANAGERS
-        RMS_MunicipalityMatchManager municipalityMatchManager = new RMS_MunicipalityMatchManager(); 
         RMS_reactivateResource reactivateResource = new RMS_reactivateResource();
         RMS_addressManager addressManager = new RMS_addressManager();
-
-        
         // Before Insert
         if(Trigger.isInsert && Trigger.isBefore){
-            municipalityMatchManager.matchBuildingPermitMunicipality(Trigger.New);
+            //handler.OnBeforeInsert(Trigger.old, Trigger.new, Trigger.newMap, Trigger.oldMap); 
         }
         
         //  Before Update

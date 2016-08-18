@@ -3,7 +3,7 @@
     <fieldUpdates>
         <fullName>Set_Account_Name</fullName>
         <field>Name</field>
-        <formula>ShippingPostalCode + &quot;, &quot; +  ShippingStreet</formula>
+        <formula>LEFT(ShippingPostalCode,5) + &quot;, &quot; +  ShippingStreet</formula>
         <name>Set Account Name</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
