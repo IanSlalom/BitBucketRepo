@@ -433,9 +433,13 @@
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
+        <members>RbA_Operational_Reporting/BO2012_Internal_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2013_Internal_Labor_JIP</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
+        <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Matching_Report</members>
+        <members>RbA_Operational_Reporting/Deposit_Slip_Report</members>
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
@@ -478,7 +482,6 @@
         <members>RbA_Operational_Reporting/Report_BO3000_Detailed_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO3000_Order_Backlog_Installation</members>
         <members>RbA_Operational_Reporting/Report_BO3001_Summary_Backlog_Report</members>
-        <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>

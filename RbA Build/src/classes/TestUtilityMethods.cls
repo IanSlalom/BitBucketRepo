@@ -422,9 +422,11 @@ public with sharing class TestUtilityMethods {
 		update opp1;
 		
 		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
-		RbA_Work_Order__c techWorkOrder = new RbA_Work_Order__c(	RecordTypeId = serviceOrderVisitRecordTypeId, 
-																			Opportunity__c = opp1.id,
-		insert techWorkOrder;
+		RbA_Work_Order__c techWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															                Opportunity__c = opp1.id,
+															                Work_Order_Type__c = 'Tech Measure'  
+															                    );
+    	insert techWorkOrder;
 		
 		opp1.StageName = 'Closed Won';
 		update opp1;
