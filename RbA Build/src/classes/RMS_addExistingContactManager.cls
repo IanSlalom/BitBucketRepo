@@ -2,9 +2,11 @@ public with sharing class RMS_addExistingContactManager {
     
     public final Contact_History__c c;
     Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
+    public String baseURL{get;set;}
     
     public RMS_addExistingContactManager(ApexPages.StandardController stdController) {
-        this.c = (Contact_History__c)stdController.getRecord();                      
+        this.c = (Contact_History__c)stdController.getRecord();  
+        baseUrl = URL.getSalesforceBaseUrl().toExternalForm();
     }
     
     public String aid { get; set; }{
@@ -62,19 +64,19 @@ public with sharing class RMS_addExistingContactManager {
     public PageReference saveCH2(){
         try{
             upsert c;
-            PageReference newPage;
-            newPage = new PageReference('/'+c.Dwelling__c);
-            newPage.setRedirect(true);
-            return newPage;
+
+			Contact acc = [SELECT Id FROM Contact WHERE Id = :c.Contact__c];
+            
+           PageReference savePage = new PageReference('/'+acc.id);
+            savePage.setRedirect(true);
+            return savePage;
         } catch(DMLException saveEx){
-            ApexPages.addMessages(saveEx);
-            PageReference newPage = new PageReference('/'+c.Dwelling__c);
-            newPage.setRedirect(false);
-            return newPage;
+         ApexPages.addMessages(saveEx);
         }
+        return null;
         
     }
-                  
+            
 
     
 }

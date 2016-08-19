@@ -9,15 +9,33 @@
         
     };
     
-    function testOpenSubtab() {
+     function testOpenSubtab() {
         //First find the ID of the primary tab to put the new subtab in
         sforce.console.getEnclosingPrimaryTabId(openSubtab);
     };
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Add Contact');
-    };
+        sforce.console.setTabTitle('Select Contact')
+    }; 
+    
+    function testCloseTab() {
+        
+               
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+           location.href='/'+aid;
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        
+        sforce.console.closeTab(tabId);
+    }
     
     function  getAccountId()
     {
@@ -30,12 +48,13 @@
     }
     
     
+    
     </script>
     
     <apex:form id="theForm">
         <apex:pageBlock title="Add Contact" mode="edit">
             <apex:pageBlockButtons >
-                <apex:commandButton action="{!cancel}" value="Cancel"/>
+                <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
                 <apex:commandButton action="{!saveCH}" value="Save & Next"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection columns="1">

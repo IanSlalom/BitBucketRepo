@@ -16,15 +16,32 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('Add Contact');
-    };
+        sforce.console.setTabTitle('{!Contact_History__c.Contact__r.Name}')
+    }; 
+    
+    function testCloseTab() {
+        
+        
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+            location.href='/{!Contact_History__c.Dwelling__c}';
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    }
     
     function  getAccountId()
     {
         return document.getElementById( 'aid' ).innerHTML;
     }
     
-        function  getAccountName()
+    function  getAccountName()
     {
         return document.getElementById( 'aname' ).innerHTML;
     }
@@ -35,8 +52,8 @@
     <apex:form id="theForm">
         <apex:pageBlock title="Add Contact" mode="edit">
             <apex:pageBlockButtons >
-                <apex:commandButton action="{!cancel}" value="Cancel"/>
-                <apex:commandButton action="{!saveCH2}" value="Save"/>
+                <apex:commandButton action="{!cancel}" value="Cancel"/>                
+                <apex:commandButton value="Save" action="{!saveCH2}"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection columns="1" title="Add Contact to Dwelling">
                 <apex:outputField value="{!Contact_History__c.Dwelling__c}" label="Add to Dwelling:"/>
