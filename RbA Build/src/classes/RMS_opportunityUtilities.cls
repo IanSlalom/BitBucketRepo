@@ -2,10 +2,7 @@ global with sharing class RMS_opportunityUtilities {
 
 	webservice static String convertOpportunity(String oppId) {
 		Opportunity opp = [SELECT Id, IsWon, StageName, SyncedQuoteId FROM Opportunity WHERE Id = :oppId];
-		System.Debug('***************iswon=' +opp.IsWon);
-		System.Debug('***************StageName=' +opp.StageName);
 		List<Order> orderList = [SELECT Id, Status FROM Order WHERE OpportunityId = :oppId AND Status != 'Cancelled'];
-		System.Debug('***************orderList=' +orderList);
 		
 		String tempStatus;
 		if(orderList.size() > 0){
