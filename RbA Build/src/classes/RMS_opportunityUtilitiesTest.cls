@@ -2,6 +2,8 @@
 public with sharing class RMS_opportunityUtilitiesTest {
 
 	static testmethod void convertOpportunityTest(){
+
+		// Set up test data
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
@@ -17,20 +19,7 @@ public with sharing class RMS_opportunityUtilitiesTest {
 		
 		Opportunity opp1 = testMethods.createOpportunity(dwelling1.id, 'Draft');
 		insert opp1;
-		
-		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
-		
-		Order order1 = new Order(	Name='Sold Order 1', 
-									AccountId = dwelling1.id, 
-									EffectiveDate= Date.Today(), 
-									Store_Location__c = store1.Id,
-									Opportunity = opp1, 									
-									Status ='Draft',
-									BillToContactId = contact1.id, 
-									Pricebook2Id = Test.getStandardPricebookId()
-								);
-		insert order1;
-		
+
 		Quote quote1 = testMethods.createQuote(opp1.id,Test.getStandardPricebookId());
 		insert quote1;
 		
@@ -44,16 +33,29 @@ public with sharing class RMS_opportunityUtilitiesTest {
 		insert  qli1;
 			
 		opp1.SyncedQuoteId = quote1.id;
+		opp1.StageName = 'New';
 		update opp1;
 
+		// Convert opportunity when not won -- no order should be created
+		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
+		System.AssertEquals(0, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
+		
 		test.startTest();		
-		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
-		
-		
-		opp1.StageName = 'Closed Won';
-		update opp1;
 
+		// Change the status to a closed won status, an order should now be created
+		opp1.StageName = 'Measured';
+		update opp1;
+		System.AssertEquals(1, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
+
+		// Run the convert after an order has already been created, only one order should be there
 		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
+		System.AssertEquals(1, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
+
+		// Delete the order and run the convert, should be one new order there
+		List<Order> orderList = [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id];
+		delete orderList;
+		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
+		System.AssertEquals(1, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
 		test.stopTest();
 	}
 	 
