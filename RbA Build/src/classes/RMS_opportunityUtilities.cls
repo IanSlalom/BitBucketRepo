@@ -18,6 +18,9 @@ global with sharing class RMS_opportunityUtilities {
 				update opp;				
 				opp.StageName = tempStatus;
 			}
+			else {
+				opp.StageName = 'Sold';
+			}
 			update opp;
 			Order ord;
 			for (Order o : [SELECT Id, OpportunityId FROM Order WHERE OpportunityId = :oppId]){

@@ -36,18 +36,12 @@ public with sharing class RMS_opportunityUtilitiesTest {
 		opp1.StageName = 'New';
 		update opp1;
 
+		test.startTest();		
 		// Convert opportunity when not won -- no order should be created
 		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
-		System.AssertEquals(0, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
-		
-		test.startTest();		
-
-		// Change the status to a closed won status, an order should now be created
-		opp1.StageName = 'Measured';
-		update opp1;
 		System.AssertEquals(1, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
-
-		// Run the convert after an order has already been created, only one order should be there
+		
+		// Run the convert, one order should be there
 		RMS_opportunityUtilities.convertOpportunity(String.ValueOf(opp1.id));
 		System.AssertEquals(1, [SELECT Id, Status FROM Order WHERE OpportunityId = :opp1.Id].size());		
 
