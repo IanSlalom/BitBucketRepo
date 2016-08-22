@@ -16,6 +16,7 @@
 
 <apex:page standardController="RbA_Work_Order__c" showHeader="true" sidebar="false">
 
+    <!-- <apex:includeScript value="/support/console/34.0/integration.js"/> -->
     <apex:includeScript value="/soap/ajax/34.0/connection.js" />
     <apex:includeScript value="/soap/ajax/34.0/apex.js" />
 
@@ -57,6 +58,9 @@
                 }
                 else if (param[0] == 'action') {
                     onLoadAction = param[1];
+                }
+                else if (param[0] == 'consoleNav') {
+                    $('.bPageHeader').hide();
                 }
             }
 
