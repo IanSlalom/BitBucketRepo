@@ -175,7 +175,7 @@ public with sharing class RMS_createContactHistoryManager {
         List<Id> relatedAccountIds = new list<Id>();        
         
         for(Contact con : listNew){
-            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId){ 
+            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId && mapNew.get(con.Id).AccountId != masterAccountId){ 
                 relatedAccountIds.add(con.AccountId);
             }
         }        
@@ -187,7 +187,7 @@ public with sharing class RMS_createContactHistoryManager {
         
         for(Contact con : listNew){
             if(contactHMap.isEmpty()){
-                if(con.AccountId != null && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
+                if(con.AccountId != null && con.AccountId != masterAccountId && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
                     updatedContact.add(new Contact_History__c(
                         Contact__c = con.Id,
                         Dwelling__c = con.AccountId,
