@@ -435,7 +435,7 @@
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/BO2012_Internal_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2013_Internal_Labor_JIP</members>
-		<members>RbA_Operational_Reporting/BO7503_Sch_Installs_by_Date_by_Installer</members>
+        <members>RbA_Operational_Reporting/BO7503_Sch_Installs_by_Date_by_Installer</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
@@ -503,8 +503,8 @@
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
-        <members>Orders_with_RbA_Work_Orders_with_Activities</members>
         <members>Orders_with_Purchase_Orders</members>
+        <members>Orders_with_RbA_Work_Orders_with_Activities</members>
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
         <members>Purchase_Orders_with_Order_Products</members>
