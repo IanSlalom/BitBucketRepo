@@ -3,7 +3,7 @@
     <fieldUpdates>
         <fullName>Set_Account_Name</fullName>
         <field>Name</field>
-        <formula>ShippingPostalCode + &quot;, &quot; +  ShippingStreet</formula>
+        <formula>LEFT(ShippingPostalCode,5) + &quot;, &quot; +  ShippingStreet</formula>
         <name>Set Account Name</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
@@ -37,11 +37,16 @@ TODAY()- BLANKVALUE(WorkComp_EmplLiab_ExpireDate__c, DATE(2999, 01, 01))
             <name>Set_Account_Name</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>false</active>
+        <active>true</active>
         <criteriaItems>
             <field>Account.RecordTypeId</field>
             <operation>equals</operation>
             <value>Dwelling</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Account.Name</field>
+            <operation>notContain</operation>
+            <value>Unassigned</value>
         </criteriaItems>
         <description>Postal Code, Street Address</description>
         <triggerType>onAllChanges</triggerType>

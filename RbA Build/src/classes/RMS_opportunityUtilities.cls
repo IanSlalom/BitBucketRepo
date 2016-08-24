@@ -4,15 +4,20 @@ global with sharing class RMS_opportunityUtilities {
 		Opportunity opp = [SELECT Id, IsWon, StageName, SyncedQuoteId FROM Opportunity WHERE Id = :oppId];
 		List<Order> orderList = [SELECT Id, Status FROM Order WHERE OpportunityId = :oppId AND Status != 'Cancelled'];
 		
+		String tempStatus;
 		if(orderList.size() > 0){
 			 return 'alreadyConverted'; 
 		}
 		else{
-			if (opp.StageName == 'Closed Won') {
+			if (opp.isWon) {
+				tempStatus = opp.StageName;
 				opp.StageName = 'New';
 				update opp;				
+				opp.StageName = tempStatus;
 			}
-			opp.StageName = 'Closed Won';
+			else {
+				opp.StageName = 'Sold';
+			}
 			update opp;
 			Order ord;
 			for (Order o : [SELECT Id, OpportunityId FROM Order WHERE OpportunityId = :oppId]){

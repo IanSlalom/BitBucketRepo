@@ -29,7 +29,7 @@ public with sharing class testRMS_addSkilltoWO {
         insert dwellingsToInsert; 
         
         List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id,Primary_Contact__c=True,Primary_Dwelling_for_Contact__c=true);
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
         contactsToInsert.add(contact1);
         insert contactsToInsert;
         

@@ -1,0 +1,72 @@
+<apex:page standardController="Contact_History__c" showHeader="true" sidebar="true" extensions="RMS_addExistingContactManager">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <script type="text/javascript">
+    window.onload = function() {
+        //hideSection();
+        testOpenSubtab();        
+        
+    };
+    
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('{!Contact_History__c.Contact__r.Name}')
+    }; 
+    
+    function testCloseTab() {
+        
+        
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+            location.href='/{!Contact_History__c.Dwelling__c}';
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    }
+    
+    function  getAccountId()
+    {
+        return document.getElementById( 'aid' ).innerHTML;
+    }
+    
+    function  getAccountName()
+    {
+        return document.getElementById( 'aname' ).innerHTML;
+    }
+    
+    
+    </script>
+    
+    <apex:form id="theForm">
+        <apex:pageBlock title="Add Contact" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!cancel}" value="Cancel"/>                
+                <apex:commandButton value="Save" action="{!saveCH2}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1" title="Add Contact to Dwelling">
+                <apex:outputField value="{!Contact_History__c.Dwelling__c}" label="Add to Dwelling:"/>
+                <apex:outputField value="{!Contact_History__c.Contact__c}" id="contact"/>
+                <apex:outputField value="{!Contact_History__c.Type__c}"/>   
+                <apex:outputField value="{!Contact_History__c.Primary_Contact__c}" label="Mark as Primary Contact?"/>                                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" title="Update Primary Dwelling?">
+                <apex:outputField value="{!Contact_History__c.Contact__r.Account.Name}" label="Contact's Current Primary Dwelling:"/>                
+                <apex:pageMessage escape="false" summary="<b>{!Contact_History__c.Contact__r.Account.Name}</b> is currently the Primary Dwelling for this Account. Do you wish to update the Contact record's Primary Dwelling?" severity="warning" strength="3"/>               
+                <apex:inputField value="{!Contact_History__c.Update_Contact_Account__c}" label="Update Contact's Dwelling?"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>        
+        <div id="aid" style="display:none;">{!aid}</div>
+    </apex:form>
+</apex:page>

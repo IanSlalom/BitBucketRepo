@@ -11,11 +11,8 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
 		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
+		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT, '55555', 'Blaine', 'Anoka', 'MN');
 		insert muni1;
-		
-		Municipality__c muni2 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni2;
 		
 		Municipality_Match__c mm1 = utility.createMunicipalityMatch(muni1.id, '55429', 'Blaine');
 		insert mm1;
@@ -23,12 +20,12 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		Municipality_Match__c mm2 = utility.createMunicipalityMatch(muni1.id, '55444', 'Blaine');
 		insert mm2;
 
-		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = '55429' , BillingCity = 'Blaine' );
+		Test.startTest();
+        Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, ShippingStreet = '123 Buckway', ShippingPostalCode = '55429' , ShippingCity = 'Blaine' );
 		insert newDwelling;
-		
-		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Name = 'test1'];
-		//TODO:  Investigate why this assert is failing
-//		System.assertEquals(dwelling.Building_Permit__c , muni1.id);
+		Test.stopTest();
+        Account dwelling = [SELECT id, Name, Building_Permit__c FROM Account WHERE Id = :newDwelling.Id];
+		System.assertEquals(dwelling.Building_Permit__c , muni1.id);
 	}
 
 	static testmethod void municipalityMatchBulkTest(){ 
@@ -41,11 +38,8 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
 		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
+		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT, '55555', 'Blaine', 'Anoka', 'MN');
 		insert muni1;
-		
-		Municipality__c muni2 = utility.createMunicipality(store.id, muniPermitRT);
-		insert muni2;
 		
 		Municipality_Match__c mm1 = utility.createMunicipalityMatch(muni1.id, '55429', 'Blaine');
 		insert mm1;
@@ -57,14 +51,13 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		Account newDwelling = null;
 
 		for (Integer i = 0; i < 200; i++) {
-			newDwelling = new Account(Name='test1' + i, Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = '55429' , BillingCity = 'Blaine' );
+			newDwelling = new Account(Name='test1' + i, Store_Location__c = store.id, RecordTypeId = dwellingRT, ShippingStreet = '123 Buckway', ShippingPostalCode = '55429' , ShippingCity = 'Blaine' );
 			newDwellings.add(newDwelling);
 		}
 		insert newDwellings;
 		
-//		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Name = 'test1'];
-		//TODO:  Investigate why this assert is failing
-//		System.assertEquals(dwelling.Building_Permit__c , muni1.id);
+		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Id In :newDwellings limit 1];
+		System.assertEquals(dwelling.Building_Permit__c , muni1.id);
 	}
 	
 	static testmethod void municipalityMatchNoZipCode(){ 
@@ -77,16 +70,16 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
 		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
+		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT, '55555', 'Blaine', 'Anoka', 'MN');
 		insert muni1;
 		
 		Municipality_Match__c mm1 = utility.createMunicipalityMatch(muni1.id, '55429', 'Blaine');
 		insert mm1;
 
-		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = null , BillingCity = 'Blaine' );
+		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, ShippingStreet = '123 Buckway', ShippingPostalCode = null , ShippingCity = 'Blaine' );
 		insert newDwelling;
 		
-		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Name = 'test1'];
+		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Id = :newDwelling.Id];
 		System.assertEquals(dwelling.Building_Permit__c , null);
 	}
 	
@@ -100,13 +93,13 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 		
 		Account store = [SELECT id FROM Account WHERE Name ='77 - Twin Cities, MN'];
 		
-		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT);
+		Municipality__c muni1 = utility.createMunicipality(store.id, muniPermitRT, '55555', 'Blaine', 'Anoka', 'MN');
 		insert muni1;
 
-		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, BillingPostalCode = null , BillingCity = 'Blaine' );
+		Account newDwelling = new Account(Name='test1', Store_Location__c = store.id, RecordTypeId = dwellingRT, ShippingStreet = '123 Buckway', ShippingPostalCode = null , ShippingCity = 'Blaine' );
 		insert newDwelling;
 		
-		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Name = 'test1'];
+		Account dwelling = [SELECT id, Building_Permit__c FROM Account WHERE Id = :newDwelling.Id];
 		System.assertEquals(dwelling.Building_Permit__c , null);
 	}
 	

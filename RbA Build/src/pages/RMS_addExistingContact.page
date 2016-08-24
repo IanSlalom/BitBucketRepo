@@ -1,0 +1,70 @@
+<apex:page standardController="Contact_History__c" showHeader="true" sidebar="true" extensions="RMS_addExistingContactManager">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <script type="text/javascript">
+    window.onload = function() {
+        //hideSection();
+        testOpenSubtab();        
+        
+    };
+    
+     function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Select Contact')
+    }; 
+    
+    function testCloseTab() {
+        
+               
+        if (sforce.console.isInConsole()) { 
+            sforce.console.getEnclosingTabId(closeSubtab);
+        } else { 
+           location.href='/'+aid;
+        }
+        
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        
+        sforce.console.closeTab(tabId);
+    }
+    
+    function  getAccountId()
+    {
+        return document.getElementById( 'aid' ).innerHTML;
+    }
+    
+        function  getAccountName()
+    {
+        return document.getElementById( 'aname' ).innerHTML;
+    }
+    
+    
+    
+    </script>
+    
+    <apex:form id="theForm">
+        <apex:pageBlock title="Add Contact" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Cancel" onClick="testCloseTab();return false" immediate="true"/>
+                <apex:commandButton action="{!saveCH}" value="Save & Next"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1">
+                <apex:outputText id="aname" style="font-weight: bold;" label="Add Contact to Dwelling:">{!aname}</apex:outputText>
+                <apex:inputField value="{!Contact_History__c.Contact__c}" id="contact"/>
+                <apex:inputField value="{!Contact_History__c.Type__c}"/>            
+                <apex:pageMessage escape="false" summary="<b>{!pc}</b> is currently the Primary Contact for this Account. If you mark this contact as Primary, <b>{!pc} will no longer be the primary contact.</b>" severity="warning" strength="3" rendered="{!IF(pc != null,true,false)}"/>               
+                <apex:inputField value="{!Contact_History__c.Primary_Contact__c}" label="Mark as Primary Contact?"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>        
+        <div id="aid" style="display:none;">{!aid}</div>
+    </apex:form>
+</apex:page>

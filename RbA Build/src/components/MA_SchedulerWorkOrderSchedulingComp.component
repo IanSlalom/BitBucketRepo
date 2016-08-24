@@ -101,7 +101,7 @@
 		            $('#workOrderType').text(record.Work_Order_Type__c);
 		            $('.rescheduleReason').val(record.Reschedule_Reason__c);
 
-		            if (/*record.Work_Order_Type__c == 'Install' &&*/ (!record.Assigned_Resources__r || record.Assigned_Resources__r.length == 0)) {
+		            if (record.Work_Order_Type__c == 'Install' && (!record.Assigned_Resources__r || record.Assigned_Resources__r.length == 0)) {
 		            	forceScheduleAssignmentCombo = true;
 		            }
 

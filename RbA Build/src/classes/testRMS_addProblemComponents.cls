@@ -47,7 +47,7 @@ private class testRMS_addProblemComponents
         insert dwellingsToInsert; 
         
         List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id,Primary_Contact__c=True,Primary_Dwelling_for_Contact__c=true);
+        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
         contactsToInsert.add(contact1);
         insert contactsToInsert;
         
@@ -170,7 +170,7 @@ private class testRMS_addProblemComponents
 
         Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo.Id);
         insert charge2;
-		
+        
                
         ssym = new Service_Symptom__c(Service_Product__c=rwo.Id,Service_Symptom__c=ssl1.Id);
         insert ssym;
