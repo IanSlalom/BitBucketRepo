@@ -37,7 +37,7 @@ public with sharing class RMS_createContactHistoryManager {
         
         Map<Id,Id> mapCurrentPrimary = new Map<Id,Id>();
         List<Contact_History__c> contactHistoriestoUpdate = new List<Contact_History__c>();
-        
+        List<Id> relatedAccountIds = new list<Id>();             
         
         for(Contact con : listNew){ 
             if(con.AccountId != null && con.RecordTypeId == customerContactRecordType){
@@ -50,6 +50,7 @@ public with sharing class RMS_createContactHistoryManager {
                 newContactHistories.add(ch);
                 if(con.Primary_Contact__c == True){
                     mapCurrentPrimary.put(con.AccountId, con.Id);
+                    relatedAccountIds.add(con.AccountId);
                 }
             }
         }
@@ -63,7 +64,34 @@ public with sharing class RMS_createContactHistoryManager {
         
         update contactHistoriestoUpdate;
         
+        List<Account> parentAccount = [SELECT Id, Primary_Contact__c FROM Account WHERE Id in :relatedAccountIds];
+        for(Contact con : listNew){
+            for(Account parent :parentAccount){
+                if(con.Primary_Contact__c == TRUE){
+                    parent.Primary_Contact__c = con.Full_Name__c;
+                }
+            }  
+        }
+        
+        update parentAccount;
+        
+        List<Contact> formerPrimary = [SELECT Id, Primary_Contact__c, AccountId FROM Contact WHERE AccountId In:relatedAccountIds AND Primary_Contact__c = TRUE AND Id NOT IN : Trigger.newMap.keySet()];
+        
+        Map<Id, Contact> contactMap = new Map<Id,Contact>([SELECT Id from Contact WHERE Id in:formerPrimary]);          
+        
+        for(Contact con : listNew){
+            for(Contact former :formerPrimary){
+                if(!contactMap.isEmpty()){                    
+                    former.Primary_Contact__c = FALSE;                                   
+                }  
+            }
+            
+        }
+        if(formerPrimary.size()>0){
+            update formerPrimary;
+        }
     }
+    
     
     //If Contact History is Primary, uncheck any others as primary
     public void primaryContactController(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
@@ -74,7 +102,7 @@ public with sharing class RMS_createContactHistoryManager {
         for(Contact_History__c con : listNew){ 
             if(con.Primary_Contact__c == True){
                 mapCurrentPrimary.put(con.Dwelling__c, con.Contact__c);
-
+                
             }
         }
         
@@ -94,7 +122,7 @@ public with sharing class RMS_createContactHistoryManager {
         
         List <Id> contact = new List<Id>();
         List<Id> account = new List<Id>();        
-
+        
         for(Contact_History__c ch : listNew){
             If(mapOld.get(ch.Id).Update_Contact_Account__c != mapNew.get(ch.Id).Update_Contact_Account__c){
                 contact.add(ch.Contact__c);   
@@ -131,7 +159,7 @@ public with sharing class RMS_createContactHistoryManager {
                     }
                 }
             } 
-           
+            
             
         }
         update con; 
@@ -147,7 +175,7 @@ public with sharing class RMS_createContactHistoryManager {
         List<Id> relatedAccountIds = new list<Id>();        
         
         for(Contact con : listNew){
-            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId){ 
+            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId && mapNew.get(con.Id).AccountId != masterAccountId){ 
                 relatedAccountIds.add(con.AccountId);
             }
         }        
@@ -159,7 +187,7 @@ public with sharing class RMS_createContactHistoryManager {
         
         for(Contact con : listNew){
             if(contactHMap.isEmpty()){
-                if(con.AccountId != null && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
+                if(con.AccountId != null && con.AccountId != masterAccountId && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
                     updatedContact.add(new Contact_History__c(
                         Contact__c = con.Id,
                         Dwelling__c = con.AccountId,
@@ -184,7 +212,7 @@ public with sharing class RMS_createContactHistoryManager {
         }
         List<Contact_History__c> childCH = [SELECT Id, Primary_Contact__c, Contact__c, Dwelling__c, Type__c FROM Contact_History__c WHERE Contact__c IN: Trigger.newMap.keySet() AND Dwelling__c in: relatedAccountIds];
         Map<Id, Contact_History__c> contactHMap = new Map<Id,Contact_History__c>([SELECT Id from Contact_History__c WHERE Id in:childCH]);          
-
+        
         List<Account> parentAccount = [SELECT Id, Primary_Contact__c FROM Account WHERE Id in :relatedAccountIds];
         
         for(Contact con : listNew){
