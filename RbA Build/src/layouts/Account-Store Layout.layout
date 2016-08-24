@@ -130,13 +130,6 @@
         <relatedList>RelatedContactList</relatedList>
     </relatedLists>
     <relatedLists>
-        <excludeButtons>New</excludeButtons>
-        <fields>OPPORTUNITY.NAME</fields>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>OPPORTUNITY.CLOSE_DATE</fields>
-        <relatedList>Opportunity.Store_Location__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <excludeButtons>NewCase</excludeButtons>
         <fields>CASES.CASE_NUMBER</fields>
         <fields>CASES.STATUS</fields>
@@ -153,19 +146,8 @@
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>PRODUCT2.NAME</fields>
-        <fields>PRODUCT2.CUSTOMER_PRODUCT_ID</fields>
-        <fields>PRODUCT2.DESCRIPTION</fields>
-        <relatedList>Product2.Vendor__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <relatedList>Store_Configuration__c.Store__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>RECORDTYPE</fields>
-        <relatedList>Municipality__c.For_Retail_Location__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -173,33 +155,6 @@
         <fields>CREATED_DATE</fields>
         <fields>UPDATEDBY_USER</fields>
         <relatedList>Store_Vendor__c.Store__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Labor__c.Store_Location__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ASSET.NAME</fields>
-        <fields>ASSET.SERIAL_NUMBER</fields>
-        <fields>ASSET.INSTALL_DATE</fields>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>CONTACT.NAME</fields>
-        <fields>PRODUCT2.NAME</fields>
-        <relatedList>Asset.Store_Location__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ORDERS.ORDER_NUMBER</fields>
-        <fields>SALES.ACCOUNT.NAME</fields>
-        <fields>ORDER.BILL_TO_CONTACT</fields>
-        <fields>ORDERS.TOTAL_AMOUNT</fields>
-        <fields>ORDERS.EFFECTIVE_DATE</fields>
-        <fields>ORDERS.STATUS</fields>
-        <fields>CORE.USERS.ALIAS</fields>
-        <relatedList>Order.Store_Location__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>RbA_Work_Order__c.Account__c</relatedList>
     </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
