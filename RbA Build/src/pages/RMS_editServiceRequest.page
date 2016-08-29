@@ -119,6 +119,11 @@
                 <apex:inputField value="{!Order.BillingPostalCode}"/>
                 <apex:inputField value="{!Order.ShippingPostalCode}"/>
             </apex:pageBlockSection>
+            <apex:pageBlockSection title="Warranty Details" collapsible="true" columns="1">
+            	<apex:inputField value="{!Order.Warranty_Date_Submitted__c}"/>
+                <apex:inputField value="{!Order.Warranty_Date_Accepted__c}"/>
+                <apex:inputField value="{!Order.Warranty_Reimbursement_Amount__c}"/>
+            </apex:pageBlockSection>
             <apex:pageBlockSection title="Additional Details" collapsible="false" columns="2"> 
                 <apex:outputField value="{!Order.CreatedById}"/>
                 <apex:outputField value="{!Order.LastModifiedById}"/>

@@ -184,6 +184,11 @@
                 <apex:outputField value="{!Order.Billing_Address__c}"/>
                 <apex:outputField value="{!Order.Shipping_Address__c}"/>
             </apex:pageBlockSection>
+            <apex:pageBlockSection title="Warranty Details" collapsible="true" columns="1">
+            	<apex:outputField value="{!Order.Warranty_Date_Submitted__c}"/>
+                <apex:outputField value="{!Order.Warranty_Date_Accepted__c}"/>
+                <apex:outputField value="{!Order.Warranty_Reimbursement_Amount__c}"/>
+            </apex:pageBlockSection>
             <apex:pageBlockSection title="System Information" collapsible="true" columns="2">
                 <apex:outputField value="{!Order.CreatedById}"/>
                 <apex:outputField value="{!Order.LastModifiedById}"/>

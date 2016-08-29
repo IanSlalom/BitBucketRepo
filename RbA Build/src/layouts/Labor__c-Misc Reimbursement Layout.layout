@@ -19,6 +19,10 @@
                 <behavior>Edit</behavior>
                 <field>Related_Work_Order__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Internal_External_Resource__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
