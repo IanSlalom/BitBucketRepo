@@ -411,7 +411,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Contract_License__c</field>
+            <field>Contractor_License_1__c</field>
             <table>Account</table>
         </columns>
         <columns>
