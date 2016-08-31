@@ -19,6 +19,10 @@
                 <behavior>Readonly</behavior>
                 <field>Internal_External_Resource__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>External_Individual__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
