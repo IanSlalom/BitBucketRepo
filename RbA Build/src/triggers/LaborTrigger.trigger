@@ -70,20 +70,24 @@ trigger LaborTrigger on Labor__c (after delete, after insert, after undelete,
         
                     
         //After Delete
-        /*
+        
         else if(Trigger.isDelete && Trigger.isAfter){
-            handler.onAfterDelete(Trigger.old, Trigger.oldMap);
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
-        */
+        
         
         // After Undelete 
-        /*
+        
         else if(Trigger.isUnDelete){
-            financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-        */
-        update wkorders;
+        
+		// Try - Catch to catch any dml errors doing the work order rollup and displaying
+		// errors on the labor records
+		try { update wkorders;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
     }
 }

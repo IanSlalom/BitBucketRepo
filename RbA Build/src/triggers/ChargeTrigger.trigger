@@ -62,33 +62,32 @@ else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile 
     // After Insert 
     //else 
     if(Trigger.isInsert && Trigger.isAfter){
-       
      sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-       
     } 
     
     // After Update
     else if(Trigger.isUpdate && Trigger.isAfter){
-        
-                     sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        
+    	sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
     }
                 
     //After Delete
-    
     else if(Trigger.isDelete && Trigger.isAfter){    
-                     sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+    	sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
     }
-   
     
     // After Undelete 
-    /*
+    
     else if(Trigger.isUnDelete){
         
-                     sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+    	sproducts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
     }
-    */
     
-    update sproducts;
+	// Try - Catch to catch any dml errors doing the sproduct rollup and displaying
+	// errors on the charge records
+	try { update sproducts;} 
+	catch(System.DmlException e) {
+		if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+		else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+	}
 }
 }

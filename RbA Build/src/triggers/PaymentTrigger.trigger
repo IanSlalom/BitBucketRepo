@@ -72,15 +72,11 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		
 		            
 		//After Delete
-		
 		else if(Trigger.isDelete && Trigger.isAfter){
 //		    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
 			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
 		}
-		
-		
 		// After Undelete 
-		
 		else if(Trigger.isUnDelete){
 //		    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
 			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);

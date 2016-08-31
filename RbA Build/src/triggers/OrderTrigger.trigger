@@ -71,8 +71,8 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
         else if(Trigger.isInsert && Trigger.isAfter){
             workOrderCreationManager.createWorkOrderOnOrderCreation(Trigger.new, Trigger.newMap);
             backOfficeCheckListManager.createBackOfficeChecksOnOrderCreation(Trigger.new, Trigger.newMap);
-                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-             handler.OnAfterInsert(Trigger.new);
+			accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            handler.OnAfterInsert(Trigger.new);
         } 
         
         // After Update
@@ -80,26 +80,31 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
             workOrderCreationManager.createWorkOrderOnOrderSoldOrderBeingAssigned(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             customerPickup.customerPickup(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
-                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+			accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         	handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
         }
                     
         //After Delete
-        /*
+        
         else if(Trigger.isDelete && Trigger.isAfter){
-            handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
-                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+//          handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
+			accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
-        */
+        
         
         // After Undelete 
-        /*
-        else if(Trigger.isUnDelete){
-            handler.OnUndelete(Trigger.new);
-                         accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        }
-        */
         
-        update accounts;
-    }
+        else if(Trigger.isUnDelete){
+//          handler.OnUndelete(Trigger.new);
+        	accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        }
+        
+ 		// Try - Catch to catch any dml errors doing the account rollup and displaying
+		// errors on the order records
+		try { update accounts;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
+	}
 }
