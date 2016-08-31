@@ -78,6 +78,8 @@ public with sharing class UserTriggerHandler {
 			// to limit which stores can be selected, and long text areas are not usable in filters.
 			if (u.Store_Locations__c != null)
 				u.Store_Location_Text__c = (u.Store_Locations__c).abbreviate(255);
+			else
+				u.Store_Location_Text__c = '';
 		}
 	}
 
