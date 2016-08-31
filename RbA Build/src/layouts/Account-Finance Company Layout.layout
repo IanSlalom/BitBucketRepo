@@ -116,9 +116,11 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>RECORDTYPE</fields>
         <fields>Plan_Number__c</fields>
         <fields>Program_Fee__c</fields>
-        <relatedList>Finance_Program__c.Finance_Company__c</relatedList>
+        <fields>Active__c</fields>
+        <relatedList>Store_Finance_Program__c.Finance_Company__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>
@@ -154,7 +156,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h5B000000Mxrj</masterLabel>
+        <masterLabel>00h61000003CrzE</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
