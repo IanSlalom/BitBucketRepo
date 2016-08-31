@@ -8,7 +8,7 @@
         <label>Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>Store__c</field>
             </layoutItems>
             <layoutItems>
@@ -179,7 +179,19 @@
                 <field>Fax__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Email_Primary__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Email_Secondary__c</field>
+            </layoutItems>
+            <layoutItems>
                 <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DBA__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
