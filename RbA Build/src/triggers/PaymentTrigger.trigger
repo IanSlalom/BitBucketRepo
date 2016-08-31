@@ -87,6 +87,14 @@ trigger PaymentTrigger on Payment__c (after delete, after insert, after undelete
 		}
 		update orders;		
 
+		// Try - Catch to catch any dml errors doing the order rollup and displaying
+		// errors on the payment records
+		try
+		{
+			update orders;
+		} catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
 	}
-
 }
