@@ -250,7 +250,6 @@
     <types>
         <members>Charge__c</members>
         <members>Discount__c</members>
-        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>

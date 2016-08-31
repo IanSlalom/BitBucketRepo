@@ -150,12 +150,6 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Plan_Number__c</fields>
-        <fields>Program_Fee__c</fields>
-        <relatedList>Finance_Program__c.Finance_Company__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
         <fields>Amount__c</fields>
         <fields>Date__c</fields>
         <relatedList>Refund__c.Store_Location__c</relatedList>

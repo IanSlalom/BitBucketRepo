@@ -7,7 +7,6 @@
     <tab>Store_Configuration__c</tab>
     <tab>standard-Account</tab>
     <tab>standard-Order</tab>
-    <tab>Finance_Program__c</tab>
     <tab>RbA_Work_Order__c</tab>
     <tab>Purchase_Order__c</tab>
     <tab>Payment__c</tab>
