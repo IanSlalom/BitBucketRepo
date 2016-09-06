@@ -192,6 +192,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
+        <members>RMS_municipalityTab</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
