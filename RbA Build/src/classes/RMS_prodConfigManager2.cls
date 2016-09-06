@@ -82,7 +82,7 @@ global with sharing class RMS_prodConfigManager2 {
 	}
 
 
-	webservice static String checkMakeabiltyForOrderById(Id oid){
+	webservice static String checkMakeabilityForOrderById(Id oid){
 		// Retrieve all fields for OrderItem in a comma separated string
 		String commaSeparatedFields = getCommaSeparatedFields('OrderItem');
  
@@ -118,8 +118,22 @@ global with sharing class RMS_prodConfigManager2 {
 				}
 			}
 		}
-		Map<OrderItem, String> mapCheckMakeabilityResults = checkMakeability(mapPCtoOI,'PLACEHOLDER');
 		String stringCheckMakeabilityResults = '';
+		for(OrderItem oi: relatedOI){
+			boolean hasPC = false;
+			for(Product_Configuration__c pc : pcList){
+				if(pc.Product__c == oi.PricebookEntry.Product2.Id){
+					hasPC = true;
+					break;
+				}
+			}
+			if(!hasPC){
+				stringCheckMakeabilityResults += ' Order Product Id: ' + oi.Id + ' Errors: ' + RMS_errorMessages.PRODUCT_CONFIG_NOT_FOUND + ' \n';
+			}
+		
+		}
+		Map<OrderItem, String> mapCheckMakeabilityResults = checkMakeability(mapPCtoOI,'PLACEHOLDER');
+		
 		for(OrderItem oi : mapCheckMakeabilityResults.keySet()){
 			stringCheckMakeabilityResults += ' Order Product Id: ' + oi.Id + ' Errors: ' + mapCheckMakeabilityResults.get(oi) + ' \n';
 		}
@@ -194,7 +208,8 @@ global with sharing class RMS_prodConfigManager2 {
 		Map<Id, List<EJ_Color_Configuration__c>> EJColorConfigMap = new Map<Id, List<EJ_Color_Configuration__c>>();
 		for(EJ_Color_Configuration__c con: [SELECT 	Id, 
 													EJ_Color__c,
-													EJ_Species__c
+													EJ_Species__c,
+													Product_Configuration__c
 													FROM EJ_Color_Configuration__c
 													WHERE Product_Configuration__c  in: productConfigIds]){
 			if(EJColorConfigMap.containsKey(con.Product_Configuration__c)){
@@ -207,7 +222,8 @@ global with sharing class RMS_prodConfigManager2 {
 		Map<Id, List<Color_Configuration__c>> colorConfigMap = new Map<Id, List<Color_Configuration__c>>();
 		for(Color_Configuration__c con: [SELECT 	Id, 
 													Exterior_Color__c,
-													Interior_Color__c
+													Interior_Color__c,
+													Product_Configuration__c
 													FROM Color_Configuration__c
 													WHERE Product_Configuration__c  in: productConfigIds]){
 			if(colorConfigMap.containsKey(con.Product_Configuration__c)){
@@ -262,7 +278,8 @@ global with sharing class RMS_prodConfigManager2 {
 															Min_Width_Inches__c,
 															Min_Width_Fraction__c,
 															Min_Height_Inches__c,
-															Min_Height_Fraction__c													
+															Min_Height_Fraction__c,
+															Product_Configuration__c													
 															FROM Grille_Pattern_Configuration__c
 															WHERE Product_Configuration__c in: productConfigIds]){
 			if(grillePatternConfigMap.containsKey(con.Product_Configuration__c)){
@@ -279,7 +296,8 @@ global with sharing class RMS_prodConfigManager2 {
 													Max_Width_Inches__c,
 													Max_Width_Fraction__c,
 													Max_Height_Inches__c,
-													Max_Height_Fraction__c													
+													Max_Height_Fraction__c,
+													Product_Configuration__c													
 													FROM Glazing_Configuration__c
 													WHERE Product_Configuration__c	 in: productConfigIds]){
 			if(glazingConfigMap.containsKey(con.Product_Configuration__c)){
@@ -288,6 +306,8 @@ global with sharing class RMS_prodConfigManager2 {
 				glazingConfigMap.put(con.Product_Configuration__c,new List<Glazing_Configuration__c>{con});
 			}
 		}
+
+		system.debug('GLAZING MAP' + glazingConfigMap);
 																					
 		for(Product_Configuration__c masterProductConfig: mapProdConfigToOrderItemList.keySet()){
 			for(OrderItem orderLineItem: mapProdConfigToOrderItemList.get(masterProductConfig)){
@@ -981,7 +1001,7 @@ global with sharing class RMS_prodConfigManager2 {
 																							];*/
 			List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = new List<Grille_Pattern_Configuration__c>();
 
-			if(grilleConfigsAllPatterns!= null){
+			if(grillePatternConfigsAllPatterns!= null){
 				for(Grille_Pattern_Configuration__c sgc : grillePatternConfigsAllPatterns){
 					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S1__c){
 						relatedGrillePatternConfigurations.add(sgc);
@@ -1075,8 +1095,9 @@ global with sharing class RMS_prodConfigManager2 {
 																							];*/
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = new List<Glazing_Configuration__c>();
 
-			if(grilleConfigsAllPatterns!= null){
+			if(glazingConfigsAllPatterns!= null){
 				for(Glazing_Configuration__c sgc : glazingConfigsAllPatterns){
+					system.debug('COMPARISON' + sgc.Glazing__c + '       ' + orderLineitem.Glazing_S1__c);
 					if(sgc.Glazing__c == orderLineitem.Glazing_S1__c){
 						relatedGlazingConfigurations.add(sgc);
 					}
@@ -1084,9 +1105,10 @@ global with sharing class RMS_prodConfigManager2 {
 			}	
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
-
+	
 			if(!relatedGlazingConfigurations.isEmpty()){
 				for(Glazing_Configuration__c glazingConfig : relatedGlazingConfigurations){
+	
 					if(glazingConfig.Max_Width_Inches__c != null){
 						Decimal requiredWidth = glazingConfig.Max_Width_Inches__c + UtilityMethods.calculateFraction(glazingConfig.Max_Width_Fraction__c);
 						if(widthInches > requiredWidth){
