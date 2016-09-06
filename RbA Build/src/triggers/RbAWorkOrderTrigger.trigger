@@ -107,6 +107,13 @@ trigger RbAWorkOrderTrigger on RbA_Work_Order__c (after delete, after insert, af
         // run the order rollup real-time if the order trigger
         // hasn't been run yet, otherwise run it @future            
         if (UtilityMethods.hasOrderTriggerRan()) return;
-        update orders;
+
+ 		// Try - Catch to catch any dml errors doing the order  rollup and displaying
+		// errors on the rba work orders
+		try { update orders;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
     }
 }

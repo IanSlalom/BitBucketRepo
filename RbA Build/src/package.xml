@@ -251,7 +251,6 @@
     <types>
         <members>Charge__c</members>
         <members>Discount__c</members>
-        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
@@ -318,7 +317,6 @@
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
         <members>Event-Work Order Event Page Layout</members>
-        <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
         <members>Glazing_Configuration__c-Glazing Configuration Layout</members>

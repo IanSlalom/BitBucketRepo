@@ -79,12 +79,18 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         
         
         // After Undelete 
-        /*
+        
         else if(Trigger.isUnDelete){
             
             wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-        */
-        update wkorders;
+        
+		// Try - Catch to catch any dml errors doing the work order rollup and displaying
+		// errors on the labor records
+		try { update wkorders;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
     }
 }

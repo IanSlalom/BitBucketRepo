@@ -67,21 +67,21 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
     	else if(Trigger.isUpdate && Trigger.isAfter){
     		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
     	}
-/*    
-    
-    //After Delete
-    
-    else if(Trigger.isDelete && Trigger.isAfter){
-    handler.onAfterDelete(Trigger.old, Trigger.oldMap);
-    }
-    
-    
-    // After Undelete 
-    
-    else if(Trigger.isUnDelete){
-    financialTransactionManager.onUndelete(Trigger.new, Trigger.newMap);
-    }    */
-    update orderItems;      
+    	//After Delete
+    	else if(Trigger.isDelete && Trigger.isAfter){
+    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+    	}
+    	// After Undelete 
+    	else if(Trigger.isUnDelete){
+    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+    	}    
+		// Try - Catch to catch any dml errors doing the order rollup and displaying
+		// errors on the order item records
+		try { update orderItems;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
 
     }
 

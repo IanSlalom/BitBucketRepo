@@ -76,7 +76,10 @@ public with sharing class UserTriggerHandler {
 			// Limit the text to 255 characters to avoid too many chars error. We can't use a long text area
 			// because this field is being used in the Labor->Store Location field filter
 			// to limit which stores can be selected, and long text areas are not usable in filters.
-			u.Store_Location_Text__c = (u.Store_Locations__c).abbreviate(255);
+			if (u.Store_Locations__c != null)
+				u.Store_Location_Text__c = (u.Store_Locations__c).abbreviate(255);
+			else
+				u.Store_Location_Text__c = '';
 		}
 	}
 
