@@ -34,25 +34,22 @@ public with sharing class UserTriggerHandler {
   }
 
  
-  /*
+  
   public void OnAfterInsert(User[] newUsers){
+      createSharingRecords(newUsers);
   }
-*/
+
 
 
   public void OnBeforeUpdate( Map<ID, User> oldMap, Map<ID, User> newMap){
     updateStoreLocationText(newMap);
   }
   
-  /*
+  
   public void OnAfterUpdate( Map<ID, User> oldMap, Map<ID, User> newMap){
-
-    updateOrderStatusToOrderReleased(oldMap, newMap);
-    updateOrderStatusToInstallNeeded(oldMap, newMap);
-    updateHasPOCheckbox(oldMap,newMap);
-
+    createOrDeleteSharingRecordsHelper(oldMap, newMap);
   }
-*/
+
 
 /*
   public void OnBeforeDelete(User[] UsersToDelete, Map<ID, User> UsersMap){
@@ -89,4 +86,71 @@ public with sharing class UserTriggerHandler {
 		updateStoreLocationText(usersToUpdate);
 	}
 
+  public void createOrDeleteSharingRecordsHelper(Map<Id, User> oldMap, Map<Id, User> newMap){
+
+    //TODO: account for store location going from nonnull to null; Account for deleting the old share records
+    List<User> usersToCreateSharingFor = new List<User>();
+    List<User> usersToDeleteSharingRecordsFor = new List<User>();
+    for(Id uid: oldMap.keyset()){
+      if(oldMap.get(uid).Store_Locations__c != newMap.get(uid).Store_Locations__c){
+        usersToDeleteSharingRecordsFor.add(newMap.get(uid));
+        if(newMap.get(uid).Store_Locations__c != null){
+          usersToCreateSharingFor.add(newMap.get(uid));       
+        }
+      }
+    }
+    deleteSharingRecords(usersToDeleteSharingRecordsFor);
+    createSharingRecords(usersToCreateSharingFor);
+    
+  }
+
+  public void createSharingRecords(List<User> users){
+    //Possibly unnecessary
+    users = [Select Id, Store_Location_Text__c, Store_Locations__c from User where Id in: users and Store_Locations__c != null];
+    if(!users.isEmpty() ){
+      Set<UserShare> sharesToInsert = new Set<UserShare>();
+
+      String userQuery = 'Select Id, Store_Locations__c from User where Store_Locations__c includes(';
+      Set<String> locations = new Set<String>();
+      for(User u : users){ 
+          List<String> loc = u.Store_Locations__c.split(';');
+          locations.addAll(loc);
+      }
+      for(String s: locations){
+            userQuery +='\''+s+'\',';
+      }
+      userQuery = userQuery.removeEnd(',');
+      userQuery += ')';
+
+      System.debug(userQuery);
+      List<User> usersWithMatchingLoc = Database.query(userQuery);
+      for(User u1: usersWithMatchingLoc){
+        for(User u : users){
+          if(u1.Id != u.Id){
+            List<String> loc = u.Store_Locations__c.split(';');
+            for(String l : loc){
+              if(u1.Store_Locations__c.containsIgnoreCase(l)){
+                sharesToInsert.add(new UserShare(UserId = u.Id, UserOrGroupId = u1.Id, UserAccessLevel = 'read',
+                                rowCause = 'Manual'));
+                sharesToInsert.add(new UserShare(UserId = u1.Id, UserOrGroupId = u.Id, UserAccessLevel = 'read',
+                                rowCause = 'Manual'));
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      system.debug(sharesToInsert);
+      insert new List<UserShare>(sharesToInsert);
+
+    }
+  }
+
+
+
+  public void deleteSharingRecords(List<User> users){
+      List<UserShare> sharesToDelete = [Select Id, rowCause, UserId, UserOrGroupId from UserShare where ( UserId in: users or UserOrGroupId in: users) and rowCause = 'Manual'];
+      delete sharesToDelete;
+  }
 }
