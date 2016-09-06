@@ -197,7 +197,7 @@
         </actions>
         <active>true</active>
         <formula>true</formula>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
         <fullName>Store Config Update 2</fullName>
@@ -235,6 +235,6 @@
         </actions>
         <active>true</active>
         <formula>true</formula>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <triggerType>onAllChanges</triggerType>
     </rules>
 </Workflow>
