@@ -32,6 +32,7 @@ public with sharing class RMS_errorMessages {
 	public static final String PO_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released in the current status.';
 	public static final String PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until all Purchase Order line items have been verified';
 	public static final String ORDER_TYPE_STATUS_DATE_INVALID_FOR_PO_CREATION = 'Purchase Order cannot be created for CORO Orders if Revenue Recognized Date is not empty or Order Status is not Ready to Order, Order Released, Install Needed, Install Scheduled, Install Complete, or Job In Progress';
+	public static final String DUPLICATE_SERVICE_PRODUCTS = 'Multiple service purchase orders cannot be created for a single service product.';
 
 	/*******************************************************
 					Product Configuration Errors

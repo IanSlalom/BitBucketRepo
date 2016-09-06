@@ -109,9 +109,10 @@ public with sharing class RMS_WorkOrderCreationManager {
                 activatedOrderId.add(ord.id);
             }
         }
-        
+        system.debug('******activatedOrders.size()=' +activatedOrders.size());
         //IF NO ORDERS HAVE BEEN ACTIVATED THEN SKIP REST OF LOGIC
         if(activatedOrders.size() > 0){
+        system.debug('******got here=');
             
             //LOOPING THROUGH ALL DWELLINGS GETTING THEIR STORE LOCATIONS TO USE TO GET STORE CONFIGS
             for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
@@ -243,6 +244,8 @@ public with sharing class RMS_WorkOrderCreationManager {
             insert workOrdersToAdd;
             
         }// END IF activatedOrders.size() > 0
+        system.debug('******end woactivation=');
+        
     }// END createWorkOrderOnActivation METHOD
     
     

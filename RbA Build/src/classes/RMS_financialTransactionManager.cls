@@ -2353,7 +2353,7 @@ public with sharing class RMS_financialTransactionManager {
                             
                             if(alreadyHasJEofTypeRevRecServiceTax == false  && o.RecordTypeId == orderCOROServiceRecordTypeId){
                                 if(errorMessage == null){
-                                    
+                                    if(o.Sales_Tax__c > 0){                                    
                                     Journal_Entry__c newJE = new Journal_Entry__c(
                                         Date__c = Datetime.Now(),
                                         Type__c = 'Rev Recognized - Service Tax',
@@ -2363,7 +2363,7 @@ public with sharing class RMS_financialTransactionManager {
                                         Credit_General_Ledger_Account__c = orderIdToRevRecognizedServiceTaxFTL.get(o.id)[0].Credit_Account_Number__r.Name
                                     );
                                     journalEntriesToUpsert.add(newJE);
-                                    
+                                 }  
                                 }else{ 
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
                                     break;

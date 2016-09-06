@@ -63,6 +63,8 @@
         <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
+        <members>RMS_createServicePurchaseOrders</members>
+        <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -185,6 +187,7 @@
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
+        <members>RMS_createServicePurchaseOrders</members>
         <members>RMS_createServiceRequestP1</members>
         <members>RMS_createServiceRequestP2</members>
         <members>RMS_createServiceRequestP3</members>
