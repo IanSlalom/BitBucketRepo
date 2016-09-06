@@ -73,7 +73,7 @@ public with sharing class RMS_AccountTriggerHandler {
   }
   public void createSharingRecords(List<Account> accounts){
     //Possibly unnecessary
-    accounts = [Select Id, Store_Location__c, Store_Location__r.Name from Account where Id in: accounts and Store_Location__c != null];
+    accounts = [Select Id, OwnerId, Store_Location__c, Store_Location__r.Name from Account where Id in: accounts and Store_Location__c != null];
     if(!accounts.isEmpty() ){
       List<AccountShare> sharesToInsert = new List<AccountShare>();
 
@@ -89,7 +89,7 @@ public with sharing class RMS_AccountTriggerHandler {
       List<User> users = Database.query(userQuery);
       for(Account a: accounts){
         for(User u : users){
-          if(u.Store_Locations__c.containsIgnoreCase(a.Store_Location__r.Name)){
+          if(u.Store_Locations__c.containsIgnoreCase(a.Store_Location__r.Name) && a.OwnerId != u.Id){
             sharesToInsert.add(new AccountShare(AccountId = a.Id, UserOrGroupId = u.Id, AccountAccessLevel = 'read',
                               OpportunityAccessLevel = 'read', CaseAccessLevel = 'read', rowCause = 'Manual'));
           }
