@@ -143,6 +143,7 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
+        <members>RMS_prodConfigManager2Test</members>
         <name>ApexClass</name>
     </types>
     <types>
