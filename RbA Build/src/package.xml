@@ -195,6 +195,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
+        <members>RMS_municipalityTab</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
@@ -253,7 +254,6 @@
     <types>
         <members>Charge__c</members>
         <members>Discount__c</members>
-        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
@@ -320,7 +320,6 @@
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
         <members>Event-Work Order Event Page Layout</members>
-        <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
         <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
@@ -564,6 +563,7 @@
         <members>Service_Symptom_Assignment__c</members>
         <members>Service_Symptom_List__c</members>
         <members>Service_Symptom__c</members>
+        <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
         <members>Task</members>
         <members>Warranty__c</members>

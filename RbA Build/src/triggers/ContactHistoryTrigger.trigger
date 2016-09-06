@@ -51,7 +51,7 @@ handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
         else 
             if(Trigger.isUpdate && Trigger.isAfter){
                 contactHistoryCreationManager.updateContactAccount(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                   
-                contactHistoryCreationManager.moveContacttoUnassigned(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                                   
+                contactHistoryCreationManager.contactManager(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                                   
                 contactHistoryCreationManager.primaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                            
             }
         

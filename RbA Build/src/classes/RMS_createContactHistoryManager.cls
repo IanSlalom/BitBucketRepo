@@ -27,7 +27,7 @@ public with sharing class RMS_createContactHistoryManager {
     
     Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
-    Id masterAccountId = RMS_Settings_map.get('Unassigned Account Id').Value__c;
+    //Id masterAccountId = RMS_Settings_map.get('Unassigned Account Id').Value__c;
     
     
     public void createContactHistoryonInsert(List<Contact> listNew){
@@ -175,7 +175,7 @@ public with sharing class RMS_createContactHistoryManager {
         List<Id> relatedAccountIds = new list<Id>();        
         
         for(Contact con : listNew){
-            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId && mapNew.get(con.Id).AccountId != masterAccountId){ 
+            if(mapOld.get(con.Id).AccountId != mapNew.get(con.Id).AccountId){ 
                 relatedAccountIds.add(con.AccountId);
             }
         }        
@@ -187,7 +187,7 @@ public with sharing class RMS_createContactHistoryManager {
         
         for(Contact con : listNew){
             if(contactHMap.isEmpty()){
-                if(con.AccountId != null && con.AccountId != masterAccountId && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
+                if(con.AccountId != null && mapOld.get(con.Id).AccountId != con.AccountId && con.RecordTypeId == customerContactRecordType){
                     updatedContact.add(new Contact_History__c(
                         Contact__c = con.Id,
                         Dwelling__c = con.AccountId,
@@ -241,9 +241,9 @@ public with sharing class RMS_createContactHistoryManager {
         }
     }
     
-    //On Create/Update of Contact History and Type = Past Resident, query all Contact Histories for related Contact where Type = Current Resident. If size == 0, update Account on Contact to Unassigned
-    
-    public void moveContacttoUnassigned(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
+
+    //formerly moveContacttoUnassigned Method
+    public void contactManager(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
         
         List<Id> relatedContact = new list<Id>();
         
@@ -274,7 +274,7 @@ public with sharing class RMS_createContactHistoryManager {
                     z.AccountId = z.AccountId;
                 } else {
                     
-                    z.AccountId = masterAccountId;
+                    //z.AccountId = masterAccountId;
                     z.Primary_Contact__c = FALSE;
                 }
             }

@@ -59,45 +59,32 @@ trigger warrantyTrigger on Warranty__c (after delete, after insert, after undele
         
         // After Insert 
         // else       
-         if(Trigger.isInsert && Trigger.isAfter){
-            // run the order rollup real-time if the order trigger
-            // hasn't been run yet, otherwise run it @future
-            
-          
-              
-                orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        if(Trigger.isInsert && Trigger.isAfter){
+            orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         } 
-     
-        
         // After Update
-        
         else if(Trigger.isUpdate && Trigger.isAfter){
-            // run the order rollup real-time if the order trigger
-            // hasn't been run yet, otherwise run it @future            
-          
-                orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-
-       
-                    
         //After Delete
-        
         else if(Trigger.isDelete && Trigger.isAfter){            
             orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
-       
-        
         // After Undelete 
-        /*
         else if(Trigger.isUnDelete){
-            handler.OnUndelete(Trigger.new);
-            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-        */
         
         // run the order rollup real-time if the order trigger
         // hasn't been run yet, otherwise run it @future            
         if (UtilityMethods.hasOrderTriggerRan()) return;
-        update orderitems;
+
+ 		// Try - Catch to catch any dml errors doing the order item rollup and displaying
+		// errors on the warranty records
+		try { update orderitems;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
     }
 }

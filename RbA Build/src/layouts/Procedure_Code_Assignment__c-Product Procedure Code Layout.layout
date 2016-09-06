@@ -58,15 +58,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Service_Request__c</fields>
-        <fields>Service_Product__c</fields>
-        <fields>Charge_Cost_To__c</fields>
-        <fields>Quantity__c</fields>
-        <fields>Procedure_Code_Time__c</fields>
-        <relatedList>Warranty__c.Procedure_Code__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
         <fields>ACTIVITY.TASK</fields>
@@ -91,7 +82,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hQ0000000Q37O</masterLabel>
+        <masterLabel>00h2C000000EdFv</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

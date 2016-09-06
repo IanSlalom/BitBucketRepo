@@ -89,16 +89,23 @@ trigger serviceSymptomTrigger on Service_Symptom__c (after delete, after insert,
        
         
         // After Undelete 
-        /*
+
         else if(Trigger.isUnDelete){
-            handler.OnUndelete(Trigger.new);
-            orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            //handler.OnUndelete(Trigger.new);
+            orderitems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
-        */
+        
         
         // run the order rollup real-time if the order trigger
         // hasn't been run yet, otherwise run it @future            
         if (UtilityMethods.hasOrderTriggerRan()) return;
-        update orderitems;
+
+		// Try - Catch to catch any dml errors doing the order item rollup and displaying
+		// errors on the service symptoms records
+		try { update orderitems;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
     }
 }
