@@ -24,6 +24,8 @@
         <members>OrderTriggerHandlerTest</members>
         <members>PurchaseOrderTriggerHandler</members>
         <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_AccountTriggerHandler</members>
+        <members>RMS_AccountTriggerHandlerTests</members>
         <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityManager</members>
@@ -95,6 +97,7 @@
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigManager2</members>
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
@@ -142,6 +145,7 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
+        <members>RMS_prodConfigManager2Test</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -195,6 +199,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
+        <members>RMS_municipalityTab</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
