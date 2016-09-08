@@ -1636,7 +1636,17 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public void createJournalEntryOrder(list<Order> listNew, map<id, Order> mapNew, map<id, Order> mapOld){ 
     	        
-        
+		// First check if any order's revenue recognition date has changed
+		Set<Id> orderIdsChangedRR = new Set<Id>();
+		for(Order o: listNew){
+			if (mapOld.get(o.id).Revenue_Recognized_Date__c != mapNew.get(o.id).Revenue_Recognized_Date__c) {
+				orderIdsChangedRR.add(o.Id);
+			}
+		}
+		
+		// If no order's rev recognition has changed, just return
+		if (orderIdsChangedRR.size() == 0) return;
+
         boolean hasServiceType = false;
         boolean hasCoroType = false;
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
@@ -1653,10 +1663,8 @@ public with sharing class RMS_financialTransactionManager {
                                                     Invoice_Subtotal__c,
                                                     Install_Complete_Date__c 
                                                     
-                                                    FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :orderRecordTypes];       
+                                                    FROM Order WHERE Id IN : orderIdsChangedRR AND RecordTypeId IN :orderRecordTypes];       
         system.debug('ads extraFieldsList; '+extraFieldsList);
-		
-		
 		
         list<Order> installDateFilledInOrders = new list<Order>();
         list<Id> installDateFilledInOrderIdList = new list<id>();

@@ -98,6 +98,7 @@
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
         <members>RMS_prodConfigManager2</members>
+        <members>RMS_prodConfigManager2Test</members>
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
@@ -145,7 +146,6 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
-        <members>RMS_prodConfigManager2Test</members>
         <name>ApexClass</name>
     </types>
     <types>

@@ -67,8 +67,8 @@ public with sharing class RMS_AccountTriggerHandler {
         }
       }
     }
-    deleteSharingRecords(accountsToDeleteSharingRecordsFor);
-    createSharingRecords(accountsToCreateSharingRecordsFor);
+    if (accountsToDeleteSharingRecordsFor.size() > 0) deleteSharingRecords(accountsToDeleteSharingRecordsFor);
+    if (accountsToCreateSharingRecordsFor.size() > 0) createSharingRecords(accountsToCreateSharingRecordsFor);
 
   }
   public void createSharingRecords(List<Account> accounts){

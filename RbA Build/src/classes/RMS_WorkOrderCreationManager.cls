@@ -6,16 +6,30 @@ public with sharing class RMS_WorkOrderCreationManager {
     *************************************************************/
     public void createWorkOrderOnOrderSoldOrderBeingAssigned(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
   		system.debug('ads inside createWorkOrderOnOrderSoldOrderBeingAssigned:');
-  		list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
-  		
+
 	    Id orderCoroServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
 	    Id visitWORecordType = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
-	    
+
+		// Loop through the new order triggers and identify if any meet the criteria for creating a work order
+		List<Order> ordersBeingAssigned = new List<Order> ();
+		for(Order ord: listNew){
+			if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+				if(mapOld.get(ord.Id).Sold_Order__c == null && mapNew.get(ord.Id).Sold_Order__c != null ){
+					ordersBeingAssigned.add(ord);
+				}
+			}
+		}
+		
+		// If there are no orders being assigned, exit this method
+		if (ordersBeingAssigned.size() == 0) return;
+
+  		list<RbA_Work_Order__c> workOrdersToAdd = new list<RbA_Work_Order__c>();
+  			    
 	    list<id> relatedAccountIds = new list<Id>();
         list<id> relatedOpportunityIds = new list<id>();
         list<id> relatedParentIds = new list<id>();
         
-        for(Order o : listNew){
+        for(Order o : ordersBeingAssigned){
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
             	system.debug('****** order: '+o);
@@ -48,44 +62,42 @@ public with sharing class RMS_WorkOrderCreationManager {
         map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
         map<id, Order> orderIdToOrderMap = new map<id, Order>([SELECT Id, BillToContactID, AccountId, OpportunityId FROM Order WHERE Id IN :relatedParentIds]);
         
-		for(Order ord: listNew){
-			if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
-				Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
-				Id serviceQueueId;
-                if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
-                	serviceQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c;
-                }else{
-                	serviceQueueId = UserInfo.getUserId();
-            	}
-            	system.debug('ads mapOld.get(ord.Id).Sold_Order__c: '+ mapOld.get(ord.Id).Sold_Order__c); 
-            	system.debug('ads mapNew.get(ord.Id).Sold_Order__c: '+ mapNew.get(ord.Id).Sold_Order__c);
+		for(Order ord: ordersBeingAssigned){
+//			if(ord.RecordTypeId == orderCoroServiceRecordTypeId){
+			Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
+			Id serviceQueueId;
+            if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c != null){
+	            serviceQueueId = accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Service_Work_Order_Queue_ID__c;
+            }else{
+               	serviceQueueId = UserInfo.getUserId();
+            }
+           	system.debug('ads mapOld.get(ord.Id).Sold_Order__c: '+ mapOld.get(ord.Id).Sold_Order__c); 
+           	system.debug('ads mapNew.get(ord.Id).Sold_Order__c: '+ mapNew.get(ord.Id).Sold_Order__c);
             	
-				if(mapOld.get(ord.Id).Sold_Order__c == null && mapNew.get(ord.Id).Sold_Order__c != null ){
-					system.debug('ads making service work order ord: '+ ord);
-					system.debug('ads orderIdToOrderMap.get(ord.Sold_Order__c): '+ orderIdToOrderMap.get(ord.Sold_Order__c)); 
-					system.debug('ads ord.OpportunityId: '+ ord.OpportunityId);
+//			if(mapOld.get(ord.Id).Sold_Order__c == null && mapNew.get(ord.Id).Sold_Order__c != null ){
+			system.debug('ads making service work order ord: '+ ord);
+			system.debug('ads orderIdToOrderMap.get(ord.Sold_Order__c): '+ orderIdToOrderMap.get(ord.Sold_Order__c)); 
+			system.debug('ads ord.OpportunityId: '+ ord.OpportunityId);
 			            		
-					//RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, orderIdToOrderMap.get(ord.Sold_Order__c), visitWORecordType, serviceQueueId, 'Service', null );
-					RbA_Work_Order__c serviceWorkOrder = new RbA_Work_Order__c(
-						Sold_Order__c = ord.id,
-						RecordTypeId = visitWORecordType,
-						Work_Order_Type__c = 'Service',
-						Account__c = ord.AccountId,
-								
-						Street__c = relatedDwelling.ShippingStreet,
-						City__c = relatedDwelling.ShippingCity,
-						State__c = relatedDwelling.ShippingStateCode,
-						Zip__c = relatedDwelling.ShippingPostalCode, 
-						Country__c = relatedDwelling.ShippingCountryCode,
-						Contact__c = orderIdToOrderMap.get(ord.Sold_Order__c).BillToContactId,
-
-						OwnerId = serviceQueueId
+			//RbA_Work_Order__c serviceWorkOrder = UtilityMethods.buildWorkOrder(relatedDwelling, orderIdToOrderMap.get(ord.Sold_Order__c), visitWORecordType, serviceQueueId, 'Service', null );
+			RbA_Work_Order__c serviceWorkOrder = new RbA_Work_Order__c(
+					Sold_Order__c = ord.id,
+					RecordTypeId = visitWORecordType,
+					Work_Order_Type__c = 'Service',
+					Account__c = ord.AccountId,				
+					Street__c = relatedDwelling.ShippingStreet,
+					City__c = relatedDwelling.ShippingCity,
+					State__c = relatedDwelling.ShippingStateCode,
+					Zip__c = relatedDwelling.ShippingPostalCode, 
+					Country__c = relatedDwelling.ShippingCountryCode,
+					Contact__c = orderIdToOrderMap.get(ord.Sold_Order__c).BillToContactId,
+					OwnerId = serviceQueueId
 						
-					);
+			);
 
-					workOrdersToAdd.add(serviceWorkOrder);
-				}
-			}
+			workOrdersToAdd.add(serviceWorkOrder);
+//				}
+//			}
 		}
 		system.debug('ads inserting workOrdersToAdd: '+workOrdersToAdd);
 		insert workOrdersToAdd;
@@ -109,10 +121,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                 activatedOrderId.add(ord.id);
             }
         }
-        system.debug('******activatedOrders.size()=' +activatedOrders.size());
         //IF NO ORDERS HAVE BEEN ACTIVATED THEN SKIP REST OF LOGIC
         if(activatedOrders.size() > 0){
-        system.debug('******got here=');
             
             //LOOPING THROUGH ALL DWELLINGS GETTING THEIR STORE LOCATIONS TO USE TO GET STORE CONFIGS
             for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
@@ -244,7 +254,6 @@ public with sharing class RMS_WorkOrderCreationManager {
             insert workOrdersToAdd;
             
         }// END IF activatedOrders.size() > 0
-        system.debug('******end woactivation=');
         
     }// END createWorkOrderOnActivation METHOD
     
