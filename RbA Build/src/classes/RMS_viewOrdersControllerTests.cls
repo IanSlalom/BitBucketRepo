@@ -51,7 +51,8 @@ private class RMS_viewOrdersControllerTests {
 	
 	@isTest static void testControllerForServiceOrders(){
 		Order order = [select Id,Pricebook2Id,RecordTypeId from Order where Name ='Sold Order 1'];
-		Account acc = [select Id,Store_Location__c from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account acc = [Select Id,Store_Location__c from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
 		Test.setCurrentPage(new PageReference('/apex/RMS_viewServiceOrders?Id='+acc.Id));
 		RMS_viewOrdersController controller = new RMS_viewOrdersController(new ApexPages.StandardController(acc));
 		System.assertEquals(controller.orders.size(), 1);
@@ -60,7 +61,8 @@ private class RMS_viewOrdersControllerTests {
 
 	@isTest static void testControllerForCOROOrders(){
 		Order order = [select Id,Pricebook2Id,RecordTypeId from Order where Name ='Sold Order 2'];
-		Account acc = [select Id,Store_Location__c from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account acc = [Select Id,Store_Location__c from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
 		Test.setCurrentPage(new PageReference('/apex/RMS_viewCOROOrders?Id='+acc.Id));
 		RMS_viewOrdersController controller = new RMS_viewOrdersController(new ApexPages.StandardController(acc));
 		System.assertEquals(controller.orders.size(), 1);

@@ -66,7 +66,8 @@ private class TaskTriggerHandlerTests {
 	
 	
 	@isTest static void testUpdateOrderStatus(){
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
 		List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
 								 from Order where accountId =: dwelling.Id 
 												  and Name = 'TMNeeded'];

@@ -48,6 +48,11 @@ TODAY()- BLANKVALUE(WorkComp_EmplLiab_ExpireDate__c, DATE(2999, 01, 01))
             <operation>notContain</operation>
             <value>Unassigned</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>Account.Name</field>
+            <operation>notContain</operation>
+            <value>RbA</value>
+        </criteriaItems>
         <description>Postal Code, Street Address</description>
         <triggerType>onAllChanges</triggerType>
     </rules>

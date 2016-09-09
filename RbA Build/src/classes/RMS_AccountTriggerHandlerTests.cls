@@ -46,8 +46,8 @@ public with sharing class RMS_AccountTriggerHandlerTests {
 	//Test that the insertion of accounts causes sharing records to be created;
 	@isTest
 	static void testCreateSharingRecordsAfterInsert(){
-		User mnUser = [Select Id from User where Store_Locations__c = '0060 - Rochester, MN;0066 - Mankato, MN'];
-		User txUser = [Select Id from USer where Store_Locations__c = '0730 - Austin, TX;0731 - Houston, TX'];
+		User mnUser = [Select Id from User where Store_Locations__c = '0060 - Rochester, MN;0066 - Mankato, MN' limit 1];
+		User txUser = [Select Id from USer where Store_Locations__c = '0730 - Austin, TX;0731 - Houston, TX' limit 1];
 		System.debug(mnUser.Id + '  ' + txUser.Id);
 		List<String> acctNames = new List<String>{'0060 - Rochester, MN','0066 - Mankato, MN','0730 - Austin, TX','0731 - Houston, TX'};
 		List<Account> storeAccounts = [Select Id, Name from Account where Name in : acctNames];
@@ -69,8 +69,8 @@ public with sharing class RMS_AccountTriggerHandlerTests {
 		//Test that the update of accounts causes sharing records to be deleted/created as appropriate;
 	@isTest
 	static void testCreateDeleteSharingRecordsAfterUpdate(){
-		User mnUser = [Select Id from User where Store_Locations__c = '0060 - Rochester, MN;0066 - Mankato, MN'];
-		User txUser = [Select Id from USer where Store_Locations__c = '0730 - Austin, TX;0731 - Houston, TX'];
+		User mnUser = [Select Id from User where Store_Locations__c = '0060 - Rochester, MN;0066 - Mankato, MN' limit 1];
+		User txUser = [Select Id from USer where Store_Locations__c = '0730 - Austin, TX;0731 - Houston, TX' limit 1];
 		System.debug(mnUser.Id + '  ' + txUser.Id);
 		List<String> acctNames = new List<String>{'0060 - Rochester, MN'};
 		List<Account> storeAccounts = [Select Id, Name from Account where Name in : acctNames];
