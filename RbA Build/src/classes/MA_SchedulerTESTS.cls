@@ -388,6 +388,7 @@ private class MA_SchedulerTESTS {
 	@isTest static void testMaSchedulerSaveAssignedResources() {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
+		Test.startTest();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -420,6 +421,7 @@ private class MA_SchedulerTESTS {
 		responseString = MA_SchedulerController.saveAssignedResources(wo.Id, new List<Id> { wo.Id, res2.Id, res3.Id }, res3.Id, null);
 		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.assertEquals(2, [SELECT Id FROM Assigned_Resources__c WHERE Work_Order__c = :wo.Id].size());
+		Test.stopTest();
 	}
 
 	@isTest static void testMaSchedulerScheduleWorkOrder() {

@@ -31,11 +31,12 @@ private class AutocompleteV2_Con_Test{
  
  		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
+		id vendorRT = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
  
         //create some test account
         List<Account> accountList = new List<Account>();
         for(Integer i =0 ; i < 200 ; i++){
-            accountList.add(new Account(Name='Autocomplete'+i));
+            accountList.add(new Account(Name='Autocomplete'+i, RecordTypeId=vendorRT));
         }
         //insert test records
         insert accountList;
