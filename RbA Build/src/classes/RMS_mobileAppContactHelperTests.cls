@@ -22,7 +22,8 @@ private class RMS_mobileAppContactHelperTests {
 	@isTest
 	public static void testSaveNewContact(){
 		TestUtilityMethods utility = new TestUtilityMethods();
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		Opportunity opp = [Select Id from Opportunity where AccountId =: dwelling.Id limit 1];
 		Contact c = utility.createContact(dwelling.Id, 'TestName2');
 		RMS_mobileAppContactHelper.DTOContact dtoContact = new RMS_mobileAppContactHelper.DTOContact();
@@ -50,7 +51,8 @@ private class RMS_mobileAppContactHelperTests {
 	@isTest
 	public static void testSaveNewContactWithoutAccountId(){
 		TestUtilityMethods utility = new TestUtilityMethods();
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		Opportunity opp = [Select Id from Opportunity where AccountId =: dwelling.Id limit 1];
 		Contact c = utility.createContact(null, 'TestName3');
 		RMS_mobileAppContactHelper.DTOContact dtoContact = new RMS_mobileAppContactHelper.DTOContact();
@@ -69,7 +71,8 @@ private class RMS_mobileAppContactHelperTests {
 	@isTest
 	public static void testSaveNewContactWithoutOpportunityId(){
 		TestUtilityMethods utility = new TestUtilityMethods();
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		Opportunity opp = [Select Id from Opportunity where AccountId =: dwelling.Id limit 1];
 		Contact c = utility.createContact(null, 'TestName1');
 		RMS_mobileAppContactHelper.DTOContact dtoContact = new RMS_mobileAppContactHelper.DTOContact();

@@ -388,7 +388,6 @@ private class MA_SchedulerTESTS {
 	@isTest static void testMaSchedulerSaveAssignedResources() {
 		TestUtilityMethods utility = new TestUtilityMethods();
 		utility.setUpConfigs();
-		Test.startTest();
 		Account store = MA_SchedulerFakeDataGenerator.createFakeStore(true);
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
@@ -399,6 +398,7 @@ private class MA_SchedulerTESTS {
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);
 		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 3', storeConfig.Id);
 		insert new List<Resource__c> { res1, res2, res3 };
+		Test.startTest(); 
 
 		Assigned_Resources__c assignedRes1 = MA_SchedulerFakeDataGenerator.createFakeAssignedResource(false, wo.Id, res1.Id, false);
 		Assigned_Resources__c assignedRes2 = MA_SchedulerFakeDataGenerator.createFakeAssignedResource(false, wo.Id, res2.Id, true);
