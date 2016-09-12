@@ -63,7 +63,7 @@ handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
         
         // After Insert 
         if(Trigger.isInsert && Trigger.isAfter){       
-            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);     
+            contactHistoryCreationManager.createContactHistoryonInsert(Trigger.new);              
             
         } 
         

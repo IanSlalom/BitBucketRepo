@@ -1636,7 +1636,17 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public void createJournalEntryOrder(list<Order> listNew, map<id, Order> mapNew, map<id, Order> mapOld){ 
     	        
-        
+		// First check if any order's revenue recognition date has changed
+		Set<Id> orderIdsChangedRR = new Set<Id>();
+		for(Order o: listNew){
+			if (mapOld.get(o.id).Revenue_Recognized_Date__c != mapNew.get(o.id).Revenue_Recognized_Date__c) {
+				orderIdsChangedRR.add(o.Id);
+			}
+		}
+		
+		// If no order's rev recognition has changed, just return
+		if (orderIdsChangedRR.size() == 0) return;
+
         boolean hasServiceType = false;
         boolean hasCoroType = false;
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
@@ -1653,10 +1663,8 @@ public with sharing class RMS_financialTransactionManager {
                                                     Invoice_Subtotal__c,
                                                     Install_Complete_Date__c 
                                                     
-                                                    FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :orderRecordTypes];       
+                                                    FROM Order WHERE Id IN : orderIdsChangedRR AND RecordTypeId IN :orderRecordTypes];       
         system.debug('ads extraFieldsList; '+extraFieldsList);
-		
-		
 		
         list<Order> installDateFilledInOrders = new list<Order>();
         list<Id> installDateFilledInOrderIdList = new list<id>();
@@ -1743,7 +1751,7 @@ public with sharing class RMS_financialTransactionManager {
         																'Rev Recognized - Finance Fees',
         																'Rev Recognized - COGS',
         																'Rev Recognized - Service COGS',
-        																//'Rev Recognized - Service Tax',
+        																'Rev Recognized - Service Tax',
         																'Rev Recognized - Service AR'
         																};
        	map<string, map<Id, list<Financial_Transaction__c>>> typeToMapOfOrderIdtoListFT = linkFinancialTransactions(extraFieldsList, financialTransactionTypesToGet);
@@ -1761,7 +1769,7 @@ public with sharing class RMS_financialTransactionManager {
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - COGS');
         
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service COGS');
-        //map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceTaxFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service Tax');
+        map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceTaxFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service Tax');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceARFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service AR');
       
       
@@ -1805,7 +1813,7 @@ public with sharing class RMS_financialTransactionManager {
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor');
 	                    //errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceInternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Internal Labor');
 	                   	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
-                    	//errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceTaxFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Tax');
+                    	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceTaxFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Tax');
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceARFTL.get(o.id) , errorMessage, 'Rev Recognized - Service AR');
                     }
                    
@@ -1838,7 +1846,7 @@ public with sharing class RMS_financialTransactionManager {
                             list<Journal_Entry__c> relatedRevRecognizedCOGSJE = new list<Journal_Entry__c>();
                             //list<Journal_Entry__c> relatedRevRecognizedServiceCOGSJE = new list<Journal_Entry__c>();
                              
-                            //list<Journal_Entry__c> relatedRevRecognizedServiceTaxJE = new list<Journal_Entry__c>();
+                            list<Journal_Entry__c> relatedRevRecognizedServiceTaxJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedRevRecognizedServiceARJE = new list<Journal_Entry__c>();
                             
                             //CHECK JOURNAL ENTRY OF TYPE Rev Recognized - Deposit DOESN'T EXIST
@@ -1856,7 +1864,7 @@ public with sharing class RMS_financialTransactionManager {
                             
                             Boolean alreadyHasJEofTypeRevRecCOGS = false; 
                             //Boolean alreadyHasJEofTypeRevRecServiceCOGS = false;
-                           // Boolean alreadyHasJEofTypeRevRecServiceTax = false; 
+                            Boolean alreadyHasJEofTypeRevRecServiceTax = false; 
                             Boolean alreadyHasJEofTypeRevRecServiceAR = false; 
                             
                     		if(orderIdToJournalEntryMap.get(o.id) != null && orderIdToJournalEntryMap.get(o.id).size() != 0 ){      
@@ -1934,12 +1942,12 @@ public with sharing class RMS_financialTransactionManager {
 	                                    alreadyHasJEofTypeRevRecFinanceFees = true;  
 	                                    relatedRevRecognizedFinanceFeesJE.add(je);
 	                                }
-									/*
+									
 	                                if(je.Type__c == 'Rev Recognized - Service Tax'){
 	                                    alreadyHasJEofTypeRevRecServiceTax= true;  
 	                                    relatedRevRecognizedServiceTaxJE.add(je);
 	                                }
-	                             	*/
+	                             	
 	                                if(je.Type__c == 'Rev Recognized - Service AR'){
 	                                	alreadyHasJEofTypeRevRecServiceAR= true;  
 	                                	relatedRevRecognizedServiceARJE.add(je);
@@ -2350,10 +2358,10 @@ public with sharing class RMS_financialTransactionManager {
                             }
                             
                             //does not have related JE records of type Rev Recognized - Service Tax
-                            /*
+                            
                             if(alreadyHasJEofTypeRevRecServiceTax == false  && o.RecordTypeId == orderCOROServiceRecordTypeId){
                                 if(errorMessage == null){
-                                    
+                                    if(o.Sales_Tax__c > 0){                                    
                                     Journal_Entry__c newJE = new Journal_Entry__c(
                                         Date__c = Datetime.Now(),
                                         Type__c = 'Rev Recognized - Service Tax',
@@ -2363,7 +2371,7 @@ public with sharing class RMS_financialTransactionManager {
                                         Credit_General_Ledger_Account__c = orderIdToRevRecognizedServiceTaxFTL.get(o.id)[0].Credit_Account_Number__r.Name
                                     );
                                     journalEntriesToUpsert.add(newJE);
-                                    
+                                 }  
                                 }else{ 
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
                                     break;
@@ -2376,7 +2384,7 @@ public with sharing class RMS_financialTransactionManager {
                                     }
                                 }
                             }
-							*/
+							
 							
                             System.debug('ads journalEntriesToUpsert: '+journalEntriesToUpsert);
                             if(errorMessage == null || errorMessage == ''){

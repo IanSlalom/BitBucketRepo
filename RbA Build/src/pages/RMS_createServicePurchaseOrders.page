@@ -1,0 +1,111 @@
+<apex:page standardController="Order" extensions="RMS_createServicePurchaseOrdersExtension">   
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script>
+    var j$ = jQuery.noConflict();
+
+        //The callback function that closeTab will call once it's got the ID for its tab
+        var callCloseTab= function callCloseTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+        function closeTab() {
+            if(sforce.console.isInConsole()) {
+                sforce.console.refreshPrimaryTabById( primaryTabId, false,
+                    function()
+                    {
+                        if ( subTabId ) sforce.console.closeTab( subTabId );
+                    }
+                );
+                return false;
+            }
+            else {
+                location.href='/{!Order}'; 
+            }
+
+        
+        };
+        function openNewSubTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            sforce.console.refreshPrimaryTabById( primaryTabId, false);
+            sforce.console.openSubtab
+            (   /*  Enclosing Primary Tab Id    */  primaryTabId,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Id of Subtab to override    */  subTabId,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }
+        function openNewPrimaryTab( subTabURL, subTabLabel )
+        {
+    
+            //  if there's nowhere to go, and nowhere to go back to, just close this subtab
+            if ( !subTabURL )
+            {
+                closeTab();
+                return;
+            }
+            //  otherwise open the new subtab
+            sforce.console.openPrimaryTab
+            (   /*  Enclosing Primary Tab Id    */  null,
+                /*  URL for new Subtab        */  subTabURL,
+                /*  Active (true = take focus)  */  true,
+                /*  Label for new Subtab        */  subTabLabel,
+                /*  Callback function          */  function( result ) { if ( !result.success ) alert( subTabLabel + ' subtab cannot be opened.' + '\n' + subTabURL ); },
+                /*  Name for new Subtab      */  null
+            );
+        }   
+        
+
+    </script>
+    <apex:form id="theForm">
+        <apex:pageBlock title="Create Service Purchase Orders">
+            <apex:pageBlockButtons location="both">
+            	<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+            	<apex:commandButton action="{!save}" value="Save" oncomplete="closeTab();return false"/>
+                <apex:commandButton value="Continue" action="{!saveContinue}"/>
+            </apex:pageBlockButtons> 
+                        
+            
+            <apex:pageBlockSection title="Select Service Products" columns="1" collapsible="false">
+                <apex:outputText ><b>Instructions:</b> Select each product that needs to be ordered (only one charge per product).</apex:outputText>
+                <apex:pageBlockTable value="{!chargesWrapperList}" var="wrapper" border="1">                                
+                	<apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
+                    	<apex:inputCheckBox value="{!wrapper.isSelected}"/>
+                    </apex:column>
+                    <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
+                    	<apex:outputText value="{!wrapper.charge.Service_Product__r.Product_Name__c}"/>
+                    </apex:column>
+                      <apex:column headerValue="Installed Product" style="border-bottom: 2px solid #ccc;">
+                    	<apex:outputText value="{!wrapper.charge.Installed_Product__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="Variant" style="border-bottom: 2px solid #ccc;">                                       
+                    	<apex:outputText value="{!wrapper.charge.Variant_Number__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
+                    	<apex:outputText value="{!wrapper.charge.Charge_Cost_To__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="Category" style="border-bottom: 2px solid #ccc;">
+                    	<apex:outputText value="{!wrapper.charge.Category__c}"/>
+                    </apex:column> 
+                    <apex:column headerValue="What/Where" style="border-bottom: 2px solid #ccc;">
+                    	<apex:outputText value="{!wrapper.charge.What_Where__c}"/>
+                    </apex:column> 
+
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>   
+</apex:page>

@@ -208,7 +208,7 @@ public with sharing class RMS_OrderTriggerHandler {
             storeConfigIds.add(o.Store_Location__r.Active_Store_Configuration__c);
         }
       }
-    }
+
 
     //Lock the Store Configuration records to prevent another transaction from altering the Order Number
     Map<Id,Store_Configuration__c> configsToLock = new Map<Id,Store_Configuration__c>([Select Id, Order_Number__c from Store_Configuration__c where Id in: storeConfigIds for update]);
@@ -230,6 +230,7 @@ public with sharing class RMS_OrderTriggerHandler {
         
     }
     update configsToLock.values();
+    }
   }
 
   

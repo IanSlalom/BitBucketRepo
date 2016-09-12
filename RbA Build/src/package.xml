@@ -24,6 +24,8 @@
         <members>OrderTriggerHandlerTest</members>
         <members>PurchaseOrderTriggerHandler</members>
         <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_AccountTriggerHandler</members>
+        <members>RMS_AccountTriggerHandlerTests</members>
         <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityManager</members>
@@ -63,6 +65,8 @@
         <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
+        <members>RMS_createServicePurchaseOrders</members>
+        <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -93,6 +97,8 @@
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigManager2</members>
+        <members>RMS_prodConfigManager2Test</members>
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
@@ -185,6 +191,7 @@
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
+        <members>RMS_createServicePurchaseOrders</members>
         <members>RMS_createServiceRequestP1</members>
         <members>RMS_createServiceRequestP2</members>
         <members>RMS_createServiceRequestP3</members>
@@ -192,6 +199,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
+        <members>RMS_municipalityTab</members>
         <members>RMS_newCashReceipt</members>
         <members>RMS_newLaborRedirect</members>
         <members>RMS_newMiscLabor</members>
@@ -250,7 +258,6 @@
     <types>
         <members>Charge__c</members>
         <members>Discount__c</members>
-        <members>Finance_Program__c</members>
         <members>Financial_Account_Number__c</members>
         <members>Financial_Transaction__c</members>
         <members>Labor__c</members>
@@ -317,7 +324,6 @@
         <members>EJ_Color_Configuration__c-EJ Color Configuration Layout</members>
         <members>Event-Event Layout</members>
         <members>Event-Work Order Event Page Layout</members>
-        <members>Finance_Program__c-Finance Program Layout</members>
         <members>Financial_Account_Number__c-Financial Account Number Layout</members>
         <members>Financial_Transaction__c-Financial Transaction Layout</members>
         <members>Glazing_Configuration__c-Glazing Configuration Layout</members>
@@ -561,6 +567,7 @@
         <members>Service_Symptom_Assignment__c</members>
         <members>Service_Symptom_List__c</members>
         <members>Service_Symptom__c</members>
+        <members>Store_Configuration__c</members>
         <members>Store_Finance_Program__c</members>
         <members>Task</members>
         <members>Warranty__c</members>

@@ -36,12 +36,14 @@ public with sharing class TestUtilityMethods {
 		u.Store_Locations__c = '77 - Twin Cities, MN';
 		update u;
 		system.runAs(u){
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		id storeRT = UtilityMethods.retrieveRecordTypeId('Store', 'Account');
 		
 		Account store1 = createStoreAccount('77 - Twin Cities, MN');
 		store1.Store_Number__c = '0123';
 		insert store1;
 
-		Account masterAccount = new Account(name = 'Unassigned Account');
+		Account masterAccount = new Account(name = 'Unassigned Account', RecordTypeId = dwellingRT);
 		insert masterAccount;
 
 		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');

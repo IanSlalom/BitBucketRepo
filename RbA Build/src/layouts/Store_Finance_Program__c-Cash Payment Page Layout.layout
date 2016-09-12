@@ -15,7 +15,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RecordTypeId</field>
+                <field>Finance_Company__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -33,11 +33,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>rSuite_Financing_Option__c</field>
+                <field>RecordTypeId</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Finance_Program__c</field>
+                <field>rSuite_Financing_Option__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

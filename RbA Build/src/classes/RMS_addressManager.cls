@@ -10,6 +10,9 @@ public with sharing class RMS_addressManager {
             }
         }
 
+		// If no account's address has changed, just return
+		if (account.size() == 0) return;
+
         List<Contact> childContacts = [Select Id, AccountId, MailingStreet, MailingCity, MailingState, MailingCountry, MailingPostalCode, OtherStreet, OtherCity, OtherCountry, OtherPostalCode, OtherState FROM Contact WHERE AccountId IN: account];
         
         Map<Id,Contact> contactMap = new Map<Id,Contact>([SELECT Id from Contact WHERE Id in:childContacts]);
