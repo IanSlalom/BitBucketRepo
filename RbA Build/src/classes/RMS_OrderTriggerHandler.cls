@@ -62,6 +62,11 @@ public with sharing class RMS_OrderTriggerHandler {
   }*/
   
   public void setPriceBookId(List<Order> newOrders){
+ // TODO - This is wrong on a number of fronts
+ // 1. There should not be test specific code in here - the data should be fixed in the test cases
+ // 2. The standard price book should not be used as a default - an error should be thrown - so the problem is actually fixed.  
+ //    - the defaulting masks the data problem
+ //
     Id standardPriceBookId = null;
     if(Test.isRunningTest()){
       standardPriceBookId = Test.getStandardPricebookId();
