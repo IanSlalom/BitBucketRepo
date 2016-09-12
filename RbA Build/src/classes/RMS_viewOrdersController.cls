@@ -59,6 +59,7 @@ public with sharing class RMS_viewOrdersController {
                   Contract.Name,
                   ContractId,
                   TotalAmount,
+                  Retail_Total__c,
                   RecordType.Name,
                   Sold_Order__c,
                   Description,
