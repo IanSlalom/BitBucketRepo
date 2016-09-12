@@ -660,6 +660,30 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* Set up Leg Height Exterior Fraction Items *****************/
+	private static transient List<SelectOption> llegExteriorFractionItems;
+	public List<SelectOption> legExteriorFractionItems{
+		get
+		{   
+			if (llegExteriorFractionItems == null) {
+				llegExteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Exterior_Fraction__c);
+			}			   
+			return llegExteriorFractionItems;
+		}
+	}
+
+	/******* Set up Leg Height Interior Fraction Items *****************/
+	private static transient List<SelectOption> llegInteriorFractionItems;
+	public List<SelectOption> legInteriorFractionItems{
+		get
+		{   
+			if (llegInteriorFractionItems == null) {
+				llegInteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Interior_Fraction__c);
+			}			   
+			return llegInteriorFractionItems;
+		}
+	}
+
 	/******* Set up Meet Rail Dimension Items *****************/
 	private static transient List<SelectOption> lMeetRailDimensionItems;
 	public List<SelectOption> meetRailDimension{
@@ -1296,6 +1320,7 @@ public class RMS_prodConfigExtension {
 			oI.Grille_Pattern_S1__c = null;
 			oI.Grille_Pattern_S2__c = null;
 			oI.Grille_Pattern_S3__c = null;
+			oI.Grille_Pattern_S4__c = null;
 		}
 		if(newProdConfig.Grille_Lites_Control__c == 'Disabled' || newProdConfig.Grille_Lites_Control__c == null) {
 			oI.Lites_Wide_S1__c = null;	
@@ -1304,11 +1329,14 @@ public class RMS_prodConfigExtension {
 			oI.Lites_High_S2__c = null;	
 			oI.Lites_Wide_S3__c = null;	
 			oI.Lites_High_S3__c = null;	
+			oI.Lites_Wide_S4__c = null;	
+			oI.Lites_High_S4__c = null;	
 		}
 		if(newProdConfig.Custom_Grille_Details_Control__c == 'Disabled' || newProdConfig.Custom_Grille_Details_Control__c == null) {
 			oI.Custom_Grille_Details_S1__c	= null;
 			oI.Custom_Grille_Details_S2__c	= null;
 			oI.Custom_Grille_Details_S3__c	= null;
+			oI.Custom_Grille_Details_S4__c	= null;
 		}
 		
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
