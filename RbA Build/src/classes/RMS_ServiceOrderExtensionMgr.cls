@@ -509,6 +509,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             for(Id assetID : AssetToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){                    
                     if(wrapper.isSelected && invalidRequest == 0){                            
+						System.Debug('*******wrapper.Product.Service_Product__c=' +wrapper.Product.Service_Product__c);
                         PricebookEntry pbe = [ 
                             SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
                             FROM PricebookEntry 

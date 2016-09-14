@@ -57,17 +57,17 @@ after update, before delete, before insert, before update)
         */
         
         // After Insert 
-        /*
+        
         else if(Trigger.isInsert && Trigger.isAfter){
              handler.OnAfterInsert(Trigger.new);
         } 
-        */
+        
         // After Update
-        /*
+        
         else if(Trigger.isUpdate && Trigger.isAfter){
         	handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
         }
-        */
+        
         //After Delete
         /*
         else if(Trigger.isDelete && Trigger.isAfter){

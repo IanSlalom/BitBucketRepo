@@ -72,6 +72,9 @@ public with sharing class PurchaseOrderTriggerHandler {
       }
     }
 
+	//If there are no order ids to update, just return
+	if (orderIds.size() == 0) return;
+
     parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Ready to Order']);
     //This query is modified to exclude Ids of records that have Status updated to Released in the test class, but no update dml is actually issued.
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in: poIdsToExclude];
@@ -111,6 +114,9 @@ public with sharing class PurchaseOrderTriggerHandler {
       }
     }
 
+	//If there are no order ids to update, just return
+	if (orderIds.size() == 0) return;
+
     parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Order Released']);
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in : poIdsToExclude];
     for(Id orderId: parentOrders.keySet()){
@@ -146,6 +152,9 @@ public with sharing class PurchaseOrderTriggerHandler {
         poIdsToExclude.add(po.Id);
       }
     }
+	
+	//If there are no order ids to update, just return
+	if (orderIds.size() == 0) return;
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status, hasPO__c FROM Order WHERE Id in: orderIds]);
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: orderIds AND Status__c != 'Cancelled' AND  Id not in : poIdsToExclude];

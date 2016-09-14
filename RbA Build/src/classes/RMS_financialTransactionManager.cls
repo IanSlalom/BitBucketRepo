@@ -1636,7 +1636,17 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public void createJournalEntryOrder(list<Order> listNew, map<id, Order> mapNew, map<id, Order> mapOld){ 
     	        
-        
+		// First check if any order's revenue recognition date has changed
+		Set<Id> orderIdsChangedRR = new Set<Id>();
+		for(Order o: listNew){
+			if (mapOld.get(o.id).Revenue_Recognized_Date__c != mapNew.get(o.id).Revenue_Recognized_Date__c) {
+				orderIdsChangedRR.add(o.Id);
+			}
+		}
+		
+		// If no order's rev recognition has changed, just return
+		if (orderIdsChangedRR.size() == 0) return;
+
         boolean hasServiceType = false;
         boolean hasCoroType = false;
         list<Journal_Entry__c> journalEntriesToUpsert = new list<Journal_Entry__c>();
@@ -1653,10 +1663,8 @@ public with sharing class RMS_financialTransactionManager {
                                                     Invoice_Subtotal__c,
                                                     Install_Complete_Date__c 
                                                     
-                                                    FROM Order WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :orderRecordTypes];       
+                                                    FROM Order WHERE Id IN : orderIdsChangedRR AND RecordTypeId IN :orderRecordTypes];       
         system.debug('ads extraFieldsList; '+extraFieldsList);
-		
-		
 		
         list<Order> installDateFilledInOrders = new list<Order>();
         list<Id> installDateFilledInOrderIdList = new list<id>();
@@ -2353,7 +2361,7 @@ public with sharing class RMS_financialTransactionManager {
                             
                             if(alreadyHasJEofTypeRevRecServiceTax == false  && o.RecordTypeId == orderCOROServiceRecordTypeId){
                                 if(errorMessage == null){
-                                    
+                                    if(o.Sales_Tax__c > 0){                                    
                                     Journal_Entry__c newJE = new Journal_Entry__c(
                                         Date__c = Datetime.Now(),
                                         Type__c = 'Rev Recognized - Service Tax',
@@ -2363,7 +2371,7 @@ public with sharing class RMS_financialTransactionManager {
                                         Credit_General_Ledger_Account__c = orderIdToRevRecognizedServiceTaxFTL.get(o.id)[0].Credit_Account_Number__r.Name
                                     );
                                     journalEntriesToUpsert.add(newJE);
-                                    
+                                 }  
                                 }else{ 
                                     mapNew.get(o.id).addError(errorMessage, FALSE);
                                     break;

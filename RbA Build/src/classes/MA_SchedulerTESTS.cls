@@ -398,6 +398,7 @@ private class MA_SchedulerTESTS {
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);
 		Resource__c res3 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 3', storeConfig.Id);
 		insert new List<Resource__c> { res1, res2, res3 };
+		Test.startTest(); 
 
 		Assigned_Resources__c assignedRes1 = MA_SchedulerFakeDataGenerator.createFakeAssignedResource(false, wo.Id, res1.Id, false);
 		Assigned_Resources__c assignedRes2 = MA_SchedulerFakeDataGenerator.createFakeAssignedResource(false, wo.Id, res2.Id, true);
@@ -420,6 +421,7 @@ private class MA_SchedulerTESTS {
 		responseString = MA_SchedulerController.saveAssignedResources(wo.Id, new List<Id> { wo.Id, res2.Id, res3.Id }, res3.Id, null);
 		responseObj = MA_SchedulerFakeDataGenerator.deserializeResponse(responseString);
 		System.assertEquals(2, [SELECT Id FROM Assigned_Resources__c WHERE Work_Order__c = :wo.Id].size());
+		Test.stopTest();
 	}
 
 	@isTest static void testMaSchedulerScheduleWorkOrder() {

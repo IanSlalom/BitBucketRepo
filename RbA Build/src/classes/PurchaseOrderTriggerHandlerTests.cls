@@ -82,7 +82,8 @@ private class PurchaseOrderTriggerHandlerTests {
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
 
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
 			o.Status = 'Ready to Order';
@@ -141,7 +142,8 @@ private class PurchaseOrderTriggerHandlerTests {
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
 
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
 			o.Status = 'Order Released';
@@ -200,7 +202,8 @@ private class PurchaseOrderTriggerHandlerTests {
 
 		PurchaseOrderTriggerHandler handler = new PurchaseOrderTriggerHandler(false,200);
 
-		Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+		Account dwelling = [Select Id from Account where RecordTypeId =: dwellingRT limit 1];
 		List<Order> orderList = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id];
 		for(Order o: orderList){
 			o.Status = 'Order Released';

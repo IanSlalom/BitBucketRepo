@@ -16,6 +16,20 @@ Unauthorized use is prohibited.
 public class RMS_reactivateResource {
     
     public void reactivateResource(List<Account> listOld, List<Account> listNew, Map<Id, Account> mapOld, Map<Id, Account> mapNew){
+
+		// First check if any account's inactive date has been filled in
+		Set<Id> acctIdsInactiveEntered = new Set<Id>();
+		for(Account a: listNew){
+            if(mapNew.get(a.Id).Inactive_Date__c != null && mapNew.get(a.Id).Inactive_Date__c != mapOld.get(a.Id).Inactive_Date__c){
+            	if(mapNew.get(a.Id).Inactive_Date__c >= system.TODAY()){
+					acctIdsInactiveEntered.add(a.Id);
+            	}
+			}
+		}
+		
+		// If no account's inactive date has been filled in, just return
+		if (acctIdsInactiveEntered.size() == 0) return;
+
         
         List<Resource__c> childRecords = [Select Id, RbA_User__c, Vendor_Account_Id__c,RbA_User__r.Contact.AccountId
                                                 FROM Resource__c WHERE Active__c = FALSE and RbA_User__r.Contact.AccountId IN: Trigger.newMap.keySet()];

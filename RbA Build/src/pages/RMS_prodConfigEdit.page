@@ -277,7 +277,7 @@
             <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="outwideBar" rendered="{!prodConfig.mpc.Wide_Bar_Control__c == 'Disabled'  || mode != 'e'}" />
             <apex:inputField value="{!OrderItem.Applied_Grilles__c}" required="{!prodConfig.mpc.Applied_Grilles_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
-            <apex:outputField value="{!OrderItem.Perm_Applied_Int_Wood_Grille__c}" rendered="{!prodConfig.mpc.Perm_Applied_Int_Wood_Grille_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="outpermanentlyAppliedInteriorWoodGrille" />
+            <apex:outputField value="{!OrderItem.Applied_Grilles__c}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="outpermanentlyAppliedInteriorWoodGrille" />
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
             <apex:outputField value="{!OrderItem.Brickmould_Applied__c}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbrickmouldApplied"/>
 
@@ -416,12 +416,12 @@
             <apex:outputField value="{!OrderItem.Is_Leg_Height_L_or_R_Leg_Height__c}" label="Is Leg Height L or R Height" id="outisLegHeightLorR" rendered="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c == 'Disabled' || mode != 'e'}" />
 
              <apex:selectList value="{!OrderItem.Leg_Height_Exterior_Fraction__c }" label="Leg Height Exterior Fraction" size="1" id="legHeightExteriorFraction" required="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightExteriorFraction">
-            	<apex:selectOptions value="{!measurementFractionItems}"/>
+            	<apex:selectOptions value="{!legExteriorFractionItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Leg_Height_Exterior_Fraction__c}" label="Leg Height Exterior Fraction" id="outlegHeightExteriorFraction" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c == 'Disabled' || mode != 'e'}" />
 
              <apex:selectList value="{!OrderItem.Leg_Height_Interior_Fraction__c }" label="Leg Height Interior Fraction" size="1" id="legHeightInteriorFraction" required="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightInteriorFraction">
-            	<apex:selectOptions value="{!measurementFractionItems}"/>
+            	<apex:selectOptions value="{!legInteriorFractionItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Leg_Height_Interior_Fraction__c}" label="Leg Height Interior Fraction" id="outlegHeightInteriorFraction" rendered="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c == 'Disabled' || mode != 'e'}" />
 
@@ -551,7 +551,7 @@
 	                <apex:selectOptions value="{!GlassPatternItems}"/>
 	            </apex:selectList>
 	            <apex:inputField value="{!OrderItem.Tempered_S3__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' &&  numSashes >=3}"  html-data-jsid="tempered3"/>
-	            <apex:outputField value="{!OrderItem.Tempered_S3__c}" id="outtempered3" rendered="{!(prodConfig.mpc.Tempered_S3_Control__c == 'Disabled'  || mode != 'e') &&  numSashes >=3}" html-data-jsid="outtempered3"/>
+	            <apex:outputField value="{!OrderItem.Tempered_S3__c}" id="outtempered3" rendered="{!(prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e') &&  numSashes >=3}" html-data-jsid="outtempered3"/>
 
 	        </apex:pageBlockSection>
 
@@ -650,6 +650,7 @@
         glazing(1);
         glazing(2);
         glazing(3);
+        glazing(4);
         frameType();
         specialOptions();
         specialtyWindow();
@@ -684,6 +685,8 @@
             glazing(2);
         }else if(ruleName == 'glazing3'){
             glazing(3);
+        }else if(ruleName == 'glazing4'){
+            glazing(4);
         }else if(ruleName == 'frameType'){
             frameType();
         }else if(ruleName == 'applyToAllGrillesCheck'){

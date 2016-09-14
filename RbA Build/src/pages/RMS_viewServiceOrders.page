@@ -103,7 +103,7 @@
                 <apex:column value="{!ord.EffectiveDate}" headerValue="Start Date"/>
                 <apex:column value="{!ord.Service_Type__c}"/>
                 <apex:column value="{!ord.Description}"/>
-                <apex:column value="{!ord.TotalAmount}" headerValue="Amount"/>
+                <apex:column value="{!ord.Amount_Due__c}" headerValue="Amount Due"/>
             </apex:pageBlockTable>
     </apex:pageBlock> 
 </apex:page>

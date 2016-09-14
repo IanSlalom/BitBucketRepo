@@ -8,10 +8,13 @@ private class RMS_OrderTriggerHandlerTests {
         
         Account account1 = utility.createVendorAccount('Vendor Account 1 ');
         insert account1;
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 
         Account account2 = new Account( Name = 'RbA',
                                         AccountNumber = '1234567890',
-                                        Phone = '(763) 555-2000'
+                                        Phone = '(763) 555-2000',
+										RecordTypeId = dwellingRT
+                                        
                                     );
         insert account2;
 
@@ -99,7 +102,8 @@ private class RMS_OrderTriggerHandlerTests {
     
     @isTest static void testUpdateOrderStatus() {
 
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
         /*List<Order> orderList = [Select Name, Status from Order where accountId =:dwelling.Id];
         for(Order o: orderList){
             //o.Apex_Context__c = true;
@@ -180,7 +184,9 @@ private class RMS_OrderTriggerHandlerTests {
     }
     
     @isTest static void testUpdateTimeStamps() {
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
+
         Map<Id,Order> oldMap = new Map<Id,Order>([Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c from Order where accountId =: dwelling.Id]);
         Map<Id,Order> newMap = new Map<Id,Order>();
         for(Order o: oldMap.values()){
@@ -277,7 +283,8 @@ private class RMS_OrderTriggerHandlerTests {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
         insert turnOffFinancialTrigger;
 
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
         List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
                                                   and Name = 'InstallScheduled'];
         System.assertEquals(soldOrder.size(),1);
@@ -301,7 +308,9 @@ private class RMS_OrderTriggerHandlerTests {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
         insert turnOffFinancialTrigger;
 
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
+
         List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId from Order where accountId =: dwelling.Id 
                                                   and Name = 'InstallScheduled'];
         System.assertEquals(soldOrder.size(),1);
@@ -323,7 +332,8 @@ private class RMS_OrderTriggerHandlerTests {
     }
 
     @isTest static void testCreateOnHoldTasks(){
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
         List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
                                  from Order where accountId =: dwelling.Id 
                                                   and Name = 'InstallScheduled'];
@@ -348,7 +358,8 @@ private class RMS_OrderTriggerHandlerTests {
         Decimal orderNumBeforeUpdate = store.Active_Store_Configuration__r.Order_Number__c; 
         System.assertNotEquals(store.Store_Number__c, null);
         System.assertNotEquals(store.Active_Store_Configuration__r.Order_Number__c, null);
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
         List<Order> soldOrder = [Select Id, Name, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
                                  from Order where accountId =: dwelling.Id 
                                                   and Name = 'InstallScheduled'];
@@ -391,7 +402,8 @@ private class RMS_OrderTriggerHandlerTests {
     }
 
      @isTest static void testSetPriceBookId(){
-        Account dwelling = [Select Id from Account where Name = 'Dwelling Account'];
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
         Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
         List<Order> soldOrder = [Select Id, Name, Pricebook2Id, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
                                  from Order where Name = 'InstallScheduled'];

@@ -24,8 +24,19 @@ public class RMS_ServiceProductPickup {
     
     public void customerPickup(List<Order> listOld, List<Order> listNew, Map<Id, Order> mapOld, Map<Id, Order> mapNew){
         
+		// First check if any order's customer pickup all has turned on
+		Set<Id> orderIdsChangedPickup = new Set<Id>();
+		for(Order o: listNew){
+			if(mapNew.get(o.Id).Customer_Pickup_All__c == TRUE && mapNew.get(o.Id).Customer_Pickup_All__c != mapOld.get(o.Id).Customer_Pickup_All__c){
+				orderIdsChangedPickup.add(o.Id);
+			}
+		}
+		
+		// If no order's customer pickup has turned on, just return
+		if (orderIdsChangedPickup.size() == 0) return;
+
         List<OrderItem> childRecords = [Select Id, OrderId, Quote_Accepted__c, Customer_Pickup__c,Order.Customer_Pickup_All__c 
-                                                FROM OrderItem WHERE Quote_Accepted__c = TRUE AND OrderId IN: Trigger.newMap.keySet()];
+                                                FROM OrderItem WHERE Quote_Accepted__c = TRUE AND OrderId IN: orderIdsChangedPickup];
         
         Map<Id,OrderItem> orderMap = new Map<Id,OrderItem>([select Id from OrderItem where id in:childRecords]);
         

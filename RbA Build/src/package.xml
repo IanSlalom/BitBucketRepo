@@ -24,6 +24,8 @@
         <members>OrderTriggerHandlerTest</members>
         <members>PurchaseOrderTriggerHandler</members>
         <members>PurchaseOrderTriggerHandlerTests</members>
+        <members>RMS_AccountTriggerHandler</members>
+        <members>RMS_AccountTriggerHandlerTests</members>
         <members>RMS_CancelOrderLineController</members>
         <members>RMS_FutureRollups</members>
         <members>RMS_MunicipalityManager</members>
@@ -63,6 +65,8 @@
         <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
+        <members>RMS_createServicePurchaseOrders</members>
+        <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editableTaskList</members>
@@ -93,6 +97,8 @@
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
+        <members>RMS_prodConfigManager2</members>
+        <members>RMS_prodConfigManager2Test</members>
         <members>RMS_prodConfigManagerTest</members>
         <members>RMS_prodConfigRedirectExtension</members>
         <members>RMS_prodConfigRedirectExtensionTest</members>
@@ -185,6 +191,7 @@
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
+        <members>RMS_createServicePurchaseOrders</members>
         <members>RMS_createServiceRequestP1</members>
         <members>RMS_createServiceRequestP2</members>
         <members>RMS_createServiceRequestP3</members>
