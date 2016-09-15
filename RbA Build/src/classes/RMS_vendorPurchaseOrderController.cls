@@ -465,6 +465,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c, Purchase_Order__c, Remake__c,
+                    MTO_Source_Code__c, Defect_Code__c, Charge_Cost_To__c,
                     Parent_Order_Item__r.Installed_Product_Asset__c,
                     Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null

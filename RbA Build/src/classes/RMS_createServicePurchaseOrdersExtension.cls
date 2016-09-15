@@ -1,8 +1,9 @@
 public with sharing class RMS_createServicePurchaseOrdersExtension {
 
 	/******* Variables  *****************/
-//	public list<ChargeWrapper> chargesWrapperList = new list<ChargeWrapper>();
 	public String errorOccurred {get; set;}   
+	public String newpoId {get;set;}
+	public String orderId {get;set;}
 
 	// The map of Charge Vendors to PO Id
 	public Map<String,Id> chargeVendorMap = new Map<String,Id>();
@@ -16,15 +17,18 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 			for (Charge__c c : [SELECT Id, Service_Request__c, Service_Product__r.Product_Name__c, Service_Product__c, 
 								Service_Product__r.Purchase_Order__c, Installed_Product_Id__c, Charge_Cost_To__c, Installed_Product__c,
 								Variant_Number__c, Category__c, What_Where__c, Service_Product__r.Purchase_Order__r.Vendor__c,
-								Service_Product__r.Order.Store_Location__c
+								Service_Product__r.Order.Store_Location__c, Service_Product__r.Purchase_Order__r.Charge_Cost_To__c
 								from Charge__c Where Service_Request__c =: serviceRequest.Id AND Service_Product__c != null]) {
 				boolean poExists = false;
+				boolean isChecked = false;
 	
 				if (c.Service_Product__r.Purchase_Order__c != null) {
 					poExists = true;
 					chargeVendorMap.put(c.Charge_Cost_To__c + c.Service_Product__r.Purchase_Order__r.Vendor__c, c.Service_Product__r.Purchase_Order__c);
+					if (c.Charge_Cost_To__c == c.Service_Product__r.Purchase_Order__r.Charge_Cost_To__c)
+						isChecked = true;
 				}
-				chargesWrapperList.add(new chargeWrapper(poExists, poExists, c));
+				chargesWrapperList.add(new chargeWrapper(isChecked, poExists, c));
 			}
 			System.Debug('*****************chargesWrapperList=' +chargesWrapperList);
 			return chargesWrapperList;
@@ -100,6 +104,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 	/******* Constructor  *****************/
 	public RMS_createServicePurchaseOrdersExtension(ApexPages.StandardController stdController) {
 		this.serviceRequest = (Order)stdController.getRecord();
+		orderId = this.serviceRequest.Id;
 	}
 
 
@@ -119,7 +124,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 		Set<Id> serviceProductsSelected = new Set<Id>();
 		List<OrderItem> orderItemsToUpdate = new List<OrderItem>();
 		Map<OrderItem, Purchase_Order__c> orderItemPOMap = new Map<OrderItem, Purchase_Order__c>();
-
+		Id poId;
 		// Loop through all of the charge wrappers
 		for(ChargeWrapper cw : chargesWrapperList){
 			// If the charge was not selected, just continue
@@ -139,8 +144,8 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 			if (cw.isDisabled) continue;
 		
 			// Attempt to retrieve the purchase order from the charge vendor map
-			Id poId = chargeVendorMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
-
+			poId = chargeVendorMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+			
 			// If we were able to find an existing purchase order then add the service
 			// product in a map so we can update it with the Purchase Order later
 			if (poId != null) {
@@ -149,14 +154,17 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 				orderItemsToUpdate.add(itemToUpdate);
 				continue;
 			}
+			String storeAbbreviation = returnStoreAbbreviation();
 			
 			Purchase_Order__c newPurchaseOrder = new Purchase_Order__c(
 													Vendor__c = ProductToVendorMap.get(cw.charge.Installed_Product_Id__c),
 													Order__c = this.serviceRequest.Id,
 													Store_Location__c = cw.charge.Service_Product__r.Order.Store_Location__c, 
-													Status__c = 'In Process'
+													Status__c = 'In Process',
+													Charge_Cost_To__c = cw.charge.Charge_Cost_To__c,
+													Store_Abbreviation__c = storeAbbreviation,
+													RecordTypeId = UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order')
 												);
-												// charge cost to?
 			OrderItem itemToUpdate = serviceProductMap.get(cw.charge.Service_Product__c);
 			orderItemPOMap.put(itemToUpdate, newPurchaseOrder);
 			
@@ -172,9 +180,12 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
         try{
        		insert orderItemPOMap.values();
        		for(OrderItem oi : orderItemPOMap.keyset()) {
+       			System.Debug('*************orderItemPOMap.get(oi).Id=' +orderItemPOMap.get(oi).Id);
        			oi.Purchase_Order__c = orderItemPOMap.get(oi).Id;
+       			newpoId = oi.Purchase_Order__c;
        			orderItemsToUpdate.add(oi);
        		}
+       		if (newpoId == null) newpoId = poId;
           	upsert orderItemsToUpdate;
         } catch (Exception e){
           System.debug('************The following exception occurred in the RMS_createServicePurchaseOrderExtension in the save method inserting records:' + e);
@@ -185,10 +196,50 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 		errorOccurred = 'false';
 		return null;    
 	} 
+  public PageReference save2() {
+
+    // Set this flag to true so we know to exit the javascript before redirecting
+    errorOccurred = 'true';
+    errorOccurred = 'false';
+    return null;
+  }
+
     public PageReference saveContinue(){
         return null;
     } 
 
+	/*******************************************************
+			setStoreAbbreviation method
+	*******************************************************/
+	public String returnStoreAbbreviation() {
+ 
+		// Retrive the current user
+		User currentUser = [SELECT User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
+
+		// If a test is running just set the user's abbreviation, otherwise get it from the current user
+		String userAbbreviation = (Test.isRunningTest()) ?   'A' 
+								: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
+								:	currentUser.User_Abbreviation__c;
+
+		// Set the type of PO
+		String typeAbbreviation = 'S';
+
+		String storeAbbreviation;
+			
+		// Query the store location to retrieve the store abbreviation and location number
+		for (Account storeLocAccount : [SELECT 	Id, Name, Active_Store_Configuration__r.Store_Abbreviation__c, 
+										Active_Store_Configuration__c, Active_Store_Configuration__r.Location_Number__c
+										FROM Account WHERE Id = :serviceRequest.Store_Location__c]){
+			if (storeLocAccount.Active_Store_Configuration__c != null) {
+				storeAbbreviation = storeLocAccount.Active_Store_Configuration__r.Store_Abbreviation__c;
+			}
+		}
+		// Set a default store abbreviation if it's null
+		if (storeAbbreviation == null) storeAbbreviation = 'X';
+		
+		// concatanate the store abbreviation and return it
+		return storeAbbreviation + userAbbreviation + typeAbbreviation;
+	}
 	/*******************************************************
 			chargesWrapper Class
 	*******************************************************/
