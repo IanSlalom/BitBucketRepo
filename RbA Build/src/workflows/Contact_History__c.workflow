@@ -10,6 +10,15 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Primary_Contact_to_False_when_Pas</fullName>
+        <field>Primary_Contact__c</field>
+        <literalValue>0</literalValue>
+        <name>Update Primary Contact to False when Pas</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
     <rules>
         <fullName>Unique Contact History Record</fullName>
         <actions>
@@ -20,5 +29,19 @@
         <description>Creates a concatenation of Type,Dwelling, and Contact to ensure no two Contact History records are the same</description>
         <formula>true</formula>
         <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Primary Contact to False when Past Resident</fullName>
+        <actions>
+            <name>Update_Primary_Contact_to_False_when_Pas</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Contact_History__c.Type__c</field>
+            <operation>equals</operation>
+            <value>Past Resident</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
 </Workflow>
