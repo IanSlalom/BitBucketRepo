@@ -1290,7 +1290,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
     }
     
     
-        static testmethod void saveCloseLegacytest2(){
+    static testmethod void saveCloseLegacytest2(){
         createTestRecords();
         
         Test.startTest();
@@ -1389,7 +1389,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         Boolean hasValidationErrors = false;
-
+        
         Boolean isSelected = true;
         Boolean manufacturer = true;
         Boolean local = true;
@@ -1423,7 +1423,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         ApexPages.StandardController sc = new ApexPages.StandardController(order);
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         Boolean hasValidationErrors = false;
-
+        
         Boolean isSelected = true;
         Boolean manufacturer = true;
         Boolean local = true;
@@ -1520,4 +1520,22 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         
         Test.stopTest();       
     }
+    
+    
+    static testmethod void productPickup(){
+        createTestRecords();
+        
+        Test.startTest();
+        Order order = [SELECT Id,Customer_Pickup_All__c,Validate_Service_Order__c,Service_Type__c,AccountId,pricebook2id,Name FROM Order WHERE Name = 'Sold Order 1'];               
+        OrderItem oi = [Select Id, UnitPrice, OrderId, PriceBookEntryId, Installed_Product_Asset__c, Quanity_Ordered__c, Quantity, Service__c, Parent_Order_Item__c, Customer_Pickup__c, Quote_Accepted__c FROM OrderItem WHERE OrderId =:order.Id];               
+        
+        oi.Quote_Accepted__c = True;
+        update oi;
+        
+        order.Customer_Pickup_All__c = True;
+        update order;
+        
+        Test.stopTest();       
+    }
+    
 }
