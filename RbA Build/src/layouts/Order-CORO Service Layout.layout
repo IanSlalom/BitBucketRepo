@@ -376,11 +376,12 @@
         <style>OneColumn</style>
     </layoutSections>
     <relatedLists>
-        <customButtons>New_Purchase_Order</customButtons>
+        <customButtons>New_Service_Purchase_Order</customButtons>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Date__c</fields>
         <fields>Vendor__c</fields>
+        <fields>Charge_Cost_To__c</fields>
         <fields>Total__c</fields>
         <fields>Status__c</fields>
         <fields>Estimated_Ship_Date__c</fields>
