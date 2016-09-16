@@ -332,6 +332,14 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Change_Order_Amount_Financed__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Change_Order_Finance_Fees__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Non_Sufficient_Funds__c</field>
             </layoutItems>
         </layoutColumns>
@@ -455,6 +463,7 @@
         <fields>NAME</fields>
         <fields>Date__c</fields>
         <fields>Vendor__c</fields>
+        <fields>Charge_Cost_To__c</fields>
         <fields>Total__c</fields>
         <fields>Status__c</fields>
         <fields>Estimated_Ship_Date__c</fields>
