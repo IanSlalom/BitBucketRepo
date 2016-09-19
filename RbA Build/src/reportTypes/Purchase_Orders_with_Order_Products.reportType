@@ -165,6 +165,21 @@
             <field>Vendor__c</field>
             <table>Purchase_Order__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Defect_Code__c</field>
+            <table>Purchase_Order__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>MTO_Source_Code__c</field>
+            <table>Purchase_Order__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Ordering_Instructions__c</field>
+            <table>Purchase_Order__c</table>
+        </columns>
         <masterLabel>Purchase Orders</masterLabel>
     </sections>
     <sections>
@@ -305,11 +320,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Defect_Code__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Detail_Line_Number__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
@@ -425,6 +435,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Multiple_Remakes__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Glass_Pattern_S3__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
@@ -446,6 +461,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Gliding_Screen__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Multiple_Remake_Formula__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <columns>
@@ -520,6 +540,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Sold_Order_Product_NSPR__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Hubs__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
@@ -571,6 +596,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Jamb_Liner_Color__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Original_Baan_Sales_Order__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <columns>
@@ -661,11 +691,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Mfg_Mull_Sequence__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>MTO_Source_Code__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <columns>
@@ -1001,6 +1026,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>PricebookEntry.Product2</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sold_Order_Product_Asset__c.Variant_Number__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <masterLabel>Order Products</masterLabel>

@@ -635,6 +635,11 @@
             <field>Windows_Rollup__c</field>
             <table>Order</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>BillToContact.HomePhone</field>
+            <table>Order</table>
+        </columns>
         <masterLabel>Orders</masterLabel>
     </sections>
     <sections>
