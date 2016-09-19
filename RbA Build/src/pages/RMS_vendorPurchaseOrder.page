@@ -155,6 +155,7 @@
    <!--  TODO:   temporarily commented out                    <apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" />  -->
               <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
                     <apex:inputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == false}"/>
   <!--              <apex:outputText value=""/> -->   
                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>
                     <apex:inputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" rendered="{! status == 'new' || status == 'rbanew' || status == 'rel'}"/>
@@ -184,9 +185,9 @@
                     <apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'rbanew' ||status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec'}"/>
                     
                     <apex:outputField value="{!Purchase_Order__c.Charge_Cost_To__c}" rendered="{!servicePurchaseOrder}"/>
-                    <apex:inputField value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}}"/>
-                    <apex:outputfield value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && servicePurchaseOrder}}"/>
-                    <apex:inputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}}"/>
+                    <apex:inputField value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}"/>
+                    <apex:outputfield value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && servicePurchaseOrder}"/>
+                    <apex:inputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}"/>
                     <apex:outputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!( status == 'rbanew' ||status == 'rbarel' || status == 'rbacon' || status == 'con' || status == 'rec') && servicePurchaseOrder}"/>
                     
                     <apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
