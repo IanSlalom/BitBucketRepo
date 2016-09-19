@@ -40,7 +40,6 @@ public with sharing class Constants {
 			'RecordTypeId',
 			'EffectiveDate',
 			'QuoteId',
-			'Order_Processed_Date__c', 
 			'Change_Order_Total__c'
 		},
 		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'Job Closed'=>new String[]
@@ -52,7 +51,6 @@ public with sharing class Constants {
 			'RecordTypeId',
 			'EffectiveDate',
 			'QuoteId',
-			'Order_Processed_Date__c', 
 			'Change_Order_Total__c'
 		},
 		'TestClass'=>new String[]
