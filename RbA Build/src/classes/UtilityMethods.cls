@@ -232,11 +232,14 @@ global with sharing class UtilityMethods {
 		for(SObject recordToCheck : recordsToCheck){
 			String dynamicErrorMessage;
 			String	errorMessage;
-			System.Debug('********************object=' +(mapOld.get(recordToCheck.id)).get('Status'));
 			// Retrieve	the old Status from the record, not the new (in case it changed)		
-//			String status = (string)(mapOld.get(recordToCheck.id)).get('Status');
-			String status = 'TestClass';
-			List<String> lockedFields = lockedFieldMap.get(status);
+			Object sta = (mapOld.get(recordToCheck.id)).get('Status');
+			Object rec = (mapOld.get(recordToCheck.id)).get('RecordTypeId');
+			String status = String.valueOf(sta);
+			String recordtypeId = String.valueOf(rec);
+//			String status = 'TestClass';
+			List<String> lockedFields = lockedFieldMap.get(recordtypeId + status);
+			System.Debug('********************lockedFields=' +lockedFields);
 			if (lockedFields == null) continue;
 			// Pull the locked fields from the map and loop through them
 			for (String lockedField : lockedFields) {

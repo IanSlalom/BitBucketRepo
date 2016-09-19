@@ -20,6 +20,15 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_Processed_Date</fullName>
+        <field>Order_Processed_Date__c</field>
+        <formula>Now()</formula>
+        <name>Set Processed Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Service_Type_to_Field_Service_For_Co</fullName>
         <field>Service_Type__c</field>
         <literalValue>Field Service</literalValue>
@@ -70,6 +79,30 @@
         </criteriaItems>
         <description>Due to recursive triggers, workflow used to set Install Order Status to Cancelled on the Sold Order to reflect the Install Work Order status.</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Processed Date on Change Order</fullName>
+        <actions>
+            <name>Set_Processed_Date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Order.RecordTypeName__c</field>
+            <operation>equals</operation>
+            <value>Change_Order</value>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Sales Tax on Service Order</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Order.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>CORO Service</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
         <fullName>Set Service Type to Field Service For Cottage Grove</fullName>

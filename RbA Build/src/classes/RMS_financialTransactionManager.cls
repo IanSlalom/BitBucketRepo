@@ -429,6 +429,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     GL_Account__c,
                                                     GL_Account__r.Name,
                                                     Internal_Cost__c,
+                                                    JIP__c,
                                                     Related_Work_Order__c,
                                                     Related_Work_Order__r.Sold_Order__c,
                                                     Hourly_Rate__c,
@@ -457,10 +458,12 @@ public with sharing class RMS_financialTransactionManager {
         
         list<string> financialTransactionTypesToGet = new list<string>{	'Internal Labor', 
         																'External Labor', 
-        																//'Service External Labor',
+        																'Service External Labor',
+        																'Service External Labor - JIP',
         																//'Post Recognized Internal Labor',
         																'Post Recognized External Labor',
         																'Post Recognized Service External Labor',
+        																'Post Recognized Service External Labor - JIP',
         																'Misc Reimbursement'
         																};
        	map<string, map<Id, list<Financial_Transaction__c>>> typeToMapOfLaborIdtoListFT = linkFinancialTransactions(extraFieldsList, financialTransactionTypesToGet);
@@ -469,9 +472,11 @@ public with sharing class RMS_financialTransactionManager {
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborExternalFTL = typeToMapOfLaborIdtoListFT.get('External Labor');
        	//map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborFTL = typeToMapOfLaborIdtoListFT.get('Service Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborExternalFTL = typeToMapOfLaborIdtoListFT.get('Service External Labor');
+        map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborExternalJIPFTL = typeToMapOfLaborIdtoListFT.get('Service External Labor - JIP');
        	//map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecInternalFTL = typeToMapOfLaborIdtoListFT.get('Post Recognized Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecExternalFTL = typeToMapOfLaborIdtoListFT.get('Post Recognized External Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecServiceExternalFTL = typeToMapOfLaborIdtoListFT.get('Post Recognized Service External Labor');
+        map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecServiceExternalJIPFTL = typeToMapOfLaborIdtoListFT.get('Post Recognized Service External Labor - JIP');
         map<Id, list<Financial_Transaction__c>>  laborIdToMiscReimbursementFTL = typeToMapOfLaborIdtoListFT.get('Misc Reimbursement');
 
         map<Id, String> laborIdToMiscReimbursementGLAmap = linkMiscPaymentAccountNumbers(extraFieldsList, mapNew);
@@ -483,6 +488,7 @@ public with sharing class RMS_financialTransactionManager {
         for(Labor__c l : extraFieldsList){
             String typeOfLabor;
             String subTypeOfLabor;
+            String JIPLabor;
             String typeOfOrder;
             
             if(l.RecordTypeId == laborLaborRecordTypeId && l.Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c == null){
@@ -492,6 +498,8 @@ public with sharing class RMS_financialTransactionManager {
                 }else if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
                 	subTypeOfLabor = 'external';
                 }
+      			// If the labor JIP flag is set, this is JIP labor, otherwise it is not
+                JIPLabor = (l.JIP__c == true) ? 'true' : 'false';
 				if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCORORecordTypeId){
 					typeOfOrder = 'coroRecordType';
 				}else if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCOROServiceRecordTypeId){
@@ -506,6 +514,9 @@ public with sharing class RMS_financialTransactionManager {
                 }else if(l.External_Labor_Amount__c != null && l.External_Labor_Amount__c != 0){
                 	subTypeOfLabor = 'external';
                 }
+                // If the labor JIP flag is set, this is JIP labor, otherwise it is not
+                JIPLabor = (l.JIP__c == true) ? 'true' : 'false';
+                
                 if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCORORecordTypeId){
 					typeOfOrder = 'coroRecordType';
 				}else if(l.Related_Work_Order__r.Sold_Order__r.RecordTypeId == orderCOROServiceRecordTypeId){
@@ -528,7 +539,14 @@ public with sharing class RMS_financialTransactionManager {
                 if(typeOfLabor == 'LaborLabor'){
                     if(subTypeOfLabor == 'external'){
 	                	if(typeOfOrder == 'coroService'){
-	                		errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborExternalFTL.get(l.id) , errorMessage, 'Service External Labor');
+	                		if(JIPLabor == 'true')
+	                			errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborExternalJIPFTL.get(l.id) , errorMessage, 'Service External Labor - JIP');
+							else { 		  
+								System.Debug('************l.id=' +l.id);
+								System.Debug('************laborIdToServiceLaborExternalFTL=' +laborIdToServiceLaborExternalFTL);
+								System.Debug('************errorMessage=' +errorMessage);
+	                			errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborExternalFTL.get(l.id) , errorMessage, 'Service External Labor');
+							}
 		                }else if(typeOfOrder == 'coroRecordType'){
 	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborExternalFTL.get(l.id) , errorMessage, 'External Labor');
 	                	}
@@ -547,7 +565,10 @@ public with sharing class RMS_financialTransactionManager {
                 else if(typeOfLabor == 'PostRecLabor'){
                     if(subTypeOfLabor == 'external'){
                         if(typeOfOrder == 'coroService'){
-    	                	errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecServiceExternalFTL.get(l.id) , errorMessage, 'Post Recognized Service External Labor');
+	                		if(JIPLabor == 'true')
+	    	                	errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecServiceExternalJIPFTL.get(l.id) , errorMessage, 'Post Recognized Service External Labor - JIP');
+							else
+	    	                	errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecServiceExternalFTL.get(l.id) , errorMessage, 'Post Recognized Service External Labor');
                         }else if(typeOfOrder == 'coroRecordType'){
 	                    	errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
                         }
@@ -582,9 +603,16 @@ public with sharing class RMS_financialTransactionManager {
 	                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 	                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
                                     }else if(typeOfOrder == 'coroService'){
-                                    	newJE.Type__c = 'Service External Labor'; 
-	                                    newJE.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
-	                                    newJE.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+                                    	if (JIPLabor == 'true') {
+                                    		newJE.Type__c = 'Service External Labor - JIP'; 
+	                                    	newJE.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalJIPFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+	                                    	newJE.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalJIPFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+                                    	}
+                                    	else {
+                                    		newJE.Type__c = 'Service External Labor'; 
+	                                    	newJE.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+	                                    	newJE.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;                                    	
+                                    	}	
                                     }
                                 }else if(subTypeOfLabor == 'internal'){
                                     newJe.Amount__c = l.Internal_Cost__c;
@@ -604,11 +632,18 @@ public with sharing class RMS_financialTransactionManager {
                             }else if(typeOfLabor == 'PostRecLabor'){
                                 if(subTypeOfLabor == 'external'){
                                 	if(typeOfOrder == 'coroService'){
-                                		newJE.Type__c = 'Post Recognized Service External Labor';
 	                                    newJE.Amount__c = l.External_Labor_Amount__c;
 	                                    newJE.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
-	                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
-	                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+                                    	if (JIPLabor == 'true') {
+	                                		newJE.Type__c = 'Post Recognized Service External Labor - JIP';
+		                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalJIPFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalJIPFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+                                    	}
+										else {
+	                                		newJE.Type__c = 'Post Recognized Service External Labor';
+		                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;											
+										}
                                 	}else if(typeOfOrder == 'coroRecordType'){
 					                    newJE.Type__c = 'Post Recognized External Labor';
 	                                    newJE.Amount__c = l.External_Labor_Amount__c;
@@ -666,9 +701,16 @@ public with sharing class RMS_financialTransactionManager {
 		                                    je.Debit_General_Ledger_Account__c = laborIdToLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 		                                    je.Credit_General_Ledger_Account__c = laborIdToLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
 	                                    }else if(typeOfOrder == 'coroService'){
-	                                    	je.Type__c = 'Service External Labor';
-		                                    je.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
-		                                    je.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+	                                    	if(JIPLabor == 'true') {
+	                                    		je.Type__c = 'Service External Labor - JIP';
+		                                    	je.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalJIPFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    	je.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalJIPFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+	                                    	} 
+	                                    	else {
+	                                    		je.Type__c = 'Service External Labor';
+		                                    	je.Debit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    	je.Credit_General_Ledger_Account__c = laborIdToServiceLaborExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;	                                    		
+	                                    	}
 	                                    }
 	                                }else if(subTypeOfLabor == 'internal'){
 	                                    je.Amount__c = l.Internal_Cost__c;
@@ -688,11 +730,18 @@ public with sharing class RMS_financialTransactionManager {
                                 }else if(typeOfLabor == 'PostRecLabor'){
                                 	 if(subTypeOfLabor == 'external'){
                                 	 	if(typeOfOrder == 'coroService'){
-	                                		je.Type__c = 'Post Recognized Service External Labor';
 		                                    je.Amount__c = l.External_Labor_Amount__c;
-		                                    je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
-		                                    je.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
-		                                    je.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+	                                    	je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
+	                                		if(JIPLabor == 'true') {
+		                                		je.Type__c = 'Post Recognized Service External Labor - JIP';
+		                                    	je.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalJIPFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    	je.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalJIPFTL.get(l.id)[0].Credit_Account_Number__r.Name;	                                			
+	                                		}
+	                                		else {
+		                                		je.Type__c = 'Post Recognized Service External Labor';
+		                                    	je.Debit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
+		                                    	je.Credit_General_Ledger_Account__c = laborIdToLaborPostRecServiceExternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;	                                			
+	                                		}
 	                                	}else if(typeOfOrder == 'coroRecordType'){
 						                    je.Type__c = 'Post Recognized External Labor';
 		                                    je.Amount__c = l.External_Labor_Amount__c;
@@ -1743,6 +1792,7 @@ public with sharing class RMS_financialTransactionManager {
         list<string> financialTransactionTypesToGet = new list<string>{	'Rev Recognized - Deposit',
     																	'Rev Recognized - External Labor',
     																	'Rev Recognized - Service External Labor',
+    																	'Rev Recognized - Service External Labor - JIP',
     																	'Rev Recognized - Refund Deposit',
     																	//'Rev Recognized - Internal Labor',
     																	//'Rev Recognized - Service Internal Labor',
@@ -1760,6 +1810,7 @@ public with sharing class RMS_financialTransactionManager {
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedDepositFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Deposit');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedExternalLaborFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - External Labor');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceExternalLaborFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service External Labor');
+        map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceExternalLaborJIPFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service External Labor - JIP');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedRefundDepositFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Refund Deposit');
         //map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedInternalLaborFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Internal Labor');
         // map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceInternalLaborFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service Internal Labor');
@@ -1811,6 +1862,7 @@ public with sharing class RMS_financialTransactionManager {
 	                    errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - COGS');
                     }else{
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor');
+                    	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborJIPFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor - JIP');
 	                    //errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceInternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Internal Labor');
 	                   	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
                     	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceTaxFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Tax');
@@ -1825,8 +1877,10 @@ public with sharing class RMS_financialTransactionManager {
                             list<Journal_Entry__c> relatedRevRecognizedDepositJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedExternalLaborJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedServiceExternalLaborJE = new list<Journal_Entry__c>();
+                            list<Journal_Entry__c> relatedServiceExternalLaborJIPJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedRevRecognizedExternalLaborJE = new list<Journal_Entry__c>();
                             list<Journal_Entry__c> relatedRevRecognizedServiceExternalLaborJE = new list<Journal_Entry__c>();
+                            list<Journal_Entry__c> relatedRevRecognizedServiceExternalLaborJIPJE = new list<Journal_Entry__c>();
                             
                             list<Journal_Entry__c> relatedInternalLaborJE = new list<Journal_Entry__c>();
                             /*
@@ -1853,6 +1907,7 @@ public with sharing class RMS_financialTransactionManager {
                             Boolean alreadyHasJEofTypeRevRecDeposit = false;
                             Boolean alreadyHasJEofTypeRevRecExternalLabor = false;
                             Boolean alreadyHasJEofTypeRevRecServiceExternalLabor = false;
+                            Boolean alreadyHasJEofTypeRevRecServiceExternalLaborJIP = false;
                             Boolean alreadyHasJEofTypeRevRecRefundDeposit = false;
                             /*
                             Boolean alreadyHasJEofTypeRevRecInternalLabor = false;
@@ -1890,6 +1945,9 @@ public with sharing class RMS_financialTransactionManager {
 	                                if(je.Type__c == 'Service External Labor'){
 	                                    relatedServiceExternalLaborJE.add(je);
 	                                }
+	                                if(je.Type__c == 'Service External Labor - JIP'){
+	                                    relatedServiceExternalLaborJIPJE.add(je);
+	                                }
 	                                if(je.Type__c == 'Refund - Deposit'){
 	                                    relatedRefundDepositJE.add(je);
 	                                }
@@ -1915,6 +1973,10 @@ public with sharing class RMS_financialTransactionManager {
 	                                if(je.Type__c == 'Rev Recognized - Service External Labor'){
 	                                    alreadyHasJEofTypeRevRecServiceExternalLabor = true;   
 	                                    relatedRevRecognizedServiceExternalLaborJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Rev Recognized - Service External Labor - JIP'){
+	                                    alreadyHasJEofTypeRevRecServiceExternalLaborJIP = true;   
+	                                    relatedRevRecognizedServiceExternalLaborJIPJE.add(je);
 	                                }
 	                                if(je.Type__c == 'Rev Recognized - Refund Deposit'){ 
 	                                    alreadyHasJEofTypeRevRecRefundDeposit = true;   
@@ -2050,6 +2112,41 @@ public with sharing class RMS_financialTransactionManager {
                                     }
                                 }//END relatedDespoitJE LOOP
                             }else if(alreadyHasJEofTypeRevRecServiceExternalLabor == true && relatedRevRecognizedServiceExternalLaborJE.size() > 0  && o.RecordTypeId == orderCOROServiceRecordTypeId){
+                                for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
+                                    if(je.Sent_to_BaanERP__c == true){
+                                        mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            //does not have related JE records of type Revenue Received External labor BUT HAS SERVICE EXTERNAL LABOR JIP JE AND IS CORO SERVICE RECORD TYPE
+                            system.debug('ads Service External Labor:  alreadyHasJEofTypeRevRecServiceExternalLaborJIP :'+alreadyHasJEofTypeRevRecServiceExternalLaborJIP);
+                            system.debug('ads Service External Labor:  relatedServiceExternalLaborJIPJE :'+relatedServiceExternalLaborJIPJE);
+                            system.debug('ads Service External Labor:  o.RecordTypeId :'+o.RecordTypeId);
+                            system.debug('ads Service External Labor:  orderCOROServiceRecordTypeId :'+orderCOROServiceRecordTypeId);
+                            
+                            if(alreadyHasJEofTypeRevRecServiceExternalLaborJIP == false && relatedServiceExternalLaborJIPJE.size() > 0  && o.RecordTypeId == orderCOROServiceRecordTypeId){
+                                for(Journal_Entry__c je : relatedServiceExternalLaborJIPJE){
+                                    errorMessage = checkOrderJEForErrors(je, errorMessage, 'labor');
+                                    if(errorMessage == null){
+                                        Journal_Entry__c newJE = new Journal_Entry__c(
+                                            Date__c = Datetime.Now(),
+                                            Type__c = 'Rev Recognized - Service External Labor - JIP',
+                                            Labor__c = je.Labor__c,
+                                            Order__c = je.Order__c,
+                                            Amount__c = je.Amount__c,
+                                            Baan_Business_Partner_Number__c = je.Baan_Business_Partner_Number__c,
+                                            Debit_General_Ledger_Account__c = orderIdToRevRecognizedServiceExternalLaborJIPFTL.get(o.id)[0].Debit_Account_Number__r.Name,
+                                            Credit_General_Ledger_Account__c = orderIdToRevRecognizedSErviceExternalLaborJIPFTL.get(o.id)[0].Credit_Account_Number__r.Name
+                                        );
+                                        journalEntriesToUpsert.add(newJE);
+                                    }else{
+                                        mapNew.get(o.id).addError(errorMessage, FALSE);
+                                        break;
+                                    }
+                                }//END relatedDepositJIPJE LOOP
+                            }else if(alreadyHasJEofTypeRevRecServiceExternalLaborJIP == true && relatedRevRecognizedServiceExternalLaborJIPJE.size() > 0  && o.RecordTypeId == orderCOROServiceRecordTypeId){
                                 for(Journal_Entry__c je: relatedRevRecognizedRefundDepositJE){
                                     if(je.Sent_to_BaanERP__c == true){
                                         mapNew.get(o.id).addError(RMS_errorMessages.REVENUE_ALREADY_RECOGNIZED, FALSE);

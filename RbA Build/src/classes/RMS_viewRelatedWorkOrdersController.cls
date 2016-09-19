@@ -25,6 +25,7 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
     public string serviceOrderCollectionsRecordTypeURL{get;set;}
     
     public boolean displayButtonsOnPage{get;set;}
+    public boolean displayPaintStainOnly{get;set;}
     
 /******* Set up Standard Controller for Purchase_Order__c  *****************/
     private Apexpages.StandardController standardController;
@@ -92,7 +93,10 @@ public with sharing class RMS_viewRelatedWorkOrdersController {
         
         list<Order> theOrd = [SELECT Id, AccountId, Status, Store_Location__c, OrderNumber, OpportunityId, BillToContactId, RecordTypeId FROM Order WHERE Id =:ordId ];
         Id orderServiceRecordTypeId = UtilityMethods.retrieveRecordTypeId('CORO_Service', 'Order');
+        Id changeOrderRecordTypeId = UtilityMethods.retrieveRecordTypeId('Change_Order', 'Order');
         
+		// only display the paint stain button for change orders
+        displayPaintStainOnly = (theOrd[0].RecordTypeId == changeOrderRecordTypeId) ? true : false;
         if(theOrd[0].Status == 'Draft' && theOrd[0].RecordTypeId != orderServiceRecordTypeId){
             displayButtonsOnPage = false;
         }else if(theOrd[0].Status != 'Draft' || theOrd[0].RecordTypeId == orderServiceRecordTypeId){
