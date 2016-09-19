@@ -163,6 +163,7 @@ function prepareList(parent,child,isSubselectOptional){
 					
 					<apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" />
 					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+                    <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px"/>
 					 <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
 <!--  					<apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
 -->
