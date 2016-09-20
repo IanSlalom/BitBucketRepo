@@ -10,13 +10,7 @@
         <field>Pricing_Configuration__c$AE_Removable_IDL_SEL_Pattern__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Aluminum_Screen__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Aluminum_Screen_Half__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Aluminum_Dual__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$AluminumScreenCloth__c</field>
@@ -46,9 +40,6 @@
         <field>Pricing_Configuration__c$Base_Installer_Rate_IF__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Base_Jamb__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Base_Unit__c</field>
     </columns>
     <columns>
@@ -61,9 +52,6 @@
         <field>Pricing_Configuration__c$Brickmold_Picture_Frame_Price__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Brickmould_Traditional_Price__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Bronze_Sill__c</field>
     </columns>
     <columns>
@@ -71,9 +59,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Casings_Full_Frame_3__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Clear_or_Brown_Panel__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Corrosion_Resistant_Hardware__c</field>
@@ -95,9 +80,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$EAG_Specified_Equal_Lite_Pattern_Grilles__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$EJ_Frame_Price__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$EJ_Full_Frame__c</field>
@@ -148,9 +130,6 @@
         <field>Pricing_Configuration__c$Exterior_Frame_Depth__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Exterior_Jambs__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Extra_Lift_or_Pull__c</field>
     </columns>
     <columns>
@@ -175,9 +154,6 @@
         <field>Pricing_Configuration__c$FDL_Open_Hub_Sunburst__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$FDL_Permanently_Applied_Interior__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$FDL_Prairie__c</field>
     </columns>
     <columns>
@@ -200,9 +176,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Fibrex_L_Trim_or_Drip_Cap__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Finger_Lifts__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Fixed_Sash_Deduction_Casement__c</field>
@@ -283,9 +256,6 @@
         <field>Pricing_Configuration__c$Grilles_Between_Glass__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Hardware__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Special_Hardware_Color_Combination__c</field>
     </columns>
     <columns>
@@ -328,19 +298,10 @@
         <field>Pricing_Configuration__c$IEJ_Primed_Interior__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Interior_Jambs__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Interior_Trim_Insert_Frame__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Interior_Wood_and_GBG__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Interior_Wood_Grilles_INTW__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Interior_Wood_Only__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$INTW_Colonial__c</field>
@@ -373,9 +334,6 @@
         <field>Pricing_Configuration__c$LaminatedAndTempered__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Lifts_Pulls__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$Min_Qty_to_Round_to__c</field>
     </columns>
     <columns>
@@ -392,12 +350,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$ObscureTempered__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Overfit_Brickmold_Price__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Overfit_Chamfered_Edge_Price__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Overfit_Chamfered_Edge__c</field>
@@ -422,9 +374,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Panel_Primed_Interior__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Permanently_Applied_Interior_Wood_Grille__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Pre_fin_White_Int_with_Non_white_Ext__c</field>
@@ -496,9 +445,6 @@
         <field>Pricing_Configuration__c$SEL_Pattern_Modified_Check_Rail__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Simulated_Divided_Light__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$SmartSun__c</field>
     </columns>
     <columns>
@@ -506,9 +452,6 @@
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Special_Grille_Color_Combination__c</field>
-    </columns>
-    <columns>
-        <field>Pricing_Configuration__c$Special_Jamb__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$SpecialtyGlazing__c</field>

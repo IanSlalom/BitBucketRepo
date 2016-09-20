@@ -463,6 +463,7 @@
         <members>RbA_Operational_Reporting/Orders_Ready_to_Order</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
+        <members>RbA_Operational_Reporting/Pricing_Configuration_by_Store</members>
         <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
         <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
@@ -512,6 +513,7 @@
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
+        <members>Pricing_Configurations_with_Pricebook_Information</members>
         <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>

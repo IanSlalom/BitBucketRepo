@@ -13,17 +13,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Aluminum_Screen__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Aluminum_Screen_Half__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Aluminum_Dual__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -73,11 +63,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Base_Jamb__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Base_Unit__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -98,11 +83,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Brickmould_Traditional_Price__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Bronze_Sill__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -114,11 +94,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Casings_Full_Frame_3__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Clear_or_Brown_Panel__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -164,11 +139,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>EAG_Specified_Equal_Lite_Pattern_Grilles__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>EJ_Frame_Price__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -253,11 +223,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Exterior_Jambs__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Extra_Lift_or_Pull__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -298,11 +263,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>FDL_Permanently_Applied_Interior__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>FDL_Prairie__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -339,11 +299,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Fibrex_L_Trim_or_Drip_Cap__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Finger_Lifts__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -478,11 +433,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Hardware__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Special_Hardware_Color_Combination__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -553,27 +503,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Interior_Jambs__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Interior_Trim_Insert_Frame__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Interior_Wood_and_GBG__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Interior_Wood_Grilles_INTW__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Interior_Wood_Only__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -643,11 +578,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Lifts_Pulls__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Min_Qty_to_Round_to__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -674,16 +604,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>ObscureTempered__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Overfit_Brickmold_Price__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Overfit_Chamfered_Edge_Price__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -729,11 +649,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Panel_Primed_Interior__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Permanently_Applied_Interior_Wood_Grille__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
@@ -873,11 +788,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Simulated_Divided_Light__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>SmartSun__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
@@ -889,11 +799,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Special_Grille_Color_Combination__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Special_Jamb__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
         <columns>
