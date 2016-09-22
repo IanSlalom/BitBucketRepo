@@ -171,6 +171,7 @@
             $('.storeHoursInnerGroup, .bookingWindowsInnerGroup, .holidayRow, .removableSettingsRow').remove();
             $('.listViewportWrapper .refreshListButton').click();
             $('li a[href="#storeSettingsTab"]').click();
+            $('body').css('overflow-y', 'hidden');
 
             setTimeout(function(){
                 $('.main-nav-container').hide();
@@ -737,6 +738,7 @@
             $('#settingsModal, .esriCredentials, .esriCredentialsInputs').hide();
             toggleEsriCredentialsVisibility($('#hideEsriLink'));
             $('.esriCredentialsInputs .ma-input').attr('disabled', true);
+            $('body').css('overflow-y', 'scroll');
 
             if (!isBatchResources) {
                 $('#loaderModal').hide();

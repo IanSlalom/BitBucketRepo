@@ -22,6 +22,16 @@
 
     <apex:includeScript value="{!URLFOR($Resource.MA_Scheduler, '/fullcalendar-scheduler-1.2.0/lib/jquery.min.js')}" />
 
+    <style>
+        .ma-settings-modal-footer {
+            position: fixed !important;
+        }
+
+        .ma-tab-vertical-wrap .ma-tab-content-group {
+            margin-bottom: 100px !important;
+        }
+    </style>
+
     <script>
         var storeFound = false;
         var isIndividual = true;
