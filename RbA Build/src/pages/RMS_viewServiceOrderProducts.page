@@ -68,6 +68,7 @@
     <apex:pageBlock >
         <apex:form >                               
             <apex:commandButton action="{!addProductPage}" value="Add Product" style="margin-left:2%" rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}" />
+    		<apex:inputHidden value="{!Order.AccountId}" id="theHiddenInput"/>
         </apex:form>
         <apex:pageBlockTable title="Service Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
             <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
@@ -83,4 +84,5 @@
             </apex:column>
         </apex:pageBlockTable>	
     </apex:pageBlock> 
+    
 </apex:page>

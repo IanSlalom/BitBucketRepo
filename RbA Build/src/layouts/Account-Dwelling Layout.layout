@@ -18,7 +18,7 @@
                 <field>Dwelling_Style__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>Year_Built__c</field>
             </layoutItems>
             <layoutItems>

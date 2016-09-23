@@ -56,10 +56,6 @@
                 <behavior>Edit</behavior>
                 <field>Window_Problems__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Permit_Required__c</field>
-            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>

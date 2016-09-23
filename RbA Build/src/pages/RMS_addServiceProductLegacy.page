@@ -99,7 +99,7 @@
                                     <apex:inputCheckBox value="{!wrapper.isSelected}" />
                                 </apex:column>
                                 <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
-                                    <apex:outputText value="{!wrapper.product.Name}"/>
+                                    <apex:outputText value="{!wrapper.product.Service_Product__r.Name}"/>
                                 </apex:column>
                                 <apex:column headerValue="Manufacturing" style="border-bottom: 2px solid #ccc;">
                                     <apex:inputCheckbox value="{!wrapper.manufacturer}"/>

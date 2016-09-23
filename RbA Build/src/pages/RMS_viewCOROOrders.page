@@ -88,8 +88,7 @@
 				</apex:column>
 		        <apex:column value="{!ord.Status}"/>
 		        <apex:column value="{!ord.EffectiveDate}"/>
-		        <apex:column value="{!ord.Contract}"/>
-		        <apex:column value="{!ord.TotalAmount}"/>
+		        <apex:column value="{!ord.Retail_Total__c}"/>
 			</apex:pageBlockTable>
 	</apex:pageBlock> 
 </apex:page>

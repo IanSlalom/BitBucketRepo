@@ -19,7 +19,7 @@ public with sharing class RMS_eventManager {
 			relatedOwnerIds.add(e.OwnerId);
 		}
 		
-		list<RbA_Work_Order__c> relatedWorkOrdersList = [SELECT id, Cancel_Reason__c, Cancel_Date__c FROM RbA_Work_Order__c WHERE id IN:relatedWhatIds];
+		list<RbA_Work_Order__c> relatedWorkOrdersList = [SELECT id, Cancel_Reason__c, Cancel_Date__c FROM RbA_Work_Order__c WHERE id IN:relatedWhatIds AND Cancel_Reason__c != null AND Cancel_Date__c != null];
 		set<id> relatedWorkOrderIdSet = new set<id>();
 		map<id, RbA_Work_Order__c> idToWorkOrder = new map<id, RbA_Work_Order__c>();
 		for(RbA_Work_Order__c wo : relatedWorkOrdersList){

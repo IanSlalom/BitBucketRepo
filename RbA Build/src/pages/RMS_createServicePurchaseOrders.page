@@ -1,9 +1,9 @@
 <apex:page standardController="Order" extensions="RMS_createServicePurchaseOrdersExtension">   
-    <apex:pageMessages />
-    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
-    <apex:includeScript value="/support/console/26.0/integration.js"/>
+
     <apex:includeScript value="{!$Resource.jquery}" />
+    <apex:includeScript value="/support/console/33.0/integration.js"/>
     
+    <apex:form id="page-form">
     <script>
     var j$ = jQuery.noConflict();
 
@@ -66,15 +66,43 @@
                 /*  Name for new Subtab      */  null
             );
         }   
+        function openSavedPO(newpoId, orderId)
+        {
+            var errorOccurred = '{!errorOccurred}';
+            if (errorOccurred == 'false') {
+                if(sforce.console.isInConsole()) {
+                	if (newpoId == '') {
+                        closeTab();
+                	}
+                	else {
+                        openNewSubTab( '/' +newpoId +'?isdtp=vw', 'saving');
+                        closeTab();
+                    }
+                }
+                else {
+                	if (newpoId == '') {
+                		location.href='/' +orderId;
+                	}
+                	else {
+                    	location.href='/apex/RMS_viewPurchaseOrder?id=' +newpoId;
+                    }
+                }
+            }
+        }
         
 
     </script>
-    <apex:form id="theForm">
+    <apex:pageMessages /> 
+        <apex:actionRegion >
+        <apex:inputHidden value="{!Order.Store_Location__c}" id="hiddenId"/>
+
         <apex:pageBlock title="Create Service Purchase Orders">
+            <apex:actionStatus id="save-status"  onstop="openSavedPO('{!newpoId}', '{!orderId}');return false"/>
+            <apex:actionStatus id="save-status-close"  onstop="openSavedPO('', '{!orderId}');return false"/>
             <apex:pageBlockButtons location="both">
             	<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-            	<apex:commandButton action="{!save}" value="Save" oncomplete="closeTab();return false"/>
-                <apex:commandButton value="Continue" action="{!saveContinue}"/>
+            	<apex:commandButton action="{!save}" value="Save" status="save-status-close" rerender="page-form"/>
+                <apex:commandButton action="{!save}" value="Save & Continue" status="save-status" rerender="page-form"/>
             </apex:pageBlockButtons> 
                         
             
@@ -82,7 +110,7 @@
                 <apex:outputText ><b>Instructions:</b> Select each product that needs to be ordered (only one charge per product).</apex:outputText>
                 <apex:pageBlockTable value="{!chargesWrapperList}" var="wrapper" border="1">                                
                 	<apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
-                    	<apex:inputCheckBox value="{!wrapper.isSelected}"/>
+                    	<apex:inputCheckBox value="{!wrapper.isSelected}" disabled="{!wrapper.isDisabled}"/>
                     </apex:column>
                     <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
                     	<apex:outputText value="{!wrapper.charge.Service_Product__r.Product_Name__c}"/>
@@ -107,5 +135,34 @@
             </apex:pageBlockSection>
             
         </apex:pageBlock>
-    </apex:form>   
+        </apex:actionRegion>
+    </apex:form> 
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+
+        var primaryTabId = null;
+        var subTabId = null;
+        var previousOnload  = window.onload;
+
+        window.onload = function()
+        {
+        
+            //  perform the previously registered 'onload' function, if any
+            if ( previousOnload ) previousOnload();
+
+            //  get the id's of both the primary tab and this subtab
+            sforce.console.getEnclosingPrimaryTabId ( function( result ) { primaryTabId = result.id; } );
+            sforce.console.getEnclosingTabId        ( function( result ) { subTabId  = result.id; } );
+
+            //  set the title of this subtab
+            sforce.console.setTabTitle( 'New Service POs' );
+
+        };
+
+        function setFocusOnLoad() {
+            // Do nothing. This keeps standard Salesforce from giving focus to the first
+            // field so that the calendar widget won't pop up.
+        }
+
+    </script>  
 </apex:page>
