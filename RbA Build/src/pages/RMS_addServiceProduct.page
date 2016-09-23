@@ -90,8 +90,8 @@
             
             <apex:pageBlockSection title="Select Installed Products" columns="1" collapsible="false">
                 <apex:pageBlockTable value="{!selectedAssets}" var="a" id="table" width="1000px;" >
-                    <apex:column value="{!a.Name}"/>
-                    <apex:column value="{!a.Original_Order_Variant_Number__c}"/>
+                    <apex:column value="{!a.Product_Name__c}" headerValue="Asset Name"/>
+                    <apex:column value="{!a.Variant_Number__c}"/>
                     <apex:column value="{!a.Install_Date__c}"/>
                     <apex:column value="{!a.Location_Details__c}"/>
                     <apex:column breakBefore="true" colspan="10" style="border-bottom: 10px solid #ccc;">

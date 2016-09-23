@@ -98,8 +98,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                        }        
         selectedAssets = [SELECT    Id,
                           Name,
+                          Product_Name__c, 
                           Install_Date__c,
                           Product2Id,
+                          Variant_Number__c,
                           Product2.Name, 
                           Original_Order_Variant_Number__c, 
                           Location_Details__c,
