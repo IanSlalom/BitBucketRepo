@@ -478,9 +478,6 @@
         <field>Pricing_Configuration__c$TruScene_Dual__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$TruScene_Wood_Vaneer__c</field>
-    </columns>
-    <columns>
         <field>Pricing_Configuration__c$TruScene_Wood_Veneer__c</field>
     </columns>
     <columns>
