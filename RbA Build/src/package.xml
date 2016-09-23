@@ -451,6 +451,7 @@
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
+        <members>RbA_Operational_Reporting/On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
         <members>RbA_Operational_Reporting/Order_Status_Report</members>
         <members>RbA_Operational_Reporting/Ordering_and_Install_Status_Report</members>
