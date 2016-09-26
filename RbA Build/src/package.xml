@@ -513,6 +513,7 @@
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>
+        <members>Orders_with_or_without_Activities</members>
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
         <members>Pricing_Configurations_with_Pricebook_Information</members>
