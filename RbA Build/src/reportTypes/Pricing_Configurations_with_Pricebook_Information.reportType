@@ -843,11 +843,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>TruScene_Wood_Vaneer__c</field>
-            <table>Pricing_Configuration__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>TruScene_Wood_Veneer__c</field>
             <table>Pricing_Configuration__c</table>
         </columns>
