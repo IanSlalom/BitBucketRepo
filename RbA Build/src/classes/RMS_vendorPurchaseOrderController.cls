@@ -326,6 +326,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     writeOff = false;
     vendorCredit = false;
     renderVendorSelection = true;
+ 	servicePurchaseOrder = false;
     zeroDollarVendor = false;
     system.debug(orderId);
     showInventoryWriteOff = false;

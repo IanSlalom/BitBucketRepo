@@ -62,17 +62,6 @@ public with sharing class RMS_OrderTriggerHandler {
   }*/
   
   public void setPriceBookId(List<Order> newOrders){
- // TODO - This is wrong on a number of fronts
- // 1. There should not be test specific code in here - the data should be fixed in the test cases
- // 2. The standard price book should not be used as a default - an error should be thrown - so the problem is actually fixed.  
- //    - the defaulting masks the data problem
- //
-    Id standardPriceBookId = null;
-    if(Test.isRunningTest()){
-      standardPriceBookId = Test.getStandardPricebookId();
-    }else{
-      standardPriceBookId = [Select Id from Pricebook2 where IsStandard = true].Id;
-    }
     List<Id> soldOrders = new List<Id>();
      for(Order o: newOrders){
       if(o.Sold_Order__c != null){
@@ -86,7 +75,7 @@ public with sharing class RMS_OrderTriggerHandler {
         if(soldOrderMap.containsKey(o.Sold_Order__c)){
           o.Pricebook2Id = soldOrderMap.get(o.Sold_Order__c).Pricebook2Id;
         }else{
-          o.PriceBook2Id = standardPriceBookId;
+          	o.addError('A valid pricebook could not be retrieved for this order. Please contact your Administrator for help.');
         }
       }
     }

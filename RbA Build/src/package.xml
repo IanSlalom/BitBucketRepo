@@ -65,6 +65,7 @@
         <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
+        <members>RMS_createServicePurchaseOrdersExtTest</members>
         <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
