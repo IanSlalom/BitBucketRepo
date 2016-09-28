@@ -202,8 +202,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
     {
       if ( vendorProducts != null) return vendorProducts;
       vendorProducts = new Set<Id>();
-      for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c =: selectedVendor AND Product__c != null]) {
+      Id constMatRecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Construction_Materials');
+      for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c, Product__r.Cost_PO__c, Product__r.Product_PO__c, Product__r.isActive from Vendor_Product__c Where (Vendor__c =: selectedVendor OR Product__r.RecordTypeId =: constMatRecordTypeId) AND Product__c != null]) {
+		if (!vp.Product__r.isActive) continue;
+		if (!costPurchaseOrder && (vp.Vendor__c != selectedVendor || !vp.Product__r.Product_PO__c))
+			continue;
+		if (costPurchaseOrder && !vp.Product__r.Cost_PO__c)
+			continue;
         vendorProducts.add(vp.Product__c);
+      }
+      if (costPurchaseOrder) {
+      	for (Product2 p : [SELECT Id, Cost_PO__c, isActive from Product2 Where RecordTypeId =: constMatRecordTypeId AND isActive = true AND Cost_PO__c = true]) {
+      		vendorProducts.add(p.Id);
+      	}
       }
 	  System.Debug('*****************vendorProducts=' +vendorProducts);
       return vendorProducts;
@@ -231,7 +242,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       if ( productQueries != null ) return productQueries;
       if (selectedVendor == null) return null;
 
-      // If this is a cost PO, only return non-inventoried items, otherwise return inventoried items
+      // If this is a cost PO, only return cost po items, otherwise return inventoried items
       productQueries = (costPurchaseOrder) ?   'Cost_PO__c = true ' :
                               'Product_PO__c = true ';
 
@@ -525,6 +536,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
               	orderItemWrapperList.add(OIW);
       		}
         }
+        else {
+            OrderItemWrapper OIW = new OrderItemWrapper(oi, null, product2);
+            orderItemWrapperList.add(OIW);
+        	
+        }
       }
 	System.Debug('************orderItemWrapperList=' +orderItemWrapperList);
   System.debug('VENDORSONORDER' + vendorsOnOrder);
@@ -603,7 +619,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
  	System.Debug('*********orderItemWrapperList=' +orderItemWrapperList);   
     for(OrderItemWrapper oiw : orderItemWrapperList){
       system.debug('ADS oiw: '+oiw);
-      if(oiw.account != null && oiw.account.id == selectedVendor && vendorProducts.contains(oiw.product.id) ){
+      if(((oiw.account != null && oiw.account.id == selectedVendor) || (costPurchaseOrder && oiw.account == null)) && vendorProducts.contains(oiw.product.id) ){
 		// Only include in the orderitemwrapperbyvendor if this is a new purchase order
 		// and the order item hasn't been assigned to an order
 		if (newPurchaseOrder && oiw.orderItem.Purchase_Order__c == null)
@@ -671,7 +687,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		// For Cost POs, to have order items, we need a dummy order record, so this creates that order 
 		// and links it to the selected vendor  
         String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
-        Order costPOOrder = new Order(Name='PlaceHolderOrderName', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+        Order costPOOrder = new Order(Name='Dummy Cost PO Order', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
         costPOOrder.Store_Location__c = storeLocation.Id;
 
         try{
@@ -944,6 +960,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   }
 
   public void updateCostCenters() {
+    System.Debug('***************yo=' +newProduct);
     System.Debug('***************newProduct=' +newProduct);
     List<SelectOption> pickListItems = new List<SelectOption>();
     pickListItems.add(new SelectOption('', '-- Select --'));
