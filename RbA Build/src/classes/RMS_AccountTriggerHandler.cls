@@ -14,7 +14,7 @@ public with sharing class RMS_AccountTriggerHandler {
 */
 
   public void OnAfterInsert(Account[] newAccounts){
-    createSharingRecords(newAccounts);
+	createSharingRecords(new Map<Id, Account>(newAccounts).keySet());
   }
 /*
   @future public static void OnAfterInsertAsync(Set<ID> newAccountIDs){
@@ -54,16 +54,18 @@ public with sharing class RMS_AccountTriggerHandler {
 
   public void createOrDeleteSharingRecordsHelper(Map<Id, Account> oldMap, Map<Id, Account> newMap){
     //TODO: account for store location going from nonnull to null; Account for deleting the old share records
-    List<Account> accountsToCreateSharingRecordsFor = new List<Account>();
-    List<Account> accountsToDeleteSharingRecordsFor = new List<Account>();
+//    List<Account> accountsToCreateSharingRecordsFor = new List<Account>();
+    Set<Id> accountsToCreateSharingRecordsFor = new Set<Id>();
+//    List<Account> accountsToDeleteSharingRecordsFor = new List<Account>();
+    Set<Id> accountsToDeleteSharingRecordsFor = new Set<Id>();
   	for(Id aid: oldMap.keyset()){
       if(oldMap.get(aid).OwnerId != newMap.get(aid).OwnerId){
-        accountsToCreateSharingRecordsFor.add(newMap.get(aid));
+        accountsToCreateSharingRecordsFor.add(aid);
       }else if(oldMap.get(aid).Store_Location__c != newMap.get(aid).Store_Location__c){
         if(newMap.get(aid).Store_Location__c != null){
-          accountsToCreateSharingRecordsFor.add(newMap.get(aid));
+          accountsToCreateSharingRecordsFor.add(aid);
         }if(oldMap.get(aid).Store_Location__c != null){
-          accountsToDeleteSharingRecordsFor.add(newMap.get(aid));
+          accountsToDeleteSharingRecordsFor.add(aid);
         }
       }
     }
@@ -71,13 +73,14 @@ public with sharing class RMS_AccountTriggerHandler {
     if (accountsToCreateSharingRecordsFor.size() > 0) createSharingRecords(accountsToCreateSharingRecordsFor);
 
   }
-  public void createSharingRecords(List<Account> accounts){
+  @future
+  public static void createSharingRecords(Set<Id> accountIds){
     //Possibly unnecessary
-    accounts = [Select Id, OwnerId, Store_Location__c, Store_Location__r.Name from Account where Id in: accounts and Store_Location__c != null];
+    List<Account> accounts= [Select Id, OwnerId, Store_Location__c, Store_Location__r.Name from Account where Id in: accountIds and Store_Location__c != null];
     if(!accounts.isEmpty() ){
       List<AccountShare> sharesToInsert = new List<AccountShare>();
 
-      String userQuery = 'Select Id, Store_Locations__c from User where Store_Locations__c includes(';
+      String userQuery = 'Select Id, Store_Locations__c from User where IsActive = true AND Store_Locations__c includes(';
       for(Account a : accounts){ 
           userQuery +='\''+a.Store_Location__r.Name+'\',';
       }
@@ -101,8 +104,13 @@ public with sharing class RMS_AccountTriggerHandler {
     }
   }
 
-  public void deleteSharingRecords(List<Account> accounts){
-      List<AccountShare> sharesToDelete = [Select Id, rowCause, AccountId, UserOrGroupId from AccountShare where AccountId in: accounts and rowCause = 'Manual'];
+  @future
+  public static void deleteSharingRecords(Set<Id> accountIds){
+	  Set<Id> activeUserIds = new Set<Id>();
+	  for (User u : [Select Id, Store_Locations__c from User where IsActive = true AND Store_Locations__c != null]) {
+	  	  activeUserIds.add(u.Id);
+	  }
+      List<AccountShare> sharesToDelete = [Select Id, rowCause, AccountId, UserOrGroupId from AccountShare where AccountId in: accountIds and rowCause = 'Manual' and UserOrGroupId IN: activeUserIds];
       delete sharesToDelete;
   }
   

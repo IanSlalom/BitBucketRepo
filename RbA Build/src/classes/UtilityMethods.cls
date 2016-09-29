@@ -218,6 +218,10 @@ global with sharing class UtilityMethods {
 		
 		Map<String, List<String>> lockedFieldMap;
 
+		Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+		Schema.SObjectType objSchema = schemaMap.get(objectType);
+		Map<String, Schema.SObjectField> fieldMap = objSchema.getDescribe().fields.getMap();
+
 		if(listNew == null){
 			result = 'No records received';
 			return result;
@@ -247,7 +251,7 @@ global with sharing class UtilityMethods {
 				// Check if the locked field has changed
 				if ((mapOld.get(recordToCheck.id)).get(lockedField) != (mapNew.get(recordToCheck.id)).get(lockedField))
 				{
-					dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FIELD_IS_LOCKED, '[field]', lockedField);
+					dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FIELD_IS_LOCKED, '[field]', fieldMap.get(lockedField).getDescribe().getLabel());
 					errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 					recordToCheck.addError(errorMessage, FALSE);
 					result = 'At least one record containted a field that was locked';
@@ -261,7 +265,7 @@ global with sharing class UtilityMethods {
 	 Method to dynamically change error messages
 	****************************************************/
   	public static string fillInErrorRuleValues(String errorMessage, String targetValue, String replacementValue){
-		errorMessage = errorMessage.replace(targetValue, '<b>('+replacementValue+')</b>');
+		errorMessage = errorMessage.replace(targetValue, '<b>'+replacementValue+'</b>');
 		errorMessage = errorMessage.replace('null', '');
 		
 		return errorMessage;
