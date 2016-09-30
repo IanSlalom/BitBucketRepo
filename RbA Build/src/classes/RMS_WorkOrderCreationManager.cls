@@ -1,6 +1,5 @@
 public with sharing class RMS_WorkOrderCreationManager {
-    
-    
+        
     /************************************************************
             createWorkOrderOnOrderSoldOrderBeingAssigned 
     *************************************************************/
@@ -278,6 +277,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         for(Order o : listNew){
         	if (o.RecordTypeId == changeOrderRecordTypeId) continue;
+         	if (o.Id == UtilityMethods.getDummyOrderId()) continue;
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
             	system.debug('****** order: '+o);
@@ -285,6 +285,9 @@ public with sharing class RMS_WorkOrderCreationManager {
                     relatedOpportunityIds.add(o.OpportunityId);
                 } 
         } 
+        
+        // If there were no accounts, then just break out of this method
+        if (relatedAccountIds.size() == 0) return;
         
         list<Account> relatedAccounts = [SELECT ShippingStreet,
                                                 ShippingCity,
@@ -332,6 +335,7 @@ public with sharing class RMS_WorkOrderCreationManager {
 
         for(Order ord : listNew){ 
          	if (ord.RecordTypeId == changeOrderRecordTypeId) continue;
+         	if (ord.Id == UtilityMethods.getDummyOrderId()) continue;
             //CHECKING IF CURRENT ORDER'S OPPORTUNITY HAS ANY RELATED TECH MEASURES IF SO, SKIP LOGIC AND ASSIGN THOSE TO THIS WORK ORDER
             system.debug('****** ord ' + ord);
             if(ord.OpportunityId != null && oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId) != null){
@@ -346,9 +350,10 @@ public with sharing class RMS_WorkOrderCreationManager {
             //CHECK THE RECORD TYPE IS CORO SERVICE, IF IT IS, SKIP LOGIC
             }else{
                 Account relatedDwelling = accountIdToAccountMap.get(ord.AccountId);
-    			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
+//    			if (relatedDwelling.Name == 'RbA') continue;  //If this is RbA (Cost PO order), then continue
+				if (ord.Name == 'Dummy Cost PO Order') continue;
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c) == null){
-                    ord.addError('Store Configuation has not been created.');
+                    ord.addError('Store Configuration has not been created.');
                 } 
                 
                 if(accountIdtoStoreConfigMap.get(relatedDwelling.Store_Location__c).Tech_Measure_Work_Order_Queue_Id__c == null){

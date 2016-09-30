@@ -686,19 +686,23 @@ public with sharing class RMS_vendorPurchaseOrderController {
 //        }
 		// For Cost POs, to have order items, we need a dummy order record, so this creates that order 
 		// and links it to the selected vendor  
-        String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
-        Order costPOOrder = new Order(Name='Dummy Cost PO Order', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
-        costPOOrder.Store_Location__c = storeLocation.Id;
+//        String standardPriceBookId = Test.isRunningTest()? Test.getStandardPricebookId() : [SELECT Id FROM PriceBook2 WHERE Name = 'Standard Price Book'].Id;
+//        Order costPOOrder = new Order(Name='Dummy Cost PO Order', AccountId = selectedVendor, Status='Draft', EffectiveDate = System.Today(), Pricebook2Id = standardPriceBookId);
+//        costPOOrder.Store_Location__c = storeLocation.Id;
 
-        try{
+//        try{
           // Inserts the dummy Order as a parent for the cost PO
-          insert costPOOrder;
-        } catch (Exception e){
-          System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method inserting the Cost POs Order:' + e);
-          ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
-          return null;
-        }
-        orderId = costPOOrder.Id;
+//          insert costPOOrder;
+//        } catch (Exception e){
+//          System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method inserting the Cost POs Order:' + e);
+//          ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+//          return null;
+//        }
+          orderId = UtilityMethods.getDummyOrderId();
+          if (orderId == null) {
+        	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.NO_DUMMY_ORDER));
+        	return null;
+          }
       }
       po.Order__c = orderId;
       // Sets the PO's record type
@@ -728,6 +732,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
           		allOrderItemsHaveWholesaleCost = false;
           		break;
+        	}
+        	else if (oiw.orderItem.Unit_Wholesale_Cost__c <= 0) {
+          		allOrderItemsHaveWholesaleCost = false;
+          		break;        		
         	}
         	else 
         		allOrderItemsHaveWholesaleCost = true;
@@ -1026,6 +1034,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
 			if(oi.Unit_Wholesale_Cost__c == null) {
+			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
+				  return null;
+			}
+			if(!zeroDollarVendor && oi.Unit_Wholesale_Cost__c <= 0) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null;
 			}
