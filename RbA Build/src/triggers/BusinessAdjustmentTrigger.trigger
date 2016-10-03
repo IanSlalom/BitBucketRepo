@@ -33,6 +33,7 @@ trigger BusinessAdjustmentTrigger on Business_Adjustment__c (after delete, after
 		
 		//HANDLERS AND MANAGERS
        	RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
+		List<SObject> orders = new List<SObject>();
 	     
 		
 		// Before Insert
@@ -60,6 +61,7 @@ trigger BusinessAdjustmentTrigger on Business_Adjustment__c (after delete, after
 		
 		else if(Trigger.isInsert && Trigger.isAfter){
 			financialTransactionManager.onAfterInsertAsset(Trigger.new, Trigger.newMap);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		}
 		
 		 
@@ -67,24 +69,26 @@ trigger BusinessAdjustmentTrigger on Business_Adjustment__c (after delete, after
 		
 		else if(Trigger.isUpdate && Trigger.isAfter){
 		    financialTransactionManager.onAfterUpdateOrder(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		}
 		
 		            
 		//After Delete
-		/*
 		else if(Trigger.isDelete && Trigger.isAfter){
-		    handler.OnAfterDelete(Trigger.old, Trigger.oldMap);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
 		}
-		*/
-		
 		// After Undelete 
-		/*
 		else if(Trigger.isUnDelete){
-		    handler.OnUndelete(Trigger.new);
+			orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
 		}
-		*/
+
+		// Try - Catch to catch any dml errors doing the order rollup and displaying
+		// errors on the payment records
+		try { update orders;} 
+		catch(System.DmlException e) {
+			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		}
+
 	}
-
-
-
 }

@@ -121,12 +121,24 @@
                 <field>Retail_Total__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Payments_Received__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Amount_Refunded__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Amount_Due__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Business_Adjustments__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Non_Sufficient_Funds__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -320,10 +332,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Amount_Refunded__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
                 <field>Amount_Financed__c</field>
             </layoutItems>
             <layoutItems>
@@ -337,10 +345,6 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Change_Order_Finance_Fees__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Non_Sufficient_Funds__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>

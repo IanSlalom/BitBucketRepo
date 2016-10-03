@@ -300,10 +300,11 @@ public with sharing class RMS_financialTransactionManager {
                         	system.debug('ads temporary paymentTotal 1: '+paymentTotal);
                         	system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
                         	system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
-                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+							//  commented out per JETT-3638
+/*                        	if(paymentTotal > p.Order__r.Retail_Total__c){
                         	 	errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
                              	mapNew.get(p.id).addError(errorMessage, FALSE);
-                        	} 
+                        	} */
                             newJE.Date__c = Datetime.Now();
                             newJE.Payment__c = p.id;
                             newJE.Order__c = p.Order__c;
@@ -358,10 +359,11 @@ public with sharing class RMS_financialTransactionManager {
 		                        	}
 		                        	system.debug('ads temporary paymentTotal: '+paymentTotal);
 		                        	system.debug('ads temporary p.Order__r.Retail_Total__c: '+p.Order__r.Retail_Total__c);
-		                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+									//  commented out per JETT-3638
+		    /*                    	if(paymentTotal > p.Order__r.Retail_Total__c){
 		                        		 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
 		                            	 mapNew.get(p.id).addError(errorMessage, FALSE);
-		                        	}
+		                        	}*/
 		                        
                                 	//Journal Entry NOT sent to BaanERP, update Journal Entry
                                 	system.debug('ads inside not sent to Baan: '+ je);
