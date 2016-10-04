@@ -76,6 +76,15 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_Appointment_Duration_2_Hours</fullName>
+        <field>Appointment_Duration__c</field>
+        <formula>2</formula>
+        <name>Set Appointment Duration 2 Hours</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Appointment_Duration_4_Hours</fullName>
         <description>Set Default Appointment Duration to 4 hours</description>
         <field>Appointment_Duration__c</field>
@@ -249,9 +258,24 @@
         <criteriaItems>
             <field>RbA_Work_Order__c.Work_Order_Type__c</field>
             <operation>equals</operation>
-            <value>Tech Measure,Service</value>
+            <value>Service</value>
         </criteriaItems>
         <description>Set Appointment Duration for 1 hour for Tech Measure and Service.</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Appointment Duration 2 Hours</fullName>
+        <actions>
+            <name>Set_Appointment_Duration_2_Hours</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </criteriaItems>
+        <description>Set Appointment Duration for 2 hours for Tech Measure</description>
         <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
