@@ -78,28 +78,6 @@
         <targetObject>Store__c</targetObject>
     </fieldUpdates>
     <fieldUpdates>
-        <fullName>Update_Email_Primary</fullName>
-        <description>Pushes primary email from store configuration to the Store Account</description>
-        <field>Email_Primary__c</field>
-        <formula>Email_Primary__c</formula>
-        <name>Update Email Primary</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Formula</operation>
-        <protected>false</protected>
-        <targetObject>Store__c</targetObject>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>Update_Email_Secondary</fullName>
-        <description>Pushes secondary email from store configuration to the Store Account</description>
-        <field>Email_Secondary__c</field>
-        <formula>Email_Secondary__c</formula>
-        <name>Update Email Secondary</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Formula</operation>
-        <protected>false</protected>
-        <targetObject>Store__c</targetObject>
-    </fieldUpdates>
-    <fieldUpdates>
         <fullName>Update_Fax</fullName>
         <description>Pushes fax from store configuration to the Store Account</description>
         <field>Fax</field>
@@ -177,14 +155,6 @@
         </actions>
         <actions>
             <name>Update_DBA</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Update_Email_Primary</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Update_Email_Secondary</name>
             <type>FieldUpdate</type>
         </actions>
         <actions>

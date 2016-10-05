@@ -42,9 +42,16 @@ private class RMS_OrderTriggerHandlerTests {
         );
         
         insert product1;
-        
-        PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
-        insert pricebookEntry1;
+
+		Pricebook2 pricebook1 =  utility.createPricebook2Name('Standard Price Book');
+		insert pricebook1;
+
+		List<PricebookEntry> pbsToEnter = new List<PricebookEntry>();
+		PricebookEntry pricebookEntry1 = utility.createPricebookEntry(Test.getStandardPricebookId(), product1.id);
+		pbsToEnter.add(pricebookEntry1);
+        PricebookEntry pricebookEntry2 = utility.createPricebookEntry(pricebook1.Id, product1.id);
+		pbsToEnter.add(pricebookEntry2);
+        insert pbsToEnter;
         
         List<Order> orderList =  new List<Order>{ new Order(    Name='TMNeeded', 
                                     AccountId = dwelling.id, 

@@ -62,12 +62,6 @@ public with sharing class RMS_OrderTriggerHandler {
   }*/
   
   public void setPriceBookId(List<Order> newOrders){
-    Id standardPriceBookId = null;
-    if(Test.isRunningTest()){
-      standardPriceBookId = Test.getStandardPricebookId();
-    }else{
-      standardPriceBookId = [Select Id from Pricebook2 where IsStandard = true].Id;
-    }
     List<Id> soldOrders = new List<Id>();
      for(Order o: newOrders){
       if(o.Sold_Order__c != null){
@@ -81,7 +75,7 @@ public with sharing class RMS_OrderTriggerHandler {
         if(soldOrderMap.containsKey(o.Sold_Order__c)){
           o.Pricebook2Id = soldOrderMap.get(o.Sold_Order__c).Pricebook2Id;
         }else{
-          o.PriceBook2Id = standardPriceBookId;
+          	o.addError('A valid pricebook could not be retrieved for this order. Please contact your Administrator for help.');
         }
       }
     }

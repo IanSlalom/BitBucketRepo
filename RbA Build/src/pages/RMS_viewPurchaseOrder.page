@@ -12,7 +12,6 @@
 
         window.onload = function()
         {
-        
             //  perform the previously registered 'onload' function, if any
             if ( previousOnload ) previousOnload();
 
@@ -129,7 +128,6 @@ function prepareList(parent,child,isSubselectOptional){
 		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Purchase_Order ,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
 	}
 
-
     </script>
 	<apex:pageMessages /> 
 
@@ -229,16 +227,17 @@ function prepareList(parent,child,isSubselectOptional){
 
 				</apex:pageBlockTable>
             <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new' && costPurchaseOrder}">
+				<apex:actionFunction name="updateCostCenters" action="{!updateCostCenters}" reRender="myTable" />
                 <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
 
 
 					<apex:column >
 						<apex:facet name="header">{!productText}</apex:facet> 
-<!--                              <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>--> 
-					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
+                              <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>
+<!--    					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
 						<apex:selectOptions value="{!productItems}"/>
 						<apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
-					</apex:selectList>
+					</apex:selectList>-->
 
 					</apex:column>
 					<apex:column rendered="{!costPurchaseOrder == true}">

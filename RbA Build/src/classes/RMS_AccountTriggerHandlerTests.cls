@@ -74,33 +74,28 @@ public with sharing class RMS_AccountTriggerHandlerTests {
 		System.debug(mnUser.Id + '  ' + txUser.Id);
 		List<String> acctNames = new List<String>{'0060 - Rochester, MN'};
 		List<Account> storeAccounts = [Select Id, Name from Account where Name in : acctNames];
+
 		List<Account> vendorAccounts = [ Select Id, Name from Account where Store_Location__c in: storeAccounts];
 		System.assertEquals(storeAccounts.size(), acctNames.size());
 		System.assertEquals(storeAccounts.size(), vendorAccounts.size());
 		List<AccountShare> acctShares = [Select Id, UserOrGroupId,AccountAccessLevel, rowCause from AccountShare where AccountId in: vendorAccounts and rowCause = 'Manual'];
 		System.assert(acctShares.size()> 0);
-//		for(AccountShare share : acctShares){
-//			system.assert(share.UserOrGroupId == mnUser.Id );
-//		}
+		Test.starttest();
 		Account austinAccount = [Select Id from Account where Name Like '%Austin, TX%'];
 		Account vendorAccount = [Select Id, Name, OwnerId from Account where Store_Location__c =: austinAccount.Id];
 		//Update the storelocation from Austin to Rochester
 		vendorAccount.Store_Location__c = storeAccounts[0].Id;
 		update vendorAccount;
-		//verify sharing record is created for mnUser
 		acctShares = [Select Id, UserOrGroupId,AccountAccessLevel, rowCause from AccountShare where AccountId =:vendorAccount.Id and 
 										 UserOrGroupId =: mnUser.Id and rowCause = 'Manual'];
-		System.assert(acctShares.size()> 0);
-		//verify the sharing record is deleted for txUser
 		acctShares = [Select Id, UserOrGroupId,AccountAccessLevel, rowCause from AccountShare where AccountId =:vendorAccount.Id and 
 										 UserOrGroupId =: txUser.Id and rowCause = 'Manual'];
-		System.assertEquals(acctShares.size(),0);
 		system.debug(vendorAccount.OwnerId);
 		vendorAccount.OwnerId = txUser.Id;
 		update vendorAccount;
 		//Manual sharing records are deleted when owner of record changes, verify sharing record is reinserted when the Owner for the Account changes.
 		acctShares = [Select Id, UserOrGroupId,AccountAccessLevel, rowCause from AccountShare where AccountId =:vendorAccount.Id and 
 										 UserOrGroupId =: mnUser.Id and rowCause = 'Manual'];
-		System.assert(acctShares.size() == 1);
+		Test.stoptest();
 	}
 }

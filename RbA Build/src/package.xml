@@ -65,6 +65,7 @@
         <members>RMS_createCharges</members>
         <members>RMS_createContactHistoryManager</members>
         <members>RMS_createContactHistoryManagerTests</members>
+        <members>RMS_createServicePurchaseOrdersExtTest</members>
         <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
@@ -436,6 +437,7 @@
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
+        <members>RbA_Operational_Reporting/BO2004_Job_Cost_Summary_LSWP_by_RPD</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/BO2012_Internal_Labor_JIP</members>
@@ -450,6 +452,7 @@
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
+        <members>RbA_Operational_Reporting/On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
         <members>RbA_Operational_Reporting/Order_Status_Report</members>
         <members>RbA_Operational_Reporting/Ordering_and_Install_Status_Report</members>
@@ -511,6 +514,7 @@
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>
+        <members>Orders_with_or_without_Activities</members>
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
         <members>Pricing_Configurations_with_Pricebook_Information</members>

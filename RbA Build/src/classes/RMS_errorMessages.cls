@@ -9,6 +9,7 @@ public with sharing class RMS_errorMessages {
 	public static final String PRICEBOOK_ENTRY_NOT_FOUND = 'A pricebook entry could not be found for this product. Please contact your system admin for help.';
 	public static final String ADD_PRODUCT_EXCEPTION = 'The system was unable to add the item to the purchase order. Please contact your system admin for help.';
 	public static final String SAVE_PO_EXCEPTION = 'The system was unable to save the purchase order. Please contact your system admin for help.';
+	public static final String NO_DUMMY_ORDER = 'The system was unable to retrieve the dummy order id from custom settings. Please contact your system admin for help.';
 	public static final String UPDATE_PO_LINES_EXCEPTION = 'The system was unable to update the purchase order line items. Please contact your system admin for help.';
 	public static final String UPDATE_PO_EXCEPTION = 'The system was unable to update the purchase order. Please contact your system admin for help.';
 	public static final String USER_STORE_LOCATION_BLANK = 'Your user record is not associated with a store location. Please contact your system admin for help.';
@@ -133,7 +134,7 @@ public with sharing class RMS_errorMessages {
 	public static final String LABOR_AMOUNTS_NULL = '&bull;Both Internal and External Costs are null.';
 	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
 	public static final String VENDOR_HAS_NO_BAAN_NUMBER = '&bull;The Vendor you have selected\'s account has no Baan Business Partner Number';
-	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount can not be zero or empty on a Misc Reimbursement.';
+	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount cannot be zero or empty on a Misc Reimbursement.';
 
 	public static final String ASSET_ID_IS_NULL = '&bull;The Asset Id is null.';
 	public static final String MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED = '&bull;The Asset you are trying to edit has more than one unsubmitted Journal Entry. Please consult your system admin for help resolving this error.';
@@ -141,17 +142,18 @@ public with sharing class RMS_errorMessages {
 	public static final String BILL_TO_CONTACT_ON_ORDER_NULL = '&bull;The \'Bill to Contact\' field on the related order is null.';
 	public static final String STORE_LOCATION_ON_ORDER_NULL = '&bull;The \'Store Location\' field on the related order is null.';
 	public static final String RETAIL_SUBTOTAL_ON_ORDER_NULL = '&bull;The \'Retail Subtotal\' field on the related order is null.';
-	public static final String QUANTITY_IS_LESS_THAN_ZERO = '&bull;The Asset Quantity can not be lower than zero.';
+	public static final String QUANTITY_IS_LESS_THAN_ZERO = '&bull;The Asset Quantity cannot be lower than zero.';
 	
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_DEPOSIT = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Deposits. Please contact your system admin for assistance';
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_LABOR = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Labor. Please contact your system admin for assistance.';
 	public static final String NO_RELATED_DEPOSIT_JOURNAL_ENTRY = '&bull;This Order Has no related Journal Entries with deposit type.';
 	public static final String REVENUE_ALREADY_RECOGNIZED = '&bull;This revenue has already been recognized and submitted for this order and you cannot change it.';
-	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You can not change the Revenue Recognized Date to another date, you must first clear it.';					
+	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You cannot change the Revenue Recognized Date to another date, you must first clear it.';					
 
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	
-	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
+//  commented out per JETT-3638
+//	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
 	public static final String CHANGED_WRITE_OFF_AND_VENDOR_CREDIT = '&bull;You are unable to change the Quantity Written Off the same time you change Vendor Credit.';
 	
 	
@@ -168,9 +170,9 @@ public with sharing class RMS_errorMessages {
 	public static final String CUSTOM_SETTING_REQUIRED = 'Require custom settings are missing: \'Data Loading Profile ID\' or \'Unassigned Account Id\'.';
 	public static final String DATA_LOADING_CUSTOM_SETTING_REQUIRED = 'Please populate the \'Data Loading Profile ID\' in Custom Settings.';
 	public static final String RECORD_IS_LOCKED = 'This record is locked so you cannot change it.';
-	public static final String FIELD_IS_LOCKED = '&bull;The [field] field can not be changed in the current status.';
+	public static final String FIELD_IS_LOCKED = '&bull;The [field] field cannot be changed in the current status.';
 	public static final String WORK_ORDERS_WITH_OPEN_EVENTS = 'Please close appointments within any Tech Measure or Install Work Orders before cancelling this order.';
-	public static final String ORDER_CLOSED = 'You can not add or edit products on a closed order.';
+	public static final String ORDER_CLOSED = 'You cannot add or edit products on a closed order.';
 
 
 }

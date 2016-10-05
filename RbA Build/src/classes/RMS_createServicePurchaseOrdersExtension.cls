@@ -1,3 +1,18 @@
+/*******************************************************//**
+
+@class  RMS_createServicePurchaseOrdersExtension
+
+@brief  Controller Extension for RMS_createServicePurchaseOrders visualforce page
+
+@author  Creston Kuenzi (Slalom.CDK)
+
+@version    2016-9-16  Slalom.CDK
+Created.
+
+@copyright  (c)2016 Slalom.  All Rights Reserved. 
+Unauthorized use is prohibited.
+
+***********************************************************/
 public with sharing class RMS_createServicePurchaseOrdersExtension {
 
 	/******* Variables  *****************/
@@ -196,17 +211,6 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 		errorOccurred = 'false';
 		return null;    
 	} 
-  public PageReference save2() {
-
-    // Set this flag to true so we know to exit the javascript before redirecting
-    errorOccurred = 'true';
-    errorOccurred = 'false';
-    return null;
-  }
-
-    public PageReference saveContinue(){
-        return null;
-    } 
 
 	/*******************************************************
 			setStoreAbbreviation method
