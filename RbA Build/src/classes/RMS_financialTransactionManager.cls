@@ -962,7 +962,8 @@ public with sharing class RMS_financialTransactionManager {
 				if((mapOld != null && mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c)
 					||(mapOld == null && mapNew.get(a.id).Quantity_Written_Off__c != null)){
 						//ONLY IF QUANTITY IS 0 look into
-					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+//					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+					if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
 						inventoryWriteOffAT = true;
 					}
 				}
@@ -971,7 +972,8 @@ public with sharing class RMS_financialTransactionManager {
 						||(mapOld == null && mapNew.get(a.id).Vendor_Credit__c != null)
 						&& (mapNew.get(a.id).Vendor_Credit__c != null)){
 					
-					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
+//					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
+					if(a.RecordTypeId != assetInstalledProductsRecordTypeId){
 						if(assetIdToLatestJEforVendorCredit.get(a.id) == null){
 							errorMessage = 'A vendor credit cannot be issued on an item that has not been received.';
 						}else{
@@ -1009,12 +1011,14 @@ public with sharing class RMS_financialTransactionManager {
                 		serviceInventoryReceivedAT = true;
 					}
 					if(mapNew.get(a.id).RecordTypeId == assetCostProductsRecordTypeId){
-                		if(a.Sold_Order__r.RecordTypeId == assetCostProductsRecordTypeId){
+//                		if(a.Sold_Order__r.RecordTypeId == assetCostProductsRecordTypeId){
+                		if(a.RecordTypeId == assetCostProductsRecordTypeId){
                 			costProductRecivedAT = true;
                 		}
 					}
                 	if(a.Quantity_Written_Off__c != null){
-	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+//	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+	                	if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
 	                		inventoryWriteOffAT = true;
 	                	}
                 	}
@@ -1802,7 +1806,7 @@ public with sharing class RMS_financialTransactionManager {
     																	'Rev Recognized - AR', 
         																'Rev Recognized - Finance Fees',
         																'Rev Recognized - COGS',
-        																'Rev Recognized - Service COGS',
+        																//'Rev Recognized - Service COGS',
         																'Rev Recognized - Service Tax',
         																'Rev Recognized - Service AR'
         																};
@@ -1821,7 +1825,7 @@ public with sharing class RMS_financialTransactionManager {
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedFinanceFeesFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Finance Fees');
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - COGS');
         
-        map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service COGS');
+        //map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service COGS');
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceTaxFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service Tax');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceARFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service AR');
       
@@ -1866,7 +1870,7 @@ public with sharing class RMS_financialTransactionManager {
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor');
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborJIPFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor - JIP');
 	                    //errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceInternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Internal Labor');
-	                   	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
+	                   	//errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
                     	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceTaxFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Tax');
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceARFTL.get(o.id) , errorMessage, 'Rev Recognized - Service AR');
                     }
@@ -3286,10 +3290,10 @@ public with sharing class RMS_financialTransactionManager {
     
     
     /***************************************************
-     Methods to lock records
+     Methods to lock records (Not used)
     ****************************************************/
     // TODO: Make these completely generic for sObjects?
-    public void lockPaymentRecords(list<Payment__c> listNew){   
+/*    public void lockPaymentRecords(list<Payment__c> listNew){   
 
         List<Payment__c> recordsToLock = new List<Payment__c>();
 
@@ -3304,9 +3308,9 @@ public with sharing class RMS_financialTransactionManager {
             String result = UtilityMethods.lockRecords(recordsToLock);
         }
         
-    }
+    }*/
 
-    public void lockPaymentRecords(list<Payment__c> listOld, map<id,Payment__c> mapNew ){   
+/*    public void lockPaymentRecords(list<Payment__c> listOld, map<id,Payment__c> mapNew ){   
 
         List<Payment__c> recordsWithNullProcessedDate = new List<Payment__c>();
 
@@ -3317,7 +3321,7 @@ public with sharing class RMS_financialTransactionManager {
             }
         }   
         lockPaymentRecords(recordsWithNullProcessedDate);   
-    }
+    }*/
 
     /***************************************************
      Method to dynamicly change error messages
