@@ -28,6 +28,56 @@ private class RMS_financialTransManRevRecognitionTest {
 
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
+
+        User u = [select Id from User WHERE Id =: UserInfo.getUserId()];
+
+        System.runAs(u) {
+
+        Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
+       
+        UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
+        Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
+        
+        User portalAccountOwner1 = new User(
+            UserRoleId = portalRole.Id,
+            ProfileId = profile1.Id,
+            Username = System.now().millisecond() + 'test2@test.com',
+            Alias = 'batman',
+            Email='bruce.wayne@wayneenterprises.com',
+            EmailEncodingKey='UTF-8',
+            Firstname='Bruce',
+            Lastname='Wayne',
+            LanguageLocaleKey='en_US',
+            LocaleSidKey='en_US',
+            TimeZoneSidKey='America/Chicago'
+        );
+        insert portalAccountOwner1;
+       
+        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
+        insert communityUserAccount; 
+       
+        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
+        insert communityContact;  
+                  
+        User communityUser = new User(  Alias = 'test123', 
+                                        Email = 'test123@noemail.com',
+                                        EmailEncodingKey ='UTF-8', 
+                                        FirstName = 'first',
+                                        LastName='Testing', 
+                                        LanguageLocaleKey='en_US',
+                                        LocaleSidKey='en_US', 
+                                        ProfileID = partnerProfileId,
+                                        Country = 'United States',
+                                        IsActive = true,
+                                        ContactId = communityContact.Id,
+                                        TimeZoneSidKey = 'America/Los_Angeles', 
+                                        Username = 'tester9837589@noemail.com',  
+                                        PortalRole = 'Worker',
+                                        CommunityNickname = 'financialTest'
+                                        );
+       
+        insert communityUser;
+       }
 		
 		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
@@ -412,50 +462,7 @@ private class RMS_financialTransManRevRecognitionTest {
 															 );
 		insert workOrder1;		
 
-		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
-       
-      	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
-		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
-		
-		User portalAccountOwner1 = new User(
-			UserRoleId = portalRole.Id,
-			ProfileId = profile1.Id,
-			Username = System.now().millisecond() + 'test2@test.com',
-		   	Alias = 'batman',
-			Email='bruce.wayne@wayneenterprises.com',
-			EmailEncodingKey='UTF-8',
-			Firstname='Bruce',
-			Lastname='Wayne',
-			LanguageLocaleKey='en_US',
-			LocaleSidKey='en_US',
-			TimeZoneSidKey='America/Chicago'
-		);
-		insert portalAccountOwner1;
-       
-        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
-        insert communityUserAccount; 
-       
-        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
-        insert communityContact;  
-                  
-        User communityUser = new User(	Alias = 'test123', 
-										Email = 'test123@noemail.com',
-		               					EmailEncodingKey ='UTF-8', 
-		               					FirstName = 'first',
-		               					LastName='Testing', 
-		               					LanguageLocaleKey='en_US',
-		                				LocaleSidKey='en_US', 
-		                				ProfileID = partnerProfileId,
-		                				Country = 'United States',
-		                				IsActive = true,
-						                ContactId = communityContact.Id,
-						                TimeZoneSidKey = 'America/Los_Angeles', 
-						                Username = 'tester9837589@noemail.com',  
-						                PortalRole = 'Worker',
-						                CommunityNickname = 'financialTest'
-						                );
-       
-        insert communityUser;
+        User communityUser = [SELECT Id FROM User WHERE username = 'tester9837589@noemail.com'];
  
 		Resource__c res = new Resource__c(
 			Active__c = true,
@@ -517,50 +524,7 @@ private class RMS_financialTransManRevRecognitionTest {
 															 );
 		insert workOrder1;		
 
-		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
-       
-      	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
-		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
-		
-		User portalAccountOwner1 = new User(
-			UserRoleId = portalRole.Id,
-			ProfileId = profile1.Id,
-			Username = System.now().millisecond() + 'test2@test.com',
-		   	Alias = 'batman',
-			Email='bruce.wayne@wayneenterprises.com',
-			EmailEncodingKey='UTF-8',
-			Firstname='Bruce',
-			Lastname='Wayne',
-			LanguageLocaleKey='en_US',
-			LocaleSidKey='en_US',
-			TimeZoneSidKey='America/Chicago'
-		);
-		insert portalAccountOwner1;
-       
-        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
-        insert communityUserAccount; 
-       
-        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
-        insert communityContact;  
-                  
-        User communityUser = new User(	Alias = 'test123', 
-										Email = 'test123@noemail.com',
-		               					EmailEncodingKey ='UTF-8', 
-		               					FirstName = 'first',
-		               					LastName='Testing', 
-		               					LanguageLocaleKey='en_US',
-		                				LocaleSidKey='en_US', 
-		                				ProfileID = partnerProfileId,
-		                				Country = 'United States',
-		                				IsActive = true,
-						                ContactId = communityContact.Id,
-						                TimeZoneSidKey = 'America/Los_Angeles', 
-						                Username = 'tester9837589@noemail.com',  
-						                PortalRole = 'Worker',
-						                CommunityNickname = 'financialTest'
-						                );
-       
-        insert communityUser;
+        User communityUser = [SELECT Id FROM User WHERE username = 'tester9837589@noemail.com'];
  
 		Resource__c res = new Resource__c(
 			Active__c = true,
@@ -628,50 +592,7 @@ private class RMS_financialTransManRevRecognitionTest {
 															 );
 		insert workOrder1;		
 
-		Id partnerProfileId = [select id from profile where name='Partner Community User'].id;
-       
-      	UserRole portalRole = [Select Id From UserRole Where PortalType = 'None' Limit 1];
-		Profile profile1 = [Select Id from Profile where name = 'System Administrator'];
-		
-		User portalAccountOwner1 = new User(
-			UserRoleId = portalRole.Id,
-			ProfileId = profile1.Id,
-			Username = System.now().millisecond() + 'test2@test.com',
-		   	Alias = 'batman',
-			Email='bruce.wayne@wayneenterprises.com',
-			EmailEncodingKey='UTF-8',
-			Firstname='Bruce',
-			Lastname='Wayne',
-			LanguageLocaleKey='en_US',
-			LocaleSidKey='en_US',
-			TimeZoneSidKey='America/Chicago'
-		);
-		insert portalAccountOwner1;
-       
-        Account communityUserAccount = new Account(name ='Community User Account', Baan_Business_Partner_Number__c = '12345', OwnerId = portalAccountOwner1.Id);
-        insert communityUserAccount; 
-       
-        Contact communityContact = new Contact(LastName ='testCon',AccountId = communityUserAccount.Id);
-        insert communityContact;  
-                  
-        User communityUser = new User(	Alias = 'test123', 
-										Email = 'test123@noemail.com',
-		               					EmailEncodingKey ='UTF-8', 
-		               					FirstName = 'first',
-		               					LastName='Testing', 
-		               					LanguageLocaleKey='en_US',
-		                				LocaleSidKey='en_US', 
-		                				ProfileID = partnerProfileId,
-		                				Country = 'United States',
-		                				IsActive = true,
-						                ContactId = communityContact.Id,
-						                TimeZoneSidKey = 'America/Los_Angeles', 
-						                Username = 'tester9837589@noemail.com',  
-						                PortalRole = 'Worker',
-						                CommunityNickname = 'financialTest'
-						                );
-       
-        insert communityUser;
+        User communityUser = [SELECT Id FROM User WHERE username = 'tester9837589@noemail.com'];
  
 		Resource__c res = new Resource__c(
 			Active__c = true,
