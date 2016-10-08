@@ -81,6 +81,7 @@
         <members>RMS_financialTransManRefundTest</members>
         <members>RMS_financialTransManRevRecognitionTest</members>
         <members>RMS_financialTransactionManager</members>
+        <members>RMS_financialTransactionManagerTest</members>
         <members>RMS_mobileAppAPIController</members>
         <members>RMS_mobileAppAPIControllerTest</members>
         <members>RMS_mobileAppContactHelper</members>
