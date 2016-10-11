@@ -153,18 +153,19 @@ private class RMS_financialTransManInventoryTest {
 		// Verify the account numbers 
 		System.AssertEquals(interCompanyDebit.Name, je2.Debit_General_Ledger_Account__c);
 		System.AssertEquals(interCompanyCredit.Name, je2.Credit_General_Ledger_Account__c);
-// TODO		
-//		asset1.Quantity = 3;
-//		update asset1;
 
-/*		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
+		asset1.Quantity = 4;
+		update asset1;
+
+		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
 								WHERE Order__c =: soldOrder.Id AND Type__c = 'Inventory Received - Intercompany' AND Sent_to_BaanERP__c = false]; 
 
-		System.AssertEquals(100, je2.Amount__c);
+		System.AssertEquals(200, je2.Amount__c);
 		System.AssertEquals(System.today(), je2.Date__c.date());
+
 		// Verify the account numbers 
-		System.AssertEquals(interCompanyDebit.Name, je2.Credit_General_Ledger_Account__c);
-		System.AssertEquals(interCompanyCredit.Name, je2.Debit_General_Ledger_Account__c);*/
+		System.AssertEquals(interCompanyDebit.Name, je2.Debit_General_Ledger_Account__c);
+		System.AssertEquals(interCompanyCredit.Name, je2.Credit_General_Ledger_Account__c);
 		
 		Test.stopTest();
 	}
@@ -238,18 +239,19 @@ private class RMS_financialTransManInventoryTest {
 		// Verify the account numbers 
 		System.AssertEquals(interCompanyCCDebit.Name, je2.Debit_General_Ledger_Account__c);
 		System.AssertEquals(interCompanyCCCredit.Name, je2.Credit_General_Ledger_Account__c);
-// TODO		
-//		asset1.Quantity = 3;
-//		update asset1;
 
-/*		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
-								WHERE Order__c =: soldOrder.Id AND Type__c = 'Inventory Received - Intercompany' AND Sent_to_BaanERP__c = false]; 
+		asset1.Quantity = 4;
+		update asset1;
 
-		System.AssertEquals(100, je2.Amount__c);
+		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
+								WHERE Order__c =: soldOrder.Id AND Type__c = 'Inventory Received - Intercompany Consolidation Center' AND Sent_to_BaanERP__c = false]; 
+
+		System.AssertEquals(200, je2.Amount__c);
 		System.AssertEquals(System.today(), je2.Date__c.date());
+
 		// Verify the account numbers 
-		System.AssertEquals(interCompanyDebit.Name, je2.Credit_General_Ledger_Account__c);
-		System.AssertEquals(interCompanyCredit.Name, je2.Debit_General_Ledger_Account__c);*/
+		System.AssertEquals(interCompanyCCDebit.Name, je2.Debit_General_Ledger_Account__c);
+		System.AssertEquals(interCompanyCCCredit.Name, je2.Credit_General_Ledger_Account__c);
 		
 		Test.stopTest();
 	}
@@ -323,18 +325,18 @@ private class RMS_financialTransManInventoryTest {
 		// Verify the account numbers 
 		System.AssertEquals(externalVendorDebit.Name, je2.Debit_General_Ledger_Account__c);
 		System.AssertEquals(externalVendorCredit.Name, je2.Credit_General_Ledger_Account__c);
-// TODO		
-//		asset1.Quantity = 3;
-//		update asset1;
 
-/*		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
-								WHERE Order__c =: soldOrder.Id AND Type__c = 'Inventory Received - Intercompany' AND Sent_to_BaanERP__c = false]; 
+		asset1.Quantity = 4;
+		update asset1;
 
-		System.AssertEquals(100, je2.Amount__c);
+		je2 = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
+								WHERE Order__c =: soldOrder.Id AND Type__c = 'Inventory Received - External Vendor' AND Sent_to_BaanERP__c = false]; 
+
+		System.AssertEquals(200, je2.Amount__c);
 		System.AssertEquals(System.today(), je2.Date__c.date());
 		// Verify the account numbers 
-		System.AssertEquals(interCompanyDebit.Name, je2.Credit_General_Ledger_Account__c);
-		System.AssertEquals(interCompanyCredit.Name, je2.Debit_General_Ledger_Account__c);*/
+		System.AssertEquals(externalVendorDebit.Name, je2.Debit_General_Ledger_Account__c);
+		System.AssertEquals(externalVendorCredit.Name, je2.Credit_General_Ledger_Account__c);
 		
 		Test.stopTest();
 	}

@@ -374,10 +374,13 @@ public with sharing class RMS_financialTransactionManager {
                                 	je.Customer__c = p.Order__r.BillToContactId;
 								// It's a misc cash receipt
 								} else {
-                        			Journal_Entry__c newJE = new Journal_Entry__c(
-                            		Date__c = Datetime.Now(),
-                            		Payment__c = p.id,
-                            		Amount__c = p.Payment_Amount__c);
+                        			//Journal_Entry__c newJE = new Journal_Entry__c(
+                            		//Date__c = Datetime.Now(),
+                            		//Payment__c = p.id,
+                            		//Amount__c = p.Payment_Amount__c);
+		                            je.Date__c = Datetime.Now();
+        		                    je.Payment__c = p.id;
+                		            je.Amount__c = p.Payment_Amount__c;
 								}
 								
                                 if(typeOfPayment == 'DepositDeposit'){
@@ -765,8 +768,9 @@ public with sharing class RMS_financialTransactionManager {
                                     je.Amount__c = l.External_Labor_Amount__c;
                                     je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                     
-                                    je.Debit_General_Ledger_Account__c = l.Installer_Account_Number__c;
+                                	je.Debit_General_Ledger_Account__c = laborIdToMiscReimbursementGLAmap.get(l.id);
                                     je.Credit_General_Ledger_Account__c = laborIdToMiscReimbursementFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+
                                 }
     
                                 journalEntriesToUpsert.add(je);
@@ -2670,16 +2674,16 @@ public with sharing class RMS_financialTransactionManager {
                                 je.Credit_General_Ledger_Account__c = refundIdToDepositFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
                             }else if(refundType == 'deposit'){
                                 je.Type__c = 'Refund - Deposit';
-                                je.Debit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
-                                je.Credit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Debit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Credit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                             }else if(refundType == 'finalPayment'){
                                 je.Type__c = 'Refund - Final Payment';
                                 je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                                 je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
                             }else if(refundType == 'finalPaymentCheck'){
                                 je.Type__c = 'Refund - Final Payment';
-                                je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
-                                je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                             }
                             journalEntriesToUpsert.add(je);
                         }//END ELSE NOT SENT TO BaanERP
@@ -3051,12 +3055,12 @@ public with sharing class RMS_financialTransactionManager {
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }else{
             //CHECK IF CREDIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Cash Receipt' && objectType != 'Misc Reimbursement' && ftList[0].Credit_Account_Number__c == null ){
+            if(objectType != 'Misc Cash Receipt' && ftList[0].Credit_Account_Number__c == null ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_CREDIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
             //CHECK IF DEBIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Cash Receipt' && ftList[0].Debit_Account_Number__c == null ){
+            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }

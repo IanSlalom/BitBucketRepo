@@ -342,8 +342,10 @@ private class RMS_financialTransManPaymentTest {
 		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
 		Id paymentMiscCashReceiptRecordTypeId = UtilityMethods.retrieveRecordTypeId('Misc_Cash_Receipt', 'Payment__c');
-		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig.id, Name = '3132', Account_Type__c = 'Misc Cash Receipt');
+		Financial_Account_Number__c glAccount1 = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig.id, Name = '233132', Account_Type__c = 'Misc Cash Receipt');
 		insert glAccount1;
+
+		Financial_Account_Number__c depAcctNumberDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANMiscCashReceiptDebit'];
 		
 		Payment__c payment1 = new Payment__c(	Payment_Amount__c = 100,
 												Payment_Date__c = Date.Today(), 
@@ -352,18 +354,26 @@ private class RMS_financialTransManPaymentTest {
 												RecordTypeId = paymentMiscCashReceiptRecordTypeId
 												);
 		insert payment1;
-		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Payment__c, Date__c FROM Journal_Entry__c WHERE Payment__c =: payment1.Id]; 
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Payment__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c WHERE Payment__c =: payment1.Id]; 
 		System.AssertEquals(100, je.Amount__c);
 		System.AssertEquals('Misc Cash Receipt', je.Type__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers 
+		System.AssertEquals(depAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals('233777132', je.Credit_General_Ledger_Account__c);
 		
 		payment1.Payment_Amount__c = 200;
 		update payment1;
-		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Payment__c, Date__c FROM Journal_Entry__c WHERE Payment__c =: payment1.Id]; 
-// TO DO : assert failing
-//		System.AssertEquals(200, je.Amount__c);
+		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Payment__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c  FROM Journal_Entry__c WHERE Payment__c =: payment1.Id]; 
+		System.AssertEquals(200, je.Amount__c);
 		System.AssertEquals('Misc Cash Receipt', je.Type__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers. Credit should be the all but the last 3 digits of the GL Account,
+		// then the store location number, then the last 3 digits of the GL Account number
+		System.AssertEquals(depAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals('233777132', je.Credit_General_Ledger_Account__c);
 
 		delete payment1;
 		test.stoptest();

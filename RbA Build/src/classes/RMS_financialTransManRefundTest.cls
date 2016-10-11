@@ -163,7 +163,7 @@ private class RMS_financialTransManRefundTest {
 		System.AssertEquals(10, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 
-		// Verify the account numbers are the reverse of the deposit debit/credit
+		// Verify the account numbers are not the reverse of the deposit debit/credit
 		System.AssertEquals(depCheckRefundAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
 		System.AssertEquals(depCheckRefundAcctNumberCredit.Name, je.Credit_General_Ledger_Account__c);
 		
@@ -276,10 +276,9 @@ private class RMS_financialTransManRefundTest {
 		System.AssertEquals(20, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 		
-		// Verify the account numbers are the reverse of the deposit debit/credit
-// TODO: These are reversed and should not be
-//		System.AssertEquals(finalPaymentCheckRefundAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
-//		System.AssertEquals(finalPaymentCheckRefundAcctNumberCredit.Name, je.Credit_General_Ledger_Account__c);
+		// Verify the account numbers
+		System.AssertEquals(finalPaymentCheckRefundAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(finalPaymentCheckRefundAcctNumberCredit.Name, je.Credit_General_Ledger_Account__c);
 		delete refund1;
 		Test.stopTest();
 	}

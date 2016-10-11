@@ -265,9 +265,9 @@ private class RMS_financialTransManRevRecognitionTest {
 		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
 		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];		
 		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
-		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id );
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id, Program_Fee__c = 10 );
 		insert storeFinance;
-		Order_Financing__c orderFinancing = new Order_Financing__c(Store_Location__c = store.Id, Store_Finance_Program__c = storeFinance.Id, Related_Order__c = soldOrder.Id, Program_Fee__c = 50);
+		Order_Financing__c orderFinancing = new Order_Financing__c(Store_Location__c = store.Id, Store_Finance_Program__c = storeFinance.Id, Related_Order__c = soldOrder.Id, Amount_Financed__c = 500);
 		insert orderFinancing;
 		Id paymentDepositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
 		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
@@ -278,14 +278,23 @@ private class RMS_financialTransManRevRecognitionTest {
 												Payment_Date__c = Date.Today()
 												);
 		insert payment1;
+
+		Financial_Account_Number__c FANRRFinanceFeesDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANRRFinanceFeesDebit'];
+		Financial_Account_Number__c FANRRFinanceFeesCredit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANRRFinanceFeesCredit'];
 		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		update soldOrder;
-//TODO
-//		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c FROM Journal_Entry__c 
-//								WHERE Order__c =: soldOrder.Id AND Type__c = 'Rev Recognized - Finance Fees']; 
-//		System.AssertEquals(50, je.Amount__c);
-//		System.AssertEquals(System.today(), je.Date__c.date());
+		Order myorder = [SELECT Id, Finance_Program_Fees__c, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
+		System.AssertEquals(50, myorder.Finance_Program_Fees__c);
+		
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c  FROM Journal_Entry__c 
+								WHERE Order__c =: soldOrder.Id AND Type__c = 'Rev Recognized - Finance Fees']; 
+		System.AssertEquals(50, je.Amount__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers are not the reverse of the deposit debit/credit
+		System.AssertEquals(FANRRFinanceFeesDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(FANRRFinanceFeesCredit.Name, je.Credit_General_Ledger_Account__c);
 
 		// Delete the Rev Recognized Date and verify the journal entry is deleted
 		soldOrder.Revenue_Recognized_Date__c = null;
