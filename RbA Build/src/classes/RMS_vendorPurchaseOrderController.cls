@@ -560,26 +560,24 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // For Cost POs, pulls the current user's multiple store locations and puts them in a set so the related
     // vendors can be selected
     if (costPurchaseOrder) {
-	  String storeLocationText;
+//	  String storeLocationText;
+	  Set<String> storeLocationText = new Set<String>();
 	  User currentUser = [SELECT Store_Locations__c, Default_Store_Location__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
 
       // If a test is running just set the store name, otherwise get it from the current user
       String storeLocationNames = (Test.isRunningTest()) ?   '77 - Twin Cities, MN' 
       														: currentUser.Store_Locations__c;
-
 	  // Build text string to be used in dynamic soql below
       if (String.isNotBlank(storeLocationNames)) {
-	      storeLocationText = '(';
     	  for (String storeText : storeLocationNames.split(';')) {
-      	  	storeLocationText += '\'' + storeText + '\',';
+      	  	storeLocationText.add(storeText);
       	  }
-      	  storeLocationText = storeLocationText.substring(0,storeLocationText.length()-1) + ')';
       }
-      
-        for (Account store : Database.query('SELECT Id FROM Account WHERE Name IN ' +storeLocationText )){
+        for (Account store : Database.query('SELECT Id FROM Account WHERE Name IN : storeLocationText' )){
         	storeLocationSet.add(store.Id);
         }
-		if (storeLocationSet == null) {
+ //       System.Debug()
+		if (storeLocationSet.size() == 0) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
         }
       // If a test is running just set the store name, otherwise get it from the current user
