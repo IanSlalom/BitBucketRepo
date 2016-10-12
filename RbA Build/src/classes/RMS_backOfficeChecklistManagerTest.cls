@@ -17,7 +17,8 @@ public with sharing class RMS_backOfficeChecklistManagerTest {
 		
 		Order ord1 = new Order( AccountId = newDwelling.id ,
 								Status = 'Draft', 
-								EffectiveDate = Date.Today()
+								EffectiveDate = Date.Today(),
+								Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert ord1;
 		
@@ -50,7 +51,8 @@ public with sharing class RMS_backOfficeChecklistManagerTest {
 		
 		Order ord1 = new Order( AccountId = newDwelling.id ,
 								Status = 'Draft', 
-								EffectiveDate = Date.Today()
+								EffectiveDate = Date.Today(),
+								Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert ord1;
 		

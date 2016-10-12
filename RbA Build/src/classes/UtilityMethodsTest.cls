@@ -230,7 +230,7 @@ private class UtilityMethodsTest {
 		
 		utility.createOrderTestRecords();
 
-		Order soldOrder = [SELECT Id, Name, Status FROM Order WHERE Name = 'Sold Order 1'];
+		Order soldOrder = [SELECT Id, Name, Status, RecordTypeId FROM Order WHERE Name = 'Sold Order 1'];
 		Account store = [SELECT Id, Active_Store_Configuration__c from Account Where Name = '77 - Twin Cities, MN'];
 
 		List<Order> lockedRecords = new List<Order>();		
