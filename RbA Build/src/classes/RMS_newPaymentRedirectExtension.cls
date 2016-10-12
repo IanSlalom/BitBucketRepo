@@ -87,8 +87,8 @@ public with sharing class RMS_newPaymentRedirectExtension {
         			// TODO:   These parameter will need to be updated after pushing to build and production
          			m.put('CF00N6100000Br7Y0', theOrder.Store_Location__r.Name);	
          			m.put('CF00N6100000Br7Y0_lkid', theOrder.Store_Location__c);	
-         			m.put('CF00Nn0000000XyEu', theOrder.BillToContact.Name);	
-         			m.put('CF00Nn0000000XyEu_lkid', theOrder.BillToContactId);	
+         			m.put('CF00NQ0000001cUgI', theOrder.BillToContact.Name);	
+         			m.put('CF00NQ0000001cUgI_lkid', theOrder.BillToContactId);	
         		}
         	}		
 		}
