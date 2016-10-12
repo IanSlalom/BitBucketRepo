@@ -109,6 +109,10 @@
             sforce.console.setTabTitle( 'Edit Checks' );
 
         };
+        function setFocusOnLoad() {
+            // Do nothing. This keeps standard Salesforce from giving focus to the first
+            // field so that the calendar widget won't pop up.
+        }
         
 
     </script>
