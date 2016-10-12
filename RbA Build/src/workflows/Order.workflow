@@ -92,6 +92,10 @@
             <operation>equals</operation>
             <value>Change_Order</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>Order.Order_Processed_Date__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
         <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
