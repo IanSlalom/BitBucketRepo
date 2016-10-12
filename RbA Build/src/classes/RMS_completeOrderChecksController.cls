@@ -40,7 +40,9 @@ public with sharing class RMS_completeOrderChecksController {
         if(allChecksCompleted){
             Order order = [SELECT Id, Status, Tech_Measure_Status__c, Order_Processed_Date__c FROM Order WHERE Id =: ordId];
             if(order.Status == 'Draft'){
-				order.Order_Processed_Date__c = System.Today();
+                if(order.Order_Processed_Date__c == null){
+                 order.Order_Processed_Date__c = System.Today();   
+                }                
                 order.Status = 'Tech Measure Needed';
                 if(order.Tech_Measure_Status__c == 'Scheduled'){
                     order.Status = 'Tech Measure Scheduled';
