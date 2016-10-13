@@ -19,8 +19,11 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
     
     private static Order ord;
     
-    private static void setupData()
-    {
+	@testSetup static void setupData(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
         TestUtilityMethods utility = new TestUtilityMethods();
         utility.setUpConfigs();
         
@@ -41,10 +44,9 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         insert contactsToInsert;
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
-        insert finacialAccountNumber1;
         Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '2');
-        insert finacialAccountNumber2;
         
+		insert new List<Financial_Account_Number__c>{finacialAccountNumber1,finacialAccountNumber2};
         Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(  Store_Configuration__c = storeConfig1.id,
                                                                                      Transaction_Type__c = 'Inventory Received - External Vendor',
                                                                                      Debit_Account_Number__c = finacialAccountNumber1.id,
@@ -72,56 +74,6 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
             insert sprods;
         
         
-/*        Problem_Component_List__c probC1 = new Problem_Component_List__c(name='Prob1');
-        Problem_Component_List__c probC2 = new Problem_Component_List__c(name='Prob2');
-        Problem_Component_List__c probC3 = new Problem_Component_List__c(name='Prob3');
-        List<Problem_Component_List__c> probCs = new List<Problem_Component_List__c>{probC1,probC2,probC3};
-            insert probCs;
-        
-        Service_Symptom_List__c ssl1 = new Service_Symptom_List__c(name='SS1');
-        Service_Symptom_List__c ssl2 = new Service_Symptom_List__c(name='SS2');
-        Service_Symptom_List__c ssl3 = new Service_Symptom_List__c(name='SS3');
-        List<Service_Symptom_List__c> ssl = new List<Service_Symptom_List__c>{ssl1,ssl2,ssl3};
-            insert ssl;
-        
-        Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
-        Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
-        Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
-        List<Procedure_Code__c> procC = new List<Procedure_Code__c>{procC1,procC2,procC3};
-            insert procC;
-        
-        Procedure_Code_Assignment__c pca1 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC1.Id);
-        Procedure_Code_Assignment__c pca2 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC2.Id);
-        Procedure_Code_Assignment__c pca3 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct.Id, Procedure_Code__c = procC3.Id);
-        Procedure_Code_Assignment__c pca4 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC1.Id); 
-        Procedure_Code_Assignment__c pca5 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC2.Id);        
-        Procedure_Code_Assignment__c pca6 = new Procedure_Code_Assignment__c(Service_Product__c=servProduct2.Id, Procedure_Code__c = procC3.Id);
-        List<Procedure_Code_Assignment__c> pca = new List<Procedure_Code_Assignment__c>{pca1,pca2,pca3,pca4,pca5,pca6};
-            insert pca;
-        
-        Service_Symptom_Assignment__c ssa1 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa2 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa3 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl1.Id);
-        Service_Symptom_Assignment__c ssa4 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa5 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa6 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl2.Id);
-        Service_Symptom_Assignment__c ssa7 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC1.Id,Service_Symptom__c=ssl3.Id);
-        Service_Symptom_Assignment__c ssa8 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC2.Id,Service_Symptom__c=ssl3.Id);
-        Service_Symptom_Assignment__c ssa9 = new Service_Symptom_Assignment__c(Procedure_Code__c=procC3.Id,Service_Symptom__c=ssl3.Id);
-        List<Service_Symptom_Assignment__c> ssa = new List<Service_Symptom_Assignment__c>{ssa1,ssa2,ssa3,ssa4,ssa5,ssa6,ssa7,ssa8,ssa9};
-            insert ssa;
-        
-        Problem_Component_Config__c pcc1 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc2 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc3 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl1.Id);
-        Problem_Component_Config__c pcc4 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc5 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc6 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl2.Id);
-        Problem_Component_Config__c pcc7 = new Problem_Component_Config__c(Problem_Component__c=probC1.Id,Service_Symptom__c=ssl3.Id);
-        Problem_Component_Config__c pcc8 = new Problem_Component_Config__c(Problem_Component__c=probC2.Id,Service_Symptom__c=ssl3.Id);
-        Problem_Component_Config__c pcc9 = new Problem_Component_Config__c(Problem_Component__c=probC3.Id,Service_Symptom__c=ssl3.Id);
-        List<Problem_Component_Config__c> pcc = new List<Problem_Component_Config__c>{pcc1,pcc2,pcc3,pcc4,pcc5,pcc6,pcc7,pcc8,pcc9};
-            insert pcc;*/
         
         
         List<Order> ordersToInsert = new List<Order>();
@@ -171,17 +123,16 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         insert orderItemsToInsert;
         
         Charge__c charge = new Charge__c(Service_Request__c = order2.Id, Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
-        insert charge;
 
         Charge__c charge2 = new Charge__c(Service_Request__c = order2.Id, Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=rwo2.Id);
-        insert charge2;
+        
+        insert new List<Charge__c>{charge,charge2};
                       
         
     }
     
     @isTest static void ExtensionContructorTest()
     {
-        setupData();
         
         Test.startTest();
         ord = [SELECT Id FROM Order WHERE Name = 'Service Order'];
@@ -195,7 +146,6 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
     
     @isTest static void SaveTest()
     {
-        setupData();
                 
         Test.startTest();
         ord = [SELECT Id, Store_Location__c FROM Order WHERE Name = 'Service Order'];

@@ -25,11 +25,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Crew_Size__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Retail_Location__c</field>
+                <field>Secondary_Resource_Type_s__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -44,6 +40,14 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Retail_Location_Formula__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Crew_Size__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Retail_Location__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

@@ -78,15 +78,17 @@ public with sharing class RMS_newPaymentRedirectExtension {
 		} 
 		else {
         	m.put('RecordType', UtilityMethods.RecordTypeFor('Payment__c', 'Deposit'));
-        	for (Order theOrder : [SELECT Store_Location__r.Name, Store_Location__c FROM Order WHERE Id =: thePayment.Order__c]) {
+        	for (Order theOrder : [SELECT Store_Location__r.Name, Store_Location__c, BillToContactId, BillToContact.Name FROM Order WHERE Id =: thePayment.Order__c]) {
         		if (theOrder.Store_Location__c == null) {
 					ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_errorMessages.STORE_LOCATION_IS_BLANK_PAYMENT)); //
 					return null;
         		} 
         		else {
-        			// TODO:   This parameter will need to be updated after pushing to build and production
+        			// TODO:   These parameter will need to be updated after pushing to build and production
          			m.put('CF00N6100000Br7Y0', theOrder.Store_Location__r.Name);	
          			m.put('CF00N6100000Br7Y0_lkid', theOrder.Store_Location__c);	
+         			m.put('CF00NQ0000001cUgI', theOrder.BillToContact.Name);	
+         			m.put('CF00NQ0000001cUgI_lkid', theOrder.BillToContactId);	
         		}
         	}		
 		}

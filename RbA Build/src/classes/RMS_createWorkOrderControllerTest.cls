@@ -15,7 +15,8 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		//CREATE AN ORDER RELATED TO OPPORTUNITY
 		Order ord1 = new Order( AccountId = newDwelling.id ,
 								Status = 'Draft', 
-								EffectiveDate = Date.Today()
+								EffectiveDate = Date.Today(),
+								Pricebook2Id = Test.getStandardPricebookId()
 								);
 		insert ord1;
 		

@@ -69,11 +69,19 @@
         <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
+        <members>RMS_editBackOfficeCheckRedirectExtTest</members>
+        <members>RMS_editBackOfficeCheckRedirectExtension</members>
         <members>RMS_editableTaskList</members>
         <members>RMS_editableTaskListExt</members>
         <members>RMS_errorMessages</members>
         <members>RMS_eventManager</members>
         <members>RMS_eventManagerTest</members>
+        <members>RMS_financialTransManBusAdjTest</members>
+        <members>RMS_financialTransManInventoryTest</members>
+        <members>RMS_financialTransManLaborTest</members>
+        <members>RMS_financialTransManPaymentTest</members>
+        <members>RMS_financialTransManRefundTest</members>
+        <members>RMS_financialTransManRevRecognitionTest</members>
         <members>RMS_financialTransactionManager</members>
         <members>RMS_financialTransactionManagerTest</members>
         <members>RMS_mobileAppAPIController</members>
@@ -197,6 +205,7 @@
         <members>RMS_createServiceRequestP3</members>
         <members>RMS_createServiceRequestRedirect</members>
         <members>RMS_createVisitWorkOrder</members>
+        <members>RMS_editBackOfficeCheckRedirect</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
         <members>RMS_municipalityTab</members>
@@ -443,6 +452,7 @@
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Matching</members>
+        <members>RbA_Operational_Reporting/BO2004_Job_Cost_Summary_LSWP_by_RPD</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/BO2012_Internal_Labor_JIP</members>

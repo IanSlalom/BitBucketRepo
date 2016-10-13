@@ -300,10 +300,11 @@ public with sharing class RMS_financialTransactionManager {
                         	system.debug('ads temporary paymentTotal 1: '+paymentTotal);
                         	system.debug('ads temporary p.Order__r.Retail_Total__c 1: '+p.Order__r.Retail_Total__c);
                         	system.debug('ads temporary p.Payment_Amount__c 1: '+p.Payment_Amount__c);
-                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+							//  commented out per JETT-3638
+/*                        	if(paymentTotal > p.Order__r.Retail_Total__c){
                         	 	errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
                              	mapNew.get(p.id).addError(errorMessage, FALSE);
-                        	} 
+                        	} */
                             newJE.Date__c = Datetime.Now();
                             newJE.Payment__c = p.id;
                             newJE.Order__c = p.Order__c;
@@ -358,10 +359,11 @@ public with sharing class RMS_financialTransactionManager {
 		                        	}
 		                        	system.debug('ads temporary paymentTotal: '+paymentTotal);
 		                        	system.debug('ads temporary p.Order__r.Retail_Total__c: '+p.Order__r.Retail_Total__c);
-		                        	if(paymentTotal > p.Order__r.Retail_Total__c){
+									//  commented out per JETT-3638
+		    /*                    	if(paymentTotal > p.Order__r.Retail_Total__c){
 		                        		 errorMessage = RMS_errorMessages.AMOUNT_OF_PAYMENT_EXCEEDS_PRICE;
 		                            	 mapNew.get(p.id).addError(errorMessage, FALSE);
-		                        	}
+		                        	}*/
 		                        
                                 	//Journal Entry NOT sent to BaanERP, update Journal Entry
                                 	system.debug('ads inside not sent to Baan: '+ je);
@@ -372,10 +374,13 @@ public with sharing class RMS_financialTransactionManager {
                                 	je.Customer__c = p.Order__r.BillToContactId;
 								// It's a misc cash receipt
 								} else {
-                        			Journal_Entry__c newJE = new Journal_Entry__c(
-                            		Date__c = Datetime.Now(),
-                            		Payment__c = p.id,
-                            		Amount__c = p.Payment_Amount__c);
+                        			//Journal_Entry__c newJE = new Journal_Entry__c(
+                            		//Date__c = Datetime.Now(),
+                            		//Payment__c = p.id,
+                            		//Amount__c = p.Payment_Amount__c);
+		                            je.Date__c = Datetime.Now();
+        		                    je.Payment__c = p.id;
+                		            je.Amount__c = p.Payment_Amount__c;
 								}
 								
                                 if(typeOfPayment == 'DepositDeposit'){
@@ -763,8 +768,9 @@ public with sharing class RMS_financialTransactionManager {
                                     je.Amount__c = l.External_Labor_Amount__c;
                                     je.Baan_Business_Partner_Number__c = l.Installer__r.RbA_User__r.Account.Baan_Business_Partner_Number__c;
                                     
-                                    je.Debit_General_Ledger_Account__c = l.Installer_Account_Number__c;
+                                	je.Debit_General_Ledger_Account__c = laborIdToMiscReimbursementGLAmap.get(l.id);
                                     je.Credit_General_Ledger_Account__c = laborIdToMiscReimbursementFTL.get(l.id)[0].Credit_Account_Number__r.Name;
+
                                 }
     
                                 journalEntriesToUpsert.add(je);
@@ -960,7 +966,8 @@ public with sharing class RMS_financialTransactionManager {
 				if((mapOld != null && mapOld.get(a.id).Quantity_Written_Off__c != mapNew.get(a.id).Quantity_Written_Off__c)
 					||(mapOld == null && mapNew.get(a.id).Quantity_Written_Off__c != null)){
 						//ONLY IF QUANTITY IS 0 look into
-					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+//					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+					if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
 						inventoryWriteOffAT = true;
 					}
 				}
@@ -969,7 +976,8 @@ public with sharing class RMS_financialTransactionManager {
 						||(mapOld == null && mapNew.get(a.id).Vendor_Credit__c != null)
 						&& (mapNew.get(a.id).Vendor_Credit__c != null)){
 					
-					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
+//					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
+					if(a.RecordTypeId != assetInstalledProductsRecordTypeId){
 						if(assetIdToLatestJEforVendorCredit.get(a.id) == null){
 							errorMessage = 'A vendor credit cannot be issued on an item that has not been received.';
 						}else{
@@ -1007,12 +1015,14 @@ public with sharing class RMS_financialTransactionManager {
                 		serviceInventoryReceivedAT = true;
 					}
 					if(mapNew.get(a.id).RecordTypeId == assetCostProductsRecordTypeId){
-                		if(a.Sold_Order__r.RecordTypeId == assetCostProductsRecordTypeId){
+//                		if(a.Sold_Order__r.RecordTypeId == assetCostProductsRecordTypeId){
+                		if(a.RecordTypeId == assetCostProductsRecordTypeId){
                 			costProductRecivedAT = true;
                 		}
 					}
                 	if(a.Quantity_Written_Off__c != null){
-	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+//	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
+	                	if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
 	                		inventoryWriteOffAT = true;
 	                	}
                 	}
@@ -1800,7 +1810,7 @@ public with sharing class RMS_financialTransactionManager {
     																	'Rev Recognized - AR', 
         																'Rev Recognized - Finance Fees',
         																'Rev Recognized - COGS',
-        																'Rev Recognized - Service COGS',
+        																//'Rev Recognized - Service COGS',
         																'Rev Recognized - Service Tax',
         																'Rev Recognized - Service AR'
         																};
@@ -1819,7 +1829,7 @@ public with sharing class RMS_financialTransactionManager {
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedFinanceFeesFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Finance Fees');
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - COGS');
         
-        map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service COGS');
+        //map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceCOGSFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service COGS');
         map<Id, list<Financial_Transaction__c>> orderIdtoRevRecognizedServiceTaxFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service Tax');
         map<Id, list<Financial_Transaction__c>> orderIdToRevRecognizedServiceARFTL = typeToMapOfOrderIdtoListFT.get('Rev Recognized - Service AR');
       
@@ -1864,7 +1874,7 @@ public with sharing class RMS_financialTransactionManager {
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor');
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceExternalLaborJIPFTL.get(o.id) , errorMessage, 'Rev Recognized - Service External Labor - JIP');
 	                    //errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceInternalLaborFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Internal Labor');
-	                   	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
+	                   	//errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceCOGSFTL.get(o.id) , errorMessage, 'Rev Recognized - Service COGS');
                     	errorMessage = checkFinacialTransationForErrors(orderIdtoRevRecognizedServiceTaxFTL.get(o.id) , errorMessage, 'Rev Recognized - Service Tax');
                     	errorMessage = checkFinacialTransationForErrors(orderIdToRevRecognizedServiceARFTL.get(o.id) , errorMessage, 'Rev Recognized - Service AR');
                     }
@@ -2664,16 +2674,16 @@ public with sharing class RMS_financialTransactionManager {
                                 je.Credit_General_Ledger_Account__c = refundIdToDepositFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
                             }else if(refundType == 'deposit'){
                                 je.Type__c = 'Refund - Deposit';
-                                je.Debit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
-                                je.Credit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Debit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Credit_General_Ledger_Account__c = refundIdToDepositCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                             }else if(refundType == 'finalPayment'){
                                 je.Type__c = 'Refund - Final Payment';
                                 je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                                 je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
                             }else if(refundType == 'finalPaymentCheck'){
                                 je.Type__c = 'Refund - Final Payment';
-                                je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
-                                je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Debit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Debit_Account_Number__r.Name;
+                                je.Credit_General_Ledger_Account__c = refundIdToFinalPaymentCheckFTL.get(ref.id)[0].Credit_Account_Number__r.Name;
                             }
                             journalEntriesToUpsert.add(je);
                         }//END ELSE NOT SENT TO BaanERP
@@ -3045,12 +3055,12 @@ public with sharing class RMS_financialTransactionManager {
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }else{
             //CHECK IF CREDIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Cash Receipt' && objectType != 'Misc Reimbursement' && ftList[0].Credit_Account_Number__c == null ){
+            if(objectType != 'Misc Cash Receipt' && ftList[0].Credit_Account_Number__c == null ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_CREDIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
             //CHECK IF DEBIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Cash Receipt' && ftList[0].Debit_Account_Number__c == null ){
+            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
@@ -3284,10 +3294,10 @@ public with sharing class RMS_financialTransactionManager {
     
     
     /***************************************************
-     Methods to lock records
+     Methods to lock records (Not used)
     ****************************************************/
     // TODO: Make these completely generic for sObjects?
-    public void lockPaymentRecords(list<Payment__c> listNew){   
+/*    public void lockPaymentRecords(list<Payment__c> listNew){   
 
         List<Payment__c> recordsToLock = new List<Payment__c>();
 
@@ -3302,9 +3312,9 @@ public with sharing class RMS_financialTransactionManager {
             String result = UtilityMethods.lockRecords(recordsToLock);
         }
         
-    }
+    }*/
 
-    public void lockPaymentRecords(list<Payment__c> listOld, map<id,Payment__c> mapNew ){   
+/*    public void lockPaymentRecords(list<Payment__c> listOld, map<id,Payment__c> mapNew ){   
 
         List<Payment__c> recordsWithNullProcessedDate = new List<Payment__c>();
 
@@ -3315,7 +3325,7 @@ public with sharing class RMS_financialTransactionManager {
             }
         }   
         lockPaymentRecords(recordsWithNullProcessedDate);   
-    }
+    }*/
 
     /***************************************************
      Method to dynamicly change error messages

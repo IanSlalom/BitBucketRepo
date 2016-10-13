@@ -17,11 +17,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Non_Sufficient_Funds__c</field>
+                <field>Contact__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Bill_to_Contact__c</field>
+                <behavior>Edit</behavior>
+                <field>Non_Sufficient_Funds__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -35,11 +35,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Payment_Date__c</field>
+                <field>Payment_Amount__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Payment_Amount__c</field>
+                <field>Payment_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -53,6 +53,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Payment_Method__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Credit_Card_Type__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -150,7 +154,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h3B000000N1H0</masterLabel>
+        <masterLabel>00h61000002WhAs</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>1</sizeY>
         <summaryLayoutItems>

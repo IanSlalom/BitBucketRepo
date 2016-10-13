@@ -206,10 +206,26 @@ public with sharing class TestUtilityMethods {
 
 	public Account createVendorAccount(String x){
 		Account account1 = createAccount(x);
-		account1.recordTypeId = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');   
+		account1.recordTypeId = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');  
+		account1.Baan_Business_Partner_Number__c = '12345';
 		return account1;
 	}
-	 
+	
+	public Account createIntercompanyVendorAccount(String x) {
+		Account account1 = createVendorAccount(x);
+		account1.Vendor_Account_Type__c = 'Intercompany';   
+		return account1;		
+	}
+	public Account createIntercompanyCCVendorAccount(String x) {
+		Account account1 = createVendorAccount(x);
+		account1.Vendor_Account_Type__c = 'Intercompany Consolidation Center';   
+		return account1;		
+	}
+	public Account createExternalVendorAccount(String x) {
+		Account account1 = createVendorAccount(x);
+		account1.Vendor_Account_Type__c = 'External';   
+		return account1;		
+	}	 
 	
 	public Contact createContact(Id accountId, String x){
 		Contact testContact = new Contact(
@@ -524,8 +540,381 @@ public with sharing class TestUtilityMethods {
 		System.Debug('***************Test.getStandardPricebookId()=' +Test.getStandardPricebookId());
 //	  System.Debug('***************pricebook1=' +pricebook1.Id);
 
+	}
 
+	public void createAllFinancialRecords(Store_Configuration__c storeConfig1){
 
+		List<Financial_Account_Number__c> FANSToInsert = new List<Financial_Account_Number__c>();
+
+		// Create all financial account numbers
+		// Payments
+		Financial_Account_Number__c FANDepositDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANDepositDebit');
+		FANSToInsert.add(FANDepositDebit);
+		Financial_Account_Number__c FANDepositCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANDepositCredit');
+		FANSToInsert.add(FANDepositCredit);
+		Financial_Account_Number__c FANDepositCheckRefundDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANDepositCheckRefundDebit');
+		FANSToInsert.add(FANDepositCheckRefundDebit);
+		Financial_Account_Number__c FANDepositCheckRefundCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANDepositCheckRefundCredit');
+		FANSToInsert.add(FANDepositCheckRefundCredit);
+		Financial_Account_Number__c FANFinalPaymentDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANFinalPaymentDebit');
+		FANSToInsert.add(FANFinalPaymentDebit);
+		Financial_Account_Number__c FANFinalPaymentCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANFinalPaymentCredit');
+		FANSToInsert.add(FANFinalPaymentCredit);
+		Financial_Account_Number__c FANFinalPaymentCheckRefundDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANFinalPaymentCheckRefundDebit');
+		FANSToInsert.add(FANFinalPaymentCheckRefundDebit);
+		Financial_Account_Number__c FANFinalPaymentCheckRefundCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANFinalPaymentCheckRefundCredit');
+		FANSToInsert.add(FANFinalPaymentCheckRefundCredit);
+		Financial_Account_Number__c FANNonSufficientFundsDepositDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANNonSufficientFundsDepositDebit');
+		FANSToInsert.add(FANNonSufficientFundsDepositDebit);
+		Financial_Account_Number__c FANNonSufficientFundsDepositCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANNonSufficientFundsDepositCredit');
+		FANSToInsert.add(FANNonSufficientFundsDepositCredit);
+		Financial_Account_Number__c FANNonSufficientFundsFinalPaymentDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANNonSufficientFundsFinalPaymentDebit');
+		FANSToInsert.add(FANNonSufficientFundsFinalPaymentDebit);
+		Financial_Account_Number__c FANNonSufficientFundsFinalPaymentCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANNonSufficientFundsFinalPaymentCredit');
+		FANSToInsert.add(FANNonSufficientFundsFinalPaymentCredit);
+		Financial_Account_Number__c FANRRDepositDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRDepositDebit');
+		FANSToInsert.add(FANRRDepositDebit);
+		Financial_Account_Number__c FANRRDepositCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRDepositCredit');
+		FANSToInsert.add(FANRRDepositCredit);
+		Financial_Account_Number__c FANRRDepositRefundDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRDepositRefundDebit');
+		FANSToInsert.add(FANRRDepositRefundDebit);
+		Financial_Account_Number__c FANRRDepositRefundCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRDepositRefundCredit');
+		FANSToInsert.add(FANRRDepositRefundCredit);
+
+		// Inventory
+		Financial_Account_Number__c FANInventoryReceivedIntercompanyDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedIntercompanyDebit');
+		FANSToInsert.add(FANInventoryReceivedIntercompanyDebit);
+		Financial_Account_Number__c FANInventoryReceivedIntercompanyCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedIntercompanyCredit');
+		FANSToInsert.add(FANInventoryReceivedIntercompanyCredit);
+		Financial_Account_Number__c FANInventoryReceivedIntercompanyCCDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedIntercompanyCCDebit');
+		FANSToInsert.add(FANInventoryReceivedIntercompanyCCDebit);
+		Financial_Account_Number__c FANInventoryReceivedIntercompanyCCCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedIntercompanyCCCredit');
+		FANSToInsert.add(FANInventoryReceivedIntercompanyCCCredit);
+		Financial_Account_Number__c FANInventoryReceivedExternalDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedExternalDebit');
+		FANSToInsert.add(FANInventoryReceivedExternalDebit);
+		Financial_Account_Number__c FANInventoryReceivedExternalCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryReceivedExternalCredit');
+		FANSToInsert.add(FANInventoryReceivedExternalCredit);
+		Financial_Account_Number__c FANInventoryWriteOffDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryWriteOffDebit');
+		FANSToInsert.add(FANInventoryWriteOffDebit);
+		Financial_Account_Number__c FANInventoryWriteOffCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryWriteOffCredit');
+		FANSToInsert.add(FANInventoryWriteOffCredit);
+
+		Financial_Account_Number__c FANServiceInventoryReceivedIntercompanyDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedIntercompanyDebit');
+		FANSToInsert.add(FANServiceInventoryReceivedIntercompanyDebit);
+		Financial_Account_Number__c FANServiceInventoryReceivedIntercompanyCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedIntercompanyCredit');
+		FANSToInsert.add(FANServiceInventoryReceivedIntercompanyCredit);
+		Financial_Account_Number__c FANServiceInventoryReceivedIntercompanyCCDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedIntercompanyCCDebit');
+		FANSToInsert.add(FANServiceInventoryReceivedIntercompanyCCDebit);
+		Financial_Account_Number__c FANServiceInventoryReceivedIntercompanyCCCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedIntercompanyCCCredit');
+		FANSToInsert.add(FANServiceInventoryReceivedIntercompanyCCCredit);
+		Financial_Account_Number__c FANServiceInventoryReceivedExternalDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedExternalDebit');
+		FANSToInsert.add(FANServiceInventoryReceivedExternalDebit);
+		Financial_Account_Number__c FANServiceInventoryReceivedExternalCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedExternalCredit');
+		FANSToInsert.add(FANServiceInventoryReceivedExternalCredit);
+
+		Financial_Account_Number__c FANCostProductReceivedDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANCostProductReceivedDebit');
+		FANSToInsert.add(FANCostProductReceivedDebit);
+		Financial_Account_Number__c FANCostProductReceivedCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANCostProductReceivedCredit');
+		FANSToInsert.add(FANCostProductReceivedCredit);
+
+		// Labor
+		Financial_Account_Number__c FANInternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInternalLaborDebit');
+		FANSToInsert.add(FANInternalLaborDebit);
+		Financial_Account_Number__c FANInternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInternalLaborCredit');
+		FANSToInsert.add(FANInternalLaborCredit);
+		Financial_Account_Number__c FANExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANExternalLaborDebit');
+		FANSToInsert.add(FANExternalLaborDebit);
+		Financial_Account_Number__c FANExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANExternalLaborCredit');
+		FANSToInsert.add(FANExternalLaborCredit);
+		Financial_Account_Number__c FANRRExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRExternalLaborDebit');
+		FANSToInsert.add(FANRRExternalLaborDebit);
+		Financial_Account_Number__c FANRRExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRExternalLaborCredit');
+		FANSToInsert.add(FANRRExternalLaborCredit);
+		Financial_Account_Number__c FANPRExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANPRExternalLaborDebit');
+		FANSToInsert.add(FANPRExternalLaborDebit);
+		Financial_Account_Number__c FANPRExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANPRExternalLaborCredit');
+		FANSToInsert.add(FANPRExternalLaborCredit);
+
+		Financial_Account_Number__c FANServiceExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceExternalLaborDebit');
+		FANSToInsert.add(FANServiceExternalLaborDebit);
+		Financial_Account_Number__c FANServiceExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceExternalLaborCredit');
+		FANSToInsert.add(FANServiceExternalLaborCredit);
+		Financial_Account_Number__c FANServiceRRExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceRRExternalLaborDebit');
+		FANSToInsert.add(FANServiceRRExternalLaborDebit);
+		Financial_Account_Number__c FANServiceRRExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceRRExternalLaborCredit');
+		FANSToInsert.add(FANServiceRRExternalLaborCredit);
+		Financial_Account_Number__c FANServicePRExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServicePRExternalLaborDebit');
+		FANSToInsert.add(FANServicePRExternalLaborDebit);
+		Financial_Account_Number__c FANServicePRExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServicePRExternalLaborCredit');
+		FANSToInsert.add(FANServicePRExternalLaborCredit);
+
+		Financial_Account_Number__c FANServiceExternalLaborJIPDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceExternalLaborJIPDebit');
+		FANSToInsert.add(FANServiceExternalLaborJIPDebit);
+		Financial_Account_Number__c FANServiceExternalLaborJIPCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceExternalLaborJIPCredit');
+		FANSToInsert.add(FANServiceExternalLaborJIPCredit);
+		Financial_Account_Number__c FANServiceRRExternalLaborJIPDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceRRExternalLaborJIPDebit');
+		FANSToInsert.add(FANServiceRRExternalLaborJIPDebit);
+		Financial_Account_Number__c FANServiceRRExternalLaborJIPCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServiceRRExternalLaborJIPCredit');
+		FANSToInsert.add(FANServiceRRExternalLaborJIPCredit);
+		Financial_Account_Number__c FANServicePRExternalLaborJIPDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServicePRExternalLaborJIPDebit');
+		FANSToInsert.add(FANServicePRExternalLaborJIPDebit);
+		Financial_Account_Number__c FANServicePRExternalLaborJIPCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANServicePRExternalLaborJIPCredit');
+		FANSToInsert.add(FANServicePRExternalLaborJIPCredit);
+
+		// Revenue Recognized
+		Financial_Account_Number__c FANRRARDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRARDebit');
+		FANSToInsert.add(FANRRARDebit);
+		Financial_Account_Number__c FANRRARCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRARCredit');
+		FANSToInsert.add(FANRRARCredit);
+		Financial_Account_Number__c FANRRDiscountDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRDiscountDebit');
+		FANSToInsert.add(FANRRDiscountDebit);
+		Financial_Account_Number__c FANRRDiscountCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRDiscountCredit');
+		FANSToInsert.add(FANRRDiscountCredit);
+		Financial_Account_Number__c FANRRFinanceFeesDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRFinanceFeesDebit');
+		FANSToInsert.add(FANRRFinanceFeesDebit);
+		Financial_Account_Number__c FANRRFinanceFeesCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRFinanceFeesCredit');
+		FANSToInsert.add(FANRRFinanceFeesCredit);
+		Financial_Account_Number__c FANRRCOGSDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRCOGSDebit');
+		FANSToInsert.add(FANRRCOGSDebit);
+		Financial_Account_Number__c FANRRCOGSCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRCOGSCredit');
+		FANSToInsert.add(FANRRCOGSCredit);
+		Financial_Account_Number__c FANRRGrossSalesDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRGrossSalesDebit');
+		FANSToInsert.add(FANRRGrossSalesDebit);
+		Financial_Account_Number__c FANRRGrossSalesCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRGrossSalesCredit');
+		FANSToInsert.add(FANRRGrossSalesCredit);
+
+		Financial_Account_Number__c FANRRServiceTaxDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRServiceTaxDebit');
+		FANSToInsert.add(FANRRServiceTaxDebit);
+		Financial_Account_Number__c FANRRServiceTaxCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRServiceTaxCredit');
+		FANSToInsert.add(FANRRServiceTaxCredit);
+		Financial_Account_Number__c FANRRServiceARDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANRRServiceARDebit');
+		FANSToInsert.add(FANRRServiceARDebit);
+		Financial_Account_Number__c FANRRServiceARCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANRRServiceARCredit');
+		FANSToInsert.add(FANRRServiceARCredit);
+		
+		// Business Adjustments
+		Financial_Account_Number__c FANARWriteOffDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANARWriteOffDebit');
+		FANSToInsert.add(FANARWriteOffDebit);
+		Financial_Account_Number__c FANARWriteOffCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANARWriteOffCredit');
+		FANSToInsert.add(FANARWriteOffCredit);
+		Financial_Account_Number__c FANInstallAdjustmentDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANInstallAdjustmentDebit');
+		FANSToInsert.add(FANInstallAdjustmentDebit);
+		Financial_Account_Number__c FANInstallAdjustmentCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInstallAdjustmentCredit');
+		FANSToInsert.add(FANInstallAdjustmentCredit);
+		
+		// Misc Reimbursement/Cash Receipt
+		Financial_Account_Number__c FANMiscReimbursementDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANMiscReimbursementDebit');
+		FANSToInsert.add(FANMiscReimbursementDebit);
+		Financial_Account_Number__c FANMiscReimbursementCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANMiscReimbursementCredit');
+		FANSToInsert.add(FANMiscReimbursementCredit);
+		Financial_Account_Number__c FANMiscCashReceiptDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANMiscCashReceiptDebit');
+		FANSToInsert.add(FANMiscCashReceiptDebit);
+		Financial_Account_Number__c FANMiscCashReceiptCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANMiscCashReceiptCredit');
+		FANSToInsert.add(FANMiscCashReceiptCredit);
+
+		insert FANSToInsert;
+
+		
+		List<Financial_Transaction__c> FTSToInsert = new List<Financial_Transaction__c>();
+
+		// Deposits
+		Financial_Transaction__c FANDeposit = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit',
+																						Debit_Account_Number__c = FANDepositDebit.id,
+																						Credit_Account_Number__c = FANDepositCredit.id);
+		FTSToInsert.add(FANDeposit);
+		Financial_Transaction__c FANDepositCheckRefund = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Deposit - Check Refund',
+																						Debit_Account_Number__c = FANDepositCheckRefundDebit.id,
+																						Credit_Account_Number__c = FANDepositCheckRefundCredit.id);
+		FTSToInsert.add(FANDepositCheckRefund);
+		Financial_Transaction__c FANFinalPayment = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Final Payment',
+																						Debit_Account_Number__c = FANFinalPaymentDebit.id,
+																						Credit_Account_Number__c = FANFinalPaymentCredit.id);
+		FTSToInsert.add(FANFinalPayment);
+		Financial_Transaction__c FANFinalPaymentCheckRefund = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Final Payment - Check Refund',
+																						Debit_Account_Number__c = FANFinalPaymentCheckRefundDebit.id,
+																						Credit_Account_Number__c = FANFinalPaymentCheckRefundCredit.id);
+		FTSToInsert.add(FANFinalPaymentCheckRefund);
+		Financial_Transaction__c FANNonSufficientFundsDeposit = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Non-sufficient Funds - Deposit',
+																						Debit_Account_Number__c = FANNonSufficientFundsDepositDebit.id,
+																						Credit_Account_Number__c = FANNonSufficientFundsDepositCredit.id);
+		FTSToInsert.add(FANNonSufficientFundsDeposit);
+		Financial_Transaction__c FANNonSufficientFundsFinalPayment = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Non-sufficient Funds - Final Payment',
+																						Debit_Account_Number__c = FANNonSufficientFundsFinalPaymentDebit.id,
+																						Credit_Account_Number__c = FANNonSufficientFundsFinalPaymentCredit.id);
+		FTSToInsert.add(FANNonSufficientFundsFinalPayment);
+		Financial_Transaction__c FANRRDeposit = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Deposit',
+																						Debit_Account_Number__c = FANRRDepositDebit.id,
+																						Credit_Account_Number__c = FANRRDepositCredit.id);
+		FTSToInsert.add(FANRRDeposit);
+		Financial_Transaction__c FANRRDepositRefund = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Refund Deposit',
+																						Debit_Account_Number__c = FANRRDepositRefundDebit.id,
+																						Credit_Account_Number__c = FANRRDepositRefundCredit.id);
+		FTSToInsert.add(FANRRDepositRefund);
+
+		// Inventory
+		Financial_Transaction__c FANInventoryReceivedIntercompany = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Received - Intercompany',
+																						Debit_Account_Number__c = FANInventoryReceivedIntercompanyDebit.id,
+																						Credit_Account_Number__c = FANInventoryReceivedIntercompanyCredit.id);
+		FTSToInsert.add(FANInventoryReceivedIntercompany);
+		Financial_Transaction__c FANInventoryReceivedIntercompanyCC = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Received - Intercompany Consolidation Center',
+																						Debit_Account_Number__c = FANInventoryReceivedIntercompanyCCDebit.id,
+																						Credit_Account_Number__c = FANInventoryReceivedIntercompanyCCCredit.id);
+		FTSToInsert.add(FANInventoryReceivedIntercompanyCC);
+		Financial_Transaction__c FANInventoryReceivedExternal = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Received - External Vendor',
+																						Debit_Account_Number__c = FANInventoryReceivedExternalDebit.id,
+																						Credit_Account_Number__c = FANInventoryReceivedExternalCredit.id);
+		FTSToInsert.add(FANInventoryReceivedExternal);
+		Financial_Transaction__c FANInventoryWriteOff = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Inventory Write-Off',
+																						Debit_Account_Number__c = FANInventoryWriteOffDebit.id,
+																						Credit_Account_Number__c = FANInventoryWriteOffCredit.id);
+		FTSToInsert.add(FANInventoryWriteOff);
+		Financial_Transaction__c FANServiceInventoryReceivedIntercompany = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Service Inventory Received - Intercompany',
+																						Debit_Account_Number__c = FANServiceInventoryReceivedIntercompanyDebit.id,
+																						Credit_Account_Number__c = FANServiceInventoryReceivedIntercompanyCredit.id);
+		FTSToInsert.add(FANServiceInventoryReceivedIntercompany);
+		Financial_Transaction__c FANServiceInventoryReceivedIntercompanyCC = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Service Inventory Received - Intercompany Consolidation Center',
+																						Debit_Account_Number__c = FANServiceInventoryReceivedIntercompanyCCDebit.id,
+																						Credit_Account_Number__c = FANServiceInventoryReceivedIntercompanyCCCredit.id);
+		FTSToInsert.add(FANServiceInventoryReceivedIntercompanyCC);
+		Financial_Transaction__c FANServiceInventoryReceivedExternal = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Service Inventory Received - External Vendor',
+																						Debit_Account_Number__c = FANServiceInventoryReceivedExternalDebit.id,
+																						Credit_Account_Number__c = FANServiceInventoryReceivedExternalCredit.id);
+		FTSToInsert.add(FANServiceInventoryReceivedExternal);
+		Financial_Transaction__c FANCostProductReceived = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Cost Product Received',
+																						Debit_Account_Number__c = FANCostProductReceivedDebit.id,
+																						Credit_Account_Number__c = FANCostProductReceivedCredit.id);
+		FTSToInsert.add(FANCostProductReceived);
+
+		// Labor
+		Financial_Transaction__c FANInternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Internal Labor',
+																						Debit_Account_Number__c = FANInternalLaborDebit.id,
+																						Credit_Account_Number__c = FANInternalLaborCredit.id);
+		FTSToInsert.add(FANInternalLabor);
+		Financial_Transaction__c FANExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'External Labor',
+																						Debit_Account_Number__c = FANExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANExternalLaborCredit.id);
+		FTSToInsert.add(FANExternalLabor);
+		Financial_Transaction__c FANRRExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - External Labor',
+																						Debit_Account_Number__c = FANRRExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANRRExternalLaborCredit.id);
+		FTSToInsert.add(FANRRExternalLabor);
+		Financial_Transaction__c FANPRExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized External Labor',
+																						Debit_Account_Number__c = FANPRExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANPRExternalLaborCredit.id);
+		FTSToInsert.add(FANPRExternalLabor);
+		Financial_Transaction__c FANServiceExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Service External Labor',
+																						Debit_Account_Number__c = FANServiceExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANServiceExternalLaborCredit.id);
+		FTSToInsert.add(FANServiceExternalLabor);
+		Financial_Transaction__c FANServiceRRExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Service External Labor',
+																						Debit_Account_Number__c = FANServiceRRExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANServiceRRExternalLaborCredit.id);
+		FTSToInsert.add(FANServiceRRExternalLabor);
+		Financial_Transaction__c FANServicePRExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized Service External Labor',
+																						Debit_Account_Number__c = FANServicePRExternalLaborDebit.id,
+																						Credit_Account_Number__c = FANServicePRExternalLaborCredit.id);
+		FTSToInsert.add(FANServicePRExternalLabor);
+		Financial_Transaction__c FANServiceExternalLaborJIP = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Service External Labor - JIP',
+																						Debit_Account_Number__c = FANServiceExternalLaborJIPDebit.id,
+																						Credit_Account_Number__c = FANServiceExternalLaborJIPCredit.id);
+		FTSToInsert.add(FANServiceExternalLaborJIP);
+		Financial_Transaction__c FANServiceRRExternalLaborJIP = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Service External Labor - JIP',
+																						Debit_Account_Number__c = FANServiceRRExternalLaborJIPDebit.id,
+																						Credit_Account_Number__c = FANServiceRRExternalLaborJIPCredit.id);
+		FTSToInsert.add(FANServiceRRExternalLaborJIP);
+		Financial_Transaction__c FANServicePRExternalLaborJIP = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized Service External Labor - JIP',
+																						Debit_Account_Number__c = FANServicePRExternalLaborJIPDebit.id,
+																						Credit_Account_Number__c = FANServicePRExternalLaborJIPCredit.id);
+		FTSToInsert.add(FANServicePRExternalLaborJIP);
+
+		// Revenue Recognized
+		Financial_Transaction__c FANRRAR = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - AR',
+																						Debit_Account_Number__c = FANRRARDebit.id,
+																						Credit_Account_Number__c = FANRRARCredit.id);
+		FTSToInsert.add(FANRRAR);
+		Financial_Transaction__c FANRRDiscount = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Discount',
+																						Debit_Account_Number__c = FANRRDiscountDebit.id,
+																						Credit_Account_Number__c = FANRRDiscountCredit.id);
+		FTSToInsert.add(FANRRDiscount);
+		Financial_Transaction__c FANRRFinanceFees = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Finance Fees',
+																						Debit_Account_Number__c = FANRRFinanceFeesDebit.id,
+																						Credit_Account_Number__c = FANRRFinanceFeesCredit.id);
+		FTSToInsert.add(FANRRFinanceFees);
+		Financial_Transaction__c FANRRCOGS = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - COGS',
+																						Debit_Account_Number__c = FANRRCOGSDebit.id,
+																						Credit_Account_Number__c = FANRRCOGSCredit.id);
+		FTSToInsert.add(FANRRCOGS);
+		Financial_Transaction__c FANRRGrossSales = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Gross Sales',
+																						Debit_Account_Number__c = FANRRGrossSalesDebit.id,
+																						Credit_Account_Number__c = FANRRGrossSalesCredit.id);
+		FTSToInsert.add(FANRRGrossSales);
+		Financial_Transaction__c FANRRServiceTax = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Service Tax',
+																						Debit_Account_Number__c = FANRRServiceTaxDebit.id,
+																						Credit_Account_Number__c = FANRRServiceTaxCredit.id);
+		FTSToInsert.add(FANRRServiceTax);
+		Financial_Transaction__c FANRRServiceAR = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Rev Recognized - Service AR',
+																						Debit_Account_Number__c = FANRRServiceARDebit.id,
+																						Credit_Account_Number__c = FANRRServiceARCredit.id);
+		FTSToInsert.add(FANRRServiceAR);
+
+		// Business Adjustments
+		Financial_Transaction__c FANARWriteOff = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'AR write-off',
+																						Debit_Account_Number__c = FANARWriteOffDebit.id,
+																						Credit_Account_Number__c = FANARWriteOffCredit.id);
+		FTSToInsert.add(FANARWriteOff);
+		Financial_Transaction__c FANInstallAdjustment = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Install Adjustment',
+																						Debit_Account_Number__c = FANInstallAdjustmentDebit.id,
+																						Credit_Account_Number__c = FANInstallAdjustmentCredit.id);
+		FTSToInsert.add(FANInstallAdjustment);
+
+		// Misc Reimbursement/Cash Receipt
+		Financial_Transaction__c FANMiscReimbursement = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Misc Reimbursement',
+																						Debit_Account_Number__c = FANMiscReimbursementDebit.id,
+																						Credit_Account_Number__c = FANMiscReimbursementCredit.id);
+		FTSToInsert.add(FANMiscReimbursement);
+		Financial_Transaction__c FANMiscCashReceipt = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Misc Cash Receipt',
+																						Debit_Account_Number__c = FANMiscCashReceiptDebit.id,
+																						Credit_Account_Number__c = FANMiscCashReceiptCredit.id);
+		FTSToInsert.add(FANMiscCashReceipt);
+
+		insert FTSToInsert;	
 	}
 	
 }

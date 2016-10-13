@@ -9,6 +9,7 @@ public with sharing class RMS_errorMessages {
 	public static final String PRICEBOOK_ENTRY_NOT_FOUND = 'A pricebook entry could not be found for this product. Please contact your system admin for help.';
 	public static final String ADD_PRODUCT_EXCEPTION = 'The system was unable to add the item to the purchase order. Please contact your system admin for help.';
 	public static final String SAVE_PO_EXCEPTION = 'The system was unable to save the purchase order. Please contact your system admin for help.';
+	public static final String NO_DUMMY_ORDER = 'The system was unable to retrieve the dummy order id from custom settings. Please contact your system admin for help.';
 	public static final String UPDATE_PO_LINES_EXCEPTION = 'The system was unable to update the purchase order line items. Please contact your system admin for help.';
 	public static final String UPDATE_PO_EXCEPTION = 'The system was unable to update the purchase order. Please contact your system admin for help.';
 	public static final String USER_STORE_LOCATION_BLANK = 'Your user record is not associated with a store location. Please contact your system admin for help.';
@@ -151,7 +152,8 @@ public with sharing class RMS_errorMessages {
 
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	
-	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
+//  commented out per JETT-3638
+//	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
 	public static final String CHANGED_WRITE_OFF_AND_VENDOR_CREDIT = '&bull;You are unable to change the Quantity Written Off the same time you change Vendor Credit.';
 	
 	

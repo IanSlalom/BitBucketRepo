@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Order$BillToContact</field>
+    </columns>
+    <columns>
+        <field>Order$Revenue_Recognized_Date__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Number_of_Units__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Work_Orders1__r.Labor1__r$External_Labor_Amount__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order.Work_Orders1__r.Labor1__r$Internal_Cost__c</field>
+    </columns>
+    <description>BO2004 - Job Cost Summary LSWP by RPD</description>
+    <filter>
+        <criteriaItems>
+            <column>Order.Work_Orders1__r$Work_Order_Type__c</column>
+            <operator>equals</operator>
+            <value>LSWP</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Revenue_Recognized_Date__c</column>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Order$OrderNumber</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>BO2004 - Job Cost Summary LSWP by RPD</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Labor_with_Work_Order_with_Order__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Order$Revenue_Recognized_Date__c</dateColumn>
+        <interval>INTERVAL_LAST30</interval>
+    </timeFrameFilter>
+</Report>

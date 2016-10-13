@@ -261,6 +261,22 @@ global with sharing class UtilityMethods {
 		return result;
 	}	
 
+	// Persistant variable used by getDummyOrderId()
+	public static String dummyOrderId;
+
+	/***************************************************
+	 Method to retrieve the dummy order Id (used for Cost POs)
+	****************************************************/
+	public static String getDummyOrderId() {
+		if (dummyOrderId != null) return dummyOrderId;
+		map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll();
+		RMS_Settings__c setting = RMS_Settings_map.get('Dummy Order Id');
+		if (setting == null) return null;
+		dummyOrderId =  setting.Value__c;
+		return dummyOrderId;
+	}
+
+
 	/***************************************************
 	 Method to dynamically change error messages
 	****************************************************/
