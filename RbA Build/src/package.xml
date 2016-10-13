@@ -337,6 +337,7 @@
         <members>MABatchSchedule__c-MABatchSchedule Layout</members>
         <members>MA_Scheduler_Event__c-MA Scheduler Event Layout</members>
         <members>MA_Scheduler_Settings__c-MA Scheduler Settings Layout</members>
+        <members>Mullion_Size_Configuration__c-Mullion Size Configuration Layout</members>
         <members>Municipality_Contact__c-Municipality Contact Layout</members>
         <members>Municipality_Match__c-Municipality Match Layout</members>
         <members>Municipality__c-Building Layout</members>
@@ -372,6 +373,11 @@
         <members>Product2-Product Layout</members>
         <members>Product2-Service Product Layout</members>
         <members>Product_Configuration__c-Product Configuration Layout</members>
+        <members>Product_Configuration__c-200 400 Series Doors Prod Config Layout</members>
+        <members>Product_Configuration__c-A-Series Doors Prod Config Layout</members>
+        <members>Product_Configuration__c-Mullion Prod Config Layout</members>
+        <members>Product_Configuration__c-Specialty Window Prod Config Layout</members>
+        <members>Product_Configuration__c-Windows Prod Config Layout</members>
         <members>Product_Skill__c-Product Skill Layout</members>
         <members>Quote-Quote Layout</members>
         <members>QuoteLineItem-Quote Line Item Layout</members>
