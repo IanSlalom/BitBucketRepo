@@ -203,6 +203,7 @@
         <members>RMS_createServiceRequestP3</members>
         <members>RMS_createServiceRequestRedirect</members>
         <members>RMS_createVisitWorkOrder</members>
+        <members>RMS_createVisitWorkOrderService</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
         <members>RMS_municipalityTab</members>

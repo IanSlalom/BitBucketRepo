@@ -60,7 +60,7 @@ public class RMS_viewServiceRequestCtrlr {
             '&hoa='+relatedAccount[0].HOA__c+ 
             '&historical='+relatedAccount[0].Historical__c; 
         
-        serviceOrderVisitRecordTypeURL = '/apex/RMS_createVisitWorkOrder?type=visit'+endURL;
+        serviceOrderVisitRecordTypeURL = '/apex/RMS_createVisitWorkOrderService?type=visit'+endURL;
         serviceOrderActionsRecordTypeURL =  '/apex/RMS_createActionsWorkOrder?type=actions'+endURL;                
         serviceOrderLSWPRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=lswp'+endURL;        
         serviceOrderPaintStainRecordTypeURL = '/apex/RMS_createActionsWorkOrder?type=paintStain'+endURL;         
