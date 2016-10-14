@@ -15,8 +15,7 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		//CREATE AN ORDER RELATED TO OPPORTUNITY
 		Order ord1 = new Order( AccountId = newDwelling.id ,
 								Status = 'Draft', 
-								EffectiveDate = Date.Today(),
-								Pricebook2Id = Test.getStandardPricebookId()
+								EffectiveDate = Date.Today()
 								);
 		insert ord1;
 		
@@ -61,6 +60,11 @@ public with sharing class RMS_createWorkOrderControllerTest {
 		'&permit='+
 		'&hoa='+
 		'&historical=';
+        String propPickValSelected = customController.getpropPickValSelected(); 
+        customController.propPickValSelected = 'Tech Measure';
+        for(SelectOption listView : customController.getPickLstValue()){
+            listView.getValue();
+        } 
 		PageReference pageRefVisit = new PageReference(visitUrl); 
 		Test.setCurrentPage(pageRefVisit);
 			
