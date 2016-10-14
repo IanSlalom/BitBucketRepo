@@ -21,8 +21,7 @@ public class MA_SchedulerFakeDataGenerator {
 
 	public static Store_Configuration__c createFakeStoreConfig(Boolean insertNeeded, Id storeId) {
 		Store_Configuration__c storeConfig = new Store_Configuration__c(
-			Store__c = storeId,
-			Order_Number__c = 1
+			Store__c = storeId
 		);
 
 		if (insertNeeded) {
@@ -234,6 +233,7 @@ public class MA_SchedulerFakeDataGenerator {
 
 	public static Resource_Skill__c createFakeResourceSkill(Boolean insertNeeded, Id skillId, Id resourceId) {
 		Resource_Skill__c skill = new Resource_Skill__c(
+			Active__c = true,
 			Type__c = 'Primary',
 			RbA_Skill__c = skillId,
 			Resource__c = resourceId
