@@ -1,0 +1,6 @@
+<apex:page standardController="Back_Office_Check__c" extensions="RMS_editBackOfficeCheckRedirectExtension" action="{!redirect}">
+    <apex:outputField value="{!Back_Office_Check__c.Order__c}" rendered="false"/>
+    <apex:pageBlock title="Back Office Check Edit" mode="edit" id="BackOfficeCheckBlock">
+        <apex:pageMessages />
+    </apex:pageBlock>
+</apex:page>

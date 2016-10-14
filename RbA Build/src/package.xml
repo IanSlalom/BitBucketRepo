@@ -69,6 +69,8 @@
         <members>RMS_createServicePurchaseOrdersExtension</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
+        <members>RMS_editBackOfficeCheckRedirectExtTest</members>
+        <members>RMS_editBackOfficeCheckRedirectExtension</members>
         <members>RMS_editableTaskList</members>
         <members>RMS_editableTaskListExt</members>
         <members>RMS_errorMessages</members>
