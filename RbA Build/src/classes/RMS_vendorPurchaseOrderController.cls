@@ -63,7 +63,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean electronicOrder{get;set;}
   public boolean showInventoryWriteOff{get;set;}
   public boolean relatedOrderClosed{get;set;}
-  public boolean showCancelPO{get;set;}
   public boolean revRecNullAndValidStatus {get;set;}
   public boolean relatedCOROOrder {get;set;}
 
@@ -204,13 +203,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
       vendorProducts = new Set<Id>();
       Id constMatRecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Construction_Materials');
       for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c, Product__r.Cost_PO__c, Product__r.Product_PO__c, Product__r.Service_PO__c, Product__r.isActive from Vendor_Product__c Where (Vendor__c =: selectedVendor OR Product__r.RecordTypeId =: constMatRecordTypeId) AND Product__c != null]) {
+		System.Debug('***************vp=' +vp);
 		if (!vp.Product__r.isActive) continue;
+		System.Debug('***************vp2=' +vp);
 		if (productPurchaseOrder && (vp.Vendor__c != selectedVendor || !vp.Product__r.Product_PO__c))
 			continue;
+		System.Debug('***************vp3=' +vp);
 		if (servicePurchaseOrder && !vp.Product__r.Service_PO__c)
 			continue;
+		System.Debug('***************vp4=' +vp);
 		if (costPurchaseOrder && !vp.Product__r.Cost_PO__c)
 			continue;
+		System.Debug('***************vp5=' +vp);
         vendorProducts.add(vp.Product__c);
       }
       if (costPurchaseOrder) {
@@ -298,7 +302,23 @@ public with sharing class RMS_vendorPurchaseOrderController {
       return productText;
     }
     private set;
-  }
+  } 
+
+	/******* Set up Unit of Measure Options  *****************/
+	private static transient List<SelectOption> lUnitOfMeasureItems;
+	public List<SelectOption> unitOfMeasureItems{
+		get
+		{   
+			if (lUnitOfMeasureItems == null) {
+				lUnitOfMeasureItems = new List<SelectOption>();
+				lUnitOfMeasureItems.add(new SelectOption('', '-- Select --'));
+				lUnitOfMeasureItems.add(new SelectOption('Each', 'Each'));
+				lUnitOfMeasureItems.add(new SelectOption('Case', 'Case'));
+				lUnitOfMeasureItems.add(new SelectOption('Roll', 'Roll'));
+			}			   
+			return lUnitOfMeasureItems;
+		}
+	}
 
   public String orderId { get; set; }
   {
@@ -344,7 +364,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
     zeroDollarVendor = false;
     showInventoryWriteOff = false;
     relatedOrderClosed = false;
-    showCancelPO = false;
     storeLocationSet = new Set<Id>();
     relatedCOROOrder = false;
     revRecNullAndValidStatus = false;
@@ -374,6 +393,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       overReceivingAllowed = po1.Vendor__r.Over_Receiving_Allowed__c;
       zeroDollarVendor = po1.Vendor__r.Zero_Dollar_Vendor__c;
       selectedPricebook = po1.Order__r.Pricebook2Id;
+
     }
 
     // Check if there's an orderId
@@ -407,10 +427,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
         revRecNullAndValidStatus = true;
       }
 
-	  // Determine if this is a service or product purchase order
+	  // Determine if this is a service or product purchase order if it's not a cost PO
+	  if (!costPurchaseOrder) {
 	  	servicePurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Service')) ? true : false;
 	  	productPurchaseOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type')) ? true : false;
-			
+	  }	
 	  	// If the PO's store location hasn't been set yet and the order's store location is not null, set it to that value
       	if (thisOrder.Store_Location__c != null)
         	po.Store_Location__c = thisOrder.Store_Location__r.Id;
@@ -446,10 +467,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
  		
       // If this is an RbA order and it's not a service purchase order, then this is an electronic order
       electronicOrder = (electronicVendor && !servicePurchaseOrder && !costPurchaseOrder);
-
-      if(po.Status__c == 'In Progress' || po.Status__c == 'Rejected'){
-         showCancelPO = true;
-      }
      
 
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
@@ -770,7 +787,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
     set<Id> orderItemAssetSet = new set<Id>();
     
-        
+	boolean descriptionEmpty = false;        
     for(OrderItemWrapper oiw : POOrderItemWrappers){
       OrderItem oi = oiw.orderItem;
       oi.Purchase_Order__c = po.id;
@@ -782,11 +799,16 @@ public with sharing class RMS_vendorPurchaseOrderController {
         }if(oi.Vendor_Credit_To_Receive__c != null){
           oi.Date_Vendor_Credit__c = System.Today();
         }
+        if(costPurchaseOrder && String.isBlank(oi.Description)) descriptionEmpty = true;
 //      oi.GL_Account__c = glAccount;
 //      oi.Intercompany_AP_Account__c = intercompanyAccount;
       orderItemsToUpdateList.add(oi);
       orderItemAssetSet.add(oi.Installed_Product_Asset__c);
     }
+	if (descriptionEmpty) {
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
+      return null;
+	}
 
 //    try{
       // upsert the order line items
@@ -867,7 +889,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if(Test.isRunningTest()) newOrderItem.Quantity = 1;
     
     //Throw an error if the product and quantity are empty
-    if(String.isBlank(newProduct) ||  newOrderItem.Quantity == null){
+    if(String.isBlank(newProduct) ||  newOrderItem.Quantity == null || String.isBlank(newOrderItem.Description) ||  String.isBlank(costCenter)){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
       return null;
     }
@@ -959,6 +981,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     for (OrderItem theItemToCancel : [SELECT Id, Status__c From OrderItem Where Id =: lineItemToCancel]) {
     	itemToCancel = theItemToCancel;
     	itemToCancel.Status__c = 'Cancelled';
+    	itemToCancel.Purchase_Order__c = null;
     }
     upsert itemToCancel;
     // Directs the browser back to the same page to view the purchase order
@@ -972,10 +995,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
     List<SelectOption> pickListItems = new List<SelectOption>();
     pickListItems.add(new SelectOption('', '-- Select --'));
 
-    for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name, Cost_Center__r.Account_Label__c  from Cost_Center__c WHERE Product__c =: newProduct ]) {
+    for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name, Cost_Center__r.Account_Label__c, Product__r.Part_Number__c from Cost_Center__c WHERE Product__c =: newProduct ]) {
       costCenters.add(cc);
       string label = (cc.Cost_Center__r.Account_Label__c == null) ? '' : cc.Cost_Center__r.Account_Label__c;
       pickListItems.add(new SelectOption(cc.Cost_Center__r.Name, cc.Cost_Center__r.Name + ' - ' + label));
+      newOrderItems[0].Description = cc.Product__r.Name +(String.isBlank(cc.Product__r.Part_Number__c) ?  '' : ' - ' +cc.Product__r.Part_Number__c);
     }
     
     costCenterItems =  pickListItems;
@@ -1418,6 +1442,30 @@ public with sharing class RMS_vendorPurchaseOrderController {
     return pageRef;
 
   }
+
+  /*******************************************************
+        unCancelPurchaseOrder method
+  *******************************************************/
+  // Called after the confirmation window is accepted. This cancels the PO and the order line items
+  public PageReference unCancelPurchaseOrder() {
+    system.debug('*****Status set to in progress');
+    po.Status__c = 'In Progress';    
+        
+    try{
+      // upsert the po as uncancelled
+      upsert po;  
+    } catch (Exception e){
+      System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the unCancelPurchaseOrder method unCancelling the PO:' + e);
+      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
+    }
+
+    PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
+    pageRef.setRedirect(false);
+    return pageRef;
+
+  }
+
+
   /*******************************************************
         writeOff button method
   *******************************************************/
