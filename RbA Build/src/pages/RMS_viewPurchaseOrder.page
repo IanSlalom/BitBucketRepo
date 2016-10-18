@@ -141,7 +141,7 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}"/>				
   				<apex:commandButton action="{!confirm}" value="Cancel PO"  rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
-				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!NOT(relatedOrderClosed) && ((status == 'con' || status == 'rbacon' || status == 'rec')) }"/>
+  				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'rbacon' || status == 'rec') && (poComplete == false)) }"/>
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
@@ -292,6 +292,7 @@ function prepareList(parent,child,isSubselectOptional){
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
                     <apex:outputField value="{!Purchase_Order__c.Submitted_Timestamp__c}" label="Submitted Timestamp" />
+                    <apex:outputField value="{!Purchase_Order__c.Received_Timestamp__c}" label="Submitted Timestamp" rendered="false" />
 				</apex:pageBlockSection>
 
 			</apex:outputPanel>	

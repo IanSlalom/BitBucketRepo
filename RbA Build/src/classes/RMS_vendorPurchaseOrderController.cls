@@ -65,6 +65,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean relatedOrderClosed{get;set;}
   public boolean revRecNullAndValidStatus {get;set;}
   public boolean relatedCOROOrder {get;set;}
+  public boolean poComplete {get;set;}
 
 
   /******* Set up Measurement Fraction Items  *****************/
@@ -203,18 +204,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
       vendorProducts = new Set<Id>();
       Id constMatRecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Construction_Materials');
       for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c, Product__r.Cost_PO__c, Product__r.Product_PO__c, Product__r.Service_PO__c, Product__r.isActive from Vendor_Product__c Where (Vendor__c =: selectedVendor OR Product__r.RecordTypeId =: constMatRecordTypeId) AND Product__c != null]) {
-		System.Debug('***************vp=' +vp);
 		if (!vp.Product__r.isActive) continue;
-		System.Debug('***************vp2=' +vp);
 		if (productPurchaseOrder && (vp.Vendor__c != selectedVendor || !vp.Product__r.Product_PO__c))
 			continue;
-		System.Debug('***************vp3=' +vp);
 		if (servicePurchaseOrder && !vp.Product__r.Service_PO__c)
 			continue;
-		System.Debug('***************vp4=' +vp);
 		if (costPurchaseOrder && !vp.Product__r.Cost_PO__c)
 			continue;
-		System.Debug('***************vp5=' +vp);
         vendorProducts.add(vp.Product__c);
       }
       if (costPurchaseOrder) {
@@ -357,6 +353,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     this.po = (Purchase_Order__c)stdController.getRecord();
     receiving = false;
     writeOff = false;
+    poComplete = false;
     vendorCredit = false;
     renderVendorSelection = true;
  	servicePurchaseOrder = false;
@@ -399,21 +396,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
     // Check if there's an orderId
     if (String.isNotBlank(orderId)) {
 
-      //GET THE ORDER
-//      relatedOrder = [SELECT Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, Store_Location__c FROM Order WHERE Id = :orderId];
-      
-//      storeLocation = relatedOrder.Store_Location__r;
-//      storeLocationNumber = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
-//      po.Store_Abbreviation__c = relatedOrder.Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c;
-//      po.Store_Location__c = storeLocation.Id;
-
-//	  User currentUser = [SELECT Store_Locations__c, User_Abbreviation__c FROM User WHERE Id =: UserInfo.getUserId()];
-
-      // If a test is running just set the user's abbreviation, otherwise get it from the current user
-//      String userAbbreviation = (Test.isRunningTest()) ?   'A' 
-//      							: 	String.isBlank(currentUser.User_Abbreviation__c) ? 'X'
- //     							:	currentUser.User_Abbreviation__c;
-
       for (Order thisOrder : [SELECT  Id, Name, Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c, 
                         Store_Location__r.Active_Store_Configuration__c, Store_Location__r.Active_Store_Configuration__r.Location_Number__c, 
                         Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
@@ -441,23 +423,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			if (thisOrder.Store_Location__r.Active_Store_Configuration__c != null) 
             	storeLocationNumber = thisOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
 
-/*			String typeAbbreviation = 	(costPurchaseOrder) 	? 'C' :
-										(servicePurchaseOrder) 	? 'S' : 'P';
-
-			String storeAbbreviation;
-          	relatedOrder = thisOrder;
-            if (thisOrder.Store_Location__c != null) {
-		        storeLocation = thisOrder.Store_Location__r;
-				if (thisOrder.Store_Location__r.Active_Store_Configuration__c != null) {
-					po.Store_Location__c = thisOrder.Store_Location__r.Id;
-					storeAbbreviation = thisOrder.Store_Location__r.Active_Store_Configuration__r.Store_Abbreviation__c;
-            		storeLocationNumber = thisOrder.Store_Location__r.Active_Store_Configuration__r.Location_Number__c;
-				}
-            }
-            if (storeAbbreviation == null) storeAbbreviation = 'X';
-          	// concatanate the store abbreviation and user abbreviation
-            po.Store_Abbreviation__c = storeAbbreviation + userAbbreviation + typeAbbreviation;*/
-      }
+   }
 			
 	  // Determine the purchase order status so we know what to display on the page.
       orderStatus = this.po.Status__c;
@@ -478,10 +444,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';
       		
-    if(relatedOrder.Status == 'Job Closed'){
-      status = 'rec';
-    }                                                             
-      		
+	// If related order is closed set the status to received
+    if(relatedOrder.Status == 'Job Closed') 
+       status = 'rec';
+
+    // If the PO status is received and the timestamp is not today, set poComplete to true
+    if (orderStatus == 'Received' && this.po.Received_Timestamp__c != null && this.po.Received_Timestamp__c.date() != System.Today())
+    	poComplete = true;
+
 	  if (storeLocation == null) {
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
       }
@@ -835,8 +805,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       if (String.isNotBlank(receiveStatus)) {
       	orderStatus = receiveStatus;
       	po.Status__c = orderStatus;
+		po.Received_Timestamp__c = System.Now();
       	update po;
       }
+
  //   } catch (Exception e){
  //     System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method adding line items:' + e);
   //    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_LINES_EXCEPTION));
