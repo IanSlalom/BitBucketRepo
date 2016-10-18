@@ -175,7 +175,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 													Vendor__c = ProductToVendorMap.get(cw.charge.Installed_Product_Id__c),
 													Order__c = this.serviceRequest.Id,
 													Store_Location__c = cw.charge.Service_Product__r.Order.Store_Location__c, 
-													Status__c = 'In Process',
+													Status__c = 'In Progress',
 													Charge_Cost_To__c = cw.charge.Charge_Cost_To__c,
 													Store_Abbreviation__c = storeAbbreviation,
 													RecordTypeId = UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order')

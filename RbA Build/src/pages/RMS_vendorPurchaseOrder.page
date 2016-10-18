@@ -119,7 +119,7 @@
     
     <apex:pageMessages /> 
         <apex:actionRegion >
-        <apex:pageBlock title="{!pageTitle} Purchase Order">
+        <apex:pageBlock title="{!pageTitle} Purchase Order Edit">
             <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
             <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 

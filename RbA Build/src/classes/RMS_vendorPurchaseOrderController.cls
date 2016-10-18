@@ -284,8 +284,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
     get
     {
       if ( pageTitle != null ) return pageTitle;
-      pageTitle = (newPurchaseOrder) ? 'Create ' : '';
-      pageTitle += (costPurchaseOrder) ? 'Cost' :
+//      pageTitle = (newPurchaseOrder) ? 'Create ' : '';
+      pageTitle = (costPurchaseOrder) ? 'Cost' :
       			   (servicePurchaseOrder) ? 'Service' : 
       				'Product';
       return pageTitle;
@@ -789,7 +789,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
     
 	boolean descriptionEmpty = false;        
     for(OrderItemWrapper oiw : POOrderItemWrappers){
-      OrderItem oi = oiw.orderItem;
+        OrderItem oi = oiw.orderItem;
+		// Make sure the wholesale cost is not negative if it's entered
+    	if (oi.Unit_Wholesale_Cost__c != null && oi.Unit_Wholesale_Cost__c < 0) {
+        	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_NEGATIVE));
+        	return null;
+        }
+
       oi.Purchase_Order__c = po.id;
       //JETT 2083 Set Date fields if quantity fields are not null
       if(oi.Quantity_To_Receive__c != null){
@@ -892,6 +898,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if(String.isBlank(newProduct) ||  newOrderItem.Quantity == null || String.isBlank(newOrderItem.Description) ||  String.isBlank(costCenter)){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.ADD_PRODUCT_FIELDS_REQUIRED));
       return null;
+    }
+
+	// Make sure the wholesale cost is not negative if it's entered
+    if (newOrderItem.Unit_Wholesale_Cost__c != null && newOrderItem.Unit_Wholesale_Cost__c < 0) {
+        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_NEGATIVE));
+        return null;
     }
 
     // Check if the retail price is null, if so enter 0 since a non-null value is required    

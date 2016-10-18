@@ -138,10 +138,10 @@ function prepareList(parent,child,isSubselectOptional){
 			<apex:pageBlockButtons location="both">
 				<apex:commandButton action="{!edit}" value="Edit" rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)}"/>				
+				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}"/>				
   				<apex:commandButton action="{!confirm}" value="Cancel PO"  rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
-				<apex:commandButton action="{!receive}" value="Receiving"  rendered="{!NOT(relatedOrderClosed)}"/>
+				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!NOT(relatedOrderClosed) && ((status == 'con' || status == 'rbacon' || status == 'rec')) }"/>
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed)}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
@@ -206,8 +206,11 @@ function prepareList(parent,child,isSubselectOptional){
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Charge_Cost_To__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
+					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
 						<apex:facet name="header">Cost</apex:facet> 
+					</apex:column>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Total_Wholesale_Cost__c}" rendered="{!costPurchaseOrder == true}">
+						<apex:facet name="header">Total Cost</apex:facet> 
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Defect_Code__c}" rendered="{!servicePurchaseOrder}"/>
@@ -284,7 +287,7 @@ function prepareList(parent,child,isSubselectOptional){
 			</apex:pageBlockSection> 
 
 			</apex:outputPanel>	
-			<apex:outputPanel id="SystemInformationFields" rendered="{!costPurchaseOrder == false}">
+			<apex:outputPanel id="SystemInformationFields">
 				<apex:pageBlockSection title="System Information" columns="2"> 
 					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
