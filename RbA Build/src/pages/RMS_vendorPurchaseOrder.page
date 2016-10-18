@@ -117,7 +117,7 @@
     }
     </script>
     
-    <apex:pageMessages /> 
+    <apex:pageMessages />  
         <apex:actionRegion >
         <apex:pageBlock title="{!pageTitle} Purchase Order Edit">
             <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
