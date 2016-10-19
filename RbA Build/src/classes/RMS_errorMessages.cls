@@ -5,7 +5,7 @@ public with sharing class RMS_errorMessages {
 	*******************************************************/
 	public static final String SHIP_DATE_REQUIRED = 'Please enter an estimated ship date before changing the status to Received.'; 
 	public static final String UNIT_COST_REQUIRED = 'Please enter a unit cost for all products before changing the status to Received.';
-	public static final String ADD_PRODUCT_FIELDS_REQUIRED = 'Please enter an item name and quantity before adding a new product.';
+	public static final String ADD_PRODUCT_FIELDS_REQUIRED = 'Please enter an item name, cost center, description, and quantity before saving a line item.';
 	public static final String PRICEBOOK_ENTRY_NOT_FOUND = 'A pricebook entry could not be found for this product. Please contact your system admin for help.';
 	public static final String ADD_PRODUCT_EXCEPTION = 'The system was unable to add the item to the purchase order. Please contact your system admin for help.';
 	public static final String SAVE_PO_EXCEPTION = 'The system was unable to save the purchase order. Please contact your system admin for help.';
@@ -26,6 +26,7 @@ public with sharing class RMS_errorMessages {
 	public static final String WRITEOFF_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to write off an item. Please try again.';
 	public static final String VENDORCREDIT_DATE_AMOUNT_REQUIRED = 'You must enter both an amount and date to of vendor credit for an item. Please try again.';
 	public static final String WHOLESALE_COST_REQUIRED = 'You must enter a unit wholesale cost to receive an item. Please try again.';
+	public static final String WHOLESALE_COST_NEGATIVE = 'Please enter a positive cost amount.';
 	public static final String WHOLESALE_COST_REQUIRED_CREDIT = 'You must enter a unit wholesale cost to apply a vendor credit. Please try again.';
 	public static final String PO_NOT_READY_TO_RELEASE = 'The order must be in the Ready to Order status before you can release this purchase order.';
 	public static final String ORDER_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until the Order is in Ready to Order Status.';

@@ -95,6 +95,15 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_Cancel_Date_on_Work_Order</fullName>
+        <field>Cancel_Date__c</field>
+        <formula>Today()</formula>
+        <name>Set Cancel Date on Work Order</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Completed_Date_Install</fullName>
         <field>Completed_Appt_Date_Install__c</field>
         <formula>Today()</formula>
@@ -292,6 +301,29 @@
         </criteriaItems>
         <description>Set Appointment Duration for 4 hours for Install</description>
         <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Cancel Date on Work Order</fullName>
+        <actions>
+            <name>Set_Cancel_Date_on_Work_Order</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Visit</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Cancel_Reason__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Cancel_Date__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <description>When Visit WO is set to Cancelled, if there is a Cancel Reason but no Cancel Date, set the Cancel Date to today.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
         <fullName>Set Headcount to 2</fullName>

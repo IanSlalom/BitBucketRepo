@@ -491,12 +491,12 @@ global with sharing class MA_RoutingSchedulerController {
             
             if (resourceIds != null && !resourceIds.isEmpty()) {
                 resourceList = [SELECT Id, Name, RbA_User__c, Retail_Location__c,
-                                    (SELECT Id, RbA_Skill__c FROM Resource_Skills__r)
+                                    (SELECT Id, RbA_Skill__c FROM Resource_Skills__r WHERE Active__c = true)
                                     FROM Resource__c WHERE Id IN :resourceIds];
             }
             else {
                 resourceList = [SELECT Id, Name, RbA_User__c, Retail_Location__c,
-            						(SELECT Id, RbA_Skill__c FROM Resource_Skills__r)
+            						(SELECT Id, RbA_Skill__c FROM Resource_Skills__r WHERE Active__c = true)
             						FROM Resource__c WHERE Retail_Location__c = :storeId AND Active__c = true AND Resource_Type__c IN : resourceTypes];
             }
 
@@ -540,7 +540,8 @@ global with sharing class MA_RoutingSchedulerController {
                     Integer resourceDuration = (Integer)(milliDiff / 1000) / 60;
 
 		            attributes.put('AssignmentRule', 1);
-		            attributes.put('LatestStartTime', resourceEndDateTime.getTime());
+		            //attributes.put('LatestStartTime', resourceEndDateTime.getTime());
+                    attributes.put('LatestStartTime', resourceStartDateTime.getTime());
 		            attributes.put('EarliestStartTime', resourceStartDateTime.getTime());
                 	attributes.put('MaxTotalTime', resourceDuration);
                 
@@ -592,7 +593,7 @@ global with sharing class MA_RoutingSchedulerController {
                                     				        									AND ((RbA_Work_Order__r.Work_Order_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c = null)
                                                                                                     OR Resource__c IN :resourceIds
                                                                                                     OR (RbA_Work_Order__r.Scheduled_As_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c != null))
-                                                                                                AND RbA_Work_Order__c != null]);
+                                                                                                AND RbA_Work_Order__c != null ORDER BY StartDateTime__c ASC]);
 
             for (MA_Scheduler_Event__c maEvent : maEventsMap.values()) {
                 if (maEvent.Resource__c != null && !resourceIds.contains(maEvent.Resource__c)) {
@@ -605,7 +606,7 @@ global with sharing class MA_RoutingSchedulerController {
 
                 maEventsMap.putAll(new Map<Id, MA_Scheduler_Event__c>([SELECT Id, Name, Event_Sequence__c, StartDateTime__c, EndDateTime__c, RbA_Work_Order__c, Resource__c, Resource__r.RbA_User__c
                                                                         FROM MA_Scheduler_Event__c WHERE StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime
-                                                                        AND Resource__c IN :extraResourceIds AND Id NOT IN :maEventsMap.keySet() AND RbA_Work_Order__c != null]));
+                                                                        AND Resource__c IN :extraResourceIds AND Id NOT IN :maEventsMap.keySet() AND RbA_Work_Order__c != null ORDER BY StartDateTime__c ASC]));
             }
 
             List<MA_Scheduler_Event__c> maEventsList = maEventsMap.values();
@@ -641,17 +642,19 @@ global with sharing class MA_RoutingSchedulerController {
                                             + '","isSynced":' + workOrder.Tech_Measure_Synced__c + ',"isLswp":' + workOrder.LSWP_Test_Results__c
                                             + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder
                                             + '","startTimeUnix":' + startDateTime.getTime() + ',"endTimeUnix":' + endDateTime.getTime() + '}');
+                
                 attributes.put('CurbApproach', 3);
 
                 Long milliDiff = endDateTime.getTime() - startDateTime.getTime();
                 Integer serviceTime = (Integer)(milliDiff / 1000) / 60;
 
-                attributes.put('ServiceTime', serviceTime);
-                //attributes.put('TimeWindowEnd1', endDateTime.getTime());
-                attributes.put('TimeWindowEnd1', endDateTime.getTime() - (milliDiff / 2));
+                //attributes.put('ServiceTime', serviceTime);
+                attributes.put('ServiceTime', serviceTime - 60);
+                //attributes.put('TimeWindowEnd1', endDateTime.getTime() - (milliDiff / 2));
+                attributes.put('TimeWindowEnd1', startDateTime.getTime());
                 attributes.put('TimeWindowStart1', startDateTime.getTime());
-                //attributes.put('MaxViolationTime1', 0);
-	            attributes.put('MaxViolationTime1', serviceTime / 2);
+                attributes.put('MaxViolationTime1', 0);
+	            //attributes.put('MaxViolationTime1', serviceTime / 2);
 
                 if (workOrder.Work_Order_Required_Skills__r != null && !workOrder.Work_Order_Required_Skills__r.isEmpty()) {
                     Set<Id> skillIds = new Set<Id>();
@@ -668,6 +671,7 @@ global with sharing class MA_RoutingSchedulerController {
                     attributes.put('RouteName', '{"resId":"' + maEvent.Resource__c + '","userId":"' + maEvent.Resource__r.RbA_User__c + '"}');
                     attributes.put('AssignmentRule', 2);
                     attributes.put('Sequence', sequence);
+                    attributes.put('SpecialtyNames', '');
                     sequence++;
                 }
                 else {

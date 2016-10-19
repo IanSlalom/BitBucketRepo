@@ -59,6 +59,7 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
             DateTime startDateTimeTemp = MA_SchedulerUtilities.createDateTimeFromBookingWindowMilitary(day, this.windowStart, storeTimezone);
             DateTime startDateTimeChecked = MA_SchedulerUtilities.createDateTimeFromBookingWindowMilitary(day, startTimeString, storeTimezone);
 
+            /*
             if (startTimeString == endTimeString) {
             	if (startTimeString == '00:00') {
             		endDateTimeChecked = startDateTimeChecked.addDays(1);
@@ -70,6 +71,9 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
             else {
                 endDateTimeChecked = MA_SchedulerUtilities.createDateTimeFromBookingWindowMilitary(day, endTimeString, storeTimezone);
             }
+            */
+
+            endDateTimeChecked = startDateTimeChecked.addDays(1);
 
             if (startDateTimeTemp < endDateTimeChecked && endDateTimeTemp > startDateTimeChecked) {
 	            this.isValid = true;

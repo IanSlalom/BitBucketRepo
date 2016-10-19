@@ -110,6 +110,7 @@
     </layoutSections>
     <relatedLists>
         <fields>RbA_Skill__c</fields>
+        <fields>Active__c</fields>
         <relatedList>Resource_Skill__c.Resource__c</relatedList>
     </relatedLists>
     <relatedLists>

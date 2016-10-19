@@ -596,7 +596,7 @@ global with sharing class MA_SchedulerController {
             }
 
             for (Resource__c resource : [SELECT Id, Name, Active__c, RbA_User__c, Crew_Size__c, Rank__c, Resource_Type__c,
-                                            (SELECT Id, RbA_Skill__r.Name FROM Resource_Skills__r WHERE RbA_Skill__c IN :requiredSkills.keySet())
+                                            (SELECT Id, RbA_Skill__r.Name FROM Resource_Skills__r WHERE RbA_Skill__c IN :requiredSkills.keySet() AND Active__c = true)
                                             FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId)
                                             OR Id IN :assignedResources]) {
 
@@ -862,7 +862,7 @@ global with sharing class MA_SchedulerController {
             }
 
             List<Resource__c> resourceList = [SELECT Id, RbA_User__c,
-                                                (SELECT Id, RbA_Skill__c FROM Resource_Skills__r WHERE RbA_Skill__c IN :rbaSkillIds)
+                                                (SELECT Id, RbA_Skill__c FROM Resource_Skills__r WHERE RbA_Skill__c IN :rbaSkillIds AND Active__c = true)
                                                 FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId AND Resource_Type__c IN :resourceTypes) OR Id IN :assignedResourceIds];
 
             for (Resource__c resource : resourceList) {
@@ -889,7 +889,7 @@ global with sharing class MA_SchedulerController {
 
             MA_SchedulerUtilities.createBookingWindows(bookingWindows, unAvailableSlots, storeBookingWindows, resourceToSkillsMap, totalSkillsCountMap, startDateTime, endDateTime, storeTimezone, storeHolidayDates, resourceHours);
             MA_SchedulerUtilities.checkResourceAvailability(bookingWindows, unAvailableSlots, userMap, startDateTime, endDateTime, resourceToSkillsMap, workOrder.Work_Order_Type__c, rbaSkillIds);
-
+            
             /**********************************************************/
             /*                                                        */
             /*    remove booking windows with no available resources  */
@@ -1039,6 +1039,7 @@ global with sharing class MA_SchedulerController {
             endDateTime = endDateTime.addDays(-7);
             startDateTime = startDateTime.addDays(7);
 
+            /*
             if (startDateTime.format('HH:mm') == endDateTime.format('HH:mm')) {
                 if ((String.isBlank(storeTimezone) && startDateTime.format('HH:mm') == '00:00') || (String.isNotBlank(storeTimezone) && startDateTime.format('HH:mm', storeTimezone) == '00:00')) {
                     endDateTime = endDateTime.addDays(1);
@@ -1047,6 +1048,9 @@ global with sharing class MA_SchedulerController {
                     endDateTime = endDateTime.addMinutes(30);
                 }
             }
+            */
+
+            endDateTime = endDateTime.addDays(1);
 
             for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
                 MA_SchedulerBookingWindow bw = bookingWindows[index];

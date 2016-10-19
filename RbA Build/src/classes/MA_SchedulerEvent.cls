@@ -223,7 +223,7 @@ global with sharing class MA_SchedulerEvent {
 					needsBookedWindowChecked = true;
 				}
 				else {
-					if (window.resourceToSkillsMap.get(resourceId) != null ) {
+					if (window.resourceToSkillsMap.get(resourceId) != null) {
 						checkWindowOverbooked(window, window.resourceToSkillsMap.get(resourceId));
 					}
 					window.resourceToSkillsMap.remove(resourceId);

@@ -117,9 +117,9 @@
     }
     </script>
     
-    <apex:pageMessages /> 
+    <apex:pageMessages />  
         <apex:actionRegion >
-        <apex:pageBlock title="{!pageTitle} Purchase Order">
+        <apex:pageBlock title="{!pageTitle} Purchase Order Edit">
             <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
             <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 
@@ -196,7 +196,7 @@
                 </apex:pageBlockSection>
 
                 <!--  Order Item Table for Normal Editing of Order Items-->
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && !writeOff && !receiving && !vendorCredit}">
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw" rendered="{! selectedVendor != '' && !writeOff && !receiving && !vendorCredit}">
                     <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
 						<apex:facet name="header">{!productText}</apex:facet> 
 					</apex:column>
@@ -263,7 +263,7 @@
                     
 
                 <!--  Order Item Table for Receiving Order Items-->
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && receiving == true}">
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw" rendered="{! selectedVendor != '' && receiving == true}">
                     <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
 						<apex:facet name="header">{!productText}</apex:facet> 
 					</apex:column>
@@ -315,7 +315,7 @@
             </apex:pageBlockTable>
 
                 <!--  Order Item Table for Writing Off Order Items-->
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && writeOff == true}">
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw" rendered="{! selectedVendor != '' && writeOff == true}">
                     <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
 						<apex:facet name="header">{!productText}</apex:facet> 
 					</apex:column>
@@ -367,7 +367,7 @@
             </apex:pageBlockTable>
 
                 <!--  Order Item Table for Vendor Credit-->
-                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!orderItemWrappersByVendor}" var="oiw" rendered="{! selectedVendor != '' && vendorCredit == true}">
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw" rendered="{! selectedVendor != '' && vendorCredit == true}">
                     <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
 						<apex:facet name="header">{!productText}</apex:facet> 
 					</apex:column>
