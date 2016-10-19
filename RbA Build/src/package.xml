@@ -83,7 +83,6 @@
         <members>RMS_financialTransManRefundTest</members>
         <members>RMS_financialTransManRevRecognitionTest</members>
         <members>RMS_financialTransactionManager</members>
-        <members>RMS_financialTransactionManagerTest</members>
         <members>RMS_mobileAppAPIController</members>
         <members>RMS_mobileAppAPIControllerTest</members>
         <members>RMS_mobileAppContactHelper</members>
@@ -367,6 +366,7 @@
         <members>Pricing_Configuration__c-A Series Doors Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Construction Materials Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Misc Job and Unit Charges Pricing Configuration Layout</members>
+        <members>Pricing_Configuration__c-Mullion Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Specialty Windows Pricing Configuration Layout</members>
         <members>Pricing_Configuration__c-Windows Pricing Configuration Layout</members>
         <members>Problem_Component_Config__c-Problem Component Config Layout</members>
@@ -379,12 +379,13 @@
         <members>Product2-Door Components Layout</members>
         <members>Product2-Master Product Layout</members>
         <members>Product2-Misc Job and Unit Charges</members>
+        <members>Product2-Mullion Product Layout</members>
         <members>Product2-Product Layout</members>
         <members>Product2-Service Product Layout</members>
-        <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Product_Configuration__c-200 400 Series Doors Prod Config Layout</members>
         <members>Product_Configuration__c-A-Series Doors Prod Config Layout</members>
         <members>Product_Configuration__c-Mullion Prod Config Layout</members>
+        <members>Product_Configuration__c-Product Configuration Layout</members>
         <members>Product_Configuration__c-Specialty Window Prod Config Layout</members>
         <members>Product_Configuration__c-Windows Prod Config Layout</members>
         <members>Product_Skill__c-Product Skill Layout</members>

@@ -1,5 +1,22 @@
+/***************************************
+    @class RMS_OrderItemManager
+    @brief  class for processing actions on OrderItems - generally used in the OrderItemTrigger
+    @author  Anthony Strafaccia (Slalom.ADS)
+	@author  Mark Wochnick (Slalom.MAW)
+    @version    2016-3/3  Slalom.ADS
+	    Created.
+    @version    2016-9/30  Slalom.MAW
+		added -linkChildProducts method
+		added -documentation comments	
+    @see        OrderItemTriggerTest
+    
+    @copyright  (c)2016 Slalom.  All Rights Reserved.
+    Unauthorized use is prohibited.
+    
+    ***********************************************************/
 public with sharing class RMS_OrderItemManager {
-	
+
+//TODO: add method comment	
 	public void setUpChangeHistoryOnCreate(list<OrderItem> newList, map<id,OrderItem> newMap){
 		system.debug('ads creating new change history: '+ newList);
 		list<Change_History__c> changeHistoryToInsert = new list<Change_History__c>();
@@ -14,6 +31,7 @@ public with sharing class RMS_OrderItemManager {
 		insert changeHistoryToInsert;
 	}
 	
+//TODO: add method comment	
 	public void updateChangeHistoryOnUpdate(list<OrderItem> newList, list<OrderItem> oldList, map<id,OrderItem> newMap, map<id,OrderItem> oldMap){
 		list<Change_History__c> changeHistoryToUpsert = new list<Change_History__c>();
 		
@@ -139,7 +157,195 @@ public with sharing class RMS_OrderItemManager {
 	}
 	
 	
+  /* @method: linkChildProducts(List<OrderItem> oiList)
+   * @description: This method will find link Child Product pricebook entries to the line item
+   *				for items created outside of rSuite so that rSuite can pull up the order correclty
+   * @param: olLIst - List of OrderItems that need to have the child product line item linked
+   * @return: void
+   */
+	public void linkNewChildProducts(List<OrderItem> oiList) {
+		List<OrderItem> unlinkedOIList = new List<OrderItem>(); // list of orderitems to process
+		Set<Id> masterProductPBEs = new Set<Id>(); // Set of pricebook entries ids to process
+		Set<Id> ordersToProcess = new Set<Id>(); // list of orders that will be processed - used to find the Pricebooks
+//		Set<Id> usedPriceBooks = new Set<Id>(); // set of pricebooks used with this group of orders
+		//Only proceess items that are not already linked
+		for (OrderItem oi : oiList) {
+			if (oi.Child_Product_Pricebook_Entry_Id__c == null || oi.Child_Product_Pricebook_Entry_Id__c.equals('') &&
+				oi.PricebookEntryId != null) {
+				// add to list to process
+				unlinkedOIList.add(oi);
+				masterProductPBEs.add(oi.PricebookEntryId);
+				ordersToProcess.add(oi.OrderId);
+			}
+		}
+		// get the list of pricebooks used on orderitems we are going to process
+//		Map<Id,AggregateResult> pricebookResults = new Map<Id,AggregateResult>([SELECT Pricebook2Id Id, COUNT(Id) orderCount FROM Order WHERE Id in :ordersToProcess group by Pricebook2Id]);
+		// get the list of master product Ids
+//		Map<Id,AggregateResult> masterProducts = new Map<Id,AggregateResult>([select Product2Id Id, count(Id) pbeCount from PricebookEntry where Id in :masterProductPBEs group by Product2Id]);
+		// get the list of master product details via the PBE ids - not that te above query can be eliminated if we spin this list through and create a set instead
+		Map<Id,PricebookEntry> masterProductsMap = new Map<Id,PricebookEntry>([select Id, Pricebook2Id, Product2Id, Product2.Family from PricebookEntry where Id in :masterProductPBEs]);
+		Set<Id> masterProducts = new Set<Id>();
+		Set<Id> pricebooks = new Set<Id>();
+		for (PricebookEntry pbe : masterProductsMap.values()) {
+			masterProducts.add(pbe.Product2Id);
+			pricebooks.add(pbe.Pricebook2Id);
+		}
+		// get a list of child products from the pricebook entries for the master products
+		List<PricebookEntry> childPBEs = [select Id, Product2Id, Pricebook2Id, 
+			Product2.Name, 
+			Product2.Master_Product__r.Name,
+			Product2.Family,
+			Product2.Master_Product__c,
+			Product2.Master_Product__r.Master_Product__c,
+			Product2.UI_Maximum__c,
+			Product2.UI_Minimum__c,
+			Product2.Height__c,
+			Product2.Width__c 
+			from PricebookEntry where
+				(Product2.Master_Product__c in :masterProducts OR 
+				Product2.Master_Product__r.Master_Product__c in :masterProducts)
+//				(Product2.Master_Product__c in :masterProducts.keySet() OR 
+//				Product2.Master_Product__r.Master_Product__c in :masterProducts.keySet())
+				and
+				Pricebook2Id in :pricebooks and 
+//				Pricebook2Id in :pricebookResults.keySet() and 
+				Product2.RecordType.DeveloperName = :Constants.CHILD_PRODUCT_RECORD_TYPE_NAME 
+			order by Product2.Name ASC, Product2.UI_Minimum__c ASC, Product2.Height__c ASC];
+
+		//add the child product pbes to the order line items
+		for(OrderItem oi : unLinkedOIList) {
+			// get the master product entry
+			PricebookEntry masterProductPBE = masterProductsMap.get(oi.PricebookEntryId);
+			Double unitedInches = null;
+			Double height = null;
+			Double width = null;
+			if (!masterProductPBE.Product2.Family.equals(Constants.PF_PATIO_DOOR)) {
+				// we have a window, specialty window or mullion get the united inches
+				unitedInches = getUnitedInches(oi, masterProductPBE.Product2.Family);
+			} else {
+				// converst the door measurements
+				if (oi.Height_Inches__c == null) {
+					// uses sales measurements
+					height = getCombinedMeasurement(oi.Sales_Height_Inches__c, oi.Sales_Height_Fraction__c);
+					width = getCombinedMeasurement(oi.Sales_Width_Inches__c, oi.Sales_Width_Fraction__c);
+				} else {
+					// use the detail measurements
+					height = getCombinedMeasurement(oi.Height_Inches__c, oi.Height_Fraction__c);
+					width = getCombinedMeasurement(oi.Width_Inches__c, oi.Width_Fraction__c);
+				}
+			}
+			// now match it to the correct child product
+			for (PricebookEntry cPBE : childPBEs) {
+				// need to match
+				// 1. Pricebook Id
+				// 2. Master Product or Master_Product__r.Master_Product for specialty windows - family
+				// 3. size bucket (UI for windows and Specialty) - width and height for door
+				// check the pricebook
+				if (!cPBE.Pricebook2Id.equals(masterProductPBE.Pricebook2Id)) {
+					// no match get the next record
+					break;
+				}
+				// check the master product
+				if (masterProductPBE.Product2.Family.equals(Constants.PF_SPECIALTY)) {
+					if(cPBE.Product2.Master_Product__r.Master_Product__c == null || 
+						!masterProductPBE.Product2Id.equals(cPBE.Product2.Master_Product__r.Master_Product__c)) {
+						// no match get the next record
+						break;
+					}
+				} else if (!masterProductPBE.Product2Id.equals(cPBE.Product2.Master_Product__c)) {
+					// no match get the next record
+					break;
+				}
+				// match on the size
+				if (masterProductPBE.Product2.Family.equals(Constants.PF_PATIO_DOOR)) {
+					//match doors on height and width
+					if (cPBE.Product2.Height__c == height && cPBE.Product2.Width__c == width) {
+						// we found a match assign the value to the order item
+						oi.Child_Product_Pricebook_Entry_Id__c = cPBE.Id;
+					} else {
+						// no match get the next record
+						break; 
+					}
+				} else {
+					// match windows and specialty on UI  ?? how are we handling mullions?
+					if ( unitedInches >= cPBE.Product2.UI_Minimum__c && unitedInches <= cPBE.Product2.UI_Maximum__c) {
+						// we found a match assign the value to the order item
+						oi.Child_Product_Pricebook_Entry_Id__c = cPBE.Id;
+					} else {
+						// no match get the next record
+						break; 
+					}
+				}
+			}
+		}
+	}
 	
+//TODO		// handle changes where the measurement changes
+  /* @method: updateLinkedChildProducts(List<OrderItem> newOIList, List<OrderItem> oldOIList)
+   * @description: blah blah blah
+   * @param: newOIList - blah blah blah
+   * @param: oldOIList - blah blah blah
+   * @return: void
+   */
+	public void updateLinkedChildProducts(List<OrderItem> newOIList, List<OrderItem> oldOIList) {
+	}
 	
-	
+  /* @method: getUnitedInches(OrderItem myOI, String family)
+   * @description: calculates united inches for windows, specialty windows and mullions
+   * @param: myOI - orderItem to calculate united inches for
+   * @param: family - orderItem product family
+   * @return: Double - the calculated united inches
+   */
+	@TestVisible private Double getUnitedInches(OrderItem myOI, String family) {
+		// convert the fractions to doubles
+		// use the tech measure height and width if available otherwise use the sales measurements
+		// not going to check the opportunity stage to avoid making a soql call
+		Double height, width;
+		if (family.equals(Constants.PF_WINDOW)) {
+			// processs window united inches
+			if (myOI.Height_Inches__c == null) {
+				// uses sales measurements
+				height = getCombinedMeasurement(myOI.Sales_Height_Inches__c, myOI.Sales_Height_Fraction__c);
+				width = getCombinedMeasurement(myOI.Sales_Width_Inches__c, myOI.Sales_Width_Fraction__c);
+			} else {
+				// use the detail measurements
+				height = getCombinedMeasurement(myOI.Height_Inches__c, myOI.Height_Fraction__c);
+				width = getCombinedMeasurement(myOI.Width_Inches__c, myOI.Width_Fraction__c);
+			}
+			return height + width;
+		} else if (family.equals(Constants.PF_SPECIALTY)){
+			//process specialty windows
+			//specialty winodw united inches is calculated by making a rectatangle around the shape and then use that to calculate the United inches
+			//triangle/right triangle = base + height
+			//circle = diameter + diameter
+			//quarter cirlce = radius + raduis
+			//chord - base + height
+			//circle top
+			//octogon
+			//hexagon
+			//peak pentagon, pentagon
+			//trapezoid
+			//unequal leg arch
+			//equal leg arch
+			//half springline
+			//springline
+
+			return -1.0d;
+		} else {
+			// process mullions
+			//TODO:
+			return -1.0d;
+		}
+	}
+
+  /* @method: getCombinedMeasurement(String wholeInch, String fraction)
+   * @description: creates a combined measurement from string whole inch and a string fraction and converts it to a double
+   * @param: wholeInch - Decimal rep of a whole inch measurment
+   * @param: fraction - string rep of a fraction measurment
+   * @return: Double - double of the combined strings converted to a double
+   */
+	@TestVisible private Double getCombinedMeasurement(Decimal wholeInch, String fraction) {
+		Double value = wholeInch + ((Constants.fractionConversionMap.containsKey(fraction)) ? Constants.fractionConversionMap.get(fraction) : 0.0d);
+		return value;
+	}
 }

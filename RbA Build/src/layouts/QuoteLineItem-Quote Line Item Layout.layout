@@ -101,6 +101,10 @@
                 <behavior>Edit</behavior>
                 <field>Corrosion_Resistant_Hinges__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Linear_Inches__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

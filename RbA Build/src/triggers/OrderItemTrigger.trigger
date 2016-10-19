@@ -37,25 +37,22 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
         RMS_OrderItemManager orderItemManager = new RMS_OrderItemManager();
         RMS_createCharges createCharges = new RMS_createCharges();
         List <SObject> orderItems = new List <SObject> ();
-        /*     
+
         // Before Insert
         if(Trigger.isInsert && Trigger.isBefore){
-        orderItemManager.setUpChangeHistoryOnCreate(Trigger.new);
+//	        orderItemManager.linkNewChildProducts(Trigger.new);
         } 
-        else 
-        */
         //  Before Update
-        if (Trigger.isUpdate && Trigger.isBefore) {
+        else  if (Trigger.isUpdate && Trigger.isBefore) {
             orderItemManager.updateChangeHistoryOnUpdate(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap);
         }
-
         // Before Delete
         /*
-    else if(Trigger.isDelete && Trigger.isBefore){
-    UtilityMethods.checkLocked(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Delete');
-    financialTransactionManager.onBeforeDeletePayment(Trigger.old, Trigger.oldMap);
-    }
-    */
+		else if(Trigger.isDelete && Trigger.isBefore){
+			UtilityMethods.checkLocked(Trigger.new, Trigger.old, Trigger.newMap, Trigger.oldMap, 'Delete');
+			financialTransactionManager.onBeforeDeletePayment(Trigger.old, Trigger.oldMap);
+		}
+		*/
         // After Insert
         else if (Trigger.isInsert && Trigger.isAfter) {
             orderItemManager.setUpChangeHistoryOnCreate(Trigger.new, Trigger.newMap);
