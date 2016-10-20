@@ -477,6 +477,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       //USING ORDER ITEMS GET ALL PRODUCTS
       for(OrderItem oi: relatedOrderItems){
+      	// If the date received is not today, clear out the quantity received and date received
+      	if (oi.Date_Received__c != system.today()) {
+	        oi.Quantity_To_Receive__c = null;
+	        oi.Date_Received__c = null;
+      	}
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
 		if (oi.Purchase_Order__c == null) unassignedProductIds.add(oi.Pricebookentry.Product2Id);
@@ -717,8 +722,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     if (checkReceived())
       return null;
 
+	checkConfirmed();
     //JETT-712 
-    if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
+/*    if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
       boolean allOrderItemsHaveWholesaleCost = false;
       if (zeroDollarVendor) {
       	 allOrderItemsHaveWholesaleCost = true;
@@ -741,7 +747,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         po.Status__c = 'Confirmed';
         po.Confirmed_Timestamp__c = System.Now();
       }
-    }    
+    }  */  
     try{
       // upsert the purchase order
       upsert po;
@@ -820,8 +826,38 @@ public with sharing class RMS_vendorPurchaseOrderController {
     
   }
   
+    /*******************************************************
+        checkConfirmed method
+    *******************************************************/
+	public void checkConfirmed() {
 
-
+	    //JETT-712 
+	    if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
+	      boolean allOrderItemsHaveWholesaleCost = false;
+	      if (zeroDollarVendor) {
+	      	 allOrderItemsHaveWholesaleCost = true;
+	      }
+	      else {
+			for(OrderItemWrapper oiw : POOrderItemWrappers){
+	        	if (oiw.orderItem.Unit_Wholesale_Cost__c == null) {
+	          		allOrderItemsHaveWholesaleCost = false;
+	          		break;
+	        	}
+	        	else if (oiw.orderItem.Unit_Wholesale_Cost__c <= 0) {
+	          		allOrderItemsHaveWholesaleCost = false;
+	          		break;        		
+	        	}
+	        	else 
+	        		allOrderItemsHaveWholesaleCost = true;
+	      	}
+	      }
+	      if(allOrderItemsHaveWholesaleCost){
+	        po.Status__c = 'Confirmed';
+	        po.Confirmed_Timestamp__c = System.Now();
+	      }
+	    }
+		
+	}
 	/*******************************************************
 			setStoreAbbreviation method
 	*******************************************************/
@@ -997,6 +1033,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     List<Asset> finalAssetsToReceive = new List<Asset>();
     List<OrderItem> finalOrderItems = new List<OrderItem>();
     Map<Id, Asset> assetMap = new Map<Id, Asset>();
+    Map<Id, Received_Product__c> recProd = new Map<Id, Received_Product__c>();
     
     for (Asset prodAsset : [SELECT Id, Quantity FROM Asset WHERE Id IN: assetSet]) {
     	assetMap.put(prodAsset.Id, prodAsset);
@@ -1087,31 +1124,47 @@ public with sharing class RMS_vendorPurchaseOrderController {
     boolean partialReceived = false;
     boolean allReceived = false;
     
+	// Find any received product records from today for the assets
+    for (Received_Product__c rp : [SELECT Id, Quantity__c, Amount__c, Date__c, Asset__c FROM Received_Product__c WHERE Asset__c IN: assetSet AND Date__c = TODAY]) {
+    	recProd.put(rp.Asset__c, rp);
+    }
 
 //    if (orderToAssetMap.size() > 0) {
       for (OrderItem oi : itemsToReceive) {
-		list<Received_Product__c> recivedProducts = new list<Received_Product__c>();
+		list<Received_Product__c> receivedProducts = new list<Received_Product__c>();
 		if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
         	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
         	
-    		Received_Product__c rp = new Received_Product__c(	Asset__c = 	orderToAssetMap.get(oi.Id).Id, 
+        	// If the asset is in the received product map it means it has already been received once today so 
+        	// update the current received product record.
+        	if (recProd.size() > 0 && recProd.get(oi.Installed_Product_Asset__c) != null) {
+        		Received_Product__c rp = recProd.get(oi.Installed_Product_Asset__c);
+        		rp.Quantity__c = oi.Quantity_To_Receive__c;
+        		rp.Amount__c = oi.Unit_Wholesale_Cost__c;
+        		rp.Date__c = oi.Date_Received__c;
+        		receivedProducts.add(rp);
+        	}
+        	// otherwise create a new received product record
+        	else {
+    			Received_Product__c rp = new Received_Product__c(	Asset__c = 	orderToAssetMap.get(oi.Id).Id, 
 																Quantity__c = oi.Quantity_To_Receive__c, 
 																Amount__c = oi.Unit_Wholesale_Cost__c , 
 																Date__c = oi.Date_Received__c
 															);
-			recivedProducts.add(rp);
+				receivedProducts.add(rp);
+        	}
 		}
 		  
 		
 		try{
-	    	upsert recivedProducts;
+	    	upsert receivedProducts;
 	    } catch (Exception e){
 	    	System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController while upserting recived Products in the receiveLineItems method:' + e);
 	    	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
 	    }
-    
-        oi.Quantity_To_Receive__c = null;
-        oi.Date_Received__c = null;
+// TODO Testing    
+//        oi.Quantity_To_Receive__c = null;
+//        oi.Date_Received__c = null;
         finalOrderItems.add(oi);
 
 		if (oi.Installed_Product_Asset__c == null) {
@@ -1369,6 +1422,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       if(allLineItemsVerified){
         po.Status__c = 'Released';    
         po.Released_Timestamp__c = System.Now();
+		checkConfirmed();
 
         try{
           // upsert the po with the new status
