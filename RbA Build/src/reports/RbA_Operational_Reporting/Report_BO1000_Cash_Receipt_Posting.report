@@ -28,7 +28,6 @@
             <operator>equals</operator>
             <value>Payment__c.Misc_Cash_Receipt</value>
         </criteriaItems>
-        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>
