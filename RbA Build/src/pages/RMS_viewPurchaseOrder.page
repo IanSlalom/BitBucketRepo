@@ -135,10 +135,10 @@ function prepareList(parent,child,isSubselectOptional){
 
 	<apex:form >
 		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
-			<apex:pageBlockButtons location="both">
+			<apex:pageBlockButtons location="both" id="pageBlockButtons">
 				<apex:commandButton action="{!edit}" value="Edit" rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}"/>				
+				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
   				<apex:commandButton action="{!confirm}" value="Cancel PO"  rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
   				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'rbacon' || status == 'rec') && (poComplete == false)) }"/>

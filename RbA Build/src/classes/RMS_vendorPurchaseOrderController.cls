@@ -482,6 +482,16 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        oi.Quantity_To_Receive__c = null;
 	        oi.Date_Received__c = null;
       	}
+      	if (oi.Date_Written_Off__c != system.today()) {
+	        oi.Quantity_To_Write_Off__c = null;
+    	    oi.Date_Written_Off__c = null;
+      	}
+      	if (oi.Date_Vendor_Credit__c != system.today()) {
+            oi.Vendor_Credit_to_Receive__c = null;
+	        oi.Date_Vendor_Credit__c = null;
+      	}
+
+
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
 		if (oi.Purchase_Order__c == null) unassignedProductIds.add(oi.Pricebookentry.Product2Id);
@@ -803,7 +813,17 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	  if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
 	  	return null;
 	  } 
-      update orderItemsToUpdateList;
+	  try{
+        // update the order items
+        update orderItemsToUpdateList;
+
+      } catch (Exception e){
+        System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the receivelineitems method updating the line items:' + e);
+        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+        return null;
+      }
+
+
 
 	  List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(orderItemsToUpdateList, po.Subtotal__c, po.Tax__c);    
 	  if (orderItemsToTax != null) update orderItemsToTax;
@@ -1039,6 +1059,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
     	assetMap.put(prodAsset.Id, prodAsset);
     }
 
+    boolean noneReceived = false;
+    boolean partialReceived = false;
+    boolean allReceived = false;
+    
+	// Find any received product records from today for the assets
+    for (Received_Product__c rp : [SELECT Id, Quantity__c, Amount__c, Date__c, Asset__c FROM Received_Product__c WHERE Asset__c IN: assetSet AND Date__c = TODAY]) {
+    	recProd.put(rp.Asset__c, rp);
+    }
+
+
+
+
+
 	for (OrderItem oi : itemsToReceive) {
       Asset productAsset;
       if (oi.Installed_Product_Asset__c == null && oi.Quantity_To_Receive__c != null) { 
@@ -1076,6 +1109,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.REC_DATE_QUANTITY_REQUIRED));
         return null;
       }
+      if (oi.Quantity_To_Receive__c < 0)
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.QUANTITY_NEGATIVE));
+        return null;
+      }
+
       if (oi.Date_Received__c != null && oi.Quantity_To_Receive__c != null) {
 			if(oi.Unit_Wholesale_Cost__c == null) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
@@ -1086,9 +1125,18 @@ public with sharing class RMS_vendorPurchaseOrderController {
 				  return null;
 			}
 
+/*      		productAsset.Quantity =  (productAsset.Quantity == null) 
+                          ?   oi.Quantity_To_Receive__c 
+                          :  oi.Quantity_To_Receive__c + productAsset.Quantity;*/
+			// If the assets quantity is null just set the quantity to the quantity received, otherwise add in the current asset quantity
       		productAsset.Quantity =  (productAsset.Quantity == null) 
                           ?   oi.Quantity_To_Receive__c 
                           :  oi.Quantity_To_Receive__c + productAsset.Quantity;
+                          
+            // Check to see if this item has been received already today and if so subtract the previous received quantity
+            if (recProd.containsKey(oi.Installed_Product_Asset__c))
+            	productAsset.Quantity = productAsset.Quantity - recProd.get(oi.Installed_Product_Asset__c).Quantity__c;
+
           //JETT 2083 set Asset Received Date to Today   
       		productAsset.Date_Received__c = System.today();
       		
@@ -1118,16 +1166,9 @@ public with sharing class RMS_vendorPurchaseOrderController {
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the receiveLineItems method:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+      return null;
     }
-    
-    boolean noneReceived = false;
-    boolean partialReceived = false;
-    boolean allReceived = false;
-    
-	// Find any received product records from today for the assets
-    for (Received_Product__c rp : [SELECT Id, Quantity__c, Amount__c, Date__c, Asset__c FROM Received_Product__c WHERE Asset__c IN: assetSet AND Date__c = TODAY]) {
-    	recProd.put(rp.Asset__c, rp);
-    }
+
 
 //    if (orderToAssetMap.size() > 0) {
       for (OrderItem oi : itemsToReceive) {
@@ -1137,7 +1178,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
         	
         	// If the asset is in the received product map it means it has already been received once today so 
         	// update the current received product record.
-        	if (recProd.size() > 0 && recProd.get(oi.Installed_Product_Asset__c) != null) {
+        	if (recProd.size() > 0 && recProd.containsKey(oi.Installed_Product_Asset__c) != null) {
         		Received_Product__c rp = recProd.get(oi.Installed_Product_Asset__c);
         		rp.Quantity__c = oi.Quantity_To_Receive__c;
         		rp.Amount__c = oi.Unit_Wholesale_Cost__c;
@@ -1189,6 +1230,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
     					(allReceived && noneReceived)	?	'Partially Received'	:
     					(allReceived)					?	'Received'				:
     														'';
+
+
+
+
+
+    
     return finalOrderItems;
 	
   }
@@ -1237,15 +1284,23 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WRITEOFF_DATE_QUANTITY_REQUIRED));
         return null;
       }
+      if (oi.Quantity_To_Write_Off__c < 0)
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.QUANTITY_NEGATIVE));
+        return null;
+      }
+
       if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
 			if(oi.Unit_Wholesale_Cost__c == null && !zeroDollarVendor) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED));
 				  return null; 
 				  
 			}
+			decimal quantityWrittenOffToday = orderItemIdToOrderItemMap.get(oi.Id).Quantity_To_Write_Off__c;
+			if (quantityWrittenOffToday == null) quantityWrittenOffToday = 0;
       		productAsset.Quantity_Written_Off__c =  (productAsset.Quantity_Written_Off__c == null) 
-                          ?   oi.Quantity_To_Write_Off__c 
-                          :  oi.Quantity_To_Write_Off__c + productAsset.Quantity_Written_Off__c;
+                          ?   oi.Quantity_To_Write_Off__c - quantityWrittenOffToday
+                          :  oi.Quantity_To_Write_Off__c + productAsset.Quantity_Written_Off__c - quantityWrittenOffToday;
           
           //JETT 2083 Date Written off set to Today   
       		productAsset.Date_Written_Off__c = System.Today();
@@ -1272,14 +1327,15 @@ public with sharing class RMS_vendorPurchaseOrderController {
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the writeOffLineItems method:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+	  return null;
     }
 
       for (OrderItem oi : itemsToWriteOff) {
 		if (oi.Date_Written_Off__c != null && oi.Quantity_To_Write_Off__c != null) {
         	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
 		}
-        oi.Quantity_To_Write_Off__c = null;
-        oi.Date_Written_Off__c = null;
+//        oi.Quantity_To_Write_Off__c = null;
+//        oi.Date_Written_Off__c = null;
         finalOrderItems.add(oi);
 
       }
@@ -1331,15 +1387,25 @@ public with sharing class RMS_vendorPurchaseOrderController {
 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.VENDORCREDIT_DATE_AMOUNT_REQUIRED));
         return null;
       }
+      if (oi.Vendor_Credit_to_Receive__c < 0)
+      {
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.VENDOR_CREDIT_NEGATIVE));
+        return null;
+      }
+
       if (oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_to_Receive__c != null) {
 			if(oi.Unit_Wholesale_Cost__c == null) {
 			      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.WHOLESALE_COST_REQUIRED_CREDIT));
 				  return null; 
 				  
 			}
+
+			decimal vendorCreditToday = orderItemIdToOrderItemMap.get(oi.Id).Vendor_Credit_to_Receive__c;
+			if (vendorCreditToday == null) vendorCreditToday = 0;
+
       		productAsset.Vendor_Credit__c =  (productAsset.Vendor_Credit__c == null) 
-                          ?   oi.Vendor_Credit_to_Receive__c 
-                          :  oi.Vendor_Credit_to_Receive__c + productAsset.Vendor_Credit__c;
+                          ?   oi.Vendor_Credit_to_Receive__c - vendorCreditToday
+                          :  oi.Vendor_Credit_to_Receive__c + productAsset.Vendor_Credit__c - vendorCreditToday;
           
           //JETT 2083 Date of Vendor Credit set to Today's date   
       		productAsset.Date_Vendor_Credit__c = System.today();
@@ -1363,14 +1429,15 @@ public with sharing class RMS_vendorPurchaseOrderController {
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the vendorCredit method:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+	  return null;
     }
 
       for (OrderItem oi : itemsForVendorCredit) {
 		if (oi.Date_Vendor_Credit__c != null && oi.Vendor_Credit_to_Receive__c != null) {
         	oi.Installed_Product_Asset__c = orderToAssetMap.get(oi.Id).Id;
 		}
-        oi.Vendor_Credit_to_Receive__c = null;
-        oi.Date_Vendor_Credit__c = null;
+//        oi.Vendor_Credit_to_Receive__c = null;
+//        oi.Date_Vendor_Credit__c = null;
         finalOrderItems.add(oi);
 
       }
@@ -1437,7 +1504,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     }
 
     PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
-    pageRef.setRedirect(false);
+    pageRef.setRedirect(true);
     return pageRef;
   }
 
