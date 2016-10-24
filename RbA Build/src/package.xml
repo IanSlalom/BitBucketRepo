@@ -207,6 +207,7 @@
         <members>RMS_createVisitWorkOrder</members>
         <members>RMS_createVisitWorkOrderService</members>
         <members>RMS_editBackOfficeCheckRedirect</members>
+        <members>RMS_editOrderRedirect</members>
         <members>RMS_editServiceProduct</members>
         <members>RMS_editServiceRequest</members>
         <members>RMS_municipalityTab</members>
