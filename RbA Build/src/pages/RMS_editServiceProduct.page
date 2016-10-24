@@ -16,7 +16,7 @@
     
     var openSubtab = function openSubtab(result) {
         var primaryTabId = result.id;
-        sforce.console.setTabTitle('{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}')
+        sforce.console.setTabTitle('Edit Service Product: {!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}')
     }; 
     
     function testCloseTab() {
