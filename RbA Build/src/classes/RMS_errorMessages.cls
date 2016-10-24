@@ -23,9 +23,12 @@ public with sharing class RMS_errorMessages {
 	public static final String OVERWRITINGOFF_NOT_ALLOWED = 'The quantity written off for this item cannot be more than the quantity ordered. Please try again.';
 	public static final String OVERVENDORCREDIT_NOT_ALLOWED = 'The amount of vendor credit for this item cannot be more than the total wholesale cost. Please try again.';
 	public static final String REC_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to receive an item. Please try again.';
+	public static final String QUANTITY_NEGATIVE = 'You cannot enter a negative quantity. Please try again.';
+	public static final String VENDOR_CREDIT_NEGATIVE = 'You cannot enter a negative vendor credit. Please try again.';
 	public static final String WRITEOFF_DATE_QUANTITY_REQUIRED = 'You must enter both a quantity and date to write off an item. Please try again.';
 	public static final String VENDORCREDIT_DATE_AMOUNT_REQUIRED = 'You must enter both an amount and date to of vendor credit for an item. Please try again.';
 	public static final String WHOLESALE_COST_REQUIRED = 'You must enter a unit wholesale cost to receive an item. Please try again.';
+	public static final String WHOLESALE_COST_NEGATIVE = 'Please enter a positive cost amount.';
 	public static final String WHOLESALE_COST_REQUIRED_CREDIT = 'You must enter a unit wholesale cost to apply a vendor credit. Please try again.';
 	public static final String PO_NOT_READY_TO_RELEASE = 'The order must be in the Ready to Order status before you can release this purchase order.';
 	public static final String ORDER_STATUS_INVALID_FOR_PO_RELEASE = 'Purchase Order cannot be released until the Order is in Ready to Order Status.';

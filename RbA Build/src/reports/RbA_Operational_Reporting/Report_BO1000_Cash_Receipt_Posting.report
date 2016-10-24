@@ -7,7 +7,7 @@
         <field>Payment__c.GL_Account__c</field>
     </columns>
     <columns>
-        <field>Payment__c.Bill_to_Contact__c</field>
+        <field>Payment__c.Contact__c</field>
     </columns>
     <columns>
         <field>Payment__c.Description__c</field>
