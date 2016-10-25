@@ -126,7 +126,7 @@
             </div>
         </div>
         
-        <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
+        <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="block1">
             <apex:pageBlockButtons >
             <apex:commandButton action="{!editServiceRequest}" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
@@ -139,24 +139,39 @@
                 <apex:outputField value="{!Order.BilltoContactId}"/>
                 <apex:outputField value="{!Order.EffectiveDate}"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
-                <apex:outputField value="{!Order.Type_image__c}"/>
-                <apex:outputField value="{!Order.Service_Type__c}"/>
-                <apex:outputField value="{!Order.Store_Location__c}"/>
-                <apex:outputField value="{!Order.Service_initiated_By__c}"/>
-                <apex:outputField value="{!Order.Mileage__c}"/>
-                <apex:outputField value="{!Order.Status}"/>
-                <apex:outputField value="{!Order.Reimbursement_Mileage__c}"/>
-                <apex:outputField value="{!Order.Total_Jobsite_Hours__c}"/>
-                <apex:outputField value="{!Order.Total_Procedure_Time__c}"/>
-                <apex:outputField value="{!Order.of_Visits__c}"/>
-                <apex:outputField value="{!Order.Reimbursement_Labor__c}"/>
+                <apex:outputField value="{!Order.Store_Location__c}"/> <br/>               
+                <apex:outputField value="{!Order.Service_Type__c}"/><br/>                
+                <apex:outputField value="{!Order.Service_initiated_By__c}"/><br/>                
+                <apex:outputField value="{!Order.Status}"/> 
+                <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
                 <apex:outputField value="{!Order.Description}"/>
-                <apex:outputField value="{!Order.Save_Reason__c}"/>
-                <apex:outputField value="{!Order.Secondary_Save_Reason__c}"/>
+                <apex:outputField value="{!Order.Save_Reason__c}" rendered="{!IF(Order.Service_Type__c == 'Save',true,false)}"/>
+                <apex:outputField value="{!Order.Secondary_Save_Reason__c}" rendered="{!IF(Order.Service_Type__c == 'Save',true,false)}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Quote and Billing Details" columns="2" collapsible="true">
+            <apex:pageBlockSection title="Reimbursement" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.of_Visits__c}"/>                
+                <apex:outputField value="{!Order.Mileage__c}"/>                
+                <apex:outputField value="{!Order.Total_Jobsite_Hours__c}"/>
+                <apex:outputField value="{!Order.Reimbursement_Mileage__c}"/>
+                <apex:outputField value="{!Order.Warranty_Date_Submitted__c}"/>                
+                <apex:outputField value="{!Order.Total_Procedure_Time__c}"/> 
+                <apex:outputField value="{!Order.Warranty_Date_Accepted__c}"/>
+                <apex:outputField value="{!Order.Reimbursement_Labor__c}"/>
+                <apex:outputField value="{!Order.Warranty_Reimbursement_Amount__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">
+                <apex:outputField value="{!Order.Sold_Order__c}"/>
+                <apex:outputField value="{!Order.Account.Account_Balance__c}" label="Amount Due on Account"/>
+                <apex:outputField value="{!Order.Install_Complete_Date__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Tech_Measure__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Crew__c}"/><br/>
+                <apex:outputField value="{!Order.Original_Stainer__c}"/><br/>
+                <apex:outputField value="{!Order.Lead_Service_Tech__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Quote and Billing Details" columns="2" collapsible="true" id="qbd">
                 <apex:outputField value="{!Order.OpportunityId}"/>
                 <apex:outputField value="{!Order.Quote_Subtotal__c}"/>
                 <apex:outputField value="{!Order.QuoteId}"/>
@@ -171,34 +186,21 @@
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
                 <apex:outputField value="{!Order.Invoice_Notes__c}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Sold Order Details" collapsible="true" columns="2">
-                <apex:outputField value="{!Order.Sold_Order__c}"/>
-                <apex:outputField value="{!Order.Amount_due_on_Account__c}"/>
-                <apex:outputField value="{!Order.Install_Complete_Date__c}"/><br/>
-                <apex:outputField value="{!Order.Original_Tech_Measure__c}"/><br/>
-                <apex:outputField value="{!Order.Original_Crew__c}"/><br/>
-                <apex:outputField value="{!Order.Original_Stainer__c}"/><br/>
-                <apex:outputField value="{!Order.Lead_Service_Tech__c}"/>
-            </apex:pageBlockSection>
+            <script> twistSection(document.getElementById('{!$Component.block1.qbd}').getElementsByTagName('img')[0]) </script>            
             <apex:pageBlockSection title="Address Details" collapsible="true" columns="2">
                 <apex:outputField value="{!Order.Billing_Address__c}"/>
                 <apex:outputField value="{!Order.Shipping_Address__c}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Warranty Details" collapsible="true" columns="1">
-            	<apex:outputField value="{!Order.Warranty_Date_Submitted__c}"/>
-                <apex:outputField value="{!Order.Warranty_Date_Accepted__c}"/>
-                <apex:outputField value="{!Order.Warranty_Reimbursement_Amount__c}"/>
-            </apex:pageBlockSection>
-            <apex:pageBlockSection title="System Information" collapsible="true" columns="2">
+            <apex:pageBlockSection title="System Information" collapsible="true" columns="2" id="si">
                 <apex:outputField value="{!Order.CreatedById}"/>
                 <apex:outputField value="{!Order.LastModifiedById}"/>
                 <apex:outputField value="{!Order.Sales_Tax_Percent__c}"/>
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>
                 <apex:outputField value="{!Order.Date_Cancelled__c}"/>
                 <apex:outputField value="{!Order.RecordType.Name}"/><br/>
                 <apex:outputField value="{!Order.hasPO__c}"/>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="Additional Information" collapsible="true" columns="2">
+            <script> twistSection(document.getElementById('{!$Component.block1.si}').getElementsByTagName('img')[0]) </script>
+            <apex:pageBlockSection title="Additional Information" collapsible="true" columns="2" id="ai">
                 <apex:outputField value="{!Order.Primary_Tech_Measure__c}"/>
                 <apex:outputField value="{!Order.Tech_Measure_Date__c}"/><br/>
                 <apex:outputField value="{!Order.Tech_Measure_Status__c}"/>
@@ -209,13 +211,13 @@
                 <apex:outputField value="{!Order.Stainer__c}"/>
                 <apex:outputField value="{!Order.Paint_Stain_Status__c}"/>
                 <apex:outputField value="{!Order.Primary_Service__c}"/>
-                <apex:outputField value="{!Order.Service_Status__c}"/>
-                <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>
+                <apex:outputField value="{!Order.Service_Status__c}"/><br/>
                 <apex:outputField value="{!Order.HOA_Status__c}"/><br/>
                 <apex:outputField value="{!Order.Historical_Status__c}"/><br/>
                 <apex:outputField value="{!Order.Permit_Status__c}"/><br/>
                 <apex:outputField value="{!Order.LSWP_Status__c}"/>
             </apex:pageBlockSection>
+            <script> twistSection(document.getElementById('{!$Component.block1.ai}').getElementsByTagName('img')[0]) </script>
         </apex:pageBlock>
         
         
@@ -291,7 +293,7 @@
             <apex:column headerValue="Journal Entry Name" value="{!t.Name}"/>
             <apex:column headerValue="Type" value="{!t.Type__c}"/>
             <apex:column headerValue="Debit General Ledger Account" value="{!t.Debit_General_Ledger_Account__c }"/> 
-            <apex:column headerValue="Credit General Ledger Account	" value="{!t.Credit_General_Ledger_Account__c }"/> 
+            <apex:column headerValue="Credit General Ledger Account " value="{!t.Credit_General_Ledger_Account__c }"/> 
             <apex:column headerValue="Amount" value="{!t.Amount__c}"/> 
             <apex:column headerValue="Date Sent to BaanERP" value="{!t.Date_Sent_to_BaanERP__c}"/>             
         </apex:pageBlockTable> 
