@@ -63,7 +63,7 @@
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
                 <apex:inputField value="{!Order.Store_Location__c}"/><br/>
                 <apex:inputField value="{!Order.Service_Type__c}"/><br/>
-                <apex:inputField value="{!Order.Service_initiated_By__c}"/>
+                <apex:inputField value="{!Order.Service_initiated_By__c}"/><br/>
                 <apex:inputField value="{!Order.Status}"/>
                 <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
                 <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>
