@@ -141,9 +141,9 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
   				<apex:commandButton action="{!confirm}" value="Cancel PO"  rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
-  				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'rbacon' || status == 'rec') && (poComplete == false)) }"/>
+  				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
 				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed)}"/>
+				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed) && (status == 'part' || status == 'rbapart' || status == 'rec')}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
  				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaServicePO()" rendered="{!servicePurchaseOrder}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaProductPO()" rendered="{!(!costPurchaseOrder && !servicePurchaseOrder)}"/>
@@ -218,15 +218,15 @@ function prepareList(parent,child,isSubselectOptional){
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
-                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
+                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec')) }">
 						<apex:facet name="header">Qty Received</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
                     </apex:column>
-                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec')) }">
+                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec')) }">
 						<apex:facet name="header">Qty Written Off</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
                     </apex:column>
-                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'rbacon' || status == 'rec') && (costPurchaseOrder || servicePurchaseOrder)) }">
+                    <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (costPurchaseOrder || servicePurchaseOrder)) }">
 						<apex:facet name="header">Vendor Credit</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Vendor_Credit__c}" />
                     </apex:column>

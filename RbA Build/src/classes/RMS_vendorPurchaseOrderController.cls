@@ -436,10 +436,12 @@ public with sharing class RMS_vendorPurchaseOrderController {
      
 
       status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
-            	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && !electronicOrder)  ?  'con'    :
-            	((orderStatus == 'Confirmed' || orderStatus == 'Partially Received') && electronicOrder)  ?  'rbacon'  :
+            	((orderStatus == 'Confirmed') && !electronicOrder)  ?  'con'    :
+            	((orderStatus == 'Confirmed') && electronicOrder)  ?  'rbacon'  :
             	(orderStatus == 'Rejected')                  					?  	'rej'   :
             	(orderStatus == 'Cancelled')                  					?  	'can'   :
+            	((orderStatus == 'Partially Received') && !electronicOrder)     ?  	'part'  :
+            	((orderStatus == 'Partially Received') && electronicOrder)     ?  	'rbapart'  :
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';

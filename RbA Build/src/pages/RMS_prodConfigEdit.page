@@ -134,7 +134,6 @@
 
     <apex:actionRegion >
 
-
     <apex:pageBlock title="Configure Product" id="ConfigureProductBlock" rendered="{!productSelected}"> 
         <apex:actionStatus id="save-status"  onstop="openSavedOI();return false"/>
         <apex:actionStatus id="save-new-status"  onstop="openNewOI('{!orderId}','{!priceBookId}');return false"/>
@@ -152,7 +151,7 @@
  		<apex:pageBlockSection title="Quantity Configuration" columns="2">
  			<apex:inputText value="{!OrderItem.Quantity}" label="Quantity" id="inputQuantity" rendered="{!mode == 'e'}"/>   
  			<apex:outputField value="{!OrderItem.Quantity}" label="Quantity" id="outQuantity" rendered="{!mode != 'e'}"/>   
-            <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled' && mode == 'e'}"/>
+            <apex:inputText value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="unitId" required="{!prodConfig.mpc.Unit_Id_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Unit_Id_Control__c != 'Disabled' && mode == 'e'}"/>
             <apex:outputField value="{!OrderItem.Unit_Id__c}" label="Unit Id" id="outunitId" rendered="{!prodConfig.mpc.Unit_Id_Control__c == 'Disabled' || mode != 'e'}"/>           
  		</apex:pageBlockSection> 
 
@@ -162,305 +161,305 @@
                 <apex:outputLabel value="Quantity"></apex:outputLabel>
 
  -->    		
- 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
+ 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
                 	<apex:selectOptions value="{!frameTypeItems}"/>
             	</apex:selectList>               
-            	<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ejFrame" /> 
+            	<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ejFrame" /> 
             	<apex:outputField value="{!OrderItem.EJ_Frame__c}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="outejFrame" /> 
 
-               <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="exteriorTrim">
+               <apex:selectList value="{!OrderItem.Exterior_Trim__c}" label="Exterior Trim" size="1" id="exteriorTrim" required="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Exterior_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="exteriorTrim">
                   <apex:selectOptions value="{!exteriorTrimItems}"/>
                </apex:selectList>
-     	       <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="checkrailStyle" >
+     	       <apex:selectList value="{!OrderItem.Checkrail_Style__c}" label="Checkrail Style" size="1" id="checkrailStyle"  required="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Checkrail_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="checkrailStyle" >
                 	<apex:selectOptions value="{!checkrailStyleItems}"/>
             	</apex:selectList>
-               <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+               <apex:inputText value="{!OrderItem.Width_Inches__c}" label="Width" id="inputWidth" required="{!prodConfig.mpc.Width_Inches_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Width_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
                <apex:outputField value="{!OrderItem.Width_Inches__c}" label="Width" id="outWidth" rendered="{!prodConfig.mpc.Width_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
-               <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Width_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
+               <apex:selectList value="{!OrderItem.Width_Fraction__c}" label="Width Fraction" size="1" id="inputWidthFraction" required="{!prodConfig.mpc.Width_Fraction_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Width_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                   <apex:selectOptions value="{!measurementFractionItems}"/>
                </apex:selectList>
-            <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
-            <apex:outputField value="{!OrderItem.Height_Inches__c}" label="Height" id="outHeight" rendered="{!prodConfig.mpc.Height_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
-         	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Height_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
+              <apex:inputText value="{!OrderItem.Height_Inches__c}" label="Height" id="inputHeight"  required="{!prodConfig.mpc.Height_Inches_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Height_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+				<apex:outputField value="{!OrderItem.Height_Inches__c}" label="Height" id="outHeight" rendered="{!prodConfig.mpc.Height_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
+         	<apex:selectList value="{!OrderItem.Height_Fraction__c}" label="Height Fraction" size="1" id="inputHeightFraction"   required="{!prodConfig.mpc.Height_Fraction_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Height_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:inputText value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="rightLegInches"  required="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Right_Leg_Inches__c}" label="Right Leg" id="outrightLegInches" rendered="{!prodConfig.mpc.Right_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Right_Leg_Fraction__c}" label="Right Leg Fraction" size="1" id="rightLegFraction"   required="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Right_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:inputText value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="leftLegInches"  required="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Left_Leg_Inches__c}" label="Left Leg" id="outleftLegInches" rendered="{!prodConfig.mpc.Left_Leg_Inches_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Left_Leg_Fraction__c}" label="Left Leg Fraction" size="1" id="leftLegFraction"   required="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Left_Leg_Fraction_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!measurementFractionItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Sill_Angle_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Sill_Angle__c}" label="Sill Angle" size="1" id="sillAngle"  required="{!prodConfig.mpc.Sill_Angle_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Sill_Angle_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!sillAngleItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Disabled'  || mode != 'e'}"  >
+            <apex:selectList value="{!OrderItem.Sash_Ratio__c}" label="Sash Ratio" size="1" id="sashRatio"   required="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Sash_Ratio_Control__c == 'Disabled'  || mode != 'e'}"  >
                 <apex:selectOptions value="{!sashRatioItems}"/>
             </apex:selectList>
-            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:inputText value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="mfgMullSequence"  required="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Mfg_Mull_Sequence__c}" label="Mfg Mull Sequence" id="outmfgMullSequence" rendered="{!prodConfig.mpc.Mfg_Mull_Sequence_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!mullSequenceMullionItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" html-data-jsid="exteriorColor" onChange="callRule('exteriorColor')" required="{!prodConfig.mpc.Exterior_Color_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Exterior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" html-data-jsid="exteriorColor" onChange="callRule('exteriorColor')" required="{!prodConfig.mpc.Exterior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Exterior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!exteriorColorItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" onChange="callRule('interiorColor')" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Interior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" onChange="callRule('interiorColor')" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Interior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!interiorColorItems}"/>
             </apex:selectList>
-		    <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 1}" html-data-jsid="glazing1" onChange="callRule('glazing1')" >
+		    <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 1}" html-data-jsid="glazing1" onChange="callRule('glazing1')" >
 		        <apex:selectOptions value="{!glazingItems}"/>
 		    </apex:selectList>
-		    <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 1}" html-data-jsid="glassPattern1"  >
+		    <apex:selectList value="{!OrderItem.Glass_Pattern_S1__c}" label="Glass Pattern {!sashFieldName}" size="1" id="glassPattern1"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 1}" html-data-jsid="glassPattern1"  >
 		        <apex:selectOptions value="{!GlassPatternItems}"/>
 		    </apex:selectList>
-		    <apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered S1" required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' && numSashes >= 1}" html-data-jsid="tempered1"  />
+		    <apex:inputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered S1" required="{!prodConfig.mpc.Tempered_Control__c == 'Required' && verifyProducts == true}" id="tempered0" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' && numSashes >= 1}" html-data-jsid="tempered1"  />
 		    <apex:outputField value="{!OrderItem.Tempered_S1__c}"  label="Tempered S1" id="outtempered0" rendered="{!(prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e') && numSashes >=1}" html-data-jsid="outtempered1" />
- 		    <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Required'}" id="breathertubes1" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="breatherTubes1"/>
+ 		    <apex:inputField value="{!OrderItem.Breather_Tubes__c}"  required="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Required' && verifyProducts == true}" id="breathertubes1" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="breatherTubes1"/>
  		    <apex:outputField value="{!OrderItem.Breather_Tubes__c}" id="outbreathertubes1" rendered="{!prodConfig.mpc.Breather_Tubes_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbreatherTubes1"/>
-		    <apex:selectList value="{!OrderItem.Glazing_S2__c}" label="Glazing S2" size="1" id="glazing2"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 2}" html-data-jsid="glazing2" onChange="callRule('glazing2')" >
+		    <apex:selectList value="{!OrderItem.Glazing_S2__c}" label="Glazing S2" size="1" id="glazing2"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 2}" html-data-jsid="glazing2" onChange="callRule('glazing2')" >
 		        <apex:selectOptions value="{!glazingItems}"/>
 		    </apex:selectList>
-		    <apex:selectList value="{!OrderItem.Glass_Pattern_S2__c}" label="Glass Pattern S2" size="1" id="glassPattern2"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 2}" html-data-jsid="glassPattern2" >
+		    <apex:selectList value="{!OrderItem.Glass_Pattern_S2__c}" label="Glass Pattern S2" size="1" id="glassPattern2"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 2}" html-data-jsid="glassPattern2" >
 		        <apex:selectOptions value="{!GlassPatternItems}"/>
 		    </apex:selectList>
-		    <apex:inputField value="{!OrderItem.Tempered_S2__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered2" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'  && numSashes >=2}" html-data-jsid="tempered2" />
+		    <apex:inputField value="{!OrderItem.Tempered_S2__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required' && verifyProducts == true}" id="tempered2" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'  && numSashes >=2}" html-data-jsid="tempered2" />
 		    <apex:outputField value="{!OrderItem.Tempered_S2__c}"  label="Tempered S2" id="outtempered2" rendered="{!(prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e') &&  numSashes >=1}" html-data-jsid="outtempered2" />
-            <apex:selectList value="{!OrderItem.Lifts_Pulls__c}" label="Lifts/Pulls" size="1" id="liftsPulls" required="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Lifts_Pulls__c}" label="Lifts/Pulls" size="1" id="liftsPulls" required="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Lifts_Pulls_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!liftsPullsItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Finger_Lifts__c}" label="Finger Lifts" size="1" id="fingerLifts" required="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Finger_Lifts__c}" label="Finger Lifts" size="1" id="fingerLifts" required="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Finger_Lifts_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!fingerLiftItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Locks_Sash__c}" label="Locks/Sash" size="1" id="locksSash" required="{!prodConfig.mpc.Locks_Sash_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Locks_Sash_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Locks_Sash__c}" label="Locks/Sash" size="1" id="locksSash" required="{!prodConfig.mpc.Locks_Sash_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Locks_Sash_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!locksSashItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Sash_Operation_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Sash_Operation__c}" label="Sash Operation" size="1" id="sashOperation"   required="{!prodConfig.mpc.Sash_Operation_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Sash_Operation_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!sashOperationItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Hardware_Style__c}" label="Hardware Style" size="1" id="hardwareStyle"  required="{!prodConfig.mpc.Hardware_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Hardware_Style_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Hardware_Style__c}" label="Hardware Style" size="1" id="hardwareStyle"  required="{!prodConfig.mpc.Hardware_Style_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Hardware_Style_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!hardwareStyleItems}"/>
             </apex:selectList>
-              <apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Hardware_Option_Control__c == 'Disabled'  || mode != 'e'}" >
+              <apex:selectList value="{!OrderItem.Hardware_Option__c}" label="Hardware Option" size="1" id="hardwareOption"  required="{!prodConfig.mpc.Hardware_Option_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Hardware_Option_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!hardwareOptionItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="hardwareFinish" >
+            <apex:selectList value="{!OrderItem.Hardware_Finish__c}" label="Hardware Finish" size="1" id="hardwareFinish"  required="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Hardware_Finish_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="hardwareFinish" >
                 <apex:selectOptions value="{!hardwareFinishItems}"/>
             </apex:selectList>
-            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="corrosionResistant" />
+            <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}"  required="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="corrosionResistant" />
             <apex:outputField value="{!OrderItem.Corrosion_Resistant_Hardware__c}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hardware_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outcorrosionResistant" />
-            <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="fibrexLTrim" />
+            <apex:inputField value="{!OrderItem.Fibrex_L_Trim__c}" required="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="fibrexLTrim" />
             <apex:outputField value="{!OrderItem.Fibrex_L_Trim__c}"  rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outfibrexLTrim" />
-            <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Type_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenTypeItems}"/>
             </apex:selectList>
- <!--             <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
+ <!--             <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenVeneerTypeItems}"/>
             </apex:selectList>
-       --> 	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Grille Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
+       --> 	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Grille Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Grille Pattern S1" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
+            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Grille Pattern S1" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
             	<apex:selectOptions value="{!grillePatternItems}"/>
             </apex:selectList>
 
-                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide S1" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="LightsWide1" >
+                <apex:selectList value="{!OrderItem.Lites_Wide_S1__c}" label="Grille Lites Wide S1" size="1" id="LightsWide1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="LightsWide1" >
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High S1" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="LightsHigh1" >
+                <apex:selectList value="{!OrderItem.Lites_High_S1__c}" label="Grille Lites High S1" size="1" id="LightsHigh1"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="LightsHigh1" >
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details S1" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}"  rendered ="{!numSashes >= 1}" html-data-jsid="customGrilleDetails1"/>
-            <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
+                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S1__c}" label="Custom Grille Details S1" cols="50" rows="5" id="customGrilleDetails1" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}"  rendered ="{!numSashes >= 1}" html-data-jsid="customGrilleDetails1"/>
+            <apex:inputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="wideBar" required="{!prodConfig.mpc.Wide_Bar_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Wide_Bar_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputField value="{!OrderItem.Wide_Bar__c}"  html-data-jsid="outwideBar" rendered="{!prodConfig.mpc.Wide_Bar_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:inputField value="{!OrderItem.Applied_Grilles__c}" required="{!prodConfig.mpc.Applied_Grilles_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
+            <apex:inputField value="{!OrderItem.Applied_Grilles__c}" required="{!prodConfig.mpc.Applied_Grilles_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="permanentlyAppliedInteriorWoodGrille" />
             <apex:outputField value="{!OrderItem.Applied_Grilles__c}" rendered="{!prodConfig.mpc.Applied_Grilles_Control__c != 'Disabled'  && mode == 'e'}"  html-data-jsid="outpermanentlyAppliedInteriorWoodGrille" />
-            <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
+            <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
             <apex:outputField value="{!OrderItem.Brickmould_Applied__c}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbrickmouldApplied"/>
 
-                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Grille Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
+                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Grille Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
                         <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="lightsWide2">
+                <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="lightsWide2">
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}"  html-data-jsid="lightsHigh2">
+                <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}"  html-data-jsid="lightsHigh2">
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-            <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e') &&  numSashes >= 2}" html-data-jsid="customGrilleDetails2" />
+            <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required' && verifyProducts == true}" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e') &&  numSashes >= 2}" html-data-jsid="customGrilleDetails2" />
             <apex:outputText value="{!OrderItem.Custom_Grille_Details_S2__c}"  id="outcustomGrilleDetails2" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e') && numSashes >=2}" html-data-jsid="outcustomGrilleDetails2" />
-            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required'}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'  && mode == 'e'}"  /> <!-- disabled="true" -->
+            <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'  && mode == 'e'}"  /> <!-- disabled="true" -->
             <apex:outputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="outgrilleAlignment" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Disabled'  || mode != 'e'}"  /> <!-- disabled="true" -->
-            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputText value="{!OrderItem.Hubs__c}" label="Hubs" id="outhubs"  rendered="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'  && mode == 'e'}" />
+            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'  && mode == 'e'}" />
             <apex:outputText value="{!OrderItem.Spokes__c}" label="Spokes" id="outspokes"  rendered="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" />
         </apex:pageBlockSection>
 
 
         <apex:pageBlockSection title="Trim & Casing" columns="2" rendered="{!prodConfig.mpc != null}">
-            <apex:selectList value="{!OrderItem.EJ_Thickness__c}" label="EJ Thickness" size="1" id="EJThickness"   required="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Required'}" disabled="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.EJ_Thickness__c}" label="EJ Thickness" size="1" id="EJThickness"   required="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.EJ_Thickness_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!EJThicknessItems}"/>
             </apex:selectList>
-             <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Interior_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="interiorTrim" >
+             <apex:selectList value="{!OrderItem.Interior_Trim__c}" label="Interior Trim" size="1" id="interiorTrim"  required="{!prodConfig.mpc.Interior_Trim_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Interior_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="interiorTrim" >
                 <apex:selectOptions value="{!interiorTrimItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.EJ_Wall_Depth__c}" label="EJ Wall Depth" size="1" id="EJWallDepth"   required="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Required'}" disabled="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.EJ_Wall_Depth__c}" label="EJ Wall Depth" size="1" id="EJWallDepth"   required="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.EJ_Wall_Depth_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!EJWallDepthItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Casing_Profile__c}" label="Casing Profile" size="1" id="casingProfile"   required="{!prodConfig.mpc.Casing_Profile_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Casing_Profile_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Casing_Profile__c}" label="Casing Profile" size="1" id="casingProfile"   required="{!prodConfig.mpc.Casing_Profile_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Casing_Profile_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!casingProfileItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.EJ_Species__c}" label="EJ Species" size="1" id="EJSpecies"   required="{!prodConfig.mpc.EJ_Species_Control__c == 'Required'}" disabled="{!prodConfig.mpc.EJ_Species_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.EJ_Species__c}" label="EJ Species" size="1" id="EJSpecies"   required="{!prodConfig.mpc.EJ_Species_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.EJ_Species_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!EJSpeciesItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Casing_Species__c}" label="Casing Species" size="1" id="casingSpecies"   required="{!prodConfig.mpc.Casing_Species_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Casing_Species_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Casing_Species__c}" label="Casing Species" size="1" id="casingSpecies"   required="{!prodConfig.mpc.Casing_Species_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Casing_Species_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!casingSpeciesItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.EJ_Color__c}" label="EJ Color" size="1" id="EJColor"   required="{!prodConfig.mpc.EJ_Color_Control__c == 'Required'}" disabled="{!prodConfig.mpc.EJ_Color_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.EJ_Color__c}" label="EJ Color" size="1" id="EJColor"   required="{!prodConfig.mpc.EJ_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.EJ_Color_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!EJColorItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Casing_Location__c}" label="Casing Location" size="1" id="casingLocation"   required="{!prodConfig.mpc.Casing_Location_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Casing_Location_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Casing_Location__c}" label="Casing Location" size="1" id="casingLocation"   required="{!prodConfig.mpc.Casing_Location_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Casing_Location_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!casingLocationItems}"/>
             </apex:selectList>
 
         </apex:pageBlockSection>
         <apex:pageBlockSection title="Brickmould & Drip Cap Options" columns="2" rendered="{!prodConfig.mpc != null}">
-            <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Brickmould_Location__c}" label="Brickmould Location" size="1" id="brickmouldLocation"   required="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Brickmould_Location_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!brickmouldLocationItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Drip_Cap_Pieces__c}" label="Drip Cap Pieces" size="1" id="dripCapPieces" required="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Drip_Cap_Pieces__c}" label="Drip Cap Pieces" size="1" id="dripCapPieces" required="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Drip_Cap_Pieces_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!dripCapPiecesItems}"/>
             </apex:selectList>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Storm Windows" columns="2" rendered="{!prodConfig.mpc != null}">
-            <apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Storm_Window_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Storm_Window__c}" label="Storm Window" size="1" id="stormWindow" required="{!prodConfig.mpc.Storm_Window_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Storm_Window_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!stormWindowItems}"/>
             </apex:selectList>
 
-            <apex:selectList value="{!OrderItem.Storm_Window_Style__c}" label="Storm Window Style" size="1" id="stormWindowStyle" required="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Storm_Window_Style__c}" label="Storm Window Style" size="1" id="stormWindowStyle" required="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Storm_Window_Style_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!stormWindowStyleItems}"/>
             </apex:selectList>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection id="jobCostDetailsSection" title="Additional Job Cost Details" columns="2" collapsible="true" rendered="{!prodConfig.mpc != null}">
-            <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="partOfBay"/>
+            <apex:inputField value="{!OrderItem.Part_of_Bay__c}"  required="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="partOfBay"/>
             <apex:outputField value="{!OrderItem.Part_of_Bay__c}" rendered="{!prodConfig.mpc.Part_of_Bay_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outpartOfBay"/>
-            <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="partOfBow"/>
+            <apex:inputField value="{!OrderItem.Part_of_Bow__c}"  required="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="partOfBow"/>
             <apex:outputField value="{!OrderItem.Part_of_Bow__c}" rendered="{!prodConfig.mpc.Part_of_Bow_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outpartOfBow"/>
         </apex:pageBlockSection>
 
 
 		<apex:pageBlockSection title="Door Fields" columns="2" rendered="{!prodConfig.mpc != null}">
 			 		
-			<apex:inputField value="{!OrderItem.Aluminum_Sill_Support__c}"  required="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="AluminiumSillSupport"/>
+			<apex:inputField value="{!OrderItem.Aluminum_Sill_Support__c}"  required="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="AluminiumSillSupport"/>
             <apex:outputField value="{!OrderItem.Aluminum_Sill_Support__c}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid="AluminiumSillSupport"/>
 			
-			<apex:inputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}"  required="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}"  required="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
-			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
 -           <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
-			<apex:inputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}"  required="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}"  required="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
-			<apex:inputField value="{!OrderItem.Number_of_Panels__c}"  required="{!prodConfig.mpc.Number_of_Panels_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Number_of_Panels_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Number_of_Panels__c}"  required="{!prodConfig.mpc.Number_of_Panels_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Number_of_Panels_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Number_of_Panels__c}" rendered="{!prodConfig.mpc.Number_of_Panels_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid=""/>
 
-			<apex:selectList value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" size="1" id="interiorPreFinish" required="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorPreFinish">
+			<apex:selectList value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" size="1" id="interiorPreFinish" required="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorPreFinish">
             	<apex:selectOptions value="{!interiorPreFinishItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Interior_Pre_Finish__c}" label="Interior Pre Finish" id="outinteriorPreFinish" rendered="{!prodConfig.mpc.Interior_Pre_Finish_Control__c == 'Disabled' || mode != 'e'}" />
 			
-			<apex:inputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="InteriorExtensionJambKit" required="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="InteriorExtensionJambKit" required="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Interior_Extension_Jamb_Kit__c}" label="Interior Extension Jamb Kit" id="outInteriorExtensionJambKit" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />
 			
-			<apex:inputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="ExteriorDoorJamb" required="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+			<apex:inputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="ExteriorDoorJamb" required="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Exterior_Door_Jamb_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="outExteriorDoorJamb" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />			
 	
             <apex:outputField value="{!OrderItem.Exterior_Frame_Depth__c}" label="Exterior Frame Depth" id="outExteriorFrameDepth" rendered="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c == 'Disabled' || mode != 'e'}" />
 			 
-			<apex:selectList value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" size="1" id="DoorSillColor" required="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
+			<apex:selectList value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" size="1" id="DoorSillColor" required="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
             	<apex:selectOptions value="{!DoorSillColorItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" id="outDoorSillColor" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Disabled' || mode != 'e'}" />
 			 	  
-		  	<apex:inputField value="{!OrderItem.Color_Match_Hinges__c}" label="Color Match Hinges" id="ColorMatchHinges" required="{!prodConfig.mpc.Color_Match_Hinges_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Color_Match_Hinges_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+		  	<apex:inputField value="{!OrderItem.Color_Match_Hinges__c}" label="Color Match Hinges" id="ColorMatchHinges" required="{!prodConfig.mpc.Color_Match_Hinges_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Color_Match_Hinges_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Color_Match_Hinges__c}" label="Color Match Hinges" id="outColorMatchHinges" rendered="{!prodConfig.mpc.Color_Match_Hinges_Control__c == 'Disabled' || mode != 'e'}" />
 
-           <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hinges__c}" label="Corrosion Resistant Hinges" id="CorrosionResistantHinges" required="{!prodConfig.mpc.Corrosion_Resistant_Hinges_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hinges_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+           <apex:inputField value="{!OrderItem.Corrosion_Resistant_Hinges__c}" label="Corrosion Resistant Hinges" id="CorrosionResistantHinges" required="{!prodConfig.mpc.Corrosion_Resistant_Hinges_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hinges_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
            <apex:outputField value="{!OrderItem.Corrosion_Resistant_Hinges__c}" label="Corrosion Resistant Hinges" id="outCorrosionResistantHinges" rendered="{!prodConfig.mpc.Corrosion_Resistant_Hinges_Control__c == 'Disabled' || mode != 'e'}" />
 
-           <apex:inputField value="{!OrderItem.Corrosion_Resistant_Lock__c}" label="Corrosion Resistant Lock" id="CorrosionResistantLock" required="{!prodConfig.mpc.Corrosion_Resistant_Lock_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Lock_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+           <apex:inputField value="{!OrderItem.Corrosion_Resistant_Lock__c}" label="Corrosion Resistant Lock" id="CorrosionResistantLock" required="{!prodConfig.mpc.Corrosion_Resistant_Lock_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Corrosion_Resistant_Lock_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
            <apex:outputField value="{!OrderItem.Corrosion_Resistant_Lock__c}" label="Corrosion Resistant Lock" id="outCorrosionResistantLock" rendered="{!prodConfig.mpc.Corrosion_Resistant_Lock_Control__c == 'Disabled' || mode != 'e'}" />
 
-           <apex:selectList value="{!OrderItem.Is_Height_L_or_R_Leg_Height__c }" label="Is Height L or R Height" size="1" id="isHeightLorR" required="{!prodConfig.mpc.Is_Height_L_or_R_Leg_Height_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Is_Height_L_or_R_Leg_Height_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isHeightLorR">
+           <apex:selectList value="{!OrderItem.Is_Height_L_or_R_Leg_Height__c }" label="Is Height L or R Height" size="1" id="isHeightLorR" required="{!prodConfig.mpc.Is_Height_L_or_R_Leg_Height_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Is_Height_L_or_R_Leg_Height_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isHeightLorR">
             	<apex:selectOptions value="{!isHeightlOrR}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Is_Height_L_or_R_Leg_Height__c }" label="Is Height L or R Height" id="outisHeightLorR" rendered="{!prodConfig.mpc.Is_Height_L_or_R_Leg_Height_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Is_Leg_Height_L_or_R_Leg_Height__c }" label="Is Leg Height L or R Height" size="1" id="isLegHeightLorR" required="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isLegHeightLorR">
+            <apex:selectList value="{!OrderItem.Is_Leg_Height_L_or_R_Leg_Height__c }" label="Is Leg Height L or R Height" size="1" id="isLegHeightLorR" required="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="isLegHeightLorR">
             	<apex:selectOptions value="{!isLegHeightlOrR}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Is_Leg_Height_L_or_R_Leg_Height__c}" label="Is Leg Height L or R Height" id="outisLegHeightLorR" rendered="{!prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height_Control__c == 'Disabled' || mode != 'e'}" />
 
-             <apex:selectList value="{!OrderItem.Leg_Height_Exterior_Fraction__c }" label="Leg Height Exterior Fraction" size="1" id="legHeightExteriorFraction" required="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightExteriorFraction">
+             <apex:selectList value="{!OrderItem.Leg_Height_Exterior_Fraction__c }" label="Leg Height Exterior Fraction" size="1" id="legHeightExteriorFraction" required="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightExteriorFraction">
             	<apex:selectOptions value="{!legExteriorFractionItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Leg_Height_Exterior_Fraction__c}" label="Leg Height Exterior Fraction" id="outlegHeightExteriorFraction" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Fraction_Control__c == 'Disabled' || mode != 'e'}" />
 
-             <apex:selectList value="{!OrderItem.Leg_Height_Interior_Fraction__c }" label="Leg Height Interior Fraction" size="1" id="legHeightInteriorFraction" required="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightInteriorFraction">
+             <apex:selectList value="{!OrderItem.Leg_Height_Interior_Fraction__c }" label="Leg Height Interior Fraction" size="1" id="legHeightInteriorFraction" required="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="legHeightInteriorFraction">
             	<apex:selectOptions value="{!legInteriorFractionItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Leg_Height_Interior_Fraction__c}" label="Leg Height Interior Fraction" id="outlegHeightInteriorFraction" rendered="{!prodConfig.mpc.Leg_Height_Interior_Fraction_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:inputField value="{!OrderItem.Leg_Height_Exterior_Whole_Inch__c}" required="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+            <apex:inputField value="{!OrderItem.Leg_Height_Exterior_Whole_Inch__c}" required="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
            	<apex:outputField value="{!OrderItem.Leg_Height_Exterior_Whole_Inch__c}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c == 'Disabled' || mode != 'e'}" />
 
-           	<apex:inputField value="{!OrderItem.Leg_Height_Interior_Whole_Inch__c}" required="{!prodConfig.mpc.Leg_Height_Interior_Whole_Inch_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
+           	<apex:inputField value="{!OrderItem.Leg_Height_Interior_Whole_Inch__c}" required="{!prodConfig.mpc.Leg_Height_Interior_Whole_Inch_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Leg_Height_Exterior_Whole_Inch_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
            	<apex:outputField value="{!OrderItem.Leg_Height_Interior_Whole_Inch__c}" rendered="{!prodConfig.mpc.Leg_Height_Interior_Whole_Inch_Control__c == 'Disabled' || mode != 'e'}" />
 
-           	<apex:selectList value="{!OrderItem.Meet_Rail_Dimension__c}" label="Meet Rail Dimension" size="1" id="meetRailDimension" required="{!prodConfig.mpc.Meet_Rail_Dimension_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Meet_Rail_Dimension_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="meetRailDimension">
+           	<apex:selectList value="{!OrderItem.Meet_Rail_Dimension__c}" label="Meet Rail Dimension" size="1" id="meetRailDimension" required="{!prodConfig.mpc.Meet_Rail_Dimension_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Meet_Rail_Dimension_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="meetRailDimension">
             	<apex:selectOptions value="{!meetRailDimension}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Meet_Rail_Dimension__c}" label="Meet Rail Dimension" id="outmeetRailDimension" rendered="{!prodConfig.mpc.Meet_Rail_Dimension_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:inputField value="{!OrderItem.EJ_Kerf__c}"  required="{!prodConfig.mpc.EJ_Kerf_Control__c == 'Required'}" rendered="{!prodConfig.mpc.EJ_Kerf_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="EjKerf"/>
+            <apex:inputField value="{!OrderItem.EJ_Kerf__c}"  required="{!prodConfig.mpc.EJ_Kerf_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.EJ_Kerf_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid="EjKerf"/>
             <apex:outputField value="{!OrderItem.EJ_Kerf__c}" rendered="{!prodConfig.mpc.EJ_Kerf_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid="EjKerf"/>
 			
 
            	</apex:pageBlockSection>
 	        <apex:pageBlockSection title="Sash 4 Fields" columns="1" html-data-jsid="glazing4Section" rendered="{!numSashes >=4 && masterProduct.Family == 'Door'}">
-	            <apex:selectList value="{!OrderItem.Glazing_S4__c}" label="Glazing S4" size="1" id="glazing4"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing4" onChange="callRule('glazing4')" >
+	            <apex:selectList value="{!OrderItem.Glazing_S4__c}" label="Glazing S4" size="1" id="glazing4"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glazing4" onChange="callRule('glazing4')" >
 	                <apex:selectOptions value="{!glazingItems}"/>
 	            </apex:selectList>
-	             <apex:selectList value="{!OrderItem.Glass_Pattern_S4__c}" label="Glass Pattern S4" size="1" id="glassPattern4"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern4" >
+	             <apex:selectList value="{!OrderItem.Glass_Pattern_S4__c}" label="Glass Pattern S4" size="1" id="glassPattern4"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="glassPattern4" >
 	                <apex:selectOptions value="{!GlassPatternItems}"/>
 	            </apex:selectList>
-	            <apex:inputField value="{!OrderItem.Tempered_S4__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered4" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered4"/>
+	            <apex:inputField value="{!OrderItem.Tempered_S4__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required' && verifyProducts == true}" id="tempered4" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered4"/>
 	            <apex:outputField value="{!OrderItem.Tempered_S4__c}" id="outtempered" rendered="{!prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outtempered4"/>
 
-	             <apex:selectList value="{!OrderItem.Grille_Pattern_S4__c}" label="Pattern S4" size="1" id="grillePattern4" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern4" onChange="callRule('grillePattern4')">
+	             <apex:selectList value="{!OrderItem.Grille_Pattern_S4__c}" label="Pattern S4" size="1" id="grillePattern4" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern4" onChange="callRule('grillePattern4')">
                         <apex:selectOptions value="{!grillePatternItems}"/>
                    </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_Wide_S4__c}" label="Grille Lites Wide S4" size="1" id="lightsWide4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide4">
+                <apex:selectList value="{!OrderItem.Lites_Wide_S4__c}" label="Grille Lites Wide S4" size="1" id="lightsWide4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide4">
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S4__c}" label="Grille Lites High S4" size="1" id="lightsHigh4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh4">
+                <apex:selectList value="{!OrderItem.Lites_High_S4__c}" label="Grille Lites High S4" size="1" id="lightsHigh4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsHigh4">
                         <apex:selectOptions value="{!litesHighItems}"/>
                    </apex:selectList>
-                <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S4__c}" cols="50" rows="5" id="customGrilleDetails4" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="customGrilleDetails4" />
+                <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S4__c}" cols="50" rows="5" id="customGrilleDetails4" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="customGrilleDetails4" />
             	<apex:outputText value="{!OrderItem.Custom_Grille_Details_S4__c}"  id="outcustomGrilleDetails2" rendered="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outcustomGrilleDetails4" />   
 
 	        </apex:pageBlockSection>
@@ -476,86 +475,87 @@
 
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
 
-             <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" required="{!prodConfig.mpc.Screen_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Screen_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="screenColor">
+             <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" required="{!prodConfig.mpc.Screen_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Screen_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="screenColor">
                  <apex:selectOptions value="{!screenColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Screen_Color__c}" label="Screen Color" id="outscreenColor"  rendered="{!prodConfig.mpc.Screen_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" required="{!prodConfig.mpc.Hardware_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareColor">
+            <apex:selectList value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" size="1" id="hardwareColor" required="{!prodConfig.mpc.Hardware_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hardware_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareColor">
                 <apex:selectOptions value="{!hardwareColorItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" id="outhardwareColor"  rendered="{!prodConfig.mpc.Hardware_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" size="1" id="hardwareFinishColor" required="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareFinishColor">
+            <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" size="1" id="hardwareFinishColor" required="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareFinishColor">
                 <apex:selectOptions value="{!hardwareFinishColorItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" id="outhardwareFinishColor"  rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-            <apex:inputField value="{!OrderItem.Window_Opening_Control_Device__c}"  required="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
+            <apex:inputField value="{!OrderItem.Window_Opening_Control_Device__c}"  required="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Window_Opening_Control_Device__c}" rendered="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid=""/>
 
 
-             <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" required="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="extGrilleColor">
+             <apex:selectList value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" size="1" id="exteriorGrilleColor" required="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="extGrilleColor">
                  <apex:selectOptions value="{!exteriorGrilleColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Exterior_Grille_Color__c}" label="Exterior Grille Color" id="outexteriorGrilleColor"  rendered="{!prodConfig.mpc.Exterior_Grille_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
 
-             <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" required="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="intGrilleColor">
+             <apex:selectList value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" size="1" id="interiorGrilleColor" required="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="intGrilleColor">
                  <apex:selectOptions value="{!interiorGrilleColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Interior_Grille_Color__c}" label="Interior Grille Color" id="outinteriorGrilleColor" rendered="{!prodConfig.mpc.Interior_Grille_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-             <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" required="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="stormWindowColor">
+             <apex:selectList value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" size="1" id="stormWindowColor" required="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="stormWindowColor">
                  <apex:selectOptions value="{!stormWindowColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Storm_Window_Color__c}" label="Storm Window Color" id="outstormWindowColor" rendered="{!prodConfig.mpc.Storm_Window_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
 
-             <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" required="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="exteriorTrimColor">
+             <apex:selectList value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" size="1" id="exteriorTrimColor" required="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="exteriorTrimColor">
                  <apex:selectOptions value="{!exteriorTrimColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Exterior_Trim_Color__c}" label="Exterior Trim Color" id="outexteriorTrimColor" rendered="{!prodConfig.mpc.Exterior_Trim_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
-             <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" required="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="jambLinerColor">
+             <apex:selectList value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" size="1" id="jambLinerColor" required="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="jambLinerColor">
                  <apex:selectOptions value="{!jambLinerColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Jamb_Liner_Color__c}" label="Jamb Liner Color" id="outjambLinerColor" rendered="{!prodConfig.mpc.Jamb_Liner_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
 
-             <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" required="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorSashColor" >
+             <apex:selectList value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" size="1" id="interiorSashColor" required="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="interiorSashColor" >
                  <apex:selectOptions value="{!interiorSashColorItems}"/>
              </apex:selectList>
              <apex:outputField value="{!OrderItem.Interior_Sash_Color__c}" label="Interior Sash Color" id="outinteriorSashColor" rendered="{!prodConfig.mpc.Interior_Sash_Color_Control__c == 'Disabled' || mode != 'e'}"/ >
 
-            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal Color" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="astragalColor">
+            <apex:selectList value="{!OrderItem.Astragal__c}" label="Astragal Color" size="1" id="astragalColor" required="{!prodConfig.mpc.Astragal_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Astragal_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="astragalColor">
                  <apex:selectOptions value="{!astragalColorItems}"/>
              </apex:selectList>
             <apex:outputField value="{!OrderItem.Astragal__c}" label="Astragal Color" id="outastragalColor" rendered="{!prodConfig.mpc.Astragal_Control__c == 'Disabled' || mode != 'e'}" />
 
-             <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" required="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installTrackLocation">
+             <apex:selectList value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" size="1" id="installTrackLocation" required="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installTrackLocation">
                  <apex:selectOptions value="{!installTrackLocationItems}"/>
               </apex:selectList>
               <apex:outputField value="{!OrderItem.Install_Track_Location__c}" label="Install Track Location" id="outinstallTrackLocation" rendered="{!prodConfig.mpc.Install_Track_Location_Control__c == 'Disabled' || mode != 'e'}"/>
 
 
-            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" required="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installHolesLocation"/>
+            <apex:inputText value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="installHolesLocation" required="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="installHolesLocation"/>
             <apex:outputField value="{!OrderItem.Install_Holes_Location__c}" label="Install Holes Location" id="outinstallHolesLocation" rendered="{!prodConfig.mpc.Install_Holes_Location_Control__c == 'Disabled' || mode != 'e'}"/>
 
 
 	        <apex:pageBlockSection title="Sash 3 Glazing" columns="1" html-data-jsid="glazing3Section">
-	            <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 3}" html-data-jsid="glazing3" onChange="callRule('glazing3')" >
+	            <apex:selectList value="{!OrderItem.Glazing_S3__c}" label="Glazing S3" size="1" id="glazing3"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 3}" html-data-jsid="glazing3" onChange="callRule('glazing3')" >
 	                <apex:selectOptions value="{!glazingItems}"/>
 	            </apex:selectList>
-	             <apex:selectList value="{!OrderItem.Glass_Pattern_S3__c}" label="Glass Pattern S3" size="1" id="glassPattern3"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required'}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 3}" html-data-jsid="glassPattern3" >
+	             <apex:selectList value="{!OrderItem.Glass_Pattern_S3__c}" label="Glass Pattern S3" size="1" id="glassPattern3"  required="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glass_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 3}" html-data-jsid="glassPattern3" >
 	                <apex:selectOptions value="{!GlassPatternItems}"/>
 	            </apex:selectList>
-	            <apex:inputField value="{!OrderItem.Tempered_S3__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required'}" id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' &&  numSashes >=3}"  html-data-jsid="tempered3"/>
+	            <apex:inputField value="{!OrderItem.Tempered_S3__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required' && verifyProducts == true}" id="tempered3" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e' &&  numSashes >=3}"  html-data-jsid="tempered3"/>
 	            <apex:outputField value="{!OrderItem.Tempered_S3__c}" id="outtempered3" rendered="{!(prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e') &&  numSashes >=3}" html-data-jsid="outtempered3"/>
 
 	        </apex:pageBlockSection>
 
         </apex:pageBlockSection>        
+
           <apex:pageBlockSection title="Order Information" columns="2">
 			<apex:outputField value="{!OrderItem.Order.Name}"/>
 			<apex:inputField value="{!OrderItem.Purchase_Order__c}" rendered="{!mode == 'e'}"/>
@@ -575,12 +575,18 @@
             <apex:outputField value="{!OrderItem.Tax__c}" />
 			<apex:inputField value="{!OrderItem.NSPR_Number__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nsprNumber"/>
 			<apex:outputField value="{!OrderItem.NSPR_Number__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnsprNumber"/>
-            <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required'}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
+            <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
-            <apex:inputField value="{!OrderItem.Verify_Item_Configuration__c}" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}" html-data-jsid="verify"/>
+
             <apex:inputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode == 'e' || mode == 'r'}" required="true"/>
 			<apex:outputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
+            <apex:outputpanel id="verify" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}">
+			  <apex:outputLabel value="Verify Item Configuration" for="verifyItemConfiguration" style="padding-top: 2px; margin-left: 10px; padding-right: 20px; padding-bottom: 2px; padding-left: 2px; text-align: right; font-weight:bold; font-size:91%; color: #4a4a56;"/>
+              <apex:inputField id="verifyItemConfiguration" value="{!OrderItem.Verify_Item_Configuration__c}"  html-data-jsid="verify"/>
+              <apex:actionSupport event="onchange" action="{!toggleVerify}" rerender="page-form" immediate="true"/>
+            </apex:outputpanel>
         </apex:pageBlockSection>
+
         <apex:pageBlockSection title="Sales Information" columns="2" rendered="{!prodConfig.mpc != null}">
 
             <apex:outputText value="{!OrderItem.Room__c}" label="Room" id="room" /> 
@@ -595,6 +601,7 @@
 
     <apex:outputField value="{!OrderItem.OrderId}" rendered="false"/>
     </apex:actionRegion>
+
 
 </apex:form>
     <apex:pageBlock rendered="{!!newOrderItem}">
@@ -698,6 +705,9 @@
         }
         else if(ruleName == 'nspr') {
         	nspr();
+        }
+        else if(ruleName == 'verify') {
+        	verify();
         }
     }       
         
@@ -1046,9 +1056,23 @@
     	var nsprCheck = j$("input[data-jsid='nspr']").prop('checked');
         if( nsprCheck == true){
             j$("input[data-jsid='verify']").prop('checked',false);    
+            j$("input[data-jsid='verify']").trigger('change');    
         }
         if( nsprCheck == false){
             j$("input[data-jsid='verify']").prop('checked',true);
+            j$("input[data-jsid='verify']").trigger('change');    
+        }
+    }
+
+    function verify(){
+            alert("her");
+    	var verifyCheck = j$("input[data-jsid='verify']").prop('checked');
+        if( verifyCheck == true){
+            alert("1");
+            jQuery('[id$=myHiddenField]').val('true');
+        }
+        if( verifyCheck == false){
+            alert("2");
         }
     }
 
