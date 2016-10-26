@@ -593,7 +593,7 @@ global with sharing class MA_RoutingSchedulerController {
                                     				        									AND ((RbA_Work_Order__r.Work_Order_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c = null)
                                                                                                     OR Resource__c IN :resourceIds
                                                                                                     OR (RbA_Work_Order__r.Scheduled_As_Type__c = :workOrderType AND RbA_Work_Order__r.Scheduled_As_Type__c != null))
-                                                                                                AND RbA_Work_Order__c != null ORDER BY StartDateTime__c ASC]);
+                                                                                                AND RbA_Work_Order__c != null AND RbA_Work_Order__r.Account__r.Store_Location__r.Active_Store_Configuration__c = :storeId ORDER BY StartDateTime__c ASC]);
 
             for (MA_Scheduler_Event__c maEvent : maEventsMap.values()) {
                 if (maEvent.Resource__c != null && !resourceIds.contains(maEvent.Resource__c)) {

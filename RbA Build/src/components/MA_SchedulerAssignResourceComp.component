@@ -86,6 +86,7 @@
         #assignedResourcesAvailableTable tbody {
             display: block;
             overflow-y: auto;
+            min-height: 150px;
             height: calc(100vh - 530px);
             width: 100%;
         }
@@ -328,6 +329,10 @@
 
         #resourceHeadCount, #requiredSkillsMatchCount {
             color: lightgrey;
+        }
+
+        #resourceHeadCount.underResourced {
+            color: red;
         }
 
         .inactiveResource, .inactiveResource td, .inactiveResource span, .inactiveResource div {
@@ -658,6 +663,14 @@
             }
 
             $('#resourceHeadCount').text('(' + totalHeads + (preferredHeadCount != '' ? '/' + preferredHeadCount : '') + ' Heads)');
+
+            if (preferredHeadCount != '' && !isNaN(parseInt(preferredHeadCount)) && parseInt(preferredHeadCount) > totalHeads) {
+                $('#resourceHeadCount').addClass('underResourced');
+            }
+            else {
+                $('#resourceHeadCount').removeClass('underResourced');
+            }
+
             updateRequiredSkillsMatchCount();
         }
 
