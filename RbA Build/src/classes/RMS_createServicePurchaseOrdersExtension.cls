@@ -101,7 +101,8 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 		get	{
 			if ( serviceProductMap != null) return serviceProductMap;
 			serviceProductMap = new map<Id,OrderItem>();
-			for (OrderItem oi : [SELECT Id, Purchase_Order__c 
+			for (OrderItem oi : [SELECT Id, Purchase_Order__c, Sold_Order_Product_Asset__r.Variant_Number__c,
+									Sold_Order_Product_Asset__r.Product_Name__c 
 								FROM OrderItem
 								WHERE Id IN : serviceProductIds])
 			{
@@ -158,6 +159,10 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 			// If the charge is disabled (meaning a PO has already been created) just continue
 			if (cw.isDisabled) continue;
 		
+			System.Debug('*************chargeVendorMap)=' +chargeVendorMap);
+			System.Debug('*************cw.charge.Charge_Cost_To__c)=' +cw.charge.Charge_Cost_To__c);
+			System.Debug('*************cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c)=' +cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+
 			// Attempt to retrieve the purchase order from the charge vendor map
 			poId = chargeVendorMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
 			
@@ -169,6 +174,8 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 				orderItemsToUpdate.add(itemToUpdate);
 				continue;
 			}
+
+			// Loop through 
 			String storeAbbreviation = returnStoreAbbreviation();
 			
 			Purchase_Order__c newPurchaseOrder = new Purchase_Order__c(
@@ -195,8 +202,16 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
         try{
        		insert orderItemPOMap.values();
        		for(OrderItem oi : orderItemPOMap.keyset()) {
-       			System.Debug('*************orderItemPOMap.get(oi).Id=' +orderItemPOMap.get(oi).Id);
-       			oi.Purchase_Order__c = orderItemPOMap.get(oi).Id;
+       			System.Debug('*************orderItemPOMap.get(oi)=' +orderItemPOMap.get(oi).Charge_Cost_To__c);
+       			Purchase_Order__c po = orderItemPOMap.get(oi);
+       			oi.Purchase_Order__c = po.Id;
+       			
+       			// Set the remake flag on the order item if the charge cost to is local
+				if (po.Charge_Cost_To__c == 'Retailer') 
+					oi.Remake__c = true;
+				// Set the order item description
+				oi.Description = (oi.Sold_Order_Product_Asset__r.Product_Name__c == null) ? '' : oi.Sold_Order_Product_Asset__r.Product_Name__c + ' - ';
+				oi.Description = (oi.Sold_Order_Product_Asset__r.Variant_Number__c == null) ? oi.Description : oi.Description + oi.Sold_Order_Product_Asset__r.Variant_Number__c;
        			newpoId = oi.Purchase_Order__c;
        			orderItemsToUpdate.add(oi);
        		}

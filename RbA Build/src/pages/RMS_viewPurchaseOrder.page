@@ -163,11 +163,13 @@ function prepareList(parent,child,isSubselectOptional){
 				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
 					
 					<apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" />
-					<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
-                    <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px"/>
+
+					<apex:pageBlockSectionItem helptext="{!$ObjectType.Purchase_Order__c.Fields.Status__c.InlineHelpText}">
+      					<apex:outputLabel value="{!$ObjectType.Purchase_Order__c.Fields.Status__c.Label}" />
+						<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+					</apex:pageBlockSectionItem>
+                   <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px"/>
 					 <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
-<!--  					<apex:outputField value="{!Purchase_Order__c.GL_Account__c}" label="GL Account" rendered="{!costPurchaseOrder == true}"/>
--->
 					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
 					
 					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
@@ -182,9 +184,6 @@ function prepareList(parent,child,isSubselectOptional){
 					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
 					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
                     <apex:outputField value="{!Purchase_Order__c.Charge_Cost_To__c}" label="Charge Cost To" rendered="{!servicePurchaseOrder}"/>
-                    <apex:outputfield value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!servicePurchaseOrder}"/>
-                    <apex:outputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!servicePurchaseOrder}"/>
-					
   					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
 		
 				</apex:pageBlockSection>
@@ -204,17 +203,18 @@ function prepareList(parent,child,isSubselectOptional){
 						<apex:facet name="header">Retail Price</apex:facet> 
 							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
 					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Charge_Cost_To__c}" rendered="{!servicePurchaseOrder}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!costPurchaseOrder == false}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!productPurchaseOrder == true}"/>
+					<apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!servicePurchaseOrder == true}">
+						<apex:facet name="header">New Variant</apex:facet> 
+					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
 						<apex:facet name="header">Cost</apex:facet> 
 					</apex:column>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Total_Wholesale_Cost__c}" rendered="{!costPurchaseOrder == true}">
 						<apex:facet name="header">Total Cost</apex:facet> 
 					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
+  					<apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Defect_Code__c}" rendered="{!servicePurchaseOrder}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Remake__c}" rendered="{!servicePurchaseOrder}"/>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>

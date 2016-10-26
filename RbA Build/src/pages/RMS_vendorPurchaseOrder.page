@@ -153,7 +153,11 @@
                     <apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" rendered="{! newPurchaseOrder == false}"/>
                     <apex:outputText value="" rendered="{! newPurchaseOrder == true}" />
    <!--  TODO:   temporarily commented out                    <apex:inputField value="{!Purchase_Order__c.Status__c}" label="Status" />  -->
-              <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status"/>
+					<apex:pageBlockSectionItem helptext="{!$ObjectType.Purchase_Order__c.Fields.Status__c.InlineHelpText}">
+      					<apex:outputLabel value="{!$ObjectType.Purchase_Order__c.Fields.Status__c.Label}" />
+						<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+					</apex:pageBlockSectionItem>
+
                     <apex:inputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == true}"/>
                     <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px" rendered="{!costPurchaseOrder == false}"/>
   <!--              <apex:outputText value=""/> -->   
@@ -182,11 +186,6 @@
                     <apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" rendered="{! status == 'rbanew' ||status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec'}"/>
                     
                     <apex:outputField value="{!Purchase_Order__c.Charge_Cost_To__c}" rendered="{!servicePurchaseOrder}"/>
-                    <apex:inputField value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}"/>
-                    <apex:outputfield value="{!Purchase_Order__c.MTO_Source_Code__c}" label="MTO Source Code" rendered="{!( status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec') && servicePurchaseOrder}"/>
-                    <apex:inputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!( status == 'new' || status == 'rel' || status == 'rej') && servicePurchaseOrder}"/>
-                    <apex:outputField value="{!Purchase_Order__c.Defect_Code__c}" label="Defect Code" rendered="{!( status == 'rbanew' ||status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec') && servicePurchaseOrder}"/>
-                    
                     <apex:inputTextarea value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'new' || status == 'rel' || status == 'rej'}"/>
                     <apex:outputField value="{!Purchase_Order__c.Comments__c}" label="Comments" rendered="{! status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec'}"/>
                 
@@ -200,8 +199,8 @@
                     <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}" rendered="{!costPurchaseOrder == true}"/>
                     <apex:column style="width:200px">
                         <apex:facet name="header">{!productText} Description</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Description}" rendered="{! (status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej')}"/>
-                            <apex:outputField value="{!oiw.orderItem.Description}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec')}"/>
+                            <apex:inputField value="{!oiw.orderItem.Description}" rendered="{! ((status == 'new' ||  status == 'rbanew' || status == 'rel' || status == 'rej') && (!servicePurchaseOrder))}"/>
+                            <apex:outputField value="{!oiw.orderItem.Description}" rendered="{! (status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'con' || status == 'part' || status == 'rec' || servicePurchaseOrder)}"/>
                     </apex:column>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>
@@ -215,8 +214,13 @@
                             <apex:outputField value="{!oiw.orderItem.Charge_Cost_To__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
                     </apex:column>
 
-                    <apex:column style="width:100px"  rendered="{!costPurchaseOrder == false}">
-                        <apex:facet name="header">Variant</apex:facet> 
+                    <apex:column style="width:50px"  rendered="{!productPurchaseOrder == true}">
+                        <apex:facet name="header">Variant Number</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
+                            <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
+                    </apex:column>
+                    <apex:column style="width:50px"  rendered="{!servicePurchaseOrder == true}">
+                        <apex:facet name="header">New Variant Number</apex:facet> 
                             <apex:inputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.Variant_Number__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
                     </apex:column>
@@ -228,21 +232,15 @@
                             <apex:outputField value="{!oiw.orderItem.Unit_Wholesale_Cost__c}" rendered="{! status == 'rbanew' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
                     </apex:column>
                     <apex:column style="width:50px" rendered="{!servicePurchaseOrder}">
-                        <apex:facet name="header">MTO Source Code</apex:facet> 
-                            <apex:outputField value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
+                          <apex:facet name="header">MTO Source Code</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
                     </apex:column>
                     <apex:column style="width:50px" rendered="{!servicePurchaseOrder}">
                         <apex:facet name="header">Defect Code</apex:facet> 
-                            <apex:outputField value="{!oiw.orderItem.Defect_Code__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
+                            <apex:inputField value="{!oiw.orderItem.Defect_Code__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.Defect_Code__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
-                    </apex:column>
-                    <apex:column style="width:50px" rendered="{!servicePurchaseOrder}">
-                        <apex:facet name="header">Remake</apex:facet> 
-                            <apex:inputField value="{!oiw.orderItem.Remake__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
-                            <apex:outputField value="{!oiw.orderItem.Remake__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
-                    </apex:column>
-
+                    </apex:column> 
 
 
                     <!-- TODO: Add check for ARO and do not show for COROs -->
