@@ -468,7 +468,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c, Purchase_Order__c, Remake__c,
-                    MTO_Source_Code__c, Defect_Code__c, Charge_Cost_To__c,
+                    MTO_Source_Code__c, Defect_Code__c, 
+                    Charge_Cost_To__c,
                     Parent_Order_Item__r.Installed_Product_Asset__c,
                     Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
                     FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
@@ -479,21 +480,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
 
       //USING ORDER ITEMS GET ALL PRODUCTS
       for(OrderItem oi: relatedOrderItems){
-      	// If the date received is not today, clear out the quantity received and date received
-      	if (oi.Date_Received__c != system.today()) {
-	        oi.Quantity_To_Receive__c = null;
-	        oi.Date_Received__c = null;
-      	}
-      	if (oi.Date_Written_Off__c != system.today()) {
-	        oi.Quantity_To_Write_Off__c = null;
-    	    oi.Date_Written_Off__c = null;
-      	}
-      	if (oi.Date_Vendor_Credit__c != system.today()) {
-            oi.Vendor_Credit_to_Receive__c = null;
-	        oi.Date_Vendor_Credit__c = null;
-      	}
-
-
         relatedProduct2IDList.add(oi.Pricebookentry.Product2Id);
         orderItemIdToOrderItemMap.put(oi.id, oi);
 		if (oi.Purchase_Order__c == null) unassignedProductIds.add(oi.Pricebookentry.Product2Id);
@@ -633,12 +619,27 @@ public with sharing class RMS_vendorPurchaseOrderController {
                     Total_Retail_Price__c, Pricebookentry.Product2.Family, Total_Wholesale_Cost__c,
                     Pricebookentry.Product2.ProductCode, Order.EffectiveDate, Pricebookentry.Product2.Name, OrderId,
                     Order.Store_Location__c, Purchase_Order__c, Remake__c,
-                    MTO_Source_Code__c, Defect_Code__c, Charge_Cost_To__c,
+                    MTO_Source_Code__c, Defect_Code__c, 
+                    Charge_Cost_To__c,
                     Parent_Order_Item__r.Installed_Product_Asset__c,
                     Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
 										FROM OrderItem 
 										Where Purchase_Order__c =: po.Id])
 		{
+	      	if (oi.Date_Received__c != system.today()) {
+    	  		System.Debug('***************oi.Date_Received__c=' +oi.Date_Received__c);
+	    	    oi.Quantity_To_Receive__c = null;
+	        	oi.Date_Received__c = null;
+      		}
+      		if (oi.Date_Written_Off__c != system.today()) {
+	        	oi.Quantity_To_Write_Off__c = null;
+    	    	oi.Date_Written_Off__c = null;
+      		}
+      		if (oi.Date_Vendor_Credit__c != system.today()) {
+            	oi.Vendor_Credit_to_Receive__c = null;
+	        	oi.Date_Vendor_Credit__c = null;
+      		}
+
 			POOrderItemMap.put(oi.Id, oi);
 			POOrderItemProductIds.add(oi.Pricebookentry.Product2Id);
 		}
@@ -856,6 +857,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	    //JETT-712 
 	    if(po.Status__c == 'Released' && po.Estimated_Ship_Date__c != null){
 	      boolean allOrderItemsHaveWholesaleCost = false;
+	      boolean completeUnitsHaveVariants  = true;
 	      if (zeroDollarVendor) {
 	      	 allOrderItemsHaveWholesaleCost = true;
 	      }
@@ -872,8 +874,19 @@ public with sharing class RMS_vendorPurchaseOrderController {
 	        	else 
 	        		allOrderItemsHaveWholesaleCost = true;
 	      	}
+	      	// Do a check and make sure all complete units have variants for service POs.
+	      	if (servicePurchaseOrder) {
+				for(OrderItemWrapper oiw : POOrderItemWrappers){
+		        	if (oiw.orderItem.Pricebookentry.Product2.Name == 'Complete Unit' && oiw.orderItem.Variant_Number__c == null) {
+		          		completeUnitsHaveVariants = false;
+		          		break;
+		        	}
+		        	else 
+		        		completeUnitsHaveVariants = true;
+		      	}
+	      	}
 	      }
-	      if(allOrderItemsHaveWholesaleCost){
+	      if(allOrderItemsHaveWholesaleCost && completeUnitsHaveVariants){
 	        po.Status__c = 'Confirmed';
 	        po.Confirmed_Timestamp__c = System.Now();
 	      }
@@ -1081,6 +1094,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
+                      Variant_Number__c  = oi.Variant_Number__c,
                       Price        = oi.Total_Retail_Price__c,
                       Product2Id      = oi.Pricebookentry.Product2Id,
                       PurchaseDate    = oi.Order.EffectiveDate,
@@ -1095,7 +1109,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		// If this is a servicepurchaseorder and it's a complete unit
       		// link the new asset to the original asset
       		if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
-      			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Installed_Product_Asset__c;	
+      			productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Pricebookentry.Product2.Name;	
       		}
       		productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
 										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
@@ -1266,6 +1280,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
+                      Variant_Number__c = oi.Variant_Number__c,
                       Price        = oi.Total_Retail_Price__c,
                       Product2Id      = oi.Pricebookentry.Product2Id,
                       PurchaseDate    = oi.Order.EffectiveDate,
@@ -1369,6 +1384,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                       AccountId      = oi.Order.AccountId,
                       ContactId      = oi.Order.BillToContactId,
                       SerialNumber    = oi.Variant_Number__c,
+                      Variant_Number__c = oi.Variant_Number__c,
                       Price        = oi.Total_Retail_Price__c,
                       Product2Id      = oi.Pricebookentry.Product2Id,
                       PurchaseDate    = oi.Order.EffectiveDate,
