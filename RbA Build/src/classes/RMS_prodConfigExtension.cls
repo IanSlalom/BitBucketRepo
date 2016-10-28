@@ -75,7 +75,7 @@ public class RMS_prodConfigExtension {
 			if (orderId != null)
 				relatedChangeOrder = [Select RecordType.DeveloperName from Order where Id =: orderId].RecordType.DeveloperName == 'Change_Order';
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
-			this.orderLineItem.Responsible_Party__c = 'Home Owner';
+			this.orderLineItem.Responsible_Party__c = 'Homeowner';
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
