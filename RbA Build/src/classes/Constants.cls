@@ -54,8 +54,7 @@ public with sharing class Constants {
 			'OpportunityId',
 			'RecordTypeId',
 			'EffectiveDate',
-			'QuoteId',
-			'Order_Processed_Date__c'
+			'QuoteId'
 		},
 		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'Cancelled'=>new String[]
 		{	'AccountId',
@@ -65,8 +64,7 @@ public with sharing class Constants {
 			'OpportunityId',
 			'RecordTypeId',
 			'EffectiveDate',
-			'QuoteId',
-			'Order_Processed_Date__c'
+			'QuoteId'
 		},
 		'TestClass'=>new String[]
 		{	'Name'

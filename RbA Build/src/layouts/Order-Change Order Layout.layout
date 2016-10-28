@@ -158,10 +158,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Order_Processed_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
                 <field>Revenue_Recognized_Date__c</field>
             </layoutItems>
         </layoutColumns>
