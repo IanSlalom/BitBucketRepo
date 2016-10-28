@@ -119,26 +119,13 @@
 				<apex:column headerValue="Product">  
 					<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!wrapper.OrderItem.Id}&mode=v','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
 				</apex:column>
-		        <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
+		        <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}" rendered="{!changeOrder == false}"/>
 		        <apex:column value="{!wrapper.OrderItem.Quantity}"/>
 		        <apex:column value="{!wrapper.OrderItem.UnitPrice}"/>
 		        <apex:column value="{!wrapper.OrderItem.Total_Retail_Price__c}"/>
-		        <apex:column value="{!wrapper.OrderItem.Unit_Wholesale_Cost__c}"/>
-		        <apex:column value="{!wrapper.OrderItem.Total_Wholesale_Cost__c}"/>
-		        <apex:column value="{!wrapper.OrderItem.Variant_Number__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Color_Match_Hinges__c}"/>
-		        <apex:column value="{!wrapper.OrderItem.Corrosion_Resistant_Hinges__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Corrosion_Resistant_Lock__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Hardware_Finish_Color__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Window_Opening_Control_Device__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Is_Height_L_or_R_Leg_Height__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Is_Leg_Height_L_or_R_Leg_Height__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Leg_Height_Exterior_Fraction__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Leg_Height_Exterior_Whole_Inch__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Leg_Height_Interior_Fraction__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Leg_Height_Interior_Whole_Inch__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.Meet_Rail_Dimension__c}"/> 
-		        <apex:column value="{!wrapper.OrderItem.EJ_Kerf__c}"/> 
+		        <apex:column value="{!wrapper.OrderItem.Unit_Wholesale_Cost__c}" rendered="{!changeOrder == false}"/>
+		        <apex:column value="{!wrapper.OrderItem.Total_Wholesale_Cost__c}" rendered="{!changeOrder == false}"/>
+		        <apex:column value="{!wrapper.OrderItem.Variant_Number__c}" rendered="{!changeOrder == false}"/> 
 		        <apex:column value="{!wrapper.OrderItem.Cancellation_Reason__c}"/> 
 		        <apex:column breakBefore="true" colspan="10" >
 					<apex:pageblocksection title="Related Order Items" id="additionalInfo" showheader="true" collapsible="false" columns="1" rendered="{!wrapper.showRelatedItems && wrapper.relatedItems !=null}">
@@ -157,26 +144,13 @@
 							<apex:column headerValue="Product">  
 								<a href="#" onClick="callGenerateConsoleURL('/apex/RMS_prodConfigEdit?id={!item.Id}&mode=e','View Order Product');return false" text= " ">{!item.PricebookEntry.Product2.Name}</a> 
 							</apex:column>
-		       				<apex:column value="{!item.Purchase_Order__c}"/>
+		       				<apex:column value="{!item.Purchase_Order__c}" rendered="{!changeOrder == false}"/>
 		      				<apex:column value="{!item.Quantity}"/>
 		      				<apex:column value="{!item.UnitPrice}"/>
 		        			<apex:column value="{!item.Total_Retail_Price__c}"/>
-		       		 		<apex:column value="{!item.Unit_Wholesale_Cost__c}"/>
-		        			<apex:column value="{!item.Total_Wholesale_Cost__c}"/>
-		        			<apex:column value="{!item.Variant_Number__c}"/>
-		        			<apex:column value="{!item.Color_Match_Hinges__c}"/>
-					        <apex:column value="{!item.Corrosion_Resistant_Hinges__c}"/> 
-					        <apex:column value="{!item.Corrosion_Resistant_Lock__c}"/> 
-					        <apex:column value="{!item.Hardware_Finish_Color__c}"/> 
-					        <apex:column value="{!item.Window_Opening_Control_Device__c}"/> 
-					        <apex:column value="{!item.Is_Height_L_or_R_Leg_Height__c}"/> 
-					        <apex:column value="{!item.Is_Leg_Height_L_or_R_Leg_Height__c}"/> 
-					        <apex:column value="{!item.Leg_Height_Exterior_Fraction__c}"/> 
-					        <apex:column value="{!item.Leg_Height_Exterior_Whole_Inch__c}"/> 
-					        <apex:column value="{!item.Leg_Height_Interior_Fraction__c}"/> 
-					        <apex:column value="{!item.Leg_Height_Interior_Whole_Inch__c}"/> 
-					        <apex:column value="{!item.Meet_Rail_Dimension__c}"/> 
-					        <apex:column value="{!item.EJ_Kerf__c}"/>  
+		       		 		<apex:column value="{!item.Unit_Wholesale_Cost__c}" rendered="{!changeOrder == false}"/>
+		        			<apex:column value="{!item.Total_Wholesale_Cost__c}" rendered="{!changeOrder == false}"/>
+		        			<apex:column value="{!item.Variant_Number__c}" rendered="{!changeOrder == false}"/>
 					        <apex:column value="{!item.Cancellation_Reason__c}"/> 
 						</apex:pageBlockTable>
 					</apex:pageblocksection>			

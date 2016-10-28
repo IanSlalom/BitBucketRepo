@@ -130,6 +130,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Change_Order_Total__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Amount_Due__c</field>
             </layoutItems>
             <layoutItems>

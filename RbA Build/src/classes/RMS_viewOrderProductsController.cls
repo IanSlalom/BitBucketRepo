@@ -24,6 +24,7 @@ public with sharing class RMS_viewOrderProductsController {
     public Id serviceOrderId {get;set;} 
     public Id changeOrderId {get;set;}
     public Id coroOrderId {get;set;}
+    public boolean changeOrder {get;set;}
     public String baseURL{get;set;}
     public String reportURL{get;set;}
     public String addProductURL{get;set;}
@@ -37,6 +38,7 @@ public with sharing class RMS_viewOrderProductsController {
             stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         }
         this.ord = (Order)stdController.getRecord();
+		changeOrder = (this.ord.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'Change_Order')) ? true : false;
         masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');
         miscJobId =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Misc_Job_and_Unit_Charges');
         servProd =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product');    

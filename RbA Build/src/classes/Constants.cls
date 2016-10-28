@@ -35,7 +35,7 @@ public with sharing class Constants {
 			'ShippingPostalCode',
 			'Store_Location__c'
 		},
-		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'Job in Progress'=>new String[]
+		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'In Progress'=>new String[]
 		{	'AccountId',
 			'Name',
 			'Sold_Order__c',
@@ -44,7 +44,7 @@ public with sharing class Constants {
 			'RecordTypeId',
 			'EffectiveDate',
 			'QuoteId',
-			'Change_Order_Total__c'
+			'Order_Processed_Date__c'
 		},
 		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'Job Closed'=>new String[]
 		{	'AccountId',
@@ -55,7 +55,18 @@ public with sharing class Constants {
 			'RecordTypeId',
 			'EffectiveDate',
 			'QuoteId',
-			'Change_Order_Total__c'
+			'Order_Processed_Date__c'
+		},
+		UtilityMethods.RecordTypeFor('Order','Change_Order') + 'Cancelled'=>new String[]
+		{	'AccountId',
+			'Name',
+			'Sold_Order__c',
+			'Store_Location__c',
+			'OpportunityId',
+			'RecordTypeId',
+			'EffectiveDate',
+			'QuoteId',
+			'Order_Processed_Date__c'
 		},
 		'TestClass'=>new String[]
 		{	'Name'
