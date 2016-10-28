@@ -87,6 +87,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Retail_Subtotal__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Discount_Amount__c</field>
             </layoutItems>
             <layoutItems>
