@@ -1403,7 +1403,7 @@ public with sharing class RMS_financialTransactionManager {
 	                                	}
 	                                }
 	                                
-	                                if(je.Type__c != null && je.Type__c.contains('Cost Product Received')){
+	                                if(je.Type__c != null && je.Type__c == 'Cost Product Received'){
 	                                	jeCostProductReceivedListSentToBaan.add(je);
 	                                }
 	                                
@@ -1428,7 +1428,7 @@ public with sharing class RMS_financialTransactionManager {
 	                                		jeInventoryReceivedList.add(je);
 	                                	}
 	                                }
-	                                 if(je.Type__c != null && je.Type__c.contains('Cost Product Received')){
+	                                 if(je.Type__c != null && je.Type__c == 'Cost Product Received'){
 	                                	jeCostProductReceivedList.add(je);
 	                                }
 	                                /*
@@ -1444,6 +1444,7 @@ public with sharing class RMS_financialTransactionManager {
 	              
 	                        system.debug('ads jeListSentToBaan: ' + jeListSentToBaan);
 	                        system.debug('ads jeListNotSentToBaan: ' + jeListNotSentToBaan);
+	                        system.debug('ads jeCostProductReceivedList: ' + jeCostProductReceivedList);
 	                        
 	                        // More than 1 JE not sent to BAAN ERROR OUT
 	                        if(jeInventoryWriteOffList.size() > 1 || jeInventoryReceivedList.size() > 1 /*|| jeServiceMaterialReturnedList.size() > 1*/ || jeServiceInventoryReceivedList.size() > 1 || jeCostProductReceivedList.size() > 1){

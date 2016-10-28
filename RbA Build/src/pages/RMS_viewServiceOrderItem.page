@@ -86,10 +86,10 @@
                 <apex:outputField value="{!OrderItem.Measurement_Notes__c }" style="width: 289px; height: 90px;"/>
                 <apex:outputField value="{!OrderItem.Quanity_Ordered__c}"/>
                 <apex:outputField value="{!OrderItem.Purchase_Order__c}" label="Purchase Order #"/>  
-                <apex:outputField value="{!OrderItem.MTO_Source_Code__c}"/>
-                <apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
-                <apex:outputField value="{!OrderItem.Defect_Code__c}"/>           
-                <apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
+<!--                  <apex:outputField value="{!OrderItem.MTO_Source_Code__c}"/>
+ -->               <apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
+<!--                  <apex:outputField value="{!OrderItem.Defect_Code__c}"/>           
+      -->          <apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
                 <apex:outputField value="{!OrderItem.Multiple_Remakes__c}"/> 
                 <apex:outputField value="{!OrderItem.Total_Wholesale_Cost__c}"/>
                 <apex:outputField value="{!OrderItem.Description}" label="Description"/>

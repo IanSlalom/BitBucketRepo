@@ -97,11 +97,9 @@
 
         <apex:pageBlock title="Create Service Purchase Orders">
             <apex:actionStatus id="save-status"  onstop="openSavedPO('{!newpoId}', '{!orderId}');return false"/>
-            <apex:actionStatus id="save-status-close"  onstop="openSavedPO('', '{!orderId}');return false"/>
             <apex:pageBlockButtons location="both">
             	<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
-            	<apex:commandButton action="{!save}" value="Save" status="save-status-close" rerender="page-form"/>
-                <apex:commandButton action="{!save}" value="Save & Continue" status="save-status" rerender="page-form"/>
+                <apex:commandButton action="{!save}" value="Save" status="save-status" rerender="page-form"/>
             </apex:pageBlockButtons> 
                         
             

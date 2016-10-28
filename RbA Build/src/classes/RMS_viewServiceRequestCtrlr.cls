@@ -126,7 +126,27 @@ public class RMS_viewServiceRequestCtrlr {
         return newPage;
         
         
-    }  
+    }
+    
+       public PageReference editOrderRedirect(){
+        PageReference newPage = null;
+        
+        
+        
+        If (o.RecordType.Name == 'CORO Service'){
+           
+                newPage = new PageReference('/apex/RMS_editServiceRequest?id='+ o.Id);
+
+        } else {
+            newPage = new PageReference('/'+o.Id+'/e?');
+            newPage.getParameters().put('nooverride','1');
+        }
+        
+        newPage.setRedirect(true);
+        return newPage;
+        
+        
+    }   
     
     public PageReference updateServiceType(){
         PageReference newPage;

@@ -46,6 +46,7 @@ public class RMS_prodConfigExtension {
 	private final OrderItem orderLineItem;	
 
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
+		verifyProducts = true;
 		this.orderLineItem = (OrderItem)stdController.getRecord();
 		isMiscJob = false;
 		newOrderItem = stdController.getId() == null;
@@ -126,7 +127,18 @@ public class RMS_prodConfigExtension {
 	public String inputWidth {get;set;}
 	public String inputHeight {get;set;}
 	public boolean productSelected {get;set;}	
-	
+
+    public  boolean verifyProducts  {get;set;}
+
+    public PageReference toggleVerify() {
+            verifyProducts = (verifyProducts == true) ? false : true;
+            return null;
+    }
+                     
+    public boolean getVerifyProducts() {
+        return verifyProducts;
+    }
+
 	/******* property for the product configuration wrapper  *****************/
 	public  RMS_prodConfigManager.productConfigWrapper prodConfig  {
 		get
@@ -1134,6 +1146,7 @@ public class RMS_prodConfigExtension {
 		// Default the verify item config to true if a product configuration record was found
 		orderLineItem.Verify_Item_Configuration__c = (mode == 'v') ? orderLineItem.Verify_Item_Configuration__c :
 		 											 (prodConfig.mpc != null && !orderLineItem.NSPR__c) ? true : false;
+		verifyProducts = orderLineItem.Verify_Item_Configuration__c;
 		return null;
 
 	}

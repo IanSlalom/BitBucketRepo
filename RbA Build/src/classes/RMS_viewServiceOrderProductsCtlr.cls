@@ -42,7 +42,8 @@ stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         
                 orderItems =  new Map<Id,OrderItem>([select Id, PricebookEntry.Product2Id, PricebookEntry.Product2.Name, Purchase_Order__c, 
                                              Variant_Number__c,
-                                             Quanity_Ordered__c, MTO_Source_Code__c, Sold_Order_Product_Asset__r.Name, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
+                    //                         Quanity_Ordered__c, MTO_Source_Code__c, Sold_Order_Product_Asset__r.Name, Defect_Code__c, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
+                                             Quanity_Ordered__c, Sold_Order_Product_Asset__r.Name, Installed_Product_Asset__c, Installed_Product_Asset__r.Name 
                                              from OrderItem 
                                              where OrderId =: ord.Id 
                                              and PricebookEntry.Product2.RecordTypeId =: servProd

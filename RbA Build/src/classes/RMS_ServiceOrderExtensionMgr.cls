@@ -335,12 +335,26 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             //a failsafe to ensure Bill to Contact is always populated on P2 which is
             //necessary for all of the UI elements rerendering.           
             Order bc = new Order();
+            Order so = new Order();
             Contact_History__c ch = new Contact_History__c();
             
             if(o.Sold_Order__c != null){
                 bc = [Select BilltoContactId FROM Order WHERE id =: o.Sold_Order__c];
                 if(bc != null){
                     o.BillToContactId = bc.BilltoContactId;
+                }
+                so = [SELECT ShippingStreet,ShippingCity,ShippingState,ShippingPostalCode,ShippingCountry,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry FROM Order where id =: o.Sold_Order__c];
+                if(so != null){
+                    o.BillingStreet = so.BillingStreet;
+                    o.BillingCity = so.BillingCity;
+                    o.BillingState = so.BillingState;
+                    o.BillingPostalCode = so.BillingPostalCode;
+                    o.BillingCountry = so.BillingCountry;
+                    o.ShippingStreet = so.ShippingStreet;
+                    o.ShippingCity = so.ShippingCity;
+                    o.ShippingState = so.ShippingState;
+                    o.ShippingPostalCode = so.ShippingPostalCode;
+                    o.ShippingCountry = so.ShippingCountry;                    
                 }
             } else {
                 ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true LIMIT 1];
@@ -511,7 +525,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             for(Id assetID : AssetToProductWrapperMap.keySet()){
                 for(ProductWrapper wrapper: AssetToProductWrapperMap.get(assetId)){                    
                     if(wrapper.isSelected && invalidRequest == 0){                            
-						System.Debug('*******wrapper.Product.Service_Product__c=' +wrapper.Product.Service_Product__c);
+                        System.Debug('*******wrapper.Product.Service_Product__c=' +wrapper.Product.Service_Product__c);
                         PricebookEntry pbe = [ 
                             SELECT Id,Product2Id,Pricebook2Id,UnitPrice 
                             FROM PricebookEntry 
