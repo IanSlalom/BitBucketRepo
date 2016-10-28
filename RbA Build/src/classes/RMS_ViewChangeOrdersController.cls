@@ -36,7 +36,8 @@ public with sharing class RMS_ViewChangeOrdersController {
         orders = [SELECT 	Name,
                   OrderNumber,
                   Retail_Total__c,
-                  CreatedDate
+                  CreatedDate,
+                  Status
                   FROM 	Order
                   WHERE 	RecordTypeId =: ChangeOrderRecordTypeId
                   AND 	Sold_Order__c =: ord.Id];	 
