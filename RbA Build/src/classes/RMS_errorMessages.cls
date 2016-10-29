@@ -73,10 +73,10 @@ public with sharing class RMS_errorMessages {
  	public static final String GRILLE_HUBS_SPOKES = '&bull; The combination of Hubs/Spokes are not valid for this specialty shape, grille style, and type.';
  	public static final String GRILLE_LITES = '&bull; The combination of Lites High/Wide are not valid for this specialty shape, grille style, and type.';
  	public static final String COLOR_EXT_INT = '&bull; The Exterior Color / Interior Color combination that you selected is not valid for this product.';
- 	public static final String GRILLE_MIN_HEIGHT = '&bull; The height cannot be less than [requiredValue] with that combination of sash ratio / grille pattern.';
- 	public static final String GRILLE_MIN_WIDTH = '&bull; The width cannot be less than [requiredValue] with that combination of sash ratio / grille pattern.';
- 	public static final String GLAZING_MAX_HEIGHT = '&bull; The height cannot be more than [requiredValue] with that combination of sash ratio / glazing.';
- 	public static final String GLAZING_MAX_WIDTH = '&bull; The width cannot be more than [requiredValue] with that combination of sash ratio / glazing.';
+ 	public static final String GRILLE_MIN_HEIGHT = '&bull; The height cannot be less than [requiredValue] with that combination of grille style / grille pattern.';
+ 	public static final String GRILLE_MIN_WIDTH = '&bull; The width cannot be less than [requiredValue] with that combination of grille style / grille pattern.';
+ 	public static final String GLAZING_MAX_HEIGHT = '&bull; The height cannot be more than [requiredValue] with that glazing.';
+ 	public static final String GLAZING_MAX_WIDTH = '&bull; The width cannot be more than [requiredValue] with that glazing.';
  	public static final String GRILLE_STYLE_REQUIRED = '&bull; Grille Style is required for this combination of specialty shape and grille pattern.';
  	public static final String GRILLE_LITES_HIGH_REQUIRED = '&bull; Lites High is required for this combination of specialty shape and grille pattern.';
  	public static final String GRILLE_LITES_WIDE_REQUIRED = '&bull; Lites Wide is required for this combination of specialty shape and grille pattern.';
