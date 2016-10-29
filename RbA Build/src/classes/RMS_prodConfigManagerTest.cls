@@ -824,6 +824,7 @@ private class RMS_prodConfigManagerTest {
 		prodConfig.Min_Height__c = 1;
 		
 		Grille_Pattern_Configuration__c gc = new Grille_Pattern_Configuration__c(			Product_Configuration__c = prodConfig.Id,  Grille_Pattern__c = 'Colonial',
+																							Grille_Style__c = 'Interior Wood Only',
 																							Sash_Ratio__c = '1:1', Min_Width_Inches__c = 1,
 																							Min_Width_Fraction__c = '1/2',
 																							Min_Height_Inches__c = 1,
@@ -835,6 +836,7 @@ private class RMS_prodConfigManagerTest {
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
 		soldOrderItem.Width_Inches__c = 1;
 		soldOrderItem.Height_Inches__c = 1;
+		soldOrderItem.Grille_Style__c = 'Interior Wood Only';
 		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
 		soldOrderItem.Sash_Ratio__c = '1:1';
 

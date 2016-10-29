@@ -1204,6 +1204,7 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Grille_Pattern__c</fields>
+        <fields>Grille_Style__c</fields>
         <fields>Sash_Ratio__c</fields>
         <fields>Min_Width_Inches__c</fields>
         <fields>Min_Width_Fraction__c</fields>
