@@ -819,6 +819,7 @@ global with sharing class MA_SchedulerController {
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
             List<MA_SchedulerBookingWindow> bookingWindows = new List<MA_SchedulerBookingWindow>();
             List<MA_SchedulerBookingWindow> unAvailableSlots = new List<MA_SchedulerBookingWindow>();
+            Map<String, MA_SchedulerBookingWindow> bookingWindowsRemainingMap = new Map<String, MA_SchedulerBookingWindow>();
             Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrder.Work_Order_Type__c);
             Integer totalMinutes = workOrder.Appointment_Duration__c == null ? 0 : (Integer)(workOrder.Appointment_Duration__c * 60);
             Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrder.Work_Order_Type__c);
@@ -888,8 +889,16 @@ global with sharing class MA_SchedulerController {
             }
 
             MA_SchedulerUtilities.createBookingWindows(bookingWindows, unAvailableSlots, storeBookingWindows, resourceToSkillsMap, totalSkillsCountMap, startDateTime, endDateTime, storeTimezone, storeHolidayDates, resourceHours);
-            MA_SchedulerUtilities.checkResourceAvailability(bookingWindows, unAvailableSlots, userMap, startDateTime, endDateTime, resourceToSkillsMap, workOrder.Work_Order_Type__c, rbaSkillIds);
+            MA_SchedulerUtilities.checkResourceAvailability(bookingWindows, unAvailableSlots, userMap, startDateTime, endDateTime, resourceToSkillsMap, workOrder.Work_Order_Type__c, rbaSkillIds, storeId);
             
+            /**/
+            for (MA_SchedulerBookingWindow unAvailableBw : unAvailableSlots) {
+                if (unAvailableBw.overbooked /*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty()*/ && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
+                    bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+                }
+            }
+            /**/
+
             /**********************************************************/
             /*                                                        */
             /*    remove booking windows with no available resources  */
@@ -925,8 +934,22 @@ global with sharing class MA_SchedulerController {
                         remainingSlots.put(bw.startDateTime.format('MM/dd/yyyy', storeTimezone), new Set<String>());
                     }
                     remainingSlots.get(bw.startDateTime.format('MM/dd/yyyy', storeTimezone)).add(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd);
+                
+                    /*
+                    if (!bw.timeBlocksMissingASkill.isEmpty()) {
+                        bookingWindowsRemainingMap.put(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd, bw);
+                    }
+                    */
                 }
             }
+
+            /*
+            for (MA_SchedulerBookingWindow unAvailableBw : unAvailableSlots) {
+                if (unAvailableBw.overbooked *//*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty() *//* && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
+                    bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+                }
+            }
+            */
 
             /***********************************************************/
             /*                                                         */
@@ -999,6 +1022,7 @@ global with sharing class MA_SchedulerController {
                                 List<String> badRemainingList = new List<String>(badWindowsSpannedToCheckSet);
 
                                 for (Integer x = 0, remainingLen = badRemainingList.size(); x < remainingLen; x++) {
+                                    /*
                                     List<String> badRemainingSplit = badRemainingList[x].split(' - ');
                                     List<String> badRemainingStartTimeSplit = badRemainingSplit[1].split(':');
                                     List<String> badStartTimeSplit = tempStart.format('HH:mm', storeTimezone).split(':');
@@ -1013,6 +1037,70 @@ global with sharing class MA_SchedulerController {
                                     if (badStartTimeRemaining < badEndTime && badEndTimeRemaining > badStartTime) {
                                         badIndexes.add(i);
                                         tempTotalMinutes = 0;
+                                    }
+                                    */
+
+                                    String badRemainingKey = badRemainingList[x];
+                                    List<String> badStartTimeSplit = tempStart.format('HH:mm', storeTimezone).split(':');
+                                    Time badStartTime = Time.newInstance(Integer.valueOf(badStartTimeSplit[0]), Integer.valueOf(badStartTimeSplit[1]), 0, 0);
+                                    
+                                    List<String> badEndTimeSplit = tempEnd.format('HH:mm', storeTimezone).split(':');
+                                    Time badEndTime = Time.newInstance(Integer.valueOf(badEndTimeSplit[0]), Integer.valueOf(badEndTimeSplit[1]), 0, 0);
+
+                                    if (bookingWindowsRemainingMap.containsKey(badRemainingKey)) {
+                                        MA_SchedulerBookingWindow bwTemp = bookingWindowsRemainingMap.get(badRemainingKey);
+                                        Set<DateTime> badSubTimes = bwTemp.timeBlocksMissingASkill;
+
+                                        for (DateTime badSubTime : badSubTimes) {
+                                            List<String> badRemainingStartTimeSplit = badSubTime.format('HH:mm', storeTimezone).split(':');
+                                            Time badStartTimeRemaining = Time.newInstance(Integer.valueOf(badRemainingStartTimeSplit[0]), Integer.valueOf(badRemainingStartTimeSplit[1]), 0, 0);
+
+                                            List<String> badRemainingEndTimeSplit = badSubTime.addMinutes(30).format('HH:mm', storeTimezone).split(':');
+                                            Time badEndTimeRemaining = Time.newInstance(Integer.valueOf(badRemainingEndTimeSplit[0]), Integer.valueOf(badRemainingEndTimeSplit[1]), 0, 0);
+
+                                            if (badStartTimeRemaining < badEndTime && badEndTimeRemaining > badStartTime) {
+                                                badIndexes.add(i);
+                                                tempTotalMinutes = 0;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!badIndexes.contains(i)) {
+                                            Set<Id> availableResourceIds = bwTemp.originalResourceToSkillsMap.keySet().clone();
+                                            Set<DateTime> avaialableSubTimes = bwTemp.skillsTimeAvailabilityMap.keySet().clone();
+                                            avaialableSubTimes.removeAll(bwTemp.timeBlocksMissingASkill);
+
+                                            for (DateTime avaialableSubTime : avaialableSubTimes) {
+                                                List<String> avaialableStartTimeSplit = avaialableSubTime.format('HH:mm', storeTimezone).split(':');
+                                                Time avaialableStartTimeRemaining = Time.newInstance(Integer.valueOf(avaialableStartTimeSplit[0]), Integer.valueOf(avaialableStartTimeSplit[1]), 0, 0);
+
+                                                List<String> avaialableEndTimeSplit = avaialableSubTime.addMinutes(30).format('HH:mm', storeTimezone).split(':');
+                                                Time avaialableEndTimeRemaining = Time.newInstance(Integer.valueOf(avaialableEndTimeSplit[0]), Integer.valueOf(avaialableEndTimeSplit[1]), 0, 0);
+
+                                                if ((avaialableStartTimeRemaining < badEndTime && avaialableEndTimeRemaining > badStartTime) 
+                                                        && (avaialableStartTimeRemaining < badStartTime || avaialableEndTimeRemaining > badEndTime)) {
+                                                    availableResourceIds.retainAll(bwTemp.resourceTimeAvailabilityMap.get(avaialableSubTime));
+                                                }
+                                            }
+
+                                            if (availableResourceIds.isEmpty()) {
+                                                badIndexes.add(i);
+                                                tempTotalMinutes = 0;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        List<String> badRemainingSplit = badRemainingList[x].split(' - ');
+                                        List<String> badRemainingStartTimeSplit = badRemainingSplit[1].split(':');
+                                        Time badStartTimeRemaining = Time.newInstance(Integer.valueOf(badRemainingStartTimeSplit[0]), Integer.valueOf(badRemainingStartTimeSplit[1]), 0, 0);
+
+                                        List<String> badRemainingEndTimeSplit = badRemainingSplit[2].split(':');
+                                        Time badEndTimeRemaining = Time.newInstance(Integer.valueOf(badRemainingEndTimeSplit[0]), Integer.valueOf(badRemainingEndTimeSplit[1]), 0, 0);
+
+                                        if (badStartTimeRemaining < badEndTime && badEndTimeRemaining > badStartTime) {
+                                            badIndexes.add(i);
+                                            tempTotalMinutes = 0;
+                                        }
                                     }
                                 }
                             }
@@ -1093,6 +1181,7 @@ global with sharing class MA_SchedulerController {
             response.put('nextAvailable', nextAvailable);
             response.put('bookingWindows', bookingWindows);
             response.put('unAvailableSlots', unAvailableSlots);
+            response.put('bookingWindowsRemainingMap', bookingWindowsRemainingMap);
         }
         catch(Exception ex) {
             MA_SchedulerUtilities.createErrorResponse(ex, response);
