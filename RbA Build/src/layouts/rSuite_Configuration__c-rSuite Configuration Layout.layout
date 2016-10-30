@@ -342,12 +342,12 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Interior_or_Exterior__c</fields>
+        <fields>Type__c</fields>
         <fields>Add_or_Subtract__c</fields>
         <fields>Offset_Value__c</fields>
         <fields>LAST_UPDATE</fields>
         <relatedList>Tech_Measure_Offset_Configuration__c.rSuite_Configuration__c</relatedList>
-        <sortField>NAME</sortField>
+        <sortField>Type__c</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>

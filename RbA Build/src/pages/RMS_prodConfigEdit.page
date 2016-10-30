@@ -557,22 +557,22 @@
         </apex:pageBlockSection>        
 
           <apex:pageBlockSection title="Order Information" columns="2">
-			<apex:outputField value="{!OrderItem.Order.Name}"/>
-			<apex:inputField value="{!OrderItem.Purchase_Order__c}" rendered="{!mode == 'e'}"/>
-			<apex:outputField value="{!OrderItem.Purchase_Order__c}" rendered="{!mode != 'e'}"/>
+			<apex:outputField value="{!OrderItem.Order.Name}"/>			
+			<apex:inputField value="{!OrderItem.Purchase_Order__c}" rendered="{!mode == 'e' && !relatedChangeOrder}"/>
+			<apex:outputField value="{!OrderItem.Purchase_Order__c}" rendered="{!mode != 'e' && !relatedChangeOrder}"/>
 			<apex:inputField value="{!OrderItem.Description}" rendered="{!mode == 'e'}"/>
 			<apex:outputField value="{!OrderItem.Description}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.UnitPrice}" rendered="{!mode == 'e'}"/>
 			<apex:outputField value="{!OrderItem.UnitPrice}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode == 'e' || mode == 'r'}"/>
 			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
-			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode == 'e'  || mode == 'r'}"/>
-			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!mode != 'e'  && mode != 'r'}"/>
-			<apex:inputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!mode == 'e'  || mode == 'r'}"/>
-			<apex:outputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!mode != 'e'  && mode != 'r'}"/>
+			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!(mode == 'e'  || mode == 'r') && !relatedChangeOrder}"/>
+			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{(!mode != 'e'  && mode != 'r') && !relatedChangeOrder}"/>
+			<apex:inputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!(mode == 'e'  || mode == 'r') && !relatedChangeOrder}"/>
+			<apex:outputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!(mode != 'e'  && mode != 'r') && !relatedChangeOrder}"/>
 			<apex:inputField value="{!OrderItem.NSPR__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nspr" onChange="callRule('nspr')"/>
 			<apex:outputField value="{!OrderItem.NSPR__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnspr"/>
-            <apex:outputField value="{!OrderItem.Tax__c}" />
+            <apex:outputField value="{!OrderItem.Tax__c}" rendered="{!!relatedChangeOrder}"/>
 			<apex:inputField value="{!OrderItem.NSPR_Number__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="nsprNumber"/>
 			<apex:outputField value="{!OrderItem.NSPR_Number__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnsprNumber"/>
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>

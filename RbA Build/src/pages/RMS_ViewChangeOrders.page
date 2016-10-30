@@ -97,6 +97,7 @@
 		        <apex:column value="{!o.Name}"/>
 		        <apex:column value="{!o.Retail_Total__c}"/>
 		        <apex:column value="{!o.CreatedDate}"/>
+		        <apex:column value="{!o.Status}"/>
 			</apex:pageBlockTable>
 	</apex:pageBlock> 
 </apex:page>

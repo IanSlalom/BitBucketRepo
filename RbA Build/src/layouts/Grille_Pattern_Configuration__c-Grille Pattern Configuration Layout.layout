@@ -19,6 +19,10 @@
                 <behavior>Edit</behavior>
                 <field>Grille_Pattern__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Grille_Style__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

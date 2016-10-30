@@ -207,8 +207,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
        			oi.Purchase_Order__c = po.Id;
        			
        			// Set the remake flag on the order item if the charge cost to is local
-				if (po.Charge_Cost_To__c == 'Retailer') 
-					oi.Remake__c = true;
+				oi.Remake__c = (po.Charge_Cost_To__c == 'Retailer') ? true : false;
 				// Set the order item description
 				oi.Description = (oi.Sold_Order_Product_Asset__r.Product_Name__c == null) ? '' : oi.Sold_Order_Product_Asset__r.Product_Name__c + ' - ';
 				oi.Description = (oi.Sold_Order_Product_Asset__r.Variant_Number__c == null) ? oi.Description : oi.Description + oi.Sold_Order_Product_Asset__r.Variant_Number__c;

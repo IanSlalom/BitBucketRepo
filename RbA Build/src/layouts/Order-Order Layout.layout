@@ -62,10 +62,6 @@
                 <field>Status</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Reason__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>EffectiveDate</field>
             </layoutItems>
@@ -127,6 +123,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Amount_Refunded__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Change_Order_Total__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
