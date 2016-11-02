@@ -154,6 +154,13 @@ public class RMS_viewServiceRequestCtrlr {
         newPage.setRedirect(true); 
         return newPage;
     } 
+        
+    public PageReference refreshPage(){
+        PageReference newPage;
+        newPage = new PageReference('/'+o.Id);
+        newPage.setRedirect(true); 
+        return newPage;        
+    }
     
         public PageReference editServiceRequest(){
         PageReference newPage;
