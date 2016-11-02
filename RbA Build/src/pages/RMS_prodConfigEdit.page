@@ -366,10 +366,10 @@
             <apex:outputField value="{!OrderItem.Aluminum_Sill_Support__c}" rendered="{!prodConfig.mpc.Aluminum_Sill_Support_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid="AluminiumSillSupport"/>
 			
 			<apex:inputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}"  required="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
-            <apex:outputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Auxillary_Foot_Lock_Color_Match__c}" rendered="{!prodConfig.mpc.Auxillary_Foot_Lock_Color_Match_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid="auxfootlock"/>
 			
 			<apex:inputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}"  required="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
--           <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
+            <apex:outputField value="{!OrderItem.Finish_Matched_Panel_Stop__c}" rendered="{!prodConfig.mpc.Finish_Matched_Panel_Stop_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
 			
 			<apex:inputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}"  required="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Upgrade_Hinges_To_Metal_Finish__c}" rendered="{!prodConfig.mpc.Upgrade_Hinges_To_Metal_Finish_Control__c != 'Disabled' && mode != 'e'}" html-data-jsid=""/>
@@ -766,8 +766,24 @@
             j$("input[data-jsid='wideBar']").hide();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").hide()
             j$("table[data-jsid='sashGrilleTabPanel']").hide();
-			
-			
+        }else if(j$("select[data-jsid='grilleStyle']").val() == ''){
+            j$("select[data-jsid='grillePattern1']").val(null);
+            j$("select[data-jsid='grillePattern1']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern2']").val(null);
+            j$("select[data-jsid='grillePattern2']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern3']").val(null);
+            j$("select[data-jsid='grillePattern3']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
+            j$("select[data-jsid='grillePattern4']").val(null);
+            j$("select[data-jsid='grillePattern4']").hide();
+			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").hide();
+            
+            j$("input[data-jsid='wideBar']").attr('checked',false);
+            j$("input[data-jsid='wideBar']").hide();
+			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").hide()
+            j$("table[data-jsid='sashGrilleTabPanel']").hide();			
         }else{
             j$("select[data-jsid='grillePattern1']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").show();
