@@ -17,7 +17,7 @@ public with sharing class RMS_addProblemComponentsExt extends RMS_addProblemComp
                           Service_Symptom_Validation__c                                 
                           FROM Problem_Component__c
                           WHERE Service_Symptom__c =: mysObject.Id];
-                
+        
         
     }
     
@@ -61,6 +61,18 @@ public with sharing class RMS_addProblemComponentsExt extends RMS_addProblemComp
                                                        options.add(new selectOption(probs.Id, probs.Name));
                                                    }        
         return options; //return the picklist options        
-    } 
+    }
+    
+    public PageReference customDelete(){
+        //deletes the order and redirects to delete confirmation page
+        
+        
+        PageReference deletePage = new PageReference('/'+ myWO.Service_Product__c);
+        deletePage.setRedirect(true);
+        delete myWO;
+        return deletePage;
+        
+        
+    }
     
 }

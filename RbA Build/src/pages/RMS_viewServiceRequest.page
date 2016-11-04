@@ -72,6 +72,7 @@
     }
     
     
+    
     </script>
     <style>
         td.searchCell {
@@ -118,22 +119,26 @@
 
     </style>
 
-    
-    
+
     <apex:form rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
         <div class="row" style="padding-top: 9px;">            
             <div width="25%" style="float: left;">
                 <apex:image id="nonConsole" value="{!$Resource.ServiceRequestIcon}" width="33" height="33" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>                
+                            
             </div>
-            <div width="75%" style="padding-top: 4px; margin-left: 37px;">
+            <div style="padding-top: 4px;float: left;">
                 <apex:outputText style="font-size: 2em; font-weight: normal;" value="Service Request {!Order.OrderNumber}" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}">
                 </apex:outputText>                
             </div>
+                        <div>
+                <apex:commandButton id="refreshButton" action="{!refreshPage}" value="Refresh Service Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" style="background: lightslategrey;color: white;height: 30px;font-size: small;float:right;"/>
+                
+            </div>
         </div>
         
-        <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="block1">
+        <apex:pageBlock mode="maindetail" tabStyle="Order" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" id="block1">           
             <apex:pageBlockButtons >
-                <apex:commandButton action="{!editServiceRequest}" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" />
+                <apex:commandButton action="{!editServiceRequest}" value="Edit" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}" style="width: 75px;"/>
                 <apex:commandButton onclick="return confirm('Are you sure you want to cancel this request?')" action="{!cancelOrder}" value="Cancel Request" rendered="{!IF(Order.RecordType.Name == 'CORO Service' && Order.Status != 'Cancelled' && Order.Cancel_Eligible__c == TRUE,true,false) }"/>
                 <apex:commandButton action="{!updateServiceType}" value="Update Service Type" rendered="{!IF(Order.RecordType.Name == 'CORO Service',true,false)}"/>
                 <apex:commandButton value="Print Service Invoice" action="{!URLFOR($Action.Order.View,Order.Id)}" onclick="printServiceInvoice()"/>
