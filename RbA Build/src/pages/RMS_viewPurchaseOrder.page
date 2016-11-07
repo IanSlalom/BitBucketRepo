@@ -2,6 +2,7 @@
 	
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.spinner, 'spinner.css')}"/>
     <script type="text/javascript">
         var j$ = jQuery.noConflict();
 
@@ -67,6 +68,7 @@
 
             // If they confirm, run the correct method depending on the warning type
             if(confirmation) {
+                showSpinner();
                 if (warningType == 'releasePO') {
                     releasePurchaseOrder();
                 } else if (warningType == 'cancelPO') {
@@ -117,7 +119,7 @@ function prepareList(parent,child,isSubselectOptional){
              if(isSubselectOptional) j$('select#'+child).prepend("<option> — Select — </option>");
 
           });
-     }
+     } 
 	function printCongaCostPO() { 
 		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Cost_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
 	}
@@ -130,20 +132,28 @@ function prepareList(parent,child,isSubselectOptional){
 		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Purchase_Order ,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
 	}
 
+    function showSpinner()
+    {
+       document.getElementById('opaque').style.display='block';
+       var popUp = document.getElementById('spinner');
+      
+       popUp.style.display = 'block';
+    } 
+
     </script>
 	<apex:pageMessages /> 
 
 	<apex:form >
 		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
 			<apex:pageBlockButtons location="both" id="pageBlockButtons">
-				<apex:commandButton action="{!edit}" value="Edit" rendered="{!NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+				<apex:commandButton action="{!edit}" value="Edit" onclick="showSpinner()" rendered="{!NOT(relatedOrderClosed)}"/>
+				<apex:commandButton action="{!cancel}" value="Cancel" onclick="showSpinner()" oncomplete="closeTab();return false"/>
 				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
-  				<apex:commandButton action="{!confirm}" value="Cancel PO"  rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
+  				<apex:commandButton action="{!confirm}" value="Cancel PO" rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
-  				<apex:commandButton action="{!receive}" value="Receive PO"  rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
-				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed) && (status == 'part' || status == 'rbapart' || status == 'rec')}"/>
+  				<apex:commandButton action="{!receive}" value="Receive PO" onclick="showSpinner()" rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
+				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" onclick="showSpinner()" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
+				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit"  onclick="showSpinner()" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed) && (status == 'part' || status == 'rbapart' || status == 'rec')}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
  				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaServicePO()" rendered="{!servicePurchaseOrder}"/>
 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaProductPO()" rendered="{!(!costPurchaseOrder && !servicePurchaseOrder)}"/>
@@ -283,7 +293,7 @@ function prepareList(parent,child,isSubselectOptional){
 							<apex:inputField value="{!noi.Unit_Wholesale_Cost__c}" style="width:100px" />
 					</apex:column>
 				</apex:pageBlockTable>				  
-				<apex:commandButton action="{!addProduct}" value="Save"/>
+				<apex:commandButton action="{!addProduct}" onclick="showSpinner()" value="Save"/>
 			</apex:pageBlockSection> 
 
 			</apex:outputPanel>	
@@ -301,6 +311,12 @@ function prepareList(parent,child,isSubselectOptional){
 		
 	</apex:form>
 	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+   <div id="opaque"/>
+   <div id="spinner">
+    <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
+        <apex:image id="theImage" value="{!$Resource.LoadingPage}" width="50"/>
+    </p>
+   </div>
 
 
 </apex:page>
