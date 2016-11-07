@@ -587,11 +587,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
     }
 
-    //JETT-712 
-    if(newPurchaseOrder && !costPurchaseOrder && !servicePurchaseOrder && relatedOrder.Status != 'Ready to Order'){
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_STATUS_INVALID_FOR_PO_CREATION));
-      renderVendorSelection = false;
-    }
     //JETT-2366
     if(newPurchaseOrder && relatedCOROOrder && !revRecNullAndValidStatus){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_TYPE_STATUS_DATE_INVALID_FOR_PO_CREATION));
