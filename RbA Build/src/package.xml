@@ -564,6 +564,7 @@
         <members>jqueryautocomplete</members>
         <members>orderIconNonConsole</members>
         <members>select2</members>
+        <members>spinner</members>
         <name>StaticResource</name>
     </types>
     <types>
