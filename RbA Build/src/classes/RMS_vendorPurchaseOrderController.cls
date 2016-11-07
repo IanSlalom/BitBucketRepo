@@ -1115,6 +1115,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
 														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
+      		if (costPurchaseOrder) {
+      			productAsset.Store_Location__c = this.po.Store_Location__c;
+      			productAsset.PurchaseDate = System.Today();
+      		} 
+
       } 
       else if (oi.Installed_Product_Asset__c != null){
       	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
