@@ -71,9 +71,9 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
          
         // After Update
         
-        else if(Trigger.isUpdate && Trigger.isAfter){
+        else if(Trigger.isUpdate && Trigger.isAfter){            
             reactivateResource.reactivateResource(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);            
-            addressManager.updateContactAddresses(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            addressManager.updateContactAddresses(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);           
             handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
         }
         

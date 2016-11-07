@@ -9,6 +9,15 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Billable_Amount_when_Quote_Unchecked</fullName>
+        <field>Billable_Amount__c</field>
+        <formula>0</formula>
+        <name>Set Billable Amount when Quote Unchecked</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
     <rules>
         <fullName>Set Billable Amount when Quote Accepted</fullName>
         <actions>
@@ -22,6 +31,21 @@
             <value>True</value>
         </criteriaItems>
         <description>For Service Products</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Billable Amount when Quote Accepted Unchecked</fullName>
+        <actions>
+            <name>Set_Billable_Amount_when_Quote_Unchecked</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>OrderItem.Quote_Accepted__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <description>When Quote Accepted goes from checked to unchecked, set Billable Amount back to 0</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
 </Workflow>
