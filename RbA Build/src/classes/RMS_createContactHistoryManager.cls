@@ -82,7 +82,7 @@ public with sharing class RMS_createContactHistoryManager {
         for(Contact con : listNew){
             for(Contact former :formerPrimary){
                 if(!contactMap.isEmpty()){                    
-                    former.Primary_Contact__c = FALSE;                                   
+                    former.Primary_Contact__c = FALSE;               
                 }  
             }
             
@@ -109,7 +109,32 @@ public with sharing class RMS_createContactHistoryManager {
         
         for(Contact_History__c contactHistoryList: [SELECT Id, Primary_Contact__c, Type__c FROM Contact_History__c WHERE Primary_Contact__c = TRUE AND Type__c = 'Current Resident' AND Dwelling__c in: mapCurrentPrimary.keySet() AND Contact__c !=: mapCurrentPrimary.values()]){            
             
-            contactHistoryList.Primary_Contact__c = False;           
+            contactHistoryList.Primary_Contact__c = False;
+            contactHistoryList.Type__c = 'Past Resident';
+            contactHistoriestoUpdate.add(contactHistoryList);            
+        }
+        
+        update contactHistoriestoUpdate;
+        
+    }
+    
+    //If new Contact is Secondary, make current Secondary resident a Past Resident
+    public void secondaryContactController(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
+        
+        Map<Id,Id> mapCurrentSecondary = new Map<Id,Id>();
+        List<Contact_History__c> contactHistoriestoUpdate = new List<Contact_History__c>();
+        
+        for(Contact_History__c con : listNew){ 
+            if(con.Primary_Contact__c == False){
+                mapCurrentSecondary.put(con.Dwelling__c, con.Contact__c);
+                
+            }
+        }
+        
+        
+        for(Contact_History__c contactHistoryList: [SELECT Id, Primary_Contact__c, Type__c FROM Contact_History__c WHERE Primary_Contact__c = False AND Type__c = 'Current Resident' AND Dwelling__c in: mapCurrentSecondary.keySet() AND Contact__c !=: mapCurrentSecondary.values()]){            
+            
+            contactHistoryList.Type__c = 'Past Resident';
             contactHistoriestoUpdate.add(contactHistoryList);            
         }
         
@@ -241,7 +266,7 @@ public with sharing class RMS_createContactHistoryManager {
         }
     }
     
-
+    
     //formerly moveContacttoUnassigned Method
     public void contactManager(List<Contact_History__c> listOld, List<Contact_History__c> listNew, Map<Id, Contact_History__c> mapOld, Map<Id, Contact_History__c> mapNew){                               
         

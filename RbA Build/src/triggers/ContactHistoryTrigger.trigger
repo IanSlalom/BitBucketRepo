@@ -18,11 +18,11 @@ trigger ContactHistoryTrigger on Contact_History__c (before insert, before updat
         RMS_createContactHistoryManager contactHistoryCreationManager = new RMS_createContactHistoryManager();        
         
         // Before Insert
-        /*
+        
 if(Trigger.isInsert && Trigger.isBefore){
-
+contactHistoryCreationManager.secondaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 }
-
+/*
 else
 
 if(Trigger.isUpdate && Trigger.isBefore){
@@ -39,9 +39,10 @@ handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
 */
         
         // After Insert 
-        //else 
+        else 
         if(Trigger.isInsert && Trigger.isAfter){
             contactHistoryCreationManager.primaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
+            //contactHistoryCreationManager.secondaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             
         } 
         
@@ -53,6 +54,7 @@ handler.OnBeforeDelete(Trigger.old, Trigger.oldMap);
                 contactHistoryCreationManager.updateContactAccount(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                   
                 contactHistoryCreationManager.contactManager(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                                   
                 contactHistoryCreationManager.primaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);                            
+                //contactHistoryCreationManager.secondaryContactController(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
             }
         
         //After Delete

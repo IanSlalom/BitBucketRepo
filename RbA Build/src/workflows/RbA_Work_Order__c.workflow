@@ -88,7 +88,7 @@
         <fullName>Set_Appointment_Duration_4_Hours</fullName>
         <description>Set Default Appointment Duration to 4 hours</description>
         <field>Appointment_Duration__c</field>
-        <formula>4</formula>
+        <formula>8</formula>
         <name>Set Appointment Duration 4 Hours</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
@@ -288,7 +288,7 @@
         <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
-        <fullName>Set Appointment Duration 4 Hours</fullName>
+        <fullName>Set Appointment Duration 8 Hours</fullName>
         <actions>
             <name>Set_Appointment_Duration_4_Hours</name>
             <type>FieldUpdate</type>
@@ -299,7 +299,7 @@
             <operation>equals</operation>
             <value>Install</value>
         </criteriaItems>
-        <description>Set Appointment Duration for 4 hours for Install</description>
+        <description>Set Appointment Duration for 8 hours for Install</description>
         <triggerType>onCreateOnly</triggerType>
     </rules>
     <rules>
@@ -498,7 +498,7 @@
         </actions>
         <active>true</active>
         <description>When a WO is cancelled the status needs to be changed to &quot;to be scheduled&quot;</description>
-        <formula>OR( ISCHANGED(Cancel_Date__c), ISCHANGED ( Cancel_Reason__c ) )</formula>
+        <formula>AND(ISPICKVAL( Work_Order_Status__c, &quot;Cancelled&quot;), NOT(OR(ISPICKVAL( Cancel_Reason__c, &quot;Order Cancelled&quot;),ISPICKVAL( Cancel_Reason__c, &quot;Duplicate&quot;),ISPICKVAL( Cancel_Reason__c, &quot;Customer Cancelled&quot;) )))</formula>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <tasks>
