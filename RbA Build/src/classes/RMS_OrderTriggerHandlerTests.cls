@@ -135,7 +135,7 @@ private class RMS_OrderTriggerHandlerTests {
             if(o.Name == 'TMNeeded'){
                 o.Status = 'Tech Measure Needed';
                 clonedOrder.Status = 'Tech Measure Needed';
-                clonedOrder.Tech_Measure_Status__c = 'Scheduled';
+                clonedOrder.Tech_Measure_Status__c = 'Scheduled & Assigned';
             }else if(o.Name == 'TMScheduled'){
                 o.Status = 'Tech Measure Scheduled';
                 clonedOrder.Status = 'Tech Measure Scheduled';
@@ -143,7 +143,7 @@ private class RMS_OrderTriggerHandlerTests {
             }else if(o.Name == 'InstallNeeded'){
                 o.Status = 'Install Needed';
                 clonedOrder.Status = 'Install Needed';
-                clonedOrder.Install_Order_Status__c = 'Scheduled';
+                clonedOrder.Install_Order_Status__c = 'Scheduled & Assigned';
             }else if(o.Name == 'InstallScheduled'){
                 o.Status = 'Install Scheduled';
                 clonedOrder.Status = 'Install Scheduled';
@@ -160,11 +160,11 @@ private class RMS_OrderTriggerHandlerTests {
         RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
         handler.updateOrderStatus(oldMap, newMap);
         for(Order o: newMap.values()){
-            if(o.Tech_Measure_Status__c == 'Scheduled'){
+            if(o.Tech_Measure_Status__c == 'Scheduled & Assigned'){
                 System.assert(o.Status == 'Tech Measure Scheduled');
             }else if(o.Tech_Measure_Status__c == 'Complete'){
                 System.assert(o.Status == 'Ready to Order');
-            }else if(o.Install_Order_Status__c == 'Scheduled'){
+            }else if(o.Install_Order_Status__c == 'Scheduled & Assigned'){
                 System.assert(o.Status == 'Install Scheduled');
             }/* removing per JETT-1601 else if(o.Install_Order_Status__c == 'Complete'){
                 System.assert(o.Status == 'Install Complete');
