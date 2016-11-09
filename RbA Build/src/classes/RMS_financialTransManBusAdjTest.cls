@@ -29,7 +29,7 @@ private class RMS_financialTransManBusAdjTest {
 		TestUtilityMethods testMethods = new TestUtilityMethods();
 		testMethods.setUpConfigs();
 		
-		Account store1 = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];
+		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account WHERE Name='77 - Twin Cities, MN'];
 		Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
 		
 		Account dwelling1 = testMethods.createDwellingAccount('dwelling1');

@@ -48,17 +48,21 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                 ShippingCountry,
                                                 ShippingCountryCode,
                                                 Store_Location__c,
-                                                Name
+                                                Name,
+                                                Store_Location__r.Active_Store_Configuration__c
                                                 
                                                 FROM Account WHERE Id IN :relatedAccountIds];
         map<id, Account> accountIdToAccountMap = new map<id, Account>();        
-        list<id> dwellingStoreLocationIds = new list<id>();
+        map<id, id> storeIdToStoreConfigIdMap = new map<id, id>();        
+ //       list<id> dwellingStoreLocationIds = new list<id>();
         
         for(Account a : relatedAccounts){
             accountIdToAccountMap.put(a.id, a);
-            dwellingStoreLocationIds.add(a.Store_Location__c);
+			if (a.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
+//            dwellingStoreLocationIds.add(a.Store_Location__c);
         }
-        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         map<id, Order> orderIdToOrderMap = new map<id, Order>([SELECT Id, BillToContactID, AccountId, OpportunityId FROM Order WHERE Id IN :relatedParentIds]);
         
 		for(Order ord: ordersBeingAssigned){
@@ -110,8 +114,8 @@ public with sharing class RMS_WorkOrderCreationManager {
         list<Order> activatedOrders = new list<Order>();
         list<id> activatedOrderId = new list<id>();
         list<id> relatedDwellingIds = new list<id>();
-        list<id> dwellingStoreLocationIds = new list<id>();
-        
+//        list<id> dwellingStoreLocationIds = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
         //FILTERING OUT NON ACTIVATED ORDERS AS WELL AS BUILDING THE LIST OF DWELLINGS TO GET THEIR STORE CONFIGS
         for(Order ord : listNew){
            if((ord.Status == 'Tech Measure Scheduled' || ord.Status == 'Tech Measure Needed') && mapOld.get(ord.Id).Status == 'Draft'){
@@ -124,12 +128,14 @@ public with sharing class RMS_WorkOrderCreationManager {
         if(activatedOrders.size() > 0){
             
             //LOOPING THROUGH ALL DWELLINGS GETTING THEIR STORE LOCATIONS TO USE TO GET STORE CONFIGS
-            for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
-                dwellingStoreLocationIds.add(dwelling.Store_Location__c);
+            for(Account dwelling : [SELECT id, Store_Location__c,Store_Location__r.Active_Store_Configuration__c FROM Account WHERE Id IN :relatedDwellingIds]){
+//                dwellingStoreLocationIds.add(dwelling.Store_Location__c);
+				if (dwelling.Store_Location__c != null && dwelling.Store_Location__r.Active_Store_Configuration__c != null)
+					storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
             }
              
             //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
-            map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+            map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         	
         	//QUERY FOR FIELDS ON DWELLING TO POPULATE WORK ORDER
             list<Account> relatedDwelling = [SELECT Id,   
@@ -144,7 +150,8 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                     ShippingCountry,
                                                     ShippingCountryCode,
                                                     Year_Built__c,
-                                                    Name
+                                                    Name,
+                                                    Store_Location__r.Active_Store_Configuration__c
                                                 FROM Account Where Id IN : relatedDwellingIds];
             
             //BUILDING MAP OF ID TO DWELLING TO USE WHILE LOOPING THROUGH ORDERS
@@ -297,14 +304,18 @@ public with sharing class RMS_WorkOrderCreationManager {
                                                 ShippingCountry,
                                                 ShippingCountryCode,
                                                 Store_Location__c,
-                                                Name
+                                                Name,
+                                                Store_Location__r.Active_Store_Configuration__c
                                                 
                                                 FROM Account WHERE Id IN :relatedAccountIds];
         map<id, Account> accountIdToAccountMap = new map<id, Account>();        
-        list<id> dwellingStoreLocationIds = new list<id>();
+//        list<id> dwellingStoreLocationIds = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
         for(Account a : relatedAccounts){
             accountIdToAccountMap.put(a.id, a);
-            dwellingStoreLocationIds.add(a.Store_Location__c);
+//            dwellingStoreLocationIds.add(a.Store_Location__c);
+			if (a.Store_Location__c != null && a.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
         }
         
         //IF ANY RELATED OPPS EXIST THEN QUERY FOR TECH MEASURE WORK ORDERS ON THEM
@@ -330,7 +341,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         }   
         
         //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
-        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         
 
         for(Order ord : listNew){ 
@@ -424,7 +435,8 @@ public with sharing class RMS_WorkOrderCreationManager {
 		list<RbA_Work_Order__c> completeWorkOrders = new list<RbA_Work_Order__c>();
 		list<id> relatedDwellingIds = new list<id>();
 		list<Id> relatedOrderIdList = new list<id>();
-		list<id> dwellingStoreLocationIds = new list<id>();
+//		list<id> dwellingStoreLocationIds = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
 		
 		list<RbA_Work_Order__c> extraFieldsList = [SELECT 	id,
 													Sold_Order__c, 
@@ -462,10 +474,12 @@ public with sharing class RMS_WorkOrderCreationManager {
 		system.debug('**** completeWorkOrders: '+completeWorkOrders);
 		system.debug('**** relatedDwellingIds: '+relatedDwellingIds);
 		//GET RELATED DWELLINGS AND ASSIGN TO MAP
-		for(Account dwelling : [SELECT id, Store_Location__c FROM Account WHERE Id IN :relatedDwellingIds]){
-                dwellingStoreLocationIds.add(dwelling.Store_Location__c);
+		for(Account dwelling : [SELECT id, Store_Location__c, Store_Location__r.Active_Store_Configuration__c FROM Account WHERE Id IN :relatedDwellingIds]){
+ //               dwellingStoreLocationIds.add(dwelling.Store_Location__c);
+			if (dwelling.Store_Location__c != null && dwelling.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
         }
-        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+        map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
 
 		//GET RELATED WORK ORDERS ON SAME ORDER AND MAP THEM
 		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT Id, Sold_Order__c, Work_Order_Type__c  FROM RbA_Work_Order__c Where Sold_Order__c IN :relatedOrderIdList];
