@@ -28,7 +28,8 @@ public with sharing class RMS_backOfficeChecklistManager {
     	for(Account a : relatedAccounts){
     		accountIdToAccountMap.put(a.id, a);
 //    		dwellingStoreLocationIds.add(a.Store_Location__c);
-			storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
+			if (a.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
     	}
 
     	//GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS

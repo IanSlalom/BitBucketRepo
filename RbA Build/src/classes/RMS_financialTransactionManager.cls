@@ -3345,12 +3345,16 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public map<Id, string> linkMiscPaymentAccountNumbers(list<SObject> objectList, map<id, SObject> mapNew){
         map<Id, string> mapToReturn = new map<Id, string>();
-//        list<id> storeLocationIdList = new list<id>();
+        list<id> storeLocationIdList = new list<id>();
 		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
         for(SObject theObject : objectList){  
-//            storeLocationIdList.add((id)theObject.get('Store_Location__c'));
-			storeIdToStoreConfigIdMap.put((id)theObject.get('Store_Location__c'),(id)theObject.get('Store_Location__r.Active_Store_Configuration__c'));
+            storeLocationIdList.add((id)theObject.get('Store_Location__c'));
         }
+		for (Account store : [SELECT Id, Active_Store_Configuration__c FROM Account WHERE Id IN: storeLocationIdList]) {
+			if (store.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(store.Id, store.Active_Store_Configuration__c);			
+		}
+
         map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         
         for(SObject theObject : objectList){
@@ -3368,7 +3372,7 @@ public with sharing class RMS_financialTransactionManager {
                 break;
             }
             string locationNumber;
-            if(storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
+            if(storeConfigMap == null || storeConfigMap.size() == 0 || storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
                 mapNew.get(theObject.id).addError(RMS_errorMessages.LOCATION_ID_IS_NULL, FALSE);
             }else{
                 locationNumber = storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c;

@@ -58,7 +58,8 @@ public with sharing class RMS_WorkOrderCreationManager {
         
         for(Account a : relatedAccounts){
             accountIdToAccountMap.put(a.id, a);
-			storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
+			if (a.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
 //            dwellingStoreLocationIds.add(a.Store_Location__c);
         }
         map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
@@ -129,7 +130,8 @@ public with sharing class RMS_WorkOrderCreationManager {
             //LOOPING THROUGH ALL DWELLINGS GETTING THEIR STORE LOCATIONS TO USE TO GET STORE CONFIGS
             for(Account dwelling : [SELECT id, Store_Location__c,Store_Location__r.Active_Store_Configuration__c FROM Account WHERE Id IN :relatedDwellingIds]){
 //                dwellingStoreLocationIds.add(dwelling.Store_Location__c);
-				storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
+				if (dwelling.Store_Location__c != null && dwelling.Store_Location__r.Active_Store_Configuration__c != null)
+					storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
             }
              
             //GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
@@ -312,7 +314,8 @@ public with sharing class RMS_WorkOrderCreationManager {
         for(Account a : relatedAccounts){
             accountIdToAccountMap.put(a.id, a);
 //            dwellingStoreLocationIds.add(a.Store_Location__c);
-			storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
+			if (a.Store_Location__c != null && a.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
         }
         
         //IF ANY RELATED OPPS EXIST THEN QUERY FOR TECH MEASURE WORK ORDERS ON THEM
@@ -473,7 +476,8 @@ public with sharing class RMS_WorkOrderCreationManager {
 		//GET RELATED DWELLINGS AND ASSIGN TO MAP
 		for(Account dwelling : [SELECT id, Store_Location__c, Store_Location__r.Active_Store_Configuration__c FROM Account WHERE Id IN :relatedDwellingIds]){
  //               dwellingStoreLocationIds.add(dwelling.Store_Location__c);
-			storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
+			if (dwelling.Store_Location__c != null && dwelling.Store_Location__r.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(dwelling.Store_Location__c, dwelling.Store_Location__r.Active_Store_Configuration__c);
         }
         map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
 

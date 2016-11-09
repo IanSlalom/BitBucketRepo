@@ -135,6 +135,8 @@ global with sharing class UtilityMethods {
 	public static map<Id, Store_Configuration__c> mapStoreConfigs(map<id,id> storeIdToStoreConfigIdMap){
     	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
 
+		if (storeIdToStoreConfigIdMap == null || storeIdToStoreConfigIdMap.size() == 0)
+			return accountIdtoStoreConfigMap;
     	list<Store_Configuration__c> storeConfigs = [SELECT 	Id, 
     															Store__c, 
     															Install_Work_Order_Queue_Id__c, 
