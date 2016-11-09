@@ -199,6 +199,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__r.Revenue_Recognized_Date__c,
                                                     RecordTypeId,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     GL_Account__r.Name
                                                     
                                                     FROM Payment__c WHERE Id IN :mapNew.keyset() ];      
@@ -439,6 +440,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Related_Work_Order__r.Sold_Order__c,
                                                     Hourly_Rate__c,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     Related_Work_Order__r.Sold_Order__r.Store_Location__c,
                                                     Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c,
                                                     Related_Work_Order__r.Sold_Order__r.RecordTypeId,
@@ -3343,11 +3345,13 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public map<Id, string> linkMiscPaymentAccountNumbers(list<SObject> objectList, map<id, SObject> mapNew){
         map<Id, string> mapToReturn = new map<Id, string>();
-        list<id> storeLocationIdList = new list<id>();
+//        list<id> storeLocationIdList = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
         for(SObject theObject : objectList){  
-            storeLocationIdList.add((id)theObject.get('Store_Location__c'));
+//            storeLocationIdList.add((id)theObject.get('Store_Location__c'));
+			storeIdToStoreConfigIdMap.put((id)theObject.get('Store_Location__c'),(id)theObject.get('Store_Location__r.Active_Store_Configuration__c'));
         }
-        map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeLocationIdList);
+        map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         
         for(SObject theObject : objectList){
             String GLAccount;

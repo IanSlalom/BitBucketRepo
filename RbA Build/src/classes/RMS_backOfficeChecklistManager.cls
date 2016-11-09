@@ -18,18 +18,21 @@ public with sharing class RMS_backOfficeChecklistManager {
 								    			BillingPostalCode, 
 								    			BillingCountry,
 								    			BillingCountryCode,
-								    			Store_Location__c
+								    			Store_Location__c,
+								    			Store_Location__r.Active_Store_Configuration__c
 								    			
 								    			FROM Account WHERE Id IN :relatedAccountIds];
 		map<id, Account> accountIdToAccountMap = new map<id, Account>();		
-    	list<id> dwellingStoreLocationIds = new list<id>();
+//    	list<id> dwellingStoreLocationIds = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
     	for(Account a : relatedAccounts){
     		accountIdToAccountMap.put(a.id, a);
-    		dwellingStoreLocationIds.add(a.Store_Location__c);
+//    		dwellingStoreLocationIds.add(a.Store_Location__c);
+			storeIdToStoreConfigIdMap.put(a.Store_Location__c, a.Store_Location__r.Active_Store_Configuration__c);
     	}
 
     	//GETTING ALL STORE CONFIGS FOR RELATED DWELLINGS
-	    map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(dwellingStoreLocationIds);
+	    map<Id, Store_Configuration__c> accountIdtoStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
 
 		list<Id> storeConfigIdList = new list<id>();
     	for(Store_Configuration__c sc : accountIdtoStoreConfigMap.values()){
