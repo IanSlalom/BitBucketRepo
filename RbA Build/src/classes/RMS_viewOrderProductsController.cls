@@ -26,7 +26,6 @@ public with sharing class RMS_viewOrderProductsController {
     public Id coroOrderId {get;set;}
     public boolean changeOrder {get;set;}
     public String baseURL{get;set;}
-    public String reportURL{get;set;}
     public String addProductURL{get;set;}
     public String editOrderItem{get;set;}
     public Id orderItemToToggle{get;set;}
@@ -50,12 +49,6 @@ public with sharing class RMS_viewOrderProductsController {
 
         loadOrderItems();
 
-        List<Report> installMatReport = [select Id from Report where DeveloperName = 'Install_Materials_Summary2' limit 1];
-        String reportId = '';
-        if(installMatReport.size()>0){
-            reportId = installMatReport[0].Id;
-        }
-        reportURL = '/'+reportId+'?pv0='+String.ValueOf(ord.Id).substring(0,15)+'&pv1=Construction_Materials';
         if(ord.RecordTypeId == serviceOrderId){
             addProductURL = '/apex/RMS_addServiceProduct?id=' + ord.Id;
         }else{

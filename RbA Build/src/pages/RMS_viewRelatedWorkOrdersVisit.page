@@ -90,6 +90,7 @@
         <!-- <apex:form rendered="{!IF(Order.Status == 'Draft','false', 'true')}"> -->
         <apex:form rendered="{!IF(displayButtonsOnPage == true,'true', 'false')}">
             <apex:commandButton onclick="callGenerateConsoleURL('{!serviceOrderVisitRecordTypeURL}', 'Create New Work Order');return false" id="newVisitButton2" value="Create New Visit Work Order" style="margin-left:40%"/>
+            <apex:commandButton onclick="callGenerateConsoleURL('{!reportURL}', 'Install Materials List');return false" id="installMaterials" value="Install Materials List" style="margin-left:2%"/>
         </apex:form>
         
         <apex:pageBlockTable id="workOrderTable" title="Visit Work Orders" value="{!workOrders}" var="wo" style="width:100%">

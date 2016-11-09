@@ -143,6 +143,14 @@ public with sharing class RMS_createWorkOrderController {
         
         insert wo;
         
+        if(woType == 'actions'|| woType == 'permit'){
+        Municipality_Contact__c mc = new Municipality_Contact__c();
+                    mc = [Select Id, Active__c, Municipality__c FROM Municipality_Contact__c WHERE Municipality__c =: wo.Municipality__c AND Active__c = TRUE ORDER BY CreatedDate DESC LIMIT 1];
+                    wo.Municipality_Contact__c = mc.Id;
+                    
+        update wo;
+        }
+        
         // Used for redirecting to the view page from javascript
         woId = wo.Id;
         
