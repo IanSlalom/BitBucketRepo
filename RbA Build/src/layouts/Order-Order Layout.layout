@@ -269,6 +269,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Tech_Measure_Complete_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Install_Order_Status__c</field>
             </layoutItems>
             <layoutItems>
@@ -327,6 +331,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Estimated_Ship_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Billing_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>HOS_Sent_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
