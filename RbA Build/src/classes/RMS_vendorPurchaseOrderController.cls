@@ -68,14 +68,14 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public boolean poComplete {get;set;}
 
 
-  /******* Set up Measurement Fraction Items  *****************/
+  /******* Find Product Items  *****************/
   private static transient List<SelectOption> lproductItems;
-
   public  List<SelectOption> productItems {
     get
     {   
-    List<SelectOption> pickListItems = new List<SelectOption>();
-    pickListItems.add(new SelectOption('', '-- Select --'));
+    	if (lproductItems != null) return lproductItems;
+    lproductItems = new List<SelectOption>();
+    lproductItems.add(new SelectOption('', '-- Select --'));
     
     for (Product2 p : [SELECT Id, Name, Cost_PO__c, Product_PO__c, Service_PO__c from Product2 WHERE Id IN: VendorProducts
                               AND IsActive = true  ] ) {
@@ -83,10 +83,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
       		(!costPurchaseOrder &&  p.Product_PO__c && !servicePurchaseOrder) ||
       		(!costPurchaseOrder &&  p.Service_PO__c && servicePurchaseOrder)) 
       {                         
-        pickListItems.add(new SelectOption(p.Id, p.Name));
+        lproductItems.add(new SelectOption(p.Id, p.Name));
       }
     }         
-    return pickListItems;
+    return lproductItems;
     } 
     set;
   }
@@ -125,24 +125,26 @@ public with sharing class RMS_vendorPurchaseOrderController {
   }
 
   // SOQL Filters for the vendor autocomplete checklist
+  private static transient String lvendorQueries;
   public String vendorQueries
   {
     get
     {
-      if ( vendorQueries != null ) return vendorQueries;
-      vendorQueries = 'RecordTypeId = ';
-      vendorQueries += ';Id IN :';
-      return vendorQueries;
+      if ( lvendorQueries != null ) return lvendorQueries;
+      lvendorQueries = 'RecordTypeId = ';
+      lvendorQueries += ';Id IN :';
+      return lvendorQueries;
     }
     private set;
   }
 
+  private static transient String lvendorVariables;
   public String vendorVariables
   {
     get
     {
-      if ( vendorVariables != null ) return vendorVariables;
-      vendorVariables = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
+      if ( lvendorVariables != null ) return lvendorVariables;
+      lvendorVariables = UtilityMethods.retrieveRecordTypeId('Vendor', 'Account');
       String joinedString = '';
       if (storeVendors != null) {
       	for (Id s : storeVendors) {
@@ -150,58 +152,59 @@ public with sharing class RMS_vendorPurchaseOrderController {
       	}
       }
       if (String.isBlank(joinedString)) joinedString = 'empty';
-      vendorVariables += ';' +joinedString;
-      return vendorVariables;
+      lvendorVariables += ';' +joinedString;
+      return lvendorVariables;
     }
     private set;
   }
 
   // The set of vendor ids associated with the store
+  private static transient Set<Id> lstoreVendors;
   public Set<Id> storeVendors
   {
     get
     {
-//      if ( storeVendors != null) return storeVendors;
+      if ( lstoreVendors != null) return lstoreVendors;
       if (storeLocation == null) return null;
-      storeVendors = new Set<Id>();
+      lstoreVendors = new Set<Id>();
 //      for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocation.Id AND Vendor__c != null]) {
       for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c IN : storeLocationSet AND Vendor__c != null]) {
-        storeVendors.add(sv.Vendor__c);
+        lstoreVendors.add(sv.Vendor__c);
       }
       
 
-      return storeVendors;
+      return lstoreVendors;
     }
     set;
   }
 
   // The list of vendor records associated with the store
+  private static transient List<Account> lstoreVendorRecords;
   public List<Account> storeVendorRecords
   {
     get
     {
-      if ( storeVendorRecords != null) return storeVendorRecords;
+      if ( lstoreVendorRecords != null) return lstoreVendorRecords;
       if (storeVendors == null) return null;
-      storeVendorRecords = new List<Account>();
+      lstoreVendorRecords = new List<Account>();
       for (Account a : [SELECT Id, Name from Account Where Id IN : storeVendors]) {
-        storeVendorRecords.add(a);
+        lstoreVendorRecords.add(a);
       }
       
 
-      return storeVendorRecords;
+      return lstoreVendorRecords;
     }
     set;
   }
 
-
-
   // The set of products ids associated with the selected vendor
+  private static transient Set<Id> lvendorProducts;
   public Set<Id> vendorProducts
   {
     get
     {
-      if ( vendorProducts != null) return vendorProducts;
-      vendorProducts = new Set<Id>();
+      if ( lvendorProducts != null) return lvendorProducts;
+      lvendorProducts = new Set<Id>();
       Id constMatRecordTypeId = UtilityMethods.RecordTypeFor('Product2', 'Construction_Materials');
       for (Vendor_Product__c vp : [SELECT Product__c, Vendor__c, Product__r.Cost_PO__c, Product__r.Product_PO__c, Product__r.Service_PO__c, Product__r.isActive from Vendor_Product__c Where (Vendor__c =: selectedVendor OR Product__r.RecordTypeId =: constMatRecordTypeId) AND Product__c != null]) {
 		if (!vp.Product__r.isActive) continue;
@@ -211,65 +214,70 @@ public with sharing class RMS_vendorPurchaseOrderController {
 			continue;
 		if (costPurchaseOrder && !vp.Product__r.Cost_PO__c)
 			continue;
-        vendorProducts.add(vp.Product__c);
+        lvendorProducts.add(vp.Product__c);
       }
       if (costPurchaseOrder) {
       	for (Product2 p : [SELECT Id, Cost_PO__c, isActive from Product2 Where RecordTypeId =: constMatRecordTypeId AND isActive = true AND Cost_PO__c = true]) {
-      		vendorProducts.add(p.Id);
+      		lvendorProducts.add(p.Id);
       	}
       }
-      return vendorProducts;
+      return lvendorProducts;
     }
     set;
   }
     
+  private static transient List<Cost_Center__c> lcostCenters;
   public List<Cost_Center__c> costCenters
   {
     get
     {
-      costCenters = new List<Cost_Center__c>();
+      if (lcostCenters != null) return lcostCenters;
+      lcostCenters = new List<Cost_Center__c>();
       for (Cost_Center__c cc : [SELECT Id, Product__c, Product__r.Name, Cost_Center__c, Cost_Center__r.Name  from Cost_Center__c ]) {
-        costCenters.add(cc);
+        lcostCenters.add(cc);
       }
-      return costCenters;
+      return lcostCenters;
     }
     set;
   }
   // SOQL Filters for the product autocomplete checklist
+  private static transient String lproductQueries;
   public String productQueries
   {
     get
     {
-      if ( productQueries != null ) return productQueries;
+      if ( lproductQueries != null ) return lproductQueries;
       if (selectedVendor == null) return null;
 
       // If this is a cost PO, only return cost po items, otherwise return inventoried items
-      productQueries = (costPurchaseOrder) ?   'Cost_PO__c = true ' :
+      lproductQueries = (costPurchaseOrder) ?   'Cost_PO__c = true ' :
                               'Product_PO__c = true ';
 
       // Only return active products with a particular vendor (see productFilter2)
-      productQueries += ' AND IsActive = true AND Vendor__c = ';
-      productQueries += ';Id IN :';
-      return productQueries;
+      lproductQueries += ' AND IsActive = true AND Vendor__c = ';
+      lproductQueries += ';Id IN :';
+      return lproductQueries;
     }
     private set;
   }
+
+  private static transient String lproductVariables;
   public String productVariables
   {
     get
     {
-      if ( productVariables != null ) return productVariables;
+      if ( lproductVariables != null ) return lproductVariables;
       if (selectedVendor == null) return null;
       
-      productVariables = selectedVendor;
+      lproductVariables = selectedVendor;
       String joinedString = '';
       for (Id v : vendorProducts) {
         joinedString += (joinedString==''?'':',')+v;
       }
       if (String.isBlank(joinedString)) joinedString = 'empty';
-      productVariables += ';' +joinedString;
+      lproductVariables += ';' +joinedString;
 
-      return productVariables;
+      return lproductVariables;
     }
     private set;
   }
@@ -579,11 +587,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
       }
     }
 
-    //JETT-712 
-    if(newPurchaseOrder && !costPurchaseOrder && !servicePurchaseOrder && relatedOrder.Status != 'Ready to Order'){
-      ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_STATUS_INVALID_FOR_PO_CREATION));
-      renderVendorSelection = false;
-    }
     //JETT-2366
     if(newPurchaseOrder && relatedCOROOrder && !revRecNullAndValidStatus){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error, RMS_errorMessages.ORDER_TYPE_STATUS_DATE_INVALID_FOR_PO_CREATION));
@@ -1115,6 +1118,11 @@ public with sharing class RMS_vendorPurchaseOrderController {
 										(servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
 														  		UtilityMethods.RecordTypeFor('Asset', 'Installed_Products');
       		
+      		if (costPurchaseOrder) {
+      			productAsset.Store_Location__c = this.po.Store_Location__c;
+      			productAsset.PurchaseDate = System.Today();
+      		} 
+
       } 
       else if (oi.Installed_Product_Asset__c != null){
       	productAsset = assetMap.get(oi.Installed_Product_Asset__c);
@@ -1479,6 +1487,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   public PageReference confirm() {
     system.debug('*****Button requiring confirmation was pressed');
     return null;
+
   }
 
   /*******************************************************
@@ -1555,6 +1564,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     try{
       // upsert the po as cancelled
       upsert po;  
+      status = 'can';
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the cancelPurchaseOrder method cancelling the PO:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));
@@ -1577,6 +1587,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     try{
       // upsert the po as uncancelled
       upsert po;  
+      status = 'new';
     } catch (Exception e){
       System.debug('************The following exception cccurred in the RMS_vendorPurchaseOrderController in the unCancelPurchaseOrder method unCancelling the PO:' + e);
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.UPDATE_PO_EXCEPTION));

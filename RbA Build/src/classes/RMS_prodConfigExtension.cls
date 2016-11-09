@@ -171,34 +171,36 @@ public class RMS_prodConfigExtension {
 	}
 
 	// The set of vendor ids associated with the store
+	private static transient Set<Id> lstoreVendors;
 	public Set<Id> storeVendors
 	{
 		get
 		{
-			if ( storeVendors != null) return storeVendors;
+			if ( lstoreVendors != null) return lstoreVendors;
 			if (storeLocationId == null) return null;
-			storeVendors = new Set<Id>();
+			lstoreVendors = new Set<Id>();
 			for (Store_Vendor__c sv : [SELECT Vendor__c from Store_Vendor__c Where Store__c =: storeLocationId AND Vendor__c != null]) {
-				storeVendors.add(sv.Vendor__c);
+				lstoreVendors.add(sv.Vendor__c);
 			}
 			
 
-			return storeVendors;
+			return lstoreVendors;
 		}
 		set;
 	}
 
 	// The set of products ids associated with the store vendor
+	private static transient Set<Id> lvendorProducts;
 	public Set<Id> vendorProducts
 	{
 		get
 		{
-			if ( vendorProducts != null) return vendorProducts;
-			vendorProducts = new Set<Id>();
+			if ( lvendorProducts != null) return lvendorProducts;
+			lvendorProducts = new Set<Id>();
 			for (Vendor_Product__c vp : [SELECT Product__c from Vendor_Product__c Where Vendor__c IN : storeVendors AND Product__c != null]) {
-				vendorProducts.add(vp.Product__c);
+				lvendorProducts.add(vp.Product__c);
 			}
-			return vendorProducts;
+			return lvendorProducts;
 		}
 		set;
 	}	
@@ -226,46 +228,48 @@ public class RMS_prodConfigExtension {
 	}
 
 	// SOQL Filters for the product autocomplete checklist
+	private static transient String lproductQueries;
 	public String productQueries
 	{
 		get
 		{
-			if ( productQueries != null ) return productQueries;
+			if ( lproductQueries != null ) return lproductQueries;
 
 			// return inventoried items
-			productQueries = 'Inventoried_Item__c = true ';
+			lproductQueries = 'Inventoried_Item__c = true ';
 
 			// Only return active products without a master product
-			productQueries += ' AND IsActive = true AND Master_Product__c = null';
+			lproductQueries += ' AND IsActive = true AND Master_Product__c = null';
 
 			//JETT-184 If Order is Change Order, only search for products of type Misc Job & Unit Charges
 			if(relatedChangeOrder){
 				//productQueries+=' AND RecordType.DeveloperName = \'Misc_Job_and_Unit_Charges\'';
-				productQueries+=' AND RecordTypeId = "'+UtilityMethods.retrieveRecordTypeId('Misc_Job_and_Unit_Charges', 'Product2')+'"';
+				lproductQueries+=' AND RecordTypeId = "'+UtilityMethods.retrieveRecordTypeId('Misc_Job_and_Unit_Charges', 'Product2')+'"';
 			}
 
 			// The query side of making sure the product id is in the vendor product id set
-			productQueries += ' AND Id IN :';
+			lproductQueries += ' AND Id IN :';
 
-			return productQueries;
+			return lproductQueries;
 		}
 		private set;
 	}
 
+	private static transient String lproductVariables;
 	public String productVariables
 	{
 		get
 		{
-			if ( productVariables != null ) return productVariables;
+			if ( lproductVariables != null ) return lproductVariables;
 			
 			String joinedString = '';
 			for (Id v : vendorProducts) {
 				joinedString += (joinedString==''?'':',')+v;
 			}
 			if (String.isBlank(joinedString)) joinedString = 'empty';
-			productVariables = joinedString;
+			lproductVariables = joinedString;
 
-			return productVariables;
+			return lproductVariables;
 		}
 		private set;
 	}

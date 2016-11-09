@@ -1080,6 +1080,7 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 //COST PRODUCT RECIVED
                 if(costProductRecivedAT == true){
+                	System.Debug('*********************assetIdToCPRFTL.get(a.id)=' +assetIdToCPRFTL.get(a.id));
                 	errorMessage = checkFinacialTransationForErrors(assetIdToCPRFTL.get(a.id) , errorMessage, 'Cost Product Received');
                 }
                 
@@ -3061,7 +3062,7 @@ public with sharing class RMS_financialTransactionManager {
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
             //CHECK IF DEBIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null ){
+            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null && ftList[0].Transaction_Type__c != 'Cost Product Received' ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }

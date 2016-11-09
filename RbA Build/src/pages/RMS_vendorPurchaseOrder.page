@@ -2,7 +2,7 @@
 
     <apex:includeScript value="{!$Resource.jquery}" />
     <apex:includeScript value="/support/console/33.0/integration.js"/>
-
+    <apex:stylesheet value="{!URLFOR($Resource.spinner, 'spinner.css')}"/>
     <apex:form id="page-form" >
 
     <script>
@@ -120,14 +120,14 @@
     <apex:pageMessages />  
         <apex:actionRegion >
         <apex:pageBlock title="{!pageTitle} Purchase Order Edit">
-            <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
-            <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 
         <apex:pageBlockButtons location="bottom">
-            <apex:commandButton action="{!save}" value="Save" status="save-status" rerender="page-form"/>
-            <apex:commandButton action="{!save}" value="Save & New" status="save-new-status" rerender="page-form" rendered="{!newPurchaseOrder == true && servicePurchaseOrder == false}"/>
-            <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+            <apex:commandButton onclick="showSpinner()" action="{!save}" value="Save" status="save-status" rerender="page-form" oncomplete="hideSpinner()"/>
+            <apex:commandButton onclick="showSpinner()" action="{!save}" value="Save & New" status="save-new-status" rerender="page-form" oncomplete="hideSpinner()" rendered="{!newPurchaseOrder == true && servicePurchaseOrder == false}"/>
+            <apex:commandButton onclick="showSpinner()" action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
         </apex:pageBlockButtons>            
+            <apex:actionStatus id="save-status"  onstop="openSavedPO('{!poId}','{!costPurchaseOrder}');return false"/>
+            <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 
 
             <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder && renderVendorSelection}" > 
@@ -426,7 +426,12 @@
 
 
     </apex:form>
-
+   <div id="opaque"/>
+   <div id="spinner">
+    <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
+        <apex:image id="theImage" value="{!$Resource.LoadingPage}" width="50"/>
+    </p>
+   </div>
     <script type="text/javascript">
         var j$ = jQuery.noConflict();
 
@@ -453,6 +458,21 @@
             // Do nothing. This keeps standard Salesforce from giving focus to the first
             // field so that the calendar widget won't pop up.
         }
+    function showSpinner()
+    {
+       document.getElementById('opaque').style.display='block';
+       var popUp = document.getElementById('spinner');
+      
+       popUp.style.display = 'block';
+    } 
+
+    function hideSpinner()
+    {
+       document.getElementById('opaque').style.display='none';
+       var popUp = document.getElementById('spinner');
+      
+       popUp.style.display = 'none';
+    } 
 
     </script>
 </apex:page>
