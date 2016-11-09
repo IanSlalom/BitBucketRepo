@@ -78,10 +78,13 @@ private class UtilityMethodsTest {
 		Store_Configuration__c myStoreConfig = new Store_Configuration__c(Store__c = myStore.Id, Order_Number__c = 1);
 		insert myStoreConfig;
 		
-		List<Id> storeIds = new List<Id>();
-		storeIds.add(myStore.Id);
+		myStore.Active_Store_Configuration__c = myStoreConfig.Id;
 		
-		map<Id, Store_Configuration__c> myStoreMap = UtilityMethods.mapStoreConfigs(storeIds);
+//		List<Id> storeIds = new List<Id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
+		storeIdToStoreConfigIdMap.put(myStore.Id, myStoreConfig.Id);
+		
+		map<Id, Store_Configuration__c> myStoreMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
 		
 		System.AssertEquals(myStoreConfig.Id, myStoreMap.get(myStore.Id).Id);
 

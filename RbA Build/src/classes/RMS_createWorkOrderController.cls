@@ -48,9 +48,17 @@ public with sharing class RMS_createWorkOrderController {
         historical = urlParam.get('historical');
         
         woName = wo.Name;
-        list<id> storeList = new list<id>{storeId};
-        map<Id, Store_Configuration__c> storeIdToStoreConfigMap = UtilityMethods.mapStoreConfigs(storeList);
-        Store_Configuration__c storeConfig = storeIdToStoreConfigMap.get(storeId);
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
+//        list<id> storeList = new list<id>{storeId};
+		for (Account store : [SELECT Id, Active_Store_Configuration__c FROM Account WHERE Id =: storeId]) {
+			if (store.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(store.Id, store.Active_Store_Configuration__c);
+		}
+        map<Id, Store_Configuration__c> storeIdToStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
+
+		Store_Configuration__c storeConfig;
+		if (storeIdToStoreConfigMap != null && storeIdToStoreConfigMap.size() > 0)
+        	storeConfig = storeIdToStoreConfigMap.get(storeId);
         
         if(woType == 'visit'){
             woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
