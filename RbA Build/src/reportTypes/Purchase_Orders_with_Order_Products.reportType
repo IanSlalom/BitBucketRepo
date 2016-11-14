@@ -305,7 +305,17 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>MTO_Source_Code__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Date_Received__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Defect_Code__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
         <columns>
