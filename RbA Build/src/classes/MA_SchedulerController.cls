@@ -380,7 +380,7 @@ global with sharing class MA_SchedulerController {
     /*      webservice used to save a store's settings      */
     /*                                                      */
     /********************************************************/
-    webService static String saveSettings(String jsonSettings) {
+    webService static String saveSettings(String jsonSettings, Boolean closeModal) {
         System.Savepoint sp = Database.setSavepoint();
         Map<String, Object> response = new Map<String, Object>();
 
@@ -396,6 +396,7 @@ global with sharing class MA_SchedulerController {
             }
 
             response.put('success', true);
+            response.put('closeModal', closeModal);
         }
         catch(Exception ex) {
             Database.rollBack(sp);
@@ -891,13 +892,13 @@ global with sharing class MA_SchedulerController {
             MA_SchedulerUtilities.createBookingWindows(bookingWindows, unAvailableSlots, storeBookingWindows, resourceToSkillsMap, totalSkillsCountMap, startDateTime, endDateTime, storeTimezone, storeHolidayDates, resourceHours);
             MA_SchedulerUtilities.checkResourceAvailability(bookingWindows, unAvailableSlots, userMap, startDateTime, endDateTime, resourceToSkillsMap, workOrder.Work_Order_Type__c, rbaSkillIds, storeId);
             
-            /**/
+            /*
             for (MA_SchedulerBookingWindow unAvailableBw : unAvailableSlots) {
-                if (unAvailableBw.overbooked /*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty()*/ && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
+                if (unAvailableBw.overbooked *//*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty()*//* && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
                     bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
                 }
             }
-            /**/
+            */
 
             /**********************************************************/
             /*                                                        */
@@ -935,21 +936,21 @@ global with sharing class MA_SchedulerController {
                     }
                     remainingSlots.get(bw.startDateTime.format('MM/dd/yyyy', storeTimezone)).add(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd);
                 
-                    /*
+                    /**/
                     if (!bw.timeBlocksMissingASkill.isEmpty()) {
                         bookingWindowsRemainingMap.put(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd, bw);
                     }
-                    */
+                    /**/
                 }
             }
 
-            /*
+            /**/
             for (MA_SchedulerBookingWindow unAvailableBw : unAvailableSlots) {
-                if (unAvailableBw.overbooked *//*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty() *//* && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
+                if (unAvailableBw.overbooked /**//*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty() *//**/ && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
                     bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
                 }
             }
-            */
+            /**/
 
             /***********************************************************/
             /*                                                         */

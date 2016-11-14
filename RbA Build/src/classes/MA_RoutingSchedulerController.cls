@@ -478,6 +478,7 @@ global with sharing class MA_RoutingSchedulerController {
         try {
         	List<Resource__c> resourceList;
             List<Object> features = new List<Object>();
+            Map<String, Object> storeHours = new Map<String, Object>();
         	Map<Id, Map<String, Object>> resourceHours = new Map<Id, Map<String, Object>>();
         	Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrderType);
             
@@ -487,6 +488,25 @@ global with sharing class MA_RoutingSchedulerController {
 
         	if (configs != null) {
         		resourceHours = (Map<Id, Map<String, Object>>)configs.get('resourceHours');
+
+                Map<String, Object> storeBookingWindows = (Map<String, Object>)configs.get('storeBookingWindows');
+                Map<String, Map<String, Object>> latestHours = MA_SchedulerUtilities.determineEarliestStartAndLatestEndHours(storeBookingWindows);
+                
+                if (latestHours != null) {
+                    Map<String, Object> dayHours = latestHours.get(dayOfWeek);
+
+                    if (dayHours != null) {
+                        String startTime = String.valueOf((Time)dayHours.get('start')).substring(0, 5);
+                        String endTime = String.valueOf((Time)dayHours.get('end')).substring(0, 5);
+
+                        Map<String, Object> dayHoursMap = new Map<String, Object> {
+                            'start' => startTime,
+                            'end' => endTime
+                        };
+
+                        storeHours.put(dayOfWeek, new List<Object> { dayHoursMap });
+                    }
+                }
         	}
             
             if (resourceIds != null && !resourceIds.isEmpty()) {
@@ -524,12 +544,16 @@ global with sharing class MA_RoutingSchedulerController {
 					resourceHoursMap = resourceHours.get(resource.Id);
 				}
 				else {
+                    /*
 					MA_Scheduler_Settings__c storeSettings = (MA_Scheduler_Settings__c)configs.get('storeSettings');
 					if (storeSettings != null) {
 						Map<String, Object> storeSettingsMap = (Map<String, Object>)JSON.deserializeUntyped(storeSettings.Settings__c);
 						resourceHoursMap = (Map<String, Object>)storeSettingsMap.get('storeHours');
 					}
-				}
+                    */
+
+                    resourceHoursMap = storeHours;
+                }
 
 		        if (resourceHoursMap.containsKey(dayOfWeek)) {
 		            List<Object> daysHoursList = (List<Object>)resourceHoursMap.get(dayOfWeek);

@@ -366,7 +366,7 @@
         /*      this method saves the store's settings as a JSON string */
         /*                                                              */
         /****************************************************************/
-        function saveSettings() {
+        function saveSettings(closeModal) {
             $('#loaderModal').show();
 
             var settings = [];
@@ -690,7 +690,7 @@
 				}
 			}
 
-            sforce.apex.execute(apexSettingsController, 'saveSettings', { jsonSettings: JSON.stringify(settings) }, processSaveSettingsResponse);
+            sforce.apex.execute(apexSettingsController, 'saveSettings', { jsonSettings: JSON.stringify(settings), closeModal: closeModal }, processSaveSettingsResponse);
         }
 
         /****************************************************************/
@@ -721,7 +721,12 @@
             response = JSON.parse(response);
 
             if (response.success) {
-                closeSettingsModal();
+                if (response.closeModal) {
+                    closeSettingsModal();
+                }
+                else {
+                    $('#loaderModal').hide();
+                }
             }
             else {
                 handleError('MA_SchedulerSettingsComp : saveSettings', response);
@@ -739,6 +744,8 @@
             toggleEsriCredentialsVisibility($('#hideEsriLink'));
             $('.esriCredentialsInputs .ma-input').attr('disabled', true);
             $('body').css('overflow-y', 'scroll');
+            $('.topbar-header-text').text($('.topbar-header-text').attr('previousText'));
+            $('.topbar-header-text').removeAttr('previousText');
 
             if (!isBatchResources) {
                 $('#loaderModal').hide();
@@ -1282,7 +1289,8 @@
                 <div class= "ma-settings-modal-footer">
                     <div class="ma-modal-padding clearfix floatRight" id="settingsButtons">
                         <button class="ma-button ma-button--white" onclick="closeSettingsModal();">Cancel</button>
-                        <button class="ma-button ma-button--green" onclick="saveSettings();">Save</button>
+                        <button class="ma-button ma-button--green" onclick="saveSettings(false);">Save</button>
+                        <button class="ma-button ma-button--green" onclick="saveSettings(true);">Save &amp; Close</button>
                     </div>
                 </div>
             </div>

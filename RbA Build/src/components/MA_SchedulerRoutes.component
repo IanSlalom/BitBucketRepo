@@ -823,7 +823,8 @@
                 $('#calendar').fullCalendar('refetchResources');
                 $('#optimize button').attr('disabled', false);
                 $('#loaderModal').hide();
-                goToResourceView();
+                //goToResourceView();
+                goToWorkOrderView();
             }
         }
 
