@@ -240,6 +240,7 @@ public with sharing class RMS_OrderItemManager {
 				// 1. Pricebook Id
 				// 2. Master Product or Master_Product__r.Master_Product for specialty windows - family
 				// 3. size bucket (UI for windows and Specialty) - width and height for door
+				// 4. mullions are different only need to match on pricebook and master product they are one to one
 				// check the pricebook
 				if (!cPBE.Pricebook2Id.equals(masterProductPBE.Pricebook2Id)) {
 					// no match get the next record
