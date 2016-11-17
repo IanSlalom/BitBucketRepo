@@ -62,10 +62,6 @@
                 <field>Status</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Reason__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>EffectiveDate</field>
             </layoutItems>
@@ -261,6 +257,19 @@
                 <behavior>Readonly</behavior>
                 <field>Install_Ship_Date_Conflict__c</field>
             </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <emptySpace>true</emptySpace>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Install_Notes__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -270,6 +279,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Tech_Measure_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tech_Measure_Complete_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -331,6 +344,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Estimated_Ship_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Billing_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>HOS_Sent_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

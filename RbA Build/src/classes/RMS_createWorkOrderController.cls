@@ -19,8 +19,8 @@ public with sharing class RMS_createWorkOrderController {
     public string storeId{get;set;}
     
     public string woRTid;
-
-/******* Set up Standard Controller for Purchase_Order__c  *****************/
+    
+    /******* Set up Standard Controller for Purchase_Order__c  *****************/
     private Apexpages.StandardController standardController;
     private final RbA_Work_Order__c wo;
     
@@ -29,7 +29,7 @@ public with sharing class RMS_createWorkOrderController {
     public RMS_createWorkOrderController(ApexPages.StandardController stdController) {
         this.wo = (RbA_Work_Order__c)stdController.getRecord();
         map<string, string> urlParam = ApexPages.currentPage().getParameters();
-
+        
         orderId = urlParam.get('orderId');
         storeId = urlParam.get('storeId');
         accountId = urlParam.get('accountId');
@@ -48,9 +48,17 @@ public with sharing class RMS_createWorkOrderController {
         historical = urlParam.get('historical');
         
         woName = wo.Name;
-        list<id> storeList = new list<id>{storeId};
-        map<Id, Store_Configuration__c> storeIdToStoreConfigMap = UtilityMethods.mapStoreConfigs(storeList);
-        Store_Configuration__c storeConfig = storeIdToStoreConfigMap.get(storeId);
+        map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
+        //        list<id> storeList = new list<id>{storeId};
+        for (Account store : [SELECT Id, Active_Store_Configuration__c FROM Account WHERE Id =: storeId]) {
+            if (store.Active_Store_Configuration__c != null)
+                storeIdToStoreConfigIdMap.put(store.Id, store.Active_Store_Configuration__c);
+        }
+        map<Id, Store_Configuration__c> storeIdToStoreConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
+        
+        Store_Configuration__c storeConfig;
+        if (storeIdToStoreConfigMap != null && storeIdToStoreConfigMap.size() > 0)
+            storeConfig = storeIdToStoreConfigMap.get(storeId);
         
         if(woType == 'visit'){
             woRTid = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
@@ -71,6 +79,7 @@ public with sharing class RMS_createWorkOrderController {
         }else if(woType == 'permit'){
             woRTid = UtilityMethods.retrieveRecordTypeId('Permit', 'RbA_Work_Order__c');
             wo.RecordTypeId = woRTid;
+            wo.Work_Order_Status__c = 'New';
             if(permit != null && permit != '' && permit != 'null'){
                 wo.Municipality__c = permit;
             }       
@@ -86,16 +95,16 @@ public with sharing class RMS_createWorkOrderController {
         Schema.DescribeFieldResult fieldResult = RbA_Work_Order__c.Work_Order_Type__c.getDescribe();
         List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
         
-            for(Schema.PicklistEntry f : ple){
-                if(f.getValue() == 'Tech Measure' || f.getValue() == 'Install') {
-                    options.add(new SelectOption(f.getLabel(), f.getValue()));                          
-                }                      
-            }
+        for(Schema.PicklistEntry f : ple){
+            if(f.getValue() == 'Tech Measure' || f.getValue() == 'Install') {
+                options.add(new SelectOption(f.getLabel(), f.getValue()));                          
+            }                      
+        }
         
         return options;           
     }
     
-
+    
     public String getpropPickValSelected() {
         return propPickValSelected;
     }
@@ -104,7 +113,7 @@ public with sharing class RMS_createWorkOrderController {
         this.propPickValSelected = propPickValSelected;
     } 
     
-
+    
     public PageReference save() {
         wo.Sold_Order__c = orderId;
         wo.Account__c = accountId;
@@ -113,9 +122,9 @@ public with sharing class RMS_createWorkOrderController {
         wo.State__c = shippingState;
         wo.Zip__c = shippingPostalCode;
         wo.Country__c = shippingCountry;
-       
-       if(propPickValSelected != null){
-        wo.Work_Order_Type__c = propPickValSelected;
+        
+        if(propPickValSelected != null){
+            wo.Work_Order_Type__c = propPickValSelected;
         }
         
         if(billToContactId != null && billToContactId != 'null'){
@@ -135,10 +144,22 @@ public with sharing class RMS_createWorkOrderController {
         
         insert wo;
         
+        if(woType == 'actions'|| woType == 'permit'){
+            List<Municipality_Contact__c> mc = new List<Municipality_Contact__c>();
+            mc = [Select Id, Active__c, Municipality__c FROM Municipality_Contact__c WHERE Municipality__c =: wo.Municipality__c AND Active__c = TRUE ORDER BY CreatedDate DESC LIMIT 1];
+            
+            if(mc.size() > 0){
+                wo.Municipality_Contact__c = mc[0].Id;
+                
+                update wo;
+            }
+            
+        }
+        
         // Used for redirecting to the view page from javascript
         woId = wo.Id;
         
         return null;
     } 
-        
+    
 }

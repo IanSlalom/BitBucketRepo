@@ -85,21 +85,17 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public void updateOrderStatus(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     for(Order o: newMap.values()){   
-      if(o.Status == 'Tech Measure Needed' && o.Tech_Measure_Status__c == 'Scheduled' && oldMap.get(o.Id).Tech_Measure_Status__c != o.Tech_Measure_Status__c){
+      if(o.Status == 'Tech Measure Needed' && (o.Tech_Measure_Status__c == 'Pending Assignment' || o.Tech_Measure_Status__c == 'Scheduled & Assigned') && oldMap.get(o.Id).Tech_Measure_Status__c != o.Tech_Measure_Status__c){
         //Sets the Apex Context variable to true, enables bypassing validation rules that specify !Apex_Context (e.g. Status Update Through UI)
         //o.Apex_Context__c = true;
         o.status = 'Tech Measure Scheduled';
       }else if(o.Status == 'Tech Measure Scheduled' && o.Tech_Measure_Status__c == 'Complete' && oldMap.get(o.Id).Tech_Measure_Status__c != o.Tech_Measure_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Ready to Order';
-      }else if(o.Status == 'Install Needed' && o.Install_Order_Status__c == 'Scheduled' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
+      }else if(o.Status == 'Install Needed' && (o.Install_Order_Status__c == 'Pending Assignment' || o.Install_Order_Status__c == 'Scheduled & Assigned') && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
         //o.Apex_Context__c = true;
         o.status = 'Install Scheduled';
-      }/* removing per JETT-1601 else if(o.Status == 'Install Scheduled' && o.Install_Order_Status__c == 'Completed' && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
-        //o.Apex_Context__c = true;
-        o.status = 'Install Complete';
-      }*/
-      else if(O.Revenue_Recognized_Date__c != null && o.RecordtypeId == ChangeOrderRecordTypeId){
+      }else if(O.Revenue_Recognized_Date__c != null && o.RecordtypeId == ChangeOrderRecordTypeId){
         o.status = 'Job Closed';
       }
     }

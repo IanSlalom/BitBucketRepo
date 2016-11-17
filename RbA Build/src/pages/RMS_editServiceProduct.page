@@ -54,9 +54,9 @@
                 <apex:inputField value="{!OrderItem.Measurement_Notes__c }" style="width: 289px; height: 90px;"/>
                 <apex:inputField value="{!OrderItem.Quanity_Ordered__c}"/>
                 <apex:outputField value="{!OrderItem.Purchase_Order__c}" label="Purchase Order #"/>  
- <!--                <apex:inputField value="{!OrderItem.MTO_Source_Code__c}"/>--> 
+                <apex:inputField value="{!OrderItem.MTO_Source_Code__c}"/>
                 <apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!IF(OrderItem.PriceBookEntry.Name != 'Complete Unit' , false , true)}"/>
- <!--                <apex:inputField value="{!OrderItem.Defect_Code__c}"/>--> 
+                <apex:inputField value="{!OrderItem.Defect_Code__c}"/>
                 <apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}"/>
                 <apex:inputField value="{!OrderItem.Multiple_Remakes__c}"/> 
                 <apex:outputField value="{!OrderItem.Total_Wholesale_Cost__c}"/>

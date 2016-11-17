@@ -275,6 +275,7 @@ global with sharing class RMS_prodConfigManager2 {
 		for(Grille_Pattern_Configuration__c con: [SELECT 	Id, 
 															Sash_Ratio__c,
 															Grille_Pattern__c,
+															Grille_Style__c,
 															Min_Width_Inches__c,
 															Min_Width_Fraction__c,
 															Min_Height_Inches__c,
@@ -1003,7 +1004,7 @@ global with sharing class RMS_prodConfigManager2 {
 
 			if(grillePatternConfigsAllPatterns!= null){
 				for(Grille_Pattern_Configuration__c sgc : grillePatternConfigsAllPatterns){
-					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S1__c){
+					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S1__c && sgc.Grille_Style__c == orderLineitem.Grille_Style__c){
 						relatedGrillePatternConfigurations.add(sgc);
 					}
 				}
@@ -1049,7 +1050,99 @@ global with sharing class RMS_prodConfigManager2 {
 
 			if(grilleConfigsAllPatterns!= null){
 				for(Grille_Pattern_Configuration__c sgc : grillePatternConfigsAllPatterns){
-					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S2__c){
+					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S2__c && sgc.Grille_Style__c == orderLineitem.Grille_Style__c){
+						relatedGrillePatternConfigurations.add(sgc);
+					}
+				}
+			}	
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+
+			if(!relatedGrillePatternConfigurations.isEmpty()){
+				for(Grille_Pattern_Configuration__c grillePatternConfig : relatedGrillePatternConfigurations){
+					if(grillePatternConfig.Min_Width_Inches__c != null){
+						Decimal requiredWidth = grillePatternConfig.Min_Width_Inches__c + UtilityMethods.calculateFraction(grillePatternConfig.Min_Width_Fraction__c);
+						if(widthInches < requiredWidth){
+							String requiredWidthString =  String.ValueOf(grillePatternConfig.Min_Width_Inches__c) + ' ' + (grillePatternConfig.Min_Width_Fraction__c == null? '' : String.valueOf(grillePatternConfig.Min_Width_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_WIDTH, '', requiredWidthString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+					if(grillePatternConfig.Min_Height_Inches__c != null){
+						Decimal requiredHeight = grillePatternConfig.Min_Height_Inches__c + UtilityMethods.calculateFraction(grillePatternConfig.Min_Height_Fraction__c);
+						if(heightInches < requiredHeight){
+							String requiredHeightString =  String.ValueOf(grillePatternConfig.Min_Height_Inches__c) + ' '+ (grillePatternConfig.Min_Height_Fraction__c == null? '' : String.valueOf(grillePatternConfig.Min_Height_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_HEIGHT, '', requiredHeightString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+				}
+			}
+		} 
+
+		//Grille Pattern Configuration S3
+		if(orderLineItem.Grille_Pattern_S3__c != null ){
+			/*List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = [SELECT 	Sash_Ratio__c,
+																							Grille_Pattern__c,
+																							Min_Width_Inches__c,
+																							Min_Width_Fraction__c,
+																							Min_Height_Inches__c,
+																							Min_Height_Fraction__c													
+																							FROM Grille_Pattern_Configuration__c
+																							WHERE Product_Configuration__c =: masterProductConfig.Id
+																							AND Grille_Pattern__c =: orderLineItem.Grille_Pattern_S2__c
+																							];*/
+			List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = new List<Grille_Pattern_Configuration__c>();
+
+			if(grilleConfigsAllPatterns!= null){
+				for(Grille_Pattern_Configuration__c sgc : grillePatternConfigsAllPatterns){
+					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S3__c && sgc.Grille_Style__c == orderLineitem.Grille_Style__c){
+						relatedGrillePatternConfigurations.add(sgc);
+					}
+				}
+			}	
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+
+			if(!relatedGrillePatternConfigurations.isEmpty()){
+				for(Grille_Pattern_Configuration__c grillePatternConfig : relatedGrillePatternConfigurations){
+					if(grillePatternConfig.Min_Width_Inches__c != null){
+						Decimal requiredWidth = grillePatternConfig.Min_Width_Inches__c + UtilityMethods.calculateFraction(grillePatternConfig.Min_Width_Fraction__c);
+						if(widthInches < requiredWidth){
+							String requiredWidthString =  String.ValueOf(grillePatternConfig.Min_Width_Inches__c) + ' ' + (grillePatternConfig.Min_Width_Fraction__c == null? '' : String.valueOf(grillePatternConfig.Min_Width_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_WIDTH, '', requiredWidthString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+					if(grillePatternConfig.Min_Height_Inches__c != null){
+						Decimal requiredHeight = grillePatternConfig.Min_Height_Inches__c + UtilityMethods.calculateFraction(grillePatternConfig.Min_Height_Fraction__c);
+						if(heightInches < requiredHeight){
+							String requiredHeightString =  String.ValueOf(grillePatternConfig.Min_Height_Inches__c) + ' '+ (grillePatternConfig.Min_Height_Fraction__c == null? '' : String.valueOf(grillePatternConfig.Min_Height_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GRILLE_MIN_HEIGHT, '', requiredHeightString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+				}
+			}
+		} 
+
+		//Grille Pattern Configuration S4
+		if(orderLineItem.Grille_Pattern_S4__c != null ){
+			/*List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = [SELECT 	Sash_Ratio__c,
+																							Grille_Pattern__c,
+																							Min_Width_Inches__c,
+																							Min_Width_Fraction__c,
+																							Min_Height_Inches__c,
+																							Min_Height_Fraction__c													
+																							FROM Grille_Pattern_Configuration__c
+																							WHERE Product_Configuration__c =: masterProductConfig.Id
+																							AND Grille_Pattern__c =: orderLineItem.Grille_Pattern_S2__c
+																							];*/
+			List<Grille_Pattern_Configuration__c> relatedGrillePatternConfigurations = new List<Grille_Pattern_Configuration__c>();
+
+			if(grilleConfigsAllPatterns!= null){
+				for(Grille_Pattern_Configuration__c sgc : grillePatternConfigsAllPatterns){
+					if(sgc.Grille_Pattern__c == orderLineitem.Grille_Pattern_S4__c && sgc.Grille_Style__c == orderLineitem.Grille_Style__c){
 						relatedGrillePatternConfigurations.add(sgc);
 					}
 				}

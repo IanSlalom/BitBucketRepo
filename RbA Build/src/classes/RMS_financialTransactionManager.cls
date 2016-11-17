@@ -199,6 +199,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__r.Revenue_Recognized_Date__c,
                                                     RecordTypeId,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     GL_Account__r.Name
                                                     
                                                     FROM Payment__c WHERE Id IN :mapNew.keyset() ];      
@@ -439,6 +440,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Related_Work_Order__r.Sold_Order__c,
                                                     Hourly_Rate__c,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     Related_Work_Order__r.Sold_Order__r.Store_Location__c,
                                                     Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c,
                                                     Related_Work_Order__r.Sold_Order__r.RecordTypeId,
@@ -1080,6 +1082,7 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 //COST PRODUCT RECIVED
                 if(costProductRecivedAT == true){
+                	System.Debug('*********************assetIdToCPRFTL.get(a.id)=' +assetIdToCPRFTL.get(a.id));
                 	errorMessage = checkFinacialTransationForErrors(assetIdToCPRFTL.get(a.id) , errorMessage, 'Cost Product Received');
                 }
                 
@@ -3061,7 +3064,7 @@ public with sharing class RMS_financialTransactionManager {
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
             //CHECK IF DEBIT ACCOUNT NUMBER IS NULL
-            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null ){
+            if(objectType != 'Misc Reimbursement' && ftList[0].Debit_Account_Number__c == null && ftList[0].Transaction_Type__c != 'Cost Product Received' ){
                 dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.FINACIAL_TRANSACTION_RECORDS_NO_DEBIT_ACCOUNT_NUMBER, '[Transaction Type]', objectType);
                 errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
             }
@@ -3343,10 +3346,16 @@ public with sharing class RMS_financialTransactionManager {
     public map<Id, string> linkMiscPaymentAccountNumbers(list<SObject> objectList, map<id, SObject> mapNew){
         map<Id, string> mapToReturn = new map<Id, string>();
         list<id> storeLocationIdList = new list<id>();
+		map<id,Id> storeIdToStoreConfigIdMap = new map<id,Id>();       
         for(SObject theObject : objectList){  
             storeLocationIdList.add((id)theObject.get('Store_Location__c'));
         }
-        map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeLocationIdList);
+		for (Account store : [SELECT Id, Active_Store_Configuration__c FROM Account WHERE Id IN: storeLocationIdList]) {
+			if (store.Active_Store_Configuration__c != null)
+				storeIdToStoreConfigIdMap.put(store.Id, store.Active_Store_Configuration__c);			
+		}
+
+        map<Id, Store_Configuration__c> storeConfigMap = UtilityMethods.mapStoreConfigs(storeIdToStoreConfigIdMap);
         
         for(SObject theObject : objectList){
             String GLAccount;
@@ -3363,7 +3372,7 @@ public with sharing class RMS_financialTransactionManager {
                 break;
             }
             string locationNumber;
-            if(storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
+            if(storeConfigMap == null || storeConfigMap.size() == 0 || storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
                 mapNew.get(theObject.id).addError(RMS_errorMessages.LOCATION_ID_IS_NULL, FALSE);
             }else{
                 locationNumber = storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c;

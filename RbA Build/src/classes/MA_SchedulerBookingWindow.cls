@@ -27,8 +27,12 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
     public Boolean overbooked = false;
     public Set<Id> skillsMatched = new Set<Id>();
     public Set<Id> bookedWorkOrders = new Set<Id>();
+    public Set<DateTime> timeBlocksMissingASkill = new Set<DateTime>();
     public Map<Id, Integer> totalSkillsCountMap = new Map<Id, Integer>();
     public Map<Id, Set<Id>> resourceToSkillsMap = new Map<Id, Set<Id>>();
+    public Map<Id, Set<Id>> originalResourceToSkillsMap = new Map<Id, Set<Id>>();
+    public Map<DateTime, Set<Id>> resourceTimeAvailabilityMap = new Map<DateTime, Set<Id>>();
+    public Map<DateTime, Map<Id, Integer>> skillsTimeAvailabilityMap = new Map<DateTime, Map<Id, Integer>>();
 
     /****************************************************/
     /*                                                  */
@@ -82,11 +86,66 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
 	            this.dayOfWeek = dayOfWeek.capitalize();
 	            this.resourceToSkillsMap = resourceToSkillsMap.clone();
 	            this.totalSkillsCountMap = totalSkillsCountMap.clone();
+                this.originalResourceToSkillsMap = resourceToSkillsMap.clone();
                 this.endDateTimeFormated = this.endDateTime.format('hh:mm a', storeTimezone);
 	            this.startDateTimeFormated = this.startDateTime.format('MM/dd/yyyy hh:mm a', storeTimezone);
                 
 	            checkResourceAvailability(day, resourceHours, startDateTimeTemp, endDateTimeTemp, storeTimezone);
+                createSubWindows();
 	        }
+        }
+    }
+
+    /****************************************************************/
+    /*                                                              */
+    /*      creates a map of 30 minute booking windows              */
+    /*      to available skills to solve overlapping                */
+    /*      booking windows                                         */
+    /*                                                              */
+    /****************************************************************/
+    public void createSubWindows() {
+        DateTime loopDateTimeStart = startDateTime;
+
+        while (loopDateTimeStart < endDateTime) {
+            /*
+            skillsTimeAvailabilityMap.put(loopDateTimeStart, totalSkillsCountMap.clone());
+            loopDateTimeStart = loopDateTimeStart.addMinutes(30);
+            */
+
+            Set<Id> tempBadResourceTimesSet = new Set<Id>();
+            Map<Id, Integer> tempSkillsTimeMap = new Map<Id, Integer>();
+            Map<Id, Integer> skillsCountMapClone = totalSkillsCountMap.clone();
+            Set<Id> availableResourceIds = originalResourceToSkillsMap.keySet().clone();
+
+            if (skillsTimeAvailabilityMap.containsKey(loopDateTimeStart)) {
+                tempSkillsTimeMap = skillsTimeAvailabilityMap.get(loopDateTimeStart);
+            }
+
+            if (resourceTimeAvailabilityMap.containsKey(loopDateTimeStart)) {
+                tempBadResourceTimesSet = resourceTimeAvailabilityMap.get(loopDateTimeStart);
+                availableResourceIds.removeAll(tempBadResourceTimesSet);
+            }
+
+            if (!resourceTimeAvailabilityMap.containsKey(loopDateTimeStart)) {
+                resourceTimeAvailabilityMap.put(loopDateTimeStart, new Set<Id>());
+            }
+
+            for (Id skillId : tempSkillsTimeMap.keySet()) {
+                if (skillsCountMapClone.containsKey(skillId)) {
+                    Integer tempInt = skillsCountMapClone.get(skillId);
+                    tempInt += tempSkillsTimeMap.get(skillId);
+                    skillsCountMapClone.put(skillId, tempInt);
+                }
+                /*
+                else {
+                    skillsCountMapClone.put(skillId, 1);
+                }
+                */
+            }
+
+            resourceTimeAvailabilityMap.put(loopDateTimeStart, availableResourceIds);
+            skillsTimeAvailabilityMap.put(loopDateTimeStart, skillsCountMapClone);
+            loopDateTimeStart = loopDateTimeStart.addMinutes(30);
         }
     }
 
@@ -134,6 +193,49 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
 							tempInt--;
 							totalSkillsCountMap.put(skillId, tempInt);
 						}
+
+                        DateTime loopDateTimeEnd = DateTime.now();
+                        DateTime loopDateTimeStart = loopDateTimeEnd;
+                        DateTime startDateTimeCheckedTemp = startDateTimeChecked;
+
+                        if (startDateTimeTemp > startDateTimeChecked && startDateTimeTemp < endDateTimeChecked) {
+                            loopDateTimeEnd = endDateTimeChecked;
+                            loopDateTimeStart = startDateTimeTemp;
+                        }
+                        else if (endDateTimeTemp > startDateTimeChecked && endDateTimeTemp < endDateTimeChecked) {
+                            loopDateTimeEnd = endDateTimeTemp;
+                            loopDateTimeStart = startDateTimeChecked;
+                        }
+
+                        while (startDateTimeCheckedTemp < endDateTimeChecked) {
+                            if (startDateTimeCheckedTemp < loopDateTimeStart || startDateTimeCheckedTemp >= loopDateTimeEnd) {
+                                if (!resourceTimeAvailabilityMap.containsKey(startDateTimeCheckedTemp)) {
+                                    resourceTimeAvailabilityMap.put(startDateTimeCheckedTemp, new Set<Id>());
+                                }
+
+                                resourceTimeAvailabilityMap.get(startDateTimeCheckedTemp).add(resourceId);
+                            }
+                            else {
+                                Map<Id, Integer> tempSkillsTimeMap = new Map<Id, Integer>();
+
+                                if (skillsTimeAvailabilityMap.containsKey(startDateTimeCheckedTemp)) {
+                                    tempSkillsTimeMap = skillsTimeAvailabilityMap.get(startDateTimeCheckedTemp);
+                                }
+
+                                if (tempSkillsTimeMap.containsKey(skillId)) {
+                                    Integer tempInt = tempSkillsTimeMap.get(skillId);
+                                    tempInt--;
+                                    tempSkillsTimeMap.put(skillId, tempInt);
+                                }
+                                else {
+                                    tempSkillsTimeMap.put(skillId, 1);
+                                }
+
+                                skillsTimeAvailabilityMap.put(startDateTimeCheckedTemp, tempSkillsTimeMap);
+                            }
+                            
+                            startDateTimeCheckedTemp = startDateTimeCheckedTemp.addMinutes(30);
+                        }
 					}
 
 		            resourceToSkillsMap.remove(resourceId);

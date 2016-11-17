@@ -391,6 +391,7 @@
             $('.fc-timelineDay-button').click();
             $('.fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button').hide();
             closeSettingsModal();
+            changeTextResource();
         }
 
         /****************************************************************************/
@@ -402,6 +403,7 @@
             $('.fc-agendaDay-button, .fc-agendaWeek-button, .fc-month-button').show();
             $('.fc-agendaDay-button').click();
             closeSettingsModal();
+            changeTextWorkOrderPlanner();
         }
 
         /****************************************************************************/
@@ -900,8 +902,7 @@
         <div id="batchConfirm" class="batch-confirm-btn-container batchShow" >
             <button class ="ma-button ma-button--white" onclick ="MAschedRoutes.processBatchResults({accept: false})">Cancel Batch</button>
             <button class ="ma-button ma-button--green" onclick ="MAschedRoutes.processBatchResults({accept: true})">Confirm Batch</button>
-        </div>
-                                           
+        </div>                               
 
         <div id="eventOptionsModal">
             <input type="hidden" id="eventOptionsRecordId" />
@@ -973,7 +974,6 @@
         </div>
         <div id="calendarEventCreatorOverlay" class=""></div>
         <div id="calendar"></div>
-        
                 
         <div id="calendarLegendTitle" class="topNav">
             <a class="ma-button dropdown-right" onclick="openCalendarLegend();">Legend

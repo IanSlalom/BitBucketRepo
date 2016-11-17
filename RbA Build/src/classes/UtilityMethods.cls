@@ -104,7 +104,7 @@ global with sharing class UtilityMethods {
     	 
     }
      
-	public static map<Id, Store_Configuration__c> mapStoreConfigs(list<id> storeIds){
+/*	public static map<Id, Store_Configuration__c> mapStoreConfigs(list<id> storeIds){
     	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
 
     	list<Store_Configuration__c> storeConfigs = [SELECT 	Id, 
@@ -128,6 +128,39 @@ global with sharing class UtilityMethods {
     	for(Store_Configuration__c sc : storeConfigs){
     		accountIdtoStoreConfigMap.put(sc.Store__c, sc);
     	}
+    	
+    	return accountIdtoStoreConfigMap;
+	}*/
+
+	public static map<Id, Store_Configuration__c> mapStoreConfigs(map<id,id> storeIdToStoreConfigIdMap){
+    	map<id, Store_Configuration__c> accountIdtoStoreConfigMap = new map<id, Store_Configuration__c>();
+
+		if (storeIdToStoreConfigIdMap == null || storeIdToStoreConfigIdMap.size() == 0)
+			return accountIdtoStoreConfigMap;
+    	list<Store_Configuration__c> storeConfigs = [SELECT 	Id, 
+    															Store__c, 
+    															Install_Work_Order_Queue_Id__c, 
+    															Tech_Measure_Work_Order_Queue_Id__c, 
+    															Order_Queue_Id__c,
+    															HOA_Work_Order_Queue_Id__c,
+    															Historical_Work_Order_Queue_Id__c,
+    															Building_Permit_Work_Order_Queue_Id__c,
+    															LSWP_WO_Owner_ID__c,
+    															Location_Number__c,
+    															Paint_Stain_Vendor_Account__c,
+    															Paint_Stain_Vendor_Contact__c,
+    															Service_Work_Order_Queue_ID__c
+    															
+    															FROM Store_Configuration__c 
+    															WHERE Id IN :storeIdToStoreConfigIdMap.values()
+    															];
+    	
+		for(Id storeConfigId : storeIdToStoreConfigIdMap.keyset()) {
+    		for(Store_Configuration__c sc : storeConfigs){
+    			if (storeIdToStoreConfigIdMap.get(storeConfigId) == sc.Id)
+    				accountIdtoStoreConfigMap.put(storeConfigId, sc);
+    		}
+		}
     	
     	return accountIdtoStoreConfigMap;
 	}

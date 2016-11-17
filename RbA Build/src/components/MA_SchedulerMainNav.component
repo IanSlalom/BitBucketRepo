@@ -57,11 +57,21 @@
     /****************************************/
     /*                                      */
     /*    changes the main text for the     */
+    /*    work order planner view           */
+    /*                                      */
+    /****************************************/
+    function changeTextWorkOrderPlanner() {
+      $('.topbar-header-text').text('Work Order Planner');
+    }
+    
+    /****************************************/
+    /*                                      */
+    /*    changes the main text for the     */
     /*    resource view                     */
     /*                                      */
     /****************************************/
     function changeTextResource() {
-      document.getElementById('topbar-header-text').innerHTML = 'Resource View';
+      $('.topbar-header-text').text('Resource View');
     }
     
     /****************************************/
@@ -71,7 +81,8 @@
     /*                                      */
     /****************************************/
     function changeTextSettings() {
-      document.getElementById('topbar-header-text').innerHTML = 'Settings';
+      $('.topbar-header-text').attr('previousText', $($('.topbar-header-text')[0]).text());
+      $('.topbar-header-text').text('Settings');
     }
     
     /****************************************/
@@ -93,7 +104,7 @@
   
   <div class="topbar-container">
       <span id="rowsIcon" class="hideIndividual batchHide" onclick="openMainNavModal();"><img src="{!URLFOR($Resource.MA_Scheduler, '/icons/utility/rows.svg')}" class="batchHide" /></span>
-      <h2><span id="topbar-header-text">Work Order Planner</span></h2>
+      <h2><span class="topbar-header-text">Work Order Planner</span></h2>
       <span style="display: none;" class="floatRight" id="settingsModalClose" onclick="closeSettingsModal();"><img src="/resource/1462534720000/MA_Scheduler/images/close_60.png" /></span>
   </div>
   
@@ -104,7 +115,7 @@
 
       <div class="main-nav-links">
         <ul>
-          <a onclick="closeMainNavModal(); goToWorkOrderView();" href="#"><li>Work Order Planner</li></a>
+          <a onclick="closeMainNavModal(); goToWorkOrderView(); changeTextWorkOrderPlanner();" href="#"><li>Work Order Planner</li></a>
           <a onclick="closeMainNavModal(); goToResourceView(); changeTextResource();" href="#"><li>Resource View</li></a>
           <a onclick="closeMainNavModal(); openSettingsModal(); changeTextSettings();" href="#"><li>Settings</li></a>
         </ul>

@@ -224,7 +224,7 @@ global with sharing class MA_SchedulerEvent {
 				}
 				else {
 					if (window.resourceToSkillsMap.get(resourceId) != null) {
-						checkWindowOverbooked(window, window.resourceToSkillsMap.get(resourceId));
+						checkWindowOverbooked(window, window.resourceToSkillsMap.get(resourceId), resourceId);
 					}
 					window.resourceToSkillsMap.remove(resourceId);
 				}
@@ -239,7 +239,7 @@ global with sharing class MA_SchedulerEvent {
     /*		enough remaining skills matched				*/
     /*                                                  */
     /****************************************************/
-    public void checkWindowOverbooked(MA_SchedulerBookingWindow window, Set<Id> workOrderSkills) {
+    public void checkWindowOverbooked(MA_SchedulerBookingWindow window, Set<Id> workOrderSkills, Id resourceId) {
 		if (!window.overbooked) {
 			for (Id skillId : workOrderSkills) {
 				if (window.totalSkillsCountMap.containsKey(skillId)) {
@@ -251,6 +251,40 @@ global with sharing class MA_SchedulerEvent {
 						window.overbooked = true;
 						break;
 					}
+				}
+			}
+
+			Set<DateTime> subBlockSet = window.skillsTimeAvailabilityMap.keySet().clone();
+			subBlockSet.removeAll(window.timeBlocksMissingASkill);
+
+			for (DateTime subBlockStart : subBlockSet) {
+				if (startDateTime < subBlockStart.addMinutes(30) && endDateTime > subBlockStart) {
+					Map<Id, Integer> subBlockSkillsMatch = window.skillsTimeAvailabilityMap.get(subBlockStart);
+					Set<Id> workOrderSkillsClone = workOrderSkills.clone();
+					workOrderSkillsClone.retainAll(subBlockSkillsMatch.keySet());
+
+					for (Id skillId : workOrderSkillsClone) {
+						if (subBlockSkillsMatch.containsKey(skillId)) {
+							Integer tempInt = subBlockSkillsMatch.get(skillId);
+							tempInt--;
+							subBlockSkillsMatch.put(skillId, tempInt);
+
+							if (tempInt <= 0) {
+								window.skillsTimeAvailabilityMap.put(subBlockStart, subBlockSkillsMatch);
+								window.timeBlocksMissingASkill.add(subBlockStart);
+								break;
+							}
+						}
+					}
+					
+					window.skillsTimeAvailabilityMap.put(subBlockStart, subBlockSkillsMatch);
+					window.resourceTimeAvailabilityMap.get(subBlockStart).remove(resourceId);
+				}
+
+				//window.resourceTimeAvailabilityMap.get(subBlockStart).remove(resourceId);
+
+				if (window.resourceTimeAvailabilityMap.get(subBlockStart).isEmpty()) {
+					window.timeBlocksMissingASkill.add(subBlockStart);
 				}
 			}
 		}
@@ -268,11 +302,42 @@ global with sharing class MA_SchedulerEvent {
     public void setBookingWindowsOverlappingWorkOrders(List<MA_SchedulerBookingWindow> allBookingWindows, Map<Id, Set<Id>> woToSkillsMap, Set<Id> workOrderSkills) {
 		for (MA_SchedulerBookingWindow window : allBookingWindows) {
 			if (startDateTime < window.endDateTime && endDateTime > window.startDateTime) {
-				Set<Id> workOrderSkillToCompare = woToSkillsMap.get(workOrderId);
-				if (workOrderSkillToCompare != null && !workOrderSkillToCompare.isEmpty()) {
-					checkWindowOverbooked(window, workOrderSkillToCompare);
-				}
+				Set<Id> workOrderSkillsToCompare = woToSkillsMap.get(workOrderId);
 
+				if (workOrderSkillsToCompare != null && !workOrderSkillsToCompare.isEmpty()) {
+					//checkWindowOverbooked(window, workOrderSkillsToCompare);
+					
+					Set<DateTime> subBlockSet = window.skillsTimeAvailabilityMap.keySet().clone();
+					subBlockSet.removeAll(window.timeBlocksMissingASkill);
+
+					for (DateTime subBlockStart : subBlockSet) {
+						if (startDateTime < subBlockStart.addMinutes(30) && endDateTime > subBlockStart) {
+							Map<Id, Integer> subBlockSkillsMatch = window.skillsTimeAvailabilityMap.get(subBlockStart);
+							Set<Id> workOrderSkillsClone = workOrderSkills.clone();
+							workOrderSkillsClone.retainAll(subBlockSkillsMatch.keySet());
+
+							for (Id skillId : workOrderSkillsClone) {
+								if (subBlockSkillsMatch.containsKey(skillId)) {
+									Integer tempInt = subBlockSkillsMatch.get(skillId);
+									tempInt--;
+									subBlockSkillsMatch.put(skillId, tempInt);
+
+									if (tempInt <= 0) {
+										window.skillsTimeAvailabilityMap.put(subBlockStart, subBlockSkillsMatch);
+										window.timeBlocksMissingASkill.add(subBlockStart);
+										break;
+									}
+								}
+							}
+							
+							window.skillsTimeAvailabilityMap.put(subBlockStart, subBlockSkillsMatch);
+						}
+					}
+
+					if (window.skillsTimeAvailabilityMap.keySet().size() == window.timeBlocksMissingASkill.size()) {
+						window.overbooked = true;
+					}
+				}
 			}
 		}
 	}

@@ -5,14 +5,14 @@ public with sharing class RMS_addressManager {
         List<Id> account = new List<Id>();
         
         for(Account acc : listNew){
-            if((mapOld.get(acc.Id).ShippingStreet != mapNew.get(acc.Id).ShippingStreet)||(mapOld.get(acc.Id).BillingStreet != mapNew.get(acc.Id).BillingStreet)){
+            if((mapOld.get(acc.Id).ShippingStreet != mapNew.get(acc.Id).ShippingStreet)){
                 account.add(acc.Id);
             }
         }
-
-		// If no account's address has changed, just return
-		if (account.size() == 0) return;
-
+        
+        // If no account's address has changed, just return
+        if (account.size() == 0) return;
+        
         List<Contact> childContacts = [Select Id, AccountId, MailingStreet, MailingCity, MailingState, MailingCountry, MailingPostalCode, OtherStreet, OtherCity, OtherCountry, OtherPostalCode, OtherState FROM Contact WHERE AccountId IN: account];
         
         Map<Id,Contact> contactMap = new Map<Id,Contact>([SELECT Id from Contact WHERE Id in:childContacts]);
@@ -26,22 +26,21 @@ public with sharing class RMS_addressManager {
                         child.MailingState = a.ShippingState;
                         child.MailingPostalCode = a.ShippingPostalCode;
                         child.MailingCountry = a.ShippingCountry;
+                        child.OtherStreet = a.ShippingStreet;
+                        child.OtherCity = a.ShippingCity;
+                        child.OtherState = a.ShippingState;
+                        child.OtherPostalCode = a.ShippingPostalCode;
+                        child.OtherCountry = a.ShippingCountry;
+                        
                     }
-                    if(mapNew.get(child.AccountId).BillingStreet != mapOld.get(child.AccountId).BillingStreet){
-                        child.OtherStreet = a.BillingStreet;
-                        child.OtherCity = a.BillingCity;
-                        child.OtherState = a.BillingState;
-                        child.OtherPostalCode = a.BillingPostalCode;
-                        child.OtherCountry = a.BillingCountry;
-                    }
+                    
                 }
             }
         }
         
         if(childContacts.size() > 0){
             update childContacts;
-        }
-        
+        }        
     }
     
     //Update Address on Contact if the Account has changed on the Contact
@@ -109,6 +108,6 @@ public with sharing class RMS_addressManager {
                 
             }
         }
-    }
+    }    
     
 }
