@@ -195,6 +195,14 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <miniLayout>
+        <fields>Reason__c</fields>
+        <fields>Account__c</fields>
+        <fields>Contact__c</fields>
+        <fields>Work_Order_Type__c</fields>
+        <fields>Work_Order_Status__c</fields>
+        <fields>Test_Results__c</fields>
+    </miniLayout>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
