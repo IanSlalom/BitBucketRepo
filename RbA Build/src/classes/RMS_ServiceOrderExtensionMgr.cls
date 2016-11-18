@@ -440,7 +440,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
-                        oi.Description = wrapper.description;
+                        oi.Notes__c = wrapper.description;
                         listOI.add(oi); 
                         
                     }
@@ -549,7 +549,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.Quanity_Ordered__c = 1;
                         oi.Quantity = 1;
                         oi.Service__c = true;
-                        oi.Description = wrapper.description;
+                        oi.Notes__c = wrapper.description;
                         listOI.add(oi); 
                         
                     }
@@ -714,7 +714,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.Manufacturer_Replace__c = wrapper.manufacturer;
                         oi.Local_Remake__c = wrapper.local;
                         oi.Customer_Replace__c = wrapper.customer;
-                        oi.Description = wrapper.description;
+                        oi.Notes__c = wrapper.description;
                         listOILegacy.add(oi);                           
                     }
                 }        
@@ -807,7 +807,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                         oi.Manufacturer_Replace__c = wrapper.manufacturer;
                         oi.Local_Remake__c = wrapper.local;
                         oi.Customer_Replace__c = wrapper.customer;
-                        oi.Description = wrapper.description;
+                        oi.Notes__c = wrapper.description;
                         listOILegacy.add(oi);                           
                     }
                 }        
