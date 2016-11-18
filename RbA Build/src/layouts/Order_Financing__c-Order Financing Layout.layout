@@ -16,8 +16,8 @@
                 <field>Store_Finance_Program__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Finance_Program_Expiration_Date__c</field>
+                <behavior>Edit</behavior>
+                <field>Expiration_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
