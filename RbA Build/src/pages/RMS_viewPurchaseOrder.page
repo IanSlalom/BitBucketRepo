@@ -225,6 +225,8 @@ function prepareList(parent,child,isSubselectOptional){
 					</apex:column>
   					<apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.Defect_Code__c}" rendered="{!servicePurchaseOrder}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Notes__c}" rendered="{!servicePurchaseOrder}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Multiple_Remakes__c}" rendered="{!servicePurchaseOrder}"/>
 					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
 					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
 					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>

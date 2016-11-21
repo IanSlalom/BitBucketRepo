@@ -69,9 +69,9 @@
                             <td colspan="3" style="background-color: #cde4e0 ;padding-left: 34px; height: 20px; padding-top: 10px;"><b>Service Product: </b>{!acc.Product_Name__c}</td>
                         </tr>
                         <tr class="headerRow" style="height: 26px;">
-                            <th>&nbsp;&nbsp;Charge Cost To</th>
-                            <th>&nbsp;&nbsp;Category</th>
-                            <th>&nbsp;&nbsp;What/Where</th>
+                            <th>&nbsp;&nbsp;Responsibility</th>
+                            <th>&nbsp;&nbsp;Source of Defect</th>
+                            <th>&nbsp;&nbsp;Defect</th>
                         </tr>
                         <apex:repeat value="{!acc.Charges__r}" var="cont">                            
                             

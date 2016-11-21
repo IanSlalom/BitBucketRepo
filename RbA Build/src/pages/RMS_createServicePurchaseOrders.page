@@ -71,19 +71,19 @@
             var errorOccurred = '{!errorOccurred}';
             if (errorOccurred == 'false') {
                 if(sforce.console.isInConsole()) {
-                	if (newpoId == '') {
+                    if (newpoId == '') {
                         closeTab();
-                	}
-                	else {
+                    }
+                    else {
                         openNewSubTab( '/' +newpoId +'?isdtp=vw', 'saving');
                     }
                 }
                 else {
-                	if (newpoId == '') {
-                		location.href='/' +orderId;
-                	}
-                	else {
-                    	location.href='/apex/RMS_viewPurchaseOrder?id=' +newpoId;
+                    if (newpoId == '') {
+                        location.href='/' +orderId;
+                    }
+                    else {
+                        location.href='/apex/RMS_viewPurchaseOrder?id=' +newpoId;
                     }
                 }
             }
@@ -98,7 +98,7 @@
         <apex:pageBlock title="Create Service Purchase Orders">
             <apex:actionStatus id="save-status"  onstop="openSavedPO('{!newpoId}', '{!orderId}');return false"/>
             <apex:pageBlockButtons location="both">
-            	<apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" oncomplete="closeTab();return false"/>
                 <apex:commandButton action="{!save}" value="Save" status="save-status" rerender="page-form"/>
             </apex:pageBlockButtons> 
                         
@@ -106,26 +106,26 @@
             <apex:pageBlockSection title="Select Service Products" columns="1" collapsible="false">
                 <apex:outputText ><b>Instructions:</b> Select each product that needs to be ordered (only one charge per product).</apex:outputText>
                 <apex:pageBlockTable value="{!chargesWrapperList}" var="wrapper" border="1">                                
-                	<apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
-                    	<apex:inputCheckBox value="{!wrapper.isSelected}" disabled="{!wrapper.isDisabled}"/>
+                    <apex:column headerValue="Select" width="50px;" style="vertical-align: initial; border-bottom: 2px solid #ccc;" colspan="1">
+                        <apex:inputCheckBox value="{!wrapper.isSelected}" disabled="{!wrapper.isDisabled}"/>
                     </apex:column>
                     <apex:column headerValue="Product" style="vertical-align: initial;border-bottom: 2px solid #ccc;">                                
-                    	<apex:outputText value="{!wrapper.charge.Service_Product__r.Product_Name__c}"/>
+                        <apex:outputText value="{!wrapper.charge.Service_Product__r.Product_Name__c}"/>
                     </apex:column>
                       <apex:column headerValue="Installed Product" style="border-bottom: 2px solid #ccc;">
-                    	<apex:outputText value="{!wrapper.charge.Installed_Product__c}"/>
+                        <apex:outputText value="{!wrapper.charge.Installed_Product__c}"/>
                     </apex:column>
                     <apex:column headerValue="Variant" style="border-bottom: 2px solid #ccc;">                                       
-                    	<apex:outputText value="{!wrapper.charge.Variant_Number__c}"/>
+                        <apex:outputText value="{!wrapper.charge.Variant_Number__c}"/>
                     </apex:column>
-                    <apex:column headerValue="Charge Cost To" style="border-bottom: 2px solid #ccc;">
-                    	<apex:outputText value="{!wrapper.charge.Charge_Cost_To__c}"/>
+                    <apex:column headerValue="Responsibility" style="border-bottom: 2px solid #ccc;">
+                        <apex:outputText value="{!wrapper.charge.Charge_Cost_To__c}"/>
                     </apex:column>
-                    <apex:column headerValue="Category" style="border-bottom: 2px solid #ccc;">
-                    	<apex:outputText value="{!wrapper.charge.Category__c}"/>
+                    <apex:column headerValue="Source of Defect" style="border-bottom: 2px solid #ccc;">
+                        <apex:outputText value="{!wrapper.charge.Category__c}"/>
                     </apex:column> 
-                    <apex:column headerValue="What/Where" style="border-bottom: 2px solid #ccc;">
-                    	<apex:outputText value="{!wrapper.charge.What_Where__c}"/>
+                    <apex:column headerValue="Defect" style="border-bottom: 2px solid #ccc;">
+                        <apex:outputText value="{!wrapper.charge.What_Where__c}"/>
                     </apex:column> 
 
                 </apex:pageBlockTable>

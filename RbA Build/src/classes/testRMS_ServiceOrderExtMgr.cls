@@ -323,7 +323,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         List<Charge__c> chargesToInsert = new List<Charge__c>();
         Charge__c charge = new Charge__c(Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=serviceOrderItem.Id, Service_Request__c = so.Id, Validate_Service_Order__c=TRUE);
         chargesToInsert.add(charge);       
-        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'DGW (M)', What_Where__c = 'Renewal by Andersen', Service_Product__c=serviceOrderItem.Id, Service_Request__c = so.Id, Validate_Service_Order__c=TRUE);
+        Charge__c charge2 = new Charge__c(Charge_Cost_To__c = 'Manufacturing', Category__c = 'Renewal by Andersen',Service_Product__c=serviceOrderItem.Id, Service_Request__c = so.Id, Validate_Service_Order__c=TRUE);
         chargesToInsert.add(charge2);
         insert chargesToInsert;
         System.assertEquals(chargesToInsert.size() , 2); 

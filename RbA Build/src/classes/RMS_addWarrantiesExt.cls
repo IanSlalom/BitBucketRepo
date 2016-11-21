@@ -74,7 +74,7 @@ public with sharing class RMS_addWarrantiesExt extends RMS_addWarranties
         for (Charge__c charges : [SELECT Id, Name, Charge_Cost_To__c,Category__c
                                                         FROM Charge__c 
                                                         WHERE Service_Product__c = :myWo.Id
-                                  						AND What_Where__c = 'Renewal by Andersen'
+                                  						AND Category__c = 'Renewal by Andersen'
                                                         ORDER BY Charge__c.Charge_Cost_To__c ASC]) { 
                                                             options.add(new selectOption(charges.Id, charges.Charge_Cost_To__c + ' - '+ charges.Category__c)); //for all records found - add them to the picklist options
                                                         }
