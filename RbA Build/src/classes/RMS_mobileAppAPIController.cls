@@ -17,6 +17,7 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String CUSTOMER_JOB_SEARCH = 'customerJobSearch';
 	public static final String GET_SELECTED_SEARCH_RESULTS = 'getSelectedSearchResults';
 	public static final String SAVE_TECH_MEASURE = 'saveTechMeasure';
+	public static final String SAVE_TECH_MEASURE = 'cancelOrder';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
@@ -91,6 +92,10 @@ global with sharing class RMS_mobileAppAPIController {
 			} else if (operation.equals(SAVE_TECH_MEASURE)){
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				String result = handler.saveTechMeasure(req.requestBody.toString());
+				RestContext.response.responseBody = Blob.valueOf(result);
+			} else if (operation.equals(CANCEL_ORDER)){
+				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
+				String result = handler.cancelOrder(req.requestBody.toString());
 				RestContext.response.responseBody = Blob.valueOf(result);
 			} else {
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
