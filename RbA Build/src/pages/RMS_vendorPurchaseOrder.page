@@ -237,6 +237,16 @@
                             <apex:inputField value="{!oiw.orderItem.Defect_Code__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
                             <apex:outputField value="{!oiw.orderItem.Defect_Code__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
                     </apex:column> 
+                    <apex:column style="width:50px" rendered="{!servicePurchaseOrder}">
+                        <apex:facet name="header">Notes</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.Notes__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
+                            <apex:outputField value="{!oiw.orderItem.Notes__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
+                    </apex:column>
+                    <apex:column style="width:50px" rendered="{!servicePurchaseOrder}">
+                        <apex:facet name="header">Multiple Remakes?</apex:facet> 
+                            <apex:inputField value="{!oiw.orderItem.Multiple_Remakes__c}" rendered="{! status == 'new' || status == 'rel' || status == 'con' || status == 'part' || status == 'rej'}"/>
+                            <apex:outputField value="{!oiw.orderItem.Multiple_Remakes__c}" rendered="{! status == 'rbanew' || status == 'rbarel' || status == 'rbacon' || status == 'rbapart' || status == 'rec'}"/>
+                    </apex:column> 
 
 
                     <!-- TODO: Add check for ARO and do not show for COROs -->
