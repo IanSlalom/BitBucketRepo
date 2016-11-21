@@ -17,7 +17,7 @@ global with sharing class RMS_mobileAppAPIController {
 	public static final String CUSTOMER_JOB_SEARCH = 'customerJobSearch';
 	public static final String GET_SELECTED_SEARCH_RESULTS = 'getSelectedSearchResults';
 	public static final String SAVE_TECH_MEASURE = 'saveTechMeasure';
-	public static final String SAVE_TECH_MEASURE = 'cancelOrder';
+	public static final String CANCEL_ORDER = 'cancelOrder';
 	
 	// REST API Error Messages
 	public static final String NO_REQUEST_FOUND = 'No request found: ';
