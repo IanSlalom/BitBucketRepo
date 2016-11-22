@@ -23,8 +23,8 @@
                 <field>Store_Discount__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Bill_to_Contact__c</field>
+                <behavior>Edit</behavior>
+                <field>Contact__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
@@ -45,10 +45,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Status__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Discount_Processed_Date__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -79,10 +75,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>rSuite_Id__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Pivotal_Id__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
