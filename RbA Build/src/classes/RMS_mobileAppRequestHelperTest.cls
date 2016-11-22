@@ -16,31 +16,26 @@ private class RMS_mobileAppRequestHelperTest {
   																new RMS_Settings__c(Name = 'rSuite.search.tooManyResults.error', Value__c='Too Many Results')};
   		insert rms; 
 	}
-/* out of bounds
 	static testmethod void testFindAppointments(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
 		
 		TestUtilityMethods tUtil = new TestUtilityMethods();
-//		tUtil.setUpConfigsMark();
 		tUtil.setUpConfigs();
 		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		// setup configuration stuff
-//		Datetime existingApptTime = Datetime.newInstance(2016, 1, 10, 8, 0, 0);
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime tmApptTime = Datetime.now().addDays(5);
 		User u = tUtil.createUser(p.id);
 		insert u;
-
-        System.runAs(u) {
-//		tUtil.createSalesAppt(u.Id, existingApptTime, true);
 		tUtil.createSalesAppt(u.Id, newApptTime, false);
 		tUtil.createTMAppt(u.Id, tmApptTime);
-			Test.startTest();
+
+        System.runAs(u) {
+		    Test.startTest();
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			String jsonResult = mHelper.findAppointments(u.Id, newApptTime.addDays(-1));
-			Test.stopTest();
 			//Verify the Synced DateTime field on Event is set properly by the findAppointments method
 			List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, Synced_DateTime__c, isCancelled__c FROM Event Where OwnerId =: u.Id and StartDateTime >= :newApptTime.addDays(-1) and Type = 'Sales Appointment'];
       		List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, Synced_DateTime__c, isCancelled__c FROM Event Where OwnerId =: u.Id and StartDateTime >= :newApptTime.addDays(-1) and Type = 'Tech Measure'];
@@ -51,8 +46,9 @@ private class RMS_mobileAppRequestHelperTest {
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
-	} */
-/* Too Many SOQL
+		Test.stopTest();
+	} 
+
 	static testmethod void testResultSalesAppointments(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
@@ -79,7 +75,7 @@ private class RMS_mobileAppRequestHelperTest {
 			System.debug('###################################### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
-	}*/
+	}
 
 	static testmethod void testCustomerSearch(){
 		final String firstName = 'firstName';
@@ -182,6 +178,18 @@ private class RMS_mobileAppRequestHelperTest {
 		oppsToInsert.add(opp2);
 		insert oppsToInsert;
 
+		Order order1 = new Order(   Name='Sold Order 1', 
+									AccountId = dwelling.id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = store.Id,
+								//	BillToContactId = contact.Id,
+									OpportunityId = opp.Id,									 
+									Status ='Draft', 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert order1;
+
+
 		List<Event> eventsToInsert = new List<Event>();
 		Event event = new Event(WhatID = opp.Id,DurationInMinutes = 15, IsAllDayEvent = false, ActivityDateTime = System.now());
 		eventsToInsert.add(event);
@@ -197,6 +205,7 @@ private class RMS_mobileAppRequestHelperTest {
 	   	System.assertEquals(apptContainer.salesAppts[0].event.Id, event.Id);
 		Test.stopTest();
 	}
+
 
 	static testmethod void testSaveTechMeasure(){
 		// Turn off the financial trigger to avoid SOQL limits in test class
@@ -220,13 +229,14 @@ private class RMS_mobileAppRequestHelperTest {
 		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
 		opp.StageName = 'Sold';
 		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
+		Test.StartTest();
+
 		Order ord1 = [Select Id, Status from Order where OpportunityID =: opp.Id];
 		ord1.Status = 'Ready to Order';
 		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp.id AND Sold_Order__c = :ord1.id];
 		workOrder[0].Work_Order_Status__c = 'Scheduled';
 		PricebookEntry pricebookEntry1 = [Select Id from PricebookEntry where Product2Id =: productList[0].Id];
 		OrderItem oiToUpdate = new OrderItem(OrderId = ord1.Id, PricebookentryId = pricebookEntry1.Id, Quantity = 2, UnitPrice = 100 );
-		Test.StartTest();
 		insert oiToUpdate;
 		oiToUpdate.Quantity =1;
 		OrderItem oiToInsert = new OrderItem(OrderId = ord1.Id, PricebookentryId = pricebookEntry1.Id, Quantity = 10, UnitPrice = 10 );
@@ -234,6 +244,7 @@ private class RMS_mobileAppRequestHelperTest {
 		insert tmOffsetToUpdate;
 		tmOffsetToUpdate.Description__c = 'Updated Description';
 		TM_OffSet__c tmOffsetToInsert = new TM_Offset__C(Order_Line__c = oiToUpdate.Id,Description__c = 'Insert Description TMO', Measurement__c = 2 );
+
 
 		RMS_mobileAppRequestHelper.OrderItemContainer oiContainerUpdate = new RMS_mobileAppRequestHelper.OrderItemContainer();
 		oiContainerUpdate.oi = oiToUpdate;
@@ -253,11 +264,9 @@ private class RMS_mobileAppRequestHelperTest {
 		tmApptUpdate.opptyContainer = oppContainerUpsert;
 		RMS_mobileAppRequestHelper.Appointments appUpdate = new RMS_mobileAppRequestHelper.Appointments();
 		appUpdate.tmAppts = new List<RMS_mobileAppRequestHelper.TechMeasureAppointment>{tmApptUpdate};	
-			Test.StopTest();
 
         System.runAs(u) {
-// Had to comment out most of this test becauser we're hitting soql limits.
-/*        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			String input = JSON.serialize(appUpdate);
 			System.debug('################ - the JSON:' + input);
 			helper.saveTechMeasure(input);
@@ -280,8 +289,9 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assertEquals(tmoInsertedList.size(),1);
 			//Assert RBA Work Order is updated 
 			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
-			System.assertEquals(rbaUpdatedList.size(),1);*/
+			System.assertEquals(rbaUpdatedList.size(),1);
         }
+		Test.StopTest();
 	
 	}
 
@@ -336,7 +346,6 @@ private class RMS_mobileAppRequestHelperTest {
         }
 	
 	}
-/*  Too Many SOQL Queries
 	static testmethod void testSaveQuoteLineItemsDiscountsandFinancing(){
 
 		// Turn off the financial trigger to avoid SOQL limits in test class
@@ -427,6 +436,303 @@ private class RMS_mobileAppRequestHelperTest {
 			System.assert(financeToInsert.Id != null);
         }
 	
-	} */
+	} 
 
+	static testmethod void testCancelOrderNoOrder(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+       Test.StartTest();
+        // create a sales appt without an order
+		tUtil.createSalesAppt(u.Id, newApptTime, false);
+ 
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        List<Account> dwelling = [Select Id, Name from Account where Name like '%22' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName, Store_Location__c from Opportunity where AccountId =: dwelling[0].id];
+
+       System.runAs(u) {
+
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the
+			// opportunity id
+			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			List<Id> opportunityIDs = new List<ID>{opp.Id};
+			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
+
+			// Retrieve the Appointment container from the JSON response
+	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
+
+			// Assert that there was one error since there is no order to cancel
+	   		System.assert(apptContainer.getErrors()[0].contains('Order could not be found.'));
+	   		System.assertEquals(1, apptContainer.getErrors().size());
+
+
+			Test.StopTest();
+        }
+	}
+
+	static testmethod void testCancelOrderMultipleOrders(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+        Test.StartTest();
+		tUtil.createSalesAppt(u.Id, newApptTime, false);
+ 
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        List<Account> dwelling = [Select Id, Name from Account where Name like '%22' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName, Store_Location__c from Opportunity where AccountId =: dwelling[0].id];
+
+		Order order1 = new Order(   Name='Sold Order 1', 
+									AccountId = dwelling[0].id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = opp.Store_Location__c,
+								//	BillToContactId = contact.Id,
+									OpportunityId = opp.Id,									 
+									Status ='Draft', 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		Order order2 = new Order(   Name='Sold Order 1', 
+									AccountId = dwelling[0].id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = opp.Store_Location__c,
+								//	BillToContactId = contact.Id,
+									OpportunityId = opp.Id,									 
+									Status ='Draft', 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert new List<Order>{order1,order2};
+
+//        System.runAs(u) {
+
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the
+			// opportunity id
+			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			List<Id> opportunityIDs = new List<ID>{opp.Id};
+			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
+
+			// Retrieve the Appointment container from the JSON response
+	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
+
+			// Assert that there was one error since there were multiple orders
+	   		System.assertEquals(1, apptContainer.getErrors().size());
+	   		System.assert(apptContainer.getErrors()[0].contains('More than one order is linked to this opportunity.'));
+
+			Test.StopTest();
+//        }
+
+	}
+
+	static testmethod void testCancelOrderNoEligibleOrder(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+        Test.StartTest();
+		tUtil.createSalesAppt(u.Id, newApptTime, false);
+ 
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        List<Account> dwelling = [Select Id, Name from Account where Name like '%22' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName, Store_Location__c from Opportunity where AccountId =: dwelling[0].id];
+
+		Order order1 = new Order(   Name='Sold Order 1', 
+									AccountId = dwelling[0].id, 
+									EffectiveDate= Date.Today(), 
+									Store_Location__c = opp.Store_Location__c,
+								//	BillToContactId = contact.Id,
+									OpportunityId = opp.Id,									 
+									Status ='Install Complete', 
+									Pricebook2Id = Test.getStandardPricebookId()
+								);
+		insert new List<Order>{order1};
+
+//        System.runAs(u) {
+
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the
+			// opportunity id
+			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			List<Id> opportunityIDs = new List<ID>{opp.Id};
+			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
+
+			// Retrieve the Appointment container from the JSON response
+	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
+
+			// Assert that there was one error since there were multiple orders
+	   		System.assertEquals(1, apptContainer.getErrors().size());
+	   		System.assert(apptContainer.getErrors()[0].contains('Order is not cancellable.'));
+
+			Test.StopTest();
+//        }
+
+	}
+
+
+	static testmethod void testCancelOrderEligible(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+       Test.StartTest();
+		tUtil.createSalesAppt(u.Id, newApptTime, true);
+ 
+//		tUtil.createTMAppt(u.Id, tmApptTime);
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        List<Account> dwelling = [Select Id, Name from Account where Name like '%22' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling[0].id];
+//		opp.StageName = 'Sold';
+//		List<Product2> productList = [Select Id from Product2 where Name = 'Test Product'];
+//		PricebookEntry pricebookEntry1 = [Select Id from PricebookEntry where Product2Id =: productList[0].Id];
+//		Quote quote = tUtil.createQuote(opp.Id, Test.getStandardPriceBookId());
+//		insert quote;
+		Quote quote = [SELECT Id, OpportunityId FROM Quote WHERE OpportunityId =: opp.Id];
+//		QuoteLineItem lineItemToUpdate = tUtil.createQuoteLineItem(pricebookEntry1.Id, quote.Id);
+//		insert lineItemToUpdate;
+
+		Account myStore = [select Id, Active_Store_Configuration__c from Account where Name = '77 - Twin Cities, MN' Limit 1];
+		Discount__c discount1 = new Discount__c(Name = 'my discount');
+		insert discount1;
+		Store_Discount__c storeDiscount1 = new Store_Discount__c();
+		storeDiscount1.Discount__c = discount1.Id;
+		storeDiscount1.Store_Configuration__c = myStore.Active_Store_Configuration__c;
+		storeDiscount1.Active__c = true;
+		insert storeDiscount1;		
+
+		Quote_Discount__c discountToUpdate = new Quote_Discount__c(Quote__c = quote.Id, Store_Discount__c = storeDiscount1.Id);
+		insert discountToUpdate;
+
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = myStore.Active_Store_Configuration__c, Active__c = true);
+		insert storeFinance;
+
+		Quote_Financing__c financeToUpdate = new Quote_Financing__c(Related_Quote__c = quote.Id, Store_Finance_Program__c = storeFinance.Id);
+		insert financeToUpdate;
+
+		Order order1 = [SELECT Id FROM Order WHERE OpportunityId = :opp.id limit 1];
+
+        System.runAs(u) {
+
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the
+			// opportunity id
+			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			List<Id> opportunityIDs = new List<ID>{opp.Id};
+			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
+
+			// First verify the results in the json response
+			
+			// Retrieve the Appointment container from the JSON response
+	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
+
+			// Assert that there were no errors and one sales appt
+	   		System.assertEquals(0, apptContainer.getErrors().size());
+	   		System.assertEquals(1, apptContainer.salesAppts.size());
+	   		
+	   		RMS_mobileAppRequestHelper.SalesAppointment salesApptContainer = apptContainer.salesAppts[0];
+	   		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = salesApptContainer.opptyContainer;
+
+			// Assert that there is one quote within the opportunity container
+	   		System.assertEquals(1, oppContainer.quoteContainerList.size());
+
+			// Assert that there is no orders within the opp container since it is now pending cancellation
+	   		RMS_mobileAppRequestHelper.OrderContainer ordContainer = oppContainer.anOrderContainer;
+	   		System.assertEquals(null, ordContainer);
+
+			// Assert that there is one line item, discount, and financing
+	   		RMS_mobileAppRequestHelper.QuoteContainer quotContainer = oppContainer.quoteContainerList[0];
+	   		System.assertEquals(1, quotContainer.quoteLineItems.size());
+	   		System.assertEquals(1, quotContainer.quoteDiscountList.size());
+	   		System.assertEquals(1, quotContainer.quoteFinancingList.size());	   		
+
+
+			// Now verify the results in the database
+			
+			// Retrieve the quotes
+			List<Quote> quoteResults = [SELECT Id, isSold__c, Status, Opportunity.StageName from Quote ];
+			// Assert there are 2 quotes
+			System.AssertEquals(2, quoteResults.size());
+			
+			integer oldcount = 0;
+			integer newcount = 0;
+			
+			for (Quote qr : quoteResults) {
+				if (qr.isSold__c == false && qr.Status == 'Cancelled' && qr.Opportunity.StageName == 'Quoted')
+					oldCount =+ 1;
+				if (qr.isSold__c == false && qr.Status == 'Pending Cancellation' && qr.Opportunity.StageName == 'Quoted')
+					newCount =+ 1;
+			}
+			// Assert there are 1 quote is cancelled and 1 quote is pending cancellation
+			System.AssertEquals(1, oldCount);
+			System.AssertEquals(1, newCount);
+
+			List<QuoteLineItem> quoteLineItemsResults = [SELECT Id, QuoteId from QuoteLineItem ];
+			//Assert there are two quote line items in the system
+			System.AssertEquals(2, quoteLineItemsResults.size());
+			//Assert the old quote and new quote reference are not equal
+			System.Assert(quoteLineItemsResults[0].QuoteId != quoteLineItemsResults[1].QuoteId);
+
+			List<Quote_Financing__c> quoteFinancingResults = [SELECT Id, Related_Quote__c from Quote_Financing__c ];
+			//Assert there are two quote financing records in the system
+			System.AssertEquals(2, quoteFinancingResults.size());
+			//Assert the old quote and new quote reference are not equal
+			System.Assert(quoteFinancingResults[0].Related_Quote__c != quoteFinancingResults[1].Related_Quote__c);
+
+			List<Quote_Discount__c> quoteDiscountResults = [SELECT Id, Quote__c from Quote_Discount__c ];
+			//Assert there are two quote discount records in the system
+			System.AssertEquals(2, quoteDiscountResults.size());
+			//Assert the old quote and new quote reference are not equal
+			System.Assert(quoteDiscountResults[0].Quote__c != quoteDiscountResults[1].Quote__c);
+
+			List<Order> orderResults = [SELECT Id, Status from Order ];
+			//Assert there is one order record in the system
+			System.AssertEquals(1, orderResults.size());
+			//Assert the order is set to Pending Cancellation
+			System.AssertEquals('Pending Cancellation', orderResults[0].Status);
+
+
+			Test.StopTest();
+
+        }
+	}
 }

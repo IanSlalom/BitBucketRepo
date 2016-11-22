@@ -368,7 +368,7 @@ public with sharing class TestUtilityMethods {
 	}
 	
 	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder){
-		Account dwelling1 = createDwellingAccount('1');
+		Account dwelling1 = createDwellingAccount('22');
 		insert dwelling1;
 		
 		Account store1 = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'][0];

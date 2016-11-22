@@ -280,7 +280,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     FROM Opportunity WHERE Id IN :oppIds]);
 
     // get the quotes 
-    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :oppIds and isDeleted = false]);
+    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :oppIds and isDeleted = false and Status != 'Cancelled']);
 	List<Id> quoteIds = new List<Id> (quoteMap.keySet());
     // get the quote line items
 	String qliQuery = this.buildQLIQuery();
@@ -427,8 +427,9 @@ public with sharing class RMS_mobileAppRequestHelper {
       Retail_Subtotal__c, Retail_Total__c, Store_Location__c, Tech_Measure_Date__c, 
       Comments_and_Questions__c, Estimated_Install_Duration__c,
 	  Sales_Rep__c, Sales_Rep_Email__c, Sales_Rep_Phone__c,
-	  Primary_Tech_Measure_Name__c, Primary_Tech_Measure_Phone__c, Primary_Tech_Measure_Email__c
-      from Order where OpportunityId in :opptyIds and isDeleted = false]);
+	  Primary_Tech_Measure_Name__c, Primary_Tech_Measure_Phone__c, Primary_Tech_Measure_Email__c,
+	  Cancel_Eligible__c
+      from Order where OpportunityId in :opptyIds and isDeleted = false and Status != 'Cancelled' and Status != 'Pending Cancellation']);
 
     return orderMap;
   }
@@ -1015,6 +1016,133 @@ public with sharing class RMS_mobileAppRequestHelper {
     return JSON.serialize(appt);
   
   }
+
+  public String cancelOrder(String inputJSON){
+    
+    try{
+      List<Id> opportunityIds = (List<Id>)JSON.deserialize(inputJSON, List<Id>.class);
+      
+      // get the related orders
+      Map<Id, Order> orderMap = queryOrders(opportunityIds);
+      
+      // If the order does not exist return an error.
+      if (orderMap.size() == 0) {
+      		String apptsString = getSelectedSearchResults(inputJSON);
+      		Appointments appts = (Appointments)JSON.deserialize(apptsString, Appointments.class);
+      		appts.getErrors().add('Order could not be found.');
+	        return JSON.serialize(appts);
+      }
+      // If there is more than one order return an error.
+      if (orderMap.size() > 1) {
+      		String apptsString = getSelectedSearchResults(inputJSON);
+      		Appointments appts = (Appointments)JSON.deserialize(apptsString, Appointments.class);
+      		appts.getErrors().add('More than one order is linked to this opportunity.');
+	        return JSON.serialize(appts);
+      }
+
+	  // Loop through the orders and check if it is cancellable. If not, throw an error
+      for (Order ord : orderMap.values()) {
+      	if (!ord.Cancel_Eligible__c) {
+      		String apptsString = getSelectedSearchResults(inputJSON);
+      		Appointments appts = (Appointments)JSON.deserialize(apptsString, Appointments.class);
+      		appts.getErrors().add('Order is not cancellable.');
+	        return JSON.serialize(appts);
+      	}
+      	ord.Status = 'Pending Cancellation';
+      }
+
+      // get the opportunities with quotes and orders
+      Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(opportunityIds);
+
+
+	  List<Opportunity> oppsToUpdate = new List<Opportunity>();
+	  List<Quote> quotesToUpdate = new List<Quote>();
+	  List<QuoteLineItem> quoteLineItemsToUpdate = new List<QuoteLineItem>();
+	  List<Quote_Discount__c> quoteDiscountsToUpdate = new List<Quote_Discount__c>();
+	  List<Quote_Financing__c> quoteFinancingToUpdate = new List<Quote_Financing__c>();
+      // loop through the opportunity containers and retrieve the opps, quotes,
+      // quote line items, quote discounts, and quote financing records
+      for (OpportunityContainer oc: relatedOCs.values()) {
+      	oc.oppty.StageName = 'Quoted';
+        oppsToUpdate.add(oc.oppty);
+        
+        for(QuoteContainer qc : oc.quoteContainerList) {
+      	  qc.aQuote.Status = 'Pending Cancellation';
+      	  qc.aQuote.isSold__c = false;
+      	  qc.aQuote.Cloned_Quote_Id__c = qc.aQuote.Id;
+	      quotesToUpdate.add(qc.aQuote);
+        
+          for(QuoteLineItem qli : qc.quoteLineItems) {
+  	        quoteLineItemsToUpdate.add(qli);
+          }	
+
+          for(Quote_Discount__c qd : qc.quoteDiscountList) {
+  	        quoteDiscountsToUpdate.add(qd);
+          }	
+
+          for(Quote_Financing__c qf : qc.quoteFinancingList) {
+  	        quoteFinancingToUpdate.add(qf);
+          }	
+        }
+      }
+      
+	  // next clone the lists
+	  List<Quote> quotesToInsert = quotesToUpdate.deepClone(false, false, false);
+	  List<QuoteLineItem> quoteLineItemsToInsert = quoteLineItemsToUpdate.deepClone(false, false, false);
+	  List<Quote_Discount__c> quoteDiscountsToInsert = quoteDiscountsToUpdate.deepClone(false, false, false);
+	  List<Quote_Financing__c> quoteFinancingToInsert = quoteFinancingToUpdate.deepClone(false, false, false);
+
+      for (Quote q: quotesToUpdate) {
+      	q.Status = 'Cancelled';
+      }
+	  
+      // Update the orders Cancelled Status
+      update orderMap.values();
+
+	  // Update the opps to Quoted
+      update oppsToUpdate;
+
+	  // Update the quotes to Cancelled
+      update quotesToUpdate;
+      
+      // Insert the new cloned quotes, line items, discounts, and financing
+      insert quotesToInsert;
+      
+      // Need to map the quote items, discounts, and financing to the new quote, so 
+      // create a map from the old quote to the new quote ids.
+      Map<Id,Id> oldQuoteToNewQuoteMap = new Map<Id,Id>();
+      for (Quote qti : quotesToInsert) {
+      	oldQuoteToNewQuoteMap.put(qti.Cloned_Quote_Id__c, qti.Id);
+      }
+      
+      // Loop through the quote line items to insert and update the quote reference
+      // Then insert them
+      for (QuoteLineItem qliti : quoteLineItemsToInsert) {
+      	qliti.QuoteId = oldQuoteToNewQuoteMap.get(qliti.QuoteId);
+      }
+      insert quoteLineItemsToInsert;
+      // Loop through the quote discounts to insert and update the quote reference
+      // Then insert them
+      for (Quote_Discount__c qdti : quoteDiscountsToInsert) {
+      	qdti.Quote__c = oldQuoteToNewQuoteMap.get(qdti.Quote__c);
+      }
+      insert quoteDiscountsToInsert;
+      // Loop through the quote discounts to insert and update the quote reference
+      // Then insert them
+      for (Quote_Financing__c qfti : quoteFinancingToInsert) {
+      	qfti.Related_Quote__c = oldQuoteToNewQuoteMap.get(qfti.Related_Quote__c);
+      }
+      insert quoteFinancingToInsert;
+      
+      // call the getselectedsearchresults 
+      return getSelectedSearchResults(inputJSON);
+      
+    } catch (Exception e) {
+      System.debug(LoggingLevel.ERROR, e);
+      return JSON.serialize(e.getMessage() + ' : ' + e.getStackTraceString());
+    }
+  }
+
   
   public class Appointments {
     public List<SalesAppointment> salesAppts;
