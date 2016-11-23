@@ -89,7 +89,7 @@
 	<apex:pageBlock >
 		<apex:pageblockSection columns="1">
 		<apex:form >			
-			<apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!Order.Revenue_Recognized_Date__c == null || Order.RecordTypeId != coroOrderId}"/>
+			<apex:commandButton onclick="callGenerateConsoleURL('{!addProductURL}', 'Add Product');return false" id="addProduct" value="Add Product" style="margin-left:2%" rendered="{!(Order.Revenue_Recognized_Date__c == null || Order.RecordTypeId != coroOrderId) && (Order.Status != 'Cancelled' && Order.Status != 'Pending Cancellation')}"/>
 		
 			<apex:pageBlockTable title="Order Products" value="{!orderItemWrappers}" var="wrapper" style="width:100%" id="orderItemsTable">
 				<apex:column >  

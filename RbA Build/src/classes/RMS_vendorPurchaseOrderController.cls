@@ -443,13 +443,13 @@ public with sharing class RMS_vendorPurchaseOrderController {
       electronicOrder = (electronicVendor && !servicePurchaseOrder && !costPurchaseOrder);
      
 
-      status =  (orderStatus == 'Released' && electronicOrder)  	?  	'rbarel':
-            	((orderStatus == 'Confirmed') && !electronicOrder)  ?  'con'    :
-            	((orderStatus == 'Confirmed') && electronicOrder)  ?  'rbacon'  :
+      status =  (orderStatus == 'Released' && electronicOrder)  				?  	'rbarel':
+            	((orderStatus == 'Confirmed') && !electronicOrder)  			?  'con'    :
+            	((orderStatus == 'Confirmed') && electronicOrder)  				?  'rbacon'  :
             	(orderStatus == 'Rejected')                  					?  	'rej'   :
             	(orderStatus == 'Cancelled')                  					?  	'can'   :
             	((orderStatus == 'Partially Received') && !electronicOrder)     ?  	'part'  :
-            	((orderStatus == 'Partially Received') && electronicOrder)     ?  	'rbapart'  :
+            	((orderStatus == 'Partially Received') && electronicOrder)     	?  	'rbapart'  :
             	(orderStatus == 'Received')                  					?  	'rec'   :
             	(electronicOrder)                    							? 	'rbanew':
                                                 								'new';

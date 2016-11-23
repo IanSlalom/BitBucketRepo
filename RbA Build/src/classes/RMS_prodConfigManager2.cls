@@ -1650,7 +1650,7 @@ global with sharing class RMS_prodConfigManager2 {
 		(	orderStatus == 'Job in Progress') 			?	'rel'	:
 		(	orderStatus == 'Job Closed')		 			?	'clo'	:
 		(	orderStatus == 'On Hold')		 			?	'clo'	:
-		(	orderStatus == 'Cancellation in Progress')	?	'clo'	:
+		(	orderStatus == 'Pending Cancellation')	?	'clo'	:
 		(	orderStatus == 'Cancelled')					?	'clo'	: 
 															'drf';
 	}

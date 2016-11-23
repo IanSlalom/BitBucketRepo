@@ -1305,9 +1305,9 @@ public with sharing class RMS_prodConfigManager {
 		(	orderStatus == 'Install Needed') 			?	'rel'	:
 		(	orderStatus == 'Install Scheduled') 		?	'rel'	:
 		(	orderStatus == 'Job in Progress') 			?	'rel'	:
-		(	orderStatus == 'Job Closed')		 			?	'clo'	:
+		(	orderStatus == 'Job Closed')		 		?	'clo'	:
 		(	orderStatus == 'On Hold')		 			?	'clo'	:
-		(	orderStatus == 'Cancellation in Progress')	?	'clo'	:
+		(	orderStatus == 'Pending Cancellation')		?	'clo'	:
 		(	orderStatus == 'Cancelled')					?	'clo'	: 
 															'drf';
 	}

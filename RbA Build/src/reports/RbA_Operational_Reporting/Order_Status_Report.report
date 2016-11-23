@@ -47,8 +47,9 @@
         <criteriaItems>
             <column>Order$Status</column>
             <operator>notEqual</operator>
-            <value>,Cancelled,Job Closed,Activated</value>
+            <value>Cancelled,Pending Cancellation,Job Closed,Activated</value>
         </criteriaItems>
+        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>
