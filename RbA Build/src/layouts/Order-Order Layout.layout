@@ -381,7 +381,7 @@
         <label>Order Products</label>
         <layoutColumns>
             <layoutItems>
-                <height>200</height>
+                <height>400</height>
                 <page>RMS_viewOrderProducts</page>
                 <showLabel>false</showLabel>
                 <showScrollbars>true</showScrollbars>
@@ -429,7 +429,7 @@
         <label>Change Orders</label>
         <layoutColumns>
             <layoutItems>
-                <height>200</height>
+                <height>100</height>
                 <page>RMS_ViewChangeOrders</page>
                 <showLabel>false</showLabel>
                 <showScrollbars>true</showScrollbars>
