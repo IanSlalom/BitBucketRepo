@@ -118,7 +118,7 @@
                                     <apex:inputCheckbox value="{!wrapper.customer}"/>
                                 </apex:column>
                                 <apex:column headerValue="Notes" style="border-bottom: 2px solid #ccc;">
-                                    <apex:inputTextarea value="{!wrapper.description}" rendered="{!IF(wrapper.product.name != 'Miscellaneous Install Material', false , true)}"/>
+                                    <apex:inputTextarea value="{!wrapper.description}" />
                                 </apex:column>
                             </apex:pageBlockTable>
                         </apex:pageBlockSection>
