@@ -3,7 +3,7 @@
     <fieldUpdates>
         <fullName>Set_Procedure_Code_Assignment_Name</fullName>
         <field>Name</field>
-        <formula>Procedure_Code__r.Name  + &apos; - &apos; + Description__c</formula>
+        <formula>LEFT(Procedure_Code__r.Name  + &apos; - &apos; + Description__c,80)</formula>
         <name>Set Procedure Code Assignment Name</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
