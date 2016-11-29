@@ -84,10 +84,11 @@ public with sharing class RMS_cancelOrderExtension {
 			discountsToCancel.add(discToCancel);
 		}
 
-		for(RbA_Work_Order__c woTocancel : [Select Id, Work_Order_Status__c, Work_Order_Type__c FROM RbA_Work_Order__c
+		for(RbA_Work_Order__c woTocancel : [Select Id, Work_Order_Status__c, Work_Order_Type__c, Cancel_Reason__c FROM RbA_Work_Order__c
 											WHERE Work_Order_Type__c in ('LSWP','Bulding Permit','HOA','Historical','Tech Measure','Install','Paint/Stain')
 											AND Sold_Order__c =:theOrder.Id]){
 			woToCancel.Work_Order_Status__c = 'Cancelled';
+			if (woToCancel.Cancel_Reason__c == null) woToCancel.Cancel_Reason__c = 'Order Cancelled';
 			workOrdersToCancel.add(woTocancel);
 		}
 
