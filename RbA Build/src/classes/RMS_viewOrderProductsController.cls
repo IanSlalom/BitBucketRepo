@@ -67,8 +67,7 @@ public with sharing class RMS_viewOrderProductsController {
                          Leg_Height_Interior_Whole_Inch__c, Meet_Rail_Dimension__c, EJ_Kerf__c, Cancellation_Reason__c
                          from OrderItem 
                          where OrderId =: ord.Id 
-                         and (PricebookEntry.Product2.RecordTypeId =: masterProductId
-                            or (PricebookEntry.Product2.RecordTypeId =: miscJobId and Parent_Order_Item__c = null)) 
+                            and (Parent_Order_Item__c = null) 
                             order by PricebookEntry.Product2.RecordType.DeveloperName]);
 
         Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
@@ -78,8 +77,9 @@ public with sharing class RMS_viewOrderProductsController {
                          Is_Height_L_or_R_Leg_Height__c, Is_Leg_Height_L_or_R_Leg_Height__c, Leg_Height_Exterior_Fraction__c, Leg_Height_Exterior_Whole_Inch__c,Leg_Height_Interior_Fraction__c, 
                          Leg_Height_Interior_Whole_Inch__c, Meet_Rail_Dimension__c, EJ_Kerf__c, Cancellation_Reason__c
                          from OrderItem 
-                         where Parent_Order_Item__c in: orderItems.keySet() 
-                         and PricebookEntry.Product2.RecordTypeId =: miscJobId                                            
+                         where OrderId =: ord.Id
+                         and Parent_Order_Item__c in: orderItems.keySet() 
+                         and Parent_Order_Item__c != null
                          order by PriceBookEntry.Product2.Name]){
             system.debug(oi);
             if(relatedOrderItems.containsKey(oi.Parent_Order_Item__c)){
