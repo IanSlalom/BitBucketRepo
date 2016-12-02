@@ -117,11 +117,11 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         System.assertEquals(ssToInsert.size() , 3);             
         
         List<Procedure_Code__c> pcToInsert = new List<Procedure_Code__c>();
-        Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC1 = new Procedure_Code__c(name='Pr1',Description__c='Description',Time_Minutes_Each__c=15);
         pcToInsert.add(procC1);
-        Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC2 = new Procedure_Code__c(name='Pr2',Description__c='Description',Time_Minutes_Each__c=15);
         pcToInsert.add(procC2);
-        Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC3 = new Procedure_Code__c(name='Pr3',Description__c='Description',Time_Minutes_Each__c=15);
         pcToInsert.add(procC3);        
         insert pcToInsert;
         System.assertEquals(pcToInsert.size() , 3); 
