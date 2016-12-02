@@ -78,12 +78,12 @@ public with sharing class testRMS_createContactHistoryMgr {
         Account aid = [Select Id,Primary_Contact__c FROM Account WHERE Name = '11111, Dwelling Account'];
         Account aid2 = [Select Id FROM Account WHERE Name = '11111, Dwelling Account 2'];
         
-        Test.startTest();
         
         Contact cont = new Contact(AccountId = aid.Id, FirstName = 'Testing', LastName = 'Primary', Primary_Contact__c = True);
-        insert cont;
         Contact cont2 = new Contact(AccountId = aid2.Id, FirstName = 'Testing', LastName = 'Primary2', Primary_Contact__c = False);
-        insert cont2;
+        insert new List<Contact>{cont,cont2};
+
+        Test.startTest();
         
         Contact_History__c ch = new Contact_History__c(Dwelling__c = aid.Id, Contact__c = cont2.id, Primary_Contact__c = True, Update_Contact_Account__c = true);
         insert ch;
@@ -98,12 +98,11 @@ public with sharing class testRMS_createContactHistoryMgr {
         Account aid = [Select Id,Primary_Contact__c FROM Account WHERE Name = '11111, Dwelling Account'];
         Account aid2 = [Select Id FROM Account WHERE Name = '11111, Dwelling Account 2'];
         
-        Test.startTest();
         
         Contact cont = new Contact(AccountId = aid.Id, FirstName = 'Testing', LastName = 'Primary', Primary_Contact__c = True);
-        insert cont;
         Contact cont2 = new Contact(AccountId = aid2.Id, FirstName = 'Testing', LastName = 'Primary2', Primary_Contact__c = False);
-        insert cont2;
+        insert new List<Contact>{cont,cont2};
+        Test.startTest();
         
         Contact_History__c ch = new Contact_History__c(Dwelling__c = aid.Id, Contact__c = cont2.id, Primary_Contact__c = True, Update_Contact_Account__c = False);
         insert ch;
