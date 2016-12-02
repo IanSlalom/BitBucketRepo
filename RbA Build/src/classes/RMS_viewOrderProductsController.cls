@@ -20,6 +20,7 @@ public with sharing class RMS_viewOrderProductsController {
     public List<OrderItemWrapper> orderItemWrappers{get;set;}
     public Id masterProductId {get;set;}
     public Id miscJobId {get;set;}
+    public Id constrMatId {get;set;}
     public Id servProd {get;set;}
     public Id serviceOrderId {get;set;} 
     public Id changeOrderId {get;set;}
@@ -40,6 +41,7 @@ public with sharing class RMS_viewOrderProductsController {
 		changeOrder = (this.ord.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'Change_Order')) ? true : false;
         masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');
         miscJobId =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Misc_Job_and_Unit_Charges');
+		constrMatId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Construction_Materials');
         servProd =UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product');    
         serviceOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('CORO_Service');
         changeOrderId = UtilityMethods.GetRecordTypeIdsMapForSObject(Order.sObjectType).get('Change_Order');
@@ -68,6 +70,7 @@ public with sharing class RMS_viewOrderProductsController {
                          from OrderItem 
                          where OrderId =: ord.Id 
                             and (Parent_Order_Item__c = null) 
+                            and (PricebookEntry.Product2.RecordTypeId != : constrMatId)
                             order by PricebookEntry.Product2.RecordType.DeveloperName]);
 
         Map<Id,List<OrderItem>> relatedOrderItems = new Map<Id,List<OrderItem>>();
@@ -79,6 +82,7 @@ public with sharing class RMS_viewOrderProductsController {
                          from OrderItem 
                          where OrderId =: ord.Id
                          and Parent_Order_Item__c in: orderItems.keySet() 
+                         and (PricebookEntry.Product2.RecordTypeId != : constrMatId)
                          and Parent_Order_Item__c != null
                          order by PriceBookEntry.Product2.Name]){
             system.debug(oi);
