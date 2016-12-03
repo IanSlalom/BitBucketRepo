@@ -17,7 +17,7 @@ Unauthorized use is prohibited.
 @isTest 
 public with sharing class testRMS_viewServiceOrderProductsCtlr {
     
-    static testmethod void createTestRecords() {
+/*    static testmethod void createTestRecords() {
         RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name = 'Turn Financial Transactions Off', Value__c = 'Yes');
             insert turnOffFinancialTrigger;
         
@@ -141,7 +141,7 @@ public with sharing class testRMS_viewServiceOrderProductsCtlr {
     OrderItem orderItemServ = [Select Id from OrderItem where Pricebookentry.Product2.Name = 'service'];
     system.assertEquals(controller.OrderItemWrappers[0].OrderItem.Id,orderItemServ.Id);
      Test.stopTest();
-  }
+  }*/
     
 
     
