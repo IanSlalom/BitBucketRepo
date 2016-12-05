@@ -21,6 +21,30 @@
         <template>RbA_Email_Templates/PaintStainInstallReminder</template>
     </alerts>
     <fieldUpdates>
+        <fullName>Clear_out_Scheduled_Appt</fullName>
+        <field>Scheduled_Appt_Date_Time_Install__c</field>
+        <name>Clear out Scheduled Appt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Clear_out_Scheduled_Appt_Service</fullName>
+        <field>Scheduled_Appt_Date_Time_Service__c</field>
+        <name>Clear out Scheduled Appt - Service</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Clear_out_Scheduled_Appt_TM</fullName>
+        <field>Scheduled_Appt_Date_Time_Tech_Measure__c</field>
+        <name>Clear out Scheduled Appt - TM</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Account_City</fullName>
         <field>City__c</field>
         <formula>Account__r.ShippingCity</formula>
@@ -164,6 +188,15 @@
         <name>Set Original Appt Date/Time - Tech Measu</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Status_Cancelled</fullName>
+        <field>Work_Order_Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Set Status Cancelled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
@@ -368,6 +401,10 @@
         </actions>
         <active>true</active>
         <criteriaItems>
+            <field>RbA_Work_Order__c.Original_Appt_Date_Time_Install__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
             <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Install__c</field>
             <operation>notEqual</operation>
         </criteriaItems>
@@ -384,6 +421,10 @@
             <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Service__c</field>
             <operation>notEqual</operation>
         </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Original_Appt_Date_Time_Service__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
@@ -396,6 +437,10 @@
         <criteriaItems>
             <field>RbA_Work_Order__c.Scheduled_Appt_Date_Time_Tech_Measure__c</field>
             <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Original_Appt_Date_Time_Tech_Measure__c</field>
+            <operation>equals</operation>
         </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
@@ -417,6 +462,36 @@
             <value>Appt Complete / Closed</value>
         </criteriaItems>
         <description>When the appoitment has been completed and work order has been closed this will update Completed Appt Date/Time: Service</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Status Cancelled</fullName>
+        <actions>
+            <name>Clear_out_Scheduled_Appt</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Clear_out_Scheduled_Appt_Service</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Clear_out_Scheduled_Appt_TM</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Set_Status_Cancelled</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure,Install,Service</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RbA_Work_Order__c.Cancel_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>

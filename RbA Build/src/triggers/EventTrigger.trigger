@@ -32,7 +32,7 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
         //HANDLERS AND MANAGERS        
-        List<SObject> wkorders = new List<SObject>();
+        //List<SObject> wkorders = new List<SObject>();
         RMS_populateResourceonEventManager populateResourceonEventManager = new RMS_populateResourceonEventManager();
         RMS_acceptInvite acceptInvite = new RMS_acceptInvite();
         RMS_eventManager eventManager = new RMS_eventManager();
@@ -53,20 +53,20 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         // Before Delete
         //else   
         if(Trigger.isDelete && Trigger.isBefore){
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+           // wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
             eventManager.createChangeHistoryOnDelete(Trigger.old, Trigger.oldmap);
         }
 
         // After Insert
         else if(Trigger.isInsert && Trigger.isAfter){
             acceptInvite.acceptInvite(Trigger.new, Trigger.newMap);            
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            //wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
             
         } 
          
         // After Update
         else if(Trigger.isUpdate && Trigger.isAfter){           
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+           // wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
         
                     
@@ -74,7 +74,7 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         
         else if(Trigger.isDelete && Trigger.isAfter){
             
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+           // wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
         }
         
         
@@ -82,15 +82,15 @@ trigger EventTrigger on Event (after delete, after insert, after undelete,
         
         else if(Trigger.isUnDelete){
             
-            wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+           // wkorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
         
 		// Try - Catch to catch any dml errors doing the work order rollup and displaying
 		// errors on the labor records
-		try { update wkorders;} 
-		catch(System.DmlException e) {
-			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
-			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
-		}
+		//try { update wkorders;} 
+	//	catch(System.DmlException e) {
+		//	if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
+		//	else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
+		//}
     }
 }

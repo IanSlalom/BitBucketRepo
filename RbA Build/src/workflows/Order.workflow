@@ -20,6 +20,15 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_JIP_Ever</fullName>
+        <field>Job_in_Progress_All_Time__c</field>
+        <literalValue>1</literalValue>
+        <name>Set JIP Ever</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Processed_Date</fullName>
         <field>Order_Processed_Date__c</field>
         <formula>Now()</formula>
@@ -78,6 +87,26 @@
             <value>Cancelled</value>
         </criteriaItems>
         <description>Due to recursive triggers, workflow used to set Install Order Status to Cancelled on the Sold Order to reflect the Install Work Order status.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set JIP Ever</fullName>
+        <actions>
+            <name>Set_JIP_Ever</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>Order.Status</field>
+            <operation>equals</operation>
+            <value>Job in Progress</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Order.Service_Type__c</field>
+            <operation>equals</operation>
+            <value>Job in Progress</value>
+        </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
