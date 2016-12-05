@@ -361,7 +361,7 @@ private class RMS_financialTransManPaymentTest {
 
 		// Verify the account numbers 
 		System.AssertEquals(depAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
-		System.AssertEquals('233777132', je.Credit_General_Ledger_Account__c);
+		System.AssertEquals('233132', je.Credit_General_Ledger_Account__c);
 		
 		payment1.Payment_Amount__c = 200;
 		update payment1;
