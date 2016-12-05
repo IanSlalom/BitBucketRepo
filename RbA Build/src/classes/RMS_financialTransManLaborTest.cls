@@ -219,13 +219,14 @@ private class RMS_financialTransManLaborTest {
             Crew_Size__c = 5,
             Resource_Type__c = 'Installer',
             Retail_Location__c = storeConfig.Id,
-            RbA_User__c = communityUser.Id
+            RbA_User__c = communityUser.Id,
+            User_Type__c = 'External'
         );  
         insert res;
     
         Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
         Labor__c labor1 = new Labor__c( Related_Work_Order__c = workOrder1.id,
-                                        Hours_Applied__c = 1,
+                                   //     Hours_Applied__c = 1,
                                         //Standard_Hourly_Rate__c=100,
                                         External_Labor_Amount__c = 100,
                                         Store_Location__c = store.id,
@@ -298,13 +299,14 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 	
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-										Hours_Applied__c = 1,
+									//	Hours_Applied__c = 1,
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store.id,
@@ -374,13 +376,14 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 	
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-										Hours_Applied__c = 1,
+								//		Hours_Applied__c = 1,
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store.id,
@@ -453,13 +456,14 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 	
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-										Hours_Applied__c = 1,
+									//	Hours_Applied__c = 1,
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store.id,
@@ -530,13 +534,14 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 	
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-										Hours_Applied__c = 1,
+									//	Hours_Applied__c = 1,
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store.id,
@@ -608,13 +613,14 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 	
 		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
 		Labor__c labor1 = new Labor__c(	Related_Work_Order__c = workOrder1.id,
-										Hours_Applied__c = 1,
+									//	Hours_Applied__c = 1,
 										//Standard_Hourly_Rate__c=100,
 										External_Labor_Amount__c = 100,
 										Store_Location__c = store.id,
@@ -750,7 +756,8 @@ private class RMS_financialTransManLaborTest {
 			Crew_Size__c = 5,
 			Resource_Type__c = 'Installer',
 			Retail_Location__c = storeConfig.Id,
-			RbA_User__c = communityUser.Id
+			RbA_User__c = communityUser.Id,
+			User_Type__c = 'External'
 		);	
 		insert res;
 		

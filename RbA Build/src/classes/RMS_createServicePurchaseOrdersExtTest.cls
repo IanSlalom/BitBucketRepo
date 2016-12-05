@@ -31,27 +31,27 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         Account dwelling1 = utility.createDwellingAccount('Dwelling Account');
         Account dwelling2 = utility.createDwellingAccount('Dwelling Account 2');
         Account store1 = [SELECT Id from Account Where Name = '77 - Twin Cities, MN'];
-        Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
+//        Store_Configuration__c storeConfig1 = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store1.id ];
         dwelling1.Store_Location__c = store1.Id;
         dwelling2.Store_Location__c = store1.Id; 
         dwellingsToInsert.add(dwelling1);
         dwellingsToInsert.add(dwelling2);
         insert dwellingsToInsert; 
         
-        List<Contact> contactsToInsert = new List<Contact>();       
-        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
-        contactsToInsert.add(contact1);
-        insert contactsToInsert;
+//        List<Contact> contactsToInsert = new List<Contact>();       
+//        Contact contact1 = new contact ( FirstName='Contact',LastName='1',AccountId=dwelling1.id);
+ //       contactsToInsert.add(contact1);
+ //       insert contactsToInsert;
         
-        Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
-        Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '2');
+//        Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
+//        Financial_Account_Number__c finacialAccountNumber2 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '2');
         
-        insert new List<Financial_Account_Number__c>{finacialAccountNumber1,finacialAccountNumber2};
-        Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(  Store_Configuration__c = storeConfig1.id,
-                                                                                     Transaction_Type__c = 'Inventory Received - External Vendor',
-                                                                                     Debit_Account_Number__c = finacialAccountNumber1.id,
-                                                                                     Credit_Account_Number__c = finacialAccountNumber2.id);
-        insert finacialTransaction1;
+//        insert new List<Financial_Account_Number__c>{finacialAccountNumber1,finacialAccountNumber2};
+//        Financial_Transaction__c finacialTransaction1 = new Financial_Transaction__c(  Store_Configuration__c = storeConfig1.id,
+//                                                                                     Transaction_Type__c = 'Inventory Received - External Vendor',
+ //                                                                                    Debit_Account_Number__c = finacialAccountNumber1.id,
+ //                                                                                    Credit_Account_Number__c = finacialAccountNumber2.id);
+//        insert finacialTransaction1;
         
         Product2 masterProduct = new Product2( name = 'master',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product'));
         Product2 servProduct = new Product2( name = 'service',IsActive = true, recordTypeId=UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Service_Product'),Master_Product__c = masterProduct.Id);
@@ -80,7 +80,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         
         Order order =  new Order(   Name='Sold Order 1', 
                                  AccountId = dwelling1.id, 
-                                 BilltoContactId = contact1.id,
+                              //   BilltoContactId = contact1.id,
                                  EffectiveDate= Date.Today(), 
                                  Store_Location__c = store1.Id,                           
                                  Status ='Draft', 
@@ -90,7 +90,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         
         Order order2 =  new Order(   Name='Service Order', 
                                   AccountId = dwelling2.id, 
-                                  BilltoContactId = contact1.id,
+                             //     BilltoContactId = contact1.id,
                                   EffectiveDate= Date.Today(), 
                                   Store_Location__c = store1.Id,                           
                                   Status ='Draft', 
@@ -100,10 +100,10 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         ordersToInsert.add(order2);
         insert ordersToInsert;
 
-        Purchase_Order__c po1 = new Purchase_Order__c(  Order__c = order2.Id, 
+/*        Purchase_Order__c po1 = new Purchase_Order__c(  Order__c = order2.Id, 
                                     RecordTypeId = UtilityMethods.retrieveRecordTypeId( 'Service_Purchase_Order','Purchase_Order__c'),
                                     Store_Location__c = store1.Id);
-        insert po1;
+        insert po1;*/
 
         List<OrderItem> orderItemsToInsert = new  List<OrderItem> ();
         OrderItem rwo = new OrderItem();
@@ -118,7 +118,6 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         rwo2.PricebookentryId = pricebookEntryServ.Id;
         rwo2.Quantity = 1;
         rwo2.UnitPrice = 100;
-        rwo2.Purchase_Order__c = po1.Id;
         orderItemsToInsert.add(rwo2);
         insert orderItemsToInsert;
         

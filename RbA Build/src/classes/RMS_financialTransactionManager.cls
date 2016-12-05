@@ -3371,7 +3371,9 @@ public with sharing class RMS_financialTransactionManager {
             if(GLAccount == null || GLAccount.length() <= 3){
                 break;
             }
-            string locationNumber;
+
+			// Commented out this creation of the GL Account number for JETT-3959
+/*            string locationNumber;
             if(storeConfigMap == null || storeConfigMap.size() == 0 || storeConfigMap.get((id)theObject.get('Store_Location__c')).Location_Number__c == null ){
                 mapNew.get(theObject.id).addError(RMS_errorMessages.LOCATION_ID_IS_NULL, FALSE);
             }else{
@@ -3383,7 +3385,8 @@ public with sharing class RMS_financialTransactionManager {
             string glFirstSection = GLAccount.substring(0, glLength-3);
             string glSecondSection =GLAccount.substring(glLength-3);
             string newCode = glFirstSection+locationNumber+glSecondSection;
-            mapToReturn.put((id)theObject.get('Id'), newCode);
+            mapToReturn.put((id)theObject.get('Id'), newCode); */
+            mapToReturn.put((id)theObject.get('Id'), GLAccount);
         }
         return mapToReturn;
     }

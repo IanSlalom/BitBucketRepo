@@ -70,9 +70,9 @@ private class testRMS_addResponsibilityExt
         List<Service_Symptom_List__c> ssl = new List<Service_Symptom_List__c>{ssl1,ssl2,ssl3};
             insert ssl;
         
-        Procedure_Code__c procC1 = new Procedure_Code__c(name='Proc1',Description__c='Description',Time_Minutes_Each__c=15);
-        Procedure_Code__c procC2 = new Procedure_Code__c(name='Proc2',Description__c='Description',Time_Minutes_Each__c=15);
-        Procedure_Code__c procC3 = new Procedure_Code__c(name='Proc3',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC1 = new Procedure_Code__c(name='Pr1',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC2 = new Procedure_Code__c(name='Pr2',Description__c='Description',Time_Minutes_Each__c=15);
+        Procedure_Code__c procC3 = new Procedure_Code__c(name='Pr3',Description__c='Description',Time_Minutes_Each__c=15);
         List<Procedure_Code__c> procC = new List<Procedure_Code__c>{procC1,procC2,procC3};
             insert procC;
         
