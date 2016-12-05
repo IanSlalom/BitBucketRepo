@@ -236,12 +236,14 @@
     <types>
         <members>AccountTrigger</members>
         <members>AssetTrigger</members>
+        <members>AssignedResourceTrigger</members>
         <members>BusinessAdjustmentTrigger</members>
         <members>ChargeTrigger</members>
         <members>ContactHistoryTrigger</members>
         <members>ContactTrigger</members>
         <members>EventTrigger</members>
         <members>LaborTrigger</members>
+        <members>MASchedulerEventTrigger</members>
         <members>OpportunityTrigger</members>
         <members>OrderDiscountTrigger</members>
         <members>OrderItemTrigger</members>
@@ -526,6 +528,7 @@
         <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
         <members>Assets_with_without_Journal_Entries</members>
+        <members>Cycle_Time_Reports</members>
         <members>Labor_with_Work_Order_with_Order</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
