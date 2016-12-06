@@ -27,6 +27,10 @@
                 <behavior>Edit</behavior>
                 <field>Report_Grouping__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Account_Number__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -44,6 +48,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Product_PO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cost_PO__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -191,6 +199,11 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Product_Skill__c.Product__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Cost_Center__c</fields>
+        <relatedList>Cost_Center__c.Product__c</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
