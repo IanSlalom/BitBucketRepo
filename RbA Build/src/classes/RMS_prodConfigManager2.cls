@@ -294,6 +294,7 @@ global with sharing class RMS_prodConfigManager2 {
 		for(Glazing_Configuration__c con: [SELECT 	Id, 
 													Sash_Ratio__c,
 													Glazing__c,
+													Glass_Pattern__c,
 													Max_Width_Inches__c,
 													Max_Width_Fraction__c,
 													Max_Height_Inches__c,
@@ -1191,7 +1192,7 @@ global with sharing class RMS_prodConfigManager2 {
 			if(glazingConfigsAllPatterns!= null){
 				for(Glazing_Configuration__c sgc : glazingConfigsAllPatterns){
 					system.debug('COMPARISON' + sgc.Glazing__c + '       ' + orderLineitem.Glazing_S1__c);
-					if(sgc.Glazing__c == orderLineitem.Glazing_S1__c){
+					if(sgc.Glazing__c == orderLineitem.Glazing_S1__c && sgc.Glass_Pattern__c == orderLineitem.Glass_Pattern_S1__c){
 						relatedGlazingConfigurations.add(sgc);
 					}
 				}
@@ -1238,7 +1239,7 @@ global with sharing class RMS_prodConfigManager2 {
 
 			if(grilleConfigsAllPatterns!= null){
 				for(Glazing_Configuration__c sgc : glazingConfigsAllPatterns){
-					if(sgc.Glazing__c == orderLineitem.Glazing_S2__c){
+					if(sgc.Glazing__c == orderLineitem.Glazing_S2__c && sgc.Glass_Pattern__c == orderLineitem.Glass_Pattern_S2__c){
 						relatedGlazingConfigurations.add(sgc);
 					}
 				}
@@ -1284,7 +1285,53 @@ global with sharing class RMS_prodConfigManager2 {
 
 			if(grilleConfigsAllPatterns!= null){
 				for(Glazing_Configuration__c sgc : glazingConfigsAllPatterns){
-					if(sgc.Glazing__c == orderLineitem.Glazing_S2__c){
+					if(sgc.Glazing__c == orderLineitem.Glazing_S3__c && sgc.Glass_Pattern__c == orderLineitem.Glass_Pattern_S3__c){
+						relatedGlazingConfigurations.add(sgc);
+					}
+				}
+			}																					
+			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
+			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
+
+			if(!relatedGlazingConfigurations.isEmpty()){
+				for(Glazing_Configuration__c glazingConfig : relatedGlazingConfigurations){
+					if(glazingConfig.Max_Width_Inches__c != null){
+						Decimal requiredWidth = glazingConfig.Max_Width_Inches__c + UtilityMethods.calculateFraction(glazingConfig.Max_Width_Fraction__c);
+						if(widthInches > requiredWidth){
+							String requiredWidthString =  String.ValueOf(glazingConfig.Max_Width_Inches__c) + ' ' +(glazingConfig.Max_Width_Fraction__c == null? '' : String.valueOf(glazingConfig.Max_Width_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GLAZING_MAX_WIDTH, '', requiredWidthString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+					if(glazingConfig.Max_Height_Inches__c != null){
+						Decimal requiredHeight = glazingConfig.Max_Height_Inches__c + UtilityMethods.calculateFraction(glazingConfig.Max_Height_Fraction__c);
+						if(heightInches > requiredHeight){
+							String requiredHeightString =  String.ValueOf(glazingConfig.Max_Height_Inches__c) + ' '+ (glazingConfig.Max_Height_Fraction__c == null? '' : String.valueOf(glazingConfig.Max_Height_Fraction__c));
+							String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.GLAZING_MAX_HEIGHT, '', requiredHeightString);
+							errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;	
+						}
+					}
+				}
+			}
+		} 
+
+		//Glazing Configuration S4
+		if(orderLineItem.Glazing_S4__c != null){
+			/*List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
+																							Glazing__c,
+																							Max_Width_Inches__c,
+																							Max_Width_Fraction__c,
+																							Max_Height_Inches__c,
+																							Max_Height_Fraction__c													
+																							FROM Glazing_Configuration__c
+																							WHERE Product_Configuration__c =: masterProductConfig.Id
+																							AND Glazing__c =: orderLineItem.Glazing_S4__c
+																							];*/
+			List<Glazing_Configuration__c> relatedGlazingConfigurations = new List<Glazing_Configuration__c>();
+
+			if(grilleConfigsAllPatterns!= null){
+				for(Glazing_Configuration__c sgc : glazingConfigsAllPatterns){
+					if(sgc.Glazing__c == orderLineitem.Glazing_S4__c && sgc.Glass_Pattern__c == orderLineitem.Glass_Pattern_S4__c){
 						relatedGlazingConfigurations.add(sgc);
 					}
 				}
