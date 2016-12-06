@@ -22,10 +22,6 @@
                 <behavior>Edit</behavior>
                 <field>Glass_Pattern__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tempered__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
