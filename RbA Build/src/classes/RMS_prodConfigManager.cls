@@ -859,6 +859,7 @@ public with sharing class RMS_prodConfigManager {
 		if(orderLineItem.Glazing_S1__c != null){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
+																							Glass_Pattern__c,
 																							Max_Width_Inches__c,
 																							Max_Width_Fraction__c,
 																							Max_Height_Inches__c,
@@ -866,6 +867,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S1__c
+																							AND Glass_Pattern__c =: orderLineItem.Glass_Pattern_S1__c
 																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -896,6 +898,7 @@ public with sharing class RMS_prodConfigManager {
 		if(orderLineItem.Glazing_S2__c != null ){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
+																							Glass_Pattern__c,
 																							Max_Width_Inches__c,
 																							Max_Width_Fraction__c,
 																							Max_Height_Inches__c,
@@ -903,6 +906,8 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S2__c
+																							AND Glass_Pattern__c =: orderLineItem.Glass_Pattern_S2__c
+
 																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -933,6 +938,7 @@ public with sharing class RMS_prodConfigManager {
 		if(orderLineItem.Glazing_S3__c != null){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
+																							Glass_Pattern__c,
 																							Max_Width_Inches__c,
 																							Max_Width_Fraction__c,
 																							Max_Height_Inches__c,
@@ -940,6 +946,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S3__c
+																							AND Glass_Pattern__c =: orderLineItem.Glass_Pattern_S3__c
 																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);
@@ -970,6 +977,7 @@ public with sharing class RMS_prodConfigManager {
 		if(orderLineItem.Glazing_S4__c != null){
 			List<Glazing_Configuration__c> relatedGlazingConfigurations = [SELECT 	Sash_Ratio__c,
 																							Glazing__c,
+																							Glass_Pattern__c,
 																							Max_Width_Inches__c,
 																							Max_Width_Fraction__c,
 																							Max_Height_Inches__c,
@@ -977,6 +985,7 @@ public with sharing class RMS_prodConfigManager {
 																							FROM Glazing_Configuration__c
 																							WHERE Product_Configuration__c =: masterProductConfig.Id
 																							AND Glazing__c =: orderLineItem.Glazing_S4__c
+																							AND Glass_Pattern__c =: orderLineItem.Glass_Pattern_S4__c
 																							];
 			Decimal widthInches = orderLineItem.Width_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Width_Fraction__c);
 			Decimal heightInches = orderLineItem.Height_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Height_Fraction__c);

@@ -528,18 +528,6 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		customController.releasePurchaseOrder();
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
-		customController.relatedOrder.Status = 'Ready to Order';
-		customController.po.Status__c = 'New';
-		customController.releasePurchaseOrder();
-		system.debug(apexPages.getMessages());
-		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
-		customController.po.Status__c = 'In Progress';
-		customController.electronicOrder = true;
-		customController.releasePurchaseOrder();
-		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));
-		customController.electronicOrder = false;
-		customController.releasePurchaseOrder();
-		System.assertEquals(customController.po.Status__c, 'Released');
 	
 		customController.cancelPurchaseOrder();
 		customController.checkReceived();
@@ -584,6 +572,49 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		
 		Test.stopTest();
 	}
+	
+	/*******************************************************
+					MiscButtonTest3
+	*******************************************************/
+	static testmethod void MiscButtonTest3(){
+
+		Order soldOrder = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
+		Account vendorAccount = [SELECT Id FROM Account WHERE Name = 'Vendor Account 1 Test Account'];
+		Purchase_Order__c po = new Purchase_Order__c(Order__c = soldOrder.Id, Status__c = 'New');
+		insert po;
+		OrderItem soldOrderItem = [SELECT Id FROM OrderItem WHERE OrderId =: soldOrder.Id LIMIT 1];
+		soldOrderItem.NSPR__c = false;
+		soldOrderItem.Verify_Item_Configuration__c = false;
+		soldOrderItem.Purchase_Order__c = po.Id;
+		update soldOrderItem;
+
+		Test.startTest();
+		
+		soldOrder.Status = 'Ready to Order';
+		update soldOrder;
+		
+		// Set up controller with an order Id
+		PageReference pageRef = Page.RMS_viewPurchaseOrder;
+		Test.setCurrentPage(pageRef);
+		ApexPages.currentPage().getParameters().put('orderId',soldOrder.id);
+		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
+		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
+
+		customController.releasePurchaseOrder();
+		system.debug(apexPages.getMessages());
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
+		customController.po.Status__c = 'In Progress';
+		customController.electronicOrder = true;
+		customController.releasePurchaseOrder();
+		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));
+		customController.electronicOrder = false;
+		customController.releasePurchaseOrder();
+		System.assertEquals(customController.po.Status__c, 'Released');
+	
+		
+		Test.stopTest();
+	}
+
 	/*******************************************************
 					cancelLineItemTest
 	*******************************************************/
