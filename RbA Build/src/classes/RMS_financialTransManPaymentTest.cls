@@ -373,7 +373,7 @@ private class RMS_financialTransManPaymentTest {
 		// Verify the account numbers. Credit should be the all but the last 3 digits of the GL Account,
 		// then the store location number, then the last 3 digits of the GL Account number
 		System.AssertEquals(depAcctNumberDebit.Name, je.Debit_General_Ledger_Account__c);
-		System.AssertEquals('233777132', je.Credit_General_Ledger_Account__c);
+		System.AssertEquals('233132', je.Credit_General_Ledger_Account__c);
 
 		delete payment1;
 		test.stoptest();
