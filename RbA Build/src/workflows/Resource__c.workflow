@@ -13,7 +13,7 @@
     <fieldUpdates>
         <fullName>Duplicate_Catcher_Resource_Record</fullName>
         <field>Duplicate_Value_Catcher__c</field>
-        <formula>RbA_User__r.Id &amp; Text(Resource_Type__c)</formula>
+        <formula>RbA_User__r.Id &amp; Retail_Location__r.Id</formula>
         <name>Duplicate Catcher: Resource Record</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
