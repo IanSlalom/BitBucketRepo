@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -153,6 +153,7 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
+        <members>RMS_preventMultipleResourcesforSameUser</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -257,6 +258,7 @@
         <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
+        <members>ResourceTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
