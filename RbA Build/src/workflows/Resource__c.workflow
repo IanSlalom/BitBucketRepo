@@ -52,7 +52,7 @@
             <name>Duplicate_Catcher_Resource_Record</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <description>Resouce Records cannot have the same user and different resource types</description>
         <formula>TRUE</formula>
         <triggerType>onAllChanges</triggerType>
