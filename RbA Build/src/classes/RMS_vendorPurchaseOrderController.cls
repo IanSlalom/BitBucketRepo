@@ -372,7 +372,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
     storeLocationSet = new Set<Id>();
     relatedCOROOrder = false;
     revRecNullAndValidStatus = false;
-    Set<String> validStatuses = new Set<String>{'Ready to Order','Order Released','Install Needed','Install Scheduled','Install Complete','Job In Progress'};
+    Set<String> validStatuses = new Set<String>{'Ready to Order','Order Released','Install Needed','Install Scheduled','Install Complete','Job in Progress'};
     //NEW PRODUCT PURCHASE ORDER
     if(stdController.getId() == null){
       costPurchaseOrder = (String.isBlank(orderId)) ? true : false;
