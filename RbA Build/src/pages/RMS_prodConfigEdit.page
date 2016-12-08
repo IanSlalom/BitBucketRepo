@@ -294,10 +294,12 @@
             <apex:outputText value="{!OrderItem.Custom_Grille_Details_S2__c}"  id="outcustomGrilleDetails2" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e') && numSashes >=2}" html-data-jsid="outcustomGrilleDetails2" />
             <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'  && mode == 'e'}"  /> <!-- disabled="true" -->
             <apex:outputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="outgrilleAlignment" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Disabled'  || mode != 'e'}"  /> <!-- disabled="true" -->
-            <apex:inputText value="{!OrderItem.Hubs__c}" label="Hubs" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hubs_Control__c != 'Disabled'  && mode == 'e'}" />
-            <apex:outputText value="{!OrderItem.Hubs__c}" label="Hubs" id="outhubs"  rendered="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" />
-            <apex:inputText value="{!OrderItem.Spokes__c}" label="Spokes" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Spokes_Control__c != 'Disabled'  && mode == 'e'}" />
-            <apex:outputText value="{!OrderItem.Spokes__c}" label="Spokes" id="outspokes"  rendered="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" />
+            <apex:selectList value="{!OrderItem.Hubs__c}" label="Hubs" size="1" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" >
+               <apex:selectOptions value="{!hubItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Spokes__c}" label="Spokes" size="1" id="spokes"  required="{!prodConfig.mpc.Spokes_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Spokes_Control__c == 'Disabled'  || mode != 'e'}" >
+               <apex:selectOptions value="{!spokeItems}"/>
+            </apex:selectList>
         </apex:pageBlockSection>
 
 
