@@ -556,6 +556,30 @@ public class RMS_prodConfigExtension {
 		}
 	}
 
+	/******* Hub Items  *****************/
+	private static transient List<SelectOption> lHubItems;
+	public List<SelectOption> hubItems{
+		get
+		{   
+			if (lHubItems== null) {
+				lHubItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hubs__c);
+			}			   
+			return lHubItems;
+		}
+	}
+
+	/******* Spoke Items  *****************/
+	private static transient List<SelectOption> lSpokeItems;
+	public List<SelectOption> spokeItems{
+		get
+		{   
+			if (lSpokeItems== null) {
+				lSpokeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Spokes__c);
+			}			   
+			return lSpokeItems;
+		}
+	}
+
 	/******* Exterior Trim Items  *****************/
 	private static transient List<SelectOption> lExteriorTrimItems;
 	public List<SelectOption> exteriorTrimItems {

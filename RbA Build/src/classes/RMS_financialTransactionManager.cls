@@ -549,9 +549,6 @@ public with sharing class RMS_financialTransactionManager {
 	                		if(JIPLabor == 'true')
 	                			errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborExternalJIPFTL.get(l.id) , errorMessage, 'Service External Labor - JIP');
 							else { 		  
-								System.Debug('************l.id=' +l.id);
-								System.Debug('************laborIdToServiceLaborExternalFTL=' +laborIdToServiceLaborExternalFTL);
-								System.Debug('************errorMessage=' +errorMessage);
 	                			errorMessage = checkFinacialTransationForErrors(laborIdToServiceLaborExternalFTL.get(l.id) , errorMessage, 'Service External Labor');
 							}
 		                }else if(typeOfOrder == 'coroRecordType'){
@@ -824,6 +821,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Vendor__r.Baan_Business_Partner_Number__c,
                                                     RecordTypeId,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     Quantity_Written_Off__c,
                                                     Original_Order_Product__c,
                                                     Original_Order_Product__r.Remake__c,
@@ -872,9 +870,6 @@ public with sharing class RMS_financialTransactionManager {
         																'Inventory Received - Intercompany', 
         																'Inventory Received - Intercompany Consolidation Center',
         																'Inventory Received - External Vendor',
-        																'Service Material Returned - Intercompany',
-        																'Service Material Returned - Intercompany Consolidation Center',
-        																'Service Material Returned - External Vendor',
         																'Service Inventory Received - Intercompany',
         																'Service Inventory Received - Intercompany Consolidation Center',
         																'Service Inventory Received - External Vendor',
@@ -914,8 +909,11 @@ public with sharing class RMS_financialTransactionManager {
        	
        	list<string> jeTypesToGet = new list<string>{	'Inventory Received - External Vendor', 
        													'Cost Product Received',
+       													'Service Inventory Received - External Vendor',
+       													'Service Inventory Received - Remake External Vendor',
        													'Inventory Returned - External Vendor',
-       													'Inventory Returned - Cost Product Received'};
+       													'Inventory Returned - Cost Product Received',
+       													'Service Inventory Returned - External Vendor'};
        	
        	list<Journal_Entry__c> relatedJEForVendorCredit = [SELECT 	Id, 
        																Amount__c,
@@ -981,14 +979,16 @@ public with sharing class RMS_financialTransactionManager {
 //					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
 					if(a.RecordTypeId != assetInstalledProductsRecordTypeId){
 						if(assetIdToLatestJEforVendorCredit.get(a.id) == null){
-							errorMessage = 'A vendor credit cannot be issued on an item that has not been received.';
+							errorMessage = 'A vendor credit cannot be issued on an item that has not been received or is not for an external vendor.';
 						}else{
 							system.debug('ads fixingVendor vendorCreditAT setting to true: '+vendorCreditAT);
 							vendorCreditAT = true;
 							
-							if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received'){
+							if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received' ||
+								assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||	assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor'){
 								assetSubType = 'vendorCreateNew';
-							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - Cost Product Received'){
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - Cost Product Received' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - External Vendor'){
 								assetSubType = 'vendorEdit';
 							}
 						}
@@ -1082,7 +1082,6 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 //COST PRODUCT RECIVED
                 if(costProductRecivedAT == true){
-                	System.Debug('*********************assetIdToCPRFTL.get(a.id)=' +assetIdToCPRFTL.get(a.id));
                 	errorMessage = checkFinacialTransationForErrors(assetIdToCPRFTL.get(a.id) , errorMessage, 'Cost Product Received');
                 }
                 
@@ -1299,6 +1298,9 @@ public with sharing class RMS_financialTransactionManager {
 								jType = 'Inventory Returned - External Vendor';
 							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received'){
 								jType = 'Inventory Returned - Cost Product Received';
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake External Vendor'){
+								jType = 'Service Inventory Returned - External Vendor';
 							}
 							creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
 			   				debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
@@ -1718,6 +1720,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     RecordTypeId,
                                                     Revenue_Recognized_Date__c,
                                                     Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c,
                                                     Retail_Subtotal__c,
                                                     Retail_Total__c,
                                                     Discount_Amount__c,
@@ -2566,7 +2569,8 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__r.RecordTypeId,
                                                     CreatedById,
                                                     Name,
-                                                    Store_Location__c
+                                                    Store_Location__c,
+                                                    Store_Location__r.Active_Store_Configuration__c
                                                     
                                                     FROM Refund__c WHERE Id IN :mapNew.keyset() AND Order__r.RecordTypeId IN :orderRecordTypes];       
     
@@ -2723,6 +2727,7 @@ public with sharing class RMS_financialTransactionManager {
 			                                                    Description__c,
 			                                                    Order__c,
 			                                                    Store_Location__c,
+			                                                    Store_Location__r.Active_Store_Configuration__c,
 																Type__c,                                                
 			                                                    Order__r.Revenue_Recognized_Date__c,
 			                                                    Order__r.BillToContactId,
@@ -2952,13 +2957,13 @@ public with sharing class RMS_financialTransactionManager {
     ****************************************************/
     public map<id, list<SObject>>  linkFinacialTransactions(List<SObject> objectList, String typeToGet){
         list<id> paymentIdList = new list<id>();
-        list<Id> storeListId = new list<Id>();
+        list<Id> storeConfigListId = new list<Id>();
         
         for(SObject o : objectList){
             paymentIdList.add(o.id);
-            storeListId.add((Id)o.get('Store_Location__c'));
+        	storeConfigListId.add((id)String.valueOf(o.getSObject('Store_Location__r').get('Active_Store_Configuration__c')));
         } 
-        system.debug('ads storelistId: '+storeListId);
+        system.debug('ads storeConfigListId: '+storeConfigListId);
         list<Financial_Transaction__c> relatedFinancialTransactions = [SELECT   id, 
                                                                                 Store_Configuration__c, 
                                                                                 Store_Configuration__r.Store__c,
@@ -2967,7 +2972,7 @@ public with sharing class RMS_financialTransactionManager {
                                                                                 Debit_Account_Number__c,
                                                                                 Debit_Account_Number__r.Name
                                                                             FROM Financial_Transaction__c 
-                                                                            WHERE Store_Configuration__r.Store__c IN :storeListId
+                                                                            WHERE Store_Configuration__c IN :storeConfigListId
                                                                             AND Transaction_Type__c = :typeToGet
                                                                             ];
         system.debug('ads relatedFinancialTransactions: '+relatedFinancialTransactions);
@@ -2993,10 +2998,10 @@ public with sharing class RMS_financialTransactionManager {
 	    
     public map<string, map<id, list<SObject>>> linkFinancialTransactions(list<SObject> objectList, list<string> typesToGet){
     	list<id> objectIdList = new list<id>();
-        list<Id> storeListId = new list<Id>();
+        list<Id> storeConfigListId = new list<Id>();
         for(SObject o :objectList){
         	objectIdList.add(o.id);
-        	storeListId.add((id)o.get('Store_Location__c'));
+        	storeConfigListId.add((id)String.valueOf(o.getSObject('Store_Location__r').get('Active_Store_Configuration__c')));
         }
      	list<Financial_Transaction__c> relatedFinancialTransactions = [SELECT   id, 
                                                                                 Store_Configuration__c, 
@@ -3007,7 +3012,7 @@ public with sharing class RMS_financialTransactionManager {
                                                                                 Debit_Account_Number__r.Name,
                                                                                 Transaction_Type__c
                                                                             FROM Financial_Transaction__c 
-                                                                            WHERE Store_Configuration__r.Store__c IN :storeListId
+                                                                            WHERE Store_Configuration__c IN :storeConfigListId
                                                                             AND Transaction_Type__c IN :typesToGet
                                                                             ];
         system.debug('ads fixing FT method: relatedFinancialTransactions: '+relatedFinancialTransactions);                                                                    

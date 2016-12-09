@@ -781,7 +781,7 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(System.today(), je.Date__c.date());
 
 		// Verify the account number is the store location number inserted in the the gl account number
-		System.AssertEquals('GLAccountNumSLNber', je.Debit_General_Ledger_Account__c);
+		System.AssertEquals('GLAccountNumber', je.Debit_General_Ledger_Account__c);
 		System.AssertEquals(miscReimbursementCredit.Name, je.Credit_General_Ledger_Account__c);
 
 		labor1.External_Labor_Amount__c = 200;
@@ -793,7 +793,7 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(System.today(), je.Date__c.date());
 
 		// Verify the account number is a combination of the store location number + the gl account number
-		System.AssertEquals('GLAccountNumSLNber', je.Debit_General_Ledger_Account__c);
+		System.AssertEquals('GLAccountNumber', je.Debit_General_Ledger_Account__c);
 		System.AssertEquals(miscReimbursementCredit.Name, je.Credit_General_Ledger_Account__c);
 
 		// Delete the Labor and verify the journal entry is deleted

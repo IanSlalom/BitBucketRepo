@@ -20,8 +20,8 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 	public String newpoId {get;set;}
 	public String orderId {get;set;}
 
-	// The map of Charge Vendors to PO Id
-	public Map<String,Id> chargeVendorMap = new Map<String,Id>();
+	// The map of Charge Vendors to existing PO Ids
+	public Map<String,Id> chargeVendorExistingPOMap = new Map<String,Id>();
 
 	// The list of Charge Wrappers
 	public List<ChargeWrapper> chargesWrapperList
@@ -39,7 +39,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 	
 				if (c.Service_Product__r.Purchase_Order__c != null) {
 					poExists = true;
-					chargeVendorMap.put(c.Charge_Cost_To__c + c.Service_Product__r.Purchase_Order__r.Vendor__c, c.Service_Product__r.Purchase_Order__c);
+					chargeVendorExistingPOMap.put(c.Charge_Cost_To__c + c.Service_Product__r.Purchase_Order__r.Vendor__c, c.Service_Product__r.Purchase_Order__c);
 					if (c.Charge_Cost_To__c == c.Service_Product__r.Purchase_Order__r.Charge_Cost_To__c)
 						isChecked = true;
 				}
@@ -135,6 +135,130 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 		errorOccurred = 'true';
 
 	    //list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
+//		map<Id, Id> orderItemsToUpdateMap = new map<Id,Id>();
+//		list<Purchase_Order__c> posToInsert = new list<Purchase_Order__c>();
+		Set<Id> serviceProductsSelected = new Set<Id>();
+		List<OrderItem> orderItemsToUpdate = new List<OrderItem>();
+//		Map<OrderItem, Purchase_Order__c> orderItemPOMap = new Map<OrderItem, Purchase_Order__c>();
+		// The map of Charge Vendors to new POs
+		Map<String,Purchase_Order__c> chargeVendorNewPOMap = new Map<String,Purchase_Order__c>();
+		Map<OrderItem, String> orderItemChargeVendorMap = new Map<OrderItem, String>();
+		Id poId;
+		// Loop through all of the charge wrappers
+		for(ChargeWrapper cw : chargesWrapperList){
+			// If the charge was not selected, just continue
+			if (!cw.isSelected) continue;
+		
+			// Check and see if a charge has already been selected for this product,
+			// and if so, throw an error and return
+			if (serviceProductsSelected.contains(cw.charge.Service_Product__c)) {
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.DUPLICATE_SERVICE_PRODUCTS + cw.charge.Service_Product__r.Product_Name__c));
+				return null;
+			}
+		
+			// Put the service product id in the set for checking against other selected charges.
+			serviceProductsSelected.add(cw.charge.Service_Product__c);
+		
+			// If the charge is disabled (meaning a PO has already been created) just continue
+			if (cw.isDisabled) continue;
+		
+			System.Debug('*************chargeVendorExistingPOMap)=' +chargeVendorExistingPOMap);
+			System.Debug('*************cw.charge.Charge_Cost_To__c)=' +cw.charge.Charge_Cost_To__c);
+			System.Debug('*************cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c)=' +cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+
+			// Attempt to retrieve the purchase order from the charge vendor map
+			poId = chargeVendorExistingPOMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+			
+			// If we were able to find an existing purchase order then add the service
+			// product in a map so we can update it with the Purchase Order later
+			if (poId != null) {
+				OrderItem itemToUpdate = serviceProductMap.get(cw.charge.Service_Product__c);
+				itemToUpdate.Purchase_Order__c = poId;
+				orderItemsToUpdate.add(itemToUpdate);
+				continue;
+			}
+
+			// Now check if there is a new PO already pending for this charge cost to and vendor
+			if (chargeVendorNewPOMap.containsKey(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c)) {
+				//Put the order item in a map to the charge cost to and vendor
+				OrderItem itemToUpdate = serviceProductMap.get(cw.charge.Service_Product__c);
+				orderItemChargeVendorMap.put(itemToUpdate, cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+				continue;
+			}
+
+			String storeAbbreviation = returnStoreAbbreviation();
+			
+			// There was not a pending PO already so now create one and put it in the newPO map
+			Purchase_Order__c newPurchaseOrder = new Purchase_Order__c(
+													Vendor__c = ProductToVendorMap.get(cw.charge.Installed_Product_Id__c),
+													Order__c = this.serviceRequest.Id,
+													Store_Location__c = cw.charge.Service_Product__r.Order.Store_Location__c, 
+													Status__c = 'In Progress',
+													Charge_Cost_To__c = cw.charge.Charge_Cost_To__c,
+													Store_Abbreviation__c = storeAbbreviation,
+													RecordTypeId = UtilityMethods.RecordTypeFor('Purchase_Order__c', 'Service_Purchase_Order')
+												);
+
+			// Now put the new purchase order in the charge vendor map
+			chargeVendorNewPOMap.put(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c, newPurchaseOrder);
+			// Pull the order item from the serviceproduct map and put it in a different map with charge vendor
+			OrderItem itemToUpdate = serviceProductMap.get(cw.charge.Service_Product__c);
+			orderItemChargeVendorMap.put(itemToUpdate, cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+//			orderItemPOMap.put(itemToUpdate, newPurchaseOrder);
+			
+		// then create a po and a map with the actual po
+		// also create a map of po to list of service products		
+
+		// if we don't find the po, create a po then put in a different map with charge cost to and vendor?
+		// Which means we have to check that map before creating it
+
+		// Create a PO and put it in the list to insert
+
+		}
+        try{
+//       		insert orderItemPOMap.values();
+			// Now insert the new POs first
+       		insert chargeVendorNewPOMap.values();
+
+			// Then loop through the order items with a new po
+       		for(OrderItem oi : orderItemChargeVendorMap.keyset()) {
+				// Retrieve the charge vendor for the order item and then use that to 
+				// retrieve the new PO
+       			String chargeVendor = orderItemChargeVendorMap.get(oi);
+       			Purchase_Order__c po = chargeVendorNewPOMap.get(chargeVendor);
+//       			Purchase_Order__c po = orderItemPOMap.get(oi);
+
+				// Set the order item purchase order lookup to the po id
+       			oi.Purchase_Order__c = po.Id;
+       			
+       			// Set the remake flag on the order item if the charge cost to is local
+				oi.Remake__c = (po.Charge_Cost_To__c == 'Retailer') ? true : false;
+				// Set the order item description
+				oi.Description = (oi.Sold_Order_Product_Asset__r.Product_Name__c == null) ? '' : oi.Sold_Order_Product_Asset__r.Product_Name__c + ' - ';
+				oi.Description = (oi.Sold_Order_Product_Asset__r.Variant_Number__c == null) ? oi.Description : oi.Description + oi.Sold_Order_Product_Asset__r.Variant_Number__c;
+       			newpoId = oi.Purchase_Order__c;
+       			orderItemsToUpdate.add(oi);
+       		}
+       		if (newpoId == null) newpoId = poId;
+          	upsert orderItemsToUpdate;
+        } catch (Exception e){
+          System.debug('************The following exception occurred in the RMS_createServicePurchaseOrderExtension in the save method inserting records:' + e);
+          ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+          return null;
+        }
+
+		errorOccurred = 'false';
+		return null;    
+	} 
+
+
+/*	public PageReference save(){
+		system.debug('*****Saving the POs: ');
+
+		// Set this flag to true so we know to exit the javascript before redirecting
+		errorOccurred = 'true';
+
+	    //list<OrderItem> orderItemsToUpdateList = new list<OrderItem>();
 		map<Id, Id> orderItemsToUpdateMap = new map<Id,Id>();
 		list<Purchase_Order__c> posToInsert = new list<Purchase_Order__c>();
 		Set<Id> serviceProductsSelected = new Set<Id>();
@@ -159,12 +283,12 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 			// If the charge is disabled (meaning a PO has already been created) just continue
 			if (cw.isDisabled) continue;
 		
-			System.Debug('*************chargeVendorMap)=' +chargeVendorMap);
+			System.Debug('*************chargeVendorExistingPOMap)=' +chargeVendorExistingPOMap);
 			System.Debug('*************cw.charge.Charge_Cost_To__c)=' +cw.charge.Charge_Cost_To__c);
 			System.Debug('*************cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c)=' +cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
 
 			// Attempt to retrieve the purchase order from the charge vendor map
-			poId = chargeVendorMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
+			poId = chargeVendorExistingPOMap.get(cw.charge.Charge_Cost_To__c + cw.charge.Service_Product__r.Purchase_Order__r.Vendor__c);
 			
 			// If we were able to find an existing purchase order then add the service
 			// product in a map so we can update it with the Purchase Order later
@@ -224,8 +348,7 @@ public with sharing class RMS_createServicePurchaseOrdersExtension {
 
 		errorOccurred = 'false';
 		return null;    
-	} 
-
+	} */
 	/*******************************************************
 			setStoreAbbreviation method
 	*******************************************************/
