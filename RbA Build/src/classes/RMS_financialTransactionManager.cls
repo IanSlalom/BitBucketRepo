@@ -991,10 +991,12 @@ public with sharing class RMS_financialTransactionManager {
 							vendorCreditAT = true;
 							
 							if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received' ||
-								assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||	assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor'){
+								assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||	assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Intercompany' ||
+								assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Intercompany Consolidation Center'){
 								assetSubType = 'vendorCreateNew';
 							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - Cost Product Received' ||
-										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - External Vendor'){
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - Intercompany' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - Intercompany Consolidation Center'){
 								assetSubType = 'vendorEdit';
 							}
 						}
