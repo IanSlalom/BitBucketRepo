@@ -107,25 +107,36 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
 
         List<OrderItem> orderItemsToInsert = new  List<OrderItem> ();
         OrderItem rwo = new OrderItem();
-        rwo.OrderId = Order.id;
+        rwo.OrderId = Order2.id;
         rwo.PricebookentryId = pricebookEntryServ.Id;
         rwo.Quantity = 1;
         rwo.UnitPrice = 100;
         orderItemsToInsert.add(rwo);
 
         OrderItem rwo2 = new OrderItem();
-        rwo2.OrderId = Order.id;
-        rwo2.PricebookentryId = pricebookEntryServ.Id;
+        rwo2.OrderId = Order2.id;
+        rwo2.PricebookentryId = pricebookEntryServ2.Id;
         rwo2.Quantity = 1;
         rwo2.UnitPrice = 100;
         orderItemsToInsert.add(rwo2);
+
+        OrderItem rwo3 = new OrderItem();
+        rwo3.OrderId = Order2.id;
+        rwo3.PricebookentryId = pricebookEntryServ.Id;
+        rwo3.Quantity = 1;
+        rwo3.UnitPrice = 100;
+        orderItemsToInsert.add(rwo3);
+
         insert orderItemsToInsert;
+
         
         Charge__c charge = new Charge__c(Service_Request__c = order2.Id, Charge_Cost_To__c = 'Retailer', Category__c = 'Goodwill', What_Where__c='Customer Satisfaction', Service_Product__c=rwo.Id);
 
         Charge__c charge2 = new Charge__c(Service_Request__c = order2.Id, Charge_Cost_To__c = 'Manufacturing', Category__c = 'Renewal by Andersen', Service_Product__c=rwo2.Id);
+
+        Charge__c charge3 = new Charge__c(Service_Request__c = order2.Id, Charge_Cost_To__c = 'Manufacturing', Category__c = 'Renewal by Andersen', Service_Product__c=rwo3.Id);
         
-        insert new List<Charge__c>{charge,charge2};
+        insert new List<Charge__c>{charge,charge2,charge3};
                       
         
     }
@@ -161,6 +172,54 @@ public with sharing class RMS_createServicePurchaseOrdersExtTest {
         ext.Save();
         
         ext.Cancel();
+        Test.stopTest();    
+    }
+
+    @isTest static void SaveMultipleControllers()
+    {
+                
+        Test.startTest();
+        ord = [SELECT Id, Store_Location__c FROM Order WHERE Name = 'Service Order'];
+
+        ApexPages.StandardController std = new ApexPages.StandardController(ord);
+        RMS_createServicePurchaseOrdersExtension ext = new RMS_createServicePurchaseOrdersExtension(std);
+ 
+        ext.chargesWrapperList[0].isSelected = true;
+        ext.chargesWrapperList[1].isSelected = true;
+
+        // Save two selected
+        ext.Save();
+
+		List<Purchase_Order__c> posCreated = [SELECT Id FROM Purchase_Order__c];
+        
+		// Verify two pos was created, one for each charge / vendor combo selected
+        System.AssertEquals(2, posCreated.size());
+
+		// Verify one order item is linked to the first PO
+        System.AssertEquals(1, [SELECT Id FROM OrderItem WHERE Purchase_Order__c =: posCreated[1].Id ].size());
+
+		// Verify one order item is linked to the second PO
+        System.AssertEquals(1, [SELECT Id FROM OrderItem WHERE Purchase_Order__c =: posCreated[0].Id ].size());
+
+        ApexPages.StandardController std2 = new ApexPages.StandardController(ord);
+        RMS_createServicePurchaseOrdersExtension ext2 = new RMS_createServicePurchaseOrdersExtension(std2);
+ 
+
+        ext2.chargesWrapperList[2].isSelected = true;
+
+        // Save the third one selected
+        ext2.Save();
+
+		List<Purchase_Order__c> posCreated2 = [SELECT Id FROM Purchase_Order__c];
+		// Verify two pos were still created, one for each charge / vendor combo selected
+        System.AssertEquals(2, posCreated2.size());
+
+		// Verify two order items are linked to the first PO
+        System.AssertEquals(2, [SELECT Id FROM OrderItem WHERE Purchase_Order__c =: posCreated2[1].Id ].size());
+
+		// Verify one order items are linked to the second PO
+        System.AssertEquals(1, [SELECT Id FROM OrderItem WHERE Purchase_Order__c =: posCreated2[0].Id ].size());
+        
         Test.stopTest();    
     }
 
