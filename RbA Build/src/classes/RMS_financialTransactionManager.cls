@@ -870,9 +870,6 @@ public with sharing class RMS_financialTransactionManager {
         																'Inventory Received - Intercompany', 
         																'Inventory Received - Intercompany Consolidation Center',
         																'Inventory Received - External Vendor',
-        																'Service Material Returned - Intercompany',
-        																'Service Material Returned - Intercompany Consolidation Center',
-        																'Service Material Returned - External Vendor',
         																'Service Inventory Received - Intercompany',
         																'Service Inventory Received - Intercompany Consolidation Center',
         																'Service Inventory Received - External Vendor',
@@ -912,8 +909,11 @@ public with sharing class RMS_financialTransactionManager {
        	
        	list<string> jeTypesToGet = new list<string>{	'Inventory Received - External Vendor', 
        													'Cost Product Received',
+       													'Service Inventory Received - External Vendor',
+       													'Service Inventory Received - Remake External Vendor',
        													'Inventory Returned - External Vendor',
-       													'Inventory Returned - Cost Product Received'};
+       													'Inventory Returned - Cost Product Received',
+       													'Service Inventory Returned - External Vendor'};
        	
        	list<Journal_Entry__c> relatedJEForVendorCredit = [SELECT 	Id, 
        																Amount__c,
@@ -979,14 +979,16 @@ public with sharing class RMS_financialTransactionManager {
 //					if(a.Sold_Order__r.RecordTypeId != assetInstalledProductsRecordTypeId){
 					if(a.RecordTypeId != assetInstalledProductsRecordTypeId){
 						if(assetIdToLatestJEforVendorCredit.get(a.id) == null){
-							errorMessage = 'A vendor credit cannot be issued on an item that has not been received.';
+							errorMessage = 'A vendor credit cannot be issued on an item that has not been received or is not for an external vendor.';
 						}else{
 							system.debug('ads fixingVendor vendorCreditAT setting to true: '+vendorCreditAT);
 							vendorCreditAT = true;
 							
-							if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received'){
+							if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received' ||
+								assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||	assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor'){
 								assetSubType = 'vendorCreateNew';
-							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - Cost Product Received'){
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - External Vendor' || assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Returned - Cost Product Received' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Returned - External Vendor'){
 								assetSubType = 'vendorEdit';
 							}
 						}
@@ -1296,6 +1298,9 @@ public with sharing class RMS_financialTransactionManager {
 								jType = 'Inventory Returned - External Vendor';
 							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Cost Product Received'){
 								jType = 'Inventory Returned - Cost Product Received';
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake External Vendor'){
+								jType = 'Service Inventory Returned - External Vendor';
 							}
 							creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
 			   				debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
