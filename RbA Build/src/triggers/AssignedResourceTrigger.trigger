@@ -7,16 +7,15 @@
 @author  Brianne Wilson
 
 @version    2016-12/1  
-    Created.
+Created.
 
 
 @copyright  (c)2016 Slalom.  All Rights Reserved.
-            Unauthorized use is prohibited.
+Unauthorized use is prohibited.
 
 ***********************************************************/
 
-trigger AssignedResourceTrigger on Assigned_Resources__c (after delete, after insert, after undelete, 
-                                                    after update, before delete, before insert, before update) {
+trigger AssignedResourceTrigger on Assigned_Resources__c (after insert, after update) {
     
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
@@ -32,75 +31,35 @@ trigger AssignedResourceTrigger on Assigned_Resources__c (after delete, after in
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
         
-        //HANDLERS AND MANAGERS            
-        List<SObject> workorders = new List<SObject>();
-       
-        // Before Insert
-        /***
-        if(Trigger.isInsert && Trigger.isBefore){
-             
+        
+        
+        Map<ID, Rba_Work_Order__c> parentWO = new Map<ID, Rba_Work_Order__c>(); 
+        List<Id> listIds = new List<Id>();
+        
+        for (Assigned_Resources__c childObj : Trigger.new) {
+            if(childObj.isPrimary__c){
+                listIds.add(childObj.Work_Order__c);                
+            }
         }
         
         
-        //  Before Update
-        else
-        if(Trigger.isUpdate && Trigger.isBefore){
-            
-        }
-         
-    
-        // Before Delete
-        /*
-        else if(Trigger.isDelete && Trigger.isBefore){
-            
-        }
-        */
+        parentWO = new Map<Id, Rba_Work_Order__c>([SELECT id, Work_Order_Type__c,Primary_Installer__c, Primary_Tech_Measure__c, Primary_Service__c,(SELECT ID, isPrimary__c, Work_Order_Type__c, Scheduled_Resource__c FROM Assigned_Resources__r) FROM Rba_Work_Order__c WHERE ID IN :listIds]);
         
-        // After Insert 
-       
-      //else 
-      if(Trigger.isInsert && Trigger.isAfter){
-             if (UtilityMethods.hasOrderTriggerRan())
-                RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
-            else
-                workorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        } 
-     
-        
-        // After Update
-        
-        else if(Trigger.isUpdate && Trigger.isAfter){
-             if (UtilityMethods.hasOrderTriggerRan())
-                RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
-            else
-                workorders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
-        }
-
-       
-                    
-        //After Delete
-        
-      /*  else if(Trigger.isDelete && Trigger.isAfter){
-             if (UtilityMethods.hasOrderTriggerRan())
-                RMS_FutureRollups.rollupWorkOrdersToOrders(trigger.newMap.keySet());
-            else
-            workorders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+        for (Assigned_Resources__c ar: Trigger.new){
+            if(ar.isPrimary__c){
+                Rba_Work_Order__c myParentWO = parentWO.get(ar.Work_Order__c);
+                If(myParentWO.Work_Order_Type__c == 'Tech Measure'){
+                    myParentWO.Primary_Tech_Measure__c = ar.Scheduled_Resource__c;
+                }
+                If(myParentWO.Work_Order_Type__c == 'Install'){
+                    myParentWO.Primary_Installer__c = ar.Scheduled_Resource__c;
+                }
+                If(myParentWO.Work_Order_Type__c == 'Service'){
+                    myParentWO.Primary_Service__c = ar.Scheduled_Resource__c;
+                }
+            }
         }
         
-        
-        // After Undelete 
-        /*
-        else if(Trigger.isUnDelete){
-           
-        }
-        */
-        if (UtilityMethods.hasOrderTriggerRan()) return;
-         // Try - Catch to catch any dml errors doing the work order rollup and displaying
-    // errors on the labor records
-    try { update workorders;} 
-    catch(System.DmlException e) {
-      if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
-      else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
-    }
+        update parentWO.values();
     }
 }
