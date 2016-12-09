@@ -37,24 +37,27 @@ trigger AssignedResourceTrigger on Assigned_Resources__c (after insert, after up
         List<Id> listIds = new List<Id>();
         
         for (Assigned_Resources__c childObj : Trigger.new) {
-            listIds.add(childObj.Work_Order__c);
+            if(childObj.isPrimary__c){
+                listIds.add(childObj.Work_Order__c);                
+            }
         }
         
         
         parentWO = new Map<Id, Rba_Work_Order__c>([SELECT id, Work_Order_Type__c,Primary_Installer__c, Primary_Tech_Measure__c, Primary_Service__c,(SELECT ID, isPrimary__c, Work_Order_Type__c, Scheduled_Resource__c FROM Assigned_Resources__r) FROM Rba_Work_Order__c WHERE ID IN :listIds]);
         
         for (Assigned_Resources__c ar: Trigger.new){
-            Rba_Work_Order__c myParentWO = parentWO.get(ar.Work_Order__c);
-            If(myParentWO.Work_Order_Type__c == 'Tech Measure'){
-                myParentWO.Primary_Tech_Measure__c = ar.Scheduled_Resource__c;
+            if(ar.isPrimary__c){
+                Rba_Work_Order__c myParentWO = parentWO.get(ar.Work_Order__c);
+                If(myParentWO.Work_Order_Type__c == 'Tech Measure'){
+                    myParentWO.Primary_Tech_Measure__c = ar.Scheduled_Resource__c;
+                }
+                If(myParentWO.Work_Order_Type__c == 'Install'){
+                    myParentWO.Primary_Installer__c = ar.Scheduled_Resource__c;
+                }
+                If(myParentWO.Work_Order_Type__c == 'Service'){
+                    myParentWO.Primary_Service__c = ar.Scheduled_Resource__c;
+                }
             }
-            If(myParentWO.Work_Order_Type__c == 'Install'){
-                myParentWO.Primary_Installer__c = ar.Scheduled_Resource__c;
-            }
-            If(myParentWO.Work_Order_Type__c == 'Service'){
-                myParentWO.Primary_Service__c = ar.Scheduled_Resource__c;
-            }
-            
         }
         
         update parentWO.values();
