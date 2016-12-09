@@ -58,12 +58,33 @@ public with sharing class testRMS_assignServiceTaskOwner {
         PricebookEntry pricebookEntryServ2 = utility.createPricebookEntry(pricebookId, servProduct2.id);      
         List<PriceBookEntry> pbEntries = new List<PricebookEntry>{pricebookEntryMaster,pricebookEntryServ,pricebookEntryServ2};
             insert pbEntries;
-
-
+        
+        
         Service_Product__c servProd1 = new Service_Product__c(Service_Product__c = servProduct.Id, Master_Product__c = masterProduct.Id);
         Service_Product__c servProd2 = new Service_Product__c(Service_Product__c = servProduct2.Id, Master_Product__c = masterProduct.Id);
         List<Service_Product__c> sprods = new List<Service_Product__c>{servProd1,servProd2};
-        insert sprods;
+            insert sprods;
+        
+        
+        Profile portalProfile = [SELECT Id FROM Profile WHERE Name LIKE '%z-Partner-Temp%' Limit 1];
+        User u = new User(
+            Username = System.now().millisecond() + 'test12345@test.com',
+            ContactId = contact1.Id,
+            ProfileId = portalProfile.Id,
+            Alias = 'test123',
+            Email = 'test12345@test.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'McTesty',
+            CommunityNickname = 'test12345',
+            TimeZoneSidKey = 'America/Los_Angeles',
+            LocaleSidKey = 'en_US',
+            LanguageLocaleKey = 'en_US'          
+        );
+        insert u;
+        
+        List<Resource__c> resourceToInsert = new List<Resource__c>();
+        Resource__c resource1 = new Resource__c(RbA_User__c=u.Id, Name='Resource1', Resource_Type__c='Tech Measure', Retail_Location__c=storeConfig1.id, Active__c=TRUE);
+        insert resource1;        
         
         List<Order> ordersToInsert = new List<Order>();
         
@@ -102,7 +123,47 @@ public with sharing class testRMS_assignServiceTaskOwner {
             Work_Order_Type__c = 'Service'
         );
         wosToInsert.add(rwo);
+        
+        RbA_Work_Order__c rwo2 = new RbA_Work_Order__c(
+            recordTypeId=UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c'),
+            Sold_Order__c = order2.Id,
+            Account__c = dwelling1.id,
+            Contact__c = contact1.id,
+            Work_Order_Status__c = 'To be Scheduled',
+            Work_Order_Type__c = 'Tech Measure'
+        );
+        wosToInsert.add(rwo2);
+        
+        RbA_Work_Order__c rwo3 = new RbA_Work_Order__c(
+            recordTypeId=UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c'),
+            Sold_Order__c = order2.Id,
+            Account__c = dwelling1.id,
+            Contact__c = contact1.id,
+            Work_Order_Status__c = 'To be Scheduled',
+            Work_Order_Type__c = 'Install'
+        );
+        wosToInsert.add(rwo3);
         insert wosToInsert;
+        
+        List<Assigned_Resources__c> arsToInstert = new List<Assigned_Resources__c>();
+        Assigned_Resources__c ar1 = new Assigned_Resources__c(
+            isPrimary__c = TRUE,
+            Scheduled_Resource__c = resource1.id,
+            Work_Order__c = rwo.id);
+        arsToInstert.add(ar1);
+        Assigned_Resources__c ar2 = new Assigned_Resources__c(
+            isPrimary__c = TRUE,
+            Scheduled_Resource__c = resource1.id,
+            Work_Order__c = rwo2.id);
+        arsToInstert.add(ar2);
+        Assigned_Resources__c ar3 = new Assigned_Resources__c(
+            isPrimary__c = TRUE,
+            Scheduled_Resource__c = resource1.id,
+            Work_Order__c = rwo3.id);
+        arsToInstert.add(ar3);
+        insert arsToInstert;
+        
+        update arsToInstert;
         
         List<Task> tasksToInsert = new List<Task>();
         Task t = new Task(
@@ -126,6 +187,8 @@ public with sharing class testRMS_assignServiceTaskOwner {
         
         update tasksToInsert;
     }
+    
+    List<Assigned_Resources__c> resourcetoInsert = new List<Assigned_Resources__c>();
     
     static testmethod void assignServiceTaskOwner(){
         createTestRecords();
