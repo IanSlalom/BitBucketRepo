@@ -909,11 +909,17 @@ public with sharing class RMS_financialTransactionManager {
        	
        	list<string> jeTypesToGet = new list<string>{	'Inventory Received - External Vendor', 
        													'Cost Product Received',
+       													'Service Inventory Received - Intercompany',
+       													'Service Inventory Received - Intercompany Consolidation Center',
        													'Service Inventory Received - External Vendor',
+       													'Service Inventory Received - Remake Intercompany',
+       													'Service Inventory Received - Remake Intercompany Consolidation Center',
        													'Service Inventory Received - Remake External Vendor',
        													'Inventory Returned - External Vendor',
        													'Inventory Returned - Cost Product Received',
-       													'Service Inventory Returned - External Vendor'};
+       													'Service Inventory Returned - External Vendor',
+       													'Service Inventory Returned - Intercompany',
+       													'Service Inventory Returned - Intercompany Consolidation Center'};
        	
        	list<Journal_Entry__c> relatedJEForVendorCredit = [SELECT 	Id, 
        																Amount__c,
@@ -1301,6 +1307,12 @@ public with sharing class RMS_financialTransactionManager {
 							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - External Vendor' ||
 										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake External Vendor'){
 								jType = 'Service Inventory Returned - External Vendor';
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Intercompany' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake Intercompany'){
+								jType = 'Service Inventory Returned - Intercompany';
+							}else if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Intercompany Consolidation Center' ||
+										assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake Intercompany Consolidation Center'){
+								jType = 'Service Inventory Returned - Intercompany Consolidation Center';
 							}
 							creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
 			   				debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
