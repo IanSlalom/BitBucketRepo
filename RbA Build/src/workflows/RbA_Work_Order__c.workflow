@@ -571,7 +571,7 @@
             <name>Update_Status_to_To_be_scheduled</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <description>When a WO is cancelled the status needs to be changed to &quot;to be scheduled&quot;</description>
         <formula>AND(ISPICKVAL( Work_Order_Status__c, &quot;Cancelled&quot;), NOT(OR(ISPICKVAL( Cancel_Reason__c, &quot;Order Cancelled&quot;),ISPICKVAL( Cancel_Reason__c, &quot;Duplicate&quot;),ISPICKVAL( Cancel_Reason__c, &quot;Customer Cancelled&quot;) )))</formula>
         <triggerType>onAllChanges</triggerType>
