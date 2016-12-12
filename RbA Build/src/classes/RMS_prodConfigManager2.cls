@@ -1,6 +1,6 @@
 /*******************************************************//**
 
-@class	  RMS_prodConfigManager
+@class	  RMS_prodConfigManager2
 
 @brief	  Manager for the prodConfigEdit VF Page
 
@@ -17,7 +17,7 @@
 	Updated to pull product config from master product instead of pricebookentry
 @version	2015-12-04  Slalom.ADS
 	Added in new makability rules 
-@see		RMS_prodConfigManagerTest
+@see		RMS_prodConfigManagerTest2
 
 @copyright  (c)2015 Slalom.  All Rights Reserved.
 			Unauthorized use is prohibited.
@@ -611,6 +611,42 @@ global with sharing class RMS_prodConfigManager2 {
 					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Minimum_Leg_Height_Fractions__c);
 				}
 				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.MINIMUM_LEG_HEIGHT_RIGHT, enteredValue, requiredValue);
+				
+				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+			}
+		}
+
+		// Check for maximum leg heights
+		if(masterProductConfig.Maximum_Leg_Height__c != null){
+			Decimal leftLeg = orderLineItem.Left_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Left_Leg_Fraction__c);
+			Decimal rightLeg = orderLineItem.Right_Leg_Inches__c + UtilityMethods.calculateFraction(orderLineItem.Right_Leg_Fraction__c);
+			
+			if(leftLeg > (masterProductConfig.Maximum_Leg_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Maximum_Leg_Height_Fractions__c)) ){
+				
+				String enteredValue = String.ValueOf(orderLineItem.Left_Leg_Inches__c);
+				if(orderLineItem.Left_Leg_Fraction__c != null){
+					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Left_Leg_Fraction__c);
+				}
+				String requiredValue = String.ValueOf(masterProductConfig.Maximum_Leg_Height__c);
+				if(masterProductConfig.Maximum_Leg_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Maximum_Leg_Height_Fractions__c);
+				}
+				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.MAXIMUM_LEG_HEIGHT_LEFT, enteredValue, requiredValue);
+				
+				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+			}
+			
+			
+			if(rightLeg > masterProductConfig.Maximum_Leg_Height__c + UtilityMethods.calculateFraction(masterProductConfig.Maximum_Leg_Height_Fractions__c)){
+				String enteredValue = String.ValueOf(orderLineItem.Right_Leg_Inches__c);
+				if(orderLineItem.Right_Leg_Fraction__c != null){
+					enteredValue = enteredValue+' '+String.ValueOf(orderLineItem.Right_Leg_Fraction__c);
+				}
+				String requiredValue = String.ValueOf(masterProductConfig.Maximum_Leg_Height__c);
+				if(masterProductConfig.Maximum_Leg_Height_Fractions__c != null){
+					requiredValue = requiredValue+' '+String.ValueOf(masterProductConfig.Maximum_Leg_Height_Fractions__c);
+				}
+				String dynamicErrorMessage = fillInErrorRuleValues(RMS_errorMessages.MAXIMUM_LEG_HEIGHT_RIGHT, enteredValue, requiredValue);
 				
 				errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
 			}
