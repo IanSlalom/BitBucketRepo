@@ -1496,7 +1496,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
   // Called after the confirmation window is accepted
   public PageReference releasePurchaseOrder() {
     system.debug('*****Status set to released');
-    if(!revRecNullAndValidStatus){
+    if(!revRecNullAndValidStatus && productPurchaseOrder){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
     }else if(po.Status__c != 'In Progress' && po.Status__c != 'Rejected'&& productPurchaseOrder){
       ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
