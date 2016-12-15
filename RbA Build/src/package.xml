@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -101,6 +101,7 @@
         <members>RMS_opportunityUtilitiesTest</members>
         <members>RMS_orderHistoryController</members>
         <members>RMS_populateResourceonEventManager</members>
+        <members>RMS_preventMultipleResourcesforSameUser</members>
         <members>RMS_prodConfigExtension</members>
         <members>RMS_prodConfigExtensionTest</members>
         <members>RMS_prodConfigManager</members>
@@ -153,7 +154,6 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
-        <members>RMS_preventMultipleResourcesforSameUser</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -253,12 +253,12 @@
         <members>PurchaseOrderTrigger</members>
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
+        <members>ResourceTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
         <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
-        <members>ResourceTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
@@ -429,6 +429,7 @@
         <members>Store_Finance_Program__c-Cash Payment Page Layout</members>
         <members>Store_Finance_Program__c-Installment Loan Page Layout</members>
         <members>Store_Vendor__c-Store Vendor Layout</members>
+        <members>Support_Log__c-Support Log Layout</members>
         <members>TM_Offset__c-Tech Measure Offset Layout</members>
         <members>Task-Collections Task Layout</members>
         <members>Task-General Task Layout</members>

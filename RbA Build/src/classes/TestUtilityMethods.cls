@@ -24,8 +24,7 @@ Custom Objects to be added in RbA Project
 public with sharing class TestUtilityMethods {
 
 	public TestUtilityMethods() {}
-	 
-	
+
 	public void setUpConfigs(){
 
 		//Creating RMS_Settings__c
@@ -36,143 +35,79 @@ public with sharing class TestUtilityMethods {
 		u.Store_Locations__c = '77 - Twin Cities, MN';
 		update u;
 		system.runAs(u){
-		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
-		id storeRT = UtilityMethods.retrieveRecordTypeId('Store', 'Account');
+			id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+			id storeRT = UtilityMethods.retrieveRecordTypeId('Store', 'Account');
 		
-		Account store1 = createStoreAccount('77 - Twin Cities, MN');
-		store1.Store_Number__c = '0123';
-		insert store1;
+			Account store1 = createStoreAccount('77 - Twin Cities, MN');
+			store1.Store_Number__c = '0123';
+			insert store1;
 
-		Account masterAccount = new Account(name = 'Unassigned Account', RecordTypeId = dwellingRT);
-		insert masterAccount;
+			Account masterAccount = new Account(name = 'Unassigned Account', RecordTypeId = dwellingRT);
+			insert masterAccount;
 
-		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
-		insert customSetting2;
+			RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
+			insert customSetting2;
 		
 		
-		//Creating RMS_Queue_Settings__c
-		Group Order_Queue = createQueue('Order_Queue');
-		insert Order_Queue;
-		QueueSobject Order_Queue_Link = createQueueSobject(Order_Queue.id ,'Order');
-		insert Order_Queue_Link;
-		
-		
-		Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
-		insert Install_Work_Order_Queue;
-		QueueSobject Install_Work_Order_Link = createQueueSobject(Install_Work_Order_Queue.id ,'RbA_Work_Order__c');
-		insert Install_Work_Order_Link;
-		
-		Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
-		insert Tech_Measure_Work_Order_Queue;
-		QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'RbA_Work_Order__c');
-		insert Tech_Measure_Work_Order_Link;
-		
-		Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
-		insert Permit_Work_Order_Queue;
-		QueueSobject Permit_Work_Order_Link = createQueueSobject(Permit_Work_Order_Queue.id ,'RbA_Work_Order__c');
-		insert Permit_Work_Order_Link;
-		
-		Group Action_Work_Order_Queue = createQueue('Action_Work_Order');
-		insert Action_Work_Order_Queue;
-		QueueSobject Action_Work_Order_Link = createQueueSobject(Action_Work_Order_Queue.id ,'RbA_Work_Order__c');
-		insert Action_Work_Order_Link;
-		
-		Group LSWP_Work_Order_Queue = createQueue('LSWP_Work_Order');
-		insert LSWP_Work_Order_Queue;
-		QueueSobject LSWP_Work_Order_Link = createQueueSobject(LSWP_Work_Order_Queue.id ,'RbA_Work_Order__c');
-		insert LSWP_Work_Order_Link;
-		
-		Store_Configuration__c storeConfig = new Store_Configuration__c(
-			Store__c = store1.id,
-			Order_Queue_Id__c = Order_Queue.id,
-			Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
-			Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
-			//Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
-			//Action_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			Standard_Hourly_Rate__c = 50,		   
-			Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
-			Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
-			Location_Number__c = '777',
-			Order_Number__c = 0000001
-			);
-		insert storeConfig;
+			//Creating RMS_Queue_Settings__c
+			List<SObject> list2 = new List<SObject>();
+			List<SObject> list1 = new List<SObject>();
+			Group Order_Queue = createQueue('Order_Queue');
+			list1.add(Order_Queue);
+			Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
+			list1.add(Install_Work_Order_Queue);
+			Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
+			list1.add(Tech_Measure_Work_Order_Queue);
+			Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
+			list1.add(Permit_Work_Order_Queue);
+			Group Action_Work_Order_Queue = createQueue('Action_Work_Order');
+			list1.add(Action_Work_Order_Queue);
+			Group LSWP_Work_Order_Queue = createQueue('LSWP_Work_Order');
+			list1.add(LSWP_Work_Order_Queue);
+			insert list1;
 
-		store1.Active_Store_Configuration__c = storeConfig.Id;
-		update store1;
+			QueueSobject Order_Queue_Link = createQueueSobject(Order_Queue.id ,'Order');
+			list2.add(Order_Queue_Link);
+			QueueSobject Install_Work_Order_Link = createQueueSobject(Install_Work_Order_Queue.id ,'RbA_Work_Order__c');
+			list2.add(Install_Work_Order_Link);
+			QueueSobject Tech_Measure_Work_Order_Link = createQueueSobject(Tech_Measure_Work_Order_Queue.id ,'RbA_Work_Order__c');
+			list2.add(Tech_Measure_Work_Order_Link);
+			QueueSobject Permit_Work_Order_Link = createQueueSobject(Permit_Work_Order_Queue.id ,'RbA_Work_Order__c');
+			list2.add(Permit_Work_Order_Link);
+			QueueSobject Action_Work_Order_Link = createQueueSobject(Action_Work_Order_Queue.id ,'RbA_Work_Order__c');
+			list2.add(Action_Work_Order_Link);
+			QueueSobject LSWP_Work_Order_Link = createQueueSobject(LSWP_Work_Order_Queue.id ,'RbA_Work_Order__c');
+			list2.add(LSWP_Work_Order_Link);
 		
+			Store_Configuration__c storeConfig = new Store_Configuration__c(
+				Store__c = store1.id,
+				Order_Queue_Id__c = Order_Queue.id,
+				Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
+				Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
+				Standard_Hourly_Rate__c = 50,		   
+				Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
+				Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+				HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
+				LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
+				Location_Number__c = '777',
+				Order_Number__c = 0000001
+				);
+			list2.add(storeConfig);
+			insert list2;
+
+			store1.Active_Store_Configuration__c = storeConfig.Id;
+			update store1;
 		
-		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
-			Store_Configuration__c = storeConfig.id,
-			Contract_Signed__c = true,
-			Lien_Rights_Signed__c = true
-			);
-		insert backOfficeChecklist1;
+			Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
+				Store_Configuration__c = storeConfig.id,
+				Contract_Signed__c = true,
+				Lien_Rights_Signed__c = true
+				);
+			insert backOfficeChecklist1;
 		}
 			
 	}
 
-	public void setUpConfigsMark(){
-		//Creating RMS_Settings__c
-		RMS_Settings__c customSetting1 = new RMS_Settings__c(Value__c = '1234567890', Name='Data Loading Profile ID');
-		insert customSetting1;
-		Account masterAccount = new Account(name = 'Unassigned Account');
-		insert masterAccount;
-
-		RMS_Settings__c customSetting2 = new RMS_Settings__c(Value__c = masterAccount.Id, Name='Unassigned Account Id');
-		insert customSetting2;
-		
-		
-		//Creating RMS_Queue_Settings__c
-		Group Order_Queue = createQueue('Order_Queue');
-		insert Order_Queue;
-		Group Install_Work_Order_Queue = createQueue('Install_Work_Order_Queue');
-		insert Install_Work_Order_Queue;
-		Group Tech_Measure_Work_Order_Queue = createQueue('Tech_Measure_Work_Order');
-		insert Tech_Measure_Work_Order_Queue;
-		Group Permit_Work_Order_Queue = createQueue('Permit_Work_Order');
-		insert Permit_Work_Order_Queue;
-		Group Action_Work_Order_Queue = createQueue('Action_Work_Order');
-		insert Action_Work_Order_Queue;
-		Group LSWP_Work_Order_Queue = createQueue('LSWP_Work_Order');
-		insert LSWP_Work_Order_Queue;
-
-		Account store1 = createStoreAccount('77 - Twin Cities, MN');
-		store1.Store_Number__c = '0123';
-		insert store1;
-		
-		Store_Configuration__c storeConfig = new Store_Configuration__c(
-			Store__c = store1.id,
-			Order_Queue_Id__c = Order_Queue.id,
-			Install_Work_Order_Queue_Id__c = Install_Work_Order_Queue.id,
-			Tech_Measure_Work_Order_Queue_Id__c = Tech_Measure_Work_Order_Queue.id,
-			//Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
-			//Action_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			
-			Building_Permit_Work_Order_Queue_Id__c = Permit_Work_Order_Queue.id,
-			Historical_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			HOA_Work_Order_Queue_Id__c = Action_Work_Order_Queue.id,
-			LSWP_WO_Owner_ID__c = LSWP_Work_Order_Queue.id,
-			Order_Number__c = 0000001
-			);
-		insert storeConfig;
-
-		store1.Active_Store_Configuration__c = storeConfig.Id;
-		update store1;
-		
-		
-		Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
-			Store_Configuration__c = storeConfig.id,
-			Contract_Signed__c = true,
-			Lien_Rights_Signed__c = true
-			);
-		insert backOfficeChecklist1;
-		
-	}
-	
-	
-	
 	public Account createAccount(String x){
 		Account theAccount = new Account(
 			Name = x+'Test Account',
@@ -263,22 +198,35 @@ public with sharing class TestUtilityMethods {
 	}
   
 	public Pricebook2 createPricebook2(){
-		Pricebook2 testPricebook = new Pricebook2(
-			Name = 'Test PriceBook'
-		);
+		return createPricebook2('Test PriceBook', null);
+	}
+
+	public Pricebook2 createPricebook2(String Name, Id storeConfigId){
+		Pricebook2 testPricebook = new Pricebook2();
+		testPricebook.Name = Name;
+		testPricebook.IsActive = true;
+		if (storeConfigId != null) {
+			testPricebook.Store_Configuration__c = storeConfigId;
+		}
 		return testPricebook;
 	}
+
 	public Pricebook2 createPricebook2Name(String name){
-		Pricebook2 testPricebook = new Pricebook2(
-			Name = name
-		);
-		return testPricebook;
+		return createPricebook2(name, null);
 	}
+
 	public Product2 createProduct(){
+		return createProduct('Test Product', null);
+	} 
+
+	public Product2 createProduct(String Name, Id recordTypeId){
 		Product2 testProduct = new Product2(
-			Name='Test Product',
+			Name= Name,
 			IsActive=true
 		);
+		if (recordTypeId != null) {
+			testProduct.RecordTypeId = recordTypeId;
+		}
 		return testProduct;
 	} 
 	 
@@ -293,9 +241,9 @@ public with sharing class TestUtilityMethods {
 	}
 	
 
-	public Opportunity createOpportunity(Id accountId, String stage){
+	public Opportunity createOpportunity(String name, Id accountId, String stage, Id ownerId){
 		Opportunity testOpportunity = new Opportunity(
-			Name = 'TestOpportunity',
+			Name = name,
 			AccountId = accountId,
 			StageName = stage
 		);
@@ -304,8 +252,14 @@ public with sharing class TestUtilityMethods {
 		}else{
 			testOpportunity.CloseDate = Date.today().addYears(1);
 		}
+		if (ownerId != null)
+			testOpportunity.OwnerId = ownerId;
 		
 		return testOpportunity;
+	}
+
+	public Opportunity createOpportunity(Id accountId, String stage){
+		return createOpportunity('TestOpportunity', accountId, stage, null);
 	}
 		  
 
@@ -332,14 +286,19 @@ public with sharing class TestUtilityMethods {
 	}
 	
 	
-	public QuoteLineItem createQuoteLineItem(Id pricebookEntryId, Id quoteId){
+	public QuoteLineItem createQuoteLineItem(Id masterProdId, Id quoteId, Id childProdId){
 		QuoteLineItem QLI = new QuoteLineItem(
-		PricebookEntryId = pricebookEntryId,
+		PricebookEntryId = masterProdId,
 		QuoteId = quoteId,
 		Quantity = 1,
-		UnitPrice = 1
+		UnitPrice = 1,
+		Child_Product_Pricebook_Entry_Id__c = childProdId
 		);
 		return QLI;
+	}
+	
+	public QuoteLineItem createQuoteLineItem(Id pricebookEntryId, Id quoteId){
+		return createQuoteLineItem(pricebookEntryId, quoteId, null);
 	}
 	
 	public Group createQueue(String groupName){
@@ -368,96 +327,158 @@ public with sharing class TestUtilityMethods {
 	}
 	
 	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder){
+		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
 		Account dwelling1 = createDwellingAccount('22');
+		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
 		
-		Account store1 = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'][0];
-		dwelling1.Store_Location__c = store1.id;
-		update dwelling1;
-		
+		List<SObject> itemsToInsert = new List<SObject>();		
 		Contact contact1 = createContact(dwelling1.id , '1');
-		insert contact1;
+		itemsToInsert.add(contact1);
 		
 		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
 		opp1.OwnerId = userId;
-		insert opp1;
+		itemsToInsert.add(opp1);
+		insert itemsToInsert;
 		
+		//clean out the list
+		itemsToInsert.clear();
+
 		Event event1 = new Event(WhatId = opp1.id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60, Type = 'Sales Appointment');
-		insert event1;
+		itemsToInsert.add(event1);
 		
 		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
-		insert ocr1;
+		itemsToInsert.add(ocr1);
+		insert itemsToInsert;
 		
 		if(createWithOrder){
-			
-			Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
-			insert quote1;
-			Product2 prod1 = createProduct();
-			insert prod1;
+			//clean out the list
+			itemsToInsert.clear();
 
-			PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), prod1.id);
-			insert pbEntry1;
+			Pricebook2 pb = createPricebook2('SATestPB', store1.Active_Store_Configuration__c);
+			itemsToInsert.add(pb);
+			insert itemsToInsert;
+			itemsToInsert.clear();
+
+			Quote quote1 = createQuote(opp1.id, pb.Id);
+			quote1.isSold__c = true;
+			itemsToInsert.add(quote1);
+			insert itemsToInsert;
 			
-			QuoteLineItem qli1 = createQuoteLineItem(pbEntry1.Id, quote1.Id);
+			QuoteLineItem qli1 = createQLIMasterChildProducts(pb.Id, quote1.Id);
 			insert  qli1;
 			
-			opp1.SyncedQuoteId = quote1.id;
+			// generate the order
+			opp1.StageName = 'Sold';
 			update opp1;
-			
-			opp1.StageName = 'Closed Won';
-			update opp1;
-	
+
 		}
 	}
 	
+	/* creates a tech measure apptment 
+	 * with an opportunity, quote and order
+	 */
 	public void createTMAppt(Id userId, Datetime apptStartDateTime){
-		Account dwelling1 = createDwellingAccount('1');
-		insert dwelling1;
-		
-		Account store1 = [SELECT id FROM Account Where Name = '77 - Twin Cities, MN'][0];
-		dwelling1.Store_Location__c = store1.id;
-		update dwelling1;
-		
-		Contact contact1 = createContact(dwelling1.id , '1');
-		insert contact1;
-		
-		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
-		opp1.OwnerId = userId;
-		insert opp1;
-		
-		Quote quote1 = createQuote(opp1.id,Test.getStandardPricebookId());
-		insert quote1;
-		Product2 prod1 = createProduct();
-		insert prod1;
 
-		PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), prod1.id);
-		insert pbEntry1;
+		Account store1 = [SELECT id, Name, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
+		Account dwelling1 = createDwellingAccount('1');
+		dwelling1.Store_Location__c = store1.id;
+		dwelling1.OwnerId = userId;
+		insert dwelling1;
+
+		List<SObject> itemsToInsert = new List<SObject>();		
+		Contact contact1 = createContact(dwelling1.id , '1');
+		itemsToInsert.add(contact1);
+		
+		Opportunity opp1 = createOpportunity('TMAppt',dwelling1.id, 'New', userId);
+		opp1.OwnerId = userId;
+		itemsToInsert.add(opp1);
+		insert itemsToInsert;
+
+		//clean out the list
+		itemsToInsert.clear();
+		
+		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
+		itemsToInsert.add(ocr1);
+
+		Pricebook2 pb = createPricebook2('TMTestPB', store1.Active_Store_Configuration__c);
+		itemsToInsert.add(pb);
+		insert itemsToInsert;
+		itemsToInsert.clear();
+
+		Quote quote1 = createQuote(opp1.id, pb.Id);
+		quote1.isSold__c = true;
+		itemsToInsert.add(quote1);
+		insert itemsToInsert;
 			
-		QuoteLineItem qli1 = createQuoteLineItem(pbEntry1.Id, quote1.Id);
+		QuoteLineItem qli1 = createQLIMasterChildProducts(pb.Id, quote1.Id);
 		insert  qli1;
 			
-		opp1.SyncedQuoteId = quote1.id;
+		// generate the order
+		opp1.StageName = 'Sold';
 		update opp1;
 		
-		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
-		RbA_Work_Order__c techWorkOrder = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
-															                Opportunity__c = opp1.id,
-															                Work_Order_Type__c = 'Tech Measure'  
-															                    );
-    	insert techWorkOrder;
-		
-		opp1.StageName = 'Closed Won';
-		update opp1;
-		
+		// setup the event
 		Order ord1 = [SELECT Id FROM Order WHERE OpportunityId = :opp1.id][0];
-		
 		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp1.id AND Sold_Order__c = :ord1.id];
-		
 		Event event1 = new Event(WhatId = workOrder[0].id, StartDateTime = apptStartDateTime, WhoId = contact1.id, OwnerId = userId, DurationInMinutes = 60, Type = 'Tech Measure');
 		insert event1;
 		
-		OpportunityContactRole ocr1 = new OpportunityContactRole(ContactId = contact1.id, OpportunityId = opp1.id, Role = 'Business User');
-		insert ocr1;
+	}
+	
+	/* creates a tech measure apptment 
+	 * with an opportunity, quote and order
+	 */
+	public QuoteLineItem createQLIMasterChildProducts(Id pbId, Id quoteId){
+
+		Id rtId = UtilityMethods.RecordTypeFor('Product2', 'Master_Product');
+		List<Product2> masterProdList = [select Id, Name, RecordTypeId from Product2 where Name = 'Master Product' and RecordTypeId = :rtId];
+		Product2 masterProd = null;
+		if (masterProdList.size() == 0) {
+			masterProd = createProduct('Master Product', rtId);
+			insert masterProd;
+		} else {
+			masterProd = masterProdList[0];
+		}
+
+		rtId = UtilityMethods.RecordTypeFor('Product2', 'Child_Product');
+		List<Product2> childProdList = [select Id, Name, RecordTypeId from Product2 where Name = 'Child Product' and RecordTypeId = :rtId];
+		Product2 childProd = null;
+		if (childProdList.size() == 0) {
+			childProd = createProduct('Child Product', rtId);
+			childProd.Master_Product__c = masterProd.Id;
+			insert childProd;
+		} else {
+			childProd = childProdList[0];
+		}
+
+		PricebookEntry pbEntry3 = null;
+		PricebookEntry pbEntry4 = null;
+		List<PricebookEntry> pbeList = [select Id, Product2Id, Pricebook2Id, UnitPrice, isActive from PricebookEntry];
+		if (pbeList.size() == 0) {
+			List<SObject> itemsToInsert = new List<SObject>();
+			PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), masterProd.id);
+			PricebookEntry pbEntry2 = createPricebookEntry(Test.getStandardPricebookId(), childProd.id);
+			pbEntry3 = createPricebookEntry(pbId, masterProd.id);
+			pbEntry4 = createPricebookEntry(pbId, childProd.id);
+			itemsToInsert.add(pbEntry1);
+			itemsToInsert.add(pbEntry2);
+			itemsToInsert.add(pbEntry3);
+			itemsToInsert.add(pbEntry4);
+			insert itemsToInsert;
+		} else {
+			for(PricebookEntry pbe : pbeList) {
+				if (pbe.Product2Id == masterProd.Id && pbe.Pricebook2Id == pbId) {
+					pbEntry3 = pbe;
+				}
+				if (pbe.Product2Id == childProd.Id && pbe.Pricebook2Id == pbId) {
+					pbEntry4 = pbe;
+				}
+			}
+		}
+			
+		QuoteLineItem qli1 = createQuoteLineItem(pbEntry3.Id, quoteId, pbEntry4.Id);
+		return  qli1;
 	}
 	
 	public void createOrderTestRecords(){

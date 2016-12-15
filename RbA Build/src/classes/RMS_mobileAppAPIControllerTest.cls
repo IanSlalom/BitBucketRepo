@@ -56,7 +56,6 @@ private class RMS_mobileAppAPIControllerTest {
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doGet();
 		Blob b = (blob) (RestContext.response.responseBody);
-//		System.debug('################################################## ' + b.toString());
 		System.assert(b.toString().startsWith(RMS_mobileAppAPIController.NO_REQUEST_FOUND));
 	}
 
@@ -64,18 +63,18 @@ private class RMS_mobileAppAPIControllerTest {
 		RestRequest req = new RestRequest(); 
 		RestResponse res = new RestResponse();
 		// this is an example of the full URL - it needs to be broken into its parts
-//	    req.requestURI = 'https://cs50.salesforce.com/services/apexrest/1net/resultSalesAppointments';
-//		req.addParameter('TS', '2015-12-03 23:23:53');
+	    //req.requestURI = 'https://cs50.salesforce.com/services/apexrest/1net/resultSalesAppointments';
+		//req.addParameter('TS', '2015-12-03 23:23:53');
 	    req.requestURI = '/1net/resultSalesAppointments';
 	    req.httpMethod = 'POST';
-//TODO: Create a JSON string that will work
+		//TODO: Create a JSON string that will work
 		req.requestBody = Blob.valueOf('{"salesAppts": [{"opptyContainer": {"quoteContainerList": [{"quoteLineItems": [{}],"quoteDiscountList": [{}],"aQuote": {}}],"oppty": {}},"event": {},"account": {}}]}');
 		RestContext.request = req;
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
 		System.debug('################################################## ' + b.toString());
-//		System.assert(b.toString().startsWith('{"tmAppts":'));
+		System.assert(b.toString().startsWith('Unhandled Exception:'));
 		
 		//Cover various helper class method invocations
 		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.SAVE_TECH_MEASURE;
@@ -91,6 +90,9 @@ private class RMS_mobileAppAPIControllerTest {
 		RMS_mobileAppAPIController.doPost();
 
 		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.GET_SELECTED_SEARCH_RESULTS;
+		RMS_mobileAppAPIController.doPost();
+
+		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.CANCEL_ORDER;
 		RMS_mobileAppAPIController.doPost();
 	}
 

@@ -3,8 +3,7 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 	
 	static testmethod void municipalityMatchPositive(){ 
 		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigsMark();
-//		utility.setUpConfigs();
+		utility.setUpConfigs();
 
 		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 		id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');
@@ -30,8 +29,7 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 
 	static testmethod void municipalityMatchBulkTest(){ 
 		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigsMark();
-//		utility.setUpConfigs();
+		utility.setUpConfigs();
 
 		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 		id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');
@@ -62,8 +60,7 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 	
 	static testmethod void municipalityMatchNoZipCode(){ 
 		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigsMark();
-//		utility.setUpConfigs();
+		utility.setUpConfigs();
 
 		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 		id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');
@@ -85,8 +82,7 @@ public with sharing class RMS_MunicipalityMatchManagerTest {
 	
 	static testmethod void municipalityMatchNoMunicipalityMatch(){ 
 		TestUtilityMethods utility = new TestUtilityMethods();
-		utility.setUpConfigsMark();
-//		utility.setUpConfigs();
+		utility.setUpConfigs();
 
 		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 		id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');

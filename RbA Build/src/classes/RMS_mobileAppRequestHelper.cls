@@ -34,9 +34,8 @@ public with sharing class RMS_mobileAppRequestHelper {
     try {
       List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Sales Appointment'];
       List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Tech Measure'];
-//TODO: Validate that these fields are nut null, otherwise this will blow up
-      Appointments myAppts = new Appointments();
 
+      Appointments myAppts = new Appointments();
       // process the sales appointments
       if (salesEvents.size() > 0) {
         myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
@@ -83,7 +82,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     for (OpportunityContainer oc: relatedOCs.values()) {
       accountIdList.add(oc.oppty.AccountId);
     }
-//TODO: Validate that these fields are nut null, otherwise this will blow up
+	//TODO: Validate that these fields are nut null, otherwise this will blow up
     Map<Id, Account> relatedAccountMap = new Map<Id, Account>([SELECT Id, Name, Dwelling_Style__c, Shipping_County__c, ShippingCity, ShippingCountryCode, ShippingLatitude, 
       ShippingLongitude, ShippingPostalCode, ShippingStateCode, ShippingStreet, Year_Built__c, Historical__r.Name, HOA__r.Name 
       FROM Account WHERE Id IN :accountIdList and isDeleted = false]);
@@ -140,7 +139,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 
     // get the work orders
     List<RbA_Work_Order__c> workOrderList = [SELECT Id, Name, Opportunity__c, Account__c, Sold_Order__c, Sold_Order__r.OpportunityId, Sold_Order__r.Opportunity.AccountId from RbA_Work_Order__c where isDeleted = false and Id in :workOrderIdList];
-//TODO: Validate that these fields are nut null, otherwise this will blow up
+	//TODO: Validate that these fields are nut null, otherwise this will blow up
 
     // opportunity ids
     // account ids
@@ -152,7 +151,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
 
     // get the accounts
-//TODO: Validate that these fields are nut null, otherwise this will blow up
+	//TODO: Validate that these fields are nut null, otherwise this will blow up
     Map<Id, Account> relatedAccountMap = new Map<Id, Account>([SELECT Id, Name, Dwelling_Style__c, Shipping_County__c, ShippingCity, ShippingCountryCode, ShippingLatitude, 
       ShippingLongitude, ShippingPostalCode, ShippingStateCode, ShippingStreet, Year_Built__c, Historical__r.Name, HOA__r.Name 
       FROM Account WHERE Id IN :accountIds and isDeleted = false]);
@@ -470,60 +469,73 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @return: String - JSON string with of SFDC ids of quotes, orders and discounts
    */
     public String resultSalesAppointments(Id userId, String input){
-    // parse the input JSON string into an Opportunity Container
-    Appointments appts = (Appointments)JSON.deserialize(input, Appointments.class);
+		// parse the input JSON string into an Opportunity Container
+		SalesAppointment appt = (SalesAppointment)JSON.deserialize(input, SalesAppointment.class);
 
-//TODO: do some validation before saving the results
-// can this opportunity be updated?
-// can the quote be updated?
-// can the order be updated?
-// field level validation?
-// how to report errors to rSuite
-	//only attempt to save quotes if sales appointments exist
-	if (appts.salesAppts != null) {
-		// now lets save the quotes to the opportunitiez
-		appts = saveQuotes(appts);
-		// now lets save the quote line items and discounts to the quotes
-		// note that we will need to add the quote ids to quote line items before we can save the quotes
-		appts=saveQuoteLineItemsDiscountsandFinancing(appts);
-		// now save the opportunity changes
-		appts=saveOpportunities(appts);
-		// now that we are done lets return the updated records to the client
-		// most everything is updated but we need to add the order details that were generated from any closed won opportunities
-		appts = updateAppts(appts);
-		// process any closed won opportunities by creating work order activities
-	} else {
-		appts.getErrors().add('No Sales Appointments Found');
-	}
-    return JSON.serialize(appts);
-  }
-
-
-  /* @method: saveQuotes(Appointments appts)
-   * @param: Appointments appts
-   * @return: Appointments - comes back with committed quotes and/or error messages
-   */
-  public Appointments saveQuotes(Appointments appts) {
-	List<Quote> quotes = new List<Quote>();
-	for (SalesAppointment sa : appts.salesAppts) {
-		for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
-			if (qc.aQuote != null) {
-				// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON an exception occurs
-				// when trying to do an upsert.  This code is to handle that situation
-				if (qc.aQuote.Id != null) {
-					String temp = (String)qc.aQuote.Id;
-					if (temp.equals('')) {
-						qc.aQuote.Id = null;
-					}	
+		// TODO: do some validation before saving the results
+		// can this opportunity be updated?
+		// can the quote be updated?
+		// can the order be updated?
+		// field level validation?
+		// how to report errors to rSuite
+		// only attempt to save quotes if sales appointments exist
+		if (appt != null) {
+			System.SavePoint sp = Database.setSavePoint();
+			// now lets save the quotes to the opportunitiez
+			try {
+				appt = saveQuotes(appt);
+				// now lets save the quote line items and discounts to the quotes - if we don't have an error
+				if (appt.getErrors().size() == 0) {
+					appt=saveQuoteLineItemsDiscountsandFinancing(appt);
 				}
-				// END ID patch
-				quotes.add(qc.aQuote);
+				// now save the opportunity changes - if we don't have an error
+				if (appt.getErrors().size() == 0) {
+					Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
+					if (!sr.isSuccess()) {            
+						for(Database.Error err : sr.getErrors()) {
+							appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
+						}
+					}
+				}
+				// roll back if we have errors
+				if (appt.getErrors().size() > 0) {
+					Database.rollBack(sp);
+					appt.isSaveSuccessful = false;
+					//add the errors to the error facility
+					// add logic to put data in the errors object
+				}
+			} catch (NoQuotesException e) {
+				// this is a no-op -basically there were no quotes on the appointment so nothing to save
 			}
+		} else {
+			appt.getErrors().add('No Sales Appointments Found');
+			appt.isSaveSuccessful = false;
+		}
+		return JSON.serialize(appt);
+	}
+
+
+  /* @method: saveQuotes(SalesAppointment sa)
+   * @param: SalesAppointment sa
+   * @return: SalesAppointment - comes back with committed quotes and/or error messages
+   */
+  public SalesAppointment saveQuotes(SalesAppointment sa) {
+	List<Quote> quotes = new List<Quote>();
+	for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
+		if (qc.aQuote != null) {
+			// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON an exception occurs
+			// when trying to do an upsert.  This code is to handle that situation
+			if (qc.aQuote.Id != null) {
+				String temp = (String)qc.aQuote.Id;
+				if (temp.equals('')) {
+					qc.aQuote.Id = null;
+				}	
+			}
+			// END ID patch
+			quotes.add(qc.aQuote);
 		}
 	}
 	if (quotes.size() > 0) {
-		// lets set a database save point
-		System.SavePoint sp = Database.setSavePoint();
 		try {
 			Database.UpsertResult[] lsr = Database.upsert(quotes, false);
 			for(Database.UpsertResult sr : lsr){
@@ -531,72 +543,66 @@ public with sharing class RMS_mobileAppRequestHelper {
 				// add error messages 
 				// Operation failed, so get all errors               
 					for(Database.Error err : sr.getErrors()) {
-						appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
+						sa.getErrors().add('save quote error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
 					}
 				}
 			}
 		} catch (Exception e) {
 			// we've got another error
-			// rollback the inserts if possible
-			Database.rollBack(sp);
 			// put the errors in the appts errors
-			appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+			sa.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 		}
 	} else {
-		appts.getErrors().add('No Quotes Found');
+		throw new NoQuotesException();
 	}
-	return appts;
+	return sa;
   }
 
-  /* @method: saveQuoteLineItemsDiscountsandFinancing(Appointments appts)
-   * @param: Appointments appts
-   * @return: Appointments - comes back with committed quote line items, quote discounts and/or error messages
+  /* @method: saveQuoteLineItemsDiscountsandFinancing(SalesAppointment sa)
+   * @param: SalesAppointment sa
+   * @return: SalesAppointment - comes back with committed quote line items, quote discounts and/or error messages
    */
-  public Appointments saveQuoteLineItemsDiscountsandFinancing(Appointments appts) {
+  public SalesAppointment saveQuoteLineItemsDiscountsandFinancing(SalesAppointment sa) {
     List<QuoteLineItem> qliList = new List<QuoteLineItem>();
     List<Quote_Discount__c> qdList = new List<Quote_Discount__c>();
     List<Quote_Financing__c> qfList = new List<Quote_Financing__c>();
     
-    for (SalesAppointment sa : appts.salesAppts) {
-      for (QuoteContainer qc: sa.opptyContainer.quoteContainerList) {
-        // add the quote id to the quote line items and put the quote line items in the list to be inserted
-        for (QuoteLineItem qli : qc.quoteLineItems) {
+    for (QuoteContainer qc: sa.opptyContainer.quoteContainerList) {
+		// add the quote id to the quote line items and put the quote line items in the list to be inserted
+		for (QuoteLineItem qli : qc.quoteLineItems) {
 			if (qli.QuoteId == null) {
 				// since this is used in inserts and updates we need to set the id only when the qli is net new
 				qli.QuoteId = qc.aQuote.Id;
 			}
 			qliList.add(qli);
-        }
-        // add the quote id to the quote discounts and put the quote discounts in the list to be inserted
+		}
+		// add the quote id to the quote discounts and put the quote discounts in the list to be inserted
 		if (qc.quoteDiscountList != null) {
 			for (Quote_Discount__c qd : qc.quoteDiscountList) {
 				if (qd.Quote__c == null) {
 					// since this is used in inserts and updates we need to set the id only when the qli is net new
 					qd.Quote__c = qc.aQuote.Id;
 				}
-			  qdList.add(qd);
+				qdList.add(qd);
 			}
 		}
-        // add the quote id to the quote financing and put the quote financing in the list to be inserted
+		// add the quote id to the quote financing and put the quote financing in the list to be inserted
 		if (qc.quoteFinancingList != null) {
 			for (Quote_Financing__c qf : qc.quoteFinancingList) {
 				if (qf.Related_Quote__c == null) {
 					// since this is used in inserts and updates we need to set the id only when the qli is net new
 					qf.Related_Quote__c = qc.aQuote.Id;
 				}
-			  qfList.add(qf);
+				qfList.add(qf);
 			}
 		}
-      }
     }
 	// now set the master product on the qli if its not set - the child product might only be set
 	if (qliList.size() > 0) {
 		qliList = addMasterProducts(qliList);
 	}
 
-    // lets set a database save point
-    System.SavePoint sp = Database.setSavePoint();
     try {
       // attempt to insert the quote line item record
       if (qliList.size() > 0) {
@@ -606,12 +612,12 @@ public with sharing class RMS_mobileAppRequestHelper {
             // add error messages 
             // Operation failed, so get all errors               
             for(Database.Error err : sr.getErrors()) {
-              appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': qli fields that affected this error: ' + err.getFields());
+              sa.getErrors().add('save quote line item error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qli fields that affected this error: ' + err.getFields());
             }
           }
         }
       } else {
-        appts.getErrors().add('No Quote Line Items Found');
+        sa.getErrors().add('save quote line item error: No Quote Line Items Found');
       }
       // attempt to insert the qoute discount records
       if (qdList.size() > 0) {
@@ -621,7 +627,7 @@ public with sharing class RMS_mobileAppRequestHelper {
             // add error messages 
             // Operation failed, so get all errors               
             for(Database.Error err : sr.getErrors()) {
-              appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': qoute discount fields that affected this error: ' + err.getFields());
+              sa.getErrors().add('save quote discount error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute discount fields that affected this error: ' + err.getFields());
             }
           }
         }
@@ -634,20 +640,18 @@ public with sharing class RMS_mobileAppRequestHelper {
             // add error messages 
             // Operation failed, so get all errors               
             for(Database.Error err : sr.getErrors()) {
-              appts.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': qoute financing fields that affected this error: ' + err.getFields());
+              sa.getErrors().add('save quote financiing error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute financing fields that affected this error: ' + err.getFields());
             }
           }
         }
       }
     } catch (Exception e) {
       // we've got another error
-      // rollback the inserts if possible
-      Database.rollBack(sp);
       // put the errors in the appts errors
-      appts.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+      sa.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
       System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
     }
-    return appts;
+    return sa;
   }
 
   /* @method: addMasterProducts(List<QuoteLineItem> qlis)
@@ -658,7 +662,8 @@ public with sharing class RMS_mobileAppRequestHelper {
 	// get the PBE's for the child products
 	Set<Id> childProductPBESet = new Set<Id>();
 	for (QuoteLineItem qli: qlis) {
-		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '') {
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '' &&
+			qli.PricebookEntryId == null) {
 			childProductPBESet.add(qli.Child_Product_Pricebook_Entry_Id__c);
 		}
 	}
@@ -698,7 +703,8 @@ public with sharing class RMS_mobileAppRequestHelper {
 
 	// finally update the qlis
 	for (QuoteLineItem qli: qlis) {
-		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '') {
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != ''&&
+			qli.PricebookEntryId == null) {
 			PricebookEntry cpPBE = cpPBEMap.get(qli.Child_Product_Pricebook_Entry_Id__c);
 			for (PricebookEntry mpPBE : mpPBEList) {
 				if (mpPBE.Pricebook2Id == cpPBE.Pricebook2Id && mpPBE.Product2Id == cpPBE.Product2.Master_Product__c) {
@@ -712,98 +718,6 @@ public with sharing class RMS_mobileAppRequestHelper {
     return qlis;
   }
 
-  /* @method: saveOpportunities(Appointments appts)
-   * @param: Appointments appts
-   * @return: Appointments - comes back with committed opportunities and/or error messages
-   */
-  public Appointments saveOpportunities(Appointments appts) {
-    List<Opportunity> oppList = new List<Opportunity>();
-    for (SalesAppointment sa : appts.salesAppts) {
-      oppList.add(sa.opptyContainer.oppty);
-    }
-    update oppList;
-    return appts;
-  }
-
-  /* @method: updateAppts(Appointments appts)
-   * @param: Appointments appts
-   * @return: Appointments - comes back with any newly created orders, orderitems and orderDiscounts on Closed Won opportunities and/or error messages
-   */
-  public Appointments updateAppts(Appointments appts) {
-    // first find the closed won opportunities
-    List<Id> oppIds = new List<Id>();
-    for (SalesAppointment sa: appts.salesAppts) {
-      if (sa.opptyContainer.oppty.StageName.equals('Closed Won') && sa.opptyContainer.anOrderContainer == null) {
-        oppIds.add(sa.opptyContainer.oppty.Id);
-      }
-    }
-
-    // build the orderContainers
-    List<OrderContainer> orcList = buildOrderContainers(oppIds);
-
-    // update the appointments
-    for (SalesAppointment sa: appts.salesAppts) {
-      if (sa.opptyContainer.oppty.StageName.equals('Closed Won') && sa.opptyContainer.anOrderContainer == null) {
-        for (OrderContainer orc : orcList) {
-          if (sa.opptyContainer.oppty.Id == orc.anOrder.OpportunityId) {
-            sa.opptyContainer.anOrderContainer = orc;
-          }
-        }
-      }
-    }
-    return appts;
-  }
-
-  /* @method: createWorkOrders(Appointments appts)
-   * @param: Appointments appts
-   * @return: void
-   */
-/* This is being done in the OrderTrigger now
-  public void createWorkOrders(Appointments appts) {
-    // first find the closed won opportunities
-    List<Order> ordList = new List<Order>();
-    List<Id> dwellingIds = new List<Id>();
-    for (SalesAppointment sa: appts.salesAppts) {
-      if (sa.opptyContainer.oppty.StageName.equals('Closed Won')) {
-        ordList.add(sa.opptyContainer.anOrderContainer.anOrder);
-        dwellingIds.add(sa.account.Id);
-      }
-    }
-    // get some setup information
-    // get record types
-       RecordType visitOrderScheduleRecordType = [SELECT id FROM RecordType WHERE SobjectType = 'RbA_Work_Order__c' AND DeveloperName = 'Visit'];
-    // get store configruation information through the dwellings
-    Map<Id, Account> accountsWithStoresMap = new Map<Id, Account>([select Id, Store_Location__c, Store_Location__r.Active_Store_Configuration__c,
-      Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c, Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c
-      from Account where Id in : dwellingIds]);
-    // now create the tech measure and install work orders for each order
-    List<RbA_Work_Order__c> woList = new List<RbA_Work_Order__c>();
-    for (Order ord : ordList) {
-      // find the Store config to use for this order
-      Account ac = accountsWithStoresMap.get(ord.AccountId);
-      // build the tech measure work order
-        RbA_Work_Order__c techWO = new RbA_Work_Order__c();
-        techWO.Sold_Order__c = ord.Id;
-        techWO.RecordType = visitOrderScheduleRecordType;
-        techWO.Work_Order_Type__c = 'Tech Measure';
-        techWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Tech_Measure_Work_Order_Queue_Id__c;
-      // add it to the list
-      woList.add(techWO);
-
-      // build the install work order
-        RbA_Work_Order__c installWO = new RbA_Work_Order__c();
-        installWO.Sold_Order__c = ord.Id;
-        installWO.RecordType = visitOrderScheduleRecordType;
-        installWO.Work_Order_Type__c = 'Install';
-        installWO.OwnerId = ac.Store_Location__r.Active_Store_Configuration__r.Install_Work_Order_Queue_Id__c;
-      woList.add(installWO);
-    }
-    if (woList.size() > 0) {
-      // TODO: use Database insert with rollback to catch errors.
-      insert woList;
-    }
-  }
-*/
   /* @method: customerSearch(String inputJSON)
    * @param: String inputJSON
    * @return: String
@@ -927,94 +841,92 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
   }
 
+  
+  /* @method: saveTechMeasure(String inputJSON)
+   * @param: String inputJSON
+   * @return: String
+   */
   public String saveTechMeasure(String inputJSON){
-  
-    Appointments appt = (Appointments)JSON.deserialize(inputJSON,Appointments.class);
-    System.SavePoint sp = Database.setSavePoint();
+	TechMeasureAppointment tmAppt = (TechMeasureAppointment)JSON.deserialize(inputJSON,TechMeasureAppointment.class);
+	System.SavePoint sp = Database.setSavePoint();
     try{
-      List<Order> ordToUpdate = new List<Order>();
-      List<OrderItemContainer> oiContainersToUpsert = new List<OrderItemContainer>();
-      List<OrderItem> oiToUpsert = new List<OrderItem>();
-      List<TM_Offset__c> TMOffsetToUpsert = new List<TM_Offset__c>();
-      List<Opportunity> oppToUpdate = new List<Opportunity>();  
-      List<RbA_Work_Order__c> rbaWorkOrdersToUpdate = new List<RbA_Work_Order__c>();
-     
-      for(TechMeasureAppointment tmAppt: appt.tmAppts){
-        oppToUpdate.add(tmAppt.opptyContainer.oppty);
-        rbaWorkOrdersToUpdate.add(tmAppt.workOrder);
-        OrderContainer oContainer = tmAppt.opptyContainer.anOrderContainer;
-        ordToUpdate.add(oContainer.anOrder);  
-        oiContainersToUpsert.addAll(oContainer.oiContainerList); 
-      }  
-
-      
-
-      Database.SaveResult[] lsr  = Database.update(oppToUpdate, false);
-      for(Database.SaveResult sr : lsr){
-        if (!sr.isSuccess()) {            
-          for(Database.Error err : sr.getErrors()) {
-            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
-          }
-        }
-      }
-      
-      lsr = Database.update(rbaWorkOrdersToUpdate, false);
-      for(Database.SaveResult sr : lsr){
-        if (!sr.isSuccess()) {            
-          for(Database.Error err : sr.getErrors()) {
-            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': RBA Work Order fields that affected this error: ' + err.getFields());
-          }
-        }
-      }
-
-      for(OrderItemContainer oiCon: oiContainersToUpsert){
-        oiToUpsert.add(oiCon.oi);
-      }    
-
-      Database.UpsertResult[] lur = Database.upsert(oiToUpsert, false);
-      for(Database.UpsertResult ur : lur){
-        if (!ur.isSuccess()) {        
-          for(Database.Error err : ur.getErrors()) {
-            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order Item fields that affected this error: ' + err.getFields());
-          }
-        }
-      }
-
-      for(OrderItemContainer oiCon: oiContainersToUpsert){
-		if (oiCon.tmOffSetList != null) {
-			for(TM_Offset__c tmOff: oiCon.tmOffSetList){
-			  tmOff.Order_Line__c = oiCon.oi.Id;
-			  TMOffsetToUpsert.add(tmOff);
-			}     
+		List<OrderItemContainer> oiContainersToUpsert = new List<OrderItemContainer>();
+		List<OrderItem> oiToUpsert = new List<OrderItem>();
+		List<TM_Offset__c> TMOffsetToUpsert = new List<TM_Offset__c>();
+		oiContainersToUpsert = tmAppt.opptyContainer.anOrderContainer.oiContainerList; 
+		// save the opportunity
+		Database.SaveResult opptysr  = Database.update(tmAppt.opptyContainer.oppty, false);
+		if (!opptysr.isSuccess()) {            
+			for(Database.Error err : opptysr.getErrors()) {
+				tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
+			}
 		}
-      }   
-     
-     lur = Database.upsert(TMOffsetToUpsert, false);
-      for(Database.UpsertResult ur : lur){
-        if (!ur.isSuccess()) {            
-          for(Database.Error err : ur.getErrors()) {
-            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Tech Measure Offset fields that affected this error: ' + err.getFields());
+		// save the work order
+		Database.SaveResult wosr = Database.update(tmAppt.workOrder, false);
+        if (!wosr.isSuccess()) {            
+          for(Database.Error err : wosr.getErrors()) {
+            tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': RBA Work Order fields that affected this error: ' + err.getFields());
           }
         }
-      }
+		// save the order items
+		for(OrderItemContainer oiCon: oiContainersToUpsert){
+			oiToUpsert.add(oiCon.oi);
+		}
+		Database.UpsertResult[] oilur = Database.upsert(oiToUpsert, false);
+		for(Database.UpsertResult ur : oilur){
+			if (!ur.isSuccess()) {        
+				for(Database.Error err : ur.getErrors()) {
+					tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order Item fields that affected this error: ' + err.getFields());
+				}
+			}
+		}
+		// save the tm offsets
+		for(OrderItemContainer oiCon: oiContainersToUpsert){
+			if (oiCon.tmOffSetList != null) {
+				for(TM_Offset__c tmOff: oiCon.tmOffSetList){
+					tmOff.Order_Line__c = oiCon.oi.Id;
+					TMOffsetToUpsert.add(tmOff);
+				}     
+			}
+		}   
 
-      //Update Order last, as activated orders do not allow addition of orderitems
-     lsr = Database.update(ordToUpdate, false);
-      for(Database.SaveResult sr : lsr){
-        if (!sr.isSuccess()) {            
-          for(Database.Error err : sr.getErrors()) {
-            appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order fields that affected this error: ' + err.getFields());
-          }
-        }
-      }
+		Database.UpsertResult[] tmolur = Database.upsert(TMOffsetToUpsert, false);
+		for(Database.UpsertResult ur : tmolur){
+			if (!ur.isSuccess()) {            
+				for(Database.Error err : ur.getErrors()) {
+					tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Tech Measure Offset fields that affected this error: ' + err.getFields());
+				}
+			}
+		}
 
-    }catch(Exception e){
-      Database.rollBack(sp);
-      appt.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+		//Update Order last, as activated orders do not allow addition of orderitems
+		Database.SaveResult ordersr = Database.update(tmAppt.opptyContainer.anOrderContainer.anOrder, false);
+		if (!ordersr.isSuccess()) {            
+			for(Database.Error err : ordersr.getErrors()) {
+				tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order fields that affected this error: ' + err.getFields());
+			}
+		}
+		// roll back if we have errors
+		if (tmAppt.getErrors().size() > 0) {
+			Database.rollBack(sp);
+			tmAppt.isSaveSuccessful = false;
+			//add the errors to the error facility
+// add logic to put data in the errors object
+System.debug('####################: ');
+			System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: error saving records: ' + JSON.serialize(tmAppt));
+		}
+	} catch(Exception e) {
+		Database.rollBack(sp);
+		tmAppt.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+		tmAppt.isSaveSuccessful = false;
+// add logic to put data in the errors object
+System.debug('####################: ');
+		System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: exception saving records: ' + JSON.serialize(tmAppt));
+		System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: exception : ' + e.getMessage() + e.getStackTraceString());
     }
-
-    return JSON.serialize(appt);
-  
+	// get rid of everything but the opportunity and the status
+	tmAppt.tmClear();
+	return JSON.serialize(tmAppt);
   }
 
   public String cancelOrder(String inputJSON){
@@ -1157,25 +1069,48 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
   }
 
-  public class SalesAppointment{
+  public abstract class Appointment{
     public Event event {get; set;}
     public OpportunityContainer opptyContainer {get; set;}
-       public Account account {get; set;}
-        public List<Contact> contactList {get; set;}
+    public Account account {get; set;}
+    public List<Contact> contactList {get; set;}
     public List<OpportunityContainer> historicOpptyContainerList {get; set;}
+    private String[] errors;
+	public Boolean isSaveSuccessful = true;
+    public String[] getErrors() { 
+      if (errors == null) { 
+        errors = new String[]{};
+      } 
+      return errors;
+    }
+	public void clear() {
+		event = null;
+		account = null;
+		historicOpptyContainerList = null;
+		contactList = null;
+		if (opptyContainer != null) {
+			opptyContainer.anOrderContainer = null;
+			opptyContainer.quoteContainerList = null;
+		}
 
-        public SalesAppointment() {}
-    }
+	}
+  }
+
+  public class SalesAppointment extends Appointment{
+    public SalesAppointment() { super(); }
+	public void saClear() {
+		super.clear();
+	}
+  }
     
-  public class TechMeasureAppointment{
-    public Event event {get; set;}
-       public RbA_Work_Order__c workOrder {get; set;}
-       public Account account {get; set;}
-        public List<Contact> contactList {get; set;}
-    public OpportunityContainer opptyContainer {get; set;}
-       
-        public TechMeasureAppointment() {}
-    }
+  public class TechMeasureAppointment extends Appointment{
+    public RbA_Work_Order__c workOrder {get; set;}
+    public TechMeasureAppointment() { super(); }
+	public void tmClear() {
+		super.clear();
+		workOrder = null;
+	}
+  }
 
   public class OpportunityContainer {
     public Opportunity oppty {get; set;}
@@ -1228,5 +1163,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     public String email {get;set;}
     public String opportunityID {get;set;}
   }
+
+  public Class NoQuotesException extends Exception {}
 
 }

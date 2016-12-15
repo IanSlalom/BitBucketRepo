@@ -5,7 +5,7 @@ public with sharing class testRMS_MunicipalityManager {
         insert turnOffFinancialTrigger;
         
         TestUtilityMethods utility = new TestUtilityMethods();
-        utility.setUpConfigsMark();
+        utility.setUpConfigs();
         
         id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
         id muniPermitRT = UtilityMethods.retrieveRecordTypeId('Permit', 'Municipality__c');
