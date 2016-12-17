@@ -74,7 +74,7 @@ private class RMS_mobileAppRequestHelperTest {
 		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
 		Id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
         Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
-		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
+		Opportunity opp = [select Id, StageName, rSuite_Id__c from Opportunity where AccountId =: dwelling.id];
 		opp.StageName = 'In Progress';
 
 		// create pricebook
@@ -126,6 +126,7 @@ private class RMS_mobileAppRequestHelperTest {
 		salesAppt.opptyContainer = oppContainer;
 		
 		String jsonInput = JSON.serialize(salesAppt);
+		System.assert(salesAppt.opptyContainer.oppty.rSuite_Id__c != null);
 		System.debug('###################################### ' + jsonInput);
 		System.assert(jsonInput.countMatches('Child_Product_Pricebook_Entry_Id__c') == 4);
 		System.assert(jsonInput.countMatches('"PricebookEntryId":null') == 2);
@@ -136,11 +137,10 @@ private class RMS_mobileAppRequestHelperTest {
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			String jsonResult = mHelper.resultSalesAppointments(u.Id, jsonInput);
 			Test.stopTest();
-			System.debug('###################################### ' + jsonResult);
+			System.debug('######################################: result:' + jsonResult);
+			RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.SalesAppointment.class);
 			System.assert(jsonResult.startsWith('{"opptyContainer":{'));
-			System.assert(jsonResult.countMatches('Child_Product_Pricebook_Entry_Id__c') == 4);
-			System.assert(jsonResult.countMatches('"PricebookEntryId":null') == 0);
-			System.assert(jsonResult.countMatches('"QuoteLineItem","url":') == 4);
+			System.assert(appt.isSaveSuccessful);
         }
 	}
 
@@ -303,7 +303,7 @@ private class RMS_mobileAppRequestHelperTest {
 		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
 		opp.StageName = 'Measured';
 
-		Order ord1 = [Select Id, Status from Order where OpportunityID =: opp.Id];
+		Order ord1 = [Select Id, Status, rSuite_Id__c from Order where OpportunityID =: opp.Id];
 		ord1.Status = 'Ready to Order';
 		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp.id AND Sold_Order__c = :ord1.id];
 		workOrder[0].Work_Order_Status__c = 'Scheduled';

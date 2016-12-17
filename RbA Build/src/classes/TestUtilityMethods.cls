@@ -338,6 +338,7 @@ public with sharing class TestUtilityMethods {
 		
 		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
 		opp1.OwnerId = userId;
+		opp1.rSuite_Id__c = 'examplersuiteId' + System.now();
 		itemsToInsert.add(opp1);
 		insert itemsToInsert;
 		
@@ -392,6 +393,7 @@ public with sharing class TestUtilityMethods {
 		
 		Opportunity opp1 = createOpportunity('TMAppt',dwelling1.id, 'New', userId);
 		opp1.OwnerId = userId;
+		opp1.rSuite_Id__c = 'examplersuiteId';
 		itemsToInsert.add(opp1);
 		insert itemsToInsert;
 

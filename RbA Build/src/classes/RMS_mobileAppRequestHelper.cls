@@ -511,6 +511,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 			appt.getErrors().add('No Sales Appointments Found');
 			appt.isSaveSuccessful = false;
 		}
+		appt.saClear();
 		return JSON.serialize(appt);
 	}
 
