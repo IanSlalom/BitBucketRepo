@@ -580,6 +580,10 @@
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
 
+            <apex:outputField value="{!OrderItem.Detail_Line_Process_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
+            <apex:outputField value="{!OrderItem.Cancelled_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
+
+	
             <apex:inputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode == 'e' || mode == 'r'}" required="true"/>
 			<apex:outputField value="{!OrderItem.Responsible_Party__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
             <apex:outputpanel id="verify" rendered="{!prodConfig.mpc.Verify_Item_Configuration_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}">
