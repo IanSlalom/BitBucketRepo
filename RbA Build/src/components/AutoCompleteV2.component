@@ -158,9 +158,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               
            
     </script>
-    
       <apex:inputText style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" onchange="updateCostCenters()" rendered="{!Application!='prodConfig'}"/>
-      <apex:inputText id="autoInputText" style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" html-data-jsid="product" onChange="specialtyWindow())" rendered="{!Application=='prodConfig'}"/>
+      <apex:inputText id="autoInputText" style="{!Style}" styleClass="auto{!randomJsIden}" value="{!cacheField}" html-data-jsid="product" onChange="specialtyWindow()" rendered="{!Application=='prodConfig'}"/>
  
     <apex:outputPanel id="hiddenPanel">
         <apex:inputText value="{!targetField}" id="hiddenField"

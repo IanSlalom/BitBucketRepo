@@ -129,7 +129,7 @@
 
         <apex:pageBlockSection title="" columns="1" rendered="{!productSelected || ordStat == 'rel'}">
             <apex:outputText value="{!masterProduct.Name}" label="Product" id="outputProduct" html-data-jsid="productName"/>
-            <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!masterProduct.Name=='Specialty Window'}"/>
+            <apex:outputText value="{!OrderItem.Specialty_Shape__c}" label="Specialty Shape" id="outputSpecialtyShape" rendered="{!(CONTAINS(masterProduct.Name, 'Specialty Window'))}"/>
         </apex:pageBlockSection>
     </apex:pageBlock>
 
@@ -475,7 +475,6 @@
 --> 			<apex:inputField id="specialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="specialOptionsCheck" onChange="callRule('specialOptions')" rendered="{!mode == 'e'}"/>
   			<apex:outputField id="outSpecialOptionsCheck" value="{!OrderItem.Special_Options__c}"  html-data-jsid="outSpecialOptionsCheck" rendered="{!mode != 'e'}"/>
 		</apex:outputPanel>
-
         <apex:pageBlockSection title="Special Options" columns="2" rendered="{!prodConfig.mpc.Special_Options_Control__c != 'Disabled' && prodConfig.mpc != null}" html-data-jsid="specialOptions">
 
              <apex:selectList value="{!OrderItem.Screen_Color__c}" label="Screen Color" size="1" id="screenColor" required="{!prodConfig.mpc.Screen_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Screen_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="screenColor">
@@ -654,24 +653,28 @@
 
 	// Custom dynamic defaulting / picklists for makeability 
     j$( document ).ready(function() {
-        startUpDefaults();
-        exteriorColor('Sandtone');
-        exteriorColor('Terratone');
-        exteriorColor('Dark Bronze');
-        screenType();
-        grilleStyle();
-        grillePattern(1);
-        grillePattern(2);
-        grillePattern(3);
-        grillePattern(4);
-        glazing(0);
-        glazing(1);
-        glazing(2);
-        glazing(3);
-        glazing(4);
-        frameType();
-        specialOptions();
-        specialtyWindow();
+    	var mode = '{!mode}';
+
+		if (mode == 'e') {  
+        	startUpDefaults();
+        	exteriorColor('Sandtone');
+        	exteriorColor('Terratone');
+        	exteriorColor('Dark Bronze');
+        	screenType();
+        	grilleStyle();
+        	grillePattern(1);
+        	grillePattern(2);
+        	grillePattern(3);
+       		grillePattern(4);
+        	glazing(0);
+        	glazing(1);
+        	glazing(2);
+        	glazing(3);
+        	glazing(4);
+        	frameType();
+        	specialOptionsLoad();
+        	specialtyWindow();
+        }
     });
     
     
@@ -713,6 +716,8 @@
             applyToAllGlassCheck();
         }else if(ruleName == 'specialOptions'){
             specialOptions();
+        }else if(ruleName == 'specialOptionsLoad'){
+            specialOptionsLoad();
         }
         else if(ruleName == 'nspr') {
         	nspr();
@@ -724,7 +729,7 @@
         
     function startUpDefaults(){
         if(j$("select[data-jsid='screenType']").val() == ''){
-            j$("select[data-jsid='screenType']").val('Fiberglass');
+            j$("select[data-jsid='screenType']").val('Full Screen Fiberglass');
         }
     }
     
@@ -747,7 +752,7 @@
     }
     
     function screenType(){
-        if(j$("select[data-jsid='screenType']").val() == 'TruScene (Wood Veneer)'){
+        if(j$("select[data-jsid='screenType']").val() == 'TruScene with Wood Veneer'){
             j$("select[data-jsid='screenVeneerType']").show();
 			j$("label[for='"+j$("select[data-jsid='screenVeneerType']").attr("id")+"']").show();
         }else{
@@ -887,7 +892,7 @@
 			 applyToAllGlassCheck();
 		  }
 		  
-          if(j$("select[data-jsid=glazing" +sashnumber +"]").val() == 'High Performance SmartSun w/ HeatLock'){
+          if(j$("select[data-jsid=glazing" +sashnumber +"]").val() == 'High Performance SmartSun Heat Lock Glass'){
               j$("select[data-jsid=glassPattern" +sashnumber +"]").val(null);
               j$("select[data-jsid=glassPattern" +sashnumber +"]").hide();
 			  j$("label[for='"+j$("select[data-jsid=glassPattern" +sashnumber +"]").attr("id")+"']").hide();
@@ -917,15 +922,15 @@
 	}          
         
         function frameType(){
-            if(j$("select[data-jsid='frameType']").val() == 'Full-Frame'){
+            if(j$("select[data-jsid='frameType']").val() == 'Full Frame'){
                 j$.each(j$("select[data-jsid='exteriorTrim'] option"), function( index, value ) {
-                    if(j$(this).val() != 'Brickmold - Picture Frame' &&  j$(this).val() !='Brickmould - Traditional'){
+                    if(j$(this).val() != 'Brickmould/Picture Frame' &&  j$(this).val() !='Brickmould/Traditional'){
                        j$(this).hide();
                     }else{
                         j$(this).show();
                     }
                 }); 
-                if(j$("select[data-jsid='exteriorTrim']").val() != 'Brickmold - Picture Frame' &&  j$("select[data-jsid='exteriorTrim']").val() !='Brickmould - Traditional' ){
+                if(j$("select[data-jsid='exteriorTrim']").val() != 'Brickmould/Picture Frame' &&  j$("select[data-jsid='exteriorTrim']").val() !='Brickmould/Traditional' ){
                    j$("select[data-jsid='exteriorTrim']").val('');
                 }
             }else if(j$("select[data-jsid='frameType']").val() == 'Flat Sill Insert'){
@@ -972,16 +977,26 @@
 				j$("label[for='"+j$("select[data-jsid='interiorTrim']").attr("id")+"']").hide();
             } 
         }
-        
+
+    function specialOptionsLoad(){
+		// If the specialOptions checkbox is checked, display the special options section
+    	var specialOptionsCheckInput = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
+    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheck']").prop("alt");
+        if( specialOptionsCheckOutput == 'Checked'){
+           j$("div[data-jsid='specialOptions']").show();
+        }
+        else if( specialOptionsCheckInput == true){
+            j$("div[data-jsid='specialOptions']").show();
+        }
+	}        
     function specialOptions(){
 		// If the specialOptions checkbox is checked, display the special options section
     	var specialOptionsCheckInput = j$("input[data-jsid='specialOptionsCheck']").prop('checked');
-// 	TODO:   show the special options section on view if the special options check is true    	
-//    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheckOut']").prop("title");
-//        if( specialOptionsCheckOutput == true){
-//            j$("div[data-jsid='specialOptions']").show();
-//        }
-        if( specialOptionsCheckInput == true){
+    	var specialOptionsCheckOutput = j$("[data-jsid='outSpecialOptionsCheck']").prop("alt");
+        if( specialOptionsCheckOutput == 'Checked'){
+           j$("div[data-jsid='specialOptions']").show();
+        }
+        else if( specialOptionsCheckInput == true){
             j$("div[data-jsid='specialOptions']").show();
             
             callRule('interiorColor');  
@@ -995,7 +1010,7 @@
         	
         	
         	if( j$("select[data-jsid='grilleStyle']").val() == 'Interior Wood Only' || j$("select[data-jsid='grilleStyle']").val() == 'Full Divided Light'){
-	        	if(j$("select[data-jsid='interiorColor']").val() == 'Stainable Pine'){
+	        	if(j$("select[data-jsid='interiorColor']").val() == 'Pine'){
 	        		j$("select[data-jsid='intGrilleColor']").val('Maple');
 	        	}else if(	j$("select[data-jsid='interiorColor']").val() == 'White' ||
 	        				j$("select[data-jsid='interiorColor']").val() == 'Canvas' ||
@@ -1010,10 +1025,10 @@
 	        	 j$("select[data-jsid='extGrilleColor']").val(j$("select[data-jsid='exteriorColor']").val());
 	        }
 	        
-	        if(j$("span[data-jsid='productName']").text() == 'Double Hung'){
+	        if(j$("span[data-jsid='productName']").text().includes('Double-Hung')){
 	        
        			j$("input[data-jsid='installHolesLocation']").val('6');
-       			if(j$("select[data-jsid='frameType']").val() == "Full-Frame" || j$("select[data-jsid='exteriorTrim']").val() != null){ 
+       			if(j$("select[data-jsid='frameType']").val() == "Full Frame" || j$("select[data-jsid='exteriorTrim']").val() != null){ 
 					 j$("select[data-jsid='installTrackLocation']").val('Inside');
 				}else{ 
 					 j$("select[data-jsid='installTrackLocation']").val('Outside');
@@ -1092,14 +1107,11 @@
     }
 
     function verify(){
-            alert("her");
     	var verifyCheck = j$("input[data-jsid='verify']").prop('checked');
         if( verifyCheck == true){
-            alert("1");
             jQuery('[id$=myHiddenField]').val('true');
         }
         if( verifyCheck == false){
-            alert("2");
         }
     }
 

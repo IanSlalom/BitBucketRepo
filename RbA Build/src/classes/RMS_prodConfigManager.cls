@@ -421,10 +421,10 @@ public with sharing class RMS_prodConfigManager {
 		}
 		
 		// Check for Brickmould is not available on Double Hung Insert Frames with Sloped Sills
-		if(	masterProductName == 'Double-Hung' && 
+		if(	masterProductName.contains('Double-Hung') && 
 			orderLineItem.Frame_Type__c == 'Insert Frame' &&
 			orderLineItem.Sill_Angle__c != 'FS' &&
-			(orderLineItem.Exterior_Trim__c == 'Brickmould - Picture Frame' || orderLineItem.Exterior_Trim__c == 'Brickmould - Traditional')
+			(orderLineItem.Exterior_Trim__c == 'Brickmould/Picture Frame' || orderLineItem.Exterior_Trim__c == 'Brickmould/Traditional')
 			){
 				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED : errorMessage + '<BR>' + RMS_errorMessages.BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED;
 		}
@@ -1203,7 +1203,7 @@ public with sharing class RMS_prodConfigManager {
 		
 		if(orderLineItem.Special_Options__c == true){
 			
-		    if(orderLineItem.Screen_Type__c == 'TruScene (Wood Veneer)' && (orderLineItem.Screen_Color__c != null && orderLineItem.Screen_Color__c != '')){
+		    if(orderLineItem.Screen_Type__c == 'TruScene with Wood Veneer)' && (orderLineItem.Screen_Color__c != null && orderLineItem.Screen_Color__c != '')){
 		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VENEER : errorMessage + '<BR>' + RMS_errorMessages.SCREEN_COLOR_SELECTED_WITH_WOOD_VENEER;	
 		    }
 		    if((orderLineItem.Grille_Style__c == 'No Grilles' || orderLineItem.Grille_Style__c == null) && (orderLineItem.Exterior_Grille_Color__c != null || orderLineItem.Interior_Grille_Color__c != null)){
