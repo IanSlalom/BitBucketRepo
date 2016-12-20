@@ -275,6 +275,7 @@ private class RMS_prodConfigManagerTest {
 		prodConfig.United_Inch_Maximum__c = 30;
 		prodConfig.Glass_Square_Ft_Max__c = 1.56;
 		prodConfig.Rectangular_Area_Limitation__c = 1.56;
+		prodConfig.Maximum_Leg_Height__c = 15;
 
 		// Set the extended height / width
 		prodConfig.Extended_Max_Height__c = 15;
@@ -287,6 +288,10 @@ private class RMS_prodConfigManagerTest {
 		soldOrderItem.Width_Fraction__c = '15/16';
 		soldOrderItem.Height_Inches__c = 14;
 		soldOrderItem.Height_Fraction__c = '15/16';
+		soldOrderItem.Left_Leg_Inches__c = 14;
+		soldOrderItem.Left_Leg_Fraction__c = '15/16';
+		soldOrderItem.Right_Leg_Inches__c = 14;
+		soldOrderItem.Right_Leg_Fraction__c = '15/16';
 
 		// check the makeability
 		String returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
@@ -296,12 +301,18 @@ private class RMS_prodConfigManagerTest {
 		System.Assert(!returnMessage.contains('united inch total'));
 		System.Assert(!returnMessage.contains('max square feet'));
 		System.Assert(!returnMessage.contains('rectangular area limitation'));
+		System.Assert(!returnMessage.contains('left leg height'));
+		System.Assert(!returnMessage.contains('right leg height'));
 
 		// Set the width & height to 15 1/16
 		soldOrderItem.Width_Inches__c = 15;
 		soldOrderItem.Width_Fraction__c = '1/16';
 		soldOrderItem.Height_Inches__c = 15;
 		soldOrderItem.Height_Fraction__c = '1/16';
+		soldOrderItem.Left_Leg_Inches__c = 15;
+		soldOrderItem.Left_Leg_Fraction__c = '1/16';
+		soldOrderItem.Right_Leg_Inches__c = 15;
+		soldOrderItem.Right_Leg_Fraction__c = '1/16';
 
 		// check the makeability
 		returnMessage = RMS_prodConfigManager.checkMakeability(prodConfig, soldOrderItem, 'Master Product');
@@ -311,6 +322,8 @@ private class RMS_prodConfigManagerTest {
 		System.Assert(returnMessage.contains('united inch total'));
 		System.Assert(returnMessage.contains('max square feet'));
 		System.Assert(returnMessage.contains('rectangular area limitation'));
+		System.Assert(returnMessage.contains('left leg height'));
+		System.Assert(returnMessage.contains('right leg height'));
 	}
 
 	/*******************************************************

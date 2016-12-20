@@ -16,4 +16,5 @@
     <tab>Service_Request</tab>
     <tab>standard-report</tab>
     <tab>standard-Dashboard</tab>
+    <tab>Support_Log__c</tab>
 </CustomApplication>

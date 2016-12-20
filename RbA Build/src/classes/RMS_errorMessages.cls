@@ -65,6 +65,8 @@ public with sharing class RMS_errorMessages {
 	public static final String WIDTH_TO_HEIGHT_RATIO_MIN = '&bull; The height and width you have entered[enteredValue] is below the width to height ratio minimum[requiredValue] for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_RIGHT = '&bull; The right leg height you entered[enteredValue] is below the minimum[requiredValue] leg height for this product.';
 	public static final String MINIMUM_LEG_HEIGHT_LEFT = '&bull; The left leg height you entered[enteredValue] is below the minimum[requiredValue] leg height for this product.';
+	public static final String MAXIMUM_LEG_HEIGHT_RIGHT = '&bull; The right leg height you entered[enteredValue] is above the maximum[requiredValue] leg height for this product.';
+	public static final String MAXIMUM_LEG_HEIGHT_LEFT = '&bull; The left leg height you entered[enteredValue] is above the maximum[requiredValue] leg height for this product.';
 	public static final String BRICKMOULD_NOT_AVALIABLE_DOUBLE_HUNG_SLOPED = '&bull; The Brickmould exterior trim is not available on Double Hung Insert Frames with Sloped Sills.'; 
  	public static final String SCREEN_WIDTH_MAX = '&bull; The width you entered[enteredValue] is above the maximum[requiredValue] for the type of screen you selected on this product.'; 
  	public static final String SCREEN_HEIGHT_MAX = '&bull; The height you entered[enteredValue] is above the maximum[requiredValue] for the type of screen you selected on this product.'; 

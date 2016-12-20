@@ -12,13 +12,19 @@ public with sharing class RMS_mobileAppContactHelper {
 	}
 
 	public static String saveNewContact(String inputJSON){
+		System.debug('###### RMS_mobileAppContactHelper.saveNewContact: Input: ' + inputJSON);
 		DTOContact dtoContact = (DTOContact)JSON.deserialize(inputJSON, Type.forName('RMS_mobileAppContactHelper.DTOContact'));
 		Contact contactToInsert = dtoContact.contact;
+		// check for an accoutId to link the contact to
+		if (dtoContact.DwellingId == null) {
+       		dtoContact.getErrors().add('Required field missing: fields that affected this error: DwellingId');
+		}
 	
 		// lets set a database save point
       	System.SavePoint sp = Database.setSavePoint();
       	try {
       		//Insert Contact
+			contactToInsert.AccountId = dtoContact.DwellingId;
 	        Database.SaveResult sr = Database.insert(contactToInsert, false);	 
 	        if (!sr.isSuccess()) {
 	            // add error messages 
@@ -30,19 +36,6 @@ public with sharing class RMS_mobileAppContactHelper {
 	        	dtoContact.contact.Id = contactToInsert.Id;
 	        }
 	        
-
-	        //Insert Contact History
-	        if(dtoContact.getErrors().isEmpty()){
-	        	Contact_History__c contactHistoryToInsert = new Contact_History__c(Contact__c = contactToInsert.Id, Dwelling__c = dtoContact.DwellingId, Type__c ='Current Resident');
-	        	sr = Database.insert(contactHistoryToInsert, false);
-          		if (!sr.isSuccess()) {              
-	            	for(Database.Error err : sr.getErrors()) {
-	              		dtoContact.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Contact History fields that affected this error: ' + err.getFields());
-	            	}
-	          	}
-		        
-	    	}
-
 	        //Insert Opportunity Contact Role
 	        if(dtoContact.getErrors().isEmpty()){
 	        	OpportunityContactRole contactRoleToInsert = new OpportunityContactRole(ContactId= contactToInsert.Id, OpportunityId = dtoContact.OpportunityId, IsPrimary = false, Role ='Decision Maker');
@@ -56,6 +49,9 @@ public with sharing class RMS_mobileAppContactHelper {
 			// do we have errors if yes roll it all back
 			if (!dtoContact.getErrors().isEmpty()) {
 		        Database.rollBack(sp);
+				dtoContact.isSaveSuccessful = false;
+				//add the errors to the error facility
+				// add logic to put data in the errors object
 				dtoContact.Contact.Id = null;
 			}
 
@@ -64,10 +60,12 @@ public with sharing class RMS_mobileAppContactHelper {
 	        // rollback the inserts if possible
 	        Database.rollBack(sp);
 	        dtoContact.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+			dtoContact.isSaveSuccessful = false;
 	        System.debug(LoggingLevel.ERROR, 'RMS_mobileAppContactHelper.saveNewContact: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 	    }
-	    system.debug(dtoContact);
-		return JSON.serialize(dtoContact);
+		String result = JSON.serialize(dtoContact);
+	    system.debug('###### RMS_mobileAppContactHelper.saveNewContact: Output: ' + result);
+		return result;
 
 	}
 
@@ -75,6 +73,7 @@ public with sharing class RMS_mobileAppContactHelper {
 		public Id OpportunityId{get;set;}
 		public Id DwellingId{get;set;}
 		public Contact contact{get;set;}
+		public Boolean isSaveSuccessful = true;
 		private String[] errors;
     	public String[] getErrors() { 
       		if (errors == null) { 

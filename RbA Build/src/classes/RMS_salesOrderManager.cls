@@ -130,7 +130,7 @@ public with sharing class RMS_salesOrderManager {
 			ord.OwnerId = qt.Opportunity.OwnerId;
 			ord.Description = qt.Opportunity.Description;
 			ord.QuoteId = qt.Id;
-			ord.Pricebook2Id = qt.Opportunity.Pricebook2Id;
+			ord.Pricebook2Id = qt.Pricebook2Id;
 			ord.BillingStreet = qt.Opportunity.Account.BillingStreet;
 			ord.BillingCity = qt.Opportunity.Account.BillingCity;
 			ord.BillingStateCode = qt.Opportunity.Account.BillingStateCode;
