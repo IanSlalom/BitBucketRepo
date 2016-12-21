@@ -82,7 +82,7 @@
                 <apex:inputField value="{!Order.Service_initiated_By__c}" style="width: 150px;"/>                
                 <apex:outputField value="{!Order.Account.Name}"/>                
                 <apex:inputField value="{!Order.Description}" label="Problem Description" style="width: 288px; height: 118px;"/>                                                                
-                <apex:outputField value="{!Order.Sold_Order__c}"/>
+                <apex:outputField value="{!Order.SoldOrderNumber__c}"/>
             </apex:pageBlockSection>
             
             <apex:pageBlockSection title="Select Products" columns="1" collapsible="false">
