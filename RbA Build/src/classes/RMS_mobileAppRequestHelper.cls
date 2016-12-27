@@ -522,18 +522,20 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
   public SalesAppointment saveQuotes(SalesAppointment sa) {
 	List<Quote> quotes = new List<Quote>();
-	for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
-		if (qc.aQuote != null) {
-			// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON an exception occurs
-			// when trying to do an upsert.  This code is to handle that situation
-			if (qc.aQuote.Id != null) {
-				String temp = (String)qc.aQuote.Id;
-				if (temp.equals('')) {
-					qc.aQuote.Id = null;
-				}	
+	if (sa.opptyContainer != null  && sa.opptyContainer.quoteContainerList != null) {
+		for (QuoteContainer qc : sa.opptyContainer.quoteContainerList) {
+			if (qc.aQuote != null) {
+				// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON an exception occurs
+				// when trying to do an upsert.  This code is to handle that situation
+				if (qc.aQuote.Id != null) {
+					String temp = (String)qc.aQuote.Id;
+					if (temp.equals('')) {
+						qc.aQuote.Id = null;
+					}	
+				}
+				// END ID patch
+				quotes.add(qc.aQuote);
 			}
-			// END ID patch
-			quotes.add(qc.aQuote);
 		}
 	}
 	if (quotes.size() > 0) {

@@ -41,7 +41,7 @@
         <criteriaItems>
             <column>Journal_Entry__c.Type__c</column>
             <operator>equals</operator>
-            <value>Post Recognition Inventory Received - External Vendor,Post Recognition Inventory Received - Intercompany</value>
+            <value>	Post Recognized External Labor</value>
         </criteriaItems>
         <criteriaItems>
             <column>Journal_Entry__c.Date__c</column>

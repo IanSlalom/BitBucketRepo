@@ -1358,6 +1358,7 @@ public class RMS_prodConfigExtension {
 
 		//If any of the glass/grille controls are disabled, clear the corresponding Sash 1 fields:
 		if(newProdConfig.Grille_Pattern_Control__c == 'Disabled' || newProdConfig.Grille_Pattern_Control__c == null) {
+			oI.Grille_Pattern__c    = null;
 			oI.Grille_Pattern_S1__c = null;
 			oI.Grille_Pattern_S2__c = null;
 			oI.Grille_Pattern_S3__c = null;
@@ -1382,6 +1383,7 @@ public class RMS_prodConfigExtension {
 		
 		//If Prod Config -> Number of Sashes = null, clear the following Order Line Item fields:
 		if(newProdConfig.Number_of_Sashes__c == null){
+			oI.Grille_Pattern__c = null;
 			oI.Grille_Pattern_S1__c = null;
 			oI.Lites_Wide_S1__c = null;	
 			oI.Lites_High_S1__c = null;	

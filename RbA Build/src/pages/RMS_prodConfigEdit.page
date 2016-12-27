@@ -263,7 +263,7 @@
        --> 	<apex:selectList value="{!OrderItem.Grille_Style__c}" label="Grille Style" size="1" id="grilleStyle" required="{!prodConfig.mpc.Grille_Style_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Style_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grilleStyle" onChange="callRule('grilleStyle')" > <!--  disabled="true" -->
             	<apex:selectOptions value="{!grilleStyleItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Grille_Pattern_S1__c}" label="Grille Pattern S1" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
+            <apex:selectList value="{!OrderItem.Grille_Pattern__c}" label="Grille Pattern" size="1" id="grillePattern1" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 1}" html-data-jsid="grillePattern1" onChange="callRule('grillePattern1')" >
             	<apex:selectOptions value="{!grillePatternItems}"/>
             </apex:selectList>
 
@@ -281,17 +281,13 @@
             <apex:inputField value="{!OrderItem.Brickmould_Applied__c}"  required="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="brickmouldApplied"/>
             <apex:outputField value="{!OrderItem.Brickmould_Applied__c}" rendered="{!prodConfig.mpc.Brickmould_Applied_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outbrickmouldApplied"/>
 
-                    <apex:selectList value="{!OrderItem.Grille_Pattern_S2__c}" label="Grille Pattern S2" size="1" id="grillePattern2" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="grillePattern2" onChange="callRule('grillePattern2')">
-                        <apex:selectOptions value="{!grillePatternItems}"/>
-                   </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="lightsWide2">
-                        <apex:selectOptions value="{!litesWideItems}"/>
-                  </apex:selectList>
-                <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}"  html-data-jsid="lightsHigh2">
-                        <apex:selectOptions value="{!litesHighItems}"/>
-                   </apex:selectList>
-            <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required' && verifyProducts == true}" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c != 'Disabled'  && mode == 'e') &&  numSashes >= 2}" html-data-jsid="customGrilleDetails2" />
-            <apex:outputText value="{!OrderItem.Custom_Grille_Details_S2__c}"  id="outcustomGrilleDetails2" rendered="{!(prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e') && numSashes >=2}" html-data-jsid="outcustomGrilleDetails2" />
+            <apex:selectList value="{!OrderItem.Lites_Wide_S2__c}" label="Grille Lites Wide S2" size="1" id="lightsWide2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}" html-data-jsid="LightsWide2">
+                 <apex:selectOptions value="{!litesWideItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Lites_High_S2__c}" label="Grille Lites High S2" size="1" id="lightsHigh2"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" rendered="{!numSashes >= 2}"  html-data-jsid="LightsHigh2">
+                 <apex:selectOptions value="{!litesHighItems}"/>
+            </apex:selectList>
+                   <apex:inputTextArea value="{!OrderItem.Custom_Grille_Details_S2__c}" label="Custom Grille Details S2" cols="50" rows="5" id="customGrilleDetails2" required="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Custom_Grille_Details_Control__c == 'Disabled'  || mode != 'e'}"  rendered ="{!numSashes >= 2}" html-data-jsid="customGrilleDetails2"/>
             <apex:inputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="grilleAlignment"  required="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c != 'Disabled'  && mode == 'e'}"  /> <!-- disabled="true" -->
             <apex:outputText value="{!OrderItem.SW_Grille_Alignment__c}" label="Grille Alignment" id="outgrilleAlignment" rendered="{!prodConfig.mpc.SW_Grille_Alignment_Control__c == 'Disabled'  || mode != 'e'}"  /> <!-- disabled="true" -->
             <apex:selectList value="{!OrderItem.Hubs__c}" label="Hubs" size="1" id="hubs"  required="{!prodConfig.mpc.Hubs_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Hubs_Control__c == 'Disabled'  || mode != 'e'}" >
@@ -452,10 +448,6 @@
 	            </apex:selectList>
 	            <apex:inputField value="{!OrderItem.Tempered_S4__c}"  required="{!prodConfig.mpc.Tempered_Control__c == 'Required' && verifyProducts == true}" id="tempered4" rendered="{!prodConfig.mpc.Tempered_Control__c != 'Disabled'  && mode == 'e'}" html-data-jsid="tempered4"/>
 	            <apex:outputField value="{!OrderItem.Tempered_S4__c}" id="outtempered" rendered="{!prodConfig.mpc.Tempered_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outtempered4"/>
-
-	             <apex:selectList value="{!OrderItem.Grille_Pattern_S4__c}" label="Pattern S4" size="1" id="grillePattern4" required="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Pattern_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="grillePattern4" onChange="callRule('grillePattern4')">
-                        <apex:selectOptions value="{!grillePatternItems}"/>
-                   </apex:selectList>
                 <apex:selectList value="{!OrderItem.Lites_Wide_S4__c}" label="Grille Lites Wide S4" size="1" id="lightsWide4"  required="{!prodConfig.mpc.Grille_Lites_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Grille_Lites_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="lightsWide4">
                         <apex:selectOptions value="{!litesWideItems}"/>
                   </apex:selectList>
@@ -669,7 +661,7 @@
         	grillePattern(1);
         	grillePattern(2);
         	grillePattern(3);
-       		grillePattern(4);
+        	grillePattern(4);
         	glazing(0);
         	glazing(1);
         	glazing(2);
@@ -683,6 +675,8 @@
     
     
     function callRule(ruleName){
+    	var numSashes = '{!numSashes}';
+
         if(ruleName == 'exteriorColor'){
             exteriorColor('Sandtone');
             exteriorColor('Terratone');
@@ -693,6 +687,15 @@
             grilleStyle();
         }else if(ruleName == 'grillePattern1'){
             grillePattern(1);
+            if (numSashes >= 2) {
+            	grillePattern(2);
+            }
+            if (numSashes >= 3) {
+            	grillePattern(3);
+            }
+            if (numSashes >= 4) {
+            	grillePattern(4);
+            }
         }else if(ruleName == 'grillePattern2'){
             grillePattern(2);
         }else if(ruleName == 'grillePattern3'){
@@ -772,15 +775,6 @@
             j$("select[data-jsid='grillePattern1']").val(null);
             j$("select[data-jsid='grillePattern1']").hide();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern2']").val(null);
-            j$("select[data-jsid='grillePattern2']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern3']").val(null);
-            j$("select[data-jsid='grillePattern3']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern4']").val(null);
-            j$("select[data-jsid='grillePattern4']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").hide();
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
@@ -790,15 +784,6 @@
             j$("select[data-jsid='grillePattern1']").val(null);
             j$("select[data-jsid='grillePattern1']").hide();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern2']").val(null);
-            j$("select[data-jsid='grillePattern2']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern3']").val(null);
-            j$("select[data-jsid='grillePattern3']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").hide();
-            j$("select[data-jsid='grillePattern4']").val(null);
-            j$("select[data-jsid='grillePattern4']").hide();
-			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").hide();
             
             j$("input[data-jsid='wideBar']").attr('checked',false);
             j$("input[data-jsid='wideBar']").hide();
@@ -807,12 +792,6 @@
         }else{
             j$("select[data-jsid='grillePattern1']").show();
 			j$("label[for='"+j$("select[data-jsid='grillePattern1']").attr("id")+"']").show();
-            j$("select[data-jsid='grillePattern2']").show();
-			j$("label[for='"+j$("select[data-jsid='grillePattern2']").attr("id")+"']").show();
-            j$("select[data-jsid='grillePattern3']").show();
-			j$("label[for='"+j$("select[data-jsid='grillePattern3']").attr("id")+"']").show();
-            j$("select[data-jsid='grillePattern4']").show();
-			j$("label[for='"+j$("select[data-jsid='grillePattern4']").attr("id")+"']").show();
             j$("input[data-jsid='wideBar']").show();
 			j$("span:has(label[for='"+j$("input[data-jsid='wideBar']").attr("id")+"'])").show()
             j$("table[data-jsid='sashGrilleTabPanel']").show();
@@ -840,7 +819,7 @@
 			 applyToAllGrillesCheck();
 		  }
 
-        if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Colonial'){
+        if(j$("select[data-jsid=grillePattern1" +"]").val() == 'Colonial'){
             j$("select[data-jsid=LightsWide" +sashnumber +"]").show();
             j$("label[for='"+j$("select[data-jsid=LightsWide" +sashnumber +"]").attr("id")+"']").show();
             j$("select[data-jsid=LightsHigh" +sashnumber +"]").show();
@@ -854,7 +833,7 @@
             j$("select[data-jsid=LightsHigh" +sashnumber +"]").hide();
             j$("label[for='"+j$("select[data-jsid=LightsHigh" +sashnumber +"]").attr("id")+"']").hide();
         }
-        if(j$("select[data-jsid=grillePattern" +sashnumber +"]").val() == 'Custom'){
+        if(j$("select[data-jsid=grillePattern1" +"]").val() == 'Custom'){
             j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").show();
 			j$("label[for='"+j$("textarea[data-jsid=customGrilleDetails" +sashnumber +"]").attr("name")+"']").show();
         }else{
