@@ -36,6 +36,7 @@ global with sharing class MA_SchedulerEvent {
 
 	public Boolean isJip = false;
 	public Boolean isLswp = false;
+	public String numWindows = '';
 	public Boolean editable = false;
 	public Boolean isSynced = false;
 	public String multiDayOrder = '';
@@ -124,6 +125,7 @@ global with sharing class MA_SchedulerEvent {
 		contactName = discoverContactName(maEvent.RbA_Work_Order__r);
 		estimatedStartDateTime = maEvent.Estimated_Start_Date_Time__c;
 		className = 'maEvent' + (missingResource ? ' missingResource' : '');
+		numWindows = String.valueOf((Integer)maEvent.RbA_Work_Order__r.Windows__c);
 
 		if (maEvent.RbA_Work_Order__c != null) {
 			workOrderId = maEvent.RbA_Work_Order__c;
@@ -148,7 +150,8 @@ global with sharing class MA_SchedulerEvent {
 		addResource(maEvent.Resource__r.Name);
 
 		if (missingResource && isDisplay) {
-			resourceId = startDateTime.format('EEE MMM dd yyyy');
+			//resourceId = startDateTime.format('EEE MMM dd yyyy');
+			resourceId = 'Unassigned';
 		}
 	}
 
@@ -334,7 +337,8 @@ global with sharing class MA_SchedulerEvent {
 						}
 					}
 
-					if (window.skillsTimeAvailabilityMap.keySet().size() == window.timeBlocksMissingASkill.size()) {
+					//if (window.skillsTimeAvailabilityMap.keySet().size() == window.timeBlocksMissingASkill.size()) {
+					if (!window.timeBlocksMissingASkill.isEmpty()) {
 						window.overbooked = true;
 					}
 				}

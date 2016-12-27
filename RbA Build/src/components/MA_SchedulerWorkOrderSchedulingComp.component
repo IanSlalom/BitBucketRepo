@@ -254,11 +254,11 @@
 					var nextAvailableHtml = '';
 			        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
 			            var nextAvailableWindow = response.bookingWindows[i];
-			            nextAvailableHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '">' + nextAvailableWindow.dayOfWeek + ' ' + nextAvailableWindow.startDateTimeFormated + '</input></div>';
+			            nextAvailableHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + nextAvailableWindow.startDateTimeFormated + ' - ' + nextAvailableWindow.endDateTimeFormated + '">' + nextAvailableWindow.dayOfWeek + ' ' + nextAvailableWindow.startDateTimeFormated + ' (' + nextAvailableWindow.availableSlots + '/' + nextAvailableWindow.totalSlots + ')</input></div>';
 			        }
 
 			        if (nextAvailableHtml == '') {
-			            nextAvailableHtml = '<div class="ma-alert ma-alert-red">No timeslots available within a month.</div>';
+			            nextAvailableHtml = '<div class="ma-alert ma-alert-red">No timeslots available within a month.<br /><br />All available resources with<br />matching skills are booked.</div>';
 			        }
 
 			        if (useAlt) {
@@ -272,11 +272,11 @@
 		    		var bookingWindowHtml = '';
 			        for (var i = 0, len = response.bookingWindows.length; i < len; i++) {
 			            var bookingWindow = response.bookingWindows[i];
-			            bookingWindowHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.dayOfWeek + ' ' + bookingWindow.startDateTimeFormated + '</input></div>';
+			            bookingWindowHtml += '<div class="bookingWindow"><input type="radio" name="bookingWindow" onchange="selectNextAvailable()" value="' + bookingWindow.startDateTimeFormated + ' - ' + bookingWindow.endDateTimeFormated + '">' + bookingWindow.dayOfWeek + ' ' + bookingWindow.startDateTimeFormated + ' (' + bookingWindow.availableSlots + '/' + bookingWindow.totalSlots + ')</input></div>';
 			        }
 
 			        if (bookingWindowHtml == '') {
-			            bookingWindowHtml = '<div class="ma-alert ma-alert-red">No timeslots available during the selected times.</div>';
+			            bookingWindowHtml = '<div class="ma-alert ma-alert-red">No timeslots available during the selected times.<br /><br />All available resources with matching<br />skills are booked.</div>';
 			        }
 
 		    		var unAvailableSlotsHtml = '';
@@ -395,15 +395,23 @@
         /*                                                 		 	*/
         /************************************************************/
         function inputAvailStart() {
+			var today = moment();
+        	var inputtedDate = moment(new Date($('#availabilityStartDate').val()));
+
 			if ($('#scheduleWorkOrderShipDateRow').is(':visible') && $('#availabilityStartDate').val() != '') {
-				var inputtedDate = moment(new Date($('#availabilityStartDate').val()));
 				var shipDate = moment(new Date($('#scheduleWorkOrderShipDate').text())).add(3, 'days');
 
 				if (shipDate > inputtedDate) {
-					$('#availabilityStartDate').val(shipDate.format('MM/DD/YYYY'));
+					//$('#availabilityStartDate').val(shipDate.format('MM/DD/YYYY'));
+					inputtedDate = shipDate;
 				}
 			}
 
+			if (today > inputtedDate) {
+				inputtedDate = today;
+			}
+			
+			$('#availabilityStartDate').val(inputtedDate.format('MM/DD/YYYY'));
 			checkAvailEnd();
 
 		    $('#scheduleSeeAvailBtn').delay(175).fadeIn(175);

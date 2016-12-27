@@ -1205,7 +1205,7 @@
 	                                                <select class="ma-input" id="timezoneOptions" />
 	                                            </div>
 	                                        </div>
-	                	                	<div id="storeHours" class="innerSettingsGroup"></div>
+	                	                	<!-- <div id="storeHours" class="innerSettingsGroup"></div> -->
 	                	                </div>
 	                                </div>
 	                
