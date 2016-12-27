@@ -309,7 +309,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         List<selectOption> options = new List<selectOption>(); //new list for holding all of the picklist options        
         for (Order orders : [SELECT Id, OrderNumber, Activated_Date__c, Status 
                              FROM Order 
-                             WHERE Status NOT IN('Draft', 'Tech Measure Needed', 'Tech Measure Scheduled', 'Ready to Order', 'Order Released', 'Install Needed')
+                             WHERE Status NOT IN('Cancelled')
                              AND RecordTypeId = :rt 
                              AND AccountId = :o.AccountId 
                              ORDER BY Order.OrderNumber DESC]) { 
