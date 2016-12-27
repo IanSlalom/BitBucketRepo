@@ -230,7 +230,10 @@
                                     /****************************************************/
                                     out_unassigned_stops: function(callback) {
                                         MAschedRoutes.getResults(res.results.out_unassigned_stops.paramUrl, res.jobId, function(responseU) {
-                                            MAschedRoutes.processUnassignedBatch({success: true, values: responseU.value.features});
+                                            //console.log(responseU.value);
+                                            if (responseU.value != undefined && responseU.value != null) {
+                                                MAschedRoutes.processUnassignedBatch({success: true, values: responseU.value.features});
+                                            }
                                             callback(false, {success: true});
                                         });
                                     }
@@ -246,6 +249,10 @@
                                         callback(err, results);
                                     }
                                     else {
+                                        $('#calendar').fullCalendar('refetchEvents');
+                                        $('#loaderModal').hide();
+                                        closeScheduleOptimizeModal();
+
                                         callback(err, results);
                                     }
                                 });
@@ -549,7 +556,7 @@
                                 var waitTime = record.WaitTime * 60 * 1000;
 
                                 try {
-                                    workOrderInfo = JSON.parse(record.Name) ;
+                                    workOrderInfo = JSON.parse(record.Name);
 
                                     if (!workOrderInfo.storeID) {
                                         eventListToRender.push({
@@ -571,7 +578,8 @@
                                             isSynced: workOrderInfo.isSynced,
                                             isLswp: workOrderInfo.isLswp,
                                             isJip: workOrderInfo.isJip,
-                                            multiDayOrder: workOrderInfo.multiDayOrder
+                                            multiDayOrder: workOrderInfo.multiDayOrder,
+                                            numWindows: workOrderInfo.numWindows
                                         });
                                     }
                                 }
@@ -593,9 +601,11 @@
 
                     isPendingBatch = false;
 
+                    /*
                     $('#calendar').fullCalendar('refetchEvents');
                     $('#loaderModal').hide();
                     closeScheduleOptimizeModal();
+                    */
                 }
                 catch(e) {
                     console.log(e);
@@ -608,7 +618,40 @@
             /*                                                                      */
             /************************************************************************/
             processUnassignedBatch : function(unassigned) {
-                $('#unassignedBatch').hide()
+                $('#unassignedBatch').hide();
+
+                for (var i = 0, len = unassigned.values.length; i < len; i++) {
+                    var record = unassigned.values[i].attributes;
+                    if (record.Name != undefined && record.Name != null && record.Name != '') {
+
+                        workOrderInfo = JSON.parse(record.Name);
+
+                        eventListToRender.push({
+                            id: workOrderInfo.woId,
+                            resourceId: 'Unassigned',
+                            title: workOrderInfo.woName,
+                            //start: moment(correctForTimezoneOffsetRouting(new Date(record.ArriveTime + waitTime), MAschedRoutes.master.offsetResponseMinutes)),
+                            //end: moment(correctForTimezoneOffsetRouting(new Date(record.DepartTime), MAschedRoutes.master.offsetResponseMinutes)),
+                            start: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.startTimeUnix), MAschedRoutes.master.offsetResponseMinutes)),
+                            end: moment(correctForTimezoneOffsetRouting(new Date(workOrderInfo.endTimeUnix), MAschedRoutes.master.offsetResponseMinutes)),
+                            className: 'maEvent missingResource',
+                            url: '/' + workOrderInfo.woId,
+                            contactName: workOrderInfo.contactName,
+                            eventType: workOrderInfo.woType,
+                            missingResource: true,
+                            resourceNamesText: '',
+                            city: workOrderInfo.city,
+                            state: workOrderInfo.state,
+                            isSynced: workOrderInfo.isSynced,
+                            isLswp: workOrderInfo.isLswp,
+                            isJip: workOrderInfo.isJip,
+                            multiDayOrder: workOrderInfo.multiDayOrder,
+                            numWindows: workOrderInfo.numWindows
+                        });
+                    }
+                }
+
+                //$('#calendar').fullCalendar('refetchEvents');
             },
             /********************************************************************/
             /*                                                                  */

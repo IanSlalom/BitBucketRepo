@@ -80,6 +80,8 @@ global with sharing class MA_SchedulerController {
                 query += String.isNotBlank(filters) ? ' WHERE ' + filters : '';
 
                 if (objType == 'Resource') {
+                    objList.add(new Resource__c(Name = 'Unassigned', Active__c = true));
+
                     if (String.isNotBlank(workOrderType)) { 
                         Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrderType);
                         query += ' AND Resource_Type__c IN (\'' + String.join(new List<String>(resourceTypes), '\', \'') + '\')';
@@ -89,7 +91,7 @@ global with sharing class MA_SchedulerController {
                     }
                 }
 
-                objList = Database.query(query);
+                objList.addAll(Database.query(query));
             }
 
             response.put('success', true);
@@ -180,7 +182,7 @@ global with sharing class MA_SchedulerController {
             if (objType == 'allEvents') {
                 query = 'SELECT Id, Name, Resource__c, Resource__r.Name, RbA_Work_Order__c, StartDateTime__c, EndDateTime__c, Estimated_Start_Date_Time__c, Estimated_End_Date_Time__c, RbA_Work_Order__r.State__c,'
                             + ' RbA_Work_Order__r.Work_Order_Type__c, RbA_Work_Order__r.Contact__c, RbA_Work_Order__r.Contact__r.FirstName, RbA_Work_Order__r.Contact__r.LastName, RbA_Work_Order__r.City__c,'
-                            + ' RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c'
+                            + ' RbA_Work_Order__r.Windows__c, RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c'
                             + ' FROM MA_Scheduler_Event__c';
 
                 altQuery = 'SELECT Id, Subject, OwnerId, WhatId, StartDateTime, EndDateTime FROM Event';
@@ -188,7 +190,7 @@ global with sharing class MA_SchedulerController {
             else if (objType == 'WorkOrder') {
                 query = 'SELECT Id, Name, Resource__c, Resource__r.Name, RbA_Work_Order__c, StartDateTime__c, EndDateTime__c, Estimated_Start_Date_Time__c, Estimated_End_Date_Time__c, RbA_Work_Order__r.State__c,'
                             + ' RbA_Work_Order__r.Work_Order_Type__c, RbA_Work_Order__r.Contact__c, RbA_Work_Order__r.Contact__r.FirstName, RbA_Work_Order__r.Contact__r.LastName, RbA_Work_Order__r.City__c,'
-                            + ' RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c'
+                            + ' RbA_Work_Order__r.Windows__c, RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c'
                             + ' FROM MA_Scheduler_Event__c';
             }
             
@@ -479,8 +481,9 @@ global with sharing class MA_SchedulerController {
 
             List<MA_Scheduler_Event__c> maEventList = [SELECT Id, Name, Resource__c, Resource__r.Name, RbA_Work_Order__c, StartDateTime__c, EndDateTime__c, Estimated_Start_Date_Time__c, Estimated_End_Date_Time__c, RbA_Work_Order__r.State__c,
                                                         RbA_Work_Order__r.Work_Order_Type__c, RbA_Work_Order__r.Contact__c, RbA_Work_Order__r.Contact__r.FirstName, RbA_Work_Order__r.Contact__r.LastName, RbA_Work_Order__r.City__c,
-                                                        RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c
+                                                        RbA_Work_Order__r.Windows__c, RbA_Work_Order__r.Tech_Measure_Synced__c, RbA_Work_Order__r.LSWP_Test_Results__c, RbA_Work_Order__r.Service_Request_Type__c, RbA_Work_Order__r.Total_Days__c, Event_Sequence__c
                                                         FROM MA_Scheduler_Event__c WHERE Resource__c = :resourceId AND StartDateTime__c < :endDateTime AND EndDateTime__c > :startDateTime]; 
+            
             for (MA_Scheduler_Event__c maEvent : maEventList) {
                 maEventIds.add(maEvent.Id);
 
@@ -517,6 +520,10 @@ global with sharing class MA_SchedulerController {
         Map<String, Object> response = new Map<String, Object>();
         
         try {
+            if (String.isNotBlank(woToResIdsString)) {
+                woToResIdsString = woToResIdsString.remove('"Unassigned"');
+            }
+
             Id primaryResourceId;
             Date eventSchedulerDate;
             Set<Id> assignedResources = new Set<Id>();
@@ -770,6 +777,33 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            String endDay = '';
+            String startDay = '';
+            DateTime currentEndTime;
+            DateTime currentStartTime;
+
+            for (MA_Scheduler_Event__c maEvent : [SELECT Id, StartDateTime__c, EndDateTime__c, Date__c FROM MA_Scheduler_Event__c WHERE RbA_Work_Order__c = :workOrderId ORDER BY StartDateTime__c ASC, EndDateTime__c DESC]) {
+                if (!isSingleDay || (isSingleDay && maEvent.Date__c == eventSchedulerDate)) {
+                    if (currentEndTime == null || currentEndTime < maEvent.EndDateTime__c) {
+                        currentEndTime = maEvent.EndDateTime__c;
+                        workOrder.Appointment_End_Time__c = maEvent.EndDateTime__c.format('hh:mm a', storeTimezone);
+                        endDay = maEvent.EndDateTime__c.format('MM/dd/yyyy', storeTimezone);
+
+                    }
+
+                    if (currentStartTime == null || currentStartTime > maEvent.StartDateTime__c) {
+                        currentStartTime = maEvent.StartDateTime__c;
+                        workOrder.Appointment_Start_Time__c = maEvent.StartDateTime__c.format('hh:mm a', storeTimezone);
+                        startDay = maEvent.StartDateTime__c.format('MM/dd/yyyy', storeTimezone);
+                    }
+                }
+            }
+
+            if (isSingleDay || startDay == endDay) {
+                endDay = '';
+                startDay = '';
+            }
+
             List<MA_SchedulerResource> availableResourcesList = availableResources.values();
             availableResourcesList.sort();
 
@@ -777,6 +811,8 @@ global with sharing class MA_SchedulerController {
             unAvailableResourcesList.sort();
 
             response.put('success', true);
+            response.put('endDay', endDay);
+            response.put('startDay', startDay);
             response.put('workOrder', workOrder);
             response.put('isSingleDay', isSingleDay);
             response.put('primaryResourceId', primaryResourceId);
@@ -801,9 +837,10 @@ global with sharing class MA_SchedulerController {
         Map<String, Object> response = new Map<String, Object>();
 
         try {
-            RbA_Work_Order__c workOrder = [SELECT Id, Work_Order_Type__c, Appointment_Duration__c, Account__r.Store_Location__r.Active_Store_Configuration__c,
+            RbA_Work_Order__c workOrder = [SELECT Id, Windows__c, Work_Order_Type__c, Appointment_Duration__c, Account__r.Store_Location__r.Active_Store_Configuration__c,
                                             (SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r),
-                                            (SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__r)
+                                            (SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__r),
+                                            (SELECT Id, Event_Sequence__c, Resource__c FROM MA_Scheduler_Events__r WHERE Resource__c != null)
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
 
             if (String.isNotBlank(altType)) {
@@ -817,6 +854,7 @@ global with sharing class MA_SchedulerController {
             Set<Integer> badIndexes = new Set<Integer>();
             Map<Id, Set<Id>> resourceToSkillsMap = new Map<Id, Set<Id>>();
             Map<Id, Integer> totalSkillsCountMap = new Map<Id, Integer>();
+            Map<Integer, Set<Id>> singleDayResourceMap = new Map<Integer, Set<Id>>();
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
             List<MA_SchedulerBookingWindow> bookingWindows = new List<MA_SchedulerBookingWindow>();
             List<MA_SchedulerBookingWindow> unAvailableSlots = new List<MA_SchedulerBookingWindow>();
@@ -830,7 +868,7 @@ global with sharing class MA_SchedulerController {
             Map<String, Object> storeBookingWindows = (Map<String, Object>)maSettingsMap.get('storeBookingWindows');
             Map<Id, Map<String, Object>> resourceHours = (Map<Id, Map<String, Object>>)maSettingsMap.get('resourceHours');
 
-            if (storeBookingWindows.isEmpty()) {
+            if (storeBookingWindows == null || storeBookingWindows.isEmpty()) {
                 response.put('success', false);
                 response.put('error', 'The store hours and/or ' + workOrder.Work_Order_Type__c + ' booking windows have not been configured yet.  Please go to the settings page to set these up.');
                 return JSON.serialize(response);
@@ -861,6 +899,19 @@ global with sharing class MA_SchedulerController {
 
             for (Assigned_Resources__c resource : workOrder.Assigned_Resources__r) {
                 assignedResourceIds.add(resource.Scheduled_Resource__c);
+            }
+
+            for (MA_Scheduler_Event__c maEvent : workOrder.MA_Scheduler_Events__r) {
+                //if (!assignedResourceIds.contains(maEvent.Resource__c)) {
+                    Integer eventSequence = Integer.valueOf(maEvent.Event_Sequence__c);
+
+                    if (!singleDayResourceMap.containsKey(eventSequence)) {
+                        singleDayResourceMap.put(eventSequence, new Set<Id>());
+                    }
+                    singleDayResourceMap.get(eventSequence).add(maEvent.Resource__c);
+                //}
+
+                assignedResourceIds.add(maEvent.Resource__c);
             }
 
             List<Resource__c> resourceList = [SELECT Id, RbA_User__c,
@@ -905,7 +956,7 @@ global with sharing class MA_SchedulerController {
             /*    remove booking windows with no available resources  */
             /*                                                        */
             /**********************************************************/
-            if (!assignedResourceIds.isEmpty()) {
+            if (!assignedResourceIds.isEmpty() && singleDayResourceMap.size() <= 1) {
                 for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
                     MA_SchedulerBookingWindow bw = bookingWindows[index];
 
@@ -969,8 +1020,10 @@ global with sharing class MA_SchedulerController {
                     Date tempStartDate = Date.parse(tempStart.format('MM/dd/yyyy', storeTimezone));
                     Date startOfWeek = tempStartDate.toStartOfWeek();
                     Integer daysBetweenStartOfWeek = startOfWeek.daysBetween(tempStartDate);
+                    Integer workOrderEventSequence = 0;
 
                     do {
+                        workOrderEventSequence++;
                         String dayOfWeek = dayNumMap.get(Math.mod(daysBetweenStartOfWeek, 7));
                         Map<String, Object> daysHours = latestHours.get(dayOfWeek);
 
@@ -991,6 +1044,19 @@ global with sharing class MA_SchedulerController {
                             Long totalMillisecondDifference = tempEnd.getTime() - tempStart.getTime();
                             tempTotalMinutes -= (Integer)(totalMillisecondDifference / 1000 / 60);
                             Set<String> windowsSpannedToCheck = allConfiguredWindows.get(dayOfWeek);
+
+                            /*
+                            if (!assignedResourceIds.isEmpty() && singleDayResourceMap.size() <= 1) {
+                                for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
+                                    MA_SchedulerBookingWindow bw = bookingWindows[index];
+
+                                    if (!bw.resourceToSkillsMap.keySet().containsAll(assignedResourceIds)) {
+                                        unAvailableSlots.add(bookingWindows[index]);
+                                        bookingWindows.remove(index);
+                                    }
+                                }
+                            }
+                            */
 
                             if (remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)) == null) {
                                 badIndexes.add(i);
@@ -1175,6 +1241,27 @@ global with sharing class MA_SchedulerController {
                 };
             }
 
+            /********************************************************************/
+            /*                                                                  */
+            /*    determine the number of available slots per booking window    */
+            /*                                                                  */
+            /********************************************************************/
+            for (Integer i = 0, len = bookingWindows.size(); i < len; i++) {
+                MA_SchedulerBookingWindow bw = bookingWindows[i];
+                Set<Id> availableResourceIds = bw.originalResourceToSkillsMap.keySet().clone();
+                bw.totalSlots = availableResourceIds.size();
+
+                List<Set<Id>> availableResourceSets = bw.resourceTimeAvailabilityMap.values(); 
+                for (Integer x = 0, resLen = availableResourceSets.size(); x < resLen; x++) {
+                    availableResourceIds.retainAll(availableResourceSets[x]);
+
+                    if (availableResourceIds.isEmpty()) {
+                        break;
+                    }
+                }
+                bw.availableSlots = availableResourceIds.size();
+            }
+
             unAvailableSlots.sort();
 
             response.put('success', true);
@@ -1264,6 +1351,13 @@ global with sharing class MA_SchedulerController {
 
             assignedResourceIdsList.remove(0);
 
+            Integer singleDayWorkNum;
+            Decimal originalTotalDays;
+            Boolean hadMaEvents = false;
+            Date originalAppointmentDate;
+            String originalAppointmentEnd;
+            String originalAppointmentStart;
+            Decimal originalAppointmentDuration;
             Set<Id> alreadyAssignedResourceIds = new Set<Id>();
             Map<Id, Id> resourceIdToUserIdMap = new Map<Id, Id>();
             Set<Id> assignedResourceIds = new Set<Id>(assignedResourceIdsList);
@@ -1271,12 +1365,14 @@ global with sharing class MA_SchedulerController {
             List<Assigned_Resources__c> assignedResourcesToDelete = new List<Assigned_Resources__c>();
             List<Assigned_Resources__c> assignedResources = [SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__c WHERE Work_Order__c = :workOrderId];
 
-            String additionalDeletionFilters = ' AND Resource__c NOT IN (\'' + String.join(assignedResourceIdsList, '\', \'') + '\')' + (isSingleDay ? ' AND Date__c = ' + eventSchedulerDateString : '');
+            /*
+            String additionalDeletionFilters = (!assignedResourceIdsList.isEmpty() ? ' AND Resource__c NOT IN (\'' + String.join(assignedResourceIdsList, '\', \'') + '\')' : '') + (isSingleDay ? ' AND Date__c = ' + eventSchedulerDateString : '');
             MA_SchedulerUtilities.deleteEvents(workOrderId, 'Reassigned', additionalDeletionFilters);
+            */
 
             RbA_Work_Order__c workOrder = [SELECT Id, Name, Appointment_Date__c, Appointment_Start_Time__c, Appointment_End_Time__c, Appointment_Duration__c,
-                                            Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c,
-                                            (SELECT Id, StartDateTime__c, EndDateTime__c, Resource__c FROM MA_Scheduler_Events__r WHERE Date__c = :eventSchedulerDate AND Resource__c != null)
+                                            Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c, Total_Days__c,
+                                            (SELECT Id, StartDateTime__c, EndDateTime__c, Resource__c, Event_Sequence__c FROM MA_Scheduler_Events__r WHERE Date__c = :eventSchedulerDate AND Resource__c != null)
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
             
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
@@ -1296,6 +1392,12 @@ global with sharing class MA_SchedulerController {
                 }
             }
 
+            originalTotalDays = workOrder.Total_Days__c;
+            originalAppointmentDate = workOrder.Appointment_Date__c;
+            originalAppointmentEnd = workOrder.Appointment_End_Time__c;
+            originalAppointmentStart = workOrder.Appointment_Start_Time__c;
+            originalAppointmentDuration = workOrder.Appointment_Duration__c;
+
             if (isSingleDay) {
                 if (!workOrder.MA_Scheduler_Events__r.isEmpty()) {
                     MA_Scheduler_Event__c maEvent = workOrder.MA_Scheduler_Events__r[0];
@@ -1306,6 +1408,9 @@ global with sharing class MA_SchedulerController {
                     Long milliDiff = maEvent.EndDateTime__c.getTime() - maEvent.StartDateTime__c.getTime();
                     Decimal hoursDiff = ((Decimal)(milliDiff / 1000)) / 60 / 60;
                     workOrder.Appointment_Duration__c = hoursDiff.setScale(1);
+
+                    singleDayWorkNum = Integer.valueOf(maEvent.Event_Sequence__c);
+                    hadMaEvents = true;
                 }
             }
             else {
@@ -1350,6 +1455,9 @@ global with sharing class MA_SchedulerController {
                     update incorrectPrimaryResources;
                 }
             }
+
+            String additionalDeletionFilters = (!assignedResourceIdsList.isEmpty() ? ' AND Resource__c NOT IN (\'' + String.join(assignedResourceIdsList, '\', \'') + '\')' : '') + (isSingleDay ? ' AND Date__c = ' + eventSchedulerDateString : '');
+            MA_SchedulerUtilities.deleteEvents(workOrderId, 'Reassigned', additionalDeletionFilters);
             
             /********************************************************************/
             /*                                                                  */
@@ -1377,7 +1485,16 @@ global with sharing class MA_SchedulerController {
                     tempEnd = endDateTime;
                 }
 
-                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap);
+                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap, singleDayWorkNum);
+                
+                if (isSingleDay && hadMaEvents) {
+                    workOrder.Total_Days__c = originalTotalDays;
+                    workOrder.Appointment_Date__c = originalAppointmentDate;
+                    workOrder.Appointment_End_Time__c = originalAppointmentEnd;
+                    workOrder.Appointment_Start_Time__c = originalAppointmentStart;
+                    workOrder.Appointment_Duration__c = originalAppointmentDuration;
+                }
+
                 update workOrder;
             }
 
@@ -1440,7 +1557,7 @@ global with sharing class MA_SchedulerController {
                 endDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_End_Time__c, storeTimezone);
             }
 
-            MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, endDateTime, totalMinutes, resourceIdToUserIdMap.keySet(), new Set<Id>(), resourceIdToUserIdMap);
+            MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, endDateTime, totalMinutes, resourceIdToUserIdMap.keySet(), new Set<Id>(), resourceIdToUserIdMap, null);
             update workOrder;
 
             response.put('success', true);

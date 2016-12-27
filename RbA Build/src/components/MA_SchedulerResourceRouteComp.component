@@ -340,12 +340,16 @@
                 /*                                                            */
                 /**************************************************************/
                 eventAfterRender: function(event, element, view) {
-                    if (event.city != '' && event.city != undefined && event.city != null) {
-                        $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
-                    }
-
                     if (event.resourceNamesText != '' && event.resourceNamesText != undefined && event.resourceNamesText != null) {
                         $(element).find('.fc-title').before('<div class="resourceNamesTextDiv">' + event.resourceNamesText + '</div>');
+                    }
+
+                    if (event.numWindows != '' && event.numWindows != undefined && event.numWindows != null) {
+                        $(element).find('.fc-title').before('<div class="numWindowsDiv">' + event.numWindows + ' Windows</div>');
+                    }
+
+                    if (event.city != '' && event.city != undefined && event.city != null) {
+                        $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
                     }
 
                     if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
@@ -452,7 +456,8 @@
                         isSynced: record.isSynced,
                         isLswp: record.isLswp,
                         isJip: record.isJip,
-                        multiDayOrder: record.multiDayOrder
+                        multiDayOrder: record.multiDayOrder,
+                        numWindows: record.numWindows
                     });
                 }
 

@@ -355,7 +355,8 @@
 
     <script>
         var assignedSkillsToResourcesMap = {};
-        var forceAssignmentScheduleCombo = false;
+        //var forceAssignmentScheduleCombo = false;
+        var forceAssignmentScheduleCombo = true;
         var apexAssignResourcesController = 'MA_SchedulerController';
         var processResourceAvailablityResponse = { onSuccess: processResourceAvailablitySuccess, onFailure: processResponseError };
         var processAssignedResourceSaveResponse = { onSuccess: processAssignedResourceSaveSuccess, onFailure: processResponseError };
@@ -422,10 +423,10 @@
                 var workOrderTime = '';
 
                 if (workOrder.Appointment_Start_Time__c) {
-                    workOrderTime += workOrder.Appointment_Start_Time__c;
+                    workOrderTime += (response.startDay != '' ? response.startDay + ' ' : '') + workOrder.Appointment_Start_Time__c;
                 }
                 if (workOrder.Appointment_End_Time__c) {
-                    workOrderTime += ' - ' + workOrder.Appointment_End_Time__c;
+                    workOrderTime += ' - ' + (response.endDay != '' ? response.endDay + ' ' : '') + workOrder.Appointment_End_Time__c;
                 }
 
                 if (workOrder.Sold_Order__r != null && workOrder.Sold_Order__r != undefined) {
@@ -529,9 +530,11 @@
 
                 $('.resourceAlreadyAssigned .addResource').click();
 
-                if (/*workOrder.Work_Order_Type__c == 'Install' &&*/ !workOrder.Appointment_Date__c && workOrderTime == '' && $('.resourceAlreadyAssigned').length == 0) {
+                /*
+                if (*//*workOrder.Work_Order_Type__c == 'Install' &&*//* !workOrder.Appointment_Date__c && workOrderTime == '' && $('.resourceAlreadyAssigned').length == 0) {
                     forceAssignmentScheduleCombo = true;
                 }
+                */
             }
         }
 
@@ -751,7 +754,7 @@
         /*                                                                      */
         /************************************************************************/
         function closeAssignResourceModal() {
-            forceAssignmentScheduleCombo = false;
+            //forceAssignmentScheduleCombo = false;
             assignedSkillsToResourcesMap = {};
             $('.assignedWorkOrderLastWorkOrderRow').hide();
             $('#assignResourceWorkOrderId, #assignResourceInfoTable .fieldValue, #assignedWorkOrderLastWorkOrderCrew, #assignedWorkOrderLastWorkOrderStainer, #assignedWorkOrderLastWorkOrderTechMeasure').val('').text('');
@@ -807,14 +810,22 @@
                 var eventType = $('#calendarFilterSelect').val();
                 eventListToRender = $('#calendar').fullCalendar('clientEvents');
 
+                if (assignedResourceIds.length == 1) {
+                    assignedResourceIds.push('Unassigned');
+                }
+                
                 for (var i = 0, len = assignedResourceIds.length; i < len; i++) {
+                    if (assignedResourceIds[i] == $('#assignResourceWorkOrderId').val()) {
+                        continue;
+                    }
+
                     eventListToRender.push({
                         id: calEvent.id,
                         resourceId: assignedResourceIds[i],
                         title: calEvent.title,
                         start: calEvent.start,
                         end: calEvent.end,
-                        className: 'maEvent',
+                        className: 'maEvent' + (assignedResourceIds[i] == 'Unassigned' ? ' missingResource' : ''),
                         url: '/' + calEvent.id,
                         contactName: calEvent.contactName,
                         eventType: calEvent.eventType,
@@ -825,7 +836,8 @@
                         isSynced: calEvent.isSynced,
                         isLswp: calEvent.isLswp,
                         isJip: calEvent.isJip,
-                        multiDayOrder: calEvent.multiDayOrder
+                        multiDayOrder: calEvent.multiDayOrder,
+                        numWindows: calEvent.numWindows
                     });
                 }
 

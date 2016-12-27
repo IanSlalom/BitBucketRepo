@@ -23,8 +23,10 @@ global with sharing class MA_SchedulerBookingWindow implements Comparable {
     public String endDateTimeFormated;
     public String startDateTimeFormated;
 
+    public Integer totalSlots = 0;
     public Boolean isValid = false;
     public Boolean overbooked = false;
+    public Integer availableSlots = 0;
     public Set<Id> skillsMatched = new Set<Id>();
     public Set<Id> bookedWorkOrders = new Set<Id>();
     public Set<DateTime> timeBlocksMissingASkill = new Set<DateTime>();

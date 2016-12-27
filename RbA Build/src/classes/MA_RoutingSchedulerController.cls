@@ -202,6 +202,10 @@ global with sharing class MA_RoutingSchedulerController {
         Map<String, Object> response = new Map<String, Object>();
 
         try {
+            if (String.isNotBlank(woToResIdsMapString)) {
+                woToResIdsMapString = woToResIdsMapString.remove('"Unassigned"');
+            }
+
             Date batchDate = Date.valueOf(batchDateString);
             List<Event> sfEventsToCreate = new List<Event>();
             Map<Id, Id> resourceIdToUserIdMap = new Map<Id, Id>();
@@ -225,6 +229,7 @@ global with sharing class MA_RoutingSchedulerController {
             /*      and delete the ones that were removed   */
             /*                                              */
             /************************************************/
+            /*
             for (Id woId : woToResIdsMap.keySet()) {
                 List<Id> assignedResourceIds = new List<Id>(woToResIdsMap.get(woId));
                 if (assignedResourceIds.size() > 1) {
@@ -232,6 +237,7 @@ global with sharing class MA_RoutingSchedulerController {
                 }
                 woToResIdsMap.put(woId, new Set<Id>(assignedResourceIds));
             }
+            */
 
             for (Assigned_Resources__c res : [SELECT Id, Work_Order__c, Scheduled_Resource__c FROM Assigned_Resources__c WHERE Work_Order__c IN :woToResIdsMap.keySet()]) {
                 Set<Id> assignedResourceIds = woToResIdsMap.get(res.Work_Order__c);
@@ -285,11 +291,11 @@ global with sharing class MA_RoutingSchedulerController {
             for (Id woId : woToResIdsMap.keySet()) {
                 if (woId.getSobjectType() == Schema.RbA_Work_Order__c.SObjectType) {
                     Id primaryResourceId = primaryResourceMap.get(woId);
-                    Set<Id> assignedResourceIds = woToResIdsMap.get(woId);
+                    Set<Id> assignedResourceIds = woToResIdsMap.get(woId).clone();
                     Set<Id> assignedResourceIdsAlreadyCreated = oldWoToResIdsMap.containsKey(woId) ? oldWoToResIdsMap.get(woId) : new Set<Id>();
                     assignedResourceIds.removeAll(assignedResourceIdsAlreadyCreated);
 
-                    Set<Id> assignedResourceIdsEvents = woToResIdsMap.get(woId);
+                    Set<Id> assignedResourceIdsEvents = woToResIdsMap.get(woId).clone();
                     Set<Id> assignedResourceIdsAlreadyCreatedEvents = maEventsAlreadyCreatedFor.containsKey(woId) ? maEventsAlreadyCreatedFor.get(woId) : new Set<Id>();
                     assignedResourceIdsEvents.removeAll(assignedResourceIdsAlreadyCreatedEvents);
                     MA_Scheduler_Event__c tempEvent = woToMaEventMap.get(woId);
@@ -305,6 +311,19 @@ global with sharing class MA_RoutingSchedulerController {
                                 Name = tempEvent.RbA_Work_Order__r.Name,
                                 Date__c = tempEvent.Date__c,
                                 Resource__c = resourceId.getSobjectType() == Schema.Resource__c.SObjectType ? resourceId : null
+                            );
+                            maEventsToCreate.add(maEvent);
+                        }
+
+                        if (woToResIdsMap.get(woId) == null || woToResIdsMap.get(woId).isEmpty()) {
+                            MA_Scheduler_Event__c maEvent = new MA_Scheduler_Event__c(
+                                RbA_Work_Order__c = tempEvent.RbA_Work_Order__c,
+                                Event_Sequence__c = tempEvent.Event_Sequence__c,
+                                StartDateTime__c = tempEvent.StartDateTime__c,
+                                EndDateTime__c = tempEvent.EndDateTime__c,
+                                Name = tempEvent.RbA_Work_Order__r.Name,
+                                Date__c = tempEvent.Date__c,
+                                Resource__c = null
                             );
                             maEventsToCreate.add(maEvent);
                         }
@@ -639,7 +658,7 @@ global with sharing class MA_RoutingSchedulerController {
 				workOrderIds.add(maEvent.RbA_Work_Order__c);
 			}
 
-			Map<Id, RbA_Work_Order__c> workOrderList = new Map<Id, RbA_Work_Order__c>([SELECT Id, Name, Account__r.ShippingLongitude, Account__r.ShippingLatitude, Appointment_Duration__c, Work_Order_Type__c,
+			Map<Id, RbA_Work_Order__c> workOrderList = new Map<Id, RbA_Work_Order__c>([SELECT Id, Name, Account__r.ShippingLongitude, Account__r.ShippingLatitude, Appointment_Duration__c, Work_Order_Type__c, Windows__c,
                                                                                         Contact__c, Contact__r.LastName, Contact__r.FirstName, City__c, State__c, Tech_Measure_Synced__c,
                                                                                         LSWP_Test_Results__c, Service_Request_Type__c, Total_Days__c,
 																						(SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r)
@@ -661,7 +680,7 @@ global with sharing class MA_RoutingSchedulerController {
 
                 attributes.put('Name', '{"woId":"' + workOrder.Id + '","maEventId":"' + maEvent.Id
                                             + '","woName":"' + workOrder.Name + '","woType":"' + workOrder.Work_Order_Type__c.toLowerCase().deleteWhitespace()
-                                            + '","city":"' + workOrder.City__c + '","state":"' + workOrder.State__c
+                                            + '","city":"' + workOrder.City__c + '","state":"' + workOrder.State__c + '","numWindows":"' + workOrder.Windows__c
                                             + '","contactName":"' + workOrder.Contact__r.LastName + ', ' + workOrder.Contact__r.FirstName
                                             + '","isSynced":' + workOrder.Tech_Measure_Synced__c + ',"isLswp":' + workOrder.LSWP_Test_Results__c
                                             + ',"isJip":' + workOrder.Service_Request_Type__c + ',"multiDayOrder":"' + multiDayOrder

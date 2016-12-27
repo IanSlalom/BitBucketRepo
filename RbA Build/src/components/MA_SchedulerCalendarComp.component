@@ -43,6 +43,10 @@
         div.fc-content td.fc-widget-content > div {
             min-height: 80px !important;
         }
+
+        div.fc-content tr[data-resource-id="Unassigned"] td.fc-widget-content > div {
+            min-height: 200px !important;
+        }
     </style>
 
     <script>
@@ -171,6 +175,7 @@
                 /****************************************************************************/
                 events: function(start, end, timezone, callback) {
                     $('#loaderModal').show();
+
                     if (eventListToRender.length > 0) {
                         callback(eventListToRender);
                         eventListToRender = [];
@@ -220,12 +225,16 @@
                 /****************************************************************************/
                 eventAfterRender: function(event, element, view) {
                     if (view.name != 'month') {
-                        if (event.city != '' && event.city != undefined && event.city != null) {
-                            $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
+                        if (event.numWindows != '' && event.numWindows != undefined && event.numWindows != null) {
+                            $(element).find('.fc-title').before('<div class="numWindowsDiv">' + event.numWindows + ' Windows</div>');
                         }
 
                         if (event.resourceNamesText != '' && event.resourceNamesText != undefined && event.resourceNamesText != null) {
                             $(element).find('.fc-title').before('<div class="resourceNamesTextDiv">' + event.resourceNamesText + '</div>');
+                        }
+
+                        if (event.city != '' && event.city != undefined && event.city != null) {
+                            $(element).find('.fc-title').after('<div class="cityStateDiv">' + event.city + ', ' + event.state + '</div>');
                         }
 
                         if (event.contactName != '' && event.contactName != undefined && event.contactName != null) {
@@ -327,6 +336,19 @@
                     };
 
                     $('#loaderModal').hide();
+
+                    var viewName = $('#calendar').fullCalendar('getView').name;
+                    if (viewName == 'timelineDay') {
+                        var resourceEvents = $('a.fc-timeline-event');
+                        //var zIndex = 3;
+                        var zIndex = resourceEvents.length + 3;
+                        for (var i = 0, len = resourceEvents.length; i < len; i++) {
+                        //for (var i = resourceEvents.length; i >= 0; i--) {
+                            $(resourceEvents[i]).css('z-Index', zIndex);
+                            //zIndex++;
+                            zIndex--;
+                        }
+                    }
                 },
                 /****************************************************************************/
                 /*                                                                          */
@@ -375,7 +397,27 @@
             $('.fc-timelineDay-button').hide();
             $('.fc-button-group, .fc-today-button').addClass('batchHide');
 
-            $('div.fc-right').prepend('<div class="eventIcon" onclick=""><img src="' + "{!URLFOR($Resource.MA_Scheduler, '/icons/utility/event.svg')}" + '" class="svg mainChangeDate" /></div>');
+            $('div.fc-right').prepend('<div class="eventIcon" onclick="pickDate();"><img src="' + "{!URLFOR($Resource.MA_Scheduler, '/icons/utility/event.svg')}" + '" class="svg mainChangeDate" title="Select a Date" alt="Select a Date" /><input class="hiddenDatePicker" type="hidden" /></div>');
+
+            $('.eventIcon .hiddenDatePicker').datepicker({
+                showOn: 'button',
+                buttonImageOnly: true,
+                onSelect: function(dateText, dpInst) {
+                    var d = new Date(dateText);
+                    $('#calendar').fullCalendar('gotoDate', d);
+                }
+            });
+
+            $('.eventIcon .ui-datepicker-trigger').css('visibility', 'hidden').css('width', '0');
+        }
+
+        /****************************************************************************/
+        /*                                                                          */
+        /*      this method opens a mini calendar view for easier calendar nav      */
+        /*                                                                          */
+        /****************************************************************************/
+        function pickDate() {
+            $('.eventIcon .ui-datepicker-trigger').click();
         }
 
         /****************************************************************************/
@@ -579,18 +621,30 @@
         /*                                                                          */
         /****************************************************************************/
         function buildResourceObject(record) {
-            var obj = {
-                id: record.Id,
-                name: record.Name,
-                resourceId: record.Id,
-                resourceName: record.Name,
-                isActive: record.Active__c,
-                type: record.Resource_Type__c,
-                storeId: record.Retail_Location__c,
-                store: record.Retail_Location__r.Name,
-                isUser: record.RbA_User__c != null && record.RbA_User__c != undefined,
-                crewSize: record.Crew_Size__c != null && record.Crew_Size__c != undefined ? record.Crew_Size__c : 1
-            };
+            var obj = {};
+
+            if (record.Name == 'Unassigned') {
+                obj = {
+                    id: record.Name,
+                    name: '_' + record.Name,
+                    resourceName: record.Name,
+                    isActive: record.Active__c
+                };
+            }
+            else {
+                obj = {
+                    id: record.Id,
+                    name: record.Name,
+                    resourceId: record.Id,
+                    resourceName: record.Name,
+                    isActive: record.Active__c,
+                    type: record.Resource_Type__c,
+                    storeId: record.Retail_Location__c,
+                    store: record.Retail_Location__r.Name,
+                    isUser: record.RbA_User__c != null && record.RbA_User__c != undefined,
+                    crewSize: record.Crew_Size__c != null && record.Crew_Size__c != undefined ? record.Crew_Size__c : 1
+                };
+            }
 
             if (obj.isUser) {
                 obj.name += ' (User)';
@@ -622,7 +676,10 @@
             var resourceIdsFilter = ' IN (\'' + resourceIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
             var resourceUserIdsFilter = ' IN (\'' + resourceUserIds.toString().replace(new RegExp(',', 'g'), '\', \'') + '\')';
             var altFilters = timeWindowFilter + ' AND OwnerId' + resourceUserIdsFilter;
-            var filters = timeWindowFilter.replace(new RegExp('DateTime', 'g'), 'DateTime__c') + ' AND Resource__c' + resourceIdsFilter;
+            var filters = timeWindowFilter.replace(new RegExp('DateTime', 'g'), 'DateTime__c') + ' AND Resource__c' + resourceIdsFilter
+
+            filters += ($('#calendarFilter .calendarFilterSelect').val() != '' ? ' AND RbA_Work_Order__r.Work_Order_Type__c = \'' + $('#calendarFilter .calendarFilterSelect').val() + '\'' : '');
+
             sforce.apex.execute(apexCalendarController, 'retrieveEvents', { objType: 'allEvents', filters: filters, altFilters: altFilters, resourceUserIdToIdMapString: JSON.stringify(resourceUserIdToIdMap), storeId: $('#storeSelect').val() }, processEventsResponse);
         }
         
@@ -692,7 +749,8 @@
                         isSynced: record.isSynced,
                         isLswp: record.isLswp,
                         isJip: record.isJip,
-                        multiDayOrder: record.multiDayOrder
+                        multiDayOrder: record.multiDayOrder,
+                        numWindows: record.numWindows
                     });
                 }
             }
@@ -975,10 +1033,12 @@
         <div id="calendarEventCreatorOverlay" class=""></div>
         <div id="calendar"></div>
                 
-        <div id="calendarLegendTitle" class="topNav">
-            <a class="ma-button dropdown-right" onclick="openCalendarLegend();">Legend
-                <div class="dropdown-triangle-legend"></div>
-            </a>
+        <div id="calendarLegendTitle" class="topNav" style="height: 3rem;">
+            <div style="width: 120px; float: right;">
+                <a class="ma-button dropdown-right" style="float: right;" onclick="openCalendarLegend();">Legend
+                    <div class="dropdown-triangle-legend"></div>
+                </a>
+            </div>
             <div id="calendarLegendDrop" style="display:none">
                 <div>
                     <div class="legend-icon-container">
