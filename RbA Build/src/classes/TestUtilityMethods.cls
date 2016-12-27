@@ -645,6 +645,10 @@ public with sharing class TestUtilityMethods {
 		FANSToInsert.add(FANInternalLaborDebit);
 		Financial_Account_Number__c FANInternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInternalLaborCredit');
 		FANSToInsert.add(FANInternalLaborCredit);
+		Financial_Account_Number__c FANPRInternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANPRInternalLaborDebit');
+		FANSToInsert.add(FANPRInternalLaborDebit);
+		Financial_Account_Number__c FANPRInternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANPRInternalLaborCredit');
+		FANSToInsert.add(FANPRInternalLaborCredit);
 		Financial_Account_Number__c FANExternalLaborDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANExternalLaborDebit');
 		FANSToInsert.add(FANExternalLaborDebit);
 		Financial_Account_Number__c FANExternalLaborCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANExternalLaborCredit');
@@ -830,6 +834,11 @@ public with sharing class TestUtilityMethods {
 																						Debit_Account_Number__c = FANInternalLaborDebit.id,
 																						Credit_Account_Number__c = FANInternalLaborCredit.id);
 		FTSToInsert.add(FANInternalLabor);
+		Financial_Transaction__c FANPRInternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized Internal Labor',
+																						Debit_Account_Number__c = FANPRInternalLaborDebit.id,
+																						Credit_Account_Number__c = FANPRInternalLaborCredit.id);
+		FTSToInsert.add(FANPRInternalLabor);
 		Financial_Transaction__c FANExternalLabor = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'External Labor',
 																						Debit_Account_Number__c = FANExternalLaborDebit.id,

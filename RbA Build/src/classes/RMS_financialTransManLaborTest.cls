@@ -162,8 +162,8 @@ private class RMS_financialTransManLaborTest {
 
     /*******************************************************
                     noInstallerLabor
-    *******************************************************/
-    /* NEEDS COMMUNITIES ACTIVATED */
+    *******************************************************//*
+    // NEEDS COMMUNITIES ACTIVATED 
     static testmethod void noInstallerLabor(){
         test.starttest();
         Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];     
@@ -196,12 +196,12 @@ private class RMS_financialTransManLaborTest {
             System.Assert(e.getMessage().contains('Installer'));
         } 
         test.stoptest();
-    }
+    }*/
     
     /*******************************************************
                     positiveCreateAndEditLaborExternal
-    *******************************************************/
-    /* NEEDS COMMUNITIES ACTIVATED */
+    *******************************************************//*
+    // NEEDS COMMUNITIES ACTIVATED 
     static testmethod void positiveCreateAndEditLaborExternal(){
         test.starttest();
         Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];     
@@ -272,13 +272,13 @@ private class RMS_financialTransManLaborTest {
         System.AssertEquals(0, jeCount);
         test.stoptest();
 
-    }   
+    }  */ 
 
 
 	/*******************************************************
 					positiveCreateAndEditPostRecognizedLaborExternal
-	*******************************************************/
-	/* NEEDS COMMUNITIES ACTIVATED */
+	*******************************************************//*
+	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditPostRecognizedLaborExternal(){
 		test.starttest();
 		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
@@ -352,12 +352,12 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	
+	}	*/
 
 	/*******************************************************
 					positiveCreateAndEditServiceLaborExternal
-	*******************************************************/
-	/* NEEDS COMMUNITIES ACTIVATED */
+	*******************************************************//*
+	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceLaborExternal(){
 		test.starttest();
 		Order serviceRequest = [SELECT Id FROM Order where Name='Service Order 1'];		
@@ -429,12 +429,12 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	
+	}*/	
 
 	/*******************************************************
 					positiveCreateAndEditServiceLaborPostRecognizedExternal
-	*******************************************************/
-	/* NEEDS COMMUNITIES ACTIVATED */
+	*******************************************************//*
+	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceLaborPostRecognizedExternal(){
 		test.starttest();
 		Order serviceRequest = [SELECT Id FROM Order where Name='Service Order 1'];		
@@ -509,13 +509,13 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	
+	}	*/
 
 
 	/*******************************************************
 					positiveCreateAndEditServiceJIPLaborExternal
-	*******************************************************/
-	/* NEEDS COMMUNITIES ACTIVATED */
+	*******************************************************//*
+	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceJIPLaborExternal(){
 		test.starttest();
 		Order serviceRequest = [SELECT Id FROM Order where Name='Service Order JIP'];		
@@ -587,12 +587,12 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	
+	}	*/
 
 	/*******************************************************
 					positiveCreateAndEditServiceJIPLaborPostRecognizedExternal
-	*******************************************************/
-	/* NEEDS COMMUNITIES ACTIVATED */
+	*******************************************************//*
+	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceJIPLaborPostRecognizedExternal(){
 		test.starttest();
 		Order serviceRequest = [SELECT Id FROM Order where Name='Service Order JIP'];		
@@ -666,11 +666,11 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	
+	}	*/
 	
 	/*******************************************************
 					positiveCreateAndEditLaborInternal
-	*******************************************************/
+	*******************************************************//*
 	static testmethod void positiveCreateAndEditLaborInternal(){
 		test.starttest();
 		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
@@ -730,11 +730,79 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 
 		Test.StopTest();
+	}*/
+
+	/*******************************************************
+					positiveCreateAndEditPostRecLaborInternal
+	*******************************************************/
+	static testmethod void positiveCreateAndEditPostRecLaborInternal(){
+		test.starttest();
+		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
+		soldOrder.Revenue_Recognized_Date__c = Date.Today();
+		update soldOrder;
+		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];		
+		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
+		storeConfig.Standard_Hourly_Rate__c = 100;
+		update storeConfig;
+		Id serviceOrderVisitRecordTypeId = UtilityMethods.retrieveRecordTypeId('Visit', 'RbA_Work_Order__c');
+		RbA_Work_Order__c workOrder1 = new RbA_Work_Order__c(  	RecordTypeId = serviceOrderVisitRecordTypeId, 
+															    Sold_Order__c = soldOrder.id 
+															 );
+		insert workOrder1;		
+		
+		Id laborLaborRecordTypeId = UtilityMethods.retrieveRecordTypeId('Labor', 'Labor__c');
+		Labor__c labor1 = new Labor__c(			Related_Work_Order__c = workOrder1.id,
+												Hours_Applied__c = 1,
+												//Standard_Hourly_Rate__c=100,
+												//External_Labor_Amount__c = 100,
+												Store_Location__c = store.id,
+												Date_Applied__c = Date.Today()
+												);
+		insert labor1;
+
+		Financial_Account_Number__c intLaborDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInternalLaborDebit'];
+		Financial_Account_Number__c intLaborCredit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInternalLaborCredit'];
+
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+//									FROM Journal_Entry__c WHERE Labor__c =: labor1.Id AND Type__c = 'Post Recognized Internal Labor']; 
+									FROM Journal_Entry__c WHERE Labor__c =: labor1.Id]; 
+		System.AssertEquals(100, je.Amount__c);
+		System.AssertEquals('Post Recognized Internal Labor', je.Type__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers 
+		System.AssertEquals(intLaborDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(intLaborCredit.Name, je.Credit_General_Ledger_Account__c);
+		
+		labor1.Hours_Applied__c = 2;
+		update labor1;
+		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+						FROM Journal_Entry__c WHERE Labor__c =: labor1.Id AND Type__c = 'Post Recognized Internal Labor']; 
+		System.AssertEquals(200, je.Amount__c);
+		System.AssertEquals('Post Recognized Internal Labor', je.Type__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers 
+		System.AssertEquals(intLaborDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(intLaborCredit.Name, je.Credit_General_Ledger_Account__c);
+
+		// Delete the Labor and verify the journal entry is deleted
+		delete labor1;
+
+		decimal jeCount = 0;
+		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Post Recognized Internal Labor']) {
+			jeCount += 1;
+		}
+
+		System.AssertEquals(0, jeCount);
+
+		Test.StopTest();
 	}
+
 
 	/*******************************************************
 					positiveCreateLaborMiscReimbursement
-	*******************************************************/
+	*******************************************************//*
 	static testmethod void positiveCreateLaborMiscReimbursement(){
 		test.starttest();
 		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
@@ -807,7 +875,7 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 
 		Test.StopTest();
-	}
+	}*/
 					
 	public class anException extends Exception {}
 }
