@@ -560,6 +560,7 @@
 			<apex:outputField value="{!OrderItem.UnitPrice}" rendered="{!mode != 'e'}"/>
 			<apex:inputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode == 'e' || mode == 'r'}"/>
 			<apex:outputField value="{!OrderItem.Variant_Number__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
+			<apex:outputField value="{!OrderItem.Entered_Price__c}" rendered="{!!relatedChangeOrder}"/>
 			<apex:inputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{!(mode == 'e'  || mode == 'r') && !relatedChangeOrder}"/>
 			<apex:outputField value="{!OrderItem.Unit_Wholesale_Cost__c}" rendered="{(!mode != 'e'  && mode != 'r') && !relatedChangeOrder}"/>
 			<apex:inputField value="{!OrderItem.Unit_of_Measure__c}" rendered="{!(mode == 'e'  || mode == 'r') && !relatedChangeOrder}"/>

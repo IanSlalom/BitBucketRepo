@@ -728,6 +728,10 @@ public with sharing class TestUtilityMethods {
 		FANSToInsert.add(FANInstallAdjustmentDebit);
 		Financial_Account_Number__c FANInstallAdjustmentCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInstallAdjustmentCredit');
 		FANSToInsert.add(FANInstallAdjustmentCredit);
+		Financial_Account_Number__c FANPRInstallAdjustmentDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANPRInstallAdjustmentDebit');
+		FANSToInsert.add(FANPRInstallAdjustmentDebit);
+		Financial_Account_Number__c FANPRInstallAdjustmentCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANPRInstallAdjustmentCredit');
+		FANSToInsert.add(FANPRInstallAdjustmentCredit);
 		
 		// Misc Reimbursement/Cash Receipt
 		Financial_Account_Number__c FANMiscReimbursementDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANMiscReimbursementDebit');
@@ -933,6 +937,12 @@ public with sharing class TestUtilityMethods {
 																						Debit_Account_Number__c = FANInstallAdjustmentDebit.id,
 																						Credit_Account_Number__c = FANInstallAdjustmentCredit.id);
 		FTSToInsert.add(FANInstallAdjustment);
+
+		Financial_Transaction__c FANPRInstallAdjustment = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized Install Adjustment',
+																						Debit_Account_Number__c = FANPRInstallAdjustmentDebit.id,
+																						Credit_Account_Number__c = FANPRInstallAdjustmentCredit.id);
+		FTSToInsert.add(FANPRInstallAdjustment);
 
 		// Misc Reimbursement/Cash Receipt
 		Financial_Transaction__c FANMiscReimbursement = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,

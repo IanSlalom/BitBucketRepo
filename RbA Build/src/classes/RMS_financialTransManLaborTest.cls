@@ -162,7 +162,7 @@ private class RMS_financialTransManLaborTest {
 
     /*******************************************************
                     noInstallerLabor
-    *******************************************************//*
+    *******************************************************/
     // NEEDS COMMUNITIES ACTIVATED 
     static testmethod void noInstallerLabor(){
         test.starttest();
@@ -196,11 +196,11 @@ private class RMS_financialTransManLaborTest {
             System.Assert(e.getMessage().contains('Installer'));
         } 
         test.stoptest();
-    }*/
+    }
     
     /*******************************************************
                     positiveCreateAndEditLaborExternal
-    *******************************************************//*
+    *******************************************************/
     // NEEDS COMMUNITIES ACTIVATED 
     static testmethod void positiveCreateAndEditLaborExternal(){
         test.starttest();
@@ -272,12 +272,12 @@ private class RMS_financialTransManLaborTest {
         System.AssertEquals(0, jeCount);
         test.stoptest();
 
-    }  */ 
+    }  
 
 
 	/*******************************************************
 					positiveCreateAndEditPostRecognizedLaborExternal
-	*******************************************************//*
+	*******************************************************/
 	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditPostRecognizedLaborExternal(){
 		test.starttest();
@@ -352,11 +352,11 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	*/
+	}	
 
 	/*******************************************************
 					positiveCreateAndEditServiceLaborExternal
-	*******************************************************//*
+	*******************************************************/
 	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceLaborExternal(){
 		test.starttest();
@@ -429,11 +429,11 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}*/	
+	}	
 
 	/*******************************************************
 					positiveCreateAndEditServiceLaborPostRecognizedExternal
-	*******************************************************//*
+	*******************************************************/
 	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceLaborPostRecognizedExternal(){
 		test.starttest();
@@ -509,12 +509,12 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	*/
+	}	
 
 
 	/*******************************************************
 					positiveCreateAndEditServiceJIPLaborExternal
-	*******************************************************//*
+	*******************************************************/
 	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceJIPLaborExternal(){
 		test.starttest();
@@ -587,11 +587,11 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	*/
+	}	
 
 	/*******************************************************
 					positiveCreateAndEditServiceJIPLaborPostRecognizedExternal
-	*******************************************************//*
+	*******************************************************/
 	// NEEDS COMMUNITIES ACTIVATED 
 	static testmethod void positiveCreateAndEditServiceJIPLaborPostRecognizedExternal(){
 		test.starttest();
@@ -666,11 +666,11 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 		test.stoptest();
 
-	}	*/
+	}	
 	
 	/*******************************************************
 					positiveCreateAndEditLaborInternal
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void positiveCreateAndEditLaborInternal(){
 		test.starttest();
 		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
@@ -730,7 +730,7 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 
 		Test.StopTest();
-	}*/
+	}
 
 	/*******************************************************
 					positiveCreateAndEditPostRecLaborInternal
@@ -802,7 +802,7 @@ private class RMS_financialTransManLaborTest {
 
 	/*******************************************************
 					positiveCreateLaborMiscReimbursement
-	*******************************************************//*
+	*******************************************************/
 	static testmethod void positiveCreateLaborMiscReimbursement(){
 		test.starttest();
 		Order soldOrder = [SELECT Id FROM Order where Name='Sold Order 1'];		
@@ -875,7 +875,7 @@ private class RMS_financialTransManLaborTest {
 		System.AssertEquals(0, jeCount);
 
 		Test.StopTest();
-	}*/
+	}
 					
 	public class anException extends Exception {}
 }
