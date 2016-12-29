@@ -85,17 +85,19 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public void updateOrderStatus(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
     for(Order o: newMap.values()){   
+      // Set the apex context to true so the Prevent Order Status Change validation rule
+      // will be ignored if the status needs to be changed
       if(o.Status == 'Tech Measure Needed' && (o.Tech_Measure_Status__c == 'Pending Assignment' || o.Tech_Measure_Status__c == 'Scheduled & Assigned') && oldMap.get(o.Id).Tech_Measure_Status__c != o.Tech_Measure_Status__c){
-        //Sets the Apex Context variable to true, enables bypassing validation rules that specify !Apex_Context (e.g. Status Update Through UI)
-        //o.Apex_Context__c = true;
+	    o.Apex_Context__c = true;
         o.status = 'Tech Measure Scheduled';
       }else if(o.Status == 'Tech Measure Scheduled' && o.Tech_Measure_Status__c == 'Complete' && oldMap.get(o.Id).Tech_Measure_Status__c != o.Tech_Measure_Status__c){
-        //o.Apex_Context__c = true;
+	    o.Apex_Context__c = true;
         o.status = 'Ready to Order';
       }else if(o.Status == 'Install Needed' && (o.Install_Order_Status__c == 'Pending Assignment' || o.Install_Order_Status__c == 'Scheduled & Assigned') && oldMap.get(o.Id).Install_Order_Status__c != o.Install_Order_Status__c){
-        //o.Apex_Context__c = true;
+	    o.Apex_Context__c = true;
         o.status = 'Install Scheduled';
       }else if(O.Revenue_Recognized_Date__c != null && o.RecordtypeId == ChangeOrderRecordTypeId){
+	    o.Apex_Context__c = true;
         o.status = 'Job Closed';
       }
     }
@@ -140,11 +142,13 @@ public with sharing class RMS_OrderTriggerHandler {
 
   public void updateJIPCOROServiceOrders(List<Order> newOrders){
     List<Order> ordersToUpdate = new List<Order>();
-    for(Order o : [SELECT Id, Status FROM Order 
+    for(Order o : [SELECT Id, Status, Apex_Context__c FROM Order 
                     WHERE RecordType.DeveloperName = 'CORO_Service' 
                     AND Service_Type__c = 'Job in Progress'
                     AND Sold_Order__r.Status = 'Install Scheduled'
                     AND Id in: newOrders]){
+      // Allows the order status to be changed
+      o.Apex_Context__c = true;
       o.Status = 'Job in Progress';
       ordersToUpdate.add(o);
     }

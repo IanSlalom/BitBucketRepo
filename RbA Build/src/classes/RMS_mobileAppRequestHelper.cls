@@ -427,7 +427,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       Comments_and_Questions__c, Estimated_Install_Duration__c,
 	  Sales_Rep__c, Sales_Rep_Email__c, Sales_Rep_Phone__c,
 	  Primary_Tech_Measure_Name__c, Primary_Tech_Measure_Phone__c, Primary_Tech_Measure_Email__c,
-	  Cancel_Eligible__c
+	  Cancel_Eligible__c, Apex_Context__c
       from Order where OpportunityId in :opptyIds and isDeleted = false and Status != 'Cancelled' and Status != 'Pending Cancellation']);
 
     return orderMap;
@@ -964,6 +964,7 @@ System.debug('####################: ');
 	        return JSON.serialize(appts);
       	}
       	ord.Status = 'Pending Cancellation';
+      	ord.Apex_Context__c = true;
       }
 
       // get the opportunities with quotes and orders
