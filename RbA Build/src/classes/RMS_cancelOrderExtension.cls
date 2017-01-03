@@ -43,7 +43,9 @@ public with sharing class RMS_cancelOrderExtension {
 		}
 
 		// Find the order and cancel it
-		Order theOrder = [Select Id, Name, Status from Order where id =:theId];
+		Order theOrder = [Select Id, Name, Status, Apex_Context__c from Order where id =:theId];
+		// Allows the order status to be changed
+		theOrder.Apex_Context__c = true;
 		theOrder.Status = 'Cancelled';
 		theOrder.Date_Cancelled__c = System.Today();
 

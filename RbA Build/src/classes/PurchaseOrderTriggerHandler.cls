@@ -75,7 +75,7 @@ public with sharing class PurchaseOrderTriggerHandler {
 	//If there are no order ids to update, just return
 	if (orderIds.size() == 0) return;
 
-    parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Ready to Order']);
+    parentOrders = new Map<Id,Order>([SELECT Id, Status, Apex_Context__c FROM Order WHERE Id in: orderIds AND Status = 'Ready to Order']);
 
 	// Return if there were no orders in Ready to Order status.
 	if (parentOrders.size() == 0) return;
@@ -101,6 +101,7 @@ public with sharing class PurchaseOrderTriggerHandler {
 
     for(Order o : ordersToUpdate){
       o.Status = 'Order Released';
+      o.Apex_Context__c = true;
     }
     update ordersToUpdate;
   }
@@ -121,7 +122,7 @@ public with sharing class PurchaseOrderTriggerHandler {
 	//If there are no order ids to update, just return
 	if (orderIds.size() == 0) return;
 
-    parentOrders = new Map<Id,Order>([SELECT Id, Status FROM Order WHERE Id in: orderIds AND Status = 'Order Released']);
+    parentOrders = new Map<Id,Order>([SELECT Id, Status, Apex_Context__c FROM Order WHERE Id in: orderIds AND Status = 'Order Released']);
 
 	// Return if there were no orders in Order Released status.
 	if (parentOrders.size() == 0) return;
@@ -144,6 +145,7 @@ public with sharing class PurchaseOrderTriggerHandler {
 
     for(Order o : ordersToUpdate){
       o.Status = 'Install Needed';
+      o.Apex_Context__c = true;
     }
     update ordersToUpdate;
   }

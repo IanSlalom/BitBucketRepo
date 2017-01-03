@@ -70,10 +70,11 @@ public with sharing class TaskTriggerHandler {
       relatedOrders.remove(t.WhatId);
     }
 
-    List<Order> ordersToUpdate = [Select Id, Status, Prior_Status__c from Order Where Id in: relatedOrders];
+    List<Order> ordersToUpdate = [Select Id, Status, Prior_Status__c, Apex_Context__c from Order Where Id in: relatedOrders];
     for(Order o: ordersToUpdate){
       if(o.Status == 'On Hold'){
         o.Status = o.Prior_Status__c;
+        o.Apex_Context__c = true;
       }
     }
     update ordersToUpdate;

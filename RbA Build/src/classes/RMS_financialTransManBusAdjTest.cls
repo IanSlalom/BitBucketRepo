@@ -142,20 +142,91 @@ private class RMS_financialTransManBusAdjTest {
 																	Type__c = 'Install Adjustment'
 																	);
 		insert busAdj;
-		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c FROM Journal_Entry__c 
-								WHERE Order__c =: soldOrder.Id AND Type__c = 'Install Adjustment']; 
+
+		Financial_Account_Number__c installAdjustmentDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANInstallAdjustmentDebit'];
+		Financial_Account_Number__c installAdjustmentCredit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANInstallAdjustmentCredit'];
+
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+		 FROM Journal_Entry__c WHERE Order__c =: soldOrder.Id AND Type__c = 'Install Adjustment']; 
 		System.AssertEquals(10, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account number is the store location number inserted in the the gl account number
+		System.AssertEquals(installAdjustmentDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(installAdjustmentCredit.Name, je.Credit_General_Ledger_Account__c);
+
 		busAdj.Amount__c = 5;
 
 		update busAdj;
-		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c FROM Journal_Entry__c 
-								WHERE Order__c =: soldOrder.Id AND Type__c = 'Install Adjustment']; 
+		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+		 FROM Journal_Entry__c WHERE Order__c =: soldOrder.Id AND Type__c = 'Install Adjustment']; 
 		System.AssertEquals(5, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 
+		// Verify the account number is the store location number inserted in the the gl account number
+		System.AssertEquals(installAdjustmentDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(installAdjustmentCredit.Name, je.Credit_General_Ledger_Account__c);
+
 		delete busAdj;
 	}	
+
+	/*******************************************************
+					positiveCreateEditPostRecognizedInstallAdjustment
+	*******************************************************/
+	static testmethod void positiveCreateEditPostRecognizedInstallAdjustment(){
+
+		test.startTest();
+		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
+		soldOrder.Revenue_Recognized_Date__c = System.today();
+		update soldOrder;
+
+		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];				
+
+		Id paymentDepositRecordTypeId = UtilityMethods.retrieveRecordTypeId('Deposit', 'Payment__c');
+		Payment__c payment1 = new Payment__c(	Order__c = soldOrder.id,
+												RecordTypeId = paymentDepositRecordTypeId,
+												Payment_Type__c = 'Deposit',
+												Store_Location__c = store.id,
+												Payment_Amount__c = 100,
+												Payment_Date__c = Date.Today()
+												);
+		insert payment1;
+
+		Business_Adjustment__c busAdj = new Business_Adjustment__c(	Order__c = soldOrder.id, 
+																	Amount__c = 10, 
+																	Store_Location__c = store.id, 
+																	Type__c = 'Install Adjustment'
+																	);
+		insert busAdj;
+
+		Financial_Account_Number__c installAdjustmentPRDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInstallAdjustmentDebit'];
+		Financial_Account_Number__c installAdjustmentPRCredit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInstallAdjustmentCredit'];
+
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+		 FROM Journal_Entry__c WHERE Order__c =: soldOrder.Id AND Type__c = 'Post Recognized Install Adjustment']; 
+		System.AssertEquals(10, je.Amount__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account number is the store location number inserted in the the gl account number
+		System.AssertEquals(installAdjustmentPRDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(installAdjustmentPRCredit.Name, je.Credit_General_Ledger_Account__c);
+
+		busAdj.Amount__c = 5;
+
+		update busAdj;
+		je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c , Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c 
+		FROM Journal_Entry__c WHERE Order__c =: soldOrder.Id AND Type__c = 'Post Recognized Install Adjustment']; 
+		System.AssertEquals(5, je.Amount__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account number is the store location number inserted in the the gl account number
+		System.AssertEquals(installAdjustmentPRDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(installAdjustmentPRCredit.Name, je.Credit_General_Ledger_Account__c);
+
+		delete busAdj;
+		test.stopTest();
+	}	
+
 
 	/*******************************************************
 					positiveCreateEditNonSufficientDeposit

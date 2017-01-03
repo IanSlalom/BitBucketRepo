@@ -38,8 +38,10 @@ public with sharing class RMS_completeOrderChecksController {
         }
 
         if(allChecksCompleted){
-            Order order = [SELECT Id, Status, Tech_Measure_Status__c, Order_Processed_Date__c FROM Order WHERE Id =: ordId];
+            Order order = [SELECT Id, Status, Tech_Measure_Status__c, Order_Processed_Date__c, Apex_Context__c FROM Order WHERE Id =: ordId];
             if(order.Status == 'Draft'){
+                // Allows the order status to be changed
+                order.Apex_Context__c = true;
                 if(order.Order_Processed_Date__c == null){
                  order.Order_Processed_Date__c = System.Today();   
                 }                

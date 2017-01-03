@@ -38,6 +38,16 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Set_Order_Apex_Context_to_False</fullName>
+        <description>Set the order apex context to false so that the order status cannot be changed.</description>
+        <field>Apex_Context__c</field>
+        <literalValue>0</literalValue>
+        <name>Set Order Apex Context to False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Set_Service_Type_to_Field_Service_For_Co</fullName>
         <field>Service_Type__c</field>
         <literalValue>Field Service</literalValue>
@@ -107,6 +117,21 @@
             <operation>equals</operation>
             <value>Job in Progress</value>
         </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Reset Order Apex Context</fullName>
+        <actions>
+            <name>Set_Order_Apex_Context_to_False</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Order.Apex_Context__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <description>Set the order apex context back to false after order status change.</description>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
     <rules>
