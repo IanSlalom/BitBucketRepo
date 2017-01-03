@@ -10,6 +10,9 @@
         <field>Order$Order_Processed_Date__c</field>
     </columns>
     <columns>
+        <field>Order$Time_On_Hold__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Retail_Total__c</field>
     </columns>
@@ -26,12 +29,18 @@
         <field>Order.Activities$ActivityDate</field>
     </columns>
     <columns>
+        <field>Order.Activities$CreatedDate</field>
+    </columns>
+    <columns>
         <field>Order.Activities$Primary_Reason__c</field>
     </columns>
     <columns>
         <field>Order.Activities$Secondary_Reason__c</field>
     </columns>
-    <description>Report 7300 - On Hold Tracking</description>
+    <columns>
+        <field>Order.Activities$Description</field>
+    </columns>
+    <description>Report 7300 - On Hold Tracking w/ Activities</description>
     <filter>
         <criteriaItems>
             <column>Order$Status</column>
@@ -45,7 +54,7 @@
         <field>Order.Activities$Owner</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>On Hold Tracking</name>
+    <name>Report 7300b - On Hold Tracking</name>
     <params>
         <name>co</name>
         <value>1</value>
