@@ -21,7 +21,7 @@
     <description>Receivings Posting Report Summary Service POs</description>
     <filter>
         <criteriaItems>
-            <column>Order.Purchase_Orders__r$Product_Received_Date__c</column>
+            <column>Order.Purchase_Orders__r$Received_Timestamp__c</column>
             <operator>equals</operator>
             <value>LAST_N_DAYS:14</value>
         </criteriaItems>
@@ -29,7 +29,7 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Order.Purchase_Orders__r$Product_Received_Date__c</field>
+        <field>Order.Purchase_Orders__r$Received_Timestamp__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>Report BO4200 - Recs Posting Report</name>

@@ -42,6 +42,7 @@
         <field>Order.Work_Orders1__r.Labor1__r$External_Labor_Amount__c</field>
     </columns>
     <columns>
+        <aggregateTypes>Sum</aggregateTypes>
         <field>Order.Work_Orders1__r.Labor1__r$Internal_Cost__c</field>
     </columns>
     <description>Stain Labor</description>
@@ -78,6 +79,6 @@
     <showDetails>false</showDetails>
     <timeFrameFilter>
         <dateColumn>Order$Job_Close_Date__c</dateColumn>
-        <interval>INTERVAL_NEXT30</interval>
+        <interval>INTERVAL_LAST30</interval>
     </timeFrameFilter>
 </Report>
