@@ -4,11 +4,11 @@
         <field>CUST_NAME</field>
     </columns>
     <columns>
-        <field>Business_Adjustment__c.Description__c</field>
-    </columns>
-    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Business_Adjustment__c.Amount__c</field>
+    </columns>
+    <columns>
+        <field>Business_Adjustment__c.Description__c</field>
     </columns>
     <format>Summary</format>
     <groupingsDown>

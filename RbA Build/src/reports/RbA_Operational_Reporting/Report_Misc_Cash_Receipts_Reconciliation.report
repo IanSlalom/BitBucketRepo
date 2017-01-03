@@ -7,14 +7,11 @@
         <field>Payment__c.Payment_Method__c</field>
     </columns>
     <columns>
-        <field>FK_NAME</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Payment__c.Payment_Amount__c</field>
     </columns>
     <columns>
         <field>Payment__c.Description__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Payment__c.Payment_Amount__c</field>
     </columns>
     <filter>
         <criteriaItems>
