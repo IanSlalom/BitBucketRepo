@@ -88,6 +88,9 @@ private class RMS_mobileAppRequestHelperTest {
 		// create new quote
 		Quote quoteToInsert = tUtil.createQuote(opp.Id, pb.Id);
 		quoteToInsert.Description = 'INSERT THIS QUOTE';
+		// create new quote without line items
+		Quote quoteNoLines = tUtil.createQuote(opp.Id, pb.Id);
+		quoteNoLines.Description = 'Quote no line items';
 		// create existing quote lines
 		QuoteLineItem qli1 = tUtil.createQLIMasterChildProducts(pb.Id, quotetoUpdate.Id);
 		insert qli1;
@@ -111,6 +114,9 @@ private class RMS_mobileAppRequestHelperTest {
 		quoteContainerInsert.quoteLineItems = new List<QuoteLineItem>();
 		quoteContainerInsert.quoteLineItems.add(qli3);
 		quoteContainerInsert.quoteLineItems.add(qli4);
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainerNoLines = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainerNoLines.aQuote = quoteNoLines;
 		// validate data is setup correctly
 		System.assert(qli3.PricebookEntryId == null);
 		System.assert(qli4.PricebookEntryId == null);
@@ -120,7 +126,7 @@ private class RMS_mobileAppRequestHelperTest {
 
 		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
 		oppContainer.oppty = opp;
-		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer,quoteContainerInsert};
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer,quoteContainerInsert,quoteContainerNoLines};
 		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
 		salesAppt.account = dwelling;
 		salesAppt.opptyContainer = oppContainer;
@@ -141,6 +147,352 @@ private class RMS_mobileAppRequestHelperTest {
 			RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.SalesAppointment.class);
 			System.assert(jsonResult.startsWith('{"opptyContainer":{'));
 			System.assert(appt.isSaveSuccessful);
+			List<Quote> quoteList = [select Id, Name from Quote where OpportunityId = :opp.Id];
+			System.assert(quoteList.size() == 3);
+        }
+	}
+
+	/*
+	 * testAddMasterProducts
+	 */
+	static testmethod void testAddMasterProducts(){
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		// create the pricebook
+		Pricebook2 pb = tutil.createPricebook2('SATestAddProducts', null);
+		insert pb;
+		// create the procducts
+		Id rtId = UtilityMethods.retrieveRecordTypeId(Constants.MASTER_PRODUCT_RECORD_TYPE_NAME, 'Product2');
+		Product2 mpWindow = tUtil.createProduct('masterWindow', rtId);
+		mpWindow.rSuite_Product_Type__c = 'Window';
+		insert mpWindow;
+		Product2 mpMullion = tUtil.createProduct('masterMullion', rtId);
+		mpMullion.rSuite_Product_Type__c = 'Mullion';
+		insert mpMullion;
+		Product2 mpSpecialty = tUtil.createProduct('masterSpecialty', rtId);
+		mpSpecialty.rSuite_Product_Type__c = 'Specialty';
+		insert mpSpecialty;
+		Product2 mpSpecialtyChord = tUtil.createProduct('masterSpecialtyChord', rtId);
+		mpSpecialtyChord.rSuite_Product_Type__c = 'Specialty';
+		mpSpecialtyChord.Master_Product__c = mpSpecialty.Id;
+		insert mpSpecialtyChord;
+
+		rtId = UtilityMethods.retrieveRecordTypeId(Constants.CHILD_PRODUCT_RECORD_TYPE_NAME, 'Product2');
+		Product2 cpWindow = tUtil.createProduct('childWindow', rtId);
+		cpWindow.rSuite_Product_Type__c = 'Window';
+		cpWindow.Master_Product__c = mpWindow.Id;
+		insert cpWindow;
+		Product2 cpSpecialtyChord = tUtil.createProduct('childSpecialtyChord', rtId);
+		cpSpecialtyChord.rSuite_Product_Type__c = 'Specialty';
+		cpSpecialtyChord.Master_Product__c = mpSpecialtyChord.Id;
+		insert cpSpecialtyChord;
+
+		rtId = UtilityMethods.retrieveRecordTypeId(Constants.MULLION_PRODUCT_RECORD_TYPE_NAME, 'Product2');
+		Product2 cpMullion = tUtil.createProduct('childMullion', rtId);
+		cpMullion.rSuite_Product_Type__c = 'Mullion';
+		cpMullion.Master_Product__c = mpMullion.Id;
+		insert cpMullion;
+
+		rtId = UtilityMethods.retrieveRecordTypeId(Constants.CONSTRUCTION_MATERIALS_PRODUCT_RECORD_TYPE_NAME, 'Product2');
+		Product2 constructP = tUtil.createProduct('constructionMat', rtId);
+		insert constructP;
+
+		rtId = UtilityMethods.retrieveRecordTypeId(Constants.MISC_JOB_AND_UNIT_CHARGES_PRODUCT_RECORD_TYPE_NAME, 'Product2');
+		Product2 miscJob = tUtil.createProduct('MiscJobcharge', rtId);
+		miscJob.rSuite_Product_Type__c = 'Misc';
+		insert miscJob;
+		// create the pricebook entries
+		Id pbId = Test.getStandardPricebookId();
+		List<PricebookEntry> standardPBEList = new List<PricebookEntry>();
+		PricebookEntry pbe = tUtil.createPricebookEntry(pbId, mpWindow.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, mpMullion.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, mpSpecialty.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, mpSpecialtyChord.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, cpWindow.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, cpSpecialtyChord.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, cpMullion.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, constructP.Id);
+		standardPBEList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pbId, miscJob.Id);
+		standardPBEList.add(pbe);
+		insert standardPBEList;
+
+		List<PricebookEntry> pbeList = new List<PricebookEntry>();
+		pbe = tUtil.createPricebookEntry(pb.Id, mpWindow.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, mpMullion.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, mpSpecialty.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, mpSpecialtyChord.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, cpWindow.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, cpSpecialtyChord.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, cpMullion.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, constructP.Id);
+		pbeList.add(pbe);
+		pbe = tUtil.createPricebookEntry(pb.Id, miscJob.Id);
+		pbeList.add(pbe);
+		insert pbeList;
+		// create the quoteline items
+		List<QuoteLineItem> qliList = new List<QuoteLineItem>();
+
+		QuoteLineItem qliAlreadySet = tUtil.createQuoteLineItem(pbeList[1].Id, null, pbeList[4].Id);
+		qliList.add(qliAlreadySet);
+
+		QuoteLineItem qliChildWindow = tUtil.createQuoteLineItem(null, null, pbeList[4].Id);
+		qliList.add(qliChildWindow);
+		QuoteLineItem qliChildSpecialty = tUtil.createQuoteLineItem(null, null, pbeList[5].Id);
+		qliList.add(qliChildSpecialty);
+		QuoteLineItem qliChildMullion = tUtil.createQuoteLineItem(null, null, pbeList[6].Id);
+		qliList.add(qliChildMullion);
+		QuoteLineItem qliConstruct = tUtil.createQuoteLineItem(null, null, pbeList[7].Id);
+		qliList.add(qliConstruct);
+		QuoteLineItem qliMiscJob = tUtil.createQuoteLineItem(null, null, pbeList[8].Id);
+		qliList.add(qliMiscJob);
+		// run the test
+		Test.startTest();
+		RMS_mobileAppRequestHelper mhelper = new RMS_mobileAppRequestHelper();
+		List<QuoteLineItem> processedList = mHelper.addMasterProducts(qliList);
+		Test.stopTest();
+		System.assert(qliMiscJob.PricebookEntryId != null);
+		System.assert(qliMiscJob.PricebookEntryId == qliMiscJob.Child_Product_Pricebook_Entry_Id__c);
+		System.assert(qliConstruct.PricebookEntryId != null);
+		System.assert(qliConstruct.PricebookEntryId == qliConstruct.Child_Product_Pricebook_Entry_Id__c);
+		System.assert(qliChildMullion.PricebookEntryId != null);
+		System.assert(qliChildMullion.PricebookEntryId == pbeList[1].Id);
+		System.assert(qliChildSpecialty.PricebookEntryId != null);
+		System.assert(qliChildSpecialty.PricebookEntryId == pbeList[2].Id);
+		System.assert(qliChildWindow.PricebookEntryId != null);
+		System.assert(qliChildWindow.PricebookEntryId == pbeList[0].Id);
+		System.assert(qliAlreadySet.PricebookEntryId == pbeList[1].Id);
+	}
+
+	/* 
+	 * testhandleDeletes
+	 */
+	static testmethod void testProcessDeletes(){
+		// for this test 4 quotes are needed structured as follows
+		// two with committed commiteed to saleforce and two that have not been inserted
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+		
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Sales']; 
+		// setup configuration stuff
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+		tUtil.createSalesAppt(u.Id, tmApptTime, false);
+		// build out the container
+		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
+		Id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName, rSuite_Id__c from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'In Progress';
+
+		// create pricebook
+		Pricebook2 pb = tutil.createPricebook2('SATestPB2', store1.Active_Store_Configuration__c);
+		insert pb;
+
+		//create existing quote
+		Quote quoteToUpdate = tUtil.createQuote(opp.Id, pb.Id);
+		quoteToUpdate.Name = 'quoteToUpdate';
+		insert quoteToUpdate;
+		Quote quoteToDelete = tUtil.createQuote(opp.Id, pb.Id);
+		quoteToDelete.Name = 'quoteToDelete';
+		insert quoteToDelete;
+		// create new quote
+		Quote quoteToInsert = tUtil.createQuote(opp.Id, pb.Id);
+		quoteToInsert.Name = 'quoteToInsert';
+		Quote quoteToDelete2 = tUtil.createQuote(opp.Id, pb.Id);
+		quoteToDelete2.Name = 'quoteToDelete2';
+		// create existing quote lines
+		QuoteLineItem qli1 = tUtil.createQLIMasterChildProducts(pb.Id, quotetoUpdate.Id);
+		qli1.Description = 'qliToDelete';
+		qli1.UnitPrice = 30;
+		insert qli1;
+		QuoteLineItem qli2 = tUtil.createQLIMasterChildProducts(pb.Id, quotetoUpdate.Id);
+		qli2.Description = 'qliToRemain';
+		insert qli2;
+		QuoteLineItem qli21 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToDelete.Id);
+		qli21.Description = 'QLIShouldBeDeleted';
+		qli21.UnitPrice = 30;
+		insert qli21;
+		QuoteLineItem qli22 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToDelete.Id);
+		qli22.Description = 'QLIShouldBeDeleted';
+		insert qli22;
+		// creete quote lines to insert - as they would come in from rSuite - with a child product set but not the master
+		QuoteLineItem qli3 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToInsert.Id);
+		qli3.PricebookEntryId = null;
+		qli3.Description = 'qliToDeleteFromInsert';
+		qli3.UnitPrice = 30;
+		QuoteLineItem qli4 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToInsert.Id);
+		qli4.Description = 'qliToInsert';
+		qli4.PricebookEntryId = null;
+		QuoteLineItem qli23 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToDelete2.Id);
+		qli23.Description = 'qliNeverInserted';
+		qli23.UnitPrice = 30;
+		qli23.PricebookEntryId = null;
+		QuoteLineItem qli24 = tUtil.createQLIMasterChildProducts(pb.Id, quoteToDelete2.Id);
+		qli24.Description = 'qliNeverInserted';
+		qli24.PricebookEntryId = null;
+		// create quote financing
+		Quote_Financing__c qf1 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
+		insert qf1;
+		Quote_Financing__c qf2 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
+		qf2.Amount_Financed__c = 4;
+		insert qf2; // this one will be deleted
+		Quote_Financing__c qf3 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToDelete.Id);
+		insert qf3;  // this one will be deleted by cascading delete
+		Quote_Financing__c qf4 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToDelete.Id);
+		insert qf4;  // this one will be deleted by cascading delete
+		Quote_Financing__c qf5 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToInsert.Id);
+		Quote_Financing__c qf6 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToInsert.Id);
+		qf6.Amount_Financed__c = 4; // this one will never be inserted
+		// these two should never be inserted because of a cascading delete
+		Quote_Financing__c qf7 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
+		Quote_Financing__c qf8 = tUtil.createQuoteFinancing(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
+
+		// create quote discounts
+		Quote_Discount__c qd1 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
+		insert qd1;
+		Quote_Discount__c qd2 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
+		qd2.Discount_Amount__c = 4;
+		insert qd2; // this one will be deleted
+		Quote_Discount__c qd3 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete.Id);
+		insert qd3; // this one will be deleted by cascading delete
+		Quote_Discount__c qd4 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete.Id);
+		insert qd4; // this one will be deleted by cascading delete
+		Quote_Discount__c qd5 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToInsert.Id);
+		Quote_Discount__c qd6 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToInsert.Id);
+		qd6.Discount_Amount__c = 4; // this one will not be inserted
+		// these two should never be inserted because of a cascading delete
+		Quote_Discount__c qd7 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
+		Quote_Discount__c qd8 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
+
+
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quoteToUpdate;
+		quoteContainer.quoteLineItems = new List<QuoteLineItem>();
+		quoteContainer.quoteLineItems.add(qli1);
+		quoteContainer.quoteLineItems.add(qli2);
+		quoteContainer.quoteDiscountList = new List<Quote_Discount__c>();
+		quoteContainer.quoteDiscountList.add(qd1);
+		quoteContainer.quoteDiscountList.add(qd2);
+		quoteContainer.quoteFinancingList = new List<Quote_Financing__c>();
+		quoteContainer.quoteFinancingList.add(qf1);
+		quoteContainer.quoteFinancingList.add(qf2);
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainerDelete = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainerDelete.aQuote = quoteToDelete;
+		quoteContainerDelete.quoteLineItems = new List<QuoteLineItem>();
+		quoteContainerDelete.quoteLineItems.add(qli21);
+		quoteContainerDelete.quoteLineItems.add(qli22);
+		quoteContainerDelete.quoteDiscountList = new List<Quote_Discount__c>();
+		quoteContainerDelete.quoteDiscountList.add(qd3);
+		quoteContainerDelete.quoteDiscountList.add(qd4);
+		quoteContainerDelete.quoteFinancingList = new List<Quote_Financing__c>();
+		quoteContainerDelete.quoteFinancingList.add(qf3);
+		quoteContainerDelete.quoteFinancingList.add(qf4);
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainerInsert = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainerInsert.aQuote = quoteToInsert;
+		quoteContainerInsert.quoteLineItems = new List<QuoteLineItem>();
+		quoteContainerInsert.quoteLineItems.add(qli3);
+		quoteContainerInsert.quoteLineItems.add(qli4);
+		quoteContainerInsert.quoteDiscountList = new List<Quote_Discount__c>();
+		quoteContainerInsert.quoteDiscountList.add(qd5);
+		quoteContainerInsert.quoteDiscountList.add(qd6);
+		quoteContainerInsert.quoteFinancingList = new List<Quote_Financing__c>();
+		quoteContainerInsert.quoteFinancingList.add(qf5);
+		quoteContainerInsert.quoteFinancingList.add(qf6);
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainerDelete2 = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainerDelete2.aQuote = quoteToDelete2;
+		quoteContainerDelete2.quoteLineItems = new List<QuoteLineItem>();
+		quoteContainerDelete2.quoteLineItems.add(qli23);
+		quoteContainerDelete2.quoteLineItems.add(qli24);
+		quoteContainerDelete2.quoteDiscountList = new List<Quote_Discount__c>();
+		quoteContainerDelete2.quoteDiscountList.add(qd7);
+		quoteContainerDelete2.quoteDiscountList.add(qd8);
+		quoteContainerDelete2.quoteFinancingList = new List<Quote_Financing__c>();
+		quoteContainerDelete2.quoteFinancingList.add(qf7);
+		quoteContainerDelete2.quoteFinancingList.add(qf8);
+
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer, quoteContainerDelete, quoteContainerInsert, quoteContainerDelete2};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.account = dwelling;
+		salesAppt.opptyContainer = oppContainer;
+		
+		String jsonInput = JSON.serialize(salesAppt);
+		// add the isDeleted = true to the quotes
+		jsonInput = jsonInput.replace('"Name":"quoteToDelete"','"IsDeleted":true,"Name":"quoteToDelete"');
+		jsonInput = jsonInput.replace('"Name":"quoteToDelete2"','"IsDeleted":true,"Name":"quoteToDelete2"');
+		jsonInput = jsonInput.replace('"Description":"qliToDelete"','"IsDeleted":true,"Description":"qliToDelete"');
+		jsonInput = jsonInput.replace('"Description":"qliToDeleteFromInsert"','"IsDeleted":true,"Description":"qliToDeleteFromInsert"');
+		jsonInput = jsonInput.replace('"Discount_Amount__c":4','"IsDeleted":true,"Discount_Amount__c":4');
+		jsonInput = jsonInput.replace('"Amount_Financed__c":4','"IsDeleted":true,"Amount_Financed__c":4');
+System.debug('###################################### Input: ' + jsonInput);
+		RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonInput, RMS_mobileAppRequestHelper.SalesAppointment.class);
+
+        System.runAs(u) {
+			Test.startTest();
+			// test processing of deletes
+        	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
+			RMS_mobileAppRequestHelper.SalesAppointment processedAppt = mHelper.processDeletes(appt);
+			List<Quote> remainingQuotes = [select Id, Name, OpportunityId from Quote where OpportunityId = :opp.Id];
+			System.assert(remainingQuotes.size() == 1);
+			List<QuoteLineItem> remainingQLI = [select Id, Description, QuoteId from QuoteLineItem where QuoteId in :remainingQuotes];
+			System.assert(remainingQLI.size() == 1);
+			List<Quote_Discount__c> remainingQD = [select Id, Name, Quote__c from Quote_Discount__c where Quote__c in :remainingQuotes];
+			System.assert(remainingQD.size() == 1);
+			List<Quote_Financing__c> remainingQF = [select Id, Name, Related_Quote__c from Quote_Financing__c where Related_Quote__c in :remainingQuotes];
+			System.assert(remainingQF.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList.size() == 2);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteLineItems.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteDiscountList.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteFinancingList.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[1].quoteLineItems.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[1].quoteDiscountList.size() == 1);
+			System.assert(processedAppt.opptyContainer.quoteContainerList[1].quoteFinancingList.size() == 1);
+			if (processedAppt.opptyContainer.quoteContainerList[0].aQuote.Id == null) {
+				System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteLineItems[0].Description.equals('qliToInsert'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[0].aQuote.Name.equals('quoteToInsert'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[1].quoteLineItems[0].Description.equals('qliToRemain'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[1].aQuote.Name.equals('quoteToUpdate'));
+			} else {
+				System.assert(processedAppt.opptyContainer.quoteContainerList[1].quoteLineItems[0].Description.equals('qliToInsert'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[1].aQuote.Name.equals('quoteToInsert'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteLineItems[0].Description.equals('qliToRemain'));
+				System.assert(processedAppt.opptyContainer.quoteContainerList[0].aQuote.Name.equals('quoteToUpdate'));
+			}
+			//make sure that the saving of quotes and quoteline items still works as well
+			processedAppt = mHelper.saveQuotes(processedAppt);
+			processedAppt = mHelper.saveQuoteLineItemsDiscountsandFinancing(processedAppt);
+			Test.stopTest();
+System.debug('###########################: ' + processedAppt);
+			remainingQuotes = [select Id, Name, OpportunityId from Quote where OpportunityId = :opp.Id];
+System.debug('###########################: ' + remainingQuotes);
+			System.assert(remainingQuotes.size() == 2);
+			remainingQLI = [select Id, Description, QuoteId from QuoteLineItem where QuoteId in :remainingQuotes];
+System.debug('###########################: ' + remainingQLI);
+			System.assert(remainingQLI.size() == 2);
         }
 	}
 
@@ -337,12 +689,13 @@ private class RMS_mobileAppRequestHelperTest {
 		tmApptUpdate.workOrder = workOrder[0];
 		tmApptUpdate.opptyContainer = oppContainerUpsert;
 
-		Test.startTest();
         System.runAs(u) {
         	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			String input = JSON.serialize(tmApptUpdate);
 			System.debug('################ - the JSON:' + input);
+			Test.startTest();
 			String result = helper.saveTechMeasure(input);
+			Test.StopTest();
 			System.debug('###########: ' + result);
 
 			//Assert Opportunity Status is updated
@@ -367,7 +720,6 @@ private class RMS_mobileAppRequestHelperTest {
 			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
 			System.assertEquals(rbaUpdatedList.size(),1);
         }
-		Test.StopTest();
 	
 	}
 
@@ -629,7 +981,7 @@ private class RMS_mobileAppRequestHelperTest {
 			// Retrieve the Appointment container from the JSON response
 	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
 
-			// Assert that there was one error since there is no order to cancel
+			// do an assertion that there was one error since there is no order to cancel
 	   		System.assert(apptContainer.getErrors()[0].contains('Order could not be found.'));
 	   		System.assertEquals(1, apptContainer.getErrors().size());
         }
@@ -747,7 +1099,7 @@ private class RMS_mobileAppRequestHelperTest {
 			// Retrieve the Appointment container from the JSON response
 	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
 
-			// Assert that there was one error since there were multiple orders
+			// do an assertion that there was one error since there were multiple orders
 	   		System.assertEquals(1, apptContainer.getErrors().size());
 	   		System.assert(apptContainer.getErrors()[0].contains('Order is not cancellable.'));
         }

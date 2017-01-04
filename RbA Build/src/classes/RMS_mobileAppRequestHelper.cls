@@ -470,7 +470,9 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
     public String resultSalesAppointments(Id userId, String input){
 		// parse the input JSON string into an Opportunity Container
+		System.debug('RMS_mobileAppRequestHelper.resultSalesAppointments *************************** input JSON: ' + input);
 		SalesAppointment appt = (SalesAppointment)JSON.deserialize(input, SalesAppointment.class);
+		System.Debug('RMS_mobileAppRequestHelper.resultSalesAppointments *************************** parsed JSON structure =' +appt);
 
 		// TODO: do some validation before saving the results
 		// can this opportunity be updated?
@@ -481,9 +483,14 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// only attempt to save quotes if sales appointments exist
 		if (appt != null) {
 			System.SavePoint sp = Database.setSavePoint();
-			// now lets save the quotes to the opportunitiez
+			// process deletes
+			appt = processDeletes(appt);
 			try {
-				appt = saveQuotes(appt);
+				// note that the appt.getErrors.size check is made multiple times because errors can be added each step alson the way
+				// now lets save the quotes to the opportunitiez
+				if (appt.getErrors().size() == 0) {
+					appt = saveQuotes(appt);
+				}
 				// now lets save the quote line items and discounts to the quotes - if we don't have an error
 				if (appt.getErrors().size() == 0) {
 					appt=saveQuoteLineItemsDiscountsandFinancing(appt);
@@ -573,12 +580,14 @@ public with sharing class RMS_mobileAppRequestHelper {
     
     for (QuoteContainer qc: sa.opptyContainer.quoteContainerList) {
 		// add the quote id to the quote line items and put the quote line items in the list to be inserted
-		for (QuoteLineItem qli : qc.quoteLineItems) {
-			if (qli.QuoteId == null) {
-				// since this is used in inserts and updates we need to set the id only when the qli is net new
-				qli.QuoteId = qc.aQuote.Id;
+		if (qc.quoteLineItems != null) {
+			for (QuoteLineItem qli : qc.quoteLineItems) {
+				if (qli.QuoteId == null) {
+					// since this is used in inserts and updates we need to set the id only when the qli is net new
+					qli.QuoteId = qc.aQuote.Id;
+				}
+				qliList.add(qli);
 			}
-			qliList.add(qli);
 		}
 		// add the quote id to the quote discounts and put the quote discounts in the list to be inserted
 		if (qc.quoteDiscountList != null) {
@@ -619,8 +628,6 @@ public with sharing class RMS_mobileAppRequestHelper {
             }
           }
         }
-      } else {
-        sa.getErrors().add('save quote line item error: No Quote Line Items Found');
       }
       // attempt to insert the qoute discount records
       if (qdList.size() > 0) {
@@ -672,9 +679,11 @@ public with sharing class RMS_mobileAppRequestHelper {
 	}
 	// get the larger child product PBEs with product, master product and Pricebook ids
 	Map<Id, PricebookEntry> cpPBEMap = new Map<Id, PricebookEntry>([
-		select Id, Product2Id, Pricebook2Id, Product2.RecordType.DeveloperName, Product2.Master_Product__c 
+		select Id, Product2Id, Pricebook2Id, Product2.rSuite_Product_Type__c, Product2.RecordType.DeveloperName, Product2.Master_Product__c, Product2.Master_Product__r.Master_Product__c 
 		from PricebookEntry 
-		where Id in :childProductPBESet and Product2.RecordType.DeveloperName = :Constants.CHILD_PRODUCT_RECORD_TYPE_NAME
+		where Id in :childProductPBESet and 
+		(Product2.RecordType.DeveloperName = :Constants.CHILD_PRODUCT_RECORD_TYPE_NAME or 
+		Product2.RecordType.DeveloperName = :Constants.MULLION_PRODUCT_RECORD_TYPE_NAME)
 		order by Pricebook2Id ASC
 	]);
 	
@@ -689,7 +698,11 @@ public with sharing class RMS_mobileAppRequestHelper {
 				pbToMasterProductListMap.put(cpPBE.Pricebook2Id,masterProductIdList);
 			}
 			// add the master product to the list
-			masterProductIdList.add(cpPBE.Product2.Master_Product__c);
+			if (cpPBE.Product2.Master_Product__r.Master_Product__c != null && cpPBE.Product2.rSuite_Product_Type__c.equals('Specialty')) {
+				masterProductIdList.add(cpPBE.Product2.Master_Product__r.Master_Product__c);
+			} else {
+				masterProductIdList.add(cpPBE.Product2.Master_Product__c);
+			}
 		}
 	}
 
@@ -706,19 +719,136 @@ public with sharing class RMS_mobileAppRequestHelper {
 
 	// finally update the qlis
 	for (QuoteLineItem qli: qlis) {
-		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != ''&&
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '' &&
 			qli.PricebookEntryId == null) {
 			PricebookEntry cpPBE = cpPBEMap.get(qli.Child_Product_Pricebook_Entry_Id__c);
-			for (PricebookEntry mpPBE : mpPBEList) {
-				if (mpPBE.Pricebook2Id == cpPBE.Pricebook2Id && mpPBE.Product2Id == cpPBE.Product2.Master_Product__c) {
-					// we have a match
-					qli.PricebookEntryId = mpPBE.Id;
-					break;
+			if (cpPBE != null) {
+				for (PricebookEntry mpPBE : mpPBEList) {
+					if (cpPBE.Product2.rSuite_Product_Type__c != null && 
+						cpPBE.Product2.rSuite_Product_Type__c.equals('Specialty') && 
+						cpPBE.Product2.Master_Product__r.Master_Product__c != null) {
+						if (mpPBE.Pricebook2Id == cpPBE.Pricebook2Id && mpPBE.Product2Id == cpPBE.Product2.Master_Product__r.Master_Product__c) {
+							// we have a match
+							qli.PricebookEntryId = mpPBE.Id;
+							break;
+						}
+					} else {
+						if (mpPBE.Pricebook2Id == cpPBE.Pricebook2Id && mpPBE.Product2Id == cpPBE.Product2.Master_Product__c) {
+							// we have a match
+							qli.PricebookEntryId = mpPBE.Id;
+							break;
+						}
+					}
 				}
 			}
 		}
 	}
+
+	// now handle any non chlld products
+	for (QuoteLineItem qli: qlis) {
+		if (qli.Child_Product_Pricebook_Entry_Id__c != null && qli.Child_Product_Pricebook_Entry_Id__c != '' &&
+			qli.PricebookEntryId == null) {
+			qli.PricebookEntryId = qli.Child_Product_Pricebook_Entry_Id__c;
+		}
+	}
+
     return qlis;
+  }
+
+  /* @method: processDeletes(SalesAppointment sa)
+   * @param: SalesAppointment sa
+   * @return: SalesAppointment - comes back with any deleted records deleted from SF and removed from the SalesAppointment
+   *          structure and/or errors
+   */
+  public SalesAppointment processDeletes(SalesAppointment sa) {
+	List<Id> recordsToDelete = new List<Id>();
+	if (sa.opptyContainer != null  && sa.opptyContainer.quoteContainerList != null) {
+		for (Integer i = 0; i < sa.opptyContainer.quoteContainerList.size(); i++) {
+			QuoteContainer qc = sa.opptyContainer.quoteContainerList[i];
+			if (qc.aQuote != null) {
+				if (qc.aQuote.IsDeleted != null && qc.aQuote.IsDeleted == true) {
+					// we have a quote to delete from the structure
+					// When JSON desrializes an Id field - if the Id field is set to "ID=" in the JSON it sets the ID to a blank
+					// string so we need to handle that situation
+					if (qc.aQuote.Id != null && !((String)(qc.aQuote.Id)).equals('')) {
+						// we have a quote that can be deleted from Salesforce
+						recordsToDelete.add(qc.aQuote.Id);
+					}
+					// remove the quote from in memory structure
+					sa.opptyContainer.quoteContainerList.remove(i);
+					//decrement because the list got shorter
+					i--;
+				} else {
+					//check for deleted QuoteLineItems, Quote Discounts and Quote Financing records
+					// delete quote line items
+					if (qc.quoteLineItems != null) {
+						for (Integer j = 0; j < qc.quoteLineItems.size(); j++) {
+							QuoteLineItem qli = qc.quoteLineItems[j];
+							if (qli.isDeleted != null && qli.isDeleted == true) {
+								// we have a qli marked for deletion
+								if (qli.Id != null && !((String)(qli.Id)).equals('')) {
+									// we have a quote line item that can be deleted from Salesforce
+									recordsToDelete.add(qli.Id);
+								}
+								// remove from the in memory qli list
+								qc.quoteLineItems.remove(j);
+								//decrement because the list got shorter
+								j--;
+							}
+						}
+					}
+					// delete quote discounts
+					if (qc.quoteDiscountList != null) {
+						for (Integer j = 0; j < qc.quoteDiscountList.size(); j++) {
+							Quote_Discount__c qd = qc.quoteDiscountList[j];
+							if (qd.isDeleted != null && qd.isDeleted == true) {
+								// we have a qli marked for deletion
+								if (qd.Id != null && !((String)(qd.Id)).equals('')) {
+									// we have a quote line item that can be deleted from Salesforce
+									recordsToDelete.add(qd.Id);
+								}
+								// remove from the in memory qli list
+								qc.quoteDiscountList.remove(j);
+								//decrement because the list got shorter
+								j--;
+							}
+						}
+					}
+					// delete quote financing
+					if (qc.quoteFinancingList != null) {
+						for (Integer j = 0; j < qc.quoteFinancingList.size(); j++) {
+							Quote_Financing__c qf = qc.quoteFinancingList[j];
+							if (qf.isDeleted != null && qf.isDeleted == true) {
+								// we have a qli marked for deletion
+								if (qf.Id != null && !((String)(qf.Id)).equals('')) {
+									// we have a quote line item that can be deleted from Salesforce
+									recordsToDelete.add(qf.Id);
+								}
+								// remove from the in memory qli list
+								qc.quoteFinancingList.remove(j);
+								//decrement because the list got shorter
+								j--;
+							}
+						}
+					}
+				}
+			}
+		}
+		// delete the records from Salesforce
+		if (recordsToDelete.size() > 0) {
+			Database.DeleteResult[] ldr = Database.delete(recordsToDelete, false);
+			for(Database.DeleteResult dr : ldr){
+				if (!dr.isSuccess()) {
+					// add error messages 
+					// Operation failed, so get all errors               
+					for(Database.Error err : dr.getErrors()) {
+						sa.getErrors().add('delete quotes et al errors: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute financing fields that affected this error: ' + err.getFields());
+					}
+				}
+			}
+		}
+	}
+	return sa;
   }
 
   /* @method: customerSearch(String inputJSON)
