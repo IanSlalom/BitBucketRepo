@@ -151,6 +151,7 @@ public with sharing class RMS_errorMessages {
 	public static final String QUANTITY_IS_LESS_THAN_ZERO = '&bull;The Asset Quantity cannot be lower than zero.';
 	
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_DEPOSIT = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Deposits. Please contact your system admin for assistance';
+	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_INSTALL_ADJ = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Install Adjustments. Please contact your system admin for assistance';
 	public static final String JOURNAL_ENTRY_FIELD_NULL_ON_ORDER_NULL_LABOR = '&bull;The [field] field could not be found. This must be entered to recognize revenue for Labor. Please contact your system admin for assistance.';
 	public static final String NO_RELATED_DEPOSIT_JOURNAL_ENTRY = '&bull;This Order Has no related Journal Entries with deposit type.';
 	public static final String REVENUE_ALREADY_RECOGNIZED = '&bull;This revenue has already been recognized and submitted for this order and you cannot change it.';

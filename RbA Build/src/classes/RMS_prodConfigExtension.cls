@@ -381,7 +381,7 @@ public class RMS_prodConfigExtension {
 	public  Integer numSashes  {
 		get
 		{   
-			if (numSashes != null) return numSashes;
+//			if (numSashes != null) return numSashes;
 			if (prodConfig.mpc.Number_of_Sashes__c != null && prodConfig.mpc.Number_of_Sashes__c.isNumeric()){
 				numSashes = Integer.valueOf(prodConfig.mpc.Number_of_Sashes__c);
 			}else{

@@ -256,6 +256,7 @@
         <members>ResourceTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>journalEntryTrigger</members>
         <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
         <members>warrantyTrigger</members>
@@ -455,7 +456,6 @@
         <name>Queue</name>
     </types>
     <types>
-        <members>RbA_Operational_Reporting</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
@@ -491,6 +491,7 @@
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
         <members>RbA_Operational_Reporting/Pricing_Configuration_by_Store</members>
         <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
+        <members>RbA_Operational_Reporting/Report_3651_Permit_Post_Installation</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
         <members>RbA_Operational_Reporting/Report_3653_Permit_Bond_Tracking</members>
         <members>RbA_Operational_Reporting/Report_7001_Service_Requests_by_Status</members>
@@ -503,6 +504,7 @@
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
+        <members>RbA_Operational_Reporting/Report_BO2004_Job_Cost_Summary_Stain</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
         <members>RbA_Operational_Reporting/Report_BO2009_PostRPDLaborAppliedJourn</members>
@@ -517,6 +519,7 @@
         <members>RbA_Operational_Reporting/Report_BO3001_Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
+        <members>RbA_Operational_Reporting/Report_BO4200_Receivings_Postings</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
@@ -530,6 +533,7 @@
     <types>
         <members>Accounts_with_Assets_with_Received_Products</members>
         <members>Assets_with_Purchase_Orders</members>
+        <members>Assets_with_Received_Products</members>
         <members>Assets_with_without_Journal_Entries</members>
         <members>Cycle_Time_Reports</members>
         <members>Labor_with_Work_Order_with_Order</members>
