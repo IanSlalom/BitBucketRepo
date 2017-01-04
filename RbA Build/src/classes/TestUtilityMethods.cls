@@ -292,7 +292,8 @@ public with sharing class TestUtilityMethods {
 		QuoteId = quoteId,
 		Quantity = 1,
 		UnitPrice = 1,
-		Child_Product_Pricebook_Entry_Id__c = childProdId
+		Child_Product_Pricebook_Entry_Id__c = childProdId,
+		Calculated_Price__c = 100
 		);
 		return QLI;
 	}
@@ -428,8 +429,7 @@ public with sharing class TestUtilityMethods {
 		
 	}
 	
-	/* creates a tech measure apptment 
-	 * with an opportunity, quote and order
+	/* creates quoteline item. master product and child product, pricebook entries 
 	 */
 	public QuoteLineItem createQLIMasterChildProducts(Id pbId, Id quoteId){
 
@@ -483,6 +483,58 @@ public with sharing class TestUtilityMethods {
 		return  qli1;
 	}
 	
+	/* creates quote discount and store discount 
+	 */
+	public Quote_Discount__c createQuoteDiscount(Id storeId, Id quoteId){
+
+		Id rtId = UtilityMethods.RecordTypeFor('Store_Discount__c', 'dollar_off');
+		List<Store_Discount__c> storeDiscountList = [select Id, Name, RecordTypeId from Store_Discount__c where Store_Configuration__c = :storeId];
+		Store_Discount__c storeDiscount = null;
+		if (storeDiscountList.size() == 0) {
+			storeDiscount = new Store_Discount__c();
+			storeDiscount.RecordTypeId = rtId;
+			storeDiscount.Store_Configuration__c = storeId;
+			storeDiscount.Active__c = true;
+			storeDiscount.Discount_Amount__c = 1;
+			storeDiscount.Discount_Product__c = 'Unit';
+			storeDiscount.Name = 'TestStoreDiscount';
+			insert storeDiscount;
+		} else {
+			storeDiscount = storeDiscountList[0];
+		}
+
+		Quote_Discount__c qd = new Quote_Discount__c();
+		qd.Quote__c = quoteId;
+		qd.Discount_Amount__c = 1;
+		qd.Store_Discount__c = storeDiscount.Id;
+		return qd;
+	}
+
+	/* creates quote financing and store financinig 
+	 */
+	public Quote_Financing__c createQuoteFinancing(Id storeId, Id quoteId){
+
+		Id rtId = UtilityMethods.RecordTypeFor('Store_Finance_Program__c', 'Cash_Payment');
+		List<Store_Finance_Program__c> storeFPList = [select Id, Name, RecordTypeId from Store_Finance_Program__c where Store_Configuration__c = :storeId];
+		Store_Finance_Program__c storeFP = null;
+		if (storeFPList.size() == 0) {
+			storeFP = new Store_Finance_Program__c();
+			storeFP.RecordTypeId = rtId;
+			storeFP.Store_Configuration__c = storeId;
+			storeFP.Active__c = true;
+			storeFP.Name = 'TestStoreFinanceProgram';
+			insert storeFP;
+		} else {
+			storeFP = storeFPList[0];
+		}
+
+		Quote_Financing__c qf = new Quote_Financing__c();
+		qf.Related_Quote__c = quoteId;
+		qf.Amount_Financed__c = 1;
+		qf.Store_Finance_Program__c = storeFP.Id;
+		return qf;
+	}
+
 	public void createOrderTestRecords(){
 		
 		TestUtilityMethods utility = new TestUtilityMethods();
