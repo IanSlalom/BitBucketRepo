@@ -115,7 +115,6 @@ public with sharing class RMS_OrderDiscountManager {
 			rCH.Line_Processed_Date__c = System.today();
 			rCH.Order_Booking_Date__c = od.Order_Booking_Date__c;
 			rCH.Order_Revenue_Recognition_Date__c = od.Order_Revenue_Recognition_Date__c;
-			rCH.Subtype__c = 'Change';
 
 			
 			if(	orderDiscountIdToListChangeHistory.get(od.id) == null || 
@@ -136,6 +135,7 @@ public with sharing class RMS_OrderDiscountManager {
 			//GET MOST RECENTLY CREATED CHANGE HISTORY			
 			else {
 				rCH = OrderDiscountIdToListChangeHistory.get(od.id)[0];
+				rCH.Subtype__c = 'Change';
 				
 				if(typeOfChange == 'justDiscount'){
 					rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
