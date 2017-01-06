@@ -108,7 +108,7 @@
  
   <apex:pageMessages escape="false" />
 	<div id="OrderId" style="display:none;">{!orderId}</div>	
-    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock" rendered="{!!jobClosed}" > 
+    <apex:pageBlock title="Select Product" mode="view" id="EnterProductBlock"> 
         <apex:pageBlockButtons location="bottom" rendered="{!!productSelected}">
             <apex:commandButton action="{!enterProduct}" value="Enter" onclick="showSpinner()"/>
             <apex:commandButton action="{!close}" value="Close" onclick="showSpinner()" oncomplete="closeTab();return false"/>
