@@ -89,6 +89,7 @@ public with sharing class RMS_OrderItemManager {
 				rCH.Order_Product__c = oi.Id;
 				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
 				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
+				rCH.Subtype__c = 'Change';
 			}
 			//GET MOST RECENTLY CREATED CHANGE HISTORY			
 			else {
@@ -97,7 +98,6 @@ public with sharing class RMS_OrderItemManager {
 
 			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
 			rCH.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Product');
-			rCH.Subtype__c = 'Change';
 			rCH.Line_Processed_Date__c = System.today();
 			rCH.Order_Booking_Date__c = oi.Order_Booking_Date__c;
 			rCH.Order_Revenue_Recognition_Date__c = oi.Order_Revenue_Recognition_Date__c;
