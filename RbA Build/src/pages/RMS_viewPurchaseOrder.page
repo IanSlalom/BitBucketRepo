@@ -1,5 +1,5 @@
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
-	
+	  <apex:pageMessages />
 	<apex:includeScript value="{!$Resource.jquery}" />
 	<apex:includeScript value="/support/console/33.0/integration.js"/>
     <apex:stylesheet value="{!URLFOR($Resource.spinner, 'spinner.css')}"/>
@@ -146,9 +146,11 @@ function prepareList(parent,child,isSubselectOptional){
 	<apex:form >
 		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
 			<apex:pageBlockButtons location="both" id="pageBlockButtons">
-				<apex:commandButton action="{!edit}" value="Edit" onclick="showSpinner()" rendered="{!NOT(relatedOrderClosed)}"/>
+                <apex:commandButton action="{!URLFOR('/apex/TestPO?id='+Purchase_Order__c.Id)}" value="Change Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor != '' && status != 'rec'}"/>
+                <apex:commandButton action="{!URLFOR('/apex/TestPO?id='+Purchase_Order__c.Id)}" value="Add Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor == ''}"/>
+                <apex:commandButton action="{!edit}" value="Edit" onclick="showSpinner()" rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" onclick="showSpinner()" oncomplete="closeTab();return false"/>
-				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
+				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!selectedVendor != ''&&((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
   				<apex:commandButton action="{!confirm}" value="Cancel PO" rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
 				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
   				<apex:commandButton action="{!receive}" value="Receive PO" onclick="showSpinner()" rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
@@ -164,7 +166,7 @@ function prepareList(parent,child,isSubselectOptional){
 			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}"/>
 			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" />
 			<apex:actionFunction name="unCancelPurchaseOrder" action="{!unCancelPurchaseOrder}" />
-			 
+			 <apex:pageMessage summary="Please Add a Vendor Before Proceeding." severity="error" strength="3" rendered="{!selectedVendor == ''}"/>
 			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
 				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
 			</apex:pageBlockSection> 
@@ -199,7 +201,7 @@ function prepareList(parent,child,isSubselectOptional){
 				</apex:pageBlockSection>
 				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
 				
-				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw" rendered="{! selectedVendor != ''}">
+				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw">
 					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
 						<apex:facet name="header">{!productText}</apex:facet> 
 					</apex:column>

@@ -196,6 +196,7 @@
         <members>RMS_addServiceSymptomP2</members>
         <members>RMS_addWarrantytoSP</members>
         <members>RMS_cancelOrder</members>
+        <members>RMS_changeVendor</members>
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
