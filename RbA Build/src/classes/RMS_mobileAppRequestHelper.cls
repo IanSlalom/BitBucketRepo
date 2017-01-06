@@ -360,7 +360,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 
 	//get the change histories
 	List<Change_History__c> chList = [Select Id, Name, Order_Product__c, Changes__c, Responsible_Party__c, Retail_Price__c, Retail_Price_Change__c, createdDate
-		from Change_History__c where isDeleted = false and Order_Product__c in : oiList and RecordType.DeveloperName = 'Order_Product_Change'
+		from Change_History__c where isDeleted = false and Order_Product__c in : oiList and RecordType.DeveloperName = 'Order_Product' and Subtype__c = 'Change'
 		Order By LastModifiedDate];
     // get the order discounts
     List<Order_Discount__c> odList = queryOrderDiscounts(orderMap.keySet());

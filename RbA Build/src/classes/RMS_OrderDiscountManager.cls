@@ -28,6 +28,11 @@ public with sharing class RMS_OrderDiscountManager {
 				ch.Order_Discount__c = od.Id; 
 				ch.Retail_Price__c = od.Discount_Amount__c * -1;
 				ch.Retail_Price_Change__c =  od.Discount_Amount__c * -1;
+				ch.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Discount');
+				ch.Subtype__c = 'Initial';
+				ch.Line_Processed_Date__c = System.today();
+				ch.Order_Booking_Date__c = od.Order_Booking_Date__c;
+				ch.Order_Revenue_Recognition_Date__c = od.Order_Revenue_Recognition_Date__c;
 				changeHistoryToInsert.add(ch);
 			}
 		}
@@ -105,6 +110,13 @@ public with sharing class RMS_OrderDiscountManager {
 			system.debug('ads orderDiscountIdToListChangeHistory.get(od.id): '+orderDiscountIdToListChangeHistory.get(od.id));
 			system.debug('ads newMap.get(od.id).Discount_Amount__c: '+newMap.get(od.id).Discount_Amount__c);
 			system.debug('ads oldMap.get(od.id).Discount_Amount__c: '+oldMap.get(od.id).Discount_Amount__c);
+
+			rCH.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History', 'Order_Discount');
+			rCH.Line_Processed_Date__c = System.today();
+			rCH.Order_Booking_Date__c = od.Order_Booking_Date__c;
+			rCH.Order_Revenue_Recognition_Date__c = od.Order_Revenue_Recognition_Date__c;
+			rCH.Subtype__c = 'Change';
+
 			
 			if(	orderDiscountIdToListChangeHistory.get(od.id) == null || 
 				orderDiscountIdToListChangeHistory.get(od.id).size() == 0){

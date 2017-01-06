@@ -17,10 +17,7 @@
 ***********************************************************/
 
 trigger OrderTrigger on Order (before insert, before update, before delete, 
-                                            after insert, after undelete, after update, after delete) {
-    // Set the order trigger to ran
-    if(Trigger.isUpdate)UtilityMethods.setOrderTriggerRan();
-    
+                                            after insert, after undelete, after update, after delete) {    
 //  }    
     System.Debug('************hasOrderTriggerRanAfter=' +UtilityMethods.hasOrderTriggerRan());
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
@@ -82,6 +79,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
             customerPickup.customerPickup(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
 			accounts = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         	handler.OnAfterUpdate(Trigger.oldMap, Trigger.newMap);
+        	
         }
                     
         //After Delete
@@ -106,5 +104,7 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
 			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
 		}
+    // Set the order trigger to ran
+    if(Trigger.isUpdate && Trigger.isAfter)UtilityMethods.setOrderTriggerRan();
 	}
 }
