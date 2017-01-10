@@ -55,7 +55,7 @@ private class RMS_OrderDiscountManagerTest {
 		List<Change_History__c> chResults2 = [SELECT Id, RecordTypeId, Order_Discount__c, Subtype__c, Retail_Price__c, Retail_Price_Change__c, Changes__c FROM Change_History__c WHERE Order_Discount__c =: orderDiscount1.Id];
 		System.AssertEquals(1, chResults2.size());
 		System.AssertEquals(UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Discount'), chResults2[0].RecordTypeId);
-		System.AssertEquals('Initial', chResults2[0].Subtype__c);
+		System.AssertEquals('Change', chResults2[0].Subtype__c);
 		System.AssertEquals(orderDiscount1.Id, chResults2[0].Order_Discount__c);
 		System.AssertEquals(-75, chResults2[0].Retail_Price__c);
 		System.AssertEquals(-75, chResults2[0].Retail_Price_Change__c);
