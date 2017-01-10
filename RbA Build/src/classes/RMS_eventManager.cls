@@ -40,6 +40,9 @@ public with sharing class RMS_eventManager {
 				//String cancelDate = rWO.Cancel_Date__c.substring(0,9);
 				Change_History__c ch = new Change_History__c();
 				ch.RbA_Work_Order__c = e.WhatId;
+				ch.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'RbA_Work_Order');
+				ch.Subtype__c = 'Change';
+
 				ch.Changes__c = 'Cancel Reason: '+rWO.Cancel_Reason__c+'\r\n'+
 								'Cancel Date: '+rWO.Cancel_Date__c.format()+'\r\n'+
 								'Start Date Time: '+e.StartDateTime.format()+'\r\n'+ 

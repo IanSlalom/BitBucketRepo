@@ -34,10 +34,13 @@ public with sharing class RMS_OrderTriggerHandler {
     updateOrderTimeStamps(oldMap,newMap);
     updateRevenueRecDate(oldMap,newMap);
     updateUniqueIdentifier(oldMap,newMap);
+    updateChangeHistories(oldMap,newMap);
   }
 
   public void OnAfterUpdate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
-    createOnHoldTasks(oldMap, newMap);
+    if(!UtilityMethods.hasOrderTriggerRan()) {
+    	createOnHoldTasks(oldMap, newMap);
+    }
   }
 
   /*  
@@ -169,6 +172,8 @@ public with sharing class RMS_OrderTriggerHandler {
     Id onHoldTaskID = UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task');
     List<Task> tasksToInsert = new List<Task>();
     for(Order o: newMap.values()){ 
+      System.Debug('*************o.Status=' +o.Status);
+      System.Debug('*************oldMap.get(o.Id).Status=' +oldMap.get(o.Id).Status);
       if( o.Status != oldMap.get(o.Id).Status && o.Status == 'On Hold'){
         tasksToInsert.add(new Task(WhatId = o.Id,Primary_Reason__c = '', Secondary_Reason__c = '', OwnerId = o.OwnerId, Subject = 'On Hold', RecordtypeId = onHoldTaskID));
       }
@@ -224,6 +229,47 @@ public with sharing class RMS_OrderTriggerHandler {
     }
   }
 
+  public void updateChangeHistories(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
+    Set<Id> orderIdsToUpdateChangeHistory = new Set<Id>();
+    for(Order o: newMap.values()){ 
+      // If the revenue recognized date or booking date has changed on an order, 
+      // for CORO Orders or Change Orders, add it to the list
+      if( ((o.Revenue_Recognized_Date__c != oldMap.get(o.Id).Revenue_Recognized_Date__c) ||
+      	   (o.EffectiveDate != oldMap.get(o.Id).EffectiveDate)) &&
+      	  ((o.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type') ||
+      	   (o.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'Change_Order'))) )){
+      	orderIdsToUpdateChangeHistory.add(o.Id);   	
+      }
+    }
+    // If none of the updated orders meet the criteria above, just return
+    if(orderIdsToUpdateChangeHistory.isEmpty()){
+      return;
+    }
+
+	List<Change_History__c> changeHistoriesToUpdate = new List<Change_History__c>();
+    // Now loop through all of the change histories linked to the orders in the set and update their
+    // Rev Recognized and Booking dates
+    for (Change_History__c ch : [SELECT Id, Order_Revenue_Recognition_Date__c, Order_Booking_Date__c, Order_Product__r.OrderId, Order_Discount__r.Order__r.Id FROM Change_History__c
+    							 WHERE Order_Product__r.OrderId IN : orderIdsToUpdateChangeHistory OR Order_Discount__r.Order__r.Id IN : orderIdsToUpdateChangeHistory]) 
+    {
+    	// If this is an Order Product change history
+    	if (orderIdsToUpdateChangeHistory.contains(ch.Order_Product__r.OrderId)) {
+    		ch.Order_Revenue_Recognition_Date__c = newMap.get(ch.Order_Product__r.OrderId).Revenue_Recognized_Date__c;
+    		ch.Order_Booking_Date__c = newMap.get(ch.Order_Product__r.OrderId).EffectiveDate;
+    		changeHistoriesToUpdate.add(ch);
+    	}
+
+    	// If this is an Order Discount change history
+    	if (orderIdsToUpdateChangeHistory.contains(ch.Order_Discount__r.Order__r.Id)) {
+    		ch.Order_Revenue_Recognition_Date__c = newMap.get(ch.Order_Discount__r.Order__r.Id).Revenue_Recognized_Date__c;
+    		ch.Order_Booking_Date__c = newMap.get(ch.Order_Discount__r.Order__r.Id).EffectiveDate;
+    		changeHistoriesToUpdate.add(ch);    		
+    	}
+    }
+    
+    update changeHistoriesToUpdate;
+    
+  }
   
   
   

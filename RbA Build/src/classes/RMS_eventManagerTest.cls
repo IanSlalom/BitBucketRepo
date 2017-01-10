@@ -17,6 +17,13 @@ public with sharing class RMS_eventManagerTest {
 							);
 		insert e1;
 		delete e1;
+		
+		List<Change_History__c> chResults = [SELECT Id, RecordTypeId, RbA_Work_Order__c, Subtype__c, Changes__c FROM Change_History__c ];
+		System.AssertEquals(1, chResults.size());
+		System.AssertEquals(UtilityMethods.RecordTypeFor('Change_History__c', 'RbA_Work_Order'), chResults[0].RecordTypeId);
+		System.AssertEquals('Change', chResults[0].Subtype__c);
+		System.AssertEquals(rbaWO1.Id, chResults[0].RbA_Work_Order__c);
+		System.Assert(chResults[0].Changes__c != null);
 	}
 
 }

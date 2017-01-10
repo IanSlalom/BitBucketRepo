@@ -18,6 +18,7 @@ public with sharing class RMS_OrderItemManager {
 
 //TODO: add method comment	
 	public void setUpChangeHistoryOnCreate(list<OrderItem> newList, map<id,OrderItem> newMap){
+
 		system.debug('ads creating new change history: '+ newList);
 		list<Change_History__c> changeHistoryToInsert = new list<Change_History__c>();
 		for(OrderItem oi : newlist){
@@ -26,6 +27,11 @@ public with sharing class RMS_OrderItemManager {
 			ch.Retail_Price__c = oi.Total_Retail_Price__c;
 			ch.Retail_Price_Change__c =  oi.Total_Retail_Price__c;
 			ch.Responsible_Party__c = oi.Responsible_Party__c;
+			ch.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Product');
+			ch.Subtype__c = 'Initial';
+			ch.Line_Processed_Date__c = System.today();
+			ch.Order_Booking_Date__c = oi.Order_Booking_Date__c;
+			ch.Order_Revenue_Recognition_Date__c = oi.Order_Revenue_Recognition_Date__c;
 			changeHistoryToInsert.add(ch);
 		}
 		insert changeHistoryToInsert;
@@ -33,6 +39,7 @@ public with sharing class RMS_OrderItemManager {
 	
 //TODO: add method comment	
 	public void updateChangeHistoryOnUpdate(list<OrderItem> newList, list<OrderItem> oldList, map<id,OrderItem> newMap, map<id,OrderItem> oldMap){
+		system.debug('ads updating new change history: '+ newList);
 		list<Change_History__c> changeHistoryToUpsert = new list<Change_History__c>();
 		
 		list<Change_History__c> relatedChangeHistories = [SELECT 	id, 
@@ -82,6 +89,7 @@ public with sharing class RMS_OrderItemManager {
 				rCH.Order_Product__c = oi.Id;
 				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
 				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
+				rCH.Subtype__c = 'Change';
 			}
 			//GET MOST RECENTLY CREATED CHANGE HISTORY			
 			else {
@@ -89,17 +97,22 @@ public with sharing class RMS_OrderItemManager {
 			}
 
 			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
+			rCH.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Product');
+			rCH.Line_Processed_Date__c = System.today();
+			rCH.Order_Booking_Date__c = oi.Order_Booking_Date__c;
+			rCH.Order_Revenue_Recognition_Date__c = oi.Order_Revenue_Recognition_Date__c;
 
 			Boolean somethingChanged = false;
 
 			//JETT-2363 do not show updates to fields in change history, must be lowercase strings
-			Set<String> fieldsToExclude = new Set<String>{'responsible_party__c','commission_amount__c','commission_due__c','total_retail_price__c'};
+			Set<String> fieldsToExclude = new Set<String>{'responsible_party__c','commission_amount__c','commission_due__c','total_retail_price__c',
+															'availablequantity','listprice','createddate','createdbyid','lastmodifieddate','lastmodifiedbyid',
+															'systemmodstamp','orderitemnumber','billable_amount__c'};
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
 			for(String oiField : oiFieldsMap.KeySet()){ 
 				string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
-				
 				if(oldValue != newValue && !fieldsToExclude.contains(oiField)){
 					somethingChanged = true;
 					if(oldValue == null){

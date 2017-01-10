@@ -17,11 +17,7 @@ Created.
 
 trigger ChargeTrigger on Charge__c (before insert, before update, before delete, 
                                         after insert, after undelete, after update, after delete) {
-// Set the order trigger to ran
-if(Trigger.isUpdate)UtilityMethods.setOrderTriggerRan();
-
 //  }    
-System.Debug('************hasOrderTriggerRanAfter=' +UtilityMethods.hasOrderTriggerRan());
 //GET ALL RMS SETTINGS CUSTOM SETTINGS
 map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
 

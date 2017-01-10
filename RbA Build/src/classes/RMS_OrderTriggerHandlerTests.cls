@@ -31,7 +31,7 @@ private class RMS_OrderTriggerHandlerTests {
         //Store_Configuration__c stconfig = new Store_Configuration__c(Store__c = store.Id);
         //insert stconfig;
         
-        Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc');
+        Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc',Account_Type__c='Cost PO');
         insert fan;
         Product2 product1 = new Product2(
             Name='Test Product',
@@ -302,6 +302,7 @@ private class RMS_OrderTriggerHandlerTests {
         insert newOrder;
         Test.startTest();
         soldOrder[0].Status = 'Install Scheduled';
+        soldOrder[0].Apex_Context__c = true;
         update soldOrder[0];
         RMS_OrderTriggerHandler handler = new RMS_OrderTriggerHandler(false,200);
         handler.updateJIPCOROServiceOrders(new List<Order>{newOrder});
@@ -348,8 +349,9 @@ private class RMS_OrderTriggerHandlerTests {
 
         Test.startTest();
         soldOrder[0].Status = 'On Hold';
+        soldOrder[0].Apex_Context__c = true;
         update soldOrder;
-        List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id];
+        List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id AND RecordTypeId =: UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task')];
         System.assertEquals(onHoldTasks.size(),1);
         System.assertEquals(onHoldTasks[0].OwnerId, soldOrder[0].OwnerId);
         System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
@@ -383,6 +385,9 @@ private class RMS_OrderTriggerHandlerTests {
         insert oList;
         newOrder.Status = 'Ready to Order';
         newOrder2.Status = 'Ready to Order';
+        newOrder.Apex_Context__c = true;
+        newOrder2.Apex_Context__c = true;
+        
         update oList;
         oList= [Select Id, Unique_Identifier__c, Status from Order where Id in: oList];
         String uniqueIDString = store.Store_Number__c + store.Active_Store_Configuration__r.Order_Number__c.toPlainString();
@@ -425,4 +430,29 @@ private class RMS_OrderTriggerHandlerTests {
         System.assertEquals(changeOrder.Pricebook2Id, soldOrder[0].Pricebook2Id);
        
     }
+     @isTest static void testUpdateChangeHistories(){
+//		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+//        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
+ //       Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];
+        List<Order> soldOrder = [Select Id, Name, Revenue_Recognized_Date__c, Pricebook2Id, Status, Tech_Measure_Status__c,Install_Order_Status__c, Store_Location__c, OpportunityId, OwnerId
+                                 from Order where Name = 'InstallScheduled'];
+
+        Test.startTest();
+
+        soldOrder[0].Revenue_Recognized_Date__c = System.today();
+        soldOrder[0].EffectiveDate = System.today() - 1;
+        update soldOrder[0];
+        
+    	for (Change_History__c ch : [SELECT Id, Order_Revenue_Recognition_Date__c, Order_Booking_Date__c, Order_Product__r.OrderId, Order_Discount__r.Order__r.Id FROM Change_History__c
+    							 WHERE Order_Product__r.OrderId =: soldOrder[0].Id]) 
+    	{
+        	System.assertEquals(soldOrder[0].Revenue_Recognized_Date__c, ch.Order_Revenue_Recognition_Date__c);
+        	System.assertEquals(soldOrder[0].EffectiveDate, ch.Order_Booking_Date__c);
+    	}
+        
+
+        Test.stopTest();
+       
+    }
+
 }
