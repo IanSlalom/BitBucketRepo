@@ -197,6 +197,8 @@
                 <apex:outputField value="{!Order.AR_Age__c}"/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
                 <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+                <apex:outputField value="{!Order.Business_Adjustments__c}"/><br/>
+                <apex:outputField value="{!Order.Non_Sufficient_Funds__c}"/>
             </apex:pageBlockSection>
             <script> twistSection(document.getElementById('{!$Component.block1.qbd}').getElementsByTagName('img')[0]) </script>
             <apex:pageBlockSection title="Address Details" collapsible="true" columns="2">
