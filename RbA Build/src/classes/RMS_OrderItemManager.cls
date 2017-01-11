@@ -18,6 +18,7 @@ public with sharing class RMS_OrderItemManager {
 
 //TODO: add method comment	
 	public void setUpChangeHistoryOnCreate(list<OrderItem> newList, map<id,OrderItem> newMap){
+
 		system.debug('ads creating new change history: '+ newList);
 		list<Change_History__c> changeHistoryToInsert = new list<Change_History__c>();
 		for(OrderItem oi : newlist){
@@ -25,7 +26,15 @@ public with sharing class RMS_OrderItemManager {
 			ch.Order_Product__c = oi.Id;
 			ch.Retail_Price__c = oi.Total_Retail_Price__c;
 			ch.Retail_Price_Change__c =  oi.Total_Retail_Price__c;
+			ch.Quantity__c = oi.Quantity;
+			ch.Quantity_Change__c = oi.Quantity;
 			ch.Responsible_Party__c = oi.Responsible_Party__c;
+			ch.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Product');
+			ch.Subtype__c = 'Initial';
+			ch.Line_Processed_Date__c = System.today();
+			ch.Order_Booking_Date__c = oi.Order_Booking_Date__c;
+			ch.Sales_Rep__c = oi.Sales_Rep__c;
+			ch.Order_Revenue_Recognition_Date__c = oi.Order_Revenue_Recognition_Date__c;
 			changeHistoryToInsert.add(ch);
 		}
 		insert changeHistoryToInsert;
@@ -33,13 +42,16 @@ public with sharing class RMS_OrderItemManager {
 	
 //TODO: add method comment	
 	public void updateChangeHistoryOnUpdate(list<OrderItem> newList, list<OrderItem> oldList, map<id,OrderItem> newMap, map<id,OrderItem> oldMap){
+		system.debug('ads updating new change history: '+ newList);
 		list<Change_History__c> changeHistoryToUpsert = new list<Change_History__c>();
 		
 		list<Change_History__c> relatedChangeHistories = [SELECT 	id, 
 																	Changes__c, 
 																	Order_Product__c, 
 																	Retail_Price__c, 
-																	Retail_Price_Change__c 
+																	Retail_Price_Change__c,
+																	Quantity__c,
+																	Quantity_Change__c 
 																	FROM Change_History__c 
 																	WHERE Order_Product__c 
 																	IN :oldMap.Keyset()
@@ -77,11 +89,38 @@ public with sharing class RMS_OrderItemManager {
 			if(	orderItemIdToListChangeHistory.get(oi.id) == null || 
 				orderItemIdToListChangeHistory.get(oi.id).size() == 0 || 
 				oldMap.get(oi.id).Total_Retail_Price__c != newMap.get(oi.id).Total_Retail_Price__c ||
-				oldMap.get(oi.id).UnitPrice != newMap.get(oi.id).UnitPrice){
-					
+				oldMap.get(oi.id).Quantity != newMap.get(oi.id).Quantity ||
+				oldMap.get(oi.id).UnitPrice != newMap.get(oi.id).UnitPrice ||
+				(oldMap.get(oi.id).Status__c != newMap.get(oi.id).Status__c &&
+				(oldMap.get(oi.id).Status__c == 'Cancelled' || newMap.get(oi.id).Status__c == 'Cancelled'))){
+				
 				rCH.Order_Product__c = oi.Id;
-				rCH.Retail_Price__c = oi.Total_Retail_Price__c;
-				rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
+				rCH.Subtype__c = 'Change';
+
+				// If the order item has moved from non Cancelled to Cancelled 
+				if (oldMap.get(oi.id).Status__c != 'Cancelled' && newMap.get(oi.id).Status__c == 'Cancelled')
+				{
+					rCH.Retail_Price__c = 0;
+					rCH.Retail_Price_Change__c =  0 - oldMap.get(oi.id).Total_Retail_Price__c;
+					rCH.Quantity__c = 0;
+					rCH.Quantity_Change__c =  0 - oldMap.get(oi.id).Quantity;					
+				}
+				// If the order item has moved from Cancelled to non-Cancelled 
+				else if (oldMap.get(oi.id).Status__c == 'Cancelled' && newMap.get(oi.id).Status__c != 'Cancelled')
+				{
+					rCH.Retail_Price__c = oi.Total_Retail_Price__c;
+					rCH.Retail_Price_Change__c = oi.Total_Retail_Price__c;
+					rCH.Quantity__c = oi.Quantity;
+					rCH.Quantity_Change__c = oi.Quantity;										
+				}
+				// Else change the quantity and price as normal 
+				else
+				{
+					rCH.Retail_Price__c = oi.Total_Retail_Price__c;
+					rCH.Retail_Price_Change__c =  oi.Total_Retail_Price__c - oldMap.get(oi.id).Total_Retail_Price__c;
+					rCH.Quantity__c = oi.Quantity;
+					rCH.Quantity_Change__c =  oi.Quantity - oldMap.get(oi.id).Quantity;
+				}
 			}
 			//GET MOST RECENTLY CREATED CHANGE HISTORY			
 			else {
@@ -89,17 +128,23 @@ public with sharing class RMS_OrderItemManager {
 			}
 
 			rCH.Responsible_Party__c = newMap.get(oi.id).Responsible_Party__c;
+			rCH.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Product');
+			rCH.Line_Processed_Date__c = System.today();
+			rCH.Order_Booking_Date__c = oi.Order_Booking_Date__c;
+			rCH.Sales_Rep__c = oi.Sales_Rep__c;
+			rCH.Order_Revenue_Recognition_Date__c = oi.Order_Revenue_Recognition_Date__c;
 
 			Boolean somethingChanged = false;
 
 			//JETT-2363 do not show updates to fields in change history, must be lowercase strings
-			Set<String> fieldsToExclude = new Set<String>{'responsible_party__c','commission_amount__c','commission_due__c','total_retail_price__c'};
+			Set<String> fieldsToExclude = new Set<String>{'responsible_party__c','commission_amount__c','commission_due__c','total_retail_price__c',
+															'availablequantity','listprice','createddate','createdbyid','lastmodifieddate','lastmodifiedbyid',
+															'systemmodstamp','orderitemnumber','billable_amount__c'};
 			//LOOP THROUGH ALL FIELDS AND DETERMINES IF THE OLD VALUE DIFFERENT THAN THE NEW VALUE
 			for(String oiField : oiFieldsMap.KeySet()){ 
 				string oldValue = string.valueOf(oldMap.get(oi.id).get(oiField));
 				string newValue = string.valueOf(newMap.get(oi.id).get(oiField));
 				string oiLabel = oiFieldsMap.get(oiField).getDescribe().getLabel();
-				
 				if(oldValue != newValue && !fieldsToExclude.contains(oiField)){
 					somethingChanged = true;
 					if(oldValue == null){
@@ -139,14 +184,60 @@ public with sharing class RMS_OrderItemManager {
 				}
 			}
 			if(somethingChanged == true && orderItemIdToListChangeHistory.get(oi.id) != null && orderItemIdToListChangeHistory.get(oi.id).size() != 0){
-				rCH.Retail_Price__c = newMap.get(oi.id).Total_Retail_Price__c;
-				
-				Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
-				Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
-				if (newPrice == null) newPrice = 0;
-				if (oldPrice == null) oldPrice = 0;
-				if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
-				rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
+
+				// If the order item has moved from non Cancelled to Cancelled 
+				if (oldMap.get(oi.id).Status__c != 'Cancelled' && newMap.get(oi.id).Status__c == 'Cancelled')
+				{
+					rCH.Retail_Price__c = 0;
+					rCH.Quantity__c = 0;
+
+					Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
+					Decimal oldQuantity = oldMap.get(oi.id).Quantity;
+
+					if (oldPrice == null) oldPrice = 0;
+					if (oldQuantity == null) oldQuantity = 0;
+					if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
+					if (rCH.Quantity_Change__c == null) rCH.Quantity_Change__c = 0;
+					rCH.Retail_Price_Change__c = (0 - oldPrice) + rCH.Retail_Price_Change__c;
+					rCH.Quantity_Change__c = (0 - oldQuantity) + rCH.Quantity_Change__c;
+
+				}
+				// If the order item has moved from Cancelled to non-Cancelled 
+				else if (oldMap.get(oi.id).Status__c == 'Cancelled' && newMap.get(oi.id).Status__c != 'Cancelled')
+				{
+					rCH.Retail_Price__c = newMap.get(oi.id).Total_Retail_Price__c;
+					rCH.Quantity__c = newMap.get(oi.id).Quantity;
+
+					Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
+					Decimal newQuantity = newMap.get(oi.id).Quantity;
+
+					if (newPrice == null) newPrice = 0;
+					if (newQuantity == null) newQuantity = 0;
+					if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
+					if (rCH.Quantity_Change__c == null) rCH.Quantity_Change__c = 0;
+					rCH.Retail_Price_Change__c = newPrice + rCH.Retail_Price_Change__c;
+					rCH.Quantity_Change__c = newQuantity + rCH.Quantity_Change__c;
+				}
+				// Else change the quantity and price as normal 
+				else
+				{
+					rCH.Retail_Price__c = newMap.get(oi.id).Total_Retail_Price__c;
+					rCH.Quantity__c = newMap.get(oi.id).Quantity;
+					
+					Decimal newPrice = newMap.get(oi.id).Total_Retail_Price__c;
+					Decimal oldPrice = oldMap.get(oi.id).Total_Retail_Price__c;
+					Decimal newQuantity = newMap.get(oi.id).Quantity;
+					Decimal oldQuantity = oldMap.get(oi.id).Quantity;
+
+					if (newPrice == null) newPrice = 0;
+					if (oldPrice == null) oldPrice = 0;
+					if (newQuantity == null) newQuantity = 0;
+					if (oldQuantity == null) oldQuantity = 0;
+					if (rCH.Retail_Price_Change__c == null) rCH.Retail_Price_Change__c = 0;
+					if (rCH.Quantity_Change__c == null) rCH.Quantity_Change__c = 0;
+					rCH.Retail_Price_Change__c = (newPrice - oldPrice) + rCH.Retail_Price_Change__c;
+					rCH.Quantity_Change__c = (newQuantity - oldQuantity) + rCH.Quantity_Change__c;
+				}
 			}  
 			changeHistoryToUpsert.add(rCH);	
 		

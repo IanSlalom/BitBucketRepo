@@ -28,6 +28,14 @@ public with sharing class RMS_OrderDiscountManager {
 				ch.Order_Discount__c = od.Id; 
 				ch.Retail_Price__c = od.Discount_Amount__c * -1;
 				ch.Retail_Price_Change__c =  od.Discount_Amount__c * -1;
+				ch.Quantity__c = 1;
+				ch.Quantity_Change__c =  1;
+				ch.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Discount');
+				ch.Subtype__c = 'Initial';
+				ch.Line_Processed_Date__c = System.today();
+				ch.Order_Booking_Date__c = od.Order_Booking_Date__c;
+				ch.Sales_Rep__c = od.Sales_Rep__c;
+				ch.Order_Revenue_Recognition_Date__c = od.Order_Revenue_Recognition_Date__c;
 				changeHistoryToInsert.add(ch);
 			}
 		}
@@ -47,6 +55,8 @@ public with sharing class RMS_OrderDiscountManager {
 																	Order_Product__c, 
 																	Retail_Price__c, 
 																	Retail_Price_Change__c,
+																	Quantity__c,
+																	Quantity_Change__c,
 																	Order_Discount__c
 																	FROM Change_History__c 
 																	WHERE Order_Discount__c 
@@ -105,6 +115,13 @@ public with sharing class RMS_OrderDiscountManager {
 			system.debug('ads orderDiscountIdToListChangeHistory.get(od.id): '+orderDiscountIdToListChangeHistory.get(od.id));
 			system.debug('ads newMap.get(od.id).Discount_Amount__c: '+newMap.get(od.id).Discount_Amount__c);
 			system.debug('ads oldMap.get(od.id).Discount_Amount__c: '+oldMap.get(od.id).Discount_Amount__c);
+
+			rCH.RecordtypeId = UtilityMethods.RecordTypeFor('Change_History', 'Order_Discount');
+			rCH.Line_Processed_Date__c = System.today();
+			rCH.Order_Booking_Date__c = od.Order_Booking_Date__c;
+			rCH.Sales_Rep__c = od.Sales_Rep__c;
+			rCH.Order_Revenue_Recognition_Date__c = od.Order_Revenue_Recognition_Date__c;
+
 			
 			if(	orderDiscountIdToListChangeHistory.get(od.id) == null || 
 				orderDiscountIdToListChangeHistory.get(od.id).size() == 0){
@@ -112,28 +129,41 @@ public with sharing class RMS_OrderDiscountManager {
 				if(typeOfChange == 'justDiscount'){
 					rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
 					rCH.Retail_Price_Change__c =  (oldMap.get(od.id).Discount_Amount__c - newMap.get(od.id).Discount_Amount__c); 
+					rCh.Quantity__c = 1;
+					rCH.Quantity_Change__c =  0; 
 				}else if(typeOfChange == 'statusAppliedToCancelled'){
 					rCh.Retail_Price__c = 0;
 					rCH.Retail_Price_Change__c =  (oldMap.get(od.id).Discount_Amount__c - 0);
+					rCh.Quantity__c = 0;
+					rCH.Quantity_Change__c =  -1; 
 				}else if(typeOfChange == 'statusCancelledToApplied'){
 					rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
 					rCH.Retail_Price_Change__c =  (0 - newMap.get(od.id).Discount_Amount__c);
+					rCh.Quantity__c = 1;
+					rCH.Quantity_Change__c =  1; 
 				}
 			}
 
 			//GET MOST RECENTLY CREATED CHANGE HISTORY			
 			else {
 				rCH = OrderDiscountIdToListChangeHistory.get(od.id)[0];
+				rCH.Subtype__c = 'Change';
 				
 				if(typeOfChange == 'justDiscount'){
 					rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
 					rCH.Retail_Price_Change__c =  ((oldMap.get(od.id).Discount_Amount__c - newMap.get(od.id).Discount_Amount__c)+rCH.Retail_Price_Change__c);
+					rCh.Quantity__c = 1;
+					rCH.Quantity_Change__c =  0; 
 				}else if(typeOfChange == 'statusAppliedToCancelled'){
 					rCh.Retail_Price__c = 0;
 					rCH.Retail_Price_Change__c =  ((oldMap.get(od.id).Discount_Amount__c - 0)+rCH.Retail_Price_Change__c);
+					rCh.Quantity__c = 0;
+					rCH.Quantity_Change__c =  -1; 
 				}else if(typeOfChange == 'statusCancelledToApplied'){ 
 					rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
 					rCH.Retail_Price_Change__c =  ((0 - newMap.get(od.id).Discount_Amount__c)+rCH.Retail_Price_Change__c);
+					rCh.Quantity__c = 1;
+					rCH.Quantity_Change__c =  1; 
 				}
 			}
 			changeHistoryToUpsert.add(rCH);	

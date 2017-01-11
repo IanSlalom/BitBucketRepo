@@ -174,7 +174,6 @@
         <members>MA_SchedulerWorkOrderSchedulingComp</members>
         <members>RMS_orderHistoryComponent</members>
         <members>RMS_requestListViewComponent</members>
-        <members>RMS_soldOrderHistoryComponent</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -196,6 +195,7 @@
         <members>RMS_addServiceSymptomP2</members>
         <members>RMS_addWarrantytoSP</members>
         <members>RMS_cancelOrder</members>
+        <members>RMS_changeVendor</members>
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
@@ -456,6 +456,11 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>RbA_Operational_Reporting</members>
+        <members>RbA_Operational_Reporting/B02000_by_Booking_for_Commissions</members>
+        <members>RbA_Operational_Reporting/B02000_by_Booking_for_Comms_Ungrouped</members>
+        <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions</members>
+        <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions_Ungrouped</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
@@ -465,6 +470,8 @@
         <members>RbA_Operational_Reporting/BO2012_External_Labor_JIP_Service</members>
         <members>RbA_Operational_Reporting/BO2012_Internal_Labor_JIP</members>
         <members>RbA_Operational_Reporting/BO2013_Internal_Labor_JIP</members>
+        <members>RbA_Operational_Reporting/BO4000_RecPosting_Daily_Summary_Prod</members>
+        <members>RbA_Operational_Reporting/BO4100_RecPosting_Summary_C</members>
         <members>RbA_Operational_Reporting/BO7503_Sch_Installs_by_Date_by_Installer</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
@@ -474,6 +481,8 @@
         <members>RbA_Operational_Reporting/Detail_Inventory_Stock_Status_Rep</members>
         <members>RbA_Operational_Reporting/Install_Materials_Summary2</members>
         <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal</members>
+        <members>RbA_Operational_Reporting/Job_Close_Posting_Report_Journal_Entries</members>
+        <members>RbA_Operational_Reporting/Job_Close_Posting_Report_by_RPD</members>
         <members>RbA_Operational_Reporting/Last_Renovate_Right_Date</members>
         <members>RbA_Operational_Reporting/On_Hold_Tracking</members>
         <members>RbA_Operational_Reporting/Order_Age_Report_Sold_to_Scheduled</members>
@@ -490,6 +499,7 @@
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Needed</members>
         <members>RbA_Operational_Reporting/Orders_Tech_Measure_Scheduled</members>
         <members>RbA_Operational_Reporting/Pricing_Configuration_by_Store</members>
+        <members>RbA_Operational_Reporting/Receivings_Posting_Summary_Product_POs</members>
         <members>RbA_Operational_Reporting/Report_3650_Permit_Installation_Prep</members>
         <members>RbA_Operational_Reporting/Report_3651_Permit_Post_Installation</members>
         <members>RbA_Operational_Reporting/Report_3652_Permit_Submission</members>
@@ -528,6 +538,7 @@
         <members>RbA_Operational_Reporting/Sales_Order_Intake_Report_Status</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report</members>
         <members>RbA_Operational_Reporting/Summary_Backlog_Report_Installation</members>
+        <members>RbA_Operational_Reporting/Weekly_Installation_Billings_Report</members>
         <name>Report</name>
     </types>
     <types>
