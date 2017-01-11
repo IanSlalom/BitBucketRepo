@@ -11,6 +11,10 @@
 public with sharing class RMS_mobileAppRequestHelper {
 
 	public static map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
+	private static final String SINGLE_ERROR_HEADER = 'An error occured while attempting to save appointement {0}: Please contact technical support.  Error Id:{1}\n';
+	private static final String MULTILE_ERROR_HEADER = 'Multipe errors occured while attempting to save appointment {0}: Please contact technical support.  Error Id:{1}\n';
+	private static final String RECORD_ERROR_MESSAGE = 'Object:{0} :Fields:{1} :Error Status Code:{2} :Error Message:{3}\n';
+	private static final String EXCEPTION_ERROR_MESSAGE = 'Object:{0} :Unhandled Exception:{1} :Exception Stack Trace:{2}\n';
 	private static String SHARED_FIELDS;
 	// fields unique to Quote line items
 	private static final String QLI_QUERY_START = 'SELECT LineNumber, QuoteId, Subtotal, TotalPrice, Parent_Quote_Line_Item__c, isInactive__c, isDeleted';
@@ -470,16 +474,15 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
     public String resultSalesAppointments(Id userId, String input){
 		// parse the input JSON string into an Opportunity Container
-		System.debug('RMS_mobileAppRequestHelper.resultSalesAppointments *************************** input JSON: ' + input);
+		System.debug('RMS_mobileAppRequestHelper.resultSalesAppointments input JSON: ' + input);
 		SalesAppointment appt = (SalesAppointment)JSON.deserialize(input, SalesAppointment.class);
-		System.Debug('RMS_mobileAppRequestHelper.resultSalesAppointments *************************** parsed JSON structure =' +appt);
+		System.Debug('RMS_mobileAppRequestHelper.resultSalesAppointments parsed JSON structure =' +appt);
 
 		// TODO: do some validation before saving the results
 		// can this opportunity be updated?
 		// can the quote be updated?
 		// can the order be updated?
 		// field level validation?
-		// how to report errors to rSuite
 		// only attempt to save quotes if sales appointments exist
 		if (appt != null) {
 			System.SavePoint sp = Database.setSavePoint();
@@ -499,8 +502,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 				if (appt.getErrors().size() == 0) {
 					Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
 					if (!sr.isSuccess()) {            
+						String[] errParms = null;
 						for(Database.Error err : sr.getErrors()) {
-							appt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
+							String fields = '';
+							for (String field : err.getFields()) {
+								fields = fields + field + ', ';
+							}
+							errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
+							String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+							appt.getErrors().add(formattedMessage);
 						}
 					}
 				}
@@ -508,8 +518,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 				if (appt.getErrors().size() > 0) {
 					Database.rollBack(sp);
 					appt.isSaveSuccessful = false;
-					//add the errors to the error facility
-					// add logic to put data in the errors object
 				}
 			} catch (NoQuotesException e) {
 				// this is a no-op -basically there were no quotes on the appointment so nothing to save
@@ -518,6 +526,38 @@ public with sharing class RMS_mobileAppRequestHelper {
 			appt.getErrors().add('No Sales Appointments Found');
 			appt.isSaveSuccessful = false;
 		}
+		// write any errors to the support log
+		String apptName = null;
+		if (appt.opptyContainer != null && appt.opptyContainer.oppty != null) {
+			apptName = appt.opptyContainer.oppty.Name;
+		}
+		appt.errors = formatandLogErrors(appt.getErrors(), 'RMS_mobileAppRequestHelper.resultSalesAppointments', apptName, input);
+
+/*		Integer errorListSize = appt.getErrors().size();
+		if (errorListSize > 0) {
+			String message = '';
+			for (String err : appt.getErrors() ) {
+				message = message + err;
+			}
+			if (errorListSize == 1) {
+				message = SINGLE_ERROR_HEADER + message;
+			} else {
+				message = MULTILE_ERROR_HEADER + message;
+			}
+			String[] msgParms = null;
+			if (appt.opptyContainer != null && appt.opptyContainer.oppty != null) {
+				msgParms = new String[]{appt.opptyContainer.oppty.Name};
+			} else {
+				msgParms = new String[]{' '};
+			}
+			message = String.format(message, msgParms);
+			Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileAppRequestHelper.resultSalesAppointments', message, input, Userinfo.getUserId());
+			msgParms = new String[]{' ',supportLogId};
+			message = String.format(message,msgParms);
+			appt.getErrors().clear();
+			appt.getErrors().add(message);
+		}
+*/
 		appt.saClear();
 		return JSON.serialize(appt);
 	}
@@ -550,18 +590,27 @@ public with sharing class RMS_mobileAppRequestHelper {
 			Database.UpsertResult[] lsr = Database.upsert(quotes, false);
 			for(Database.UpsertResult sr : lsr){
 				if (!sr.isSuccess()) {
-				// add error messages 
-				// Operation failed, so get all errors               
+					// add error messages 
+					// Operation failed, so get all errors
+					String[] errParms = null;
 					for(Database.Error err : sr.getErrors()) {
-						sa.getErrors().add('save quote error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': quote fields that affected this error: ' + err.getFields());
+						String fields = '';
+						for (String field : err.getFields()) {
+							fields = fields + field + ', ';
+						}
+						errParms = new String[]{'Quote',fields, err.getStatusCode().name(), err.getMessage()};
+						String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+						sa.getErrors().add(formattedMessage);
 					}
 				}
 			}
 		} catch (Exception e) {
 			// we've got another error
 			// put the errors in the appts errors
-			sa.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
-			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+			String[] errParms = new String[]{'Quote', e.getMessage(), e.getStackTraceString()};
+			String formattedMessage = String.format(EXCEPTION_ERROR_MESSAGE, errParms);
+			sa.getErrors().add(formattedMessage);
+			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuotes:' + formattedMessage);
 		}
 	} else {
 		throw new NoQuotesException();
@@ -623,9 +672,16 @@ public with sharing class RMS_mobileAppRequestHelper {
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
-            for(Database.Error err : sr.getErrors()) {
-              sa.getErrors().add('save quote line item error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qli fields that affected this error: ' + err.getFields());
-            }
+			String[] errParms = null;
+			for(Database.Error err : sr.getErrors()) {
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Quote Line Item',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				sa.getErrors().add(formattedMessage);
+			}
           }
         }
       }
@@ -636,9 +692,16 @@ public with sharing class RMS_mobileAppRequestHelper {
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
-            for(Database.Error err : sr.getErrors()) {
-              sa.getErrors().add('save quote discount error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute discount fields that affected this error: ' + err.getFields());
-            }
+			String[] errParms = null;
+			for(Database.Error err : sr.getErrors()) {
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Quote Discount',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				sa.getErrors().add(formattedMessage);
+			}
           }
         }
       }
@@ -649,17 +712,26 @@ public with sharing class RMS_mobileAppRequestHelper {
           if (!sr.isSuccess()) {
             // add error messages 
             // Operation failed, so get all errors               
-            for(Database.Error err : sr.getErrors()) {
-              sa.getErrors().add('save quote financiing error: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute financing fields that affected this error: ' + err.getFields());
-            }
+			String[] errParms = null;
+			for(Database.Error err : sr.getErrors()) {
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Quote Financing',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				sa.getErrors().add(formattedMessage);
+			}
           }
         }
       }
     } catch (Exception e) {
       // we've got another error
       // put the errors in the appts errors
-      sa.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
-      System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
+		String[] errParms = new String[]{'QuoteLineItem,QuoteDiscount,QuoteFinancing', e.getMessage(), e.getStackTraceString()};
+		String formattedMessage = String.format(EXCEPTION_ERROR_MESSAGE, errParms);
+		sa.getErrors().add(formattedMessage);
+		System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveQuoteLineItemsAndDiscounts:' + formattedMessage);
     }
     return sa;
   }
@@ -841,8 +913,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 				if (!dr.isSuccess()) {
 					// add error messages 
 					// Operation failed, so get all errors               
+					String[] errParms = null;
 					for(Database.Error err : dr.getErrors()) {
-						sa.getErrors().add('delete quotes et al errors: ' + err.getStatusCode() + ': ' + err.getMessage() + ': qoute financing fields that affected this error: ' + err.getFields());
+						String fields = '';
+						for (String field : err.getFields()) {
+							fields = fields + field + ', ';
+						}
+						errParms = new String[]{'Quote,QuoteLineItem,QuoteDiscount,QuoteFinancing',fields, err.getStatusCode().name(), err.getMessage()};
+						String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+						sa.getErrors().add(formattedMessage);
 					}
 				}
 			}
@@ -990,16 +1069,30 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// save the opportunity
 		Database.SaveResult opptysr  = Database.update(tmAppt.opptyContainer.oppty, false);
 		if (!opptysr.isSuccess()) {            
+			String[] errParms = null;
 			for(Database.Error err : opptysr.getErrors()) {
-				tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Opportunity fields that affected this error: ' + err.getFields());
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				tmAppt.getErrors().add(formattedMessage);
 			}
 		}
 		// save the work order
 		Database.SaveResult wosr = Database.update(tmAppt.workOrder, false);
         if (!wosr.isSuccess()) {            
-          for(Database.Error err : wosr.getErrors()) {
-            tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': RBA Work Order fields that affected this error: ' + err.getFields());
-          }
+			String[] errParms = null;
+			for(Database.Error err : wosr.getErrors()) {
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Work Order',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				tmAppt.getErrors().add(formattedMessage);
+			}
         }
 		// save the order items
 		for(OrderItemContainer oiCon: oiContainersToUpsert){
@@ -1008,8 +1101,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 		Database.UpsertResult[] oilur = Database.upsert(oiToUpsert, false);
 		for(Database.UpsertResult ur : oilur){
 			if (!ur.isSuccess()) {        
+				String[] errParms = null;
 				for(Database.Error err : ur.getErrors()) {
-					tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order Item fields that affected this error: ' + err.getFields());
+					String fields = '';
+					for (String field : err.getFields()) {
+						fields = fields + field + ', ';
+					}
+					errParms = new String[]{'Order Item',fields, err.getStatusCode().name(), err.getMessage()};
+					String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+					tmAppt.getErrors().add(formattedMessage);
 				}
 			}
 		}
@@ -1026,8 +1126,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 		Database.UpsertResult[] tmolur = Database.upsert(TMOffsetToUpsert, false);
 		for(Database.UpsertResult ur : tmolur){
 			if (!ur.isSuccess()) {            
+				String[] errParms = null;
 				for(Database.Error err : ur.getErrors()) {
-					tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Tech Measure Offset fields that affected this error: ' + err.getFields());
+					String fields = '';
+					for (String field : err.getFields()) {
+						fields = fields + field + ', ';
+					}
+					errParms = new String[]{'Tech Measure Offset',fields, err.getStatusCode().name(), err.getMessage()};
+					String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+					tmAppt.getErrors().add(formattedMessage);
 				}
 			}
 		}
@@ -1035,33 +1142,79 @@ public with sharing class RMS_mobileAppRequestHelper {
 		//Update Order last, as activated orders do not allow addition of orderitems
 		Database.SaveResult ordersr = Database.update(tmAppt.opptyContainer.anOrderContainer.anOrder, false);
 		if (!ordersr.isSuccess()) {            
+			String[] errParms = null;
 			for(Database.Error err : ordersr.getErrors()) {
-				tmAppt.getErrors().add(err.getStatusCode() + ': ' + err.getMessage() + ': Order fields that affected this error: ' + err.getFields());
+				String fields = '';
+				for (String field : err.getFields()) {
+					fields = fields + field + ', ';
+				}
+				errParms = new String[]{'Order',fields, err.getStatusCode().name(), err.getMessage()};
+				String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+				tmAppt.getErrors().add(formattedMessage);
 			}
 		}
 		// roll back if we have errors
 		if (tmAppt.getErrors().size() > 0) {
 			Database.rollBack(sp);
 			tmAppt.isSaveSuccessful = false;
-			//add the errors to the error facility
-// add logic to put data in the errors object
-System.debug('####################: ');
-			System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: error saving records: ' + JSON.serialize(tmAppt));
 		}
 	} catch(Exception e) {
 		Database.rollBack(sp);
-		tmAppt.getErrors().add('Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 		tmAppt.isSaveSuccessful = false;
-// add logic to put data in the errors object
-System.debug('####################: ');
-		System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: exception saving records: ' + JSON.serialize(tmAppt));
-		System.debug('RMS_mobileAppRequestHelper.saveTechMeasure: exception : ' + e.getMessage() + e.getStackTraceString());
+        // we've got another error
+        // put the errors in the appts errors
+		String[] errParms = new String[]{' ', e.getMessage(), e.getStackTraceString()};
+		String formattedMessage = String.format(EXCEPTION_ERROR_MESSAGE, errParms);
+		tmAppt.getErrors().add(formattedMessage);
+		System.debug(LoggingLevel.ERROR, 'RMS_mobileAppRequestHelper.saveTechMeasure:' + formattedMessage);
     }
+	// write any errors to the support log
+	String apptName = null;
+	if (tmAppt.opptyContainer != null && tmAppt.opptyContainer.oppty != null) {
+		apptName = tmAppt.opptyContainer.oppty.Name;
+	}
+	tmAppt.errors = formatandLogErrors(tmAppt.getErrors(), 'RMS_mobileAppRequestHelper.saveTechMeasure', apptName, inputJSON);
 	// get rid of everything but the opportunity and the status
 	tmAppt.tmClear();
 	return JSON.serialize(tmAppt);
   }
 
+  /* @method: formatandLogErrors(String[] errorArray, String operation, String apptName, String inputJSON)
+   * @param: String inputJSON
+   * @return: String[]
+   */
+	private String[] formatandLogErrors(String[] errorArray, String operation, String apptName, String inputJSON){
+  		Integer errorListSize = errorArray.size();
+		if (errorListSize > 0) {
+			String message = '';
+			for (String err : errorArray) {
+				message = message + err;
+			}
+			if (errorListSize == 1) {
+				message = SINGLE_ERROR_HEADER + message;
+			} else {
+				message = MULTILE_ERROR_HEADER + message;
+			}
+			String[] msgParms = null;
+			if (apptName != null) {
+				msgParms = new String[]{apptName};
+			} else {
+				msgParms = new String[]{' '};
+			}
+			message = String.format(message, msgParms);
+			Id supportLogId = UtilityMethods.supportLog('RMS', operation, message, inputJSON, Userinfo.getUserId());
+			msgParms = new String[]{' ',supportLogId};
+			message = String.format(message,msgParms);
+			errorArray.clear();
+			errorArray.add(message);
+		}
+		return errorArray;
+	}
+
+  /* @method: cancelOrder(String inputJSON)
+   * @param: String inputJSON
+   * @return: String
+   */
   public String cancelOrder(String inputJSON){
     
     try{
@@ -1209,7 +1362,7 @@ System.debug('####################: ');
     public Account account {get; set;}
     public List<Contact> contactList {get; set;}
     public List<OpportunityContainer> historicOpptyContainerList {get; set;}
-    private String[] errors;
+    public String[] errors;
 	public Boolean isSaveSuccessful = true;
     public String[] getErrors() { 
       if (errors == null) { 

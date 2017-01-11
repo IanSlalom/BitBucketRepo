@@ -431,6 +431,9 @@ private class RMS_OrderTriggerHandlerTests {
        
     }
      @isTest static void testUpdateChangeHistories(){
+        // Turn off the financial trigger to avoid SOQL limits in test class
+        RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+        insert turnOffFinancialTrigger;
 //		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
 //        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
  //       Account store = [SELECT Id, Store_Number__c, Active_Store_Configuration__r.Order_Number__c from Account Where Name = '77 - Twin Cities, MN'];

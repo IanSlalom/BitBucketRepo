@@ -3,11 +3,8 @@ global with sharing class UtilityMethods {
 	public UtilityMethods() {}
 	
 	//CHANGE UTILITY METHOD TO SEND SOBJECT AS WELL
-//TODO: remove this method
 	public static Id retrieveRecordTypeId(String developerName, String sobjectType){
 		return UtilityMethods.RecordTypeFor(sobjectType, developerName);
-//		RecordType recordType = [SELECT Id FROM RecordType WHERE IsActive = true AND DeveloperName = :developerName AND SobjectType = :sobjectType];
-//		return recordType.Id;
 	}
 	
 	// Retrieves Id for recordtype using object name and dev name
@@ -22,11 +19,8 @@ global with sharing class UtilityMethods {
 				
 		return masterRTList.get(sObjectName + devName);
 	}
-	
 	// Persistant variable used by RecordTypeFor()
 	public static Map<String,Id> masterRTList = new Map<String,Id>();
-
-
 
 	//Cache used by GetRecordTypeIdsMapForSObject method
 	private static Map<Schema.SObjectType,Map<String,Id>> rtypesCache = new Map<Schema.SObjectType,Map<String,Id>>();
@@ -320,6 +314,21 @@ global with sharing class UtilityMethods {
 		return errorMessage;
 	} 
 
+	/***************************************************
+	 Method to write data in the Support Log Object
+	****************************************************/
+  	public static Id supportLog(String application, String operation, String details, String rSuiteAPIPayload, Id user){
+		Support_Log__c sl = new Support_Log__c(
+			Application__c = application,
+			Operation__c = operation,
+			Details__c = details,
+			rSuite_API_Payload__c = rSuiteAPIPayload);
+		insert sl;
+		return sl.Id;
+	} 
+
+
+// TODO: this is business functionality it should be in a business logic class not a utility class
 	/*******************************************************
           calculateTaxes method - calculates the tax for po line items
 	*******************************************************/

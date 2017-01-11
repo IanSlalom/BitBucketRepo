@@ -54,8 +54,10 @@ global with sharing class RMS_mobileAppAPIController {
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 			}
 		} catch (Exception e) {
+			String message = 'Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString();
+			Id suportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doGet', message, null, Userinfo.getUserId());
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('An Error has occurred.  Please contact support.  Error Id(' + suportLogId + ').  Error Details: ' + message);
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doGet: Unhandled exception: ' + e);
 		}
     }
@@ -101,8 +103,10 @@ global with sharing class RMS_mobileAppAPIController {
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 			}
 		} catch (Exception e) {
+			String message = 'Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString();
+			Id suportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doPost', message, null, Userinfo.getUserId());
 			RestContext.response.addHeader('Content-Type', 'application/json');
-			RestContext.response.responseBody = Blob.valueOf('Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString());
+			RestContext.response.responseBody = Blob.valueOf('An Error has occurred.  Please contact support.  Error Id(' + suportLogId + ').  Error Details: ' + message);
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doPost: Unhandled exception: ' + e);
 		}
     }

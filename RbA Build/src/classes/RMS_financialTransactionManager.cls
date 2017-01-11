@@ -1883,11 +1883,13 @@ public with sharing class RMS_financialTransactionManager {
                 if(mapOld.get(o.id).Revenue_Recognized_Date__c == null && mapNew.get(o.id).Revenue_Recognized_Date__c != null){
 	                if(o.Install_Complete_Date__c != null){
 	                	list<Asset> relatedA = orderIdToRelatedAssetsMap.get(o.id);
-	                	for(Asset a : relatedA){
-	                		a.InstallDate = o.Install_Complete_Date__c;
-	                		a.Status = 'Installed';
-	                	}
-	                	upsert relatedA;
+                        if (relatedA != null) {
+	                		for(Asset a : relatedA){
+	                			a.InstallDate = o.Install_Complete_Date__c;
+	                			a.Status = 'Installed';
+	                		}
+	                		upsert relatedA;
+                        }
 	                }
                     
                     if(o.Store_Location__c == null ){ 
