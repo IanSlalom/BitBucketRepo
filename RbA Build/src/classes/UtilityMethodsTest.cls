@@ -259,6 +259,18 @@ private class UtilityMethodsTest {
 //		System.AssertEquals('At least one record was locked', result);
 		
 	}
+	/*******************************************************
+					supportLogTest
+	*******************************************************/
+	static testMethod void supportLogTest() {
+		Id slId = UtilityMethods.supportLog('RMS', 'TestOperation', 'testdetails', 'testrSuiteAPIPayload', UserInfo.getUserId());
+		Support_Log__c sl = [select Id, Name, Application__c, Operation__c, Details__c, rSuite_API_Payload__c, User__c from Support_Log__c where Id = :slId limit 1];
+		System.assert(sl != null);
+		System.assert(sl.Application__c.equals('RMS'));
+		System.assert(sl.Operation__c.equals('TestOperation'));
+		System.assert(sl.Details__c.equals('testdetails'));
+		System.assert(sl.rSuite_API_Payload__c.equals('testrSuiteAPIPayload'));
+	}
 
 	/*******************************************************
 					calculateTaxesTest

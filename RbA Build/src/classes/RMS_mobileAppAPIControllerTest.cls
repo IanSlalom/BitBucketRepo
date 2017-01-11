@@ -74,7 +74,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
 		System.debug('################################################## ' + b.toString());
-		System.assert(b.toString().startsWith('Unhandled Exception:'));
+		System.assert(b.toString().startsWith('{"opptyContainer":'));
 		
 		//Cover various helper class method invocations
 		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.SAVE_TECH_MEASURE;
@@ -105,7 +105,8 @@ private class RMS_mobileAppAPIControllerTest {
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
-		System.assert(b.toString().startsWith('Unhandled Exception:'));
+System.debug('*************** ' + b.toString());
+		System.assert(b.toString().startsWith('An Error has occurred'));
 	}
 
 	static testmethod void testdoPostUnsupportedOperation(){

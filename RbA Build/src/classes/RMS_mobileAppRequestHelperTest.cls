@@ -657,6 +657,8 @@ System.debug('###########################: ' + remainingQLI);
 
 		Order ord1 = [Select Id, Status, rSuite_Id__c from Order where OpportunityID =: opp.Id];
 		ord1.Status = 'Ready to Order';
+	    ord1.Apex_Context__c = true;
+
 		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp.id AND Sold_Order__c = :ord1.id];
 		workOrder[0].Work_Order_Status__c = 'Scheduled';
 		OrderItem oiToUpdate = [select Id, Quantity, PricebookEntryId, PricebookEntry.Pricebook2Id from OrderItem where OrderId = :ord1.Id limit 1];
@@ -972,15 +974,12 @@ System.debug('###########################: ' + remainingQLI);
 		Opportunity opp = [select Id, StageName, Store_Location__c from Opportunity where AccountId =: dwelling[0].id];
 
        System.runAs(u) {
-			// Instantiate the mobileapp helper and call the cancelOrder method passing the
-			// opportunity id
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the opportunity id
 			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			List<Id> opportunityIDs = new List<ID>{opp.Id};
 			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
-
 			// Retrieve the Appointment container from the JSON response
 	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
-
 			// do an assertion that there was one error since there is no order to cancel
 	   		System.assert(apptContainer.getErrors()[0].contains('Order could not be found.'));
 	   		System.assertEquals(1, apptContainer.getErrors().size());
@@ -1090,15 +1089,12 @@ System.debug('###########################: ' + remainingQLI);
 		insert new List<Order>{order1};
 
         System.runAs(u) {
-			// Instantiate the mobileapp helper and call the cancelOrder method passing the
-			// opportunity id
+			// Instantiate the mobileapp helper and call the cancelOrder method passing the opportunity id
 			RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			List<Id> opportunityIDs = new List<ID>{opp.Id};
 			String JSONResponse = helper.cancelOrder(JSON.serialize(opportunityIDs));
-
 			// Retrieve the Appointment container from the JSON response
 	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
-
 			// do an assertion that there was one error since there were multiple orders
 	   		System.assertEquals(1, apptContainer.getErrors().size());
 	   		System.assert(apptContainer.getErrors()[0].contains('Order is not cancellable.'));
