@@ -12,7 +12,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RestRequest req = new RestRequest(); 
 		RestResponse res = new RestResponse();
 		// this is an example of the full URL - it needs to be broken into its parts
-//	    req.requestURI = 'https://foo.salesforce.com/services/apexrest/1net/getAppointments?TS=2015-12-03 23:23:53';
+	    //req.requestURI = 'https://foo.salesforce.com/services/apexrest/1net/getAppointments?TS=2015-12-03 23:23:53';
 		req.addParameter('TS', '2015-12-03 23:23:53');
 	    req.requestURI = '/1net/getAppointments';
 	    req.httpMethod = 'GET';
@@ -73,7 +73,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
-		System.debug('################################################## ' + b.toString());
+		System.debug('###### ' + b.toString());
 		System.assert(b.toString().startsWith('{"opptyContainer":'));
 		
 		//Cover various helper class method invocations
@@ -105,7 +105,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RestContext.response = res;
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
-System.debug('*************** ' + b.toString());
+		System.debug('######  ' + b.toString());
 		System.assert(b.toString().startsWith('An Error has occurred'));
 	}
 
