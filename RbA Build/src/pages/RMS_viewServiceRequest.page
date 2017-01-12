@@ -276,6 +276,7 @@
     
     <apex:relatedList list="Purchase_Orders__r" id="po"/>    
     <apex:relatedList list="Payments__r" id="pm"/>    
+    <apex:relatedList list="Refunds__r" id="rf"/>    
 
     <apex:relatedList list="Assets__r" id="ast"/>
     <apex:relatedList list="Journal_Entries__r" id="je"/>

@@ -275,6 +275,7 @@
     </apex:pageBlock>  
     
     <apex:relatedList list="Payments__r" id="pm"/> 
+    <apex:relatedList list="Refunds__r" id="rf"/>    
     
     <apex:pageBlock title="Assets">           
         <apex:pageBlockTable value="{!Order.Assets__r}" var="t">
