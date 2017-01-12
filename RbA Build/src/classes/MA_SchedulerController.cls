@@ -839,8 +839,8 @@ global with sharing class MA_SchedulerController {
         try {
             RbA_Work_Order__c workOrder = [SELECT Id, Windows__c, Work_Order_Type__c, Appointment_Duration__c, Account__r.Store_Location__r.Active_Store_Configuration__c,
                                             (SELECT Id, RbA_Skill__c FROM Work_Order_Required_Skills__r),
-                                            (SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__r),
-                                            (SELECT Id, Event_Sequence__c, Resource__c FROM MA_Scheduler_Events__r WHERE Resource__c != null)
+                                            (SELECT Id, Scheduled_Resource__c FROM Assigned_Resources__r) /*,
+                                            (SELECT Id, Event_Sequence__c, Resource__c FROM MA_Scheduler_Events__r) */
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
 
             if (String.isNotBlank(altType)) {
@@ -850,18 +850,20 @@ global with sharing class MA_SchedulerController {
             Set<Id> rbaSkillIds = new Set<Id>();
             Map<Id, Id> userMap = new Map<Id, Id>();
             Set<String> badSlots = new Set<String>();
+            //Set<Id> maEventResourceIds = new Set<Id>();
             Set<Id> assignedResourceIds = new Set<Id>();
             Set<Integer> badIndexes = new Set<Integer>();
             Map<Id, Set<Id>> resourceToSkillsMap = new Map<Id, Set<Id>>();
             Map<Id, Integer> totalSkillsCountMap = new Map<Id, Integer>();
-            Map<Integer, Set<Id>> singleDayResourceMap = new Map<Integer, Set<Id>>();
+            //Map<Integer, Set<Id>> singleDayResourceMap = new Map<Integer, Set<Id>>();
             Id storeId = workOrder.Account__r.Store_Location__r.Active_Store_Configuration__c;
             List<MA_SchedulerBookingWindow> bookingWindows = new List<MA_SchedulerBookingWindow>();
             List<MA_SchedulerBookingWindow> unAvailableSlots = new List<MA_SchedulerBookingWindow>();
-            Map<String, MA_SchedulerBookingWindow> bookingWindowsRemainingMap = new Map<String, MA_SchedulerBookingWindow>();
             Set<String> resourceTypes = MA_SchedulerUtilities.retrieveResourceTypeFromWorkOrderType(workOrder.Work_Order_Type__c);
             Integer totalMinutes = workOrder.Appointment_Duration__c == null ? 0 : (Integer)(workOrder.Appointment_Duration__c * 60);
             Map<String, Object> maSettingsMap = MA_SchedulerUtilities.retrieveAllStoreSettings(storeId, workOrder.Work_Order_Type__c);
+            Map<String, Map<String, MA_SchedulerBookingWindow>> bookingWindowsRemainingMap = new Map<String, Map<String, MA_SchedulerBookingWindow>>();
+            //Map<String, Map<String, MA_SchedulerBookingWindow>> bookingWindowsEventSequenceMap = new Map<String, Map<String, MA_SchedulerBookingWindow>>();
 
             String storeTimezone = (String)maSettingsMap.get('storeTimezone');
             List<Object> storeHolidays = (List<Object>)maSettingsMap.get('storeHolidays');
@@ -901,22 +903,30 @@ global with sharing class MA_SchedulerController {
                 assignedResourceIds.add(resource.Scheduled_Resource__c);
             }
 
+            /*
             for (MA_Scheduler_Event__c maEvent : workOrder.MA_Scheduler_Events__r) {
-                //if (!assignedResourceIds.contains(maEvent.Resource__c)) {
-                    Integer eventSequence = Integer.valueOf(maEvent.Event_Sequence__c);
+                Integer eventSequence = Integer.valueOf(maEvent.Event_Sequence__c);
+                if (eventSequence == null || eventSequence == 0) {
+                    eventSequence = 1;
+                }
 
-                    if (!singleDayResourceMap.containsKey(eventSequence)) {
-                        singleDayResourceMap.put(eventSequence, new Set<Id>());
-                    }
+                if (!singleDayResourceMap.containsKey(eventSequence)) {
+                    singleDayResourceMap.put(eventSequence, new Set<Id>());
+                }
+
+                if (maEvent.Resource__c != null) {
                     singleDayResourceMap.get(eventSequence).add(maEvent.Resource__c);
-                //}
-
-                assignedResourceIds.add(maEvent.Resource__c);
+                    maEventResourceIds.add(maEvent.Resource__c);
+                }
             }
+
+            response.put('assignedResourceIds', assignedResourceIds);
+            response.put('singleDayResourceMap', singleDayResourceMap);
+            */
 
             List<Resource__c> resourceList = [SELECT Id, RbA_User__c,
                                                 (SELECT Id, RbA_Skill__c FROM Resource_Skills__r WHERE RbA_Skill__c IN :rbaSkillIds AND Active__c = true)
-                                                FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId AND Resource_Type__c IN :resourceTypes) OR Id IN :assignedResourceIds];
+                                                FROM Resource__c WHERE (Active__c = true AND Retail_Location__c = :storeId AND Resource_Type__c IN :resourceTypes) OR Id IN :assignedResourceIds /*OR Id IN :maEventResourceIds*/];
 
             for (Resource__c resource : resourceList) {
                 if (!resource.Resource_Skills__r.isEmpty()) {
@@ -956,7 +966,7 @@ global with sharing class MA_SchedulerController {
             /*    remove booking windows with no available resources  */
             /*                                                        */
             /**********************************************************/
-            if (!assignedResourceIds.isEmpty() && singleDayResourceMap.size() <= 1) {
+            if (!assignedResourceIds.isEmpty() /*&& singleDayResourceMap.size() <= 1*/) {
                 for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
                     MA_SchedulerBookingWindow bw = bookingWindows[index];
 
@@ -982,26 +992,62 @@ global with sharing class MA_SchedulerController {
                     bookingWindows.remove(index);
                 }
                 else {
-                    if (!remainingSlots.containsKey(bw.startDateTime.format('MM/dd/yyyy', storeTimezone))) {
-                        remainingSlots.put(bw.startDateTime.format('MM/dd/yyyy', storeTimezone), new Set<String>());
+                    String bookingWindowStartTime = bw.startDateTime.format('MM/dd/yyyy', storeTimezone);
+
+                    if (!remainingSlots.containsKey(bookingWindowStartTime)) {
+                        remainingSlots.put(bookingWindowStartTime, new Set<String>());
                     }
-                    remainingSlots.get(bw.startDateTime.format('MM/dd/yyyy', storeTimezone)).add(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd);
+                    remainingSlots.get(bookingWindowStartTime).add(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd);
                 
                     /**/
                     if (!bw.timeBlocksMissingASkill.isEmpty()) {
-                        bookingWindowsRemainingMap.put(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd, bw);
+                        if (!bookingWindowsRemainingMap.containsKey(bookingWindowStartTime)) {
+                            bookingWindowsRemainingMap.put(bookingWindowStartTime, new Map<String, MA_SchedulerBookingWindow>());
+                        }
+                        bookingWindowsRemainingMap.get(bookingWindowStartTime).put(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd, bw);
                     }
                     /**/
+
+                    /*
+                    if (singleDayResourceMap.size() > 1) {
+                        if (!bookingWindowsEventSequenceMap.containsKey(bookingWindowStartTime)) {
+                            bookingWindowsEventSequenceMap.put(bookingWindowStartTime, new Map<String, MA_SchedulerBookingWindow>());
+                        }
+                        bookingWindowsEventSequenceMap.get(bookingWindowStartTime).put(bw.dayOfWeek + ' - ' + bw.windowStart + ' - ' + bw.windowEnd, bw);
+                    }
+                    */
                 }
             }
 
             /**/
             for (MA_SchedulerBookingWindow unAvailableBw : unAvailableSlots) {
                 if (unAvailableBw.overbooked /**//*&& !unAvailableBw.timeBlocksMissingASkill.isEmpty() *//**/ && unAvailableBw.skillsTimeAvailabilityMap.keySet().size() > unAvailableBw.timeBlocksMissingASkill.size()) {
-                    bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+                    //bookingWindowsRemainingMap.put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+                    String bookingWindowStartTime = unAvailableBw.startDateTime.format('MM/dd/yyyy', storeTimezone);
+
+                    if (!bookingWindowsRemainingMap.containsKey(bookingWindowStartTime)) {
+                        bookingWindowsRemainingMap.put(bookingWindowStartTime, new Map<String, MA_SchedulerBookingWindow>());
+                    }
+                    bookingWindowsRemainingMap.get(bookingWindowStartTime).put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+
+                    /*
+                    if (singleDayResourceMap.size() > 1) {
+                        if (!bookingWindowsEventSequenceMap.containsKey(bookingWindowStartTime)) {
+                            bookingWindowsEventSequenceMap.put(bookingWindowStartTime, new Map<String, MA_SchedulerBookingWindow>());
+                        }
+                        bookingWindowsEventSequenceMap.get(bookingWindowStartTime).put(unAvailableBw.dayOfWeek + ' - ' + unAvailableBw.windowStart + ' - ' + unAvailableBw.windowEnd, unAvailableBw);
+                    }
+                    */
                 }
             }
             /**/
+
+            /*
+            response.put('remainingSlots', remainingSlots);
+            response.put('allConfiguredWindows', allConfiguredWindows);
+            response.put('bookingWindowsEventSequenceMap', bookingWindowsEventSequenceMap);
+            response.put('latestHours', latestHours);
+            */
 
             /***********************************************************/
             /*                                                         */
@@ -1012,6 +1058,11 @@ global with sharing class MA_SchedulerController {
             /*                                                         */
             /***********************************************************/
             if (latestHours != null && !latestHours.isEmpty()) {
+
+                //response.put('bookingWindows1', bookingWindows.clone());
+
+                //List<Map<String, Map<String, Object>>> debuggingMapList = new List<Map<String, Map<String, Object>>>();
+
                 for (Integer i = 0, len = bookingWindows.size(); i < len; i++) {
                     MA_SchedulerBookingWindow bw = bookingWindows[i];
                     DateTime tempStart = bw.startDateTime;
@@ -1020,12 +1071,20 @@ global with sharing class MA_SchedulerController {
                     Date tempStartDate = Date.parse(tempStart.format('MM/dd/yyyy', storeTimezone));
                     Date startOfWeek = tempStartDate.toStartOfWeek();
                     Integer daysBetweenStartOfWeek = startOfWeek.daysBetween(tempStartDate);
+
+                    /*
                     Integer workOrderEventSequence = 0;
 
+                    Map<String, Map<String, Object>> debuggingMap = new Map<String, Map<String, Object>>();
+                    Map<String, Object> innerDebuggingMap = new Map<String, Object>();
+                    */
+
                     do {
-                        workOrderEventSequence++;
+                        //workOrderEventSequence++;
                         String dayOfWeek = dayNumMap.get(Math.mod(daysBetweenStartOfWeek, 7));
                         Map<String, Object> daysHours = latestHours.get(dayOfWeek);
+
+                        Set<Id> assignedResourcesForDay = new Set<Id>();    //assignedResourceIds;
 
                         if (daysHours != null) {
                             if (tempStartDate != Date.parse(tempStart.format('MM/dd/yyyy', storeTimezone))) {
@@ -1045,25 +1104,66 @@ global with sharing class MA_SchedulerController {
                             tempTotalMinutes -= (Integer)(totalMillisecondDifference / 1000 / 60);
                             Set<String> windowsSpannedToCheck = allConfiguredWindows.get(dayOfWeek);
 
-                            /*
-                            if (!assignedResourceIds.isEmpty() && singleDayResourceMap.size() <= 1) {
-                                for (Integer i = 0, index = bookingWindows.size() - 1; index >= i; index--) {
-                                    MA_SchedulerBookingWindow bw = bookingWindows[index];
+                            Set<String> remainingSlotsSetForDay = new Set<String>();
+                            if (remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)) != null) {
+                                remainingSlotsSetForDay = remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)).clone();
+                            }
 
-                                    if (!bw.resourceToSkillsMap.keySet().containsAll(assignedResourceIds)) {
-                                        unAvailableSlots.add(bookingWindows[index]);
-                                        bookingWindows.remove(index);
+                            /*
+                            System.debug(tempStart.format('MM/dd/yyyy', storeTimezone));
+                            System.debug(workOrderEventSequence);
+                            System.debug(remainingSlotsSetForDay);
+                            *//*
+
+                            //debuggingMap.put('date', tempStart.format('MM/dd/yyyy', storeTimezone));
+                            innerDebuggingMap.put('workOrderEventSequence', workOrderEventSequence);
+                            innerDebuggingMap.put('remainingSlotsSetForDay', remainingSlotsSetForDay);
+
+                            if (!bookingWindowsEventSequenceMap.isEmpty() && bookingWindowsEventSequenceMap.containsKey(tempStart.format('MM/dd/yyyy', storeTimezone))) {
+                                Map<String, MA_SchedulerBookingWindow> bookingWindowsEventSequenceMapForDay = bookingWindowsEventSequenceMap.get(tempStart.format('MM/dd/yyyy', storeTimezone));
+
+                                if (!singleDayResourceMap.containsKey(workOrderEventSequence) || singleDayResourceMap.get(workOrderEventSequence).isEmpty()) {
+                                    singleDayResourceMap.put(workOrderEventSequence, new Set<Id>(assignedResourceIds));
+                                }
+
+                                assignedResourcesForDay = singleDayResourceMap.get(workOrderEventSequence);
+                                
+                                //System.debug(assignedResourcesForDay);
+
+                                innerDebuggingMap.put('assignedResourcesForDay', assignedResourcesForDay);
+
+                                List<String> remainingSlotsSetForDayList = new List<String>(remainingSlotsSetForDay);
+
+                                for (Integer x = 0, index = remainingSlotsSetForDayList.size() - 1; index >= x; index--) {
+                                    String mapKey = remainingSlotsSetForDayList[index];
+
+                                    if (bookingWindowsEventSequenceMapForDay.containsKey(mapKey)) {
+                                        MA_SchedulerBookingWindow bwTemp = bookingWindowsEventSequenceMapForDay.get(mapKey);
+
+                                        if (bwTemp.overbooked || !bwTemp.resourceToSkillsMap.keySet().containsAll(assignedResourcesForDay)) {
+                                            remainingSlotsSetForDay.remove(mapKey);
+                                        }
                                     }
                                 }
                             }
+                            else if (singleDayResourceMap.size() > 1) {
+                                remainingSlotsSetForDay.clear();
+                            }
                             */
 
-                            if (remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)) == null) {
+                            /*
+                            System.debug(remainingSlotsSetForDay);
+                            System.debug('************************************************');
+                            */
+
+                            //innerDebuggingMap.put('remainingSlotsSetForDay', remainingSlotsSetForDay);
+
+                            if (remainingSlotsSetForDay == null) {
                                 badIndexes.add(i);
                                 tempTotalMinutes = 0;
                             }
                             else if (tempTotalMinutes > 0) {
-                                if (!remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)).containsAll(windowsSpannedToCheck)) {
+                                if (!remainingSlotsSetForDay.containsAll(windowsSpannedToCheck)) {
                                     badIndexes.add(i);
                                     tempTotalMinutes = 0;
                                 }
@@ -1083,9 +1183,9 @@ global with sharing class MA_SchedulerController {
                                     }
                                 }
                             }
-                            else if (!remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)).containsAll(windowsSpannedToCheck)) {
+                            else if (!remainingSlotsSetForDay.containsAll(windowsSpannedToCheck)) {
                                 Set<String> badWindowsSpannedToCheckSet = new Set<String>(windowsSpannedToCheck);
-                                badWindowsSpannedToCheckSet.removeAll(remainingSlots.get(tempStart.format('MM/dd/yyyy', storeTimezone)));
+                                badWindowsSpannedToCheckSet.removeAll(remainingSlotsSetForDay);
                                 List<String> badRemainingList = new List<String>(badWindowsSpannedToCheckSet);
 
                                 for (Integer x = 0, remainingLen = badRemainingList.size(); x < remainingLen; x++) {
@@ -1114,8 +1214,9 @@ global with sharing class MA_SchedulerController {
                                     List<String> badEndTimeSplit = tempEnd.format('HH:mm', storeTimezone).split(':');
                                     Time badEndTime = Time.newInstance(Integer.valueOf(badEndTimeSplit[0]), Integer.valueOf(badEndTimeSplit[1]), 0, 0);
 
-                                    if (bookingWindowsRemainingMap.containsKey(badRemainingKey)) {
-                                        MA_SchedulerBookingWindow bwTemp = bookingWindowsRemainingMap.get(badRemainingKey);
+                                    if (bookingWindowsRemainingMap.containsKey(tempStart.format('MM/dd/yyyy', storeTimezone)) && bookingWindowsRemainingMap.get(tempStart.format('MM/dd/yyyy', storeTimezone)).containsKey(badRemainingKey)) {
+
+                                        MA_SchedulerBookingWindow bwTemp = bookingWindowsRemainingMap.get(tempStart.format('MM/dd/yyyy', storeTimezone)).get(badRemainingKey);
                                         Set<DateTime> badSubTimes = bwTemp.timeBlocksMissingASkill;
 
                                         for (DateTime badSubTime : badSubTimes) {
@@ -1133,7 +1234,7 @@ global with sharing class MA_SchedulerController {
                                         }
 
                                         if (!badIndexes.contains(i)) {
-                                            Set<Id> availableResourceIds = bwTemp.originalResourceToSkillsMap.keySet().clone();
+                                            Set<Id> availableResourceIds = assignedResourcesForDay.isEmpty() ? bwTemp.originalResourceToSkillsMap.keySet().clone() : assignedResourcesForDay.clone();
                                             Set<DateTime> avaialableSubTimes = bwTemp.skillsTimeAvailabilityMap.keySet().clone();
                                             avaialableSubTimes.removeAll(bwTemp.timeBlocksMissingASkill);
 
@@ -1179,9 +1280,15 @@ global with sharing class MA_SchedulerController {
 
                         tempStartDate = tempStartDate.addDays(1);
                         daysBetweenStartOfWeek += 1;
+
+                        //debuggingMap.put(tempStart.format('MM/dd/yyyy', storeTimezone), innerDebuggingMap);
                     }
                     while (tempTotalMinutes > 0);
+
+                    //debuggingMapList.add(debuggingMap);
                 }
+
+                //response.put('debuggingMapList', debuggingMapList);
             }
 
             /****************************************************/
@@ -1485,7 +1592,7 @@ global with sharing class MA_SchedulerController {
                     tempEnd = endDateTime;
                 }
 
-                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap, singleDayWorkNum);
+                MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, tempEnd, tempTotalMinutes, assignedResourceIds, maEventsAlreadyCreatedFor, resourceIdToUserIdMap, singleDayWorkNum, new Map<Integer, Set<Id>>());
                 
                 if (isSingleDay && hadMaEvents) {
                     workOrder.Total_Days__c = originalTotalDays;
@@ -1521,18 +1628,38 @@ global with sharing class MA_SchedulerController {
         Map<String, Object> response = new Map<String, Object>();
 
         try {
+            Set<Id> assignedResourceIds = new Set<Id>();
             Map<Id, Id> resourceIdToUserIdMap = new Map<Id, Id>();
             List<String> windowTextSplit = selectedWindow.split(' ');
+            Map<Integer, Set<Id>> singleDayResourceMap = new Map<Integer, Set<Id>>();
+
+            response.put('appointmentDate', windowTextSplit[0]);
 
             RbA_Work_Order__c workOrder = [SELECT Id, Name, Appointment_Date__c, Appointment_Start_Time__c, Appointment_End_Time__c, Appointment_Duration__c,
                                             Work_Order_Type__c, Account__r.Store_Location__r.Active_Store_Configuration__c,
-                                            (SELECT Id, Scheduled_Resource__c, Scheduled_Resource__r.RbA_User__c FROM Assigned_Resources__r)
+                                            (SELECT Id, Scheduled_Resource__c, Scheduled_Resource__r.RbA_User__c FROM Assigned_Resources__r) /*,
+                                            (SELECT Id, Event_Sequence__c, Resource__c, Resource__r.RbA_User__c FROM MA_Scheduler_Events__r) */
                                             FROM RbA_Work_Order__c WHERE Id = :workOrderId];
 
             workOrder.Appointment_Date__c = Date.parse(windowTextSplit[0]);
             workOrder.Appointment_End_Time__c = windowTextSplit[4] + ' ' + windowTextSplit[5];
             workOrder.Appointment_Start_Time__c = windowTextSplit[1] + ' ' + windowTextSplit[2];
             workOrder.Scheduled_As_Type__c = String.isBlank(scheduledAsType) ? '' : scheduledAsType;
+
+            /*
+            for (MA_Scheduler_Event__c maEvent : workOrder.MA_Scheduler_Events__r) {
+                Integer eventSequence = Integer.valueOf(maEvent.Event_Sequence__c);
+
+                if (!singleDayResourceMap.containsKey(eventSequence)) {
+                    singleDayResourceMap.put(eventSequence, new Set<Id>());
+                }
+
+                if (maEvent.Resource__c != null) {
+                    singleDayResourceMap.get(eventSequence).add(maEvent.Resource__c);
+                    resourceIdToUserIdMap.put(maEvent.Resource__c, maEvent.Resource__r.RbA_User__c);
+                }
+            }
+            */
 
             if (String.isNotBlank(rescheduleReason)) {
                 workOrder.Reschedule_Reason__c = rescheduleReason;
@@ -1541,6 +1668,7 @@ global with sharing class MA_SchedulerController {
             MA_SchedulerUtilities.deleteEvents(workOrderId, 'Rescheduled', '');
                 
             for (Assigned_Resources__c resource : workOrder.Assigned_Resources__r) {
+                assignedResourceIds.add(resource.Scheduled_Resource__c);
                 resourceIdToUserIdMap.put(resource.Scheduled_Resource__c, resource.Scheduled_Resource__r.RbA_User__c);
             }
 
@@ -1557,7 +1685,7 @@ global with sharing class MA_SchedulerController {
                 endDateTime = MA_SchedulerUtilities.createDateTimeFromBookingWindow(workOrder.Appointment_Date__c, workOrder.Appointment_End_Time__c, storeTimezone);
             }
 
-            MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, endDateTime, totalMinutes, resourceIdToUserIdMap.keySet(), new Set<Id>(), resourceIdToUserIdMap, null);
+            MA_SchedulerUtilities.createEvents(workOrder, storeBookingWindows, storeTimezone, startDateTime, endDateTime, totalMinutes, assignedResourceIds, new Set<Id>(), resourceIdToUserIdMap, null, singleDayResourceMap);
             update workOrder;
 
             response.put('success', true);

@@ -361,7 +361,8 @@
 
 		    if (response.success) {
 		        $('.listViewportWrapper .refreshListButton').click();
-		        $('#calendar').fullCalendar('refetchEvents');
+		        //$('#calendar').fullCalendar('refetchEvents');
+		        $('#calendar').fullCalendar('gotoDate', response.appointmentDate);
 
 		    	if (forceScheduleAssignmentCombo) {
 		    		showAssignResourceModal(true, false, false);
