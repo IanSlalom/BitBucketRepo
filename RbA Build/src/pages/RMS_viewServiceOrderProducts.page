@@ -74,14 +74,15 @@
             <apex:column rendered="{!IF(Order.Lock_Service_Request__c == FALSE,true,false)}">  
                 <a href="#" onClick="openNewSubTab('/apex/RMS_editServiceProduct?id={!wrapper.OrderItem.Id}&mode=e','Edit Order Product');return false">Edit</a> 
             </apex:column>
-            <apex:column headerValue="Product">  
+            <apex:column headerValue="Component">  
                 <a href="#" onClick="openNewSubTab('/apex/RMS_viewServiceOrderItem?id={!wrapper.OrderItem.Id}','View Order Product');return false">{!wrapper.OrderItem.PricebookEntry.Product2.Name}</a> 
             </apex:column>                    
             <apex:column value="{!wrapper.OrderItem.Purchase_Order__c}"/>
-            <apex:column value="{!wrapper.OrderItem.Quanity_Ordered__c}"/>>
+            <apex:column value="{!wrapper.OrderItem.Quanity_Ordered__c}"/>
             <apex:column headerValue="Installed Product">  
                 <a href="#" onClick="openNewSubTab('/{!wrapper.OrderItem.Sold_Order_Product_Asset__c}','View Order Product');return false">{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Name}</a> 
             </apex:column>
+            <apex:column value="{!wrapper.OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}"/>
         </apex:pageBlockTable>	
     </apex:pageBlock> 
     

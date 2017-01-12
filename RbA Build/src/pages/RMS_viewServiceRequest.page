@@ -149,14 +149,14 @@
                 <apex:outputField value="{!Order.AccountId}"/>
                 <apex:outputField value="{!Order.OwnerId}" label="Service Request Owner"/>
                 <apex:outputField value="{!Order.BilltoContactId}"/>
-                <apex:outputField value="{!Order.EffectiveDate}"/>
+                <apex:outputField value="{!Order.EffectiveDate}" label="Create Date"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>            
                 <apex:outputField value="{!Order.Store_Location__c}"/> <br/>               
                 <apex:outputField value="{!Order.Service_Type__c}"/><br/>                
                 <apex:outputField value="{!Order.Service_initiated_By__c}"/><br/>                
                 <apex:outputField value="{!Order.Status}"/>   
                 <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>            
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}" label="Service Revenue Recognized Date"/>           
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
                 <apex:outputField value="{!Order.Description}"/>
@@ -197,6 +197,8 @@
                 <apex:outputField value="{!Order.AR_Age__c}"/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
                 <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+                <apex:outputField value="{!Order.Business_Adjustments__c}"/><br/>
+                <apex:outputField value="{!Order.Non_Sufficient_Funds__c}"/>
             </apex:pageBlockSection>
             <script> twistSection(document.getElementById('{!$Component.block1.qbd}').getElementsByTagName('img')[0]) </script>
             <apex:pageBlockSection title="Address Details" collapsible="true" columns="2">
@@ -274,6 +276,7 @@
     
     <apex:relatedList list="Purchase_Orders__r" id="po"/>    
     <apex:relatedList list="Payments__r" id="pm"/>    
+    <apex:relatedList list="Refunds__r" id="rf"/>    
 
     <apex:relatedList list="Assets__r" id="ast"/>
     <apex:relatedList list="Journal_Entries__r" id="je"/>

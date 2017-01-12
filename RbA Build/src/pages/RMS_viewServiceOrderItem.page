@@ -81,7 +81,7 @@
                 <apex:outputField value="{!OrderItem.Total_Procedure_Time__c}"/>                
             </apex:pageBlockSection>            
             <apex:pageBlockSection title="Order Information" columns="2">
-                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName" label="Unit"/>    
+                <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName" label="Component"/>    
                 <apex:outputField value="{!OrderItem.Original_Baan_Sales_Order__c}" label="Original Baan Sales Order"/>
                 <apex:outputField value="{!OrderItem.Measurement_Notes__c }" style="width: 289px; height: 90px;"/>
                 <apex:outputField value="{!OrderItem.Quanity_Ordered__c}"/>

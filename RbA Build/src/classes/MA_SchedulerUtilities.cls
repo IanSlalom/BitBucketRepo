@@ -501,7 +501,7 @@ public with sharing class MA_SchedulerUtilities {
     /*      creates necessary events                    */
     /*                                                  */
     /****************************************************/
-    public static void createEvents(RbA_Work_Order__c workOrder, Map<String, Object> storeBookingWindows, String storeTimezone, DateTime tempStart, DateTime tempEnd, Integer tempTotalMinutes, Set<Id> assignedResourceIds, Set<Id> maEventsAlreadyCreatedFor, Map<Id, Id> resourceToUserMap, Integer singleDayWorkNum) {
+    public static void createEvents(RbA_Work_Order__c workOrder, Map<String, Object> storeBookingWindows, String storeTimezone, DateTime tempStart, DateTime tempEnd, Integer tempTotalMinutes, Set<Id> assignedResourceIds, Set<Id> maEventsAlreadyCreatedFor, Map<Id, Id> resourceToUserMap, Integer singleDayWorkNum, Map<Integer, Set<Id>> singleDayResourceMap) {
         Id primaryResourceUserId;
         List<Event> sfEventsToCreate = new List<Event>();
         List<MA_Scheduler_Event__c> maEventsToCreate = new List<MA_Scheduler_Event__c>();
@@ -548,8 +548,13 @@ public with sharing class MA_SchedulerUtilities {
                         Long totalMillisecondDifference = tempEnd.getTime() - tempStart.getTime();
                         tempTotalMinutes -= (Integer)(totalMillisecondDifference / 1000 / 60);
 
-                        if (!assignedResourceIds.isEmpty()) {
-                            for (Id resourceId : assignedResourceIds) {
+                        Set<Id> assignedResourceIdsClone = singleDayResourceMap.get(totalDays);
+                        if (assignedResourceIdsClone == null || assignedResourceIdsClone.isEmpty()) {
+                            assignedResourceIdsClone = assignedResourceIds.clone();
+                        }
+
+                        if (!assignedResourceIdsClone.isEmpty()) {
+                            for (Id resourceId : assignedResourceIdsClone) {
                                 if (!maEventsAlreadyCreatedFor.contains(resourceId)) {
                                     MA_Scheduler_Event__c maEvent = new MA_Scheduler_Event__c(
                                         Name = workOrder.Name,
