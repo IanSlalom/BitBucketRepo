@@ -2468,20 +2468,18 @@ public with sharing class RMS_financialTransactionManager {
                             //does not have related JE records of type Rev Recognized - Service AR
                             if(alreadyHasJEofTypeRevRecServiceAR == false && o.RecordTypeId == orderCOROServiceRecordTypeId){
                                 if(errorMessage == null){
-                                    if(o.Retail_Total__c > 0){
+                                	decimal salesTax = (o.Sales_Tax__c == null) ? 0 : o.Sales_Tax__c;
+                                	decimal invoiceSubTotal = (o.Invoice_Subtotal__c == null) ? 0 : o.Invoice_Subtotal__c;
+									decimal serviceAR = salesTax + invoiceSubTotal;
+                                    if(serviceAR > 0){
                                         Journal_Entry__c newJE = new Journal_Entry__c(
                                             Date__c = Datetime.Now(),
                                             Type__c = 'Rev Recognized - Service AR',
                                             Order__c = o.id,
-                                            Amount__c = o.Invoice_Subtotal__c,
+                                            Amount__c = serviceAR,
                                             Debit_General_Ledger_Account__c = orderIdToRevRecognizedServiceARFTL.get(o.id)[0].Debit_Account_Number__r.Name,
                                             Credit_General_Ledger_Account__c = orderIdToRevRecognizedServiceARFTL.get(o.id)[0].Credit_Account_Number__r.Name
                                         );
-                                        if(o.RecordTypeId == orderCOROServiceRecordTypeId){
-                                        	newJE.Amount__c = o.Invoice_Subtotal__c;
-                                        }else{
-                                        	newJE.Amount__c = o.Retail_Total__c;
-                                        }
                                         journalEntriesToUpsert.add(newJE);
                                     }
                                 }else{

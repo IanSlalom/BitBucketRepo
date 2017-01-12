@@ -352,7 +352,8 @@ private class RMS_financialTransManRevRecognitionTest {
 		update servicerequest;
 		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
 								WHERE Order__c =: servicerequest.Id AND Type__c = 'Rev Recognized - Service AR']; 
-		System.AssertEquals(100, je.Amount__c);
+		// Should be equal to the invoice subtotal (100) + sales tax (10)
+		System.AssertEquals(110, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 
 		// Verify the account numbers 
