@@ -71,7 +71,7 @@
                 <apex:commandButton action="{!addWarranty}" value="Add Reimbursement" rendered="{!IF(OrderItem.Number_Service_Symptoms__c > 0,true,false)}"/>
             </apex:pageBlockButtons>
             <apex:pageBlockSection title="Product Information" columns="1">
-                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Product"/>
+                <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__c}" label="Component"/>
                                      <!--<a href="#" onClick="callGenerateConsoleURL('/{!OrderItem.Sold_Order_Product_Asset__r.Original_Order_Product__r.Id}','View Order Product');return false">{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}</a> -->
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c}"/>
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_Asset__r.Original_Order_Product__c}"/>

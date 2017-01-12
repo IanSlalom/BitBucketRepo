@@ -149,14 +149,14 @@
                 <apex:outputField value="{!Order.AccountId}"/>
                 <apex:outputField value="{!Order.OwnerId}" label="Service Request Owner"/>
                 <apex:outputField value="{!Order.BilltoContactId}"/>
-                <apex:outputField value="{!Order.EffectiveDate}"/>
+                <apex:outputField value="{!Order.EffectiveDate}" label="Create Date"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>            
                 <apex:outputField value="{!Order.Store_Location__c}"/> <br/>               
                 <apex:outputField value="{!Order.Service_Type__c}"/><br/>                
                 <apex:outputField value="{!Order.Service_initiated_By__c}"/><br/>                
                 <apex:outputField value="{!Order.Status}"/>   
                 <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>            
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}" label="Service Revenue Recognized Date"/>           
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
                 <apex:outputField value="{!Order.Description}"/>
