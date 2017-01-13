@@ -626,7 +626,8 @@
             if (record.Name == 'Unassigned') {
                 obj = {
                     id: record.Name,
-                    name: '_' + record.Name,
+                    //name: '_' + record.Name,
+                    name: ' ' + record.Name,
                     resourceName: record.Name,
                     isActive: record.Active__c
                 };
