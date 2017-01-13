@@ -195,6 +195,8 @@
                 <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
                 <apex:outputField value="{!Order.AR_Age__c}"/>
+                <apex:outputField value="{!Order.Amount_Refunded__c}"/>
+                <apex:outputText value=""/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
                 <apex:outputField value="{!Order.Invoice_Notes__c}"/>
                 <apex:outputField value="{!Order.Business_Adjustments__c}"/><br/>
