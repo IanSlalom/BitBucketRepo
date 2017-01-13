@@ -12,7 +12,7 @@ public with sharing class RMS_mobileAppContactHelper {
 	}
 
 	public static String saveNewContact(String inputJSON){
-		System.debug('###### RMS_mobileAppContactHelper.saveNewContact: Input: ' + inputJSON);
+		System.debug('RMS_mobileAppContactHelper.saveNewContact: Input: ' + inputJSON);
 		DTOContact dtoContact = (DTOContact)JSON.deserialize(inputJSON, Type.forName('RMS_mobileAppContactHelper.DTOContact'));
 		Contact contactToInsert = dtoContact.contact;
 		// check for an accoutId to link the contact to
@@ -64,7 +64,7 @@ public with sharing class RMS_mobileAppContactHelper {
 	        System.debug(LoggingLevel.ERROR, 'RMS_mobileAppContactHelper.saveNewContact: Unhandled exception : ' + e.getMessage() + ' : ' + e.getStackTraceString());
 	    }
 		String result = JSON.serialize(dtoContact);
-	    system.debug('###### RMS_mobileAppContactHelper.saveNewContact: Output: ' + result);
+	    system.debug('RMS_mobileAppContactHelper.saveNewContact: Output: ' + result);
 		return result;
 
 	}

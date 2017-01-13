@@ -47,7 +47,7 @@ private class RMS_mobileAppRequestHelperTest {
      		System.assertEquals(techmEvents.size(),1);
      		System.assert(Datetime.now().getTime() - salesEvents[0].Synced_DateTime__c.getTime() < 120000);
      		System.assert(Datetime.now().getTime() - techmEvents[0].Synced_DateTime__c.getTime() < 120000);
-			System.debug('###################################### ' + jsonResult);
+			System.debug('###### ' + jsonResult);
 			System.assert(jsonResult.startsWith('{"tmAppts":'));
         }
 		Test.stopTest();
@@ -133,7 +133,7 @@ private class RMS_mobileAppRequestHelperTest {
 		
 		String jsonInput = JSON.serialize(salesAppt);
 		System.assert(salesAppt.opptyContainer.oppty.rSuite_Id__c != null);
-		System.debug('###################################### ' + jsonInput);
+		System.debug('###### ' + jsonInput);
 		System.assert(jsonInput.countMatches('Child_Product_Pricebook_Entry_Id__c') == 4);
 		System.assert(jsonInput.countMatches('"PricebookEntryId":null') == 2);
 		System.assert(jsonInput.countMatches('"QuoteLineItem","url":') == 2);
@@ -143,7 +143,7 @@ private class RMS_mobileAppRequestHelperTest {
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			String jsonResult = mHelper.resultSalesAppointments(u.Id, jsonInput);
 			Test.stopTest();
-			System.debug('######################################: result:' + jsonResult);
+			System.debug('######: result:' + jsonResult);
 			RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.SalesAppointment.class);
 			System.assert(jsonResult.startsWith('{"opptyContainer":{'));
 			System.assert(appt.isSaveSuccessful);
@@ -278,7 +278,7 @@ private class RMS_mobileAppRequestHelperTest {
 	}
 
 	/* 
-	 * testhandleDeletes
+	 * testProcessDeletes
 	 */
 	static testmethod void testProcessDeletes(){
 		// for this test 4 quotes are needed structured as follows
@@ -448,7 +448,7 @@ private class RMS_mobileAppRequestHelperTest {
 		jsonInput = jsonInput.replace('"Description":"qliToDeleteFromInsert"','"IsDeleted":true,"Description":"qliToDeleteFromInsert"');
 		jsonInput = jsonInput.replace('"Discount_Amount__c":4','"IsDeleted":true,"Discount_Amount__c":4');
 		jsonInput = jsonInput.replace('"Amount_Financed__c":4','"IsDeleted":true,"Amount_Financed__c":4');
-System.debug('###################################### Input: ' + jsonInput);
+		System.debug('###### Input: ' + jsonInput);
 		RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonInput, RMS_mobileAppRequestHelper.SalesAppointment.class);
 
         System.runAs(u) {
@@ -486,13 +486,87 @@ System.debug('###################################### Input: ' + jsonInput);
 			processedAppt = mHelper.saveQuotes(processedAppt);
 			processedAppt = mHelper.saveQuoteLineItemsDiscountsandFinancing(processedAppt);
 			Test.stopTest();
-System.debug('###########################: ' + processedAppt);
+			System.debug('######: ' + processedAppt);
 			remainingQuotes = [select Id, Name, OpportunityId from Quote where OpportunityId = :opp.Id];
-System.debug('###########################: ' + remainingQuotes);
+			System.debug('######: ' + remainingQuotes);
 			System.assert(remainingQuotes.size() == 2);
 			remainingQLI = [select Id, Description, QuoteId from QuoteLineItem where QuoteId in :remainingQuotes];
-System.debug('###########################: ' + remainingQLI);
+			System.debug('######: ' + remainingQLI);
 			System.assert(remainingQLI.size() == 2);
+        }
+	}
+
+	/* 
+	 * testProcessDeletesErrors
+	 */
+	static testmethod void testProcessDeletesErrors(){
+		// for this test 4 quotes are needed structured as follows
+		// two with committed commiteed to saleforce and two that have not been inserted
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+		
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Sales']; 
+		// setup configuration stuff
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+		tUtil.createSalesAppt(u.Id, tmApptTime, false);
+		// build out the container
+		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
+		Id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where Name != 'RbA' AND Name != 'Unassigned Account' AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName, rSuite_Id__c from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'In Progress';
+
+		// create pricebook
+		Pricebook2 pb = tutil.createPricebook2('SATestPB2', store1.Active_Store_Configuration__c);
+		insert pb;
+
+		//create existing quote
+		Quote quoteToUpdate = tUtil.createQuote(opp.Id, pb.Id);
+		quoteToUpdate.Name = 'quoteToUpdate';
+		insert quoteToUpdate;
+		// create existing quote lines
+		QuoteLineItem qli1 = tUtil.createQLIMasterChildProducts(pb.Id, quotetoUpdate.Id);
+		qli1.Description = 'qliToDelete';
+		qli1.UnitPrice = 30;
+		insert qli1;
+		QuoteLineItem qli2 = tUtil.createQLIMasterChildProducts(pb.Id, quotetoUpdate.Id);
+		qli2.Description = 'qliToRemain';
+		insert qli2;
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quoteToUpdate;
+		quoteContainer.quoteLineItems = new List<QuoteLineItem>();
+		quoteContainer.quoteLineItems.add(qli1);
+		quoteContainer.quoteLineItems.add(qli2);
+
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.account = dwelling;
+		salesAppt.opptyContainer = oppContainer;
+		
+		String jsonInput = JSON.serialize(salesAppt);
+		// add the isDeleted = true to the quotes
+		jsonInput = jsonInput.replace('"Description":"qliToDelete"','"IsDeleted":true,"Description":"qliToDelete"');
+		System.debug('###### Input: ' + jsonInput);
+		RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonInput, RMS_mobileAppRequestHelper.SalesAppointment.class);
+		// delete the qli that were going to attempt to delete to cause an error
+		delete qli1;
+        System.runAs(u) {
+			Test.startTest();
+			// test processing of deletes
+        	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
+			RMS_mobileAppRequestHelper.SalesAppointment processedAppt = mHelper.processDeletes(appt);
+			Test.stopTest();
+			System.debug('##### ' + processedAppt.getErrors());
+			System.assert(processedAppt.getErrors().size() > 0);
         }
 	}
 
@@ -694,16 +768,16 @@ System.debug('###########################: ' + remainingQLI);
         System.runAs(u) {
         	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
 			String input = JSON.serialize(tmApptUpdate);
-			System.debug('################ - the JSON:' + input);
+			System.debug('###### - the JSON:' + input);
 			Test.startTest();
 			String result = helper.saveTechMeasure(input);
 			Test.StopTest();
-			System.debug('###########: ' + result);
+			System.debug('######: ' + result);
 
 			//Assert Opportunity Status is updated
 			Opportunity updatedOpp = [Select Id, Name, isWon, isClosed, StageName from Opportunity where Id =: opp.Id];
-			System.debug('############### opp = ' + opp); 
-			System.debug('############### updateOpp = ' + updatedOpp); 
+			System.debug('###### opp = ' + opp); 
+			System.debug('###### updateOpp = ' + updatedOpp); 
 			System.assertEquals(updatedOpp.StageName,'Measured');
 			//Assert Order status is updated
 			ord1 = [Select Status from Order where Id =: ord1.Id];
@@ -721,6 +795,90 @@ System.debug('###########################: ' + remainingQLI);
 			//Assert RBA Work Order is updated 
 			List<RbA_Work_Order__c> rbaUpdatedList = [Select Id from RbA_Work_Order__c where Work_Order_Status__c = 'Scheduled'];
 			System.assertEquals(rbaUpdatedList.size(),1);
+        }
+	
+	}
+
+	/* 
+	 * testSaveTechMeasureErrors
+	 */
+	static testmethod void testSaveTechMeasureErrors(){
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Field Service']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		tUtil.createTMAppt(u.Id, tmApptTime);
+		id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
+        Account dwelling = [Select Id from Account where OwnerId = :u.Id AND RecordTypeId =: dwellingRT];
+		Opportunity opp = [select Id, StageName from Opportunity where AccountId =: dwelling.id];
+		opp.StageName = 'Measured';
+
+		Order ord1 = [Select Id, Status, rSuite_Id__c from Order where OpportunityID =: opp.Id];
+		ord1.Status = 'Ready to Order';
+	    ord1.Apex_Context__c = true;
+
+		List<RbA_Work_Order__c> workOrder = [SELECT Id FROM RbA_Work_Order__c  WHERE Opportunity__c = :opp.id AND Sold_Order__c = :ord1.id];
+		workOrder[0].Work_Order_Status__c = 'Scheduled';
+		OrderItem oiToUpdate = [select Id, Quantity, PricebookEntryId, PricebookEntry.Pricebook2Id from OrderItem where OrderId = :ord1.Id limit 1];
+		oiToUpdate.Quantity =1;
+
+		PricebookEntry cpbe = [select id, Name from PricebookEntry where Product2.RecordType.DeveloperName = 'Child_Product' and Pricebook2Id = :oiToUpdate.PricebookEntry.Pricebook2Id limit 1];
+		PricebookEntry mpbe = [select id, Name from PricebookEntry where Product2.RecordType.DeveloperName = 'Master_Product' and Pricebook2Id = :oiToUpdate.PricebookEntry.Pricebook2Id limit 1];
+		OrderItem oiToInsert = new OrderItem(OrderId = ord1.Id, PricebookentryId = mpbe.Id, Child_Product_Pricebook_Entry_Id__c=cpbe.Id, Quantity = 10, UnitPrice = 10 );
+		// create an existing tm offset
+		TM_OffSet__C tmOffsetToUpdate = new TM_OffSet__C(Order_Line__c = oiToUpdate.Id,Description__c = 'New Description', Measurement__c = 1 );
+		insert tmOffsetToUpdate;
+		tmOffsetToUpdate.Description__c = 'Updated Description';
+		// create a new TM offset
+		TM_OffSet__c tmOffsetToInsert = new TM_Offset__C(Order_Line__c = oiToUpdate.Id,Description__c = 'Insert Description TMO', Measurement__c = 2 );
+		// set a bunch of things to null to cause some errors
+		tmOffsetToInsert.Order_Line__c = null;
+		oiToInsert.OrderId = null;
+		workOrder[0].Id = null;
+		opp.Id = null;
+	    ord1.Id = null;
+		oiToUpdate.Id = null;
+
+
+		RMS_mobileAppRequestHelper.OrderItemContainer oiContainerUpdate = new RMS_mobileAppRequestHelper.OrderItemContainer();
+		oiContainerUpdate.oi = oiToUpdate;
+		oiContainerUpdate.tmOffSetList = new List<TM_Offset__C>{tmOffsetToUpdate,tmOffsetToInsert};
+		RMS_mobileAppRequestHelper.OrderItemContainer oiContainerInsert = new RMS_mobileAppRequestHelper.OrderItemContainer();
+		oiContainerInsert.oi = oiToInsert;
+		RMS_mobileAppRequestHelper.OrderContainer orderContainerUpsert = new RMS_mobileAppRequestHelper.OrderContainer();
+		orderContainerUpsert.anOrder = ord1;
+		orderContainerUpsert.oiContainerList = new List<RMS_mobileAppRequestHelper.OrderItemContainer>{oiContainerUpdate,oiContainerInsert};
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainerUpsert = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainerUpsert.anOrderContainer = orderContainerUpsert;
+		oppContainerUpsert.oppty = opp;
+		RMS_mobileAppRequestHelper.TechMeasureAppointment tmApptUpdate = new RMS_mobileAppRequestHelper.TechMeasureAppointment();
+		tmApptUpdate.account = dwelling;
+		tmApptUpdate.workOrder = workOrder[0];
+		tmApptUpdate.opptyContainer = oppContainerUpsert;
+
+        System.runAs(u) {
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			String input = JSON.serialize(tmApptUpdate);
+			System.debug('###### - the JSON:' + input);
+			Test.startTest();
+			String result = helper.saveTechMeasure(input);
+			Test.StopTest();
+			System.debug('######: ' + result);
+			//Assert
+			RMS_mobileAppRequestHelper.TechMeasureAppointment tmUpdateResult = 
+				(RMS_mobileAppRequestHelper.TechMeasureAppointment)JSON.deserialize(result,RMS_mobileAppRequestHelper.TechMeasureAppointment.class);
+			System.debug('######: ' + tmUpdateResult.getErrors());
+			System.assert(tmUpdateResult.getErrors().size() > 0);
         }
 	
 	}
@@ -783,7 +941,7 @@ System.debug('###########################: ' + remainingQLI);
 	/* 
 	 * testSaveQuotesNoQuotes
 	 */
-	static testmethod void testSaveQuotesNoQuotes(){
+	static testmethod void testSaveQuotesErrors(){
 
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigs();
@@ -821,6 +979,14 @@ System.debug('###########################: ' + remainingQLI);
 				// should not throw a different exception
 				System.assert(false);
 			}
+			// now a bad quote to the quote container
+			RMS_mobileAppRequestHelper.QuoteContainer qc = new RMS_mobileAppRequestHelper.QuoteContainer();
+			qc.aQuote = new Quote();
+			salesAppt.opptyContainer.quoteContainerList.add(qc);
+			salesAppt.errors = null;
+			RMS_mobileAppRequestHelper.SalesAppointment testAppt = helper.saveQuotes(salesAppt);
+			System.debug('###### ' + testAppt.getErrors());
+			System.assert(testAppt.getErrors().size() > 0);
 			Test.StopTest();
         }
 	}
@@ -948,6 +1114,93 @@ System.debug('###########################: ' + remainingQLI);
 	} 
 
 	/* 
+	 * testSaveQuoteLineItemsDiscountsandFinancingErrors
+	 */
+	static testmethod void testSaveQuoteLineItemsDiscountsandFinancingErrors(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Sales']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		tUtil.createSalesAppt(u.Id, newApptTime, false);
+
+		Account store1 = [SELECT id, Name, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
+		Account dwelling1 = tUtil.createDwellingAccount('456');
+		dwelling1.Store_Location__c = store1.id;
+		dwelling1.OwnerId = u.Id;
+		insert dwelling1;
+
+		List<SObject> itemsToInsert = new List<SObject>();		
+		
+		Opportunity opp1 = tutil.createOpportunity('TMAppt',dwelling1.id, 'New', u.Id);
+		opp1.OwnerId = u.Id;
+		itemsToInsert.add(opp1);
+		// create the store discounts
+		Store_Discount__c storeDiscount1 = new Store_Discount__c();
+		storeDiscount1.Store_Configuration__c = store1.Active_Store_Configuration__c;
+		storeDiscount1.Active__c = true;
+		itemsToInsert.add(storeDiscount1);
+		// create the store finance programs
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = store1.Active_Store_Configuration__c, Active__c = true);
+		itemsToInsert.add(storeFinance);
+
+		insert itemsToInsert;
+		//clean out the list
+		itemsToInsert.clear();
+		
+		Pricebook2 pb = tutil.createPricebook2('saveQuoteTest', store1.Active_Store_Configuration__c);
+		itemsToInsert.add(pb);
+		insert itemsToInsert;
+		itemsToInsert.clear();
+
+		Quote quote1 = tutil.createQuote(opp1.id, pb.Id);
+		quote1.isSold__c = true;
+		itemsToInsert.add(quote1);
+		insert itemsToInsert;
+		//clean out the list
+		itemsToInsert.clear();
+			
+		// qli to insert
+		QuoteLineItem qli2 = new QuoteLineItem();
+		// qd to insert
+		Quote_Discount__c discountToInsert = new Quote_Discount__c();
+		// qf to insert
+		Quote_Financing__c financeToInsert = new Quote_Financing__c();
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quote1;
+		quoteContainer.quoteLineItems = new List<QuoteLineItem>{qli2};
+		quoteContainer.quoteDiscountList = new List<Quote_Discount__c>{discountToInsert};
+		quoteContainer.quoteFinancingList = new List<Quote_Financing__c>{financeToInsert};
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp1;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.opptyContainer = oppContainer;
+
+        System.runAs(u) {
+        	Test.StartTest();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			RMS_mobileAppRequestHelper.SalesAppointment testsalesAppt = helper.saveQuoteLineItemsDiscountsandFinancing(salesAppt);
+			Test.StopTest();
+			System.debug('##### ' + testsalesAppt.getErrors());
+			System.assert(testsalesAppt.getErrors().size() > 0);
+
+        }
+	
+	} 
+
+	/* 
 	 * Cancel Order Test
 	 */
 	static testmethod void testCancelOrderNoOrder(){
@@ -981,7 +1234,7 @@ System.debug('###########################: ' + remainingQLI);
 			// Retrieve the Appointment container from the JSON response
 	   		RMS_mobileAppRequestHelper.Appointments apptContainer = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(JSONResponse, RMS_mobileAppRequestHelper.Appointments.class);
 			// do an assertion that there was one error since there is no order to cancel
-	   		System.assert(apptContainer.getErrors()[0].contains('Order could not be found.'));
+	   		System.assert(apptContainer.getErrors()[0].contains('does not have an order.'));
 	   		System.assertEquals(1, apptContainer.getErrors().size());
         }
 		Test.StopTest();
@@ -1045,8 +1298,8 @@ System.debug('###########################: ' + remainingQLI);
 
 			// Assert that there was one error since there were multiple orders
 	   		System.assertEquals(1, apptContainer.getErrors().size());
-	   		System.debug('##########: ' + apptContainer.getErrors());
-	   		System.assert(apptContainer.getErrors()[0].contains('More than one order is linked to this opportunity.'));
+	   		System.debug('######: ' + apptContainer.getErrors());
+	   		System.assert(apptContainer.getErrors()[0].contains('has multiple Orders'));
         }
 		Test.StopTest();
 	}
@@ -1196,10 +1449,10 @@ System.debug('###########################: ' + remainingQLI);
 			for (Quote qr : quoteResults) {
 				if (qr.isSold__c == false && qr.Status == 'Cancelled' && qr.Opportunity.StageName == 'Quoted')
 					oldCount =+ 1;
-				if (qr.isSold__c == false && qr.Status == 'Pending Cancellation' && qr.Opportunity.StageName == 'Quoted')
+				if (qr.isSold__c == false && qr.Status == 'Draft' && qr.Opportunity.StageName == 'Quoted')
 					newCount =+ 1;
 			}
-			// Assert there are 1 quote is cancelled and 1 quote is pending cancellation
+			// Assert there are 1 quote is cancelled and 1 quote is draft
 			System.AssertEquals(1, oldCount);
 			System.AssertEquals(1, newCount);
 

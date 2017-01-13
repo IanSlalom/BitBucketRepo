@@ -31,7 +31,7 @@ private class RMS_mobileAppContactHelperTests {
 		dtoContact.OpportunityId = opp.Id;
 		dtoContact.contact = c;
 		String jsonResult = RMS_mobileAppContactHelper.saveNewContact(JSON.serialize(dtoContact));
-		System.debug('######################: ' + jsonResult);
+		System.debug('######: ' + jsonResult);
 		//Assert Contact is created
 		List<Contact> cList = [select Id, AccountId from Contact where FirstName Like '%TestName2%'];
 		System.assert(!cList.isEmpty());
@@ -61,10 +61,10 @@ private class RMS_mobileAppContactHelperTests {
 		dtoContact.OpportunityId = opp.Id;
 		dtoContact.contact = c;
 		String jsonResult = RMS_mobileAppContactHelper.saveNewContact(JSON.serialize(dtoContact));
-		System.debug('######################: ' + jsonResult);
+		System.debug('######: ' + jsonResult);
 		//Assert Contact is not created
 		List<Contact> cList = [select Id, FirstName, LastName, AccountId from Contact where FirstName Like '%TestName3%'];
-		System.debug('######################: ' + cList);
+		System.debug('######: ' + cList);
 		System.assert(cList.isEmpty());		
 		//Assert Contact History is not created
 		List<Contact_History__c> cHistList = [select Contact__c, Contact__r.FirstName, Dwelling__c, Type__c from Contact_History__c where Dwelling__c = :dwelling.Id and Contact__r.FirstName Like '%TestName3%'];
@@ -111,10 +111,10 @@ private class RMS_mobileAppContactHelperTests {
 		dtoContact.OpportunityId = dwelling.Id;
 		dtoContact.contact = c;
 		String jsonResult = RMS_mobileAppContactHelper.saveNewContact(JSON.serialize(dtoContact));
-		System.debug('######################: ' + jsonResult);
+		System.debug('######: ' + jsonResult);
 		//Assert Contact is not created
 		List<Contact> cList = [select Id, FirstName, LastName, AccountId from Contact where FirstName Like '%TestName3%'];
-		System.debug('######################: ' + cList);
+		System.debug('######: ' + cList);
 		System.assert(cList.isEmpty());		
 		//Assert Contact History is not created
 		List<Contact_History__c> cHistList = [select Contact__c, Contact__r.FirstName, Dwelling__c, Type__c from Contact_History__c where Dwelling__c = :dwelling.Id and Contact__r.FirstName Like '%TestName3%'];

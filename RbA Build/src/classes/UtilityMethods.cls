@@ -322,7 +322,8 @@ global with sharing class UtilityMethods {
 			Application__c = application,
 			Operation__c = operation,
 			Details__c = details,
-			rSuite_API_Payload__c = rSuiteAPIPayload);
+			rSuite_API_Payload__c = rSuiteAPIPayload,
+			User__c = user);
 		insert sl;
 		return sl.Id;
 	} 
