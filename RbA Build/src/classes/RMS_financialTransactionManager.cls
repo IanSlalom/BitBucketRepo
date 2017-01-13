@@ -479,6 +479,7 @@ public with sharing class RMS_financialTransactionManager {
         
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborFTL = typeToMapOfLaborIdtoListFT.get('Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToLaborExternalFTL = typeToMapOfLaborIdtoListFT.get('External Labor');
+       	//map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborFTL = typeToMapOfLaborIdtoListFT.get('Service Internal Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborExternalFTL = typeToMapOfLaborIdtoListFT.get('Service External Labor');
         map<Id, list<Financial_Transaction__c>>  laborIdToServiceLaborExternalJIPFTL = typeToMapOfLaborIdtoListFT.get('Service External Labor - JIP');
        	map<Id, list<Financial_Transaction__c>>  laborIdToLaborPostRecInternalFTL = typeToMapOfLaborIdtoListFT.get('Post Recognized Internal Labor');
@@ -560,7 +561,10 @@ public with sharing class RMS_financialTransactionManager {
 	                	}
                     }else if(subTypeOfLabor == 'internal'){
 						                       
-		                if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+                        if(typeOfOrder == 'coroService'){
+                			//DO NOT CREATE SERVICE INTERNAL LABOR FINANCIAL TRANSACTIONS
+                			continue;
+		                }else if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborFTL.get(l.id) , errorMessage, 'Internal Labor');
 	                    }
                 	}
@@ -578,7 +582,10 @@ public with sharing class RMS_financialTransactionManager {
 	                    	errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecExternalFTL.get(l.id) , errorMessage, 'Post Recognized External Labor');
                         }
                     }else if(subTypeOfLabor == 'internal'){
-                        if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+                        if(typeOfOrder == 'coroService'){
+                			//DO NOT CREATE POST RECOGNIZED SERVICE EXTERNAL LABOR FINANCIAL TRANSACTIONS
+                			continue;
+                        }else if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 	                        errorMessage = checkFinacialTransationForErrors(laborIdToLaborPostRecInternalFTL.get(l.id) , errorMessage, 'Post Recognized Internal Labor');
 	                    } 
                     }
@@ -616,7 +623,7 @@ public with sharing class RMS_financialTransactionManager {
                                     }
                                 }else if(subTypeOfLabor == 'internal'){
                                     newJe.Amount__c = l.Internal_Cost__c;
-                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 	                                    newJE.Type__c = 'Internal Labor';
 	                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 	                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborFTL.get(l.id)[0].Credit_Account_Number__r.Name;
@@ -657,7 +664,7 @@ public with sharing class RMS_financialTransactionManager {
                  				
                                 else if(subTypeOfLabor == 'internal'){  
                                     newJe.Amount__c = l.Internal_Cost__c;
-                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 	                                    newJE.Type__c = 'Post Recognized Internal Labor';
 	                                    newJE.Debit_General_Ledger_Account__c = laborIdToLaborPostRecInternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 	                                    newJE.Credit_General_Ledger_Account__c = laborIdToLaborPostRecInternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
@@ -721,7 +728,7 @@ public with sharing class RMS_financialTransactionManager {
 	                                    }
 	                                }else if(subTypeOfLabor == 'internal'){
 	                                    je.Amount__c = l.Internal_Cost__c;
-	                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+	                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 		                                    je.Type__c = 'Internal Labor';
 		                                    je.Debit_General_Ledger_Account__c = laborIdToLaborFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 		                                    je.Credit_General_Ledger_Account__c = laborIdToLaborFTL.get(l.id)[0].Credit_Account_Number__r.Name;
@@ -760,7 +767,7 @@ public with sharing class RMS_financialTransactionManager {
                                     
                                     else if(subTypeOfLabor == 'internal'){
 	                                    je.Amount__c = l.Internal_Cost__c;
-	                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder' || typeOfOrder == 'coroService'){
+	                                    if(typeOfOrder == 'coroRecordType' || typeOfOrder == 'changeOrder'){
 		                                    je.Type__c = 'Post Recognized Internal Labor';
 		                                    je.Debit_General_Ledger_Account__c = laborIdToLaborPostRecInternalFTL.get(l.id)[0].Debit_Account_Number__r.Name;
 		                                    je.Credit_General_Ledger_Account__c = laborIdToLaborPostRecInternalFTL.get(l.id)[0].Credit_Account_Number__r.Name;
