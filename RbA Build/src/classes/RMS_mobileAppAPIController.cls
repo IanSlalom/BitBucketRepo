@@ -66,8 +66,8 @@ global with sharing class RMS_mobileAppAPIController {
 	@HttpPut
     @HttpPost
     global static void doPost(){
+		RestRequest req = RestContext.request;
 		try {
-			RestRequest req = RestContext.request;
 			RestContext.response.addHeader('Content-Type', 'application/json');
 			String temp = req.requestURI.substringAfter('/');
 			temp = temp.substringAfter('/');
@@ -103,8 +103,12 @@ global with sharing class RMS_mobileAppAPIController {
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
 			}
 		} catch (Exception e) {
+			String requestBody = null;
+			if (req != null && req.requestBody != null) {
+				requestBody = req.requestBody.toString();
+			}
 			String message = 'Unhandled Exception: ' + e.getMessage() + ' Stack trace: ' + e.getStackTraceString();
-			Id suportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doPost', message, null, Userinfo.getUserId());
+			Id suportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doPost', message, requestBody, Userinfo.getUserId());
 			RestContext.response.addHeader('Content-Type', 'application/json');
 			RestContext.response.responseBody = Blob.valueOf('An Error has occurred.  Please contact support.  Error Id(' + suportLogId + ').  Error Details: ' + message);
 			System.debug(LoggingLevel.ERROR, 'RMS_mobileAppAPIController.doPost: Unhandled exception: ' + e);
