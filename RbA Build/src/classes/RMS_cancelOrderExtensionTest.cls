@@ -80,7 +80,7 @@ private class RMS_cancelOrderExtensionTest {
 
         customController.cancelOrder();
         Order soldOrderResult = [SELECT Id, Status FROM Order WHERE Name = 'Sold Order 1'];
-        System.AssertEquals('Draft', soldOrderResult.Status);   
+        System.AssertEquals('Cancelled', soldOrderResult.Status);   
 
         //Update related rba_Work_Orders to 0 open events, verify records are cancelled 
         for(RbA_Work_Order__c relatedWO : relatedVisitWOs){
