@@ -535,6 +535,10 @@
                     forceAssignmentScheduleCombo = true;
                 }
                 */
+
+                if (response.isSingleDay && eventOptionsMultiDayOrder != undefined && eventOptionsMultiDayOrder != null     && eventOptionsMultiDayOrder != '') {
+                    forceAssignmentScheduleCombo = false;
+                }
             }
         }
 
@@ -755,6 +759,7 @@
         /************************************************************************/
         function closeAssignResourceModal() {
             //forceAssignmentScheduleCombo = false;
+            forceAssignmentScheduleCombo = true;
             assignedSkillsToResourcesMap = {};
             $('.assignedWorkOrderLastWorkOrderRow').hide();
             $('#assignResourceWorkOrderId, #assignResourceInfoTable .fieldValue, #assignedWorkOrderLastWorkOrderCrew, #assignedWorkOrderLastWorkOrderStainer, #assignedWorkOrderLastWorkOrderTechMeasure').val('').text('');
