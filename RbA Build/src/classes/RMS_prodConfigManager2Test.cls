@@ -696,6 +696,7 @@ private class RMS_prodConfigManager2Test {
 		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
 		prodConfig.EJ_Species__c = 'Oak';
 		prodConfig.EJ_Color__c = 'White;Black';
+		prodConfig.Number_of_Sashes__c = '1';
 		update prodConfig;
 		
 		Specialty_Grille_Control__c gc = new Specialty_Grille_Control__c(Product_Configuration__c = prodConfig.Id, Grille_Style__c= 'Required', Grille_Pattern__c = 'Colonial',
@@ -708,8 +709,9 @@ private class RMS_prodConfigManager2Test {
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
 		soldOrderItem.Width_Inches__c = 14;
 		soldOrderItem.Height_Inches__c = 14;
-		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
+		soldOrderItem.Grille_Pattern__c = 'Colonial';
 		soldOrderItem.Specialty_Shape__c = 'Pentagon';
+		soldOrderItem.Grille_Style__c = 'No Grilles';
 		update soldOrderItem;
 
 		Test.startTest();
@@ -719,7 +721,6 @@ private class RMS_prodConfigManager2Test {
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_HUBS_REQUIRED));
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_HIGH_REQUIRED));
 		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_LITES_WIDE_REQUIRED));
-		System.assert(returnMessage.contains(RMS_errorMessages.GRILLE_STYLE_REQUIRED));
 		
 		soldOrderItem.Spokes__c = '2';
 		update soldOrderItem;
@@ -779,6 +780,7 @@ private class RMS_prodConfigManager2Test {
 		Product_Configuration__c prodConfig = [SELECT Id FROM Product_Configuration__c WHERE Name = 'Product Config'];
 		prodConfig.EJ_Species__c = 'Oak';
 		prodConfig.EJ_Color__c = 'White;Black';
+		prodConfig.Number_of_Sashes__c = '1';
 		update prodConfig;
 		
 		Specialty_Grille_Configuration__c gc = new Specialty_Grille_Configuration__c(Product_Configuration__c = prodConfig.Id, Grille_Style__c='Interior Wood Only', Grille_Pattern__c = 'Colonial',
@@ -794,7 +796,7 @@ private class RMS_prodConfigManager2Test {
 		soldOrderItem.Width_Inches__c = 14;
 		soldOrderItem.Height_Inches__c = 14;
 		soldOrderItem.Grille_Style__c='No Grilles';
-		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
+		soldOrderItem.Grille_Pattern__c = 'Colonial';
 		soldOrderItem.Specialty_Shape__c = 'Pentagon';
 		update soldOrderItem;
 
@@ -864,7 +866,7 @@ private class RMS_prodConfigManager2Test {
 		OrderItem soldOrderItem = [SELECT Id, PricebookEntryId FROM OrderItem WHERE OrderId =: soldOrder.Id];
 		soldOrderItem.Width_Inches__c = 1;
 		soldOrderItem.Height_Inches__c = 1;
-		soldOrderItem.Grille_Pattern_S1__c = 'Colonial';
+		soldOrderItem.Grille_Pattern__c = 'Colonial';
 		soldOrderItem.Grille_Style__c = 'Interior Wood Only';
 		soldOrderItem.Sash_Ratio__c = '1:1';
 		update soldOrderItem;

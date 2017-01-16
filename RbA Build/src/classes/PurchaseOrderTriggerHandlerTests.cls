@@ -28,7 +28,7 @@ private class PurchaseOrderTriggerHandlerTests {
 		//Store_Configuration__c stconfig = new Store_Configuration__c(Store__c = store.Id);
 		//insert stconfig;
 		
-		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc');
+		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc', Account_Type__c = 'Cost PO');
 		insert fan;
 		Product2 product1 = new Product2(
 			Name='Test Product',

@@ -66,13 +66,28 @@ public class MA_SchedulerFakeDataGenerator {
 	}
 
 	public static Resource__c createFakeResource(Boolean insertNeeded, String resType, Id storeConfigId) {
+
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-RSR'];
+		User rbaUser = new User(Alias = 'adm', Email='admin@test.com', Store_Locations__c = '0060 - Rochester, MN;0066 - Mankato, MN',
+
+	      EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+
+	      LocaleSidKey='en_US', ProfileId = p.Id,
+
+	      TimeZoneSidKey='America/Los_Angeles', UserName= 'RBAUSER' + UserInfo.getOrganizationId() + System.now().millisecond()+'admin-rba@test.com');
+
+		insert rbaUser;
+		
 		Resource__c res = new Resource__c(
 			Active__c = true,
 			Crew_Size__c = 5,
 			Resource_Type__c = resType,
 			Retail_Location__c = storeConfigId,
-			RbA_User__c = UserInfo.getUserId()
+//			RbA_User__c = UserInfo.getUserId()
+			RbA_User__c = rbaUser.Id
 		);
+
+
 
 		if (insertNeeded) {
 			insert res;

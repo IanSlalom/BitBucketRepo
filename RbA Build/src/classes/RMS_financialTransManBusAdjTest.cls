@@ -232,6 +232,8 @@ private class RMS_financialTransManBusAdjTest {
 					positiveCreateEditNonSufficientDeposit
 	*******************************************************/
 	static testmethod void positiveCreateEditNonSufficientDeposit(){
+
+		test.startTest();
 		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
 		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];				
 
@@ -270,6 +272,7 @@ private class RMS_financialTransManBusAdjTest {
 					positiveCreateEditNonSufficientFinalPayment
 	*******************************************************/
 	static testmethod void positiveCreateEditNonSufficientFinalPayment(){
+		test.startTest();
 		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order where Name='Sold Order 1'];		
 		soldOrder.Revenue_Recognized_Date__c = System.today();
 		update soldOrder;
@@ -304,6 +307,7 @@ private class RMS_financialTransManBusAdjTest {
 		System.AssertEquals(System.today(), je.Date__c.date());
 
 		delete busAdj;
+		test.stopTest();
 	}	
 
 	public class anException extends Exception {}

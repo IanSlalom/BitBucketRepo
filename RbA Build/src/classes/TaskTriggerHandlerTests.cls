@@ -28,7 +28,7 @@ private class TaskTriggerHandlerTests {
 		//Store_Configuration__c stconfig = new Store_Configuration__c(Store__c = store.Id);
 		//insert stconfig;
 		
-		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc');
+		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc', Account_Type__c = 'Cost PO');
 		insert fan;
 		Product2 product1 = new Product2(
 			Name='Test Product',
@@ -76,6 +76,7 @@ private class TaskTriggerHandlerTests {
 		Test.startTest();
 		soldOrder[0].Status = 'On Hold';
 		soldOrder[0].Prior_Status__c = 'Draft';
+		soldOrder[0].Apex_Context__c = true;
 		update soldOrder;
 		List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id];
 		System.assertEquals(onHoldTasks.size(),1);

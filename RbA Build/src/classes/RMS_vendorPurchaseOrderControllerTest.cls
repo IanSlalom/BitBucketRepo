@@ -51,7 +51,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		//Store_Configuration__c stconfig = new Store_Configuration__c(Store__c = store.Id);
 		//insert stconfig;
 		
-		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc');
+		Financial_Account_Number__c fan = new Financial_Account_Number__c(Name ='Finan Acc', Account_Type__c = 'Cost PO');
 		insert fan;
 		Product2 product1 = new Product2(
 			Name='Test Product',
@@ -142,6 +142,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		soldOrder.Status = 'Job in Progress';
+		soldOrder.Apex_Context__c = true;
 		update soldOrder;
 
 		// Set up controller with no order Id but has a PO Id
@@ -167,6 +168,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		Order soldOrder = [SELECT Id, Revenue_Recognized_Date__c FROM Order WHERE Name = 'Sold Order 1'];
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		soldOrder.Status = 'Job in Progress';
+		soldOrder.Apex_Context__c = true;
 		update soldOrder;
 		
 		//Set up controller with order Id and PO Id
@@ -590,6 +592,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 
 		Test.startTest();
 		
+		soldOrder.Apex_Context__c = true;
 		soldOrder.Status = 'Ready to Order';
 		update soldOrder;
 		
