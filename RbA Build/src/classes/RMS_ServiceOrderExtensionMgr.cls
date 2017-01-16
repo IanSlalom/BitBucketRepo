@@ -105,9 +105,11 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                           Product2.Name, 
                           Original_Order_Variant_Number__c, 
                           Location_Details__c,
-                          Original_Order_Product__c
+                          Original_Order_Product__c,
+                          Status
                           FROM Asset 
                           WHERE Id = :assetIds
+                          AND Status != 'Replaced'
                           ORDER BY Name];
         
         //Mapping Assets to Products, grabbing ids
