@@ -42,7 +42,7 @@ public with sharing class RMS_addSkilltoWO {
         
         //List of ids for the related Sold Orders
         List<Id> relatedOrder = new list<Id>();
-         List<String> rbaSkillIds = new list<String>();
+        List<String> rbaSkillIds = new list<String>();
         
         //for the new RbA Work Order, add to the related Order Id list the Sold Order field on the WO
         for(RbA_Work_Order__c rwo : listNew){
@@ -51,20 +51,20 @@ public with sharing class RMS_addSkilltoWO {
             }            
         }
         
-         for(RbA_Work_Order__c rwo : listNew){
+        for(RbA_Work_Order__c rwo : listNew){
             if(rwo.Work_Order_Type__c != null){
                 rbaSkillIds.add(rwo.Work_Order_Type__c);    
             }            
         }
         
         
-         List<id> rsIds = new List<id>();{
+        List<id> rsIds = new List<id>();{
             for(RbA_Skills__c rs : [SELECT  Id, Name
-                                FROM RbA_Skills__c 
-                                WHERE Name = :rbaSkillIds]){
-                                    
-                                    rsIds.add(rs.Id);
-                                }   
+                                    FROM RbA_Skills__c 
+                                    WHERE Name = :rbaSkillIds]){
+                                        
+                                        rsIds.add(rs.Id);
+                                    }   
         }
         //Store the list of Order Items of the related Sold Order to find the products and their
         //product skills
@@ -104,33 +104,35 @@ public with sharing class RMS_addSkilltoWO {
                 }
                 
                 If(rwo.Work_Order_Type__c == 'Tech Measure'){
-                   for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id =:rsIds] ) {          
-                     Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
-                       RbA_Work_Order__c = rwo.Id,
-                     RbA_Skill__c = r.Id);
-                  
-                    newWORS.add(ch);
-                  }
+                    for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id =:rsIds] ) {          
+                        Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
+                            RbA_Work_Order__c = rwo.Id,
+                            RbA_Skill__c = r.Id);
+                        
+                        newWORS.add(ch);
+                    }
                 }
                 
-               // If(rwo.Work_Order_Type__c == 'Service'){
-                 //   for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id =:rsIds] ) {          
-                   //     Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
-                     //       RbA_Work_Order__c = rwo.Id,
-                       //     RbA_Skill__c = r.Id);
-                        
-                        //newWORS.add(ch);
-                    //}
-                //}
+                If(rwo.Work_Order_Type__c == 'Service'){
+                    for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Name =:'Service Tech'] ) {          
+                        if(r.Id != null){
+                            Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
+                                RbA_Work_Order__c = rwo.Id,
+                                RbA_Skill__c = r.Id);
+                            
+                            newWORS.add(ch);
+                        }                        
+                    }
+                }
             }
             insert newWORS;
             
         }
         
     }
-
-
-///for UPDATE...if the WO did not have a Sold Order on Create
+    
+    
+    ///for UPDATE...if the WO did not have a Sold Order on Create
     public void addSkillonUpdate (List<RbA_Work_Order__c> listOld, List<RbA_Work_Order__c> listNew, Map<Id, RbA_Work_Order__c> mapOld, Map<Id, RbA_Work_Order__c> mapNew){
         
         //create list to hold Work Order Required Skills
@@ -138,7 +140,7 @@ public with sharing class RMS_addSkilltoWO {
         
         //List of ids for the related Sold Orders
         List<Id> relatedOrder = new list<Id>();
-         List<String> rbaSkillIds = new list<String>();
+        List<String> rbaSkillIds = new list<String>();
         
         //for the new RbA Work Order, add to the related Order Id list the Sold Order field on the WO
         for(RbA_Work_Order__c rwo : listNew){
@@ -147,8 +149,8 @@ public with sharing class RMS_addSkilltoWO {
             }            
         }
         
-
-
+        
+        
         //Store the list of Order Items of the related Sold Order to find the products and their
         //product skills
         List<id> oiIds = new List<id>();{
@@ -178,23 +180,23 @@ public with sharing class RMS_addSkilltoWO {
             for(RbA_Work_Order__c rwo : listNew){ 
                 If(rwo.Work_Order_Type__c == 'Install'){
                     If(rwo.Sold_Order__c != null && mapOld.get(rwo.Id).Sold_Order__c != rwo.Sold_Order__c){
-                    for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id = :skillIds] ) {          
-                        Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
-                            RbA_Work_Order__c = rwo.Id,
-                            RbA_Skill__c = r.Id);
-                        
-                        newWORS.add(ch);
+                        for (RbA_Skills__c r :[Select Id FROM RbA_Skills__c WHERE Id = :skillIds] ) {          
+                            Work_Order_Required_Skill__c ch = new Work_Order_Required_Skill__c(
+                                RbA_Work_Order__c = rwo.Id,
+                                RbA_Skill__c = r.Id);
+                            
+                            newWORS.add(ch);
+                        }
                     }
                 }
+                insert newWORS;
+                
             }
-            insert newWORS;
             
         }
         
+        
     }
-
-
-}
-
-
+    
+    
 }
