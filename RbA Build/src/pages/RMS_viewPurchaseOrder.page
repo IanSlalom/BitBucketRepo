@@ -146,7 +146,7 @@ function prepareList(parent,child,isSubselectOptional){
 	<apex:form >
 		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
 			<apex:pageBlockButtons location="both" id="pageBlockButtons">
-                <apex:commandButton action="{!URLFOR('/apex/RMS_changeVendor?id='+Purchase_Order__c.Id)}" value="Change Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor != '' && (Purchase_Order__c.Status__c == 'New' || Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'On Hold')}"/>
+                <apex:commandButton action="{!URLFOR('/apex/RMS_changeVendor?id='+Purchase_Order__c.Id)}" value="Change Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor != '' && (Purchase_Order__c.Status__c == 'New' || Purchase_Order__c.Status__c == 'In Progress' || Purchase_Order__c.Status__c == 'On Hold' || Purchase_Order__c.Status__c == 'In Process')}"/>
                 <apex:commandButton action="{!URLFOR('/apex/RMS_changeVendor?id='+Purchase_Order__c.Id)}" value="Add Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor == ''}"/>
                 <apex:commandButton action="{!edit}" value="Edit" onclick="showSpinner()" rendered="{!NOT(relatedOrderClosed)}"/>
 				<apex:commandButton action="{!cancel}" value="Cancel" onclick="showSpinner()" oncomplete="closeTab();return false"/>

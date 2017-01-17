@@ -130,7 +130,7 @@
             <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 
 
-            <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{(!newPurchaseOrder && renderVendorSelection)|| !servicePurchaseOrder}" > 
+            <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!((newPurchaseOrder && renderVendorSelection) || !servicePurchaseOrder) }" > 
                 <apex:pageBlockSectionItem rendered="{!costPurchaseOrder == false}">
                     <apex:selectList value="{!selectedVendor}" label="Vendor" size="1" id="VendorList">
                         <apex:selectOptions value="{!availableVendors}"/>
