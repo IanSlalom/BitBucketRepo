@@ -94,13 +94,13 @@ private class PurchaseOrderTriggerHandlerTests {
 		//Order2 will have a related PO in Cancelled Status, and Order3 will have a related PO in Released status.
 		for(Order o: orderList){
 			if(o.Name == 'Order1'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'New'));
 			}else if(o.Name == 'Order2'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Cancelled'));
 			}else if(o.Name == 'Order3'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Released'));
 			}
 		}
@@ -110,7 +110,7 @@ private class PurchaseOrderTriggerHandlerTests {
 		Map<Id, Purchase_Order__c> oldMap = new Map<Id, Purchase_Order__c>();
 		Map<Id, Purchase_Order__c> newMap = new Map<Id, Purchase_Order__c>();
 		for(Purchase_Order__c po: poList){
-			if(po.Status__c == 'In Progress'){
+			if(po.Status__c == 'In Process'){
 				oldMap.put(po.Id, po);
 				Purchase_Order__c poClone = po.clone(true, true, false, false);
 				poClone.Status__c = 'Released';
@@ -154,13 +154,13 @@ private class PurchaseOrderTriggerHandlerTests {
 		//Order2 will have a related PO in Cancelled Status, and Order3 will have a related PO in Confirmed status.
 		for(Order o: orderList){
 			if(o.Name == 'Order1'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'New'));
 			}else if(o.Name == 'Order2'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Cancelled'));
 			}else if(o.Name == 'Order3'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'Confirmed'));
 			}
 		}
@@ -169,7 +169,7 @@ private class PurchaseOrderTriggerHandlerTests {
 		Map<Id, Purchase_Order__c> oldMap = new Map<Id, Purchase_Order__c>();
 		Map<Id, Purchase_Order__c> newMap = new Map<Id, Purchase_Order__c>();
 		for(Purchase_Order__c po: poList){
-			if(po.Status__c == 'In Progress'){
+			if(po.Status__c == 'In Process'){
 				oldMap.put(po.Id, po);
 				Purchase_Order__c poClone = po.clone(true, true, false, false);
 				poClone.Status__c = 'Confirmed';
@@ -214,10 +214,10 @@ private class PurchaseOrderTriggerHandlerTests {
 		//Order2 will have a related PO in Cancelled Status, and Order3 will have a related PO in Confirmed status.
 		for(Order o: orderList){
 			if(o.Name == 'Order1'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'New'));
 			}else if(o.Name == 'Order2'){
-				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Progress'));
+				poList.add(new Purchase_Order__c(Order__c = o.Id, Status__c = 'In Process'));
 			}else if(o.Name == 'Order3'){
 			}
 		}
@@ -242,7 +242,7 @@ private class PurchaseOrderTriggerHandlerTests {
 		for(Purchase_Order__c po: poList){
 				oldMap.put(po.Id, po);
 				Purchase_Order__c poClone = po.clone(true, true, false, false);
-				if(poClone.Status__c == 'In Progress'){
+				if(poClone.Status__c == 'In Process'){
 					poClone.Status__c = 'Cancelled';
 				}
 				newMap.put(poClone.Id, poClone);

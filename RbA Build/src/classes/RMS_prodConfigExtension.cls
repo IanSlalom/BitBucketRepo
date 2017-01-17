@@ -57,7 +57,7 @@ public class RMS_prodConfigExtension {
 		if (mode == null) mode = 'v';
 		if(mode == 'e' && !newOrderItem && orderLineItem.Purchase_Order__c != null){
 			Purchase_Order__c relatedPO = [Select Status__c from Purchase_Order__c where Id =: orderLineItem.Purchase_Order__c];
-			if(relatedPO.Status__c != 'In Progress' && relatedPO.Status__c != 'Rejected'){
+			if(relatedPO.Status__c != 'In Process' && relatedPO.Status__c != 'Rejected'){
 				mode = 'v';
 			}
 			if(relatedPO.Status__c == 'Released' || relatedPO.Status__c == 'Confirmed'){

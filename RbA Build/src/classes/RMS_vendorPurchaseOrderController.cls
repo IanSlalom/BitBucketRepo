@@ -380,7 +380,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                 newPurchaseOrder = true;
                 status = 'new';
                 //JETT-712 
-                this.po.status__c = 'In Progress';
+                this.po.status__c = 'In Process';
             }//END OF NEW PRODUCT PURCHASE ORDER 
         
         //EXISTING PURCHASE ORDER       
@@ -1515,7 +1515,7 @@ releasePurchaseOrder method
         system.debug('*****Status set to released');
         if(!revRecNullAndValidStatus && productPurchaseOrder){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
-        }else if(po.Status__c != 'In Progress' && po.Status__c != 'Rejected'&& productPurchaseOrder){
+        }else if(po.Status__c != 'In Process' && po.Status__c != 'Rejected'&& productPurchaseOrder){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
         }
         else{
@@ -1598,8 +1598,8 @@ unCancelPurchaseOrder method
 *******************************************************/
     // Called after the confirmation window is accepted. This cancels the PO and the order line items
     public PageReference unCancelPurchaseOrder() {
-        system.debug('*****Status set to in progress');
-        po.Status__c = 'In Progress';    
+        system.debug('*****Status set to In Process');
+        po.Status__c = 'In Process';    
         
         try{
             // upsert the po as uncancelled

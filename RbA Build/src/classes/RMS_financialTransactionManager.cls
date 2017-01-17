@@ -405,7 +405,7 @@ public with sharing class RMS_financialTransactionManager {
                                 journalEntriesToUpsert.add(je);
                             }
                             
-                        }//end if only one journal entery
+                        }//end if only one journal ENTRY
                     }//end of if there is related journal entry
                 }else{
                         //there is an error message
@@ -795,14 +795,14 @@ public with sharing class RMS_financialTransactionManager {
                                 journalEntriesToUpsert.add(je);
                             }
                             
-                        }//end if only one journal entery
+                        }//end if only one journal entry
                         
                     }else{
                         //there is an error message
                         mapNew.get(l.id).addError(errorMessage, FALSE);
                     }
                     
-                }//end of if there is related journal entery 
+                }//end of if there is related journal entry 
                     
             }//END IF typeOfLabor == NULL
         }//END OF LABOR FOR LOOP
@@ -853,14 +853,17 @@ public with sharing class RMS_financialTransactionManager {
         
         map<Id, list<Journal_Entry__c>> assetIdToJournalEntryMap = linkJournalEntries(extraFieldsList);
 
-        //INVENTORY Received JOURNAL ENTERY
+        //INVENTORY Received JOURNAL ENTRY
         map<Id, list<Journal_Entry__c>> assetIdToIRIntercompanyJEM = new map<Id, list<Journal_Entry__c>>();
         map<Id, list<Journal_Entry__c>> assetIdToIRExternalVendorJEM = new map<Id, list<Journal_Entry__c>>();
-       	//POST RECOGNITION INVENTORY Received JOURNAL ENTERY
+       	//POST RECOGNITION INVENTORY Received JOURNAL ENTRY
         map<Id, list<Journal_Entry__c>> assetIdToPRIRIntercompanyJEM = new map<Id, list<Journal_Entry__c>>();
         map<Id, list<Journal_Entry__c>> assetIdToPRIRExternalVendorJEM = new map<Id, list<Journal_Entry__c>>();
         
+        //INVENTORY Write Off JOURNAL ENTRY
         map<Id, list<Journal_Entry__c>> assetIdToInventoryWriteOffJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
+        //POST RECOGNITION Write Off JOURNAL ENTRY
+        map<Id, list<Journal_Entry__c>> assetIdToPRInventoryWriteOffJournalEntryMap = new map<Id, list<Journal_Entry__c>>();
 
 		//MAKING MAPS OF ASSET ID TO DIFFERENT TYPES OF FINANCIAL TRANSACION LISTS
         
@@ -886,7 +889,8 @@ public with sharing class RMS_financialTransactionManager {
  		map<Id, list<Financial_Transaction__c>>  assetIdToCPRFTL = linkFinacialTransactions(extraFieldsList, 'Cost Product Received');
        */
        
-       list<string> financialTransactionTypesToGet = new list<string>{	'Inventory Write-Off', 
+       list<string> financialTransactionTypesToGet = new list<string>{	'Inventory Write-Off',
+        																'Post Recognized Inventory Write-Off', 
         																'Inventory Received - Intercompany', 
         																'Inventory Received - Intercompany Consolidation Center',
         																'Inventory Received - External Vendor',
@@ -902,6 +906,7 @@ public with sharing class RMS_financialTransactionManager {
         
         //Inventory Write-Off
        	map<Id, list<Financial_Transaction__c>>  assetIdToInventoryWriteOffFTL = typeToMapOfAssetIdtoListFT.get('Inventory Write-Off');
+       	map<Id, list<Financial_Transaction__c>>  assetIdToPRInventoryWriteOffFTL = typeToMapOfAssetIdtoListFT.get('Post Recognized Inventory Write-Off');
         
         //INVENTORY Received FINANCIAL TRANSATION
         map<Id, list<Financial_Transaction__c>>  assetIdToIRIntercompanyFTL = typeToMapOfAssetIdtoListFT.get('Inventory Received - Intercompany');
@@ -973,6 +978,7 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 
                 boolean inventoryWriteOffAT = false;
+                boolean inventoryWriteOffPRAT = false;
                 boolean vendorCreditAT = false;
                 boolean inventoryReceivedAT = false;
                 boolean serviceInventoryReceivedAT = false;
@@ -994,7 +1000,10 @@ public with sharing class RMS_financialTransactionManager {
 						//ONLY IF QUANTITY IS 0 look into
 //					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 					if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-						inventoryWriteOffAT = true;
+						if(a.Order.Revenue_Recognized_Date__c == null)
+							inventoryWriteOffAT = true;
+						else
+							inventoryWriteOffPRAT = true;
 					}
 				}
 				
@@ -1053,7 +1062,10 @@ public with sharing class RMS_financialTransactionManager {
                 	if(a.Quantity_Written_Off__c != null){
 //	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 	                	if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-	                		inventoryWriteOffAT = true;
+							if (a.Order.Revenue_Recognized_Date__c == null)
+	                			inventoryWriteOffAT = true;
+	                		else
+	                			inventoryWriteOffPRAT = true;
 	                	}
                 	}
                 	
@@ -1130,6 +1142,10 @@ public with sharing class RMS_financialTransactionManager {
                 //INVENTORY WRITE OFF	
                 if(inventoryWriteOffAT == true){
                 	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffFTL.get(a.id) , errorMessage, 'Inventory Write-Off');
+                }
+                //POST RECOGNIZED INVENTORY WRITE OFF	
+                if(inventoryWriteOffPRAT == true){
+                	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffPRFTL.get(a.id) , errorMessage, 'Post Recognized Inventory Write-Off');
                 }
 
                 //SETTING UP MAPS TO CHECK IF CREDIT/DEBIT ACCOUNTS HAVE BEEN SWITCHED FOR CALCULATIONS
@@ -1318,6 +1334,15 @@ public with sharing class RMS_financialTransactionManager {
 						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
                 		wrapAssetVariableList.add(wAR);
 					}
+
+					if(inventoryWriteOffPRAT == true){
+						aType = 'PostRecognizedInventoryWriteOff';
+						jType = 'Post Recognized Inventory Write-Off';
+                        debitAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+                        creditAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
+                		wrapAssetVariableList.add(wAR);
+					}
 					
 					if(vendorCreditAT == true){
 						aType = 'VendorCredit';
@@ -1396,7 +1421,7 @@ public with sharing class RMS_financialTransactionManager {
 								else 
 	                            	newJE.Amount__c = a.Quantity * a.Unit_Wholesale_Cost__c;
 
-							}else if(assetType == 'InventoryWriteOff'){
+							}else if(assetType == 'InventoryWriteOff' || assetType == 'PostRecognizedInventoryWriteOff'){
 								newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
 							}else if(assetType == 'VendorCredit'){
 								newJE.Amount__c = a.Vendor_Credit__c;
@@ -1414,6 +1439,7 @@ public with sharing class RMS_financialTransactionManager {
 	                        list<Journal_Entry__c> jeListNotSentToBaan = new list<Journal_Entry__c>();
 	                        
 	                        list<Journal_Entry__c> jeInventoryWriteOffList = new list<Journal_Entry__c>();
+	                        list<Journal_Entry__c> jeInventoryWriteOffPRList = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeInventoryReceivedList = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeCostProductReceivedList = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeServiceInventoryReceivedList = new list<Journal_Entry__c>();
@@ -1421,6 +1447,7 @@ public with sharing class RMS_financialTransactionManager {
 		                    list<Journal_Entry__c> jeInventoryReturnedList = new list<Journal_Entry__c>();
 		                    
 		                    list<Journal_Entry__c> jeInventoryWriteOffListSentToBaan = new list<Journal_Entry__c>();
+		                    list<Journal_Entry__c> jeInventoryWriteOffListPRSentToBaan = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeInventoryReceivedListSentToBaan = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeCostProductReceivedListSentToBaan = new list<Journal_Entry__c>();
 	                        list<Journal_Entry__c> jeServiceInventoryReceivedListSentToBaan = new list<Journal_Entry__c>();
@@ -1432,6 +1459,9 @@ public with sharing class RMS_financialTransactionManager {
 	                                jeListSentToBaan.add(je);
 	                                if(je.Type__c == 'Inventory Write-Off'){
 	                                	jeInventoryWriteOffListSentToBaan.add(je);
+	                                }
+	                                if(je.Type__c == 'Post Recognizied Inventory Write-Off'){
+	                                	jeInventoryWriteOffListPRSentToBaan.add(je);
 	                                }
 	                                
 	                                if(je.Type__c != null && je.Type__c.contains('Inventory Received')){
@@ -1460,6 +1490,9 @@ public with sharing class RMS_financialTransactionManager {
 	                                if(je.Type__c == 'Inventory Write-Off'){
 	                                	jeInventoryWriteOffList.add(je);
 	                                }
+	                                if(je.Type__c == 'Post Recognized Inventory Write-Off'){
+	                                	jeInventoryWriteOffPRList.add(je);
+	                                }
 	                                if(je.Type__c != null && je.Type__c.contains('Inventory Received')){
 	                                	if(je.Type__c.contains('Service')){
 	                                		jeServiceInventoryReceivedList.add(je);
@@ -1486,13 +1519,13 @@ public with sharing class RMS_financialTransactionManager {
 	                        system.debug('ads jeCostProductReceivedList: ' + jeCostProductReceivedList);
 	                        
 	                        // More than 1 JE not sent to BAAN ERROR OUT
-	                        if(jeInventoryWriteOffList.size() > 1 || jeInventoryReceivedList.size() > 1 /*|| jeServiceMaterialReturnedList.size() > 1*/ || jeServiceInventoryReceivedList.size() > 1 || jeCostProductReceivedList.size() > 1){
+	                        if(jeInventoryWriteOffList.size() > 1 || jeInventoryWriteOffPRList.size() > 1 || jeInventoryReceivedList.size() > 1 /*|| jeServiceMaterialReturnedList.size() > 1*/ || jeServiceInventoryReceivedList.size() > 1 || jeCostProductReceivedList.size() > 1){
 	                            mapNew.get(a.id).addError(RMS_errorMessages.MORE_THAN_ONE_JOURNAL_ENTERY_NOT_SUBMITTED, FALSE);
 	                        } 
 	                        
 	                        // All but 1 JE sent to BAAN then update that existing journal entry. The amount should be equal to --- 'Old Journal Entry->Amount + ( (Asset(new)->Quantity - Asset(old)->Quantity) * Unit WholesaleCost) 
 	                        else if((jeInventoryWriteOffList.size() == 1 && assetType == 'InventoryWriteOff') || 
-			                        (jeInventoryReceivedList.size() == 1 && assetType == 'InventoryReceived') ||
+									(jeInventoryWriteOffPRList.size() == 1 && assetType == 'PostRecognizedInventoryWriteOff') ||			                        (jeInventoryReceivedList.size() == 1 && assetType == 'InventoryReceived') ||
 			                        (jeServiceInventoryReceivedList.size() == 1 && assetType == 'ServiceInventoryReceived') ||
 			                        (jeCostProductReceivedList.size() == 1 && assetType == 'CostProductReceived') ||
 			                        (jeServiceInventoryReceivedList.size() == 1 && assetType == 'InventoryReceived') ||  
@@ -1692,7 +1725,7 @@ public with sharing class RMS_financialTransactionManager {
 	                            }
 	                        }//end of for loop
 	  					
-	                }//end of if there is atleast one related journal entery
+	                }//end of if there is atleast one related journal ENTRY
                 }
             }else{
                 //there is an error message
@@ -2114,7 +2147,7 @@ public with sharing class RMS_financialTransactionManager {
                                 }//END relatedDepositJE LOOP
                             }//END alreadyHasJEofTypeRevRecDeposit == false
                             
-                            //IF THERE IS A RELATED REV RECEIVED - DEPOSIT JOURNAL ENTERY
+                            //IF THERE IS A RELATED REV RECEIVED - DEPOSIT JOURNAL ENTRY
                             else if(alreadyHasJEofTypeRevRecDeposit == true && relatedRevRecognizedDepositJE.size() > 0 ){
                                 for(Journal_Entry__c je: relatedRevRecognizedDepositJE){
                                     if(je.Sent_to_BaanERP__c == true){
