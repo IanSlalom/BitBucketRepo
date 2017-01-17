@@ -1092,9 +1092,10 @@ public with sharing class RMS_prodConfigManager {
 		    if((orderLineItem.Grille_Style__c == 'No Grilles' || orderLineItem.Grille_Style__c == null) && (orderLineItem.Exterior_Grille_Color__c != null || orderLineItem.Interior_Grille_Color__c != null)){
 		    	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE : errorMessage + '<BR>' + RMS_errorMessages.GRILLE_COLOR_WITHOUT_STYPE;	
 		    }
-			if(orderLineItem.Install_Holes_Location__c == null || orderLineItem.Install_Holes_Location__c == '' || orderLineItem.Install_Track_Location__c == null || orderLineItem.Install_Track_Location__c == ''){
-				errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.TRACK_HOLE_LOCATION_NULL : errorMessage + '<BR>' + RMS_errorMessages.TRACK_HOLE_LOCATION_NULL;	
-			}
+		    //Disabling this check per JETT-4213
+			//if(orderLineItem.Install_Holes_Location__c == null || orderLineItem.Install_Holes_Location__c == '' || orderLineItem.Install_Track_Location__c == null || orderLineItem.Install_Track_Location__c == ''){
+			//	errorMessage = (String.isBlank(errorMessage)) ? RMS_errorMessages.TRACK_HOLE_LOCATION_NULL : errorMessage + '<BR>' + RMS_errorMessages.TRACK_HOLE_LOCATION_NULL;	
+			//}
 			
 			
 		}
