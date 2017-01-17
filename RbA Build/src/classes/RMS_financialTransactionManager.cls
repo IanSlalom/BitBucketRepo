@@ -1000,10 +1000,10 @@ public with sharing class RMS_financialTransactionManager {
 						//ONLY IF QUANTITY IS 0 look into
 //					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 					if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-						if(a.Order.Revenue_Recognized_Date__c == null)
-							inventoryWriteOffAT = true;
-						else
-							inventoryWriteOffPRAT = true;
+					//	if(a.Order.Revenue_Recognized_Date__c == null)
+					//		inventoryWriteOffAT = true;
+					//	else
+					//		inventoryWriteOffPRAT = true;
 					}
 				}
 				
@@ -1062,10 +1062,10 @@ public with sharing class RMS_financialTransactionManager {
                 	if(a.Quantity_Written_Off__c != null){
 //	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 	                	if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-							if (a.Order.Revenue_Recognized_Date__c == null)
-	                			inventoryWriteOffAT = true;
-	                		else
-	                			inventoryWriteOffPRAT = true;
+						//	if (a.Order.Revenue_Recognized_Date__c == null)
+	                	//		inventoryWriteOffAT = true;
+	                	//	else
+	                	//		inventoryWriteOffPRAT = true;
 	                	}
                 	}
                 	
@@ -1145,7 +1145,7 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 //POST RECOGNIZED INVENTORY WRITE OFF	
                 if(inventoryWriteOffPRAT == true){
-                	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffPRFTL.get(a.id) , errorMessage, 'Post Recognized Inventory Write-Off');
+ //               	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffPRFTL.get(a.id) , errorMessage, 'Post Recognized Inventory Write-Off');
                 }
 
                 //SETTING UP MAPS TO CHECK IF CREDIT/DEBIT ACCOUNTS HAVE BEEN SWITCHED FOR CALCULATIONS
@@ -1338,8 +1338,8 @@ public with sharing class RMS_financialTransactionManager {
 					if(inventoryWriteOffPRAT == true){
 						aType = 'PostRecognizedInventoryWriteOff';
 						jType = 'Post Recognized Inventory Write-Off';
-                        debitAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-                        creditAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+                    //    debitAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+                     //   creditAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
                 		wrapAssetVariableList.add(wAR);
 					}
