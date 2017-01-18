@@ -130,24 +130,17 @@
             <apex:actionStatus id="save-new-status"  onstop="openNewPO('{!orderId}','{!costPurchaseOrder}');return false"/>
 
 
-            <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!((newPurchaseOrder && renderVendorSelection) && !servicePurchaseOrder) }" > 
-                <apex:pageBlockSectionItem rendered="{!costPurchaseOrder == false}">
+            <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!(newPurchaseOrder && renderVendorSelection)}" > 
+                <apex:pageBlockSectionItem rendered="{!(productPurchaseOrder == true)}">
                     <apex:selectList value="{!selectedVendor}" label="Vendor" size="1" id="VendorList">
                         <apex:selectOptions value="{!availableVendors}"/>
                         <apex:actionSupport event="onchange" action="{!updateSubTotal}" reRender="PurchaseOrderFields" />
                     </apex:selectList>
                 </apex:pageBlockSectionItem>
-                <apex:pageBlockSectionItem rendered="{!costPurchaseOrder == true}">
+                <apex:pageBlockSectionItem rendered="{!(costPurchaseOrder == true || servicePurchaseOrder == true)}">
                     <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}" Application="POVendor"/> 
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection> 
-            
-            <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!servicePurchaseOrder}" > 
-                <apex:pageBlockSectionItem >
-                    <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" syncManualEntry="false" valueField="Id" targetField="{!selectedVendor}" style="width:250px" extraQueriesAttribute="{!vendorQueries}" extraVariablesAttribute="{!vendorVariables}" Application="POVendor"/> 
-                </apex:pageBlockSectionItem>
-            </apex:pageBlockSection>
-
             
             <apex:pageBlockSection title="Select a Vendor" columns="1" rendered="{!newPurchaseOrder != true && servicePurchaseOrder == false}" > 
                 <apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
