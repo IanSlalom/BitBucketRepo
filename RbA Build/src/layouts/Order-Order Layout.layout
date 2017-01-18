@@ -68,6 +68,10 @@
                 <behavior>Edit</behavior>
                 <field>Job_Close_Date__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Pivotal_Id__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -178,10 +182,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>rSuite_Id__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Pivotal_Id__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
