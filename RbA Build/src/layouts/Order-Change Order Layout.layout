@@ -2,7 +2,6 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Rec_Revenue</customButtons>
     <customButtons>Cancel_Order</customButtons>
-    <excludeButtons>Activate</excludeButtons>
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Deactivate</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
