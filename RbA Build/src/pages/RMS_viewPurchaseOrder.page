@@ -1,7 +1,7 @@
 <apex:page standardController="Purchase_Order__c" extensions="RMS_vendorPurchaseOrderController" docType="html-5.0">
-	  <apex:pageMessages />
-	<apex:includeScript value="{!$Resource.jquery}" />
-	<apex:includeScript value="/support/console/33.0/integration.js"/>
+      <apex:pageMessages />
+    <apex:includeScript value="{!$Resource.jquery}" />
+    <apex:includeScript value="/support/console/33.0/integration.js"/>
     <apex:stylesheet value="{!URLFOR($Resource.spinner, 'spinner.css')}"/>
     <script type="text/javascript">
         var j$ = jQuery.noConflict();
@@ -120,17 +120,17 @@ function prepareList(parent,child,isSubselectOptional){
 
           });
      } 
-	function printCongaCostPO() { 
-		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Cost_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
-	}
+    function printCongaCostPO() { 
+        window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Cost_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
 
-	function printCongaServicePO() { 
-		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Service_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
-	}
+    function printCongaServicePO() { 
+        window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Service_Purchase_Order,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
 
-	function printCongaProductPO() { 
-		window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Purchase_Order ,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
-	}
+    function printCongaProductPO() { 
+        window.open('{!URLFOR($Action.Purchase_Order__c.Conga_Composer_RbA_Purchase_Order ,Purchase_Order__c.Id)}', '','scrollbars=no,menubar=no,height=660,width=900,resizable=no, toolbar=no,location=no,status=no'); 
+    }
 
     function showSpinner()
     {
@@ -141,180 +141,181 @@ function prepareList(parent,child,isSubselectOptional){
     } 
 
     </script>
-	<apex:pageMessages /> 
+    <apex:pageMessages /> 
 
-	<apex:form >
-		<apex:pageBlock title="View {!pageTitle} Purchase Order" >
-			<apex:pageBlockButtons location="both" id="pageBlockButtons">
+    <apex:form >
+        <apex:pageBlock title="View {!pageTitle} Purchase Order" >
+            <apex:pageBlockButtons location="both" id="pageBlockButtons">
                 <apex:commandButton action="{!URLFOR('/apex/RMS_changeVendor?id='+Purchase_Order__c.Id)}" value="Change Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor != '' && (Purchase_Order__c.Status__c == 'New' || Purchase_Order__c.Status__c == 'In Process' || Purchase_Order__c.Status__c == 'On Hold' || Purchase_Order__c.Status__c == 'In Process')}"/>
                 <apex:commandButton action="{!URLFOR('/apex/RMS_changeVendor?id='+Purchase_Order__c.Id)}" value="Add Vendor" onclick="showSpinner()" rendered="{!servicePurchaseOrder && selectedVendor == ''}"/>
                 <apex:commandButton action="{!edit}" value="Edit" onclick="showSpinner()" rendered="{!NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!cancel}" value="Cancel" onclick="showSpinner()" oncomplete="closeTab();return false"/>
-				<apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!selectedVendor != ''&&((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Process' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>				
-  				<apex:commandButton action="{!confirm}" value="Cancel PO" rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Process' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
-				<apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
-  				<apex:commandButton action="{!receive}" value="Receive PO" onclick="showSpinner()" rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
-				<apex:commandButton action="{!writeOff}" value="Inventory Write Off" onclick="showSpinner()" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
-				<apex:commandButton action="{!vendorCredit}" value="Vendor Credit"  onclick="showSpinner()" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed) && (status == 'part' || status == 'rbapart' || status == 'rec')}"/>
-				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
- 				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaServicePO()" rendered="{!servicePurchaseOrder}"/>
-				<apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaProductPO()" rendered="{!(!costPurchaseOrder && !servicePurchaseOrder)}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" onclick="showSpinner()" oncomplete="closeTab();return false"/>
+                <apex:commandButton action="{!confirm}" value="Release PO" oncomplete="confirmationWindow('releasePO');return false" rendered="{!selectedVendor != ''&&((NOT(relatedOrderClosed) && IF(relatedCOROOrder,revRecNullAndValidStatus,true)) || costPurchaseOrder || servicePurchaseOrder) && (Purchase_Order__c.Status__c == 'In Process' || Purchase_Order__c.Status__c == 'Rejected')}" rerender="pageBlockButtons"/>             
+                <apex:commandButton action="{!confirm}" value="Cancel PO" rendered="{!NOT(relatedOrderClosed) && (Purchase_Order__c.Status__c == 'In Process' || Purchase_Order__c.Status__c == 'Rejected')}" oncomplete="confirmationWindow('cancelPO');return false"/> 
+                <apex:commandButton action="{!confirm}" value="Uncancel PO"  rendered="{!(($Profile.Name == 'System Administrator' || $Profile.Name == 'Sys Admin') && Purchase_Order__c.Status__c == 'Cancelled')}" oncomplete="confirmationWindow('unCancelPO');return false"/>
+                <apex:commandButton action="{!receive}" value="Receive PO" onclick="showSpinner()" rendered="{!(NOT(relatedOrderClosed) && (status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (poComplete == false)) }"/>
+                <apex:commandButton action="{!writeOff}" value="Inventory Write Off" onclick="showSpinner()" rendered="{!showInventoryWriteOff && NOT(relatedOrderClosed)}"/>
+                <apex:commandButton action="{!vendorCredit}" value="Vendor Credit"  onclick="showSpinner()" rendered="{! (costPurchaseOrder || servicePurchaseOrder) && NOT(relatedOrderClosed) && (status == 'part' || status == 'rbapart' || status == 'rec')}"/>
+                <apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaCostPO()" rendered="{!costPurchaseOrder}"/>
+                <apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaServicePO()" rendered="{!servicePurchaseOrder}"/>
+                <apex:commandButton value="Print" action="{!URLFOR($Action.Purchase_Order__c.View,Purchase_Order__c.Id)}" onclick="printCongaProductPO()" rendered="{!(!costPurchaseOrder && !servicePurchaseOrder)}"/>
 
-			</apex:pageBlockButtons>
+            </apex:pageBlockButtons>
 
-			<div id="OrderId" style="display:none;">{!orderId}</div>	
-			<apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}"/>
-			<apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" />
-			<apex:actionFunction name="unCancelPurchaseOrder" action="{!unCancelPurchaseOrder}" />
-			 <apex:pageMessage summary="Please Add a Vendor Before Proceeding." severity="error" strength="3" rendered="{!selectedVendor == ''}"/>
-			<apex:pageBlockSection title="Select a Vendor" columns="1"> 
-				<apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
-			</apex:pageBlockSection> 
+            <div id="OrderId" style="display:none;">{!orderId}</div>    
+            <apex:actionFunction name="releasePurchaseOrder" action="{!releasePurchaseOrder}"/>
+            <apex:actionFunction name="cancelPurchaseOrder" action="{!cancelPurchaseOrder}" />
+            <apex:actionFunction name="unCancelPurchaseOrder" action="{!unCancelPurchaseOrder}" />
+             <apex:pageMessage summary="Please Add a Vendor Before Proceeding." severity="error" strength="3" rendered="{!selectedVendor == ''}"/>
+            <apex:pageBlockSection title="Select a Vendor" columns="1"> 
+                <apex:outputField value="{!Purchase_Order__c.Vendor__c}" label="Selected Vendor"/>
+            </apex:pageBlockSection> 
 
-			<apex:outputPanel id="PurchaseOrderFields">
-				<apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
-					
-					<apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" />
+            <apex:outputPanel id="PurchaseOrderFields">
+                <apex:pageBlockSection title="Purchase Order Information" columns="2" rendered="{! selectedVendor != '' || newPurchaseOrder == false}"> 
+                    
+                    <apex:outputField value="{!Purchase_Order__c.Name}" label="PO Name" />
 
-					<apex:pageBlockSectionItem helptext="{!$ObjectType.Purchase_Order__c.Fields.Status__c.InlineHelpText}">
-      					<apex:outputLabel value="{!$ObjectType.Purchase_Order__c.Fields.Status__c.Label}" />
-						<apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
-					</apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem helptext="{!$ObjectType.Purchase_Order__c.Fields.Status__c.InlineHelpText}">
+                        <apex:outputLabel value="{!$ObjectType.Purchase_Order__c.Fields.Status__c.Label}" />
+                        <apex:outputField value="{!Purchase_Order__c.Status__c}" label="Status" />
+                    </apex:pageBlockSectionItem>
                    <apex:outputField value="{!Purchase_Order__c.Store_Location__c}" label="Store Location" style="width:125px"/>
-					 <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!costPurchaseOrder == false}"/>  
-					<apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
-					
-					<apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
-					<apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
-					<apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />					
-<!--  					<apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
--->					<apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
-					<apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
-					<apex:outputText value=""/>
-					<apex:outputField value="{!Purchase_Order__c.Total__c}" label="Total" id="total"/>
-				
-					<apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
-					<apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
+                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Order" rendered="{!productPurchaseOrder == true}"/>  
+                     <apex:outputField value="{!Purchase_Order__c.Order__c}" label="Service Request" rendered="{!servicePurchaseOrder == true}"/>
+                    <apex:outputField value="{!Purchase_Order__c.Date__c}" label="Date" style="width:125px" />
+                    
+                    <apex:outputField value="{!Purchase_Order__c.Requested_Ship_Date__c}" label="Requested Ship Date" style="width:125px" />
+                    <apex:outputField value="{!Purchase_Order__c.Subtotal__c}" label="Subtotal" id="subtotal"/>
+                    <apex:outputField value="{!Purchase_Order__c.Estimated_Ship_Date__c}" label="Estimated Ship Date" style="width:125px" />                    
+<!--                    <apex:outputField value="{!Purchase_Order__c.Discount__c}" label="Discount"  id="discountoutput"  rendered="{!costPurchaseOrder == true}"/>
+-->                 <apex:outputText value=""  rendered="{!costPurchaseOrder == true}"/>
+                    <apex:outputField value="{!Purchase_Order__c.Tax__c}" label="Tax"  id="taxoutput" />
+                    <apex:outputText value=""/>
+                    <apex:outputField value="{!Purchase_Order__c.Total__c}" label="Total" id="total"/>
+                
+                    <apex:outputfield value="{!Purchase_Order__c.Invoice_Number__c}" label="Invoice Number" />
+                    <apex:outputField value="{!Purchase_Order__c.Confirmation_Number__c}" label="Confirmation Number" />
                     <apex:outputField value="{!Purchase_Order__c.Charge_Cost_To__c}" label="Charge Cost To" rendered="{!servicePurchaseOrder}"/>
-  					<apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
-		
-				</apex:pageBlockSection>
-				<apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
-				
-				<apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw">
-					<apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
-						<apex:facet name="header">{!productText}</apex:facet> 
-					</apex:column>
-					<apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:100px" value="{!oiw.orderItem.Description}">
-						<apex:facet name="header">{!productText} Description</apex:facet> 
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
-					<apex:column style="width:100px" rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Retail Price</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.UnitPrice}" />
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!productPurchaseOrder == true}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!servicePurchaseOrder == true}">
-						<apex:facet name="header">New Variant</apex:facet> 
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
-						<apex:facet name="header">Cost</apex:facet> 
-					</apex:column>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Total_Wholesale_Cost__c}" rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Total Cost</apex:facet> 
-					</apex:column>
-  					<apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.Defect_Code__c}" rendered="{!servicePurchaseOrder}"/>
+                    <apex:outputText value="{!Purchase_Order__c.Comments__c}" label="Comments" />
+        
+                </apex:pageBlockSection>
+                <apex:actionFunction name="cancelLineItem" action="{!cancelLineItem}" /> <!-- onComplete="closeTab();return false" -->
+                
+                <apex:pageBlockTable title="Order Items"  style="width:100%" value="{!POOrderItemWrappers}" var="oiw">
+                    <apex:column style="width:300px" value="{!oiw.product.Name_Part_Number__c}">
+                        <apex:facet name="header">{!productText}</apex:facet> 
+                    </apex:column>
+                    <apex:column style="width:100px" value="{!oiw.orderItem.GL_Account__c}"  rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:100px" value="{!oiw.orderItem.Description}">
+                        <apex:facet name="header">{!productText} Description</apex:facet> 
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Quantity}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Unit_of_Measure__c}" rendered="{!costPurchaseOrder == true}"/>   
+                    <apex:column style="width:100px" rendered="{!costPurchaseOrder == false}">
+                        <apex:facet name="header">Retail Price</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.UnitPrice}" />
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!productPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Variant_Number__c}" rendered="{!servicePurchaseOrder == true}">
+                        <apex:facet name="header">New Variant</apex:facet> 
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Unit_Wholesale_Cost__c}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Total_Wholesale_Cost__c}" rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Total Cost</apex:facet> 
+                    </apex:column>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.MTO_Source_Code__c}" rendered="{!servicePurchaseOrder}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.Defect_Code__c}" rendered="{!servicePurchaseOrder}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Notes__c}" rendered="{!servicePurchaseOrder}"/>
                     <apex:column style="width:50px" value="{!oiw.orderItem.Multiple_Remakes__c}" rendered="{!servicePurchaseOrder}"/>
-					<!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
-					<apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
-					<apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
+                    <!--  TODO: Only display this for AROs and subtract the discount from the retail or wholesale amount -->
+                    <apex:column style="width:100px" value="{!oiw.orderItem.Discount_Amount__c}" rendered="{!costPurchaseOrder == true}"/>
+                    <apex:column style="width:50px" value="{!oiw.orderItem.NSPR__c}" rendered="{! (selectedVendorName == 'RbA' || selectedVendorName == 'Andersen') }"/>
                     <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec')) }">
-						<apex:facet name="header">Qty Received</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
+                        <apex:facet name="header">Qty Received</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity}" />
                     </apex:column>
                     <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec')) }">
-						<apex:facet name="header">Qty Written Off</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
+                        <apex:facet name="header">Qty Written Off</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Quantity_Written_Off__c}" />
                     </apex:column>
                     <apex:column style="width:50px" rendered="{!((status == 'con' || status == 'part' || status == 'rbacon' || status == 'rbapart' || status == 'rec') && (costPurchaseOrder || servicePurchaseOrder)) }">
-						<apex:facet name="header">Vendor Credit</apex:facet> 
-							<apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Vendor_Credit__c}" />
+                        <apex:facet name="header">Vendor Credit</apex:facet> 
+                            <apex:outputField value="{!oiw.orderItem.Installed_Product_Asset__r.Vendor_Credit__c}" />
                     </apex:column>
-					<apex:column style="width:50px" rendered="{!((Purchase_Order__c.Status__c != 'Partially Received' && status != 'rec'  && costPurchaseOrder)) }"> 
-						<apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
-							<apex:param name="lineItemToCancel"
-								value="{!oiw.orderItem.Id}"
-								assignTo="{!lineItemToCancel}"/>
-						</apex:commandLink>
-					</apex:column>
-					
+                    <apex:column style="width:50px" rendered="{!((Purchase_Order__c.Status__c != 'Partially Received' && status != 'rec'  && costPurchaseOrder)) }"> 
+                        <apex:commandLink action="{!confirm}" styleClass="btn" value="Cancel" oncomplete="confirmationWindow('cancelLineItem');return false" >
+                            <apex:param name="lineItemToCancel"
+                                value="{!oiw.orderItem.Id}"
+                                assignTo="{!lineItemToCancel}"/>
+                        </apex:commandLink>
+                    </apex:column>
+                    
 
-				</apex:pageBlockTable>
+                </apex:pageBlockTable>
             <apex:pageBlockSection id="mySection" title="Add {!productText}" columns="1" rendered="{! status == 'new' && costPurchaseOrder}">
-				<apex:actionFunction name="updateCostCenters" action="{!updateCostCenters}" reRender="myTable" />
+                <apex:actionFunction name="updateCostCenters" action="{!updateCostCenters}" reRender="myTable" />
                 <apex:pageBlockTable id="myTable" title="Add {!productText}" value="{!newOrderItems}" var="noi">
 
 
-					<apex:column >
-						<apex:facet name="header">{!productText}</apex:facet> 
+                    <apex:column >
+                        <apex:facet name="header">{!productText}</apex:facet> 
                               <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name_Part_Number__c" SObject="Product2" syncManualEntry="false" valueField="Id" targetField="{!newProduct}" style="width:300px" extraQueriesAttribute="{!productQueries}" extraVariablesAttribute="{!productVariables}"/>
-<!--    					<apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
-						<apex:selectOptions value="{!productItems}"/>
-						<apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
-					</apex:selectList>-->
+<!--                        <apex:selectList value="{!newProduct}" label="Product" size="1" id="ProductList">
+                        <apex:selectOptions value="{!productItems}"/>
+                        <apex:actionSupport event="onchange" action="{!updateCostCenters}" reRender="myTable" />
+                    </apex:selectList>-->
 
-					</apex:column>
-					<apex:column rendered="{!costPurchaseOrder == true}">
+                    </apex:column>
+                    <apex:column rendered="{!costPurchaseOrder == true}">
                      <apex:facet name="header">Cost Center</apex:facet> 
-					<apex:selectList value="{!costCenter}" label="costCenter" size="1" id="costCenterlist">
-						<apex:selectOptions value="{!costCenterItems}"/>
-					</apex:selectList>
-					</apex:column>
-					<apex:column >
-						<apex:facet name="header">{!productText} Description</apex:facet> 
-							<apex:inputField value="{!noi.Description}" style="width:300px"  />
-					</apex:column>
-					<apex:column >
-						<apex:facet name="header">Quantity</apex:facet> 
-							<apex:inputField value="{!noi.Quantity}" style="width:50px" required="false"/>
-					</apex:column>
-					<apex:column rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Unit of Measure</apex:facet> 
-						<apex:selectList value="{!noi.Unit_of_Measure__c}" size="1" id="unitOfMeasure"  >
-							<apex:selectOptions value="{!unitOfMeasureItems}"/>
-						</apex:selectList>
-					</apex:column>
-					<apex:column rendered="{!costPurchaseOrder == false}">
-						<apex:facet name="header">Retail Price</apex:facet> 
-							<apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
-					</apex:column>
-					<apex:column rendered="{!costPurchaseOrder == true}">
-						<apex:facet name="header">Cost</apex:facet> 
-							<apex:inputField value="{!noi.Unit_Wholesale_Cost__c}" style="width:100px" />
-					</apex:column>
-				</apex:pageBlockTable>				  
-				<apex:commandButton action="{!addProduct}" onclick="showSpinner()" value="Save"/>
-			</apex:pageBlockSection> 
+                    <apex:selectList value="{!costCenter}" label="costCenter" size="1" id="costCenterlist">
+                        <apex:selectOptions value="{!costCenterItems}"/>
+                    </apex:selectList>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!productText} Description</apex:facet> 
+                            <apex:inputField value="{!noi.Description}" style="width:300px"  />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Quantity</apex:facet> 
+                            <apex:inputField value="{!noi.Quantity}" style="width:50px" required="false"/>
+                    </apex:column>
+                    <apex:column rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Unit of Measure</apex:facet> 
+                        <apex:selectList value="{!noi.Unit_of_Measure__c}" size="1" id="unitOfMeasure"  >
+                            <apex:selectOptions value="{!unitOfMeasureItems}"/>
+                        </apex:selectList>
+                    </apex:column>
+                    <apex:column rendered="{!costPurchaseOrder == false}">
+                        <apex:facet name="header">Retail Price</apex:facet> 
+                            <apex:inputField value="{!noi.UnitPrice}" style="width:100px" />
+                    </apex:column>
+                    <apex:column rendered="{!costPurchaseOrder == true}">
+                        <apex:facet name="header">Cost</apex:facet> 
+                            <apex:inputField value="{!noi.Unit_Wholesale_Cost__c}" style="width:100px" />
+                    </apex:column>
+                </apex:pageBlockTable>                
+                <apex:commandButton action="{!addProduct}" onclick="showSpinner()" value="Save"/>
+            </apex:pageBlockSection> 
 
-			</apex:outputPanel>	
-			<apex:outputPanel id="SystemInformationFields">
-				<apex:pageBlockSection title="System Information" columns="2"> 
-					<apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
-					<apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
+            </apex:outputPanel> 
+            <apex:outputPanel id="SystemInformationFields">
+                <apex:pageBlockSection title="System Information" columns="2"> 
+                    <apex:outputField value="{!Purchase_Order__c.Released_Timestamp__c}" label="Released Timestamp" />
+                    <apex:outputField value="{!Purchase_Order__c.Confirmed_Timestamp__c}" label="Confirmed Timestamp" />
                     <apex:outputField value="{!Purchase_Order__c.Submitted_Timestamp__c}" label="Submitted Timestamp" />
                     <apex:outputField value="{!Purchase_Order__c.Received_Timestamp__c}" label="Submitted Timestamp" rendered="false" />
-				</apex:pageBlockSection>
+                </apex:pageBlockSection>
 
-			</apex:outputPanel>	
+            </apex:outputPanel> 
 
-		</apex:pageBlock>
-		
-	</apex:form>
-	<apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
+        </apex:pageBlock>
+        
+    </apex:form>
+    <apex:relatedList subject="{!Purchase_Order__c}" list="CombinedAttachments" />
    <div id="opaque"/>
    <div id="spinner">
     <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
