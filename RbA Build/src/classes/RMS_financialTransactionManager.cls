@@ -1000,10 +1000,10 @@ public with sharing class RMS_financialTransactionManager {
 						//ONLY IF QUANTITY IS 0 look into
 //					if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 					if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-					//	if(a.Order.Revenue_Recognized_Date__c == null)
-					//		inventoryWriteOffAT = true;
-					//	else
-					//		inventoryWriteOffPRAT = true;
+						if(a.Sold_Order__r.Revenue_Recognized_Date__c == null)
+							inventoryWriteOffAT = true;
+						else
+							inventoryWriteOffPRAT = true;
 					}
 				}
 				
@@ -1062,10 +1062,10 @@ public with sharing class RMS_financialTransactionManager {
                 	if(a.Quantity_Written_Off__c != null){
 //	                	if(a.Sold_Order__r.RecordTypeId == assetInstalledProductsRecordTypeId){
 	                	if(a.RecordTypeId == assetInstalledProductsRecordTypeId){
-						//	if (a.Order.Revenue_Recognized_Date__c == null)
-	                	//		inventoryWriteOffAT = true;
-	                	//	else
-	                	//		inventoryWriteOffPRAT = true;
+							if (a.Sold_Order__r.Revenue_Recognized_Date__c == null)
+	                			inventoryWriteOffAT = true;
+	                		else
+	                			inventoryWriteOffPRAT = true;
 	                	}
                 	}
                 	
@@ -1145,7 +1145,7 @@ public with sharing class RMS_financialTransactionManager {
                 }
                 //POST RECOGNIZED INVENTORY WRITE OFF	
                 if(inventoryWriteOffPRAT == true){
- //               	errorMessage = checkFinacialTransationForErrors(assetIdToInventoryWriteOffPRFTL.get(a.id) , errorMessage, 'Post Recognized Inventory Write-Off');
+                	errorMessage = checkFinacialTransationForErrors(assetIdToPRInventoryWriteOffFTL.get(a.id) , errorMessage, 'Post Recognized Inventory Write-Off');
                 }
 
                 //SETTING UP MAPS TO CHECK IF CREDIT/DEBIT ACCOUNTS HAVE BEEN SWITCHED FOR CALCULATIONS
@@ -1338,8 +1338,8 @@ public with sharing class RMS_financialTransactionManager {
 					if(inventoryWriteOffPRAT == true){
 						aType = 'PostRecognizedInventoryWriteOff';
 						jType = 'Post Recognized Inventory Write-Off';
-                    //    debitAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Debit_Account_Number__r.Name;
-                     //   creditAccountN = assetIdToInventoryWriteOffPRFTL.get(a.id)[0].Credit_Account_Number__r.Name;
+                        debitAccountN = assetIdToPRInventoryWriteOffFTL.get(a.id)[0].Debit_Account_Number__r.Name;
+                        creditAccountN = assetIdToPRInventoryWriteOffFTL.get(a.id)[0].Credit_Account_Number__r.Name;
 						wrapAssetVariable wAR = new wrapAssetVariable(aType, jType, creditAccountN, debitAccountN);
                 		wrapAssetVariableList.add(wAR);
 					}
@@ -1460,7 +1460,7 @@ public with sharing class RMS_financialTransactionManager {
 	                                if(je.Type__c == 'Inventory Write-Off'){
 	                                	jeInventoryWriteOffListSentToBaan.add(je);
 	                                }
-	                                if(je.Type__c == 'Post Recognizied Inventory Write-Off'){
+	                                if(je.Type__c == 'Post Recognized Inventory Write-Off'){
 	                                	jeInventoryWriteOffListPRSentToBaan.add(je);
 	                                }
 	                                
@@ -1542,6 +1542,8 @@ public with sharing class RMS_financialTransactionManager {
 	                            	je = jeInventoryReturnedList[0];
 	                            }else if(assetType == 'InventoryWriteOff'){
 	                           		je = jeInventoryWriteOffList[0];
+	                            }else if(assetType == 'PostRecognizedInventoryWriteOff'){
+	                           		je = jeInventoryWriteOffPRList[0];
 	                            }
 	                            
 	                                                  	
@@ -1639,14 +1641,17 @@ public with sharing class RMS_financialTransactionManager {
 								}
 								
 	
-								else if(assetType == 'InventoryWriteOff'){
+								else if(assetType == 'InventoryWriteOff' || assetType == 'PostRecognizedInventoryWriteOff'){
 									je.Type__c = jeType;
 		                            je.Debit_General_Ledger_Account__c = debitAccountNumber;
 		                            je.Credit_General_Ledger_Account__c = creditAccountNumber;
 		                            if(newQuantityWrittenOff - oldQuantityWrittenOff == 0){
 			                            	je.Amount__c = a.Quantity_Written_Off__c * a.Unit_Wholesale_Cost__c;
 			                            }else{
-											je.Amount__c = (jeInventoryWriteOffList[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
+			                            	if (assetType == 'InventoryWriteOff')
+												je.Amount__c = (jeInventoryWriteOffList[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
+											else if (assetType == 'PostRecognizedInventoryWriteOff')
+												je.Amount__c = (jeInventoryWriteOffPRList[0].Amount__c + (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c);
 		                            	}
 									if(je.Amount__c < 0){
 		                            	mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
@@ -1709,7 +1714,7 @@ public with sharing class RMS_financialTransactionManager {
 			                            	newJE.Credit_General_Ledger_Account__c = creditAccountNumber;  
 		                                }
 									}
-								else if(assetType == 'InventoryWriteOff'){
+								else if(assetType == 'InventoryWriteOff' || assetType == 'PostRecognizedInventoryWriteOff'){
 			                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
 			                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
 										newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
@@ -1985,6 +1990,8 @@ public with sharing class RMS_financialTransactionManager {
                             list<Journal_Entry__c> relatedRevRecognizedFinanceFeesJE = new list<Journal_Entry__c>();
                             
                             list<Journal_Entry__c> relatedInventoryRecivedJE = new list<Journal_Entry__c>();
+                            list<Journal_Entry__c> relatedInventoryInventoryWriteOffJE = new list<Journal_Entry__c>();
+
                             list<Journal_Entry__c> relatedRevRecognizedCOGSJE = new list<Journal_Entry__c>();
                             //list<Journal_Entry__c> relatedRevRecognizedServiceCOGSJE = new list<Journal_Entry__c>();
                              
@@ -2046,6 +2053,9 @@ public with sharing class RMS_financialTransactionManager {
 	                                }
 	                                if(je.Type__c != null && je.Type__c.contains('Inventory Received')){
 	                                    relatedInventoryRecivedJE.add(je);
+	                                }
+	                                if(je.Type__c == 'Inventory Write-off'){
+	                                    relatedInventoryInventoryWriteOffJE.add(je);
 	                                }
 	                                
 	
@@ -2362,14 +2372,22 @@ public with sharing class RMS_financialTransactionManager {
                             if(alreadyHasJEofTypeRevRecCOGS == false && relatedInventoryRecivedJE.size() > 0  && o.RecordTypeId != orderCOROServiceRecordTypeId){
                                 Decimal totalAmount = 0;
                                 Boolean hasNonService = false;
+                                // Add all inventory received amounts that are not service
                                 for(Journal_Entry__c je : relatedInventoryRecivedJE){
                                 	if(!je.Type__c.contains('Service')){
                                 		hasNonService = true;
                                    		totalAmount = totalAmount + je.Amount__c;
                                    	}
                                 }
-                                if(hasNonService == true){
-	                                if(errorMessage == null){
+                                // Subtract any inventory write off amounts
+                                for(Journal_Entry__c je : relatedInventoryInventoryWriteOffJE){
+                                   	totalAmount = totalAmount - je.Amount__c;
+                                }
+      							if(totalAmount < 0)
+									mapNew.get(o.id).addError(RMS_errorMessages.COGS_NEGATIVE, FALSE);
+
+                                if(hasNonService == true && totalAmount > 0){
+                                    if(errorMessage == null){
 	                                    Journal_Entry__c newJE = new Journal_Entry__c(
 	                                        Date__c = Datetime.Now(),
 	                                        Type__c = 'Rev Recognized - COGS',

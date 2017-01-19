@@ -673,6 +673,10 @@ public with sharing class TestUtilityMethods {
 		FANSToInsert.add(FANInventoryWriteOffDebit);
 		Financial_Account_Number__c FANInventoryWriteOffCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANInventoryWriteOffCredit');
 		FANSToInsert.add(FANInventoryWriteOffCredit);
+		Financial_Account_Number__c FANPRInventoryWriteOffDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANPRInventoryWriteOffDebit');
+		FANSToInsert.add(FANPRInventoryWriteOffDebit);
+		Financial_Account_Number__c FANPRInventoryWriteOffCredit = new Financial_Account_Number__c (Store_Configuration__c = storeConfig1.id, Name = 'FANPRInventoryWriteOffCredit');
+		FANSToInsert.add(FANPRInventoryWriteOffCredit);
 
 		Financial_Account_Number__c FANServiceInventoryReceivedIntercompanyDebit = new Financial_Account_Number__c (	Store_Configuration__c = storeConfig1.id, Name = 'FANServiceInventoryReceivedIntercompanyDebit');
 		FANSToInsert.add(FANServiceInventoryReceivedIntercompanyDebit);
@@ -863,6 +867,11 @@ public with sharing class TestUtilityMethods {
 																						Debit_Account_Number__c = FANInventoryWriteOffDebit.id,
 																						Credit_Account_Number__c = FANInventoryWriteOffCredit.id);
 		FTSToInsert.add(FANInventoryWriteOff);
+		Financial_Transaction__c FANPRInventoryWriteOff = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
+																						Transaction_Type__c = 'Post Recognized Inventory Write-Off',
+																						Debit_Account_Number__c = FANPRInventoryWriteOffDebit.id,
+																						Credit_Account_Number__c = FANPRInventoryWriteOffCredit.id);
+		FTSToInsert.add(FANPRInventoryWriteOff);
 		Financial_Transaction__c FANServiceInventoryReceivedIntercompany = new Financial_Transaction__c(	Store_Configuration__c = storeConfig1.id,
 																						Transaction_Type__c = 'Service Inventory Received - Intercompany',
 																						Debit_Account_Number__c = FANServiceInventoryReceivedIntercompanyDebit.id,

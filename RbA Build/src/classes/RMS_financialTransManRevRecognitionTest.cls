@@ -682,13 +682,18 @@ private class RMS_financialTransManRevRecognitionTest {
 		);
 		
 		insert asset1;
+		asset1.Quantity_Written_Off__c = 1;
+		update asset1;
 		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		update soldOrder;
 		
 		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c FROM Journal_Entry__c 
 								WHERE Order__c =: soldOrder.Id AND Type__c = 'Rev Recognized - COGS']; 
-		System.AssertEquals(1000, je.Amount__c);
+
+		// The amount should be 900 since there were 10 received and 1 written off with a 
+		// wholesale cost of 100 (100*9 = 900 )
+		System.AssertEquals(900, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 		
 		// Delete the Rev Recognized Date and verify the journal entry is deleted

@@ -409,7 +409,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
                                     Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
                                     FROM Order WHERE Id = :orderId]){
                                         
-                                        showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
                                         relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
                                         
                                         relatedCOROOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'));
@@ -461,6 +460,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
             // If the PO status is received and the timestamp is not today, set poComplete to true
             if (orderStatus == 'Received' && this.po.Received_Timestamp__c != null && this.po.Received_Timestamp__c.date() != System.Today())
                 poComplete = true;
+
+			// If the PO status is received or partially received, show the inventory button
+			showInventoryWriteOff = (orderStatus == 'Received' || orderStatus == 'Partially Received') ? true : false;
+
             
             if (storeLocation == null) {
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -1221,10 +1224,11 @@ receiveLineItems method
                 // update the current received product record.
                 if (recProd.size() > 0 && recProd.containsKey(oi.Installed_Product_Asset__c) != null) {
                     Received_Product__c rp = recProd.get(oi.Installed_Product_Asset__c);
-                    rp.Quantity__c = oi.Quantity_To_Receive__c;
-                    rp.Amount__c = oi.Unit_Wholesale_Cost__c;
-                    rp.Date__c = oi.Date_Received__c;
-                    receivedProducts.add(rp);
+ 					if (rp == null) rp = new Received_Product__c();
+                    	rp.Quantity__c = oi.Quantity_To_Receive__c;
+                    	rp.Amount__c = oi.Unit_Wholesale_Cost__c;
+                    	rp.Date__c = oi.Date_Received__c;
+                    	receivedProducts.add(rp);
                 }
                 // otherwise create a new received product record
                 else {
