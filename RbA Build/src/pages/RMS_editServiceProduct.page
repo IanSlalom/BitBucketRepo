@@ -67,7 +67,7 @@
                 <apex:inputField value="{!OrderItem.Quote_Amount__c}"/>
                 <apex:inputField value="{!OrderItem.Quote_Accepted__c}"/>                 
                 <apex:outputField value="{!OrderItem.Billable_Amount__c}"/>
-                <apex:inputField value="{!OrderItem.Customer_Pickup__c}"/>                
+                <apex:inputField value="{!OrderItem.Customer_Pickup__c}" required="true"/>                
             </apex:pageBlockSection>              
         </apex:pageBlock>
     </apex:form>
