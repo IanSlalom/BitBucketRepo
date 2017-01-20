@@ -265,7 +265,7 @@ private class RMS_financialTransManRevRecognitionTest {
 		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
 		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];		
 		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
-		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id, Program_Fee__c = 10 );
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id, Active__c = true, Program_Fee__c = 10 );
 		insert storeFinance;
 		Order_Financing__c orderFinancing = new Order_Financing__c(Store_Location__c = store.Id, Store_Finance_Program__c = storeFinance.Id, Related_Order__c = soldOrder.Id, Amount_Financed__c = 500);
 		insert orderFinancing;
