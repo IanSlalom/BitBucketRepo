@@ -573,8 +573,8 @@
 			<apex:outputField value="{!OrderItem.NSPR_Number__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnsprNumber"/>
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
-			<apex:inputField value="{!OrderItem.Notes__c}"  rendered="{!prodConfig.mpc != null && mode == 'e'}" html-data-jsid="notes"/>
-			<apex:outputField value="{!OrderItem.Notes__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outNotes"/>
+			<apex:inputField value="{!OrderItem.Notes__c}"  rendered="{!mode == 'e' || mode == 'r'}" html-data-jsid="notes"/>
+			<apex:outputField value="{!OrderItem.Notes__c}" rendered="{!mode != 'e' && mode != 'r'}" html-data-jsid="outNotes"/>
 
             <apex:outputField value="{!OrderItem.Detail_Line_Process_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
             <apex:outputField value="{!OrderItem.Cancelled_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
