@@ -482,7 +482,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                                 MTO_Source_Code__c, Defect_Code__c, 
                                 Charge_Cost_To__c, Notes__c, Multiple_Remakes__c,
                                 Parent_Order_Item__r.Installed_Product_Asset__c,
-                                Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
+                                Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c,
+                                Sold_Order_Product_Asset__c, Sold_Order_Product_Asset__r.Product_Name__c
                                 FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
         }
         
@@ -628,7 +629,8 @@ getPOOrderItemWrappers
                                  MTO_Source_Code__c, Defect_Code__c, Notes__c, Multiple_Remakes__c,
                                  Charge_Cost_To__c,
                                  Parent_Order_Item__r.Installed_Product_Asset__c,
-                                 Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
+                                 Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c,
+                                 Sold_Order_Product_Asset__c, Sold_Order_Product_Asset__r.Product_Name__c
                                  FROM OrderItem 
                                  Where Purchase_Order__c =: po.Id])
             {
@@ -1132,7 +1134,13 @@ receiveLineItems method
                 // If this is a servicepurchaseorder and it's a complete unit
                 // link the new asset to the original asset
                 if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
-                    productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Pricebookentry.Product2.Name;	
+                    if (oi.Sold_Order_Product_Asset__c != null) {
+	                    productAsset.Original_Asset__c = oi.Sold_Order_Product_Asset__c;					
+                    	productAsset.Name = oi.Sold_Order_Product_Asset__r.Product_Name__c;	
+                    	// Change the old asset status to replaced and add it to the list for update	
+						Asset oldAssetToUpdate = new Asset(Id = oi.Sold_Order_Product_Asset__c, Status = 'Replaced');
+						finalAssetsToReceive.add(oldAssetToUpdate);
+					}
                 }
                 productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
                 (servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :

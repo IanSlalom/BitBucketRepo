@@ -1100,6 +1100,8 @@ public with sharing class RMS_financialTransactionManager {
                 	system.debug('ads serviceInventoryReceivedAT assetSubType: '+assetSubType);
                 	if(assetSubType == 'Intercompany'){
                 		if(serviceInventoryRecivedRemake == true){
+                	system.debug('***************here1: '+assetIdToSIRRemakeIntercompanyFTL.get(a.id));
+                			
                 			errorMessage = checkFinacialTransationForErrors(assetIdToSIRRemakeIntercompanyFTL.get(a.id) , errorMessage, 'Service Inventory Received - Remake Intercompany');
                 		}else{
 	                		errorMessage = checkFinacialTransationForErrors(assetIdToSIRIntercompanyFTL.get(a.id) , errorMessage, 'Service Inventory Received - Intercompany');
@@ -1172,30 +1174,41 @@ public with sharing class RMS_financialTransactionManager {
 				
 				//SERVICE INVENTORY Received
 				if(assetIdToSIRIntercompanyFTL.get(a.id) != null && assetIdToSIRIntercompanyFTL.get(a.id).size() == 1){
-					if(serviceInventoryRecivedRemake == true){	
-						jeTypeToFTCreditNumber.put('Service Inventory Received - Remake Intercompany', assetIdToSIRRemakeIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-   						jeTypeToFTDebitNumber.put('Service Inventory Received - Remake Intercompany', assetIdToSIRRemakeIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
-					}else{
+					if(serviceInventoryRecivedRemake == false){	
 						jeTypeToFTCreditNumber.put('Service Inventory Received - Intercompany', assetIdToSIRIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
    						jeTypeToFTDebitNumber.put('Service Inventory Received - Intercompany', assetIdToSIRIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
 					}
 				}
 				if(assetIdToSIRIntercompanyCCFTL.get(a.id) != null && assetIdToSIRIntercompanyCCFTL.get(a.id).size() == 1){
-   					if(serviceInventoryRecivedRemake == true){	
-						jeTypeToFTCreditNumber.put('Service Inventory Received - Remake Intercompany Consolidation Center', assetIdToSIRRemakeIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-   						jeTypeToFTDebitNumber.put('Service Inventory Received - Remake Intercompany Consolidation Center', assetIdToSIRRemakeIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name);
-				}else{
+   					if(serviceInventoryRecivedRemake == false){	
    						jeTypeToFTCreditNumber.put('Service Inventory Received - Intercompany Consolidation Center', assetIdToSIRIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name);
    						jeTypeToFTDebitNumber.put('Service Inventory Received - Intercompany Consolidation Center', assetIdToSIRIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name);
    					}
    				}
 				if(assetIdToSIRExternalVendorFTL.get(a.id) != null && assetIdToSIRExternalVendorFTL.get(a.id).size() == 1){
+					if(serviceInventoryRecivedRemake == false){	
+						jeTypeToFTCreditNumber.put('Service Inventory Received - External Vendor', assetIdToSIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   						jeTypeToFTDebitNumber.put('Service Inventory Received - External Vendor', assetIdToSIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+					}
+				}
+
+				//SERVICE INVENTORY Received REMAKE
+				if(assetIdToSIRRemakeIntercompanyFTL.get(a.id) != null && assetIdToSIRRemakeIntercompanyFTL.get(a.id).size() == 1){
+					if(serviceInventoryRecivedRemake == true){	
+						jeTypeToFTCreditNumber.put('Service Inventory Received - Remake Intercompany', assetIdToSIRRemakeIntercompanyFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   						jeTypeToFTDebitNumber.put('Service Inventory Received - Remake Intercompany', assetIdToSIRRemakeIntercompanyFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+					}
+				}
+				if(assetIdToSIRRemakeIntercompanyCCFTL.get(a.id) != null && assetIdToSIRRemakeIntercompanyCCFTL.get(a.id).size() == 1){
+   					if(serviceInventoryRecivedRemake == true){	
+						jeTypeToFTCreditNumber.put('Service Inventory Received - Remake Intercompany Consolidation Center', assetIdToSIRRemakeIntercompanyCCFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+   						jeTypeToFTDebitNumber.put('Service Inventory Received - Remake Intercompany Consolidation Center', assetIdToSIRRemakeIntercompanyCCFTL.get(a.id)[0].Debit_Account_Number__r.Name);
+					}
+   				}
+				if(assetIdToSIRRemakeExternalVendorFTL.get(a.id) != null && assetIdToSIRRemakeExternalVendorFTL.get(a.id).size() == 1){
 					if(serviceInventoryRecivedRemake == true){	
 						jeTypeToFTCreditNumber.put('Service Inventory Received - Remake External Vendor', assetIdToSIRRemakeExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name);
    						jeTypeToFTDebitNumber.put('Service Inventory Received - Remake External Vendor', assetIdToSIRRemakeExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name);
-					}else{
-						jeTypeToFTCreditNumber.put('Service Inventory Received - External Vendor', assetIdToSIRExternalVendorFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-   						jeTypeToFTDebitNumber.put('Service Inventory Received - External Vendor', assetIdToSIRExternalVendorFTL.get(a.id)[0].Debit_Account_Number__r.Name);
 					}
 				}
 				
