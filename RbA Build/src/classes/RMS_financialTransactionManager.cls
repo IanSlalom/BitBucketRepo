@@ -1099,9 +1099,7 @@ public with sharing class RMS_financialTransactionManager {
                 if(serviceInventoryReceivedAT == true){
                 	system.debug('ads serviceInventoryReceivedAT assetSubType: '+assetSubType);
                 	if(assetSubType == 'Intercompany'){
-                		if(serviceInventoryRecivedRemake == true){
-                	system.debug('***************here1: '+assetIdToSIRRemakeIntercompanyFTL.get(a.id));
-                			
+                		if(serviceInventoryRecivedRemake == true){                			
                 			errorMessage = checkFinacialTransationForErrors(assetIdToSIRRemakeIntercompanyFTL.get(a.id) , errorMessage, 'Service Inventory Received - Remake Intercompany');
                 		}else{
 	                		errorMessage = checkFinacialTransationForErrors(assetIdToSIRIntercompanyFTL.get(a.id) , errorMessage, 'Service Inventory Received - Intercompany');
