@@ -79,7 +79,8 @@
                 <apex:outputField value="{!OrderItem.Sold_Order_Product_NSPR__c}" label="Original NSPR"/>
                 <apex:outputField value="{!OrderItem.Service_Product_Note__c}" style="width: 289px; height: 90px;" label="Internal Notes"/> 
                 <apex:outputField value="{!OrderItem.OrderId}" label="Service Request"/>
-                <apex:outputField value="{!OrderItem.Total_Procedure_Time__c}"/>                
+                <apex:outputField value="{!OrderItem.Total_Procedure_Time__c}"/> 
+                <apex:outputField value="{!OrderItem.Number_Warranties__c}"/> 
             </apex:pageBlockSection>            
             <apex:pageBlockSection title="Order Information" columns="2">
                 <apex:outputField value="{!OrderItem.PriceBookEntry.Name}" id="productName" label="Component"/>    
@@ -108,5 +109,5 @@
     <apex:relatedList list="Charges__r"/>
     <apex:relatedList list="Service_Symptoms__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
     <apex:relatedList list="Problem_Components__r" rendered="{!IF(OrderItem.Number_Manufacturer_Charges__c > 0,true,false)}"/>
-    <apex:relatedList list="Warranties__r" rendered="{!IF(OrderItem.Number_Service_Symptoms__c > 0,true,false)}"/>
+    <apex:relatedList list="Warranties__r" rendered="{!IF((OrderItem.Number_Service_Symptoms__c > 0) || (OrderItem.Number_Warranties__c > 0),true,false)}"/>
 </apex:page>
