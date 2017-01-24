@@ -414,4 +414,80 @@ private class RMS_financialTransManInventoryTest {
 		
 		Test.stopTest();
 	}
+
+	/*******************************************************
+				positivePostRecognizedInventoryWriteOffAsset
+	*******************************************************/
+	static testmethod void positivePostRecognizedInventoryWriteOffAsset(){
+		test.starttest();
+		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
+		soldOrder.Revenue_Recognized_Date__c = System.today();
+		update soldOrder;
+		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];		
+		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
+		storeConfig.Standard_Hourly_Rate__c = 100;
+		storeConfig.Location_Number__c = '123';
+		update storeConfig;
+		
+		Id assetInstalledProductsRecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
+		
+		Account vendor = [SELECT Id from Account where Vendor_Account_Type__c = 'External'];
+
+		Financial_Account_Number__c invWriteOffDebit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInventoryWriteOffDebit'];
+		Financial_Account_Number__c invWriteOffCredit = [Select Id, Name From Financial_Account_Number__c Where Name = 'FANPRInventoryWriteOffCredit'];
+	
+		Asset asset1 = new Asset(	Unit_Wholesale_Cost__c = 100,
+									Quantity = 10,
+									Sold_Order__c = soldOrder.id,
+									RecordTypeId = assetInstalledProductsRecordTypeId,
+									Store_Location__c = store.id,
+									Name = 'asset1',
+									AccountId = soldOrder.AccountId,
+									ContactId = soldOrder.BillToContactId,
+									Vendor__c = vendor.id
+		);
+		
+
+		insert asset1;
+
+		asset1.Quantity_Written_Off__c = 1;
+		
+		update asset1;
+
+		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
+								WHERE Order__c =: soldOrder.Id AND Type__c = 'Post Recognized Inventory Write-Off']; 
+
+		System.AssertEquals(100, je.Amount__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+
+		// Verify the account numbers 
+		System.AssertEquals(invWriteOffDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(invWriteOffCredit.Name, je.Credit_General_Ledger_Account__c);
+		
+		
+		asset1.Quantity_Written_Off__c = 2;
+		update asset1;
+
+		je = [SELECT Id, Amount__c, Type__c, Sent_to_BaanERP__c, Order__c, Store_Location__c, Date__c, Debit_General_Ledger_Account__c, Credit_General_Ledger_Account__c FROM Journal_Entry__c 
+								WHERE Order__c =: soldOrder.Id AND Type__c = 'Post Recognized Inventory Write-Off']; 
+		System.AssertEquals(200, je.Amount__c);
+		System.AssertEquals(System.today(), je.Date__c.date());
+		
+		// Verify the account numbers 
+		System.AssertEquals(invWriteOffDebit.Name, je.Debit_General_Ledger_Account__c);
+		System.AssertEquals(invWriteOffCredit.Name, je.Credit_General_Ledger_Account__c);
+
+		// Delete the Asset and verify the journal entry is deleted
+		delete asset1;
+
+		decimal jeCount = 0;
+		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Post Recognized Inventory Write-Off']) {
+			jeCount += 1;
+		}
+
+		System.AssertEquals(0, jeCount);
+		
+		Test.stopTest();
+	}
+
 }

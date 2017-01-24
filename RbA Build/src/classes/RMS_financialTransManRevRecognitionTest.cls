@@ -265,7 +265,7 @@ private class RMS_financialTransManRevRecognitionTest {
 		Order soldOrder = [SELECT Id, AccountId, BillToContactId FROM Order where Name='Sold Order 1'];		
 		Account store = [SELECT id FROM Account WHERE Name='77 - Twin Cities, MN'];		
 		Store_Configuration__c storeConfig = [SELECT id FROM Store_Configuration__c WHERE Store__c = :store.id ];
-		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id, Program_Fee__c = 10 );
+		Store_Finance_Program__c storeFinance = new Store_Finance_Program__c(Store_Configuration__c = storeConfig.Id, Active__c = true, Program_Fee__c = 10 );
 		insert storeFinance;
 		Order_Financing__c orderFinancing = new Order_Financing__c(Store_Location__c = store.Id, Store_Finance_Program__c = storeFinance.Id, Related_Order__c = soldOrder.Id, Amount_Financed__c = 500);
 		insert orderFinancing;
@@ -682,13 +682,18 @@ private class RMS_financialTransManRevRecognitionTest {
 		);
 		
 		insert asset1;
+		asset1.Quantity_Written_Off__c = 1;
+		update asset1;
 		
 		soldOrder.Revenue_Recognized_Date__c = Date.Today();
 		update soldOrder;
 		
 		Journal_Entry__c je = [SELECT Id, Amount__c, Type__c, Order__c, Store_Location__c, Date__c FROM Journal_Entry__c 
 								WHERE Order__c =: soldOrder.Id AND Type__c = 'Rev Recognized - COGS']; 
-		System.AssertEquals(1000, je.Amount__c);
+
+		// The amount should be 900 since there were 10 received and 1 written off with a 
+		// wholesale cost of 100 (100*9 = 900 )
+		System.AssertEquals(900, je.Amount__c);
 		System.AssertEquals(System.today(), je.Date__c.date());
 		
 		// Delete the Rev Recognized Date and verify the journal entry is deleted

@@ -156,6 +156,7 @@ public with sharing class RMS_errorMessages {
 	public static final String NO_RELATED_DEPOSIT_JOURNAL_ENTRY = '&bull;This Order Has no related Journal Entries with deposit type.';
 	public static final String REVENUE_ALREADY_RECOGNIZED = '&bull;This revenue has already been recognized and submitted for this order and you cannot change it.';
 	public static final String CHANGE_REVENUE_RECOGNIZED_DATE_NOT_CLEAR = '&bull;You cannot change the Revenue Recognized Date to another date, you must first clear it.';					
+	public static final String COGS_NEGATIVE = '&bull;The Cost of Goods sold cannot be negative.';					
 
 	public static final String REQUIRED_REFUND_FIELD_NULL = '&bull;Please enter a [field] before creating a Refund record on this order.';
 	

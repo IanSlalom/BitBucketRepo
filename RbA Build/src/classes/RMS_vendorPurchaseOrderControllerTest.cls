@@ -119,7 +119,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		ApexPages.StandardController stdController = new ApexPages.StandardController(po);
 		RMS_vendorPurchaseOrderController customController  = new RMS_vendorPurchaseOrderController(stdController);
 		System.assert(customController.newPurchaseOrder);
-		System.assertEquals(customController.po.Status__c,'In Progress');
+		System.assertEquals(customController.po.Status__c,'In Process');
 		System.assertEquals(customController.showInventoryWriteOff,false);
 		customController  = new RMS_vendorPurchaseOrderController(stdController);
 		system.AssertEquals('new', customController.status);
@@ -188,7 +188,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 	
 		customController3.selectedVendor = accountRBA.Id;
 //		System.assertEquals(customController3.showCancelPO,false);
-		po3.Status__c = 'In Progress';
+		po3.Status__c = 'In Process';
 		update po3;
 		customController3  = new RMS_vendorPurchaseOrderController(stdController3);
 //		System.assertEquals(customController3.showCancelPO,true);
@@ -606,7 +606,7 @@ public with sharing class RMS_vendorPurchaseOrderControllerTest {
 		customController.releasePurchaseOrder();
 		system.debug(apexPages.getMessages());
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
-		customController.po.Status__c = 'In Progress';
+		customController.po.Status__c = 'In Process';
 		customController.electronicOrder = true;
 		customController.releasePurchaseOrder();
 		System.assert(containsMessage(ApexPages.getMessages(),RMS_ErrorMessages.PO_LINE_ITEMS_INVALID_FOR_PO_RELEASE));

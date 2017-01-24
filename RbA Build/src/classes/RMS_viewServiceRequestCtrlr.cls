@@ -139,6 +139,7 @@ public class RMS_viewServiceRequestCtrlr {
 
         } else {
             newPage = new PageReference('/'+o.Id+'/e?');
+            newPage.getParameters().put('retURL',o.Id);
             newPage.getParameters().put('nooverride','1');
         }
         
