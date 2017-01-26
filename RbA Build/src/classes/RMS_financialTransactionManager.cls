@@ -2156,8 +2156,8 @@ public with sharing class RMS_financialTransactionManager {
                                         //If the original journal entry is an install adjustment rather than a deposit, swap the debit and credit numbers
                                         //and link to the business adjustment record
                                         if (je.Type__c == 'Install Adjustment') {
-                                            newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Credit_Account_Number__r.Name;
-                                            newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Debit_Account_Number__r.Name;                                       	
+                                            newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Debit_Account_Number__r.Name;
+                                            newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Credit_Account_Number__r.Name;                                       	
                                             newJE.Business_Adjustment__c = je.Business_Adjustment__c;
                                         }
                                         journalEntriesToUpsert.add(newJE);
