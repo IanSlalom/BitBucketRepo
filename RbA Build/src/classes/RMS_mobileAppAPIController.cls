@@ -48,7 +48,9 @@ global with sharing class RMS_mobileAppAPIController {
 				}
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				RestContext.response.addHeader('Content-Type', 'application/json');
+                System.debug('RMS_mobileAppAPIController.doGet: calling findAppointments - timestamp:' + afterDTStamp);
 				RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId, afterDTStamp));
+                System.debug('RMS_mobileAppAPIController.doGet: response: ' + RestContext.response.responseBody);
 			} else {
 				RestContext.response.addHeader('Content-Type', 'application/json');
 				RestContext.response.responseBody = Blob.valueOf('Unsupported operation: ' + req.requestURI + ' - temp ' + temp + ' - operation: ' + operation + ' params: ' + req.params);
@@ -72,6 +74,9 @@ global with sharing class RMS_mobileAppAPIController {
 			String temp = req.requestURI.substringAfter('/');
 			temp = temp.substringAfter('/');
 			String operation = temp.substringBefore('/');
+			if (req.requestBody != null) {
+				System.debug('RMS_mobileAppAPIController.doPost: requestBody: ' + req.requestBody.toString());
+			}
 			if (operation == null || operation== ''){			
 				RestContext.response.responseBody = Blob.valueOf(NO_REQUEST_FOUND + req.requestURI);
 			} else if (operation.equals(RESULT_APPOINTMENTS)) {

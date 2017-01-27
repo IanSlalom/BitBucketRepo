@@ -38,6 +38,8 @@ public with sharing class RMS_mobileAppRequestHelper {
     try {
       List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Sales Appointment'];
       List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Tech Measure'];
+      System.debug('RMS_mobileAppRequestHelper.findAppointments: salesEvents: ' + salesEvents);
+      System.debug('RMS_mobileAppRequestHelper.findAppointments: tmEvents: ' + techmEvents);
 
       Appointments myAppts = new Appointments();
       // process the sales appointments
@@ -1075,6 +1077,10 @@ public with sharing class RMS_mobileAppRequestHelper {
 		}
 		// save the order items
 		for(OrderItemContainer oiCon: oiContainersToUpsert){
+			// link the orderItem to the order for new line items
+			if(oiCon.oi != null && oiCon.oi.OrderId == null) {
+				oiCon.oi.OrderId = tmAppt.opptyContainer.anOrderContainer.anOrder.Id;
+			}
 			oiToUpsert.add(oiCon.oi);
 		}
 		Database.UpsertResult[] oilur = Database.upsert(oiToUpsert, false);
