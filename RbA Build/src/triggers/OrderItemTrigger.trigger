@@ -57,20 +57,24 @@ trigger OrderItemTrigger on OrderItem(after delete, after insert, after undelete
         else if (Trigger.isInsert && Trigger.isAfter) {
             orderItemManager.setUpChangeHistoryOnCreate(Trigger.new, Trigger.newMap);
             createCharges.createCharge(Trigger.new, Trigger.newMap);
-    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
+//    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
         }
          
     	// After Update
     	else if(Trigger.isUpdate && Trigger.isAfter){
-    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
+//    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
     	}
     	//After Delete
     	else if(Trigger.isDelete && Trigger.isAfter){
-    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+//    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+            RMS_FutureRollups.rollupOrderItemsToOrders(trigger.oldMap.keySet());
     	}
     	// After Undelete 
     	else if(Trigger.isUnDelete){
-    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+            RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
+//    		orderItems = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
     	}    
 		// Try - Catch to catch any dml errors doing the order rollup and displaying
 		// errors on the order item records

@@ -573,6 +573,8 @@
 			<apex:outputField value="{!OrderItem.NSPR_Number__c}" rendered="{!prodConfig.mpc != null && mode != 'e'}" html-data-jsid="outnsprNumber"/>
             <apex:inputField value="{!OrderItem.Tax_Credit_Qualified__c}"  required="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Tax_Credit_Qualified_Control__c != 'Disabled'  && mode == 'e' && prodConfig.mpc != null}"/>
             <apex:outputField value="{!OrderItem.Tax_Credit_Qualified__c}" rendered="{!(prodConfig.mpc.Tax_Credit_Qualified_Control__c == 'Disabled' || mode != 'e') && prodConfig.mpc != null}"/>
+			<apex:inputField value="{!OrderItem.Notes__c}"  rendered="{!mode == 'e' || mode == 'r'}" html-data-jsid="notes"/>
+			<apex:outputField value="{!OrderItem.Notes__c}" rendered="{!mode != 'e' && mode != 'r'}" html-data-jsid="outNotes"/>
 
             <apex:outputField value="{!OrderItem.Detail_Line_Process_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
             <apex:outputField value="{!OrderItem.Cancelled_Date__c}" rendered="{!mode != 'e' && mode != 'r'}"/>
@@ -799,17 +801,6 @@
             j$("table[data-jsid='sashGrilleTabPanel']").show();
         }
         
-        if(j$("select[data-jsid='grilleStyle']").val()  ==   'No Grilles' ||
-            j$("select[data-jsid='grilleStyle']").val() ==   'Grilles Between Glass' ||
-            j$("select[data-jsid='grilleStyle']").val() ==   'Interior Wood Only'){
-                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr('checked',false);
-                j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").hide();
-				j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").hide()
-        }else{
-            j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").show();
-			j$("span:has(label[for='"+j$("input[data-jsid='permanentlyAppliedInteriorWoodGrille']").attr("id")+"'])").show()
-			
-        }
         grillePattern(1);
         grillePattern(2);
         grillePattern(3);

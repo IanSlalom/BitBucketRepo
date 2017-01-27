@@ -380,7 +380,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                 newPurchaseOrder = true;
                 status = 'new';
                 //JETT-712 
-                this.po.status__c = 'In Progress';
+                this.po.status__c = 'In Process';
             }//END OF NEW PRODUCT PURCHASE ORDER 
         
         //EXISTING PURCHASE ORDER       
@@ -409,7 +409,6 @@ public with sharing class RMS_vendorPurchaseOrderController {
                                     Store_Location__c, RecordTypeId, Status, Revenue_Recognized_Date__c
                                     FROM Order WHERE Id = :orderId]){
                                         
-                                        showInventoryWriteOff = thisOrder.Revenue_Recognized_Date__c != null? true: false;
                                         relatedOrderClosed = thisOrder.Status == 'Job Closed'? true : false;
                                         
                                         relatedCOROOrder = (thisOrder.RecordTypeId == UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type'));
@@ -461,6 +460,10 @@ public with sharing class RMS_vendorPurchaseOrderController {
             // If the PO status is received and the timestamp is not today, set poComplete to true
             if (orderStatus == 'Received' && this.po.Received_Timestamp__c != null && this.po.Received_Timestamp__c.date() != System.Today())
                 poComplete = true;
+
+			// If the PO status is received or partially received, show the inventory button
+			showInventoryWriteOff = (orderStatus == 'Received' || orderStatus == 'Partially Received') ? true : false;
+
             
             if (storeLocation == null) {
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.USER_STORE_LOCATION_BLANK));
@@ -479,7 +482,8 @@ public with sharing class RMS_vendorPurchaseOrderController {
                                 MTO_Source_Code__c, Defect_Code__c, 
                                 Charge_Cost_To__c, Notes__c, Multiple_Remakes__c,
                                 Parent_Order_Item__r.Installed_Product_Asset__c,
-                                Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
+                                Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c,
+                                Sold_Order_Product_Asset__c, Sold_Order_Product_Asset__r.Product_Name__c
                                 FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
         }
         
@@ -625,7 +629,8 @@ getPOOrderItemWrappers
                                  MTO_Source_Code__c, Defect_Code__c, Notes__c, Multiple_Remakes__c,
                                  Charge_Cost_To__c,
                                  Parent_Order_Item__r.Installed_Product_Asset__c,
-                                 Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c
+                                 Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c,
+                                 Sold_Order_Product_Asset__c, Sold_Order_Product_Asset__r.Product_Name__c
                                  FROM OrderItem 
                                  Where Purchase_Order__c =: po.Id])
             {
@@ -1129,7 +1134,13 @@ receiveLineItems method
                 // If this is a servicepurchaseorder and it's a complete unit
                 // link the new asset to the original asset
                 if (servicePurchaseOrder && productAsset.Name.contains('Complete Unit')) {
-                    productAsset.Original_Asset__c = oi.Parent_Order_Item__r.Pricebookentry.Product2.Name;	
+                    if (oi.Sold_Order_Product_Asset__c != null) {
+	                    productAsset.Original_Asset__c = oi.Sold_Order_Product_Asset__c;					
+                    	productAsset.Name = oi.Sold_Order_Product_Asset__r.Product_Name__c;	
+                    	// Change the old asset status to replaced and add it to the list for update	
+						Asset oldAssetToUpdate = new Asset(Id = oi.Sold_Order_Product_Asset__c, Status = 'Replaced');
+						finalAssetsToReceive.add(oldAssetToUpdate);
+					}
                 }
                 productAsset.RecordTypeId = (costPurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Cost_Products') :
                 (servicePurchaseOrder) ? UtilityMethods.RecordTypeFor('Asset', 'Service_Products') :
@@ -1221,10 +1232,11 @@ receiveLineItems method
                 // update the current received product record.
                 if (recProd.size() > 0 && recProd.containsKey(oi.Installed_Product_Asset__c) != null) {
                     Received_Product__c rp = recProd.get(oi.Installed_Product_Asset__c);
-                    rp.Quantity__c = oi.Quantity_To_Receive__c;
-                    rp.Amount__c = oi.Unit_Wholesale_Cost__c;
-                    rp.Date__c = oi.Date_Received__c;
-                    receivedProducts.add(rp);
+ 					if (rp == null) rp = new Received_Product__c();
+                    	rp.Quantity__c = oi.Quantity_To_Receive__c;
+                    	rp.Amount__c = oi.Unit_Wholesale_Cost__c;
+                    	rp.Date__c = oi.Date_Received__c;
+                    	receivedProducts.add(rp);
                 }
                 // otherwise create a new received product record
                 else {
@@ -1515,7 +1527,7 @@ releasePurchaseOrder method
         system.debug('*****Status set to released');
         if(!revRecNullAndValidStatus && productPurchaseOrder){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.ORDER_STATUS_INVALID_FOR_PO_RELEASE));
-        }else if(po.Status__c != 'In Progress' && po.Status__c != 'Rejected'&& productPurchaseOrder){
+        }else if(po.Status__c != 'In Process' && po.Status__c != 'Rejected'&& productPurchaseOrder){
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,RMS_ErrorMessages.PO_STATUS_INVALID_FOR_PO_RELEASE));
         }
         else{
@@ -1598,8 +1610,8 @@ unCancelPurchaseOrder method
 *******************************************************/
     // Called after the confirmation window is accepted. This cancels the PO and the order line items
     public PageReference unCancelPurchaseOrder() {
-        system.debug('*****Status set to in progress');
-        po.Status__c = 'In Progress';    
+        system.debug('*****Status set to In Process');
+        po.Status__c = 'In Process';    
         
         try{
             // upsert the po as uncancelled

@@ -32,6 +32,25 @@ public with sharing class testRMS_viewServiceRequestCtrlr {
         Contact contact3 = new contact ( FirstName='Contact',LastName='3',AccountId=dwelling3.id);
         contactsToInsert.add(contact3);
         insert contactsToInsert;
+   
+            Profile portalProfile = [SELECT Id FROM Profile WHERE Name LIKE '%z-Partner-Temp%' Limit 1];
+        User u = new User(
+            Username = System.now().millisecond() + 'test12345@test.com',
+            ContactId = contact1.Id,
+            ProfileId = portalProfile.Id,
+            Alias = 'test123',
+            Email = 'test12345@test.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'McTesty',
+            CommunityNickname = 'test12345',
+            TimeZoneSidKey = 'America/Los_Angeles',
+            LocaleSidKey = 'en_US',
+            LanguageLocaleKey = 'en_US'          
+        );
+        insert u;
+        
+        Resource__c resource1 = new Resource__c(RbA_User__c=u.Id, Name='Resource1', Resource_Type__c='Tech Measure', Retail_Location__c=storeConfig1.id, Active__c=TRUE);
+        insert resource1;        
         
         Financial_Account_Number__c finacialAccountNumber1 = new Financial_Account_Number__c (  Store_Configuration__c = storeConfig1.id, Name = '1');
         insert finacialAccountNumber1;
@@ -290,7 +309,7 @@ public with sharing class testRMS_viewServiceRequestCtrlr {
         Id lswpRecordTypeId = UtilityMethods.retrieveRecordTypeId('LSWP', 'RbA_Work_Order__c');
         
         List<RbA_Work_Order__c> wosToInsert = new List<RbA_Work_Order__c>();
-        RbA_Work_Order__c wo1 = new RbA_Work_Order__c(RecordTypeId = serviceOrderVisitRecordTypeId, Work_Order_Type__c = 'Tech Measure', Sold_Order__c = o.Id, Account__c = dwelling1.Id, Work_Order_Status__c = 'Scheduled & Assigned', Appointment_Duration__c = 1);
+        RbA_Work_Order__c wo1 = new RbA_Work_Order__c(RecordTypeId = serviceOrderVisitRecordTypeId, Work_Order_Type__c = 'Tech Measure', Sold_Order__c = o.Id, Account__c = dwelling1.Id, Work_Order_Status__c = 'Scheduled & Assigned', Appointment_Duration__c = 1, Original_Appt_Date_Time_Tech_Measure__c = System.Now(), Primary_Tech_Measure__c = resource1.Id);
         wosToInsert.add(wo1);
         RbA_Work_Order__c wo2 = new RbA_Work_Order__c(RecordTypeId = lswpRecordTypeId, Work_Order_Type__c = 'LSWP', Sold_Order__c = o.Id, Account__c = dwelling1.Id, Work_Order_Status__c = 'New', Appointment_Duration__c = 1);
         wosToInsert.add(wo2);

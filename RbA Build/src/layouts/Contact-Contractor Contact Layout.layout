@@ -38,6 +38,10 @@
                 <behavior>Readonly</behavior>
                 <field>MobilePhone</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Fax</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

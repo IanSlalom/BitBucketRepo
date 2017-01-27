@@ -59,6 +59,10 @@
                 <field>Municipality__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Municipality_Notes__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Application_Notes__c</field>
             </layoutItems>
@@ -110,6 +114,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Permit_Attached__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Note__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -188,6 +196,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Inspection_Cancelled_Reason__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Inspection_Scheduled_Date_Time__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Inspection_Completed__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>

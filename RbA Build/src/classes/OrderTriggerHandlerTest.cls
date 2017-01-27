@@ -73,6 +73,7 @@ public with sharing class OrderTriggerHandlerTest {
 
 		
 		ord1.Status = 'Activated';
+		ord1.Apex_Context__c = true;
 		update ord1;
 		
 		list<RbA_Work_Order__c> relatedWorkOrders = [SELECT id FROM RbA_Work_Order__c WHERE Sold_Order__c = :ord1.id];
@@ -80,6 +81,7 @@ public with sharing class OrderTriggerHandlerTest {
 		//System.assertEquals(relatedWorkOrders.size(),4);
 		
 		ord1.Status = 'Draft';
+		ord1.Apex_Context__c = true;
 		update ord1;
 		
 		delete ord1;

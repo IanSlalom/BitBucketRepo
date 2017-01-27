@@ -111,6 +111,7 @@ public with sharing class RMS_completeOrderChecksControllerTest {
 
  		order1.Tech_Measure_Status__c = 'Scheduled';
  		order1.Status = 'Draft';
+ 		order1.Apex_Context__c = true;
  		update order1;
  		controller.save();
  		order1 = [select Id, Status, Order_Processed_Date__c from Order where Id =: order1.Id];

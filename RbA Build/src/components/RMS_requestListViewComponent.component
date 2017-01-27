@@ -1,4 +1,6 @@
 <apex:component controller="RMS_serviceRequestListViewMgr">  
+    <apex:pageMessage escape="false" rendered="{!listId != null}" summary="<b>Please note that any column referencing Order information, other than one labeled 'Sold Order', are in reference to the Service Request (i.e. Order Number = Service Request Number)</b>" severity="info" strength="3" />
+    
     <apex:attribute name="listViewName" type="String" required="true" 
                     description="The name of the listview." assignTo="{!listName}"/>    
         
