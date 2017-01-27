@@ -1931,14 +1931,16 @@ public with sharing class RMS_financialTransactionManager {
                 string errorMessage;
                 if(mapOld.get(o.id).Revenue_Recognized_Date__c == null && mapNew.get(o.id).Revenue_Recognized_Date__c != null){
 	                if(o.Installation_Date_Complete__c != null){
-	                	list<Asset> relatedA = orderIdToRelatedAssetsMap.get(o.id);
-                        if (relatedA != null) {
-	                		for(Asset a : relatedA){
-	                			a.InstallDate = o.Installation_Date_Complete__c;
-	                			a.Status = 'Installed';
-	                		}
-	                		upsert relatedA;
-                        }
+	                	if (orderIdToRelatedAssetsMap != null && orderIdToRelatedAssetsMap.containsKey(o.id)) {
+	                		list<Asset> relatedA = orderIdToRelatedAssetsMap.get(o.id);
+                        	if (relatedA != null) {
+	                			for(Asset a : relatedA){
+	                				a.InstallDate = o.Installation_Date_Complete__c;
+	                				a.Status = 'Installed';
+	                			}
+	                			upsert relatedA;
+                        	}
+	                	}
 	                }
                     
                     if(o.Store_Location__c == null ){ 
