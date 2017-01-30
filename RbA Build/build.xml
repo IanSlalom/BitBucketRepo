@@ -43,7 +43,7 @@
     <!-- Shows deploying code & running tests for code in directory -->
     <target name="deployCode">
       <!-- Upload the contents of the "codepkg" directory, running the tests for just 1 class -->
-      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" testLevel="RunLocalTests" pollWaitMillis="50000" maxPoll="100">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" testLevel="NoTestRun" pollWaitMillis="50000" maxPoll="100">
       </sf:deploy>
     </target>
 
@@ -66,12 +66,12 @@
 
     <!-- Shows check only; never actually saves to the server -->
     <target name="deployCodeCheckOnly">
-      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="codepkg" checkOnly="true" pollWaitMillis="20000" maxPoll="100"/>
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="src" checkOnly="true" testLevel="NoTestRun" pollWaitMillis="50000" maxPoll="100"/>
     </target>
 
     <!-- Shows check only; never actually saves to the server -->
-    <target name="deployCwCheckOnly">
-      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="src" checkOnly="true" pollWaitMillis="20000" maxPoll="100"/>
+    <target name="deployCodeSLCheckOnly">
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="src" checkOnly="true" testLevel="RunLocalTests" pollWaitMillis="50000" maxPoll="100"/>
     </target>
 
 	<!-- Retrieve the information of all items of a particular metadata type -->

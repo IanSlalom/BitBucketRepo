@@ -1810,7 +1810,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Finance_Program_Fees__c,
                                                     Sales_Tax__c,
                                                     Invoice_Subtotal__c,
-                                                    Install_Complete_Date__c 
+                                                    Installation_Date_Complete__c 
                                                     
                                                     FROM Order WHERE Id IN : orderIdsChangedRR AND RecordTypeId IN :orderRecordTypes];       
         system.debug('ads extraFieldsList; '+extraFieldsList);
@@ -1826,7 +1826,7 @@ public with sharing class RMS_financialTransactionManager {
         		hasCoroType=true;
         	}
         	//Added to fill in Asset installed date and status
-        	if(o.Install_Complete_Date__c != null){
+        	if(o.Installation_Date_Complete__c != null){
         		installDateFilledInOrders.add(o);
         		installDateFilledInOrderIdList.add(o.id);
         	}
@@ -1930,15 +1930,17 @@ public with sharing class RMS_financialTransactionManager {
                 //IF REVENUE RECOGNIZED DATE HAS CHANGED FROM BLANK/NULL TO A VALUE
                 string errorMessage;
                 if(mapOld.get(o.id).Revenue_Recognized_Date__c == null && mapNew.get(o.id).Revenue_Recognized_Date__c != null){
-	                if(o.Install_Complete_Date__c != null){
-	                	list<Asset> relatedA = orderIdToRelatedAssetsMap.get(o.id);
-                        if (relatedA != null) {
-	                		for(Asset a : relatedA){
-	                			a.InstallDate = o.Install_Complete_Date__c;
-	                			a.Status = 'Installed';
-	                		}
-	                		upsert relatedA;
-                        }
+	                if(o.Installation_Date_Complete__c != null){
+	                	if (orderIdToRelatedAssetsMap != null && orderIdToRelatedAssetsMap.containsKey(o.id)) {
+	                		list<Asset> relatedA = orderIdToRelatedAssetsMap.get(o.id);
+                        	if (relatedA != null) {
+	                			for(Asset a : relatedA){
+	                				a.InstallDate = o.Installation_Date_Complete__c;
+	                				a.Status = 'Installed';
+	                			}
+	                			upsert relatedA;
+                        	}
+	                	}
 	                }
                     
                     if(o.Store_Location__c == null ){ 
@@ -2156,8 +2158,8 @@ public with sharing class RMS_financialTransactionManager {
                                         //If the original journal entry is an install adjustment rather than a deposit, swap the debit and credit numbers
                                         //and link to the business adjustment record
                                         if (je.Type__c == 'Install Adjustment') {
-                                            newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Credit_Account_Number__r.Name;
-                                            newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Debit_Account_Number__r.Name;                                       	
+                                            newJE.Debit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Debit_Account_Number__r.Name;
+                                            newJE.Credit_General_Ledger_Account__c = orderIdToRevRecognizedDepositFTL.get(o.id)[0].Credit_Account_Number__r.Name;                                       	
                                             newJE.Business_Adjustment__c = je.Business_Adjustment__c;
                                         }
                                         journalEntriesToUpsert.add(newJE);

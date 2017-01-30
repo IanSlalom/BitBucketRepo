@@ -309,7 +309,7 @@ private class testRMS_editableTaskList
         
         List<sObject> results = [SELECT Id FROM Task WHERE WhatId =: rwo.Id ORDER BY CreatedDate];
         System.assertEquals(2, results.size());
-        System.assertEquals(myTask1.Id, results[0].Id);
+        System.assert((myTask1.Id == results[0].Id) || (myTask1.Id == results[1].Id));
         System.assertNotEquals(myTask2.Id, results[1].Id);
     }
 }
