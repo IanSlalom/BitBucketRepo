@@ -61,12 +61,15 @@
                 <apex:inputField value="{!Order.BilltoContactId}"/>
                 <apex:inputField value="{!Order.EffectiveDate}"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
-                <apex:inputField value="{!Order.Store_Location__c}"/><br/>
+                <apex:inputField value="{!Order.Store_Location__c}"/>
+                <apex:inputField value="{!Order.Incident_Number__c}" rendered="{!IF(Order.Incident_Number__c == null, true, false)}"/>    
+                <apex:outputField value="{!Order.Incident_Number__c}" rendered="{!IF(Order.Incident_Number__c != null, true, false)}"/>    
                 <apex:inputField value="{!Order.Service_Type__c}"/><br/>
                 <apex:inputField value="{!Order.Service_initiated_By__c}"/><br/>
                 <apex:inputField value="{!Order.Status}"/>
                 <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}"/>
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}" label="Service Revenue Recognized Date"/>
+                <apex:outputField value="{!Order.Pivotal_Id__c}"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="false" columns="1">                
                 <apex:inputField value="{!Order.Description}"/>
@@ -106,6 +109,9 @@
                 <apex:inputField value="{!Order.AR_Age__c}"/>
                 <apex:inputField value="{!Order.Amount_Due__c}"/>
                 <apex:inputField value="{!Order.Invoice_Notes__c}" style="width: 192px; height:100px;"/>
+                <apex:outputField value="{!Order.Amount_Refunded__c}"/><br/>
+                <apex:outputField value="{!Order.Business_Adjustments__c}"/><br/>
+                <apex:outputField value="{!Order.Non_Sufficient_Funds__c}"/>
             </apex:pageBlockSection>
             <script> twistSection(document.getElementById('{!$Component.block1.qbd}').getElementsByTagName('img')[0]) </script>            
             <apex:pageBlockSection title="Address Details" collapsible="false" columns="2">                
