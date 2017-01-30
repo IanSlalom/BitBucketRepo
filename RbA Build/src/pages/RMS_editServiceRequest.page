@@ -57,7 +57,7 @@
             </apex:pageBlockButtons>  
             <apex:pageBlockSection title="Service Request Edit" collapsible="false" columns="2" >
                 <apex:inputField value="{!Order.AccountId}"/>
-                <apex:outputField value="{!Order.OwnerId}" label="Service Request Owner"/>
+                <apex:inputField value="{!Order.OwnerId}" label="Service Request Owner"/>
                 <apex:inputField value="{!Order.BilltoContactId}"/>
                 <apex:inputField value="{!Order.EffectiveDate}"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
