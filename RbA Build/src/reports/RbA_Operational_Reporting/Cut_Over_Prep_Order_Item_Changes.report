@@ -24,9 +24,14 @@
             <operator>equals</operator>
             <value>Order.CORO_Record_Type</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
-    <name>Cut Over Prep: Order Item Changes</name>
+    <name>Cut Over Prep: Order Changes</name>
     <params>
         <name>co</name>
         <value>1</value>
