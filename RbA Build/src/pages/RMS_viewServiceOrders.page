@@ -86,7 +86,7 @@
             <apex:pageBlockTable title="Service Requests" value="{!orders}" var="ord" style="width:100%">
                 <!-- <apex:column value="{!wo.View__c}"/> --> 
                 <apex:column headerValue="">  
-                    <a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}/e','Edit Order');return false">Edit</a> 
+                    <a href="#" onClick="callGenerateConsoleURL('/apex/RMS_editServiceRequest?id={!ord.Id}','Edit Order');return false">Edit</a> 
                 </apex:column>
                 <apex:column headerValue="Request Number">  
                     <a href="#" onClick="callGenerateConsoleURL('/{!ord.Id}','View Order');return false">{!ord.OrderNumber}</a> 

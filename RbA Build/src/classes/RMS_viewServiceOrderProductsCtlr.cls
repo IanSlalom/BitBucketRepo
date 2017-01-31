@@ -63,16 +63,16 @@ stdController.addFields(new List<String>{'PriceBook2Id','RecordTypeId'});
         system.debug(orderItemWrappers);  
         
         
-        if(ord.RecordTypeId == serviceOrderId){
+        //if(ord.RecordTypeId == serviceOrderId){
             if(num_assets > 0){
                 addProductURL = '/apex/RMS_addServiceProduct?id=' + ord.Id;                
             } else {
                 addProductURL = '/apex/RMS_addServiceProductLegacy?id=' + ord.Id;                  
             }
             
-        }else{
+        /*}else{
             addProductURL = '/apex/rms_ProdConfigEdit?oid='+ord.Id+'&pid='+ord.Pricebook2Id +'&mode=e';
-        }
+        }*/
         
         
     }
