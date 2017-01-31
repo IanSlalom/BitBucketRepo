@@ -474,6 +474,7 @@
         <members>RbA_Operational_Reporting/BO4100_RecPosting_Summary_C</members>
         <members>RbA_Operational_Reporting/BO7503_Sch_Installs_by_Date_by_Installer</members>
         <members>RbA_Operational_Reporting/Current_Consumer_Deposits</members>
+        <members>RbA_Operational_Reporting/Cut_Over_Prep_Order_Item_Changes</members>
         <members>RbA_Operational_Reporting/Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Journal_Entries</members>
         <members>RbA_Operational_Reporting/Deposit_Slip_Matching_Report</members>
@@ -548,6 +549,7 @@
         <members>Assets_with_without_Journal_Entries</members>
         <members>Cycle_Time_Reports</members>
         <members>Labor_with_Work_Order_with_Order</members>
+        <members>Order_Report_for_Cut_Over_Prep</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
         <members>Orders_with_Order_Products</members>
