@@ -876,7 +876,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         ELSE{
             //options.add(new SelectOption('--None--','--None--')); 
             for(Schema.PicklistEntry f : ple){
-                if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
+                if(f.getValue() != 'Job In Progress'){
                     options.add(new SelectOption(f.getLabel(), f.getValue()));
                 }
             } 
@@ -1339,7 +1339,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
         ELSE{           
             for(Schema.PicklistEntry f : ple){
-                if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
+                if(f.getValue() != 'Job In Progress'){
                     options.add(new SelectOption(f.getLabel(), f.getValue()));
                 }
             } 
@@ -1379,7 +1379,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         ELSE{
             
             for(Schema.PicklistEntry f : ple){
-                if(f.getValue() != 'Job In Progress' && f.getValue() != 'Field Service'){
+                if(f.getValue() != 'Job In Progress'){
                     options.add(new SelectOption(f.getLabel(), f.getValue()));
                 }
             } 

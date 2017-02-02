@@ -139,12 +139,14 @@
                 <apex:outputField value="{!Order.BilltoContactId}"/>
                 <apex:outputField value="{!Order.EffectiveDate}" label="Create Date"/>
                 <apex:outputField value="{!Order.OrderNumber}" label="Service Request Number"/>
-                <apex:outputField value="{!Order.Store_Location__c}"/> <br/>               
+                <apex:outputField value="{!Order.Store_Location__c}"/> 
+                <apex:outputField value="{!Order.Incident_Number__c}"/>    
                 <apex:outputField value="{!Order.Service_Type__c}"/><br/>                
                 <apex:outputField value="{!Order.Service_initiated_By__c}"/><br/>                
                 <apex:outputField value="{!Order.Status}"/> 
                 <apex:outputField value="{!Order.LSWP_Test_Results__c}"/>                 
-                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}" label="Service Revenue Recognized Date"/>
+                <apex:outputField value="{!Order.Revenue_Recognized_Date__c}" label="Service Revenue Recognized Date"/>           
+                <apex:outputField value="{!Order.Pivotal_Id__c}"/>    
             </apex:pageBlockSection>
             <apex:pageBlockSection title="Description" collapsible="true" columns="1">                
                 <apex:outputField value="{!Order.Description}"/>
@@ -183,10 +185,9 @@
                 <apex:outputField value="{!Order.AR_Reason__c}"/>
                 <apex:outputField value="{!Order.Payments_Received__c}"/>
                 <apex:outputField value="{!Order.AR_Age__c}"/>
-                <apex:outputField value="{!Order.Amount_Refunded__c}"/>
-                <apex:outputText value=""/>
                 <apex:outputField value="{!Order.Amount_Due__c}"/>
                 <apex:outputField value="{!Order.Invoice_Notes__c}"/>
+                <apex:outputField value="{!Order.Amount_Refunded__c}"/><br/>
                 <apex:outputField value="{!Order.Business_Adjustments__c}"/><br/>
                 <apex:outputField value="{!Order.Non_Sufficient_Funds__c}"/>
             </apex:pageBlockSection>
@@ -277,8 +278,8 @@
     </apex:pageBlock>  
     
     <apex:relatedList list="Payments__r" id="pm"/> 
-    <apex:relatedList list="Refunds__r" id="rf"/>    
-    
+    <apex:relatedList list="Refunds__r" id="rf"/> 
+        
     <apex:pageBlock title="Assets">           
         <apex:pageBlockTable value="{!Order.Assets__r}" var="t">
             <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
@@ -304,16 +305,7 @@
         </apex:pageBlockTable> 
     </apex:pageBlock> 
     
-    <apex:pageBlock title="Business Adjustments">           
-        <apex:pageBlockTable value="{!Order.Business_Adjustments__r}" var="t">
-            <apex:column headervalue=" "><apex:outputLink value="/{!t.id}">View</apex:outputLink></apex:column>
-            <apex:column headerValue="Business Adjustment Name" value="{!t.Name}"/>
-            <apex:column headerValue="Type" value="{!t.Type__c}"/>
-            <apex:column headerValue="Date" value="{!t.Date__c}"/>            
-            <apex:column headerValue="Amount" value="{!t.Amount__c}"/> 
-            <apex:column headerValue="Description" value="{!t.Description__c}"/>             
-        </apex:pageBlockTable> 
-    </apex:pageBlock> 
+            <apex:relatedList list="Business_Adjustments__r" id="ba"/>               
            
     <apex:relatedList list="OpenActivities" id="oa" />
     <apex:relatedList subject="{!Order}" list="ActivityHistories" id="ah"/>
