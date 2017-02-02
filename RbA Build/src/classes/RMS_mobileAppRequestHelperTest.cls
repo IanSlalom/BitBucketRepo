@@ -27,7 +27,7 @@ private class RMS_mobileAppRequestHelperTest {
 		
 		TestUtilityMethods tUtil = new TestUtilityMethods();
 		tUtil.setUpConfigs();
-		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Sales']; 
 		// setup configuration stuff
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime tmApptTime = Datetime.now().addDays(5);

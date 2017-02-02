@@ -36,8 +36,10 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
   public String findAppointments(Id userId, Datetime afterTimeStamp){
     try {
-      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Sales Appointment'];
-      List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :afterTimeStamp and Type = 'Tech Measure'];
+      // get all my appoints in the last year and going forward
+      Datetime myTimeStamp = Datetime.now().addYears(-1);
+      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Sales Appointment'];
+      List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Tech Measure'];
       System.debug('RMS_mobileAppRequestHelper.findAppointments: salesEvents: ' + salesEvents);
       System.debug('RMS_mobileAppRequestHelper.findAppointments: tmEvents: ' + techmEvents);
 
@@ -45,10 +47,13 @@ public with sharing class RMS_mobileAppRequestHelper {
       // process the sales appointments
       if (salesEvents.size() > 0) {
         myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
-        for(Event e : salesEvents){
-          e.Synced_DateTime__c = Datetime.now();
+        // need to check again because the populate method could remove all of the events
+        if (salesEvents.size() > 0) {
+	        for(Event e : salesEvents){
+	          e.Synced_DateTime__c = Datetime.now();
+	        }
+	        update salesEvents;
         }
-        update salesEvents;
       }
 
       // process the tech measure appointmsnts
@@ -81,6 +86,29 @@ public with sharing class RMS_mobileAppRequestHelper {
     for(Event e : salesEvents){
       opportunityIdList.add(e.whatId);
     }
+    // fitter out the statuses we don't want
+    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
+		'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
+		'To Be Ordered','Seasonal Service','Closed','Activated'};
+    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :opportunityIdList];
+    // remove rows found
+    for (Order ord : filterOrders) {
+    	for (Integer i=0; i < opportunityIdList.size(); i++) {
+    		if (ord.OpportunityId == opportunityIdList[i]) {
+    			opportunityIdList.remove(i);
+    			i--;
+    			break;
+    		}
+	    }
+    	for (Integer j=0; j < salesEvents.size(); j++) {
+    		if (ord.OpportunityId == salesEvents[j].WhatId) {
+    			salesEvents.remove(j);
+    			j--;
+    			break;
+    		}
+	    }
+    }
+
     // get the opportunities with quotes and orders
     Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(opportunityIdList);
 
@@ -94,7 +122,8 @@ public with sharing class RMS_mobileAppRequestHelper {
       FROM Account WHERE Id IN :accountIdList and isDeleted = false]);
 
     // get the historic opportunites
-    Map<Id, List<OpportunityContainer>> hocListMap = populateHistoricOpportunities(accountIdList, opportunityIdList);
+    // not currently used by rSuite
+    //Map<Id, List<OpportunityContainer>> hocListMap = populateHistoricOpportunities(accountIdList, opportunityIdList);
 
     // get the contacts using the OpportunityContactRoles
     List<OpportunityContactRole> relatedOppContacts = [select Id, contactId, isPrimary, opportunityId, Role, 
@@ -123,7 +152,8 @@ public with sharing class RMS_mobileAppRequestHelper {
       sapt.opptyContainer = relatedOCs.get(e.WhatId);
       sapt.contactList = opportunityIdtoContactListMap.get(e.WhatId);
       sapt.account = relatedAccountMap.get(sapt.opptyContainer.oppty.AccountId);
-      sapt.historicOpptyContainerList = hocListMap.get(sapt.opptyContainer.oppty.AccountId); 
+	  // rSuite currently does not support historic opportunities
+	  //sapt.historicOpptyContainerList = hocListMap.get(sapt.opptyContainer.oppty.AccountId); 
       salesAppts.add(sapt);
     }  
 
@@ -155,6 +185,29 @@ public with sharing class RMS_mobileAppRequestHelper {
       opportunityIds.add(wo.Sold_Order__r.OpportunityId);
       accountIds.add(wo.Sold_Order__r.Opportunity.AccountId);
     }
+/*    // fitter out the statuses we don't want
+    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
+		'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
+		'To Be Ordered','Seasonal Service','Closed','Activated','Pending Cancellation','Cancelled'};
+    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :opportunityIdList];
+    // remove rows found
+    for (Order ord : filterOrders) {
+    	for (Integer i=0; i < opportunityIdList.size(); i++) {
+    		if (ord.OpportunityId == opportunityIdList[i]) {
+    			opportunityIdList.remove(i);
+    			i--;
+    			break;
+    		}
+	    }
+    	for (Integer j=0; j < salesEvents.size(); j++) {
+    		if (ord.OpportunityId == salesEvents[j].WhatId) {
+    			salesEvents.remove(j);
+    			j--;
+    			break;
+    		}
+	    }
+    }
+*/
 
     // get the accounts
 	//TODO: Validate that these fields are nut null, otherwise this will blow up
@@ -277,12 +330,12 @@ public with sharing class RMS_mobileAppRequestHelper {
   public Map<Id, OpportunityContainer> populateOpportunityStructure(List<Id> oppIds) {
     Map<Id, OpportunityContainer> ocMap = new Map<Id, OpportunityContainer>();
     Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity> (
-    [SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, 
-    Pricebook2Id, Window_Problems__c, rSuite_Id__c,
-    rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c,
-    First_Selected_Quote__c, Second_Selected_Quote__c,
-    Sales_Rep_Name__c, Sales_Rep_Email__c, Sales_Rep_Phone__c
-    FROM Opportunity WHERE Id IN :oppIds]);
+	    [SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, 
+	    Pricebook2Id, Window_Problems__c, rSuite_Id__c,
+	    rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c,
+	    First_Selected_Quote__c, Second_Selected_Quote__c,
+	    Sales_Rep_Name__c, Sales_Rep_Email__c, Sales_Rep_Phone__c
+	    FROM Opportunity WHERE Id IN :oppIds]);
 
     // get the quotes 
     Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :oppIds and isDeleted = false and Status != 'Cancelled']);
@@ -500,29 +553,29 @@ public with sharing class RMS_mobileAppRequestHelper {
 				if (appt.getErrors().size() == 0) {
 					appt=saveQuoteLineItemsDiscountsandFinancing(appt);
 				}
-				// now save the opportunity changes - if we don't have an error
-				if (appt.getErrors().size() == 0) {
-					Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
-					if (!sr.isSuccess()) {            
-						String[] errParms = null;
-						for(Database.Error err : sr.getErrors()) {
-							String fields = '';
-							for (String field : err.getFields()) {
-								fields = fields + field + ', ';
-							}
-							errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
-							String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
-							appt.getErrors().add(formattedMessage);
-						}
-					}
-				}
-				// roll back if we have errors
-				if (appt.getErrors().size() > 0) {
-					Database.rollBack(sp);
-					appt.isSaveSuccessful = false;
-				}
 			} catch (NoQuotesException e) {
 				// this is a no-op -basically there were no quotes on the appointment so nothing to save
+			}
+			// now save the opportunity changes - if we don't have an error
+			if (appt.getErrors().size() == 0 && appt.opptyContainer != null && appt.opptyContainer.oppty != null) {
+				Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
+				if (!sr.isSuccess()) {            
+					String[] errParms = null;
+					for(Database.Error err : sr.getErrors()) {
+						String fields = '';
+						for (String field : err.getFields()) {
+							fields = fields + field + ', ';
+						}
+						errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
+						String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+						appt.getErrors().add(formattedMessage);
+					}
+				}
+			}
+			// roll back if we have errors
+			if (appt.getErrors().size() > 0) {
+				Database.rollBack(sp);
+				appt.isSaveSuccessful = false;
 			}
 		} else {
 			appt.getErrors().add('No Sales Appointments Found');

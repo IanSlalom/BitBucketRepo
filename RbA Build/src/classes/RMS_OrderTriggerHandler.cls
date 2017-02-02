@@ -196,10 +196,16 @@ public with sharing class RMS_OrderTriggerHandler {
     if(!ordersToProcess.isEmpty()){
       for(Order o: [SELECT Id, Store_Location__r.Store_Number__c, Store_Location__r.Active_Store_Configuration__r.Order_Number__c FROM Order  WHERE Id in: ordersToProcess]){
         if(o.Store_Location__r.Store_Number__c == null){
-          o.addError('A valid store number could not be retrieved from the Store Location Account. Please contact your Administrator for help.');
+            // add the error to the original record not the selected record
+            Order originalOrder = newMap.get(o.Id);
+            originalOrder.addError('A valid store number could not be retrieved from the Store Location Account. Please contact your Administrator for help.');
+//          o.addError('A valid store number could not be retrieved from the Store Location Account. Please contact your Administrator for help.');
         }
         else if(o.Store_Location__r.Active_Store_Configuration__r.Order_Number__c == null){
-          o.addError('A valid order number could not be retrieved from the Store Configuration. Please contact your Administrator for help.');
+            // add the error to the original record not the selected record
+            Order originalOrder = newMap.get(o.Id);
+            originalOrder.addError('A valid order number could not be retrieved from the Store Configuration. Please contact your Administrator for help.');
+//          o.addError('A valid order number could not be retrieved from the Store Configuration. Please contact your Administrator for help.');
         }else{
             storeConfigIds.add(o.Store_Location__r.Active_Store_Configuration__c);
         }
