@@ -5,6 +5,7 @@ public with sharing class RMS_cloneQuoteController {
 	public list<QuoteLineItem> clonedQuoteLineItems{get;set;}
 	public String clonedQuoteId{get;set;}
 	public list<Opportunity> opportunities{get;set;}
+	public String quoteStatus{get;set;}
 
 	public RMS_cloneQuoteController(ApexPages.StandardController controller) {
 		if (clonedQuoteId == null){
@@ -31,22 +32,18 @@ public with sharing class RMS_cloneQuoteController {
 
 		if (newQuote == null){
 			newQuote = new Quote();
-			//newQuote = clonedQuote;
 		}
 
-		opportunities = [select id 
+		opportunities = [select id, StageName 
 			FROM Opportunity 
 			WHERE AccountId =: clonedQuote.AccountId
 			AND IsClosed = FALSE ];
 
-		//if (opportunities.size() == 1){
-		//	newQuote.OpportunityId = opportunities[0].Id;
-		//} else{
-		//	//throw an error there should only be one Opportunity
-		//	ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,'Error: There is no Distinct Opporyunity to Attach thie Quote');
-  //          ApexPages.addMessage(myMsg);
-  //          return null;
-		//}
+		if (clonedQuote.Status == 'New'){
+			quoteStatus = 'A Quote in New Status Can Not be Cloned';
+		}else if(clonedQuote.Status =='Draft'){
+			quoteStatus = 'A Quote in Draft Status Can Not be Cloned';
+		}
 		
 		newQuote.Id = null;
 		newQuote.Date__c = System.today();
@@ -54,8 +51,7 @@ public with sharing class RMS_cloneQuoteController {
 		newQuote.Status = 'Draft';
 		newQuote.isSold__c = False;
 		newQuote.Pricebook2Id = clonedQuote.Pricebook2Id;
-		//newQuote.AccountId = clonedQuote.AccountId;
-		//newQuote.AdditionalAddress = clonedQuote.AdditionalAddress;
+		
 		newQuote.AdditionalCity = clonedQuote.AdditionalCity;
 		newQuote.AdditionalCountry = clonedQuote.AdditionalCountry;
 		newQuote.AdditionalCountryCode = clonedQuote.AdditionalCountryCode;
@@ -67,8 +63,6 @@ public with sharing class RMS_cloneQuoteController {
 		newQuote.AdditionalState = clonedQuote.AdditionalState;
 		newQuote.AdditionalStateCode = clonedQuote.AdditionalStateCode;
 		newQuote.AdditionalStreet = clonedQuote.AdditionalStreet;
-		//newQuote.Amount_Financed__c = clonedQuote.Amount_Financed__c;
-		//newQuote.BillingAddress = clonedQuote.BillingAddress;
 		newQuote.BillingCity = clonedQuote.BillingCity;
 		newQuote.BillingCountry = clonedQuote.BillingCountry;
 		newQuote.BillingCountryCode = clonedQuote.BillingCountryCode;
@@ -83,20 +77,12 @@ public with sharing class RMS_cloneQuoteController {
 		newQuote.ContactId = clonedQuote.ContactId;
 		newQuote.ContractId = clonedQuote.ContractId;
 		newQuote.Description = clonedQuote.Description;
-		//newQuote.Discount = clonedQuote.Discount;
-		//newQuote.Discount_Amount__c = clonedQuote.Discount_Amount__c;
-		//newQuote.Discount__c = clonedQuote.Discount__c;
 		newQuote.Email = clonedQuote.Email;
 		newQuote.ExpirationDate = clonedQuote.ExpirationDate;
 		newQuote.Fax = clonedQuote.Fax;
-		//newQuote.GrandTotal = clonedQuote.GrandTotal;
-		//newQuote.IsDeleted = clonedQuote.Pricebook2Id;
-		//newQuote.IsSyncing I don't think we want to copy this
-		//newQuote.LineItemCount = clonedQuote.LineItemCount;
 		newQuote.Name = clonedQuote.Name;
 		newQuote.Phone = clonedQuote.Phone;
 		newQuote.Primary__c = clonedQuote.Primary__c;
-		//newQuote.QuoteToAddress = clonedQuote.QuoteToAddress;
 		newQuote.QuoteToCity = clonedQuote.QuoteToCity;
 		newQuote.QuoteToCountry = clonedQuote.QuoteToCountry;
 		newQuote.QuoteToCountryCode = clonedQuote.QuoteToCountryCode;
@@ -109,7 +95,6 @@ public with sharing class RMS_cloneQuoteController {
 		newQuote.QuoteToStateCode = clonedQuote.QuoteToStateCode;
 		newQuote.QuoteToStreet = clonedQuote.QuoteToStreet;
 		newQuote.RecordTypeId = clonedQuote.RecordTypeId;
-		//newQuote.ShippingAddress = clonedQuote.ShippingAddress;
 		newQuote.ShippingCity = clonedQuote.ShippingCity;
 		newQuote.ShippingCountry = clonedQuote.ShippingCountry;
 		newQuote.ShippingCountryCode = clonedQuote.ShippingCountryCode;
@@ -123,6 +108,20 @@ public with sharing class RMS_cloneQuoteController {
 		newQuote.ShippingStateCode = clonedQuote.ShippingStateCode;
 		newQuote.ShippingStreet = clonedQuote.ShippingStreet;
 		newQuote.Tax = clonedQuote.Tax;
+
+		//newQuote.Amount_Financed__c = clonedQuote.Amount_Financed__c;
+		//newQuote.BillingAddress = clonedQuote.BillingAddress;
+		//newQuote.Discount = clonedQuote.Discount;
+		//newQuote.Discount_Amount__c = clonedQuote.Discount_Amount__c;
+		//newQuote.Discount__c = clonedQuote.Discount__c;
+		//newQuote.GrandTotal = clonedQuote.GrandTotal;
+		//newQuote.IsDeleted = clonedQuote.Pricebook2Id;
+		//newQuote.IsSyncing I don't think we want to copy this
+		//newQuote.LineItemCount = clonedQuote.LineItemCount;
+		//newQuote.QuoteToAddress = clonedQuote.QuoteToAddress;
+		//newQuote.ShippingAddress = clonedQuote.ShippingAddress;
+		//newQuote.AccountId = clonedQuote.AccountId;
+		//newQuote.AdditionalAddress = clonedQuote.AdditionalAddress;
 		//newQuote.Subtotal = clonedQuote.Subtotal;
 		//newQuote.Sub_Total__c = clonedQuote.Sub_Total__c;
 		//newQuote.TotalPrice = clonedQuote.TotalPrice;
@@ -167,12 +166,12 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.PricebookEntryId = qli.PricebookEntryId;
 
 			newQuoteLineItems.add(qli2);
-			system.debug('***testing qli2: '+ qli2);
 		}
 
 		if (newQuoteLineItems.size() > 0){
 			insert newQuoteLineItems;
 		}
+		
 		PageReference pageRef = new PageReference('/'+ newQuote.id);
 		return pageRef;
 	}
