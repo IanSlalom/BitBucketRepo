@@ -60,6 +60,7 @@
         <members>RMS_backOfficeChecklistManagerTest</members>
         <members>RMS_cancelOrderExtension</members>
         <members>RMS_cancelOrderExtensionTest</members>
+        <members>RMS_cloneQuoteController</members>
         <members>RMS_completeOrderChecksController</members>
         <members>RMS_completeOrderChecksControllerTest</members>
         <members>RMS_createCharges</members>
@@ -154,7 +155,6 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
-        <members>RMS_cloneQuoteController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -197,6 +197,7 @@
         <members>RMS_addWarrantytoSP</members>
         <members>RMS_cancelOrder</members>
         <members>RMS_changeVendor</members>
+        <members>RMS_cloneQuote</members>
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
@@ -233,7 +234,6 @@
         <members>RMS_viewServiceOrders</members>
         <members>RMS_viewServiceRequest</members>
         <members>RMS_viewServiceRequestLocked</members>
-        <members>RMS_cloneQuote</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -458,6 +458,12 @@
         <name>Queue</name>
     </types>
     <types>
+        <members>Pricing_Config/Pricing_Config_200400_Doors</members>
+        <members>Pricing_Config/Pricing_Config_ASeriesDoors</members>
+        <members>Pricing_Config/Pricing_Config_MiscJobAndUnitCharge</members>
+        <members>Pricing_Config/Pricing_Config_MullCombo</members>
+        <members>Pricing_Config/Pricing_Config_Specialty</members>
+        <members>Pricing_Config/Pricing_Config_Windows</members>
         <members>RbA_Operational_Reporting</members>
         <members>RbA_Operational_Reporting/B02000_by_Booking_for_Commissions</members>
         <members>RbA_Operational_Reporting/B02000_by_Booking_for_Comms_Ungrouped</members>
@@ -561,6 +567,7 @@
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
         <members>Pricing_Configurations_with_Pricebook_Information</members>
+        <members>Pricing_Configurations_with_Pricebook_and_Product</members>
         <members>Purchase_Orders_with_Order_Products</members>
         <name>ReportType</name>
     </types>
