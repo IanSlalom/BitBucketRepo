@@ -658,7 +658,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         list<SelectOption> testoptions = TE.getPickLstValue();
         
-        system.assertEquals(2,testoptions.size());
+        system.assertEquals(3,testoptions.size());
         
         Test.stopTest();        
     }
@@ -1155,7 +1155,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         list<SelectOption> testoptions = TE.getPickLstValue2();
         String propPickValSelected2 = TE.getpropPickValSelected2();
         
-        system.assertEquals(2,testoptions.size());
+        system.assertEquals(3,testoptions.size());
         
         Test.stopTest();        
     }
@@ -1233,7 +1233,7 @@ public with sharing class testRMS_ServiceOrderExtMgr {
         RMS_ServiceOrderExtensionMgr TE = new RMS_ServiceOrderExtensionMgr(sc);
         list<SelectOption> testoptions = TE.getPickLstValueLegacy();
         
-        system.assertEquals(2,testoptions.size());
+        system.assertEquals(3,testoptions.size());
         Test.stopTest();  
     }
     
