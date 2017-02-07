@@ -1,3 +1,22 @@
+/*******************************************************//**
+
+@class	RMS_cloneQuoteController
+
+@brief	Controller extension for VF page RMS_cancelOrder.page
+
+	Cancels the order and other related records
+
+@author  Ian Fitzpatrick (Slalom.IF)
+
+@version	2017-02-07  Slalom.IF
+	Created.
+
+@see		RMS_cloneQuoteControllerTest
+
+@copyright  (c)2017 Slalom.  All Rights Reserved.
+			Unauthorized use is prohibited. 
+
+***********************************************************/
 public with sharing class RMS_cloneQuoteController {
 	public Quote newQuote{get;set;}
 	public Quote clonedQuote{get;set;}
@@ -127,8 +146,8 @@ public with sharing class RMS_cloneQuoteController {
 		//next update the Quote Line items with the QuoteID
 		clonedQuoteLineItems = [SELECT Aluminum_Sill_Support__c,Applied_Grilles__c,
 			Apply_to_All_Sashes_Glass__c, Apply_to_All_Sashes_Grilles__c, Astragal__c,
-			Auxillary_Foot_Lock_Color_Match__c, Breather_Tubes__c,
-			Casing_Location__c, Casing_Profile__c, Casing_Species__c,
+			Auxillary_Foot_Lock_Color_Match__c, Breather_Tubes__c, Brickmould_Applied__c,
+			Calculated_Price__c, Casing_Location__c, Casing_Profile__c, Casing_Species__c,
 			Checkrail_Style__c, Child_Product_Pricebook_Entry_Id__c,
 			Color_Match_Hinges__c, Corrosion_Resistant_Hardware__c,
 			Corrosion_Resistant_Hinges__c, Corrosion_Resistant_Lock__c,
@@ -140,7 +159,7 @@ public with sharing class RMS_cloneQuoteController {
 			Description, Discount, Door_Sill_Color__c, Drip_Cap_Pieces__c,
 			EJ_Color__c, EJ_Frame__c, EJ_Kerf__c,EJ_Species__c,
 			EJ_Thickness__c, EJ_Wall_Depth__c, Entered_Price__c, Exterior_Color__c,
-			Exterior_Door_Jamb__c, Exterior_Frame_Depth__c,
+			Exterior_Door_Jamb__c, Exterior_Frame_Depth__c, Extended_Price__c,
 			Exterior_Grille_Color__c, Exterior_Keyed_Lock__c, Exterior_Trim_Color__c,
 			Exterior_Trim__c, Fibrex_L_Trim__c, Finger_Lifts__c,
 			Finish_Matched_Panel_Stop__c, Floor__c, Frame_Type__c, Glass_Pattern_S1__c,
@@ -159,7 +178,7 @@ public with sharing class RMS_cloneQuoteController {
 			Lites_High_Wide_Total_S1__c, Lites_High_Wide_Total_S2__c,
 			Lites_High_Wide_Total_S4__c, Lites_Wide_S1__c,Lites_Wide_S2__c,
 			Lites_Wide_S4__c, Locks_Sash__c, Mfg_Mull_Sequence__c,
-			Mull_Sequence_Mullion__c,Number_of_Panels__c,Parent_Quote_Line_Item__c,
+			Mull_Sequence_Mullion__c, Notes__c, Number_of_Panels__c,Parent_Quote_Line_Item__c,
 			Parent_Unit_rSuite_Id__c,Part_of_Bay__c,
 			Part_of_Bow__c, Permanently_Applied_Interior_Wood_Grille__c,
 			Perm_Applied_Int_Wood_Grille__c,Pivotal_Id__c, PricebookEntryId,
@@ -188,7 +207,7 @@ public with sharing class RMS_cloneQuoteController {
 			
 			qli2.QuoteId = newQuote.Id;
 			qli2.Pivotal_Id__c = '';
-			qli2.Parent_Unit_rSuite_Id__c = '';
+			//qli2.Parent_Unit_rSuite_Id__c = '';
 			
 			qli2.Aluminum_Sill_Support__c = qli.Aluminum_Sill_Support__c;
 			qli2.Applied_Grilles__c = qli.Applied_Grilles__c;
@@ -197,6 +216,8 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.Astragal__c = qli.Astragal__c;
 			qli2.Auxillary_Foot_Lock_Color_Match__c = qli.Auxillary_Foot_Lock_Color_Match__c; 
 			qli2.Breather_Tubes__c = qli.Breather_Tubes__c;
+			qli2.Brickmould_Applied__c = qli.Brickmould_Applied__c;
+			qli2.Calculated_Price__c = qli.Calculated_Price__c; 
 			qli2.Casing_Location__c = qli.Casing_Location__c; 
 			qli2.Casing_Profile__c = qli.Casing_Profile__c; 
 			qli2.Casing_Species__c = qli.Casing_Species__c;
@@ -231,7 +252,8 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.Exterior_Grille_Color__c = qli.Exterior_Grille_Color__c; 
 			qli2.Exterior_Keyed_Lock__c = qli.Exterior_Keyed_Lock__c;
 			qli2.Exterior_Trim_Color__c = qli.Exterior_Trim_Color__c;
-			qli2.Exterior_Trim__c = qli.Exterior_Trim__c; 
+			qli2.Exterior_Trim__c = qli.Exterior_Trim__c;  
+			qli2.Extended_Price__c = qli.Extended_Price__c; 
 			qli2.Fibrex_L_Trim__c = qli.Fibrex_L_Trim__c; 
 			qli2.Finger_Lifts__c = qli.Finger_Lifts__c;
 			qli2.Finish_Matched_Panel_Stop__c = qli.Finish_Matched_Panel_Stop__c; 
@@ -280,6 +302,7 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.Locks_Sash__c = qli.Locks_Sash__c; 
 			qli2.Mfg_Mull_Sequence__c = qli.Mfg_Mull_Sequence__c;
 			qli2.Mull_Sequence_Mullion__c = qli.Mull_Sequence_Mullion__c;
+			qli2.Notes__c  = qli.Notes__c;
 			qli2.Number_of_Panels__c = qli.Number_of_Panels__c;
 			qli2.Parent_Quote_Line_Item__c = qli.Parent_Quote_Line_Item__c;
 			qli2.Part_of_Bay__c = qli.Part_of_Bay__c;
@@ -289,6 +312,7 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.PricebookEntryId = qli.PricebookEntryId;
 			qli2.Pricing_Cross_Reference__c = qli.Pricing_Cross_Reference__c;
 			qli2.Product2Id = qli.Product2Id;
+			qli2.Parent_Unit_rSuite_Id__c = qli.Parent_Unit_rSuite_Id__c;
 			qli2.Quantity = qli.Quantity;
 			qli2.Right_Leg_Fraction__c = qli.Right_Leg_Fraction__c; 
 			qli2.Right_Leg_Inches__c = qli.Right_Leg_Inches__c;
