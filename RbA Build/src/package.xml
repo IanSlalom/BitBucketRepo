@@ -154,6 +154,7 @@
         <members>testRMS_viewServiceOrderProductsCtlr</members>
         <members>testRMS_viewServiceRequestCtrlr</members>
         <members>warrantyTriggerTest</members>
+        <members>RMS_cloneQuoteController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -232,6 +233,7 @@
         <members>RMS_viewServiceOrders</members>
         <members>RMS_viewServiceRequest</members>
         <members>RMS_viewServiceRequestLocked</members>
+        <members>RMS_cloneQuote</members>
         <name>ApexPage</name>
     </types>
     <types>

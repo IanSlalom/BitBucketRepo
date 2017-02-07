@@ -1,0 +1,40 @@
+<apex:page standardController="Quote" extensions="RMS_cloneQuoteController" showHeader="true" sidebar="true">
+	<head>
+		<!-- Core JQuery -->
+        <apex:includeScript value="{!$Resource.jquery}"/>
+	</head>
+	<apex:form >
+		<apex:pageBlock title="Clone Quote">
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton action="{!save}" value="Save" id="save"/>
+				<apex:commandButton action="{!cancel}" value="Cancel"/>
+			</apex:pageBlockButtons>
+			
+			<apex:pageMessages />
+			<apex:outputPanel id="RMS_cloneQuote_messages">
+                <input style="display: none;" value="{!quoteStatus}" id="quoteStatusInput" /> 
+            </apex:outputPanel>
+
+			<apex:pageBlockSection title="New Quote Details" columns="1" >
+				<div class="errorMsg" id="cloneQuoteErrors"/>
+				<apex:inputField value="{!newQuote.Name}"/> 
+			</apex:pageBlockSection> 
+		</apex:pageBlock>
+	</apex:form>
+	<script type="text/javascript">
+        jQuery(document).ready( function() {
+            var pageOppStatus = jQuery("[id*='quoteStatusInput']").val();
+            //If we have any errors show the error message box and disable the buttons.
+            if (pageOppStatus != ''){
+            	jQuery( "#cloneQuoteErrors" ).text( pageOppStatus );
+            	jQuery( "#cloneQuoteErrors" ).css( 'visibility','visible' );
+            	jQuery( ".btn" ).attr( 'disabled','disabled' );
+            	jQuery( ".btn" ).css( 'visibility','hidden' );
+
+            } else {
+            	jQuery( "#cloneQuoteErrors" ).css( 'visibility','hidden' );
+            }
+            
+        });
+    </script>
+</apex:page>
