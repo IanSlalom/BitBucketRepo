@@ -19,7 +19,9 @@
 trigger OrderTrigger on Order (before insert, before update, before delete, 
                                             after insert, after undelete, after update, after delete) {    
 //  }    
-    System.Debug('************hasOrderTriggerRanAfter=' +UtilityMethods.hasOrderTriggerRan());
+    // Set the order trigger to ran
+    UtilityMethods.setOrderTriggerRan();
+
     //GET ALL RMS SETTINGS CUSTOM SETTINGS
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     
@@ -104,7 +106,5 @@ trigger OrderTrigger on Order (before insert, before update, before delete,
 			if (Trigger.isDelete) for (sObject obj : trigger.old) { obj.addError(e.getDmlMessage(0)); }
 			else for (sObject obj : trigger.new) { obj.addError(e.getDmlMessage(0)); }
 		}
-    // Set the order trigger to ran
-    if(Trigger.isUpdate && Trigger.isAfter)UtilityMethods.setOrderTriggerRan();
 	}
 }
