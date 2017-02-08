@@ -148,6 +148,10 @@
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cloned_Quote_Id__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
