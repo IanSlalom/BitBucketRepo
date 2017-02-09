@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customButtons>Clone_Quote</customButtons>
     <excludeButtons>Submit</excludeButtons>
     <excludeButtons>SyncQuote</excludeButtons>
     <layoutSections>
@@ -146,6 +147,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cloned_Quote_Id__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

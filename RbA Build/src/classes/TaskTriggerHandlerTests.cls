@@ -79,13 +79,13 @@ private class TaskTriggerHandlerTests {
 		soldOrder[0].Apex_Context__c = true;
 		update soldOrder;
 		List<Task> onHoldTasks = [Select Id, WhatId, OwnerId, recordTypeId from Task Where WhatId =: soldOrder[0].Id];
-//		System.assertEquals(onHoldTasks.size(),1);
-//		System.assertEquals(onHoldTasks[0].OwnerId, soldOrder[0].OwnerId);
-//		System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
+		System.assertEquals(onHoldTasks.size(),1);
+		System.assertEquals(onHoldTasks[0].OwnerId, soldOrder[0].OwnerId);
+		System.assertEquals(onHoldTasks[0].recordTypeId, UtilityMethods.retrieveRecordTypeId('On_Hold', 'Task'));
 		onHoldTasks[0].Status = 'Completed';
 		update onHoldTasks;
 		soldOrder = [Select Id, Name, Status from Order where Id =: soldOrder[0].Id];
-//		System.assertEquals(soldOrder[0].Status, priorStatus);
+		System.assertEquals(soldOrder[0].Status, priorStatus);
 		Test.stopTest();
 	}
 }
