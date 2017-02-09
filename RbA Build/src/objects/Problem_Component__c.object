@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The Problem Component code associated to the actual Service Product, filtered based on Service Symptom and Product</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Installed_Product__c</fullName>
+        <description>Displays the name of the Installed Product for the Service Product</description>
+        <externalId>false</externalId>
+        <formula>Service_Product_lkup__r.Installed_Product_Asset__r.Product2.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Displays the name of the Installed Product for the Service Product</inlineHelpText>
+        <label>Installed Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Problem_Component_asgn__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>This adds a Problem Component to the Service Symptom and Service Product. Looks up to &quot;Problem Component Assignment&quot;. The Problem Component Assignment is the junction object between Problem Components and Service Symptoms. This lookup therefore is filtered to show only those Problem Components for the Service Symptom of this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This adds a Problem Component to the Service Symptom and Service Product. Looks up to &quot;Problem Component Assignment&quot;. The Problem Component Assignment is the junction object between Problem Components and Service Symptoms. This lookup therefore is filtere</inlineHelpText>
+        <label>Problem Component</label>
+        <lookupFilter>
+            <active>false</active>
+            <filterItems>
+                <field>Problem_Component_Config__c.Service_Symptom__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Service_Symptom_Validation__c</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Problem_Component_Config__c</referenceTo>
+        <relationshipLabel>Service Requests - Problem Components</relationshipLabel>
+        <relationshipName>Problem_Components</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Text__c</fullName>
+        <description>For UI Purposes</description>
+        <externalId>false</externalId>
+        <formula>Service_Product_lkup__r.Product_Name__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Product_lkup__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Links the Problem Component to the Service Product of the related Service Symptom. Set by code in the backoffice when adding Problem Components.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Links the Problem Component to the Service Product of the related Service Symptom. Set by code in the backoffice when adding Problem Components.</inlineHelpText>
+        <label>Service Product</label>
+        <referenceTo>OrderItem</referenceTo>
+        <relationshipLabel>Problem Components</relationshipLabel>
+        <relationshipName>Problem_Components</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Symptom_Text__c</fullName>
+        <description>For UI Purposes</description>
+        <externalId>false</externalId>
+        <formula>Service_Symptom__r.Service_Symptom__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Symptom</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Symptom_Validation__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Used in part to ensure that the Problem Components available are filtered properly so that the Service Symptom on the Problem Component Assignment is equal to the Service Symptom List item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used in part to ensure that the Problem Components available are filtered properly so that the Service Symptom on the Problem Component Assignment is equal to the Service Symptom List item.</inlineHelpText>
+        <label>Service Symptom Validation</label>
+        <referenceTo>Service_Symptom_List__c</referenceTo>
+        <relationshipLabel>Problem Components</relationshipLabel>
+        <relationshipName>Problem_Components</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Symptom__c</fullName>
+        <description>Links the selected Problem Component code to the selected Service Symptom Code</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Links the selected Problem Component code to the selected Service Symptom Code</inlineHelpText>
+        <label>Service Symptom</label>
+        <referenceTo>Service_Symptom__c</referenceTo>
+        <relationshipLabel>Service Requests - Problem Components</relationshipLabel>
+        <relationshipName>Problem_Components</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>Problem Component</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>PC-{000}</displayFormat>
+        <label>Problem Component</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Problem Components</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

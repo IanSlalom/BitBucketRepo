@@ -1,0 +1,3420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddProduct</actionName>
+        <content>RMS_prodConfigRedirect</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>RMS_prodConfigEdit</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EditAllProduct</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>RMS_viewOrderItemRedirect</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Allowed_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Allowed Time</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Aluminum_Sill_Support__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Aluminum Sill Support</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Applied_Grilles__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <label>Applied Grilles</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Apply_to_All_Sashes_Glass__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Apply_to_All_Sashes_Grilles__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Astragal__c</fullName>
+        <description>The Astragal Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Astragal Color selected for the product.</inlineHelpText>
+        <label>Astragal</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Auxillary_Foot_Lock_Color_Match__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Auxillary Foot Lock Color Match</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>AvailableQuantity</fullName>
+    </fields>
+    <fields>
+        <fullName>Billable_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Billable Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Billing Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Breather_Tubes__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Breather Tubes are needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Breather Tubes are needed.</inlineHelpText>
+        <label>Breather Tubes</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Applied__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if brickmould should be applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if brickmould should be applied to this product.</inlineHelpText>
+        <label>Brickmould Applied</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Location__c</fullName>
+        <description>The Brickmould Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Brickmould Location selected for the product.</inlineHelpText>
+        <label>Brickmould Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Cancellation_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Cancellation Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Product Option Changed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Makeability Restrictions</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HOA/Historical Denied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LSWP Test Negative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unknown</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Cancelled_Date__c</fullName>
+        <description>The date the order product was cancelled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the order product was cancelled.</inlineHelpText>
+        <label>Cancelled Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Cancelled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to cancel the Order Product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to cancel the Order Product.</inlineHelpText>
+        <label>Cancelled</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Cancelled_by_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The user who cancelled the order product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The user who cancelled the order product.</inlineHelpText>
+        <label>Cancelled by User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Casing_Location__c</fullName>
+        <description>The Casing Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Location selected for the product.</inlineHelpText>
+        <label>Casing Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Profile__c</fullName>
+        <description>The Casing Profile selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Profile selected for the product.</inlineHelpText>
+        <label>Casing Profile</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Species__c</fullName>
+        <description>The Casing Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Species selected for the product.</inlineHelpText>
+        <label>Casing Species</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Charge_Cost_To__c</fullName>
+        <description>Pulled from the Purchase Order - Charge Cost To</description>
+        <externalId>false</externalId>
+        <formula>TEXT(Purchase_Order__r.Charge_Cost_To__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled from the Purchase Order - Charge Cost To</inlineHelpText>
+        <label>Charge Cost To</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Checkrail_Style__c</fullName>
+        <description>The checkrail style applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The checkrail style applied to this product.</inlineHelpText>
+        <label>Checkrail Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Child_Product_Pricebook_Entry_Id__c</fullName>
+        <description>a text field to hold an the id for child product pricebook entry. Have to use this type field because lookups to Pricebook Entry are not allowed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter Enter the Child Product Pricebook Entry Id. Note this should not be visible in the UI to the end user.</inlineHelpText>
+        <label>Child Product Pricebook Entry Id</label>
+        <length>18</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Color_Match_Hinges__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>For doors - if the hinges are to be color matched to the other door hardware</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For doors - if the hinges are to be color matched to the other door hardware</inlineHelpText>
+        <label>Color Match Hinges</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Amount__c</fullName>
+        <description>IF(  ISPICKVAL(Order.Status, &apos;Activated&apos;)  ,  Quantity * UnitPrice , 0)</description>
+        <externalId>false</externalId>
+        <formula>Quantity * UnitPrice</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Due__c</fullName>
+        <externalId>false</externalId>
+        <formula>Commission_Amount__c - Commission_Paid__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Commission Due</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Paid__c</fullName>
+        <externalId>false</externalId>
+        <label>Commission Paid</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hardware__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this corrosion resistant hardware option has been applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this corrosion resistant hardware option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hardware</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hinges__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this Corrosion Resistant Hinges option has been applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this Corrosion Resistant Hinges option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hinges</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Lock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>For Doors, check if the line item includes a corrosion resistant lock</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For Doors, check if the line item includes a corrosion resistant lock</inlineHelpText>
+        <label>Corrosion Resistant Lock</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Cross_Reference__c</fullName>
+        <description>rSuite uses the field to link lines from the various input spreadsheets. It will also be used to help with the loading of Pricebook Entries</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses the field to link lines from the various input spreadsheets. It will also be used to help with the loading of Pricebook Entries</inlineHelpText>
+        <label>Cross Reference</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S1__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 1.</inlineHelpText>
+        <label>Custom Grille Details S1</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S2__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 2.</inlineHelpText>
+        <label>Custom Grille Details S2</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S3__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 3.</inlineHelpText>
+        <label>Custom Grille Details S3</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S4__c</fullName>
+        <description>custom grille details for a 4th sash - currently used in doors</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 4.</inlineHelpText>
+        <label>Custom Grille Details S4</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S1__c</fullName>
+        <description>Price for the custom grille for sash 1</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 1</inlineHelpText>
+        <label>Custom Grille Price S1</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S2__c</fullName>
+        <description>Price for the custom grille for sash 2</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 2</inlineHelpText>
+        <label>Custom Grille Price S2</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S3__c</fullName>
+        <description>Price for the custom grille for sash 3</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 3</inlineHelpText>
+        <label>Custom Grille Price S3</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S4__c</fullName>
+        <description>Price for the custom grille for sash 4</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 4</inlineHelpText>
+        <label>Custom Grille Price S4</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Customer_Pickup__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Select Yes/No if the Customer will pickup the item. If yes, the Order will add a Sales Tax amount to the bill.</inlineHelpText>
+        <label>Customer Pickup</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Customer_Replace__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</inlineHelpText>
+        <label>Customer - Replace</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Date_Received__c</fullName>
+        <description>The last date all or part of this order product was received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date all or part of this order product was received.</inlineHelpText>
+        <label>Date Received</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Vendor_Credit__c</fullName>
+        <description>The date vendor credit was received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date vendor credit was received.</inlineHelpText>
+        <label>Date Vendor Credit</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Written_Off__c</fullName>
+        <description>The last date this particular orderitem was written off.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date this particular orderitem was written off.</inlineHelpText>
+        <label>Date Written Off</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Defect_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>Defect Code</label>
+        <picklist>
+            <picklistValues>
+                <fullName>A - Bowed/Warped/Twisted/Bent</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>B - Broken</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>C - Cracked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>D - Dented</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>E - Color/Finish</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>F - Fillet Bead</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>G - Gouged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>H - Hard Operating</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>I - Imperfection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>J - Hour Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>K - Rattle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>L - M &amp; T</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M - Missing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>N - Seal Failure/Collapsed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O - Gaps</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>P - Wavy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Q - Out of Square/Collapsed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>R - Ripped/Torn</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S - Scratched</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>T - Too Weak</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>U - Too Strong</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>V - Compressed Weatherstrip</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>W - Weld</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>X - Excess Silcone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Y - Containment Between Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Z - Delaminating/Falling Off</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AA - Height Too Tall</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>BB - Height Too Short</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>CC - Width Too Wide</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>DD - Width Too Narrow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EE - Bay Window Failure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>FF - Stripped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>GG - Not Fabricated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HH - Leaking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>II - Stress Crack</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M1 - Manufacturing-Wrong Item Shipped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M2 - Manufacturing-Wrong Color</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M3 - Manufacturing-Wrong Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M4 - Manufacturing-Wrong Label</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M5 - Manufacturing-Wrong Style</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M6 - Manufacturing-Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>M7 - Manufacturing-Wrong Grille Pattern</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RD1 - R &amp; D Replacement/Testing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S1 - Baan Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S2 - Pivotal Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S3 - Retail Systems Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O1 - Order Entry-Wrong Size</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O2 - Order Entry-Wrong Color</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O3 - Order Entry-Wrong Grilles</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O4 - Order Entry-Component Selection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O5 - Order Entry-Missed Reorder Requirements</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O6 - Order Entry-Wrong Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O7 - Order Entry-Bill of Meaterial Selection</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>O8 - Order Entry-Handing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A1 - Retailer-Homeowner Changed Mind</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A2 - Retailer-Ordering Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A3 - Retailer-Damaged at Install</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A4 - Retailer-Homeowner Damaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A5 - Retailer-Measurement Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A6 - Retailer-Damaged in Warehouse</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A7 - Retailer-Service Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A8 - Retailer-Lost</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A9 - Retailer-Sales Error</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A10 - Retailer-Display/Sales Sample</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>A11 - Retailer - Out of Warranty (Homeowner Pays)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Detail_Line_Number__c</fullName>
+        <description>The detail line number of the Order Product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The detail line number of the Order Product.</inlineHelpText>
+        <label>Detail Line Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Detail_Line_Process_Date__c</fullName>
+        <description>The process date of the detail line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The process date of the detail line.</inlineHelpText>
+        <label>Detail Line Process Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The discount (in currency) applied to the purchase order (used for AROs)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount (in currency) applied to the purchase order (used for AROs).</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Door_Sill_Color__c</fullName>
+        <externalId>false</externalId>
+        <label>Door Sill Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Drip_Cap_Pieces__c</fullName>
+        <description>The Drip Cap Pieces selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Drip Cap Pieces selected for the product.</inlineHelpText>
+        <label>Drip Cap Pieces</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Drip_Cap__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>used by rSuite to indicate that this quote line item has drip caps - for pricing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>check if this window needs to charge for drip caps</inlineHelpText>
+        <label>Drip Cap</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Dwelling_Room__c</fullName>
+        <externalId>false</externalId>
+        <label>Dwelling Room</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Color__c</fullName>
+        <description>The EJ Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Color selected for the product.</inlineHelpText>
+        <label>EJ Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Frame__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</inlineHelpText>
+        <label>EJ Frame</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Kerf__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>EJ Kerf</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Species__c</fullName>
+        <description>The EJ Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Species selected for the product.</inlineHelpText>
+        <label>EJ Species</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Thickness__c</fullName>
+        <description>The EJ Thickness selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Thickness selected for the product.</inlineHelpText>
+        <label>EJ Thickness</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Wall_Depth__c</fullName>
+        <description>The EJ Wall Depth selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Wall Depth selected for the product.</inlineHelpText>
+        <label>EJ Wall Depth</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EndDate</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Entered_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Entered Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extended_Height_Warning__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Extended Height Warning</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Extended_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Extended Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extended_Width_Warning__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Extended Width Warning</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Color__c</fullName>
+        <description>The exterior color of the product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior color of the product</inlineHelpText>
+        <label>Exterior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Door_Jamb__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exterior Door Jamb</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Frame_Depth__c</fullName>
+        <externalId>false</externalId>
+        <label>Exterior Frame Depth</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Grille_Color__c</fullName>
+        <description>The Exterior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Grille Color selected for the product.</inlineHelpText>
+        <label>Exterior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Keyed_Lock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exterior Keyed Lock</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim_Color__c</fullName>
+        <description>The Exterior Trim Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Trim Color selected for the product.</inlineHelpText>
+        <label>Exterior Trim Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim__c</fullName>
+        <description>The exterior trim option applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior trim option applied to this product.</inlineHelpText>
+        <label>Exterior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fibrex_L_Trim__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Fibrex L-Trim option is selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Fibrex L-Trim option is selected for this product.</inlineHelpText>
+        <label>Fibrex L-Trim</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Finger_Lifts__c</fullName>
+        <description>The number of extra finger lifts for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra finger lifts for this product.</inlineHelpText>
+        <label>Finger Lifts</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Finish_Matched_Panel_Stop__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Finish Matched Panel Stop</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Floor__c</fullName>
+        <description>Identifies the floor for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the floor for this product.</inlineHelpText>
+        <label>Floor</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Frame_Type__c</fullName>
+        <description>The frame type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The frame type applied to this product.</inlineHelpText>
+        <label>Frame Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <description>The GL Account associated to the order line item</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The GL Account associated to the order line item</inlineHelpText>
+        <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S1__c</fullName>
+        <description>Select the glass pattern for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 1.</inlineHelpText>
+        <label>Glass Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S2__c</fullName>
+        <description>Select the glass pattern for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 2.</inlineHelpText>
+        <label>Glass Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S3__c</fullName>
+        <description>Select the glass pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 3.</inlineHelpText>
+        <label>Glass Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S4__c</fullName>
+        <description>Select the glass pattern for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 4.</inlineHelpText>
+        <label>Glass Pattern S4</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S1__c</fullName>
+        <description>Select the glazing for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 1.</inlineHelpText>
+        <label>Glazing S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S2__c</fullName>
+        <description>Select the glazing for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 2.</inlineHelpText>
+        <label>Glazing S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S3__c</fullName>
+        <description>Select the glazing for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 3.</inlineHelpText>
+        <label>Glazing S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S4__c</fullName>
+        <description>Select the glazing for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 4.</inlineHelpText>
+        <label>Glazing S4</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Alignment__c</fullName>
+        <externalId>false</externalId>
+        <label>Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S1__c</fullName>
+        <description>Select the grille pattern for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 1.</inlineHelpText>
+        <label>Grille Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S2__c</fullName>
+        <description>Select the grille pattern for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 2.</inlineHelpText>
+        <label>Grille Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S3__c</fullName>
+        <description>Select the grille pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 3.</inlineHelpText>
+        <label>Grille Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S4__c</fullName>
+        <description>Select the grille pattern for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 4.</inlineHelpText>
+        <label>Grille Pattern S4</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern__c</fullName>
+        <description>The grille pattern applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille pattern applied to this product.</inlineHelpText>
+        <label>Grille Pattern</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Style__c</fullName>
+        <description>The grille style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille style selected for this product.</inlineHelpText>
+        <label>Grille Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Handing__c</fullName>
+        <description>Handing refers to the direction a window or door opens.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Handing refers to the direction a window or door opens.</inlineHelpText>
+        <label>Handing</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Handle_Type__c</fullName>
+        <description>The handle type selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The handle type selected for this product.</inlineHelpText>
+        <label>Handle Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Color__c</fullName>
+        <description>The hardware color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
+        <label>Hardware Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>The colors for all products - use product configuration to fill limit the options - for windows this will be used to populate Hardware_Finish__c and Hardware_Color__c for integration with Baan 4.  This was implemented to support rSuite.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Choose a hardware color.</inlineHelpText>
+        <label>Hardware Finish Color</label>
+        <length>40</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish__c</fullName>
+        <description>The hardware finish applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish applied to this product.</inlineHelpText>
+        <label>Hardware Finish</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Option__c</fullName>
+        <description>The hardware option selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware option selected for this product.</inlineHelpText>
+        <label>Hardware Option</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Style__c</fullName>
+        <description>The hardware style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware style selected for this product.</inlineHelpText>
+        <label>Hardware Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Height_Fraction__c</fullName>
+        <description>The height measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height measurement in fractions.</inlineHelpText>
+        <label>Height Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Height_Inches__c</fullName>
+        <description>The final height measurement in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The final height measurement in inches.</inlineHelpText>
+        <label>Height_Inches</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hubs__c</fullName>
+        <description>The number of hubs selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of hubs selected for the product.</inlineHelpText>
+        <label>Hubs</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Insect_Screen_Style__c</fullName>
+        <description>The insect screen style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The insect screen style selected for this product.</inlineHelpText>
+        <label>Insect Screen Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Holes_Location__c</fullName>
+        <description>The Install Holes Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Holes Location selected for the product.</inlineHelpText>
+        <label>Install Holes Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Track_Location__c</fullName>
+        <description>The Install Track Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Track Location selected for the product.</inlineHelpText>
+        <label>Install Track Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installed_Product_Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Installed Product Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Installed_Product_Name__c</fullName>
+        <description>for UI purposes on Service Order Items</description>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Sold_Order_Product_Asset__c),  &apos; &apos;, Sold_Order_Product_Asset__r.Product_Name__c + &apos; - &apos;+Sold_Order_Product_Asset__r.Variant_Number__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Installed Product Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Intercompany_AP_Account__c</fullName>
+        <description>The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The intercompany Accounts Payable Account Number used in the financial transaction integration with Baan ERP.</inlineHelpText>
+        <label>Intercompany AP Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Color__c</fullName>
+        <description>The interior color of the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior color of the product.</inlineHelpText>
+        <label>Interior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Extension_Jamb_Kit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Interior Extension Jamb Kit</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Grille_Color__c</fullName>
+        <description>The Interior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Grille Color selected for the product.</inlineHelpText>
+        <label>Interior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Pre_Finish__c</fullName>
+        <externalId>false</externalId>
+        <label>Interior Pre Finish</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Sash_Color__c</fullName>
+        <description>The Interior Sash Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Sash Color selected for the product.</inlineHelpText>
+        <label>Interior Sash Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Trim__c</fullName>
+        <description>The interior trim selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior trim selected for the product.</inlineHelpText>
+        <label>Interior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Is_Height_L_or_R_Leg_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Height L or R Leg Height</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Is_Leg_Height_L_or_R_Leg_Height__c</fullName>
+        <externalId>false</externalId>
+        <label>Leg Height L or R Leg Height</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Jamb_Liner_Color__c</fullName>
+        <description>The Jamb Liner Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Jamb Liner Color selected for the product.</inlineHelpText>
+        <label>Jamb Liner Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Fraction__c</fullName>
+        <description>The left leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg measurement fraction.</inlineHelpText>
+        <label>Left Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Inches__c</fullName>
+        <description>The left leg dimension in inches selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg dimension in inches selected for this product.</inlineHelpText>
+        <label>Left Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Leg_Height_Exterior_Fraction__c</fullName>
+        <externalId>false</externalId>
+        <label>Leg Height Exterior Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Leg_Height_Exterior_Whole_Inch__c</fullName>
+        <externalId>false</externalId>
+        <label>Leg Height Exterior Whole Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Leg_Height_Interior_Fraction__c</fullName>
+        <externalId>false</externalId>
+        <label>Leg Height Interior Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Leg_Height_Interior_Whole_Inch__c</fullName>
+        <externalId>false</externalId>
+        <label>Leg Height Interior Whole Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Legacy_Replacement_Product__c</fullName>
+        <externalId>false</externalId>
+        <label>Legacy Replacement Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Lifts_Pulls__c</fullName>
+        <description>The number of extra lifts/pulls for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra lifts/pulls for this product.</inlineHelpText>
+        <label>Lifts/Pulls</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Linear_Inches__c</fullName>
+        <description>Mullion - Linear Inches of the mullion unit</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Linear Inches of the mullion unit</inlineHelpText>
+        <label>Linear Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ListPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S1__c</fullName>
+        <description>Select the number of grille lites high on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 1</inlineHelpText>
+        <label>Lites High S1</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S2__c</fullName>
+        <description>Select the number of grille lites high on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 2.</inlineHelpText>
+        <label>Lites High S2</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S3__c</fullName>
+        <description>Select the number of grille lites high on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 3.</inlineHelpText>
+        <label>Lites High S3</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S4__c</fullName>
+        <description>Select the number of grille lites high on sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 4.</inlineHelpText>
+        <label>Lites High S4</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S1__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S1__c * Lites_Wide_S1__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S2__c * Lites_Wide_S2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S3__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S3__c * Lites_Wide_S3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S4__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S4__c * Lites_Wide_S4__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S4</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S1__c</fullName>
+        <description>Select the number of grille lites wide on sash 1</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 1</inlineHelpText>
+        <label>Lites Wide S1</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S2__c</fullName>
+        <description>Select the number of grille lites wide on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 2.</inlineHelpText>
+        <label>Lites Wide S2</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S3__c</fullName>
+        <description>Select the number of grille lites wide on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 3.</inlineHelpText>
+        <label>Lites Wide S3</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S4__c</fullName>
+        <description>Select the number of grille lites wide on sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 4.</inlineHelpText>
+        <label>Lites Wide S4</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Local_Remake__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</inlineHelpText>
+        <label>Local - Remake</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Locks_Sash__c</fullName>
+        <description>The number of extra locks/sash for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra locks/sash for this product.</inlineHelpText>
+        <label>Locks/Sash</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MTO_Source_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>MTO Source Code</label>
+        <picklist>
+            <picklistValues>
+                <fullName>A - Astraga/Interlock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>B - Balancer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>C - Stop Covers</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>D - GBG</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>E - Exterior Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>F - Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>G - Glass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>H - Sash (Rails and Stiles)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>I - Interior Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>L - Liner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>S - Screen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>T - Specialty Window Trim/EJ/Casing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>U - Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Makeability_Errors__c</fullName>
+        <description>Used for batch testing the makeability rules for order items</description>
+        <externalId>false</externalId>
+        <label>Makeability Errors</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Manufacturer_Replace__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checkbox used to indicate which type of Charge records will be generated. Not on page layout, do not delete.</inlineHelpText>
+        <label>Manufacturer - Replace</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Measurement_Notes__c</fullName>
+        <description>Used for Service</description>
+        <externalId>false</externalId>
+        <label>Measurement Notes</label>
+        <length>1000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Meet_Rail_Dimension__c</fullName>
+        <externalId>false</externalId>
+        <label>Meet Rail Dimension</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mfg_Mull_Sequence__c</fullName>
+        <description>The manufacturing mull sequence selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The manufacturing mull sequence selected for this product.</inlineHelpText>
+        <label>Mfg Mull Sequence</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Miscellaneous_Charge_Parent_Unit_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Miscellaneous Charge Parent Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mull_Sequence_Mullion__c</fullName>
+        <description>The mull sequence mullion selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The mull sequence mullion selected for this product.</inlineHelpText>
+        <label>Mull Sequence Mullion</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Multiple_Remake_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Multiple_Remakes__c , &quot;YES&quot;, &quot;NO&quot;)</formula>
+        <label>Multiple Remake Formula</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Multiple_Remakes__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Multiple Remakes?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>NSPR_Number__c</fullName>
+        <externalId>false</externalId>
+        <label>NSPR Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NSPR__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>NSPR/SPR</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Nail_Flange__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Needed for data conversion.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Needed for data conversion.</inlineHelpText>
+        <label>Nail Flange</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Manufacturer_Charges__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>Used for enforcing whether the user may add service symptoms and warranties. Set by rollup counting # of charges where What/Where = RbA.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for enforcing whether the user may add service symptoms and warranties. Set by rollup counting # of charges where What/Where = RbA.</inlineHelpText>
+        <label>Number Manufacturer Charges</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Service_Symptoms__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>Used to limit the user&apos;s ability to add Warranty records until there are Service Symptom records. Set by rollup of counting the # of Service Symptoms.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to limit the user&apos;s ability to add Warranty records until there are Service Symptom records. Set by rollup of counting the # of Service Symptoms.</inlineHelpText>
+        <label>Number Service Symptoms</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Warranties__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>Number Warranties</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Panels__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Panels</label>
+        <length>10</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>OrderId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Order_Booking_Date__c</fullName>
+        <description>The order&apos;s booking date.</description>
+        <externalId>false</externalId>
+        <formula>Order.EffectiveDate</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The order&apos;s booking date.</inlineHelpText>
+        <label>Order Booking Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order_Revenue_Recognition_Date__c</fullName>
+        <description>The date the order was revenue recognized.</description>
+        <externalId>false</externalId>
+        <formula>Order.Revenue_Recognized_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The date the order was revenue recognized.</inlineHelpText>
+        <label>Order Revenue Recognition Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>OriginalOrderItemId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Original_Baan_Sales_Order__c</fullName>
+        <description>The original order&apos;s unique identifier.</description>
+        <externalId>false</externalId>
+        <formula>Sold_Order_Product_Asset__r.Original_Order_Product__r.Order.Unique_Identifier__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The original order&apos;s unique identifier.</inlineHelpText>
+        <label>Original Baan Sales Order</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Overfit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Overfit</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Paint_Stain__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Paint &amp; Stain</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Parent_Order_Item__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Used to link Misc Unit charges and job materials to a window or door order line item</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Link this Misc Unit Charge or Job Materials to a specific door or window</inlineHelpText>
+        <label>Parent Order Item</label>
+        <referenceTo>OrderItem</referenceTo>
+        <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Parent_Unit_rSuite_Id__c</fullName>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4 - used to externally link misc job and unit charges or job materials order line items to window/door order line items</description>
+        <externalId>false</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps  - used to externally link misc job and  unit charges or construction materials to window/door order line items</inlineHelpText>
+        <label>Parent Unit rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bay__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bay window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bay window.</inlineHelpText>
+        <label>Part of Bay</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bow__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bow window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bow window.</inlineHelpText>
+        <label>Part of Bow</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Perm_Applied_Int_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Perm Applied Int Wood Grille</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Permanently Applied Interior Wood Grille</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pocket_Notch__c</fullName>
+        <externalId>false</externalId>
+        <label>Pocket Notch</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pricing_Cross_Reference__c</fullName>
+        <description>Copy of the  the Prodyct/Pricing Cross Reference - used  to tie a line item to its princng - Unique id = Pricebook + cross reference</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Copy of the  the Prodyct/Pricing Cross Reference - used  to tie a line item to its princng - Unique id = Pricebook + cross reference to find the record used to get the pricing - not directly linked otherwise</inlineHelpText>
+        <label>Pricing Cross Reference</label>
+        <length>40</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Product_Category__c</fullName>
+        <description>Product Category</description>
+        <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Category__c)</formula>
+        <inlineHelpText>Product Category</inlineHelpText>
+        <label>Product Category</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Class__c</fullName>
+        <description>used by rSuite for correctly displaying order line items</description>
+        <externalId>false</externalId>
+        <formula>IF(OR(ISNULL(Parent_Order_Item__c),ISBLANK(Parent_Order_Item__c)),&quot;Master Product&quot;,
+CASE(PricebookEntry.Product2.Category__c,
+&quot;MiscUnit&quot;, &quot;Misc Unit Charge&quot;,
+&quot;MiscMull&quot;, &quot;Misc Unit Charge&quot;,
+&quot;MiscUnitConst&quot;, &quot;Construction&quot;,
+&quot;MiscMullConst&quot;, &quot;Construction&quot;,
+&quot;Material&quot;, &quot;Material&quot;,
+&quot;Trim&quot;, &quot;Material&quot;,
+&quot;Lumber&quot;, &quot;Material&quot;,
+&quot;&quot;))</formula>
+        <inlineHelpText>used by rSuite for correctly displaying order line items</inlineHelpText>
+        <label>Product Class</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Family__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Family)</formula>
+        <label>Product Family</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2.Name_Part_Number__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Record_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>PricebookEntry.Product2.RecordType.DeveloperName</formula>
+        <label>Product Record Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Sub_Category__c</fullName>
+        <description>used by rSuite: set this to the value of the Product2.Sub_Category__c field</description>
+        <externalId>false</externalId>
+        <inlineHelpText>used by rSuite: set this to the value of the Product::Sub Category field</inlineHelpText>
+        <label>Product Sub Category</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(PricebookEntry.Product2.Product_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Purchase_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The purchase order that covers this sales order line item</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The purchase order that covers this sales order line item</inlineHelpText>
+        <label>Purchase Order</label>
+        <referenceTo>Purchase_Order__c</referenceTo>
+        <relationshipLabel>Order Products</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quanity_Ordered__c</fullName>
+        <externalId>false</externalId>
+        <label>Quantity Ordered</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Quantity_to_Receive__c</fullName>
+        <description>Used to receive a quantity of order items.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity_Received__c</inlineHelpText>
+        <label>Quantity to Receive</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_to_Write_Off__c</fullName>
+        <description>The quantity to write off during a given session.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The quantity to write off during a given session.</inlineHelpText>
+        <label>Quantity to Write Off</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>QuoteLineItemId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Accepted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this checkbox if the customer accepts the quote amount. By checking this box you will set the Billable Amount and update billable amounts on the related order.</inlineHelpText>
+        <label>Quote Accepted</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quote_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Quote Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Remake__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this service product is a complete remake and requires a new variant number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this service product is a complete remake and requires a new variant number.</inlineHelpText>
+        <label>Remake</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Replacement_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Replacement Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Replacement Product</relationshipLabel>
+        <relationshipName>Order_Products</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Responsible_Party__c</fullName>
+        <externalId>false</externalId>
+        <label>Responsible Party</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Right_Leg_Fraction__c</fullName>
+        <description>The right leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg measurement fraction.</inlineHelpText>
+        <label>Right Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Right_Leg_Inches__c</fullName>
+        <description>The right leg in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg in inches.</inlineHelpText>
+        <label>Right Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Room_Description__c</fullName>
+        <description>Allows the user enter a description of the dwelling&apos;s room for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Allows the user enter a description of the dwelling&apos;s room for this product.</inlineHelpText>
+        <label>Room Description</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Room__c</fullName>
+        <description>Identifies the dwelling&apos;s room for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the dwelling&apos;s room for this product.</inlineHelpText>
+        <label>Room</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SW_Grille_Alignment__c</fullName>
+        <description>The SW grille alignment selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The SW grille alignment selected for this product.</inlineHelpText>
+        <label>SW Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height_Fraction__c</fullName>
+        <description>The sales height measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales height measurement in fractions.</inlineHelpText>
+        <label>Sales Height Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height_Inches__c</fullName>
+        <description>The height of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Height Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep__c</fullName>
+        <description>The sales rep tied to this order product.</description>
+        <externalId>false</externalId>
+        <formula>Order.Sales_Rep__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The sales rep tied to this order product.</inlineHelpText>
+        <label>Sales Rep</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Fraction__c</fullName>
+        <description>The sales width measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales width measurement in fractions.</inlineHelpText>
+        <label>Sales Width Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Inches__c</fullName>
+        <description>The width of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Width Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sash_Operation__c</fullName>
+        <description>The Sash Operation selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sash Operation selected for the product.</inlineHelpText>
+        <label>Sash Operation</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sash_Ratio__c</fullName>
+        <description>The Sash Ratio selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sash Ratio selected for the product.</inlineHelpText>
+        <label>Sash Ratio</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Color__c</fullName>
+        <description>The Screen Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Screen Color selected for the product.</inlineHelpText>
+        <label>Screen Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Size__c</fullName>
+        <description>Half or Full Screen</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Half or Full Screen</inlineHelpText>
+        <label>Screen Size</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Type__c</fullName>
+        <description>The screen type applied to the selected product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen type applied to the selected product.</inlineHelpText>
+        <label>Screen Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Veneer_Type__c</fullName>
+        <description>The screen veneer type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen veneer type applied to this product.</inlineHelpText>
+        <label>Screen Veneer Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Select_Manufacturer__c</fullName>
+        <externalId>false</externalId>
+        <label>Select Manufacturer</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Andersen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bayworld</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMCO</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ADD ADDITIONAL IF NEEDED</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Sent to Baan Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Sent to Baan</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ServiceDate</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Note__c</fullName>
+        <externalId>false</externalId>
+        <label>Service Product Note</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Service__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, this product was created from a Service Order.</inlineHelpText>
+        <label>Service</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sill_Angle__c</fullName>
+        <description>The Sill Angle selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sill Angle selected for the product.</inlineHelpText>
+        <label>Sill Angle</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sold_Order_Product_Asset__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>For Service, the Asset record for the Installed Product on the Sold Order that this Service Product is for</description>
+        <externalId>false</externalId>
+        <label>Sold Order Product Asset</label>
+        <referenceTo>Asset</referenceTo>
+        <relationshipLabel>Order Products (Sold Order Product Asset)</relationshipLabel>
+        <relationshipName>Order_Products1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sold_Order_Product_NSPR__c</fullName>
+        <description>The sold order&apos;s NSPR number.</description>
+        <externalId>false</externalId>
+        <formula>Sold_Order_Product_Asset__r.Original_Order_Product__r.NSPR_Number__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The sold order&apos;s NSPR number.</inlineHelpText>
+        <label>Sold Order Product NSPR</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Special_Options__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check to enable the special option fields</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check to enable the special option fields</inlineHelpText>
+        <label>Special Options</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Shape__c</fullName>
+        <description>Choose the specialty shape for the window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Choose the specialty shape for the window.</inlineHelpText>
+        <label>Specialty Shape</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Equal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Peak Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hexagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Octagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle Top</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Chord</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Springline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quarter Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Right Triangle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trapezoid</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unequal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Half Springline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Spokes__c</fullName>
+        <description>The number of spokes selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of spokes selected for the product.</inlineHelpText>
+        <label>Spokes</label>
+        <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <description>The status of the order line item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The status of the order line item.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Configured</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Verified</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partially Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Color__c</fullName>
+        <description>The Storm Window Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Storm Window Color selected for the product.</inlineHelpText>
+        <label>Storm Window Color</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Style__c</fullName>
+        <description>The storm window style selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The storm window style selected for the product.</inlineHelpText>
+        <label>Storm Window Style</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window__c</fullName>
+        <description>The storm window selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The storm window selected for the product.</inlineHelpText>
+        <label>Storm Window</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tax_Credit_Qualified__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this particular product qualifies for a tax credit.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this particular product qualifies for a tax credit.</inlineHelpText>
+        <label>Tax Credit Qualified</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tax__c</fullName>
+        <description>The amount of tax applied to this order product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The amount of tax applied to this order product.</inlineHelpText>
+        <label>Tax</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S1__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 1 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 1 of this product is tempered.</inlineHelpText>
+        <label>Tempered S1</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S2__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 2 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 2 of this product is tempered.</inlineHelpText>
+        <label>Tempered S2</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S3__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 3 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 3 of this product is tempered.</inlineHelpText>
+        <label>Tempered S3</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S4__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 4 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 4 of this product is tempered.</inlineHelpText>
+        <label>Tempered S4</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>TotalPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Total_Procedure_Time__c</fullName>
+        <description>Set by rollup</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Calculates the sum total of Total Procedure Time all related Warranty/Reimbursement records</inlineHelpText>
+        <label>Total Procedure Time</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Retail_Price__c</fullName>
+        <description>The total retail price for this order item (quantity * retail price) + entered price</description>
+        <externalId>false</externalId>
+        <formula>(Quantity *  UnitPrice) +  Entered_Price__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The total retail price for this order item (quantity * retail price) + entered price</inlineHelpText>
+        <label>Total Retail Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Time__c</fullName>
+        <externalId>false</externalId>
+        <formula>Quanity_Ordered__c *  Allowed_Time__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Time</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Wholesale_Cost__c</fullName>
+        <description>The total wholesale cost for this line item.</description>
+        <externalId>false</externalId>
+        <formula>(Unit_Wholesale_Cost__c - Discount_Amount__c) * Quantity</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The total wholesale cost for this line item.</inlineHelpText>
+        <label>Total Wholesale Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Remake</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replacement</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>UnitPrice</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Unit_Id__c</fullName>
+        <description>The number used to identify the opening(window or door) location for this product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number used to identify the opening(window or door) location for this product</inlineHelpText>
+        <label>Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Unit_Wholesale_Cost__c</fullName>
+        <description>The wholesale cost of the product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The wholesale cost of the product</inlineHelpText>
+        <label>Wholesale Cost</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Unit_of_Measure__c</fullName>
+        <description>Used to describe how the quantity of 
+a Cost PO line item is figured.
+a Miscellaneous Unit charge is figured
+a Construction Material is figured</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to describe how the quantity of 
+a Cost PO line item is figured.
+a Miscellaneous Unit charge is figured
+a Construction Material is figured</inlineHelpText>
+        <label>Unit of Measure</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bag</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Box</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Can</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Foot</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Roll</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tube</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Grille</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Each Occurrence</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Opening</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Sq. Ft.</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Per Storm Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Single</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Upgrade_Hinges_To_Metal_Finish__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Upgrade Hinges To Metal Finish</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Variant_Number__c</fullName>
+        <description>The variant number received for the product from manufacturing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The variant number received for the product from manufacturing</inlineHelpText>
+        <label>Variant Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Vendor_Credit_to_Receive__c</fullName>
+        <description>The amount of vendor credit to receive for cost/service products.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The amount of vendor credit to receive for cost/service products.</inlineHelpText>
+        <label>Vendor Credit to Receive</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Verify_Item_Configuration__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Check if you want to verify the product configuration against the makeability rules.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to verify the product configuration against the makeability rules.</inlineHelpText>
+        <label>Verify Item Configuration</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Wide_Bar__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the wide Bar grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the wide Bar grille option was selected.</inlineHelpText>
+        <label>Wide Bar</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Width_Fraction__c</fullName>
+        <description>The width measurement in fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width measurement in fraction.</inlineHelpText>
+        <label>Width Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Width_Inches__c</fullName>
+        <description>The actual width measurement in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The actual width measurement in inches.</inlineHelpText>
+        <label>Width Inches</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Window_Opening_Control_Device__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if a Window Opening Control Device should be added to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if a Window Opening Control Device should be added to this product.</inlineHelpText>
+        <label>Window Opening Control Device</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isJobConstructionDetail__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>rSuite requested field - unsure of purpose - not on page layout nor used in integrations to Baan 4</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite requested field - unsure of purpose - not on page layout nor used in integrations to Baan 4</inlineHelpText>
+        <label>Is Job Construction Detail?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isJobMaterial__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>rSuite requested field - unsure of purpose - not on page layout nor used in integrations to Baan 4</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite requested field - unsure of purpose - not on page layout nor used in integrations to Baan 4</inlineHelpText>
+        <label>Is Job Material?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isStandardSize__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Standard Size</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isTechMeasureComplete__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used in rSuite to indicate that all of the Tech Measure items are complete for a particular unit</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used in rSuite to indicate that all of the Tech Measure items are complete for a particular unit</inlineHelpText>
+        <label>Tech Measure Is Complete</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>rSuite_Product_Type__c</fullName>
+        <description>Product - rSuite Product Type</description>
+        <externalId>false</externalId>
+        <formula>IF((TEXT(PricebookEntry.Product2.rSuite_Product_Type__c) = &apos;ASeries&apos;  || TEXT(PricebookEntry.Product2.rSuite_Product_Type__c) = &apos;200400Series&apos;),&apos;Patio Door&apos;,TEXT(PricebookEntry.Product2.rSuite_Product_Type__c))</formula>
+        <inlineHelpText>Product - rSuite Product Type</inlineHelpText>
+        <label>rSuite Product Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <validationRules>
+        <fullName>ChargeCostPrimaryandSecondaryRequired</fullName>
+        <active>false</active>
+        <errorConditionFormula>AND((NOT(ISPICKVAL( Charge_Cost_To__c , &apos;Customer - Replace&apos;))) ,(OR(ISBLANK(TEXT(Charge_Cost_To__c)), ISBLANK(TEXT(Primary_Reason__c)))),  Order.RecordType.DeveloperName  = &apos;CORO_Service&apos;) ||  (AND(Order.RecordType.DeveloperName  = &apos;CORO_Service&apos;,ISBLANK(TEXT(Charge_Cost_To__c))))</errorConditionFormula>
+        <errorMessage>Charge Cost To, Primary Reason, and Secondary Reason are required</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>OrderItem_Valid_PBE</fullName>
+        <active>true</active>
+        <description>Validates that a text Id field starts with the correct object type - in this case PricebookEntry</description>
+        <errorConditionFormula>OR(
+NOT(BEGINS(Child_Product_Pricebook_Entry_Id__c, &apos;01u&apos;)),
+AND(
+NOT(ISNULL(Child_Product_Pricebook_Entry_Id__c)),
+NOT(ISBLANK(Child_Product_Pricebook_Entry_Id__c)), 
+LEN(Child_Product_Pricebook_Entry_Id__c) &lt; 15
+))</errorConditionFormula>
+        <errorDisplayField>Child_Product_Pricebook_Entry_Id__c</errorDisplayField>
+        <errorMessage>Invalid PricebookEntry Id</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Add_Product</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add Product</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)} 
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)} 
+
+var oid = &quot;{!Order.Id}&quot;; 
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console 
+if (typeof(srcUp) == &apos;function&apos;) { 
+srcUp(&apos;/apex/RMS_addServiceProduct?isdtp=vw&amp;id=&apos;+oid); 
+} 
+// It will execute if the Button/Link will be clicked from normal Salesforce UI 
+else{ 
+window.open(&apos;/apex/RMS_addServiceProduct?id=&apos; +oid, &apos;_blank&apos;); 
+}</url>
+    </webLinks>
+</CustomObject>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AutoCompleteV2_Con</members>
@@ -271,6 +271,98 @@
         <members>Homeowner_Resolution</members>
         <members>Renewal_by_Andersen</members>
         <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Account</members>
+        <members>Activity</members>
+        <members>Asset</members>
+        <members>Assigned_Resources__c</members>
+        <members>Assigned_Skill__c</members>
+        <members>Back_Office_Check__c</members>
+        <members>Back_Office_Checklist_Configuration__c</members>
+        <members>Business_Adjustment__c</members>
+        <members>Change_History__c</members>
+        <members>Charge__c</members>
+        <members>Color_Configuration__c</members>
+        <members>Contact</members>
+        <members>Contact_History__c</members>
+        <members>Cost_Center__c</members>
+        <members>Discount_Tier__c</members>
+        <members>Discount__c</members>
+        <members>EJ_Color_Configuration__c</members>
+        <members>Event</members>
+        <members>Financial_Account_Number__c</members>
+        <members>Financial_Transaction__c</members>
+        <members>Glazing_Configuration__c</members>
+        <members>Grille_Pattern_Configuration__c</members>
+        <members>Journal_Entry__c</members>
+        <members>Labor__c</members>
+        <members>MABatchSchedule__c</members>
+        <members>MA_Scheduler_Event__c</members>
+        <members>MA_Scheduler_Settings__c</members>
+        <members>Mullion_Size_Configuration__c</members>
+        <members>Municipality_Contact__c</members>
+        <members>Municipality_Match__c</members>
+        <members>Municipality__c</members>
+        <members>Opportunity</members>
+        <members>OpportunityContactRole</members>
+        <members>Order</members>
+        <members>OrderItem</members>
+        <members>Order_Code_Lookup__c</members>
+        <members>Order_Discount__c</members>
+        <members>Order_Financing__c</members>
+        <members>Payment__c</members>
+        <members>Preferred_Resource__c</members>
+        <members>Pricebook2</members>
+        <members>PricebookEntry</members>
+        <members>Pricing_Configuration__c</members>
+        <members>Problem_Component_Config__c</members>
+        <members>Problem_Component_List__c</members>
+        <members>Problem_Component__c</members>
+        <members>Procedure_Code_Assignment__c</members>
+        <members>Procedure_Code__c</members>
+        <members>Product2</members>
+        <members>Product_Configuration__c</members>
+        <members>Product_Skill__c</members>
+        <members>Purchase_Order__c</members>
+        <members>Quote</members>
+        <members>QuoteLineItem</members>
+        <members>Quote_Discount__c</members>
+        <members>Quote_Financing__c</members>
+        <members>RMS_Settings__c</members>
+        <members>RbA_Skills__c</members>
+        <members>RbA_Work_Order__c</members>
+        <members>Received_Product__c</members>
+        <members>Refund__c</members>
+        <members>Resource_Skill__c</members>
+        <members>Resource__c</members>
+        <members>Sash_Configuration__c</members>
+        <members>Screen_Configuration__c</members>
+        <members>Service_Fields__c</members>
+        <members>Service_Product__c</members>
+        <members>Service_Symptom_Assignment__c</members>
+        <members>Service_Symptom_List__c</members>
+        <members>Service_Symptom__c</members>
+        <members>Specialty_Grille_Configuration__c</members>
+        <members>Specialty_Grille_Control__c</members>
+        <members>Store_Configuration__c</members>
+        <members>Store_Discount__c</members>
+        <members>Store_Finance_Program__c</members>
+        <members>Store_Vendor__c</members>
+        <members>Support_Log__c</members>
+        <members>TM_Offset__c</members>
+        <members>Task</members>
+        <members>Tech_Measure_Offset_Configuration__c</members>
+        <members>User</members>
+        <members>Vendor_Product__c</members>
+        <members>Warranty__c</members>
+        <members>Work_Order_Required_Skill__c</members>
+        <members>rSuite_Configuration__c</members>
+        <members>rSuite_External_Link__c</members>
+        <members>rSuite_Financing_Option__c</members>
+        <members>rSuite_Holidays__c</members>
+        <members>rSuite_Managed_Documents__c</members>
+        <name>CustomObject</name>
     </types>
     <types>
         <members>Charge__c</members>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>This object will record tech measure offsets for work in progress tech measurements.  The data in these records will only be used by the rSuite Tech Mapp application.  The related lists should not be visible to the normal end users.  These records are also master detail to the order line item. There will also be a Tech Measure Offset Configuration object that will be used to hold commonly used offsets.  These will not be linked but will be used by rSuite to copy values into these records.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Description__c</fullName>
+        <description>a description of the offset</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please enter a description</inlineHelpText>
+        <label>Description</label>
+        <length>255</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dimension__c</fullName>
+        <description>The type of the offset measurement - width or height</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The type of the offset measurement - width or height</inlineHelpText>
+        <label>Dimension</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Height</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Width</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <description>indicates whether an offset is measured on the interior or exterior</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set the measurement offset location</inlineHelpText>
+        <label>Location</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Exterior</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Interior</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Horizontal Mullion</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vertical Mullion</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Measurement__c</fullName>
+        <description>The offset measurement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter an offset measurement</inlineHelpText>
+        <label>Measurement</label>
+        <precision>5</precision>
+        <required>true</required>
+        <scale>4</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order_Line__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <description>The window or door line item that is the parent of this Tech Measure Offset</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The window or door line item that is the parent of this Tech Measure Offset</inlineHelpText>
+        <label>Order Line</label>
+        <referenceTo>OrderItem</referenceTo>
+        <relationshipLabel>Tech Measure Offsets</relationshipLabel>
+        <relationshipName>Tech_Measure_Offsets</relationshipName>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <description>The type of the offset measurement - width or height</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The type of the offset measurement - width or height</inlineHelpText>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Height</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Width</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <label>Tech Measure Offset</label>
+    <nameField>
+        <displayFormat>TMO-{0000000}</displayFormat>
+        <label>TM Offset Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Tech Measure Offsets</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Required Skills on the Work Order</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>RbA_Skill__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>RbA Skill</label>
+        <referenceTo>RbA_Skills__c</referenceTo>
+        <relationshipLabel>Work Order Required Skills</relationshipLabel>
+        <relationshipName>Work_Order_Required_Skills</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RbA_Work_Order__c</fullName>
+        <externalId>false</externalId>
+        <label>RbA Work Order</label>
+        <referenceTo>RbA_Work_Order__c</referenceTo>
+        <relationshipLabel>Work Order Required Skills</relationshipLabel>
+        <relationshipName>Work_Order_Required_Skills</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>Work Order Required Skill</label>
+    <nameField>
+        <displayFormat>WO ReqSkill - {00}</displayFormat>
+        <label>WO Required Skill #</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Work Order Required Skills</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>LockedServiceRequest</fullName>
+        <active>true</active>
+        <description>If Service Request is Locked (Status = Warranty Submitted, Warranty Accepted, Warranty Rejected, or Closed) users may not add records</description>
+        <errorConditionFormula>RbA_Work_Order__r.Sold_Order__r.Lock_Service_Request__c</errorConditionFormula>
+        <errorMessage>The Service Request for this Work Order is currently locked, you may not add additional skills to this Work Order.</errorMessage>
+    </validationRules>
+</CustomObject>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Used to hold details about the recourse for scheduling</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>By default when a Resource is created they will be Active. Will be marked as inactive when any one of the liability insurance expires.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this resource active?</inlineHelpText>
+        <label>Active</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Auto_Insurance_Expiration_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>RbA_User__r.Contact.Account.Auto_Liab_Expire_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled from RbA User Account info</inlineHelpText>
+        <label>Auto Insurance Expiration Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Available_Time_Window__c</fullName>
+        <externalId>false</externalId>
+        <label>Available Time Window</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Crew_Size__c</fullName>
+        <externalId>false</externalId>
+        <label>Crew Size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Duplicate_Value_Catcher__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>false</externalId>
+        <inlineHelpText>This is updated via workflow.  You cannot have the same resource/user record with different resource types.</inlineHelpText>
+        <label>Duplicate Value Catcher</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>General_Insurance_Expiration_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>RbA_User__r.Contact.Account.General_Liab_Expire_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled from RbA User Account info</inlineHelpText>
+        <label>General Insurance Expiration Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inactive_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+AND( 
+ISBLANK(Auto_Insurance_Expiration_Date__c), 
+ISBLANK(General_Insurance_Expiration_Date__c), 
+ISBLANK(Work_Comp_Insurance_Expiration_Date__c) 
+), 
+NULL, 
+TODAY()- 
+MAX( 
+TODAY()- BLANKVALUE(Auto_Insurance_Expiration_Date__c, DATE(2999, 01, 01)), 
+TODAY()- BLANKVALUE(General_Insurance_Expiration_Date__c, DATE(2999, 01, 01)), 
+TODAY()- BLANKVALUE(Work_Comp_Insurance_Expiration_Date__c, DATE(2999, 01, 01)) 
+) 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Date this resource&apos;s insurance expires - the earliest of the three insurance dates. 7 days after this date, this resource will be marked inactive.</inlineHelpText>
+        <label>Inactive Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inactive_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Inactive Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Insurance Expiration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Longer an Employee</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Phone_Number__c</fullName>
+        <externalId>false</externalId>
+        <formula>RbA_User__r.Contact.Account.Phone</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Phone Number</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Rank__c</fullName>
+        <externalId>false</externalId>
+        <label>Rank</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>RbA_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter individual for Tech Measure. Enter Crew name for Installer</inlineHelpText>
+        <label>RbA User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Resources</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Resource_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Primary Resource Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install Crew</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Field Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Location_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>Retail_Location__r.Store__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Retail Location</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Retail_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Store Configuration</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>Resources</relationshipLabel>
+        <relationshipName>Resources</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Secondary_Resource_Type_s__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>For any resource with multiple types, you may select any other type they may be.</inlineHelpText>
+        <label>Secondary Resource Type(s)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install Crew</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Field Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>User_Type__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicate whether the user (resource) is an internal or external user. Internal users do not have inactive dates based on insurance expiration. Plays a role in Labor, whether user should be entering hours or dollars.</inlineHelpText>
+        <label>User Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Internal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>External</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Vendor_Account_Id__c</fullName>
+        <description>Used for automation purposes</description>
+        <externalId>false</externalId>
+        <formula>RbA_User__r.Contact.AccountId</formula>
+        <label>Vendor Account Id</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Comp_Insurance_Expiration_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>RbA_User__r.Contact.Account.WorkComp_EmplLiab_ExpireDate__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulled from RbA User Account info</inlineHelpText>
+        <label>Work Comp Insurance Expiration Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <label>Resource</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Active__c</columns>
+        <columns>Resource_Type__c</columns>
+        <columns>Secondary_Resource_Type_s__c</columns>
+        <columns>User_Type__c</columns>
+        <columns>RbA_User__c</columns>
+        <columns>Duplicate_Value_Catcher__c</columns>
+        <columns>Retail_Location__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Demo_Resources</fullName>
+        <columns>NAME</columns>
+        <columns>Resource_Type__c</columns>
+        <columns>Crew_Size__c</columns>
+        <columns>Retail_Location_Formula__c</columns>
+        <columns>RbA_User__c</columns>
+        <columns>Active__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Retail_Location_Formula__c</field>
+            <operation>equals</operation>
+            <value>Demo Store - BW</value>
+        </filters>
+        <label>Demo Resources</label>
+    </listViews>
+    <nameField>
+        <label>Resource Name</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Resources</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Resource_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>User_Type__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Resource_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>User_Type__c</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Resource_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>User_Type__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>
