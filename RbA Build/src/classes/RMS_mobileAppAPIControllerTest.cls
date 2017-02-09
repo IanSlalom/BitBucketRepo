@@ -9,23 +9,13 @@
 private class RMS_mobileAppAPIControllerTest {
 
 	static testmethod void testdoGet(){
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setupConfigs();
 		RestRequest req = new RestRequest(); 
 		RestResponse res = new RestResponse();
 		// this is an example of the full URL - it needs to be broken into its parts
 	    //req.requestURI = 'https://foo.salesforce.com/services/apexrest/1net/getAppointments?TS=2015-12-03 23:23:53';
 		req.addParameter('TS', '2015-12-03 23:23:53');
-	    req.requestURI = '/1net/getAppointments';
-	    req.httpMethod = 'GET';
-		RestContext.request = req;
-		RestContext.response = res;
-		RMS_mobileAppAPIController.doGet();
-		Blob b = (blob) (RestContext.response.responseBody);
-		System.assert(b.toString().startsWith('{"tmAppts":'));
-	}
-
-	static testmethod void testdoGetNoTimeStamp(){
-		RestRequest req = new RestRequest(); 
-		RestResponse res = new RestResponse();
 	    req.requestURI = '/1net/getAppointments';
 	    req.httpMethod = 'GET';
 		RestContext.request = req;

@@ -226,6 +226,7 @@ public with sharing class RMS_salesOrderManager {
 			Order_Discount__c od = new Order_Discount__c();
 			od.Store_Discount__c = qd.Store_Discount__c;
 			od.Discount_Amount__c = qd.Discount_Amount__c;
+			od.Per_Unit_Discount__c = qd.Per_Unit_Discount__c;
 			od.Status__c = qd.Status__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {

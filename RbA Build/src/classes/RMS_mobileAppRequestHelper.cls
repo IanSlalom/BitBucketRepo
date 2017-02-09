@@ -28,43 +28,69 @@ public with sharing class RMS_mobileAppRequestHelper {
 	'Leg_Height_Exterior_Whole_Inch__c, Leg_Height_Exterior_Fraction__c, Is_Leg_Height_L_or_R_Leg_Height__c,' +
 	'isJobMaterial__c, isJobConstructionDetail__c' ;
 	private static final String OLI_WHERE_CLAUSE = 'from OrderItem where OrderId in :orderIds and isDeleted = false order by Unit_Id__c, Product_Class__c';
+	// Opporunity Query
+	private static final String OPP_QUERY = 'SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, Pricebook2Id, Window_Problems__c, rSuite_Id__c,' +
+	    	'rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c, First_Selected_Quote__c, Second_Selected_Quote__c, ' +
+	    	'Sales_Rep_Name__c, Sales_Rep_Email__c, Sales_Rep_Phone__c FROM Opportunity';
+	
+  /* @method: getUnsoldAge(Id userId)
+   * @param: Id userId - user who the appointements are assigned to
+   * @return: Integer
+   */
+  public Integer getUnsoldAge(Id userId){
+	User u = [select Username, Default_Store_Location__c from User where Id = :userId limit 1];
+	Account a = [select Active_Store_Configuration__r.rSuite_Configuration__r.Unsold_Age_In_Months__c from Account where Name = :u.Default_Store_Location__c and RecordType.DeveloperName = 'Store' limit 1];
+	return a.Active_Store_Configuration__r.rSuite_Configuration__r.Unsold_Age_In_Months__c.intValue();
+  }
 
   /* @method: findAppointments(Id userId)
    * @param: Id userId - user who the appointements are assigned to
-   * @param: Datatime afterTimestamp
    * @return: String - JSON string of the appointments data
    */
-  public String findAppointments(Id userId, Datetime afterTimeStamp){
+  public String findAppointments(Id userId){
     try {
+	  //get all sales opportunities assigned to me excluding old ones
+	  Integer unSoldAge = getUnsoldAge(userId);
+	  Date afterDate = Date.today().addMonths(-unSoldAge);
+	  String whereClause = 'where OwnerId = :userId and ' +
+	  	'((StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
+	  	'((StageName = \'New\' or StageName = \'In Progress\' or StageName = \'Quoted\') and CloseDate > :afterDate))';	  
+	  String query = OPP_QUERY + ' ' + whereClause;
+	  Map<Id, Opportunity> salesOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
+
+	  filterOppbyOrderStatus(salesOpportunityMap);
+      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Synced_DateTime__c, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and WhatId in: salesOpportunityMap.keySet()];
+
       // get all my appoints in the last year and going forward
       Datetime myTimeStamp = Datetime.now().addYears(-1);
-      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Sales Appointment'];
-      List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Tech Measure'];
+      List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Synced_DateTime__c, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Tech Measure'];
       System.debug('RMS_mobileAppRequestHelper.findAppointments: salesEvents: ' + salesEvents);
       System.debug('RMS_mobileAppRequestHelper.findAppointments: tmEvents: ' + techmEvents);
 
       Appointments myAppts = new Appointments();
       // process the sales appointments
       if (salesEvents.size() > 0) {
-        myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
-        // need to check again because the populate method could remove all of the events
-        if (salesEvents.size() > 0) {
-	        for(Event e : salesEvents){
+        myAppts.salesAppts = this.populateSalesAppointments(salesEvents,salesOpportunityMap);
+        for(Event e : salesEvents){
+		  //only set this if its not been set
+		  if (e.Synced_DateTime__c == null) {
 	          e.Synced_DateTime__c = Datetime.now();
-	        }
-	        update salesEvents;
+		  }
         }
+        update salesEvents;
       }
 
       // process the tech measure appointmsnts
       if (techmEvents.size() > 0) {
         myAppts.tmAppts = this.populateTMAppointments(techmEvents);
         for(Event e : techmEvents){
-          e.Synced_DateTime__c = Datetime.now();
+		  //only set this if its not been set
+		  if (e.Synced_DateTime__c == null) {
+	          e.Synced_DateTime__c = Datetime.now();
+		  }
         }
          update techmEvents;
       }
-
       myAppts.getApptsCompletedTimeStamp = Datetime.now();
       return JSON.serialize(myAppts);
     } catch (Exception e) {
@@ -74,43 +100,32 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
   }
 
+	/* @method: filterOppbyOrderStatus(Map<Id, Opportunity> oppsToFilter)
+	 * @param: Map<Id,Opportunity> oppsToFilter - map of opportunities that will be filtered by attached orders
+	 * @return: void
+	 */
+	public void filterOppbyOrderStatus(Map<Id,Opportunity> oppsToFilter) {
+	    // fitter out the statuses we don't want
+	    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
+			'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
+			'To Be Ordered','Seasonal Service','Closed','Activated'};
+		List<Id> oppIds = new List<Id>(oppsToFilter.keySet());
+	    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :oppsToFilter.keySet()];
+	    // remove rows found
+	    for (Order ord : filterOrders) {
+	    	oppsToFilter.remove(ord.OpportunityId);
+	    }
+	}
+
   /* @method: populateSalesAppointments(List<Id> opptyIds)
    * @param: List<Id> opptyIds - list of opportunity ids that will be used to build the sales appointments
    * @return: String - JSON string with of SFDC ids of quotes, orders and discounts
    */
-  public List<SalesAppointment> populateSalesAppointments(List<Event> salesEvents) {
+  public List<SalesAppointment> populateSalesAppointments(List<Event> salesEvents, Map<Id, Opportunity> salesOppsMap) {
     List<SalesAppointment> salesAppts = new List<SalesAppointment>();
     List<Id> accountIdList = new List<Id>();
-    // get the opportunity ids
-    List<Id> opportunityIdList = new List<Id>();
-    for(Event e : salesEvents){
-      opportunityIdList.add(e.whatId);
-    }
-    // fitter out the statuses we don't want
-    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
-		'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
-		'To Be Ordered','Seasonal Service','Closed','Activated'};
-    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :opportunityIdList];
-    // remove rows found
-    for (Order ord : filterOrders) {
-    	for (Integer i=0; i < opportunityIdList.size(); i++) {
-    		if (ord.OpportunityId == opportunityIdList[i]) {
-    			opportunityIdList.remove(i);
-    			i--;
-    			break;
-    		}
-	    }
-    	for (Integer j=0; j < salesEvents.size(); j++) {
-    		if (ord.OpportunityId == salesEvents[j].WhatId) {
-    			salesEvents.remove(j);
-    			j--;
-    			break;
-    		}
-	    }
-    }
-
     // get the opportunities with quotes and orders
-    Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(opportunityIdList);
+    Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(salesOppsMap);
 
     // get the Accounts(Dwellings)
     for (OpportunityContainer oc: relatedOCs.values()) {
@@ -122,15 +137,16 @@ public with sharing class RMS_mobileAppRequestHelper {
       FROM Account WHERE Id IN :accountIdList and isDeleted = false]);
 
     // get the historic opportunites
-    // not currently used by rSuite
-    //Map<Id, List<OpportunityContainer>> hocListMap = populateHistoricOpportunities(accountIdList, opportunityIdList);
+    /* not currently used by rSuite
+    Map<Id, List<OpportunityContainer>> hocListMap = populateHistoricOpportunities(accountIdList, opportunityIdList);
+    */
 
     // get the contacts using the OpportunityContactRoles
     List<OpportunityContactRole> relatedOppContacts = [select Id, contactId, isPrimary, opportunityId, Role, 
       Contact.Id, Contact.FirstName, Contact.LastName, Contact.Email, Contact.HomePhone, 
       Contact.MobilePhone, Contact.OtherPhone, Contact.Phone, Contact.Salutation, 
       Contact.Comments__c, Contact.Preferred_Method_of_Contact__c, Contact.Spouse__c
-      from OpportunityContactRole where isDeleted = false and opportunityId in :opportunityIdList order by opportunityId];
+      from OpportunityContactRole where isDeleted = false and opportunityId in :salesOppsMap.keySet() order by opportunityId];
 
     // map the contacts to the opportunity
     Map<id,list<Contact>> opportunityIdtoContactListMap = new Map<id, list<Contact>>();
@@ -185,28 +201,15 @@ public with sharing class RMS_mobileAppRequestHelper {
       opportunityIds.add(wo.Sold_Order__r.OpportunityId);
       accountIds.add(wo.Sold_Order__r.Opportunity.AccountId);
     }
+	String whereClause = 'where Id in :opportunityIds';
+	String query = OPP_QUERY + ' ' + whereClause;
+	Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
 /*    // fitter out the statuses we don't want
     List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
 		'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
 		'To Be Ordered','Seasonal Service','Closed','Activated','Pending Cancellation','Cancelled'};
     List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :opportunityIdList];
     // remove rows found
-    for (Order ord : filterOrders) {
-    	for (Integer i=0; i < opportunityIdList.size(); i++) {
-    		if (ord.OpportunityId == opportunityIdList[i]) {
-    			opportunityIdList.remove(i);
-    			i--;
-    			break;
-    		}
-	    }
-    	for (Integer j=0; j < salesEvents.size(); j++) {
-    		if (ord.OpportunityId == salesEvents[j].WhatId) {
-    			salesEvents.remove(j);
-    			j--;
-    			break;
-    		}
-	    }
-    }
 */
 
     // get the accounts
@@ -216,7 +219,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       FROM Account WHERE Id IN :accountIds and isDeleted = false]);
 
     // get the opportunities with quotes and orders
-    Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(opportunityIds);
+    Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(relatedOpportunityMap);
 
     // get the contacts using the OpportunityContactRoles
     List<OpportunityContactRole> relatedOppContacts = [select Id, contactId, isPrimary, opportunityId, Role, 
@@ -270,7 +273,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    */
   public Map<Id, List<OpportunityContainer>> populateHistoricOpportunities(List<Id> acctIds, List<Id> oppIds) {
     Map<Id, Opportunity> hoMap = new Map<Id, Opportunity>([SELECT Id from Opportunity where Id NOT in :oppIds and AccountId in :acctIds]);
-    Map<Id, OpportunityContainer> hocsMap = populateOpportunityStructure(new List<Id>(hoMap.keySet()));
+    Map<Id, OpportunityContainer> hocsMap = populateOpportunityStructure(hoMap);
 
     // now put then into a map by account
     Map<Id, List<OpportunityContainer>> acctToOppMap = new Map<Id, List<OpportunityContainer>>();
@@ -324,22 +327,15 @@ public with sharing class RMS_mobileAppRequestHelper {
   }
 
   /* @method: populateOpportunityStructure(List<Id> opptyIds)
-   * @param: List<Id> opptyIds - list of opportunity ids that will be used to build the sales appointments
+   * @param: Map<Id, Opportunity> relatedOpportunityMap - map of opportunities that will be used to build the sales appointments
    * @return: Map<Id, OpportunityContainer> containing all new appointment opportunities
    */
-  public Map<Id, OpportunityContainer> populateOpportunityStructure(List<Id> oppIds) {
+  public Map<Id, OpportunityContainer> populateOpportunityStructure(Map<Id, Opportunity> relatedOpportunityMap) {
     Map<Id, OpportunityContainer> ocMap = new Map<Id, OpportunityContainer>();
-    Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity> (
-	    [SELECT Id, Name, CloseDate, StageName, AccountId, isClosed, 
-	    Pricebook2Id, Window_Problems__c, rSuite_Id__c,
-	    rSuite_Id_1st_Selected_Quote__c, rSuite_Id_2nd_Selected_Quote__c,
-	    First_Selected_Quote__c, Second_Selected_Quote__c,
-	    Sales_Rep_Name__c, Sales_Rep_Email__c, Sales_Rep_Phone__c
-	    FROM Opportunity WHERE Id IN :oppIds]);
-
     // get the quotes 
-    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :oppIds and isDeleted = false and Status != 'Cancelled']);
+    Map<Id, Quote> quoteMap = new Map<Id, Quote>([SELECT Id, Name, isSold__c, OpportunityId, Pricebook2Id, QuoteNumber, Subtotal, Discount_Amount__c, Total__c, rSuite_Id__c, Sub_Total__c from Quote where OpportunityId in :relatedOpportunityMap.keySet() and isDeleted = false and Status != 'Cancelled']);
 	List<Id> quoteIds = new List<Id> (quoteMap.keySet());
+	// note that the variable quoteIds is used in the query
     // get the quote line items
 	String qliQuery = this.buildQLIQuery();
 	List<QuoteLineItem> qliList = Database.query(qliQuery);
@@ -376,7 +372,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
 
     // build the orderContainers
-    List<OrderContainer> orcList = buildOrderContainers(oppIds);
+    List<OrderContainer> orcList = buildOrderContainers(new List<Id>(relatedOpportunityMap.keySet()));
 
     // build the opportunityContainers
     for (Opportunity oppty: relatedOpportunityMap.values()) {
@@ -520,7 +516,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 		List<OrderItem> oiList = Database.query(oliQuery);
 		return oiList;    
 	}
-
 
   /* @method: updateOpportunity(Id OppId, String status)
    * @param: Id oppId
@@ -1074,7 +1069,10 @@ public with sharing class RMS_mobileAppRequestHelper {
 
       // process the sales appointments
       if (salesEvents.size() > 0) {
-        myAppts.salesAppts = this.populateSalesAppointments(salesEvents);
+		  String whereClause = 'where Id in :opportunityIds';
+		  String query = OPP_QUERY + ' ' + whereClause;
+		  Map<Id, Opportunity> selectedOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
+		  myAppts.salesAppts = this.populateSalesAppointments(salesEvents, selectedOpportunityMap);
       }
 
       myAppts.getApptsCompletedTimeStamp = Datetime.now();
@@ -1131,7 +1129,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// save the order items
 		for(OrderItemContainer oiCon: oiContainersToUpsert){
 			// link the orderItem to the order for new line items
-			if(oiCon.oi != null && oiCon.oi.OrderId == null) {
+			if(oiCon.oi != null && oiCon.oi.Id == null && oiCon.oi.OrderId == null) {
 				oiCon.oi.OrderId = tmAppt.opptyContainer.anOrderContainer.anOrder.Id;
 			}
 			oiToUpsert.add(oiCon.oi);
@@ -1242,7 +1240,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 				msgParms = new String[]{' '};
 			}
 			message = String.format(message, msgParms);
-			Id supportLogId = UtilityMethods.supportLog('RMS', operation, message, inputJSON, Userinfo.getUserId());
+			Id supportLogId = UtilityMethods.supportLog('RMS', operation, message, inputJSON.left(131072), Userinfo.getUserId());
 			msgParms = new String[]{' ',supportLogId};
 			message = String.format(message,msgParms);
 			errorArray.clear();
@@ -1291,7 +1289,10 @@ public with sharing class RMS_mobileAppRequestHelper {
 				ord.Apex_Context__c = true;
 			}
 			// get the opportunities with quotes and orders
-			Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(opportunityIds);
+			String whereClause = 'where Id in :opportunityIds';
+			String query = OPP_QUERY + ' ' + whereClause;
+			Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
+			Map<Id, OpportunityContainer> relatedOCs = populateOpportunityStructure(oppMap);
 
 			List<Opportunity> oppsToUpdate = new List<Opportunity>();
 			List<Quote> quotesToUpdate = new List<Quote>();

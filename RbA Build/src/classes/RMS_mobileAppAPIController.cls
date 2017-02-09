@@ -37,7 +37,7 @@ global with sharing class RMS_mobileAppAPIController {
 				RestContext.response.responseBody = Blob.valueOf(NO_REQUEST_FOUND + req.requestURI);
 			} else if (operation.equals(GET_APPOINTMENTS)) {
 				Id userId = UserInfo.getUserId();
-				String afterDateParam = req.params.get(TIME_STAMP_KEY);
+/*				String afterDateParam = req.params.get(TIME_STAMP_KEY);
 				Datetime afterDTStamp = null;
 				try {
 					afterDTStamp = Datetime.valueOf(afterDateParam);
@@ -46,10 +46,10 @@ global with sharing class RMS_mobileAppAPIController {
 					System.debug('RMS_mobileAppAPIController.doGet ' + INVALID_DATETIMESTAMP + ': ' + afterDateParam);
 					afterDTStamp = Datetime.now();
 				}
+*/
 				RMS_mobileAppRequestHelper handler = new RMS_mobileAppRequestHelper();
 				RestContext.response.addHeader('Content-Type', 'application/json');
-                System.debug('RMS_mobileAppAPIController.doGet: calling findAppointments - timestamp:' + afterDTStamp);
-				RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId, afterDTStamp));
+				RestContext.response.responseBody = Blob.valueOf(handler.findAppointments(userId));
                 System.debug('RMS_mobileAppAPIController.doGet: response: ' + RestContext.response.responseBody);
 			} else {
 				RestContext.response.addHeader('Content-Type', 'application/json');

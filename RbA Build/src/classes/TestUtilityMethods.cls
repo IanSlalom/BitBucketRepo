@@ -33,6 +33,7 @@ public with sharing class TestUtilityMethods {
 
 		User u = [select Id from User WHERE Id =: UserInfo.getUserId()];
 		u.Store_Locations__c = '77 - Twin Cities, MN';
+		u.Default_Store_Location__c = '77 - Twin Cities, MN';
 		update u;
 		system.runAs(u){
 			id dwellingRT = UtilityMethods.retrieveRecordTypeId('Dwelling', 'Account');
@@ -97,6 +98,14 @@ public with sharing class TestUtilityMethods {
 
 			store1.Active_Store_Configuration__c = storeConfig.Id;
 			update store1;
+			
+			rSuite_Configuration__c rc = new rSuite_Configuration__c();
+			rc.Store_Configuration__c = storeConfig.Id;
+			rc.Unsold_Age_In_Months__c = 4;
+			insert rc;
+			
+			storeConfig.rSuite_Configuration__c = rc.Id;
+			update storeConfig;
 		
 			Back_Office_Checklist_Configuration__c backOfficeChecklist1 = new Back_Office_Checklist_Configuration__c(
 				Store_Configuration__c = storeConfig.id,
@@ -241,16 +250,24 @@ public with sharing class TestUtilityMethods {
 	}
 	
 
-	public Opportunity createOpportunity(String name, Id accountId, String stage, Id ownerId){
+	public Opportunity createOpportunity(String name, Id accountId, String stage, Id ownerId, Date closeDate){
 		Opportunity testOpportunity = new Opportunity(
 			Name = name,
 			AccountId = accountId,
 			StageName = stage
 		);
 		if( stage.contains('Closed') ){
-			testOpportunity.CloseDate = Date.today().adddays(-1);
+			if (closeDate == null) {
+				testOpportunity.CloseDate = Date.today().adddays(-1);
+			} else {
+				testOpportunity.CloseDate = closeDate;
+			}
 		}else{
-			testOpportunity.CloseDate = Date.today().addYears(1);
+			if (closeDate == null) {
+				testOpportunity.CloseDate = Date.today().addYears(1);
+			} else {
+				testOpportunity.CloseDate = closeDate;
+			}
 		}
 		if (ownerId != null)
 			testOpportunity.OwnerId = ownerId;
@@ -258,6 +275,9 @@ public with sharing class TestUtilityMethods {
 		return testOpportunity;
 	}
 
+	public Opportunity createOpportunity(String name, Id accountId, String stage, Id ownerId){
+		return createOpportunity(name, accountId, stage, ownerId, null);
+	}
 	public Opportunity createOpportunity(Id accountId, String stage){
 		return createOpportunity('TestOpportunity', accountId, stage, null);
 	}
@@ -327,19 +347,28 @@ public with sharing class TestUtilityMethods {
 		return mm;
 	}
 	
-	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder){
+	static Integer counter = 0;
+	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder, boolean createWithQuote){
+		createSalesAppt(userId, apptStartDateTime, createWithOrder, createWithQuote, 'New', '22');
+	}
+	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder, boolean createWithQuote, String oppStage){
+		createSalesAppt(userId, apptStartDateTime, createWithOrder, createWithQuote, oppStage, '22');
+	}
+	public void createSalesAppt(Id userId, Datetime apptStartDateTime, boolean createWithOrder, boolean createWithQuote, String oppStage, String testName){
 		Account store1 = [SELECT id, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
-		Account dwelling1 = createDwellingAccount('22');
+		Account dwelling1 = createDwellingAccount(testName + System.now());
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
 		
 		List<SObject> itemsToInsert = new List<SObject>();		
-		Contact contact1 = createContact(dwelling1.id , '1');
+		Contact contact1 = createContact(dwelling1.id , testName + counter++);
 		itemsToInsert.add(contact1);
 		
-		Opportunity opp1 = createOpportunity(dwelling1.id, 'New');
+		Opportunity opp1 =  createOpportunity('TestOpp1', dwelling1.id, oppStage, userId, apptStartDateTime.date());
+//		Opportunity opp1 = createOpportunity(dwelling1.id, oppStage, apptStartDateTime.date());
 		opp1.OwnerId = userId;
-		opp1.rSuite_Id__c = 'examplersuiteId' + System.now();
+		opp1.rSuite_Id__c = 'examplersuiteId' + counter;
+		opp1.Store_Location__c = store1.Id;
 		itemsToInsert.add(opp1);
 		insert itemsToInsert;
 		
@@ -353,11 +382,11 @@ public with sharing class TestUtilityMethods {
 		itemsToInsert.add(ocr1);
 		insert itemsToInsert;
 		
-		if(createWithOrder){
+		if(createWithQuote || createWithOrder){
 			//clean out the list
 			itemsToInsert.clear();
 
-			Pricebook2 pb = createPricebook2('SATestPB', store1.Active_Store_Configuration__c);
+			Pricebook2 pb = createPricebook2('SATestPB' + testName, store1.Active_Store_Configuration__c);
 			itemsToInsert.add(pb);
 			insert itemsToInsert;
 			itemsToInsert.clear();
@@ -371,8 +400,10 @@ public with sharing class TestUtilityMethods {
 			insert  qli1;
 			
 			// generate the order
-			opp1.StageName = 'Sold';
-			update opp1;
+			if (createWithOrder) {
+				opp1.StageName = 'Sold';
+				update opp1;
+			}
 
 		}
 	}
@@ -395,6 +426,7 @@ public with sharing class TestUtilityMethods {
 		Opportunity opp1 = createOpportunity('TMAppt',dwelling1.id, 'New', userId);
 		opp1.OwnerId = userId;
 		opp1.rSuite_Id__c = 'examplersuiteId';
+		opp1.Store_Location__c = store1.Id;
 		itemsToInsert.add(opp1);
 		insert itemsToInsert;
 
@@ -454,29 +486,43 @@ public with sharing class TestUtilityMethods {
 			childProd = childProdList[0];
 		}
 
+		Id standardPBId = Test.getStandardPricebookId();
+		List<PricebookEntry> pbeList = [select Id, Product2Id, Pricebook2Id, UnitPrice, isActive from PricebookEntry where Pricebook2Id in (:pbId, :standardPBId)];
+		PricebookEntry pbEntry1 = null;
+		PricebookEntry pbEntry2 = null;
 		PricebookEntry pbEntry3 = null;
 		PricebookEntry pbEntry4 = null;
-		List<PricebookEntry> pbeList = [select Id, Product2Id, Pricebook2Id, UnitPrice, isActive from PricebookEntry];
-		if (pbeList.size() == 0) {
-			List<SObject> itemsToInsert = new List<SObject>();
-			PricebookEntry pbEntry1 = createPricebookEntry(Test.getStandardPricebookId(), masterProd.id);
-			PricebookEntry pbEntry2 = createPricebookEntry(Test.getStandardPricebookId(), childProd.id);
-			pbEntry3 = createPricebookEntry(pbId, masterProd.id);
-			pbEntry4 = createPricebookEntry(pbId, childProd.id);
-			itemsToInsert.add(pbEntry1);
-			itemsToInsert.add(pbEntry2);
-			itemsToInsert.add(pbEntry3);
-			itemsToInsert.add(pbEntry4);
-			insert itemsToInsert;
-		} else {
-			for(PricebookEntry pbe : pbeList) {
-				if (pbe.Product2Id == masterProd.Id && pbe.Pricebook2Id == pbId) {
-					pbEntry3 = pbe;
-				}
-				if (pbe.Product2Id == childProd.Id && pbe.Pricebook2Id == pbId) {
-					pbEntry4 = pbe;
-				}
+		
+		for (PricebookEntry pbe : pbeList) {
+			if (pbe.Product2Id == childProd.Id && pbe.Pricebook2Id == standardPBId) {
+				pbEntry2 = pbe;
 			}
+			if (pbe.Product2Id == masterProd.Id && pbe.Pricebook2Id == standardPBId) {
+				pbEntry1 = pbe;
+			}
+			if (pbe.Product2Id == childProd.Id && pbe.Pricebook2Id == pbId) {
+				pbEntry4 = pbe;
+			}
+			if (pbe.Product2Id == masterProd.Id && pbe.Pricebook2Id == pbId) {
+				pbEntry3 = pbe;
+			}
+		}
+		
+		if (pbEntry1 == null) {
+			pbEntry1 = createPricebookEntry(standardPBId, masterProd.id);
+			insert pbEntry1;
+		}
+		if (pbEntry2 == null) {
+			pbEntry2 = createPricebookEntry(standardPBId, childProd.id);
+			insert pbEntry2;
+		}
+		if (pbEntry3 == null) {
+			pbEntry3 = createPricebookEntry(pbId, masterProd.id);
+			insert pbEntry3;
+		}
+		if (pbEntry4 == null) {
+			pbEntry4 = createPricebookEntry(pbId, childProd.id);
+			insert pbEntry4;
 		}
 			
 		QuoteLineItem qli1 = createQuoteLineItem(pbEntry3.Id, quoteId, pbEntry4.Id);
