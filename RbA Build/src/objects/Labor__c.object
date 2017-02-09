@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>RMS_newLaborRedirect</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Used for logging Labor against a Work Order</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Applied_after_Order_Rev_Recognized__c</fullName>
+        <description>Returns true if the Date Applied on the Labor record is &gt; Rev Recognized Date on the related Order.</description>
+        <externalId>false</externalId>
+        <formula>Date_Applied__c &gt; Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Applied after Order Rev Recognized</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Check_Date__c</fullName>
+        <description>Check date used for the reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check date used for the reimbursement</inlineHelpText>
+        <label>Check Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Check_Number__c</fullName>
+        <description>Check number used for the reimbursement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check number used for the reimbursement</inlineHelpText>
+        <label>Check Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contractor__c</fullName>
+        <externalId>false</externalId>
+        <formula>Installer__r.RbA_User__r.Contact.Account.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Contractor</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Date_Applied__c</fullName>
+        <defaultValue>Today()</defaultValue>
+        <externalId>false</externalId>
+        <label>Date Applied</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>2000</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>50</visibleLines>
+    </fields>
+    <fields>
+        <fullName>External_Individual__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>In the event that the Install Resource is for a Crew, add the contact record for the individual member of the crew here.</inlineHelpText>
+        <label>External Individual</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Contact.RecordTypeId</field>
+                <operation>notEqual</operation>
+                <value>Customer Contacts</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>External_Labor_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>External Payment Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account_Name__c</fullName>
+        <description>The GL Account name</description>
+        <externalId>false</externalId>
+        <formula>GL_Account__r.Account_Label__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The GL Account name</inlineHelpText>
+        <label>GL Account Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>GL Account</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Financial_Account_Number__c.Store_Configuration__r.Store__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Location__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Financial_Account_Number__c.Account_Type__c</field>
+                <operation>equals</operation>
+                <value>Misc Reimbursement</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Financial_Account_Number__c</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Hourly_Rate__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>The hourly rate charged for this labor entry.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hourly rate charged for this labor entry.</inlineHelpText>
+        <label>Hourly Rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Hours_Applied__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Hours Applied</inlineHelpText>
+        <label>Hours Applied</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installer_Account_Number__c</fullName>
+        <description>The installer&apos;s account number</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The installer&apos;s account number</inlineHelpText>
+        <label>Installer Account Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Only active Resources for the selected Store Location are available for labor assignments</inlineHelpText>
+        <label>Resource</label>
+        <lookupFilter>
+            <active>true</active>
+            <booleanFilter>(1 AND 2 AND 5) OR (1 AND 2 AND 3 AND 4)</booleanFilter>
+            <errorMessage>Only active Resources for the selected store location are available as  resources. Also, only external resources can be chosen for Misc Reimbursements.</errorMessage>
+            <filterItems>
+                <field>Resource__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <filterItems>
+                <field>$Source.Store_Location__c</field>
+                <operation>equals</operation>
+                <valueField>Resource__c.Retail_Location__r.Store__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>$Source.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Misc Reimbursement</value>
+            </filterItems>
+            <filterItems>
+                <field>Resource__c.User_Type__c</field>
+                <operation>equals</operation>
+                <value>External</value>
+            </filterItems>
+            <filterItems>
+                <field>$Source.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Labor</value>
+            </filterItems>
+            <infoMessage>Only active Resources for the selected store location are available as  resources. Also, only external resources can be chosen for Misc Reimbursements.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Labor (Installer)</relationshipLabel>
+        <relationshipName>Installer</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Internal_Cost__c</fullName>
+        <description>The internal cost calculated by taking the hours applied times the hourly rate.</description>
+        <externalId>false</externalId>
+        <formula>Hours_Applied__c *  Hourly_Rate__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The internal cost calculated by taking the hours applied times the hourly rate.</inlineHelpText>
+        <label>Internal Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Internal_External_Resource__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Installer__r.User_Type__c)</formula>
+        <label>Internal/External Resource</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Match_Post_Date__c</fullName>
+        <description>Used for data migration from pivotal only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for data migration from pivotal only.</inlineHelpText>
+        <label>Invoice Match Post Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Matched__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used for data migration from pivotal only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for data migration from pivotal only.</inlineHelpText>
+        <label>Invoice Matched</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>JIP__c</fullName>
+        <description>Formula field that uses to the Related Work Order to determine if this is JIP labor or not.</description>
+        <externalId>false</externalId>
+        <formula>Related_Work_Order__r.Service_Request_Type__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Formula field that uses to the Related Work Order to determine if this is JIP labor or not.</inlineHelpText>
+        <label>JIP</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Labor_Complete__c</fullName>
+        <defaultValue>true</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Has Labor been completed?</inlineHelpText>
+        <label>Labor Complete</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Related_Work_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Related Work Order</label>
+        <referenceTo>RbA_Work_Order__c</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor1</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sent_to_Baan_Date__c</fullName>
+        <description>The date this labor record was sent to Baan</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date this labor record was sent to Baan</inlineHelpText>
+        <label>Sent to Baan Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Service_Labor_Mileage__c</fullName>
+        <description>In the past, RbA paid subcontractors mileage for service calls based on the Labor record - need a field for mileage on the Labor page for Service Labor. This will be used for data migration purposes and may be used in the future - at this time, the mileage from Labor don&apos;t need to roll up to the Service Request mileage field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Mileage for subcontractors</inlineHelpText>
+        <label>Service Labor Mileage</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Staining__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this is staining labor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this is staining labor.</inlineHelpText>
+        <label>Staining</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Standard_Hourly_Rate__c</fullName>
+        <description>The standard hourly rate for internal employees as pulled from the store configuration.</description>
+        <externalId>false</externalId>
+        <formula>Store_Location__r.Active_Store_Configuration__r.Standard_Hourly_Rate__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The standard hourly rate for internal employees as pulled from the store configuration.</inlineHelpText>
+        <label>Standard Hourly Rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Store_Location_Id__c</fullName>
+        <externalId>false</externalId>
+        <formula>Related_Work_Order__r.Sold_Order__r.Store_Location__r.Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Store Location Id</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Store Location</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Sorry, your user account is not configured to use for this store location.</errorMessage>
+            <filterItems>
+                <field>$User.Store_Location_Text__c</field>
+                <operation>contains</operation>
+                <valueField>Account.Name</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Labor</relationshipLabel>
+        <relationshipName>Labor</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Trip_Number__c</fullName>
+        <externalId>false</externalId>
+        <label>Trip Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Units_Applied__c</fullName>
+        <externalId>false</externalId>
+        <label>Units Applied</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>Text( Related_Work_Order__r.Work_Order_Type__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Work Order Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Labor</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>Labor Record # - {00}</displayFormat>
+        <label>Labor Record #</label>
+        <trackHistory>true</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Labor</pluralLabel>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Labor</fullName>
+        <active>true</active>
+        <description>Used to track Labor against the Work Order</description>
+        <label>Labor</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Misc_Reimbursement</fullName>
+        <active>true</active>
+        <description>Used to enter miscellaneous reimbursements to contractor. This was formerly called misc sub payments.</description>
+        <label>Misc Reimbursement</label>
+    </recordTypes>
+    <searchLayouts>
+        <excludedStandardButtons>New</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>New_Misc_Labor</listViewButtons>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>ContractorInsuranceExpired</fullName>
+        <active>true</active>
+        <errorConditionFormula>NOT(Installer__r.Active__c)</errorConditionFormula>
+        <errorMessage>Insurance is expired for this contractor. Please update the contractor&apos;s insurance expiration date fields.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>EnterProperLaborType</fullName>
+        <active>true</active>
+        <description>Ensures Hours are applied for Internal Users and Dollars are applied for External Users</description>
+        <errorConditionFormula>OR((AND(ISPICKVAL( Installer__r.User_Type__c, &quot;Internal&quot; ),NOT(ISBLANK( External_Labor_Amount__c )))),(AND(ISPICKVAL( Installer__r.User_Type__c, &quot;External&quot; ),NOT(ISBLANK(  Hours_Applied__c )))))</errorConditionFormula>
+        <errorDisplayField>Check_Date__c</errorDisplayField>
+        <errorMessage>Please enter External Payment Amount for External Resources and Hours Applied for Internal Resources</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>New_Misc_Labor</fullName>
+        <availability>online</availability>
+        <description>Custom button to direct user to a new misc reimbursement record</description>
+        <displayType>massActionButton</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Misc Labor</masterLabel>
+        <openType>replace</openType>
+        <page>RMS_newMiscLabor</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+</CustomObject>

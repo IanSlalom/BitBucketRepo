@@ -1,0 +1,4719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Custom Object used to track Work Orders related to Orders.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>AR_Reason__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Sold_Order__r.AR_Reason__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>AR Reason</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Dwelling association to the Work Order.</inlineHelpText>
+        <label>Account</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Dwelling</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>RbA Work Orders (Account)</relationshipLabel>
+        <relationshipName>RbA_Work_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Age__c</fullName>
+        <description>If Installation Date is Blank, default to Today - Rennovate Right Date otherwise use Installation Date.</description>
+        <externalId>false</externalId>
+        <formula>IF(
+ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Signed_Date__c, Sold_Order__r.Installation_Date__c-Renovate_Right_Booklet_Signed_Date__c)</formula>
+        <inlineHelpText>If Installation Date is Blank, default to Today - Rennovate Right Date otherwise use Installation Date.</inlineHelpText>
+        <label>Age</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Alternate_End_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Alternate End Time</label>
+        <picklist>
+            <picklistValues>
+                <fullName>10:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Alternate_Start_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Alternate Start Time</label>
+        <picklist>
+            <picklistValues>
+                <fullName>6:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Alternate_Time_Window__c</fullName>
+        <externalId>false</externalId>
+        <label>Alternate Time Window</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Application_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Application was applied for</inlineHelpText>
+        <label>Application Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Application_Notes__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Pulled from Municipality record</inlineHelpText>
+        <label>Application Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Application_Number__c</fullName>
+        <externalId>false</externalId>
+        <label>Application Number</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Appointment_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Appointment Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Appointment_Duration__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Duration the Appoitment will be</inlineHelpText>
+        <label>Appointment Duration</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Appointment_End_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Appointment End Time</label>
+        <picklist>
+            <picklistValues>
+                <fullName>10:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Appointment_Start_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Appointment Start Time</label>
+        <picklist>
+            <picklistValues>
+                <fullName>6:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:00 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1:30 pm</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Approval_Attached__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Approval Attached</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Assigned_Resources__c</fullName>
+        <externalId>false</externalId>
+        <label># Assigned Resources</label>
+        <summaryForeignKey>Assigned_Resources__c.Work_Order__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Amount__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Total for the Bond</inlineHelpText>
+        <label>Bond Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Issue_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>What date was the Bond Issued?</inlineHelpText>
+        <label>Bond Issue Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Refund_Amount__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Amount to refund for the Bond</inlineHelpText>
+        <label>Bond Refund Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Refund_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Bond was refunded.</inlineHelpText>
+        <label>Bond Refund Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Refund_Request_Sent_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Refund Request was sent.</inlineHelpText>
+        <label>Bond Refund Request Sent Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Bond_Required__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF  
+(Municipality__r.Bond_Required__c = TRUE, &quot;YES&quot;, &quot;NO&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicated from Municipality table.</inlineHelpText>
+        <label>Bond Required</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bond_Returned_Check_Num__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The check number that was returned to the customer.</inlineHelpText>
+        <label>Bond Returned Check #</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Building_Application_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>Text( Municipality__r.Building_Application_Type__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Building Application Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Cancel_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Cancel Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Cancel_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Cancel Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner Request</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>City__c</fullName>
+        <description>“City” part of the work order location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“City” part of the work order location.</inlineHelpText>
+        <label>City</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Completed_Appt_Date_Install__c</fullName>
+        <description>Automatically set by workflow when Status is set to Complete</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Automatically set by workflow when Status is set to Complete</inlineHelpText>
+        <label>Completed Appt Date: Install</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Completed_Appt_Date_Service__c</fullName>
+        <description>Automatically set by workflow when Status is set to Complete</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Automatically set by workflow when Status is set to Complete</inlineHelpText>
+        <label>Completed Appt Date: Service</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Completed_Appt_Date_Tech_Measure__c</fullName>
+        <description>Automatically set by workflow when Status is set to Complete</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Automatically set by workflow when Status is set to Complete</inlineHelpText>
+        <label>Completed Appt Date: Tech Measure</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Completion_Notes__c</fullName>
+        <description>Historical Notes for Service WOs from Pivotal</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Historical Notes for Service WOs from Pivotal</inlineHelpText>
+        <label>Completion Notes</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Confirmed_Appt_w_Customer__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/Time you called the customer and confirmed the scheduled visit out to the home.</inlineHelpText>
+        <label>Confirmed Appt w/Customer</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Name of the contact person from the customer account for this service order. Is a lookup to an existing salesforce contact record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the contact person from the customer account for this service order. Is a lookup to an existing salesforce contact record</inlineHelpText>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contract_Required_to_Municipality__c</fullName>
+        <description>Contract required to be sent to Municipality</description>
+        <externalId>false</externalId>
+        <formula>Municipality__r.Contract_Required_to_Municipality__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Contract required to be sent to Municipality</inlineHelpText>
+        <label>Contract Required to Municipality</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Country__c</fullName>
+        <externalId>false</externalId>
+        <label>Country</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Date_Approved__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Approval was received</inlineHelpText>
+        <label>Date Approved</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Received__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Application was received.</inlineHelpText>
+        <label>Date Received</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_scheduled_for_testing__c</fullName>
+        <externalId>false</externalId>
+        <label>Date scheduled for testing</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>EPA_Form_Attached__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>EPA Form Attached</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_Ship_Date__c</fullName>
+        <description>pulled in from Sold Order, used for Scheduling</description>
+        <externalId>false</externalId>
+        <formula>Sold_Order__r.Estimated_Ship_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>pulled in from Sold Order, used for Scheduling</inlineHelpText>
+        <label>Estimated Ship Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Fee_Amount__c</fullName>
+        <externalId>false</externalId>
+        <label>Fee Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Final_Inspection_Completed__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Final_Inspection_Date_Time__c &lt; NOW(), &quot;Y&quot;, &quot;N&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Final Inspection Completed</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Final_Inspection_Date_Time__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date &amp; Time the Final Inspection is scheduled for</inlineHelpText>
+        <label>Final Inspection Date Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Inspection_Cancelled_Reason__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Reason inspection was cancelled</inlineHelpText>
+        <label>Inspection Cancelled Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Home Owner Request</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Inspection_Cancelled__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the inspection was cancelled</inlineHelpText>
+        <label>Inspection Cancelled</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inspection_Completed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date inspection was completed</inlineHelpText>
+        <label>Inspection Completed</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inspection_Scheduled_Date_Time__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>What date and time is the inspection scheduled?</inlineHelpText>
+        <label>Inspection Scheduled Date/Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>LSWP_Test_Results__c</fullName>
+        <description>Used by MapAnything to show on the Calendar view as a visual indicator.</description>
+        <externalId>false</externalId>
+        <formula>OR( 
+IF ( Sold_Order__r.LSWP_Test_Results__c = &quot;Positive&quot;, TRUE, FALSE), 
+IF ( Sold_Order__r.LSWP_Test_Results__c = &quot;Presumed&quot;, TRUE, FALSE))</formula>
+        <inlineHelpText>If the Order has a an LSWP WO and the test results are Postive or Presumed this will be checked.</inlineHelpText>
+        <label>LSWP Test Results - Positive/Presumed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Labor_Install__c</fullName>
+        <description>Field populated via trigger</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sum of total hours from all the Completed Labor Records associated with the Work Order.
+Field populated via trigger</inlineHelpText>
+        <label>Labor: Install</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Labor_Paint_Stain__c</fullName>
+        <description>Field populated via trigger</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sum of total hours from all the Completed Labor Records associated with the Work Order.
+Field populated via trigger</inlineHelpText>
+        <label>Labor: Paint/Stain</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lead_Test_Results__c</fullName>
+        <externalId>false</externalId>
+        <label>Lead Test Results</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Municipality_Contact_Phone__c</fullName>
+        <externalId>false</externalId>
+        <formula>Municipality_Contact__r.Phone__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Municipality Contact Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Municipality_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Municipality Contact</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>The Municipality Contact must be active and attached to the Municipality associated to the Work Order.</errorMessage>
+            <filterItems>
+                <field>$Source.Municipality__c</field>
+                <operation>equals</operation>
+                <valueField>Municipality_Contact__c.Municipality__c</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Municipality_Contact__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <infoMessage>The Municipality Contact must be active and attached to the Municipality associated to the Work Order.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Municipality_Contact__c</referenceTo>
+        <relationshipLabel>Permit Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Municipality_Notes__c</fullName>
+        <externalId>false</externalId>
+        <formula>Municipality__r.Application_Notes__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Municipality Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Municipality__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>What Municipality does this Dwelling fall into?</inlineHelpText>
+        <label>Municipality</label>
+        <referenceTo>Municipality__c</referenceTo>
+        <relationshipLabel>Permit Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders_Permits1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Note__c</fullName>
+        <externalId>false</externalId>
+        <label>Note</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Note_to_Installer__c</fullName>
+        <externalId>false</externalId>
+        <label>Note to Installer</label>
+        <length>1000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>50</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Num_of_Windows__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of Windows needing to be measured.</inlineHelpText>
+        <label># of Windows</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Open_Events_Formula__c</fullName>
+        <description>Determines if there are any open events, if so the Work Order may not be closed/completed</description>
+        <externalId>false</externalId>
+        <formula>IF( 
+     AND(ISPICKVAL(Work_Order_Type__c,&quot;Service&quot;),   
+     NOT(ISBLANK(Scheduled_Appt_Date_Time_Service__c)),  
+     Scheduled_Appt_Date_Time_Service__c&gt;NOW(),
+     NOT(ISBLANK(Primary_Service__c))),1,
+IF( 
+     AND(ISPICKVAL(Work_Order_Type__c,&quot;Install&quot;), 
+     NOT(ISBLANK(Scheduled_Appt_Date_Time_Install__c)),   
+     Scheduled_Appt_Date_Time_Install__c&gt;NOW(),
+     NOT(ISBLANK(Primary_Installer__c))),1,
+IF( 
+     AND(ISPICKVAL(Work_Order_Type__c,&quot;Tech Measure&quot;), 
+     NOT(ISBLANK(Scheduled_Appt_Date_Time_Tech_Measure__c)),   
+     Scheduled_Appt_Date_Time_Tech_Measure__c&gt;NOW(),
+     NOT(ISBLANK(Primary_Tech_Measure__c))),1,0)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Determines if there are any open events, if so the Work Order may not be closed/completed</inlineHelpText>
+        <label>Number Open Events</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Open_Events__c</fullName>
+        <description>Field populated via declarative lookup helper</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Counts the number of Open Events Associated to the Work Order</inlineHelpText>
+        <label>Number Open Events</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Opportunity</inlineHelpText>
+        <label>Opportunity</label>
+        <referenceTo>Opportunity</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Order_Type__c</fullName>
+        <description>Type of service order: Field Service, Depot repair etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of service order: Field Service, Depot repair etc.</inlineHelpText>
+        <label>Order Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HOA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Historical</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Building Permit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paint/Stain</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LSWP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Original_Appt_Date_Time_Install__c</fullName>
+        <description>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</inlineHelpText>
+        <label>Original Appt Date/Time: Install</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Original_Appt_Date_Time_Service__c</fullName>
+        <description>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</inlineHelpText>
+        <label>Original Appt Date/Time: Service</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Original_Appt_Date_Time_Tech_Measure__c</fullName>
+        <description>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related Work Order Events on create, holds the StartDate based on Service Type and remains unchanged after populated.</inlineHelpText>
+        <label>Original Appt Date/Time: Tech Measure</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Paint_Stain_Invoice_Attached__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Paint/Stain Invoice Attached</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Paint_Stain_Order_Attached_to_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Paint/Stain Order Attached to Order?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Permit_Attached__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>If the permit is attached, check box</inlineHelpText>
+        <label>Permit Attached</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Permit_Fee__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Cost of Permit Fees</inlineHelpText>
+        <label>Permit Fee</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Permit_Number__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Permit Number</inlineHelpText>
+        <label>Permit Number</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Permit_Sent_To__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Who was the permit sent to?</inlineHelpText>
+        <label>Permit Sent To</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Permit_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Permit Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>external id from Pivotal</description>
+        <externalId>true</externalId>
+        <inlineHelpText>external id from Pivotal</inlineHelpText>
+        <label>Pivotal Id</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Pre_Inspection_Completed__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date inspection was completed</inlineHelpText>
+        <label>Pre-Inspection Completed</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Pre_Inspection_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Pre-Inspection Required</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Pre_Inspection_Scheduled_Date_Time__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>What date and time is the inspection scheduled?</inlineHelpText>
+        <label>Pre-Inspection Scheduled Date/Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Installer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Set by WO Event if the Event Assignee is &quot;Primary Resource&quot; == TRUE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by WO Event if the Event Assignee is &quot;Primary Resource&quot; == TRUE</inlineHelpText>
+        <label>Primary Installer</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>RbA Work Orders (Primary Installer)</relationshipLabel>
+        <relationshipName>RbA_Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Service__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related scheduled Events</inlineHelpText>
+        <label>Primary Service</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>RbA Work Orders (Primary Service)</relationshipLabel>
+        <relationshipName>RbA_Work_Orders2</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Tech_Measure__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Set by WO Event if the Event Assignee is &quot;Primary Resource&quot; == TRUE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by WO Event if the Event Assignee is &quot;Primary Resource&quot; == TRUE</inlineHelpText>
+        <label>Primary Tech Measure</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>RbA Work Orders</relationshipLabel>
+        <relationshipName>RbA_Work_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Product in which specialization would be required to service the work order. Calculated from installed product by OptiMax pre-calculation engine</description>
+        <externalId>false</externalId>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RRK_Checklist_Attached__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Required if Testing Result is Positive or Presumed</inlineHelpText>
+        <label>RRK Checklist Attached</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Reason__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>This allows us to have better reporting and to see high level the reason the Work Order has moved into this status.</inlineHelpText>
+        <label>Reason</label>
+        <picklist>
+            <controllingField>Work_Order_Status__c</controllingField>
+            <picklistValues>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+                <controllingFieldValues>Cancelled</controllingFieldValues>
+                <controllingFieldValues>On Hold</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Age of home built after 1978</fullName>
+                <default>false</default>
+                <controllingFieldValues>Cancelled</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+                <controllingFieldValues>Cancelled</controllingFieldValues>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Recommended_Crew_Size__c</fullName>
+        <defaultValue>1</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>This field displays how many people should be on a work order, regardless of type. When manually assigning a resource, scheduler will notify you if you have not met this number. Not recognized in the batch assign tool</inlineHelpText>
+        <label>Preferred Headcount</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Renovate_Right_Booklet_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Update_Renovate_Right_Booklet_Signed__c), Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c,
+IF(Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c &gt; Update_Renovate_Right_Booklet_Signed__c ,Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c, Update_Renovate_Right_Booklet_Signed__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Renovate Right Booklet Signed Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Request_sent_to_Contractor__c</fullName>
+        <externalId>false</externalId>
+        <label>Request sent to Contractor</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Request_sent_to_Paint_Stain_Vendor__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the request was sent to vendor.</inlineHelpText>
+        <label>Request sent to Paint/Stain Vendor</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Reschedule_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Reschedule Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Reschedule_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Reschedule Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner Request</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Appt_Date_Time_Install__c</fullName>
+        <description>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</inlineHelpText>
+        <label>Scheduled Appt Date/Time: Install</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Appt_Date_Time_Service__c</fullName>
+        <description>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</inlineHelpText>
+        <label>Scheduled Appt Date/Time: Service</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Appt_Date_Time_Tech_Measure__c</fullName>
+        <description>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</inlineHelpText>
+        <label>Scheduled Appt Date/Time: Tech Measure</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_As_Type__c</fullName>
+        <description>This field is used by the scheduler to determine if a work order was scheduled for a different type technician.  Example: Service work order scheduled for a Tech Measure</description>
+        <externalId>false</externalId>
+        <label>Scheduled As Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Install_Date_Formula__c</fullName>
+        <description>For UI purposes, translates the Scheduled Appt Date/Time into a Date only field</description>
+        <externalId>false</externalId>
+        <formula>DATEVALUE( Scheduled_Appt_Date_Time_Install__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>For UI purposes, translates the Scheduled Appt Date/Time into a Date only field</inlineHelpText>
+        <label>Scheduled Install Date Formula</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Installation_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sold_Order__r.Installation_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Date the Installation is Scheduled for.  Pulling from the Installation Work Order.</inlineHelpText>
+        <label>Scheduled Installation Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Sent_To__c</fullName>
+        <externalId>false</externalId>
+        <label>Sent To</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Board</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_Material_Owner_Id__c</fullName>
+        <description>pulls in who the default Service Material Owner should be from the Store Config. Used when adding Service Tasks.</description>
+        <externalId>false</externalId>
+        <formula>Account__r.Store_Location__r.Active_Store_Configuration__r.Service_Material_Owner__c</formula>
+        <inlineHelpText>pulls in who the default Service Material Owner should be from the Store Config. Used when adding Service Tasks.</inlineHelpText>
+        <label>Service Material Owner Id</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Request_Type__c</fullName>
+        <description>Indicates whether the related Service Request is Job In Progress</description>
+        <externalId>false</externalId>
+        <formula>IF( (ISPICKVAL( Sold_Order__r.Service_Type__c,&quot;Job in Progress&quot;)),true, false)</formula>
+        <inlineHelpText>Indicates whether the related Service Request is Job In Progress</inlineHelpText>
+        <label>Service Request - JIP</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Request__c</fullName>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot;+Sold_Order__r.Id , Sold_Order__r.OrderNumber)</formula>
+        <label>Service Request</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sold_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Sold Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Special_Details_from_Sales__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Special Notes from the Sales Rep</inlineHelpText>
+        <label>Special Details from Sales</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>State__c</fullName>
+        <description>“State” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“State” part of the work order location</inlineHelpText>
+        <label>State</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Street__c</fullName>
+        <description>“Street” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“Street” part of the work order location</inlineHelpText>
+        <label>Street</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Sync_Date_Time__c</fullName>
+        <description>Used to ensure MA Scheduler is syncing events w/ WO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to ensure MA Scheduler is syncing events w/ WO</inlineHelpText>
+        <label>Tech Measure Sync Date/Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Synced__c</fullName>
+        <description>If Tech Measure Sync Date/Time is populated then we know the WO and MA Scheduler are synced</description>
+        <externalId>false</externalId>
+        <formula>NOT(ISBLANK( Tech_Measure_Sync_Date_Time__c ))</formula>
+        <inlineHelpText>If Tech Measure Sync Date/Time is populated then we know the WO and MA Scheduler are synced</inlineHelpText>
+        <label>Tech Measure Synced</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Test_Results__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Test Results</inlineHelpText>
+        <label>Test Results</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Testing_completed_by__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>**MIGHT NEED TO FILTER TO THE RBA EMPLOYEE.
+
+Name of the Person that completed the testing.</inlineHelpText>
+        <label>Testing completed by?</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Work Orders (Testing completed by?)</relationshipLabel>
+        <relationshipName>Work_Orders2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Testing_documentation_sent_to_Customer__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Testing Documentation was sent to the Customer.</inlineHelpText>
+        <label>Testing documentation sent to Customer</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Total_Days__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Days</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Type_image__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE( Work_Order_Type__c, 
+&quot;Tech Measure&quot;, IMAGE (&quot;resource/TechMeasureText&quot;,&quot;Tech Measure&quot;), 
+&quot;Install&quot;, IMAGE(&quot;resource/InstallText&quot;,&quot;Install&quot;), 
+&quot;Service&quot;, IMAGE(&quot;resource/ServiceText&quot;,&quot;Service&quot;),
+&quot;HOA&quot;, IMAGE(&quot;resource/HOAText&quot;,&quot;HOA&quot;),
+&quot;Historical&quot;, IMAGE(&quot;resource/HistoricalText&quot;,&quot;Historical&quot;),
+&quot;Building Permit&quot;, IMAGE(&quot;resource/BuildingPermitText&quot;,&quot;Building Permit&quot;),
+&quot;LSWP&quot;, IMAGE(&quot;resource/LSWP&quot;,&quot;LSWP&quot;),
+&quot;Paint/Stain&quot;, IMAGE(&quot;resource/PaintStainText&quot;,&quot;Paint/Stain&quot;),
+&quot;Collections&quot;, IMAGE(&quot;resource/CollectionsText&quot;,&quot;Collections&quot;),
+NULL)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Paint/Stain</inlineHelpText>
+        <label>Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Update_Renovate_Right_Booklet_Signed__c</fullName>
+        <externalId>false</externalId>
+        <label>Update Renovate Right Booklet Signed</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Vendor_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Vendor Contact</label>
+        <lookupFilter>
+            <active>true</active>
+            <booleanFilter>(1 OR 3) AND 2</booleanFilter>
+            <filterItems>
+                <field>Contact.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Vendor Contacts</value>
+            </filterItems>
+            <filterItems>
+                <field>$Source.Vendor__c</field>
+                <operation>equals</operation>
+                <valueField>Contact.AccountId</valueField>
+            </filterItems>
+            <filterItems>
+                <field>Contact.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Contractor Contacts</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Work Orders (LSWP)</relationshipLabel>
+        <relationshipName>Work_Orders3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Vendor_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Vendor Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Vendor_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>Vendor__r.Name</formula>
+        <label>Vendor Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Vendor__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>Vendor preforming the work.</inlineHelpText>
+        <label>Vendor</label>
+        <lookupFilter>
+            <active>true</active>
+            <booleanFilter>1 OR 2</booleanFilter>
+            <filterItems>
+                <field>Account.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Vendor</value>
+            </filterItems>
+            <filterItems>
+                <field>Account.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Contractor</value>
+            </filterItems>
+            <infoMessage>The Vendor must be associated with the Store the Order is associated to.</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Work Orders (LSWP)</relationshipLabel>
+        <relationshipName>Work_Orders2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>View__c</fullName>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot;&amp;Id,&quot;View&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>View</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Who_Performed_Testing__c</fullName>
+        <externalId>false</externalId>
+        <label>Who Performed Testing?</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Who_Scheduled_Final_Inspection__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Who Scheduled Final Inspection?</inlineHelpText>
+        <label>Who Scheduled Final Inspection</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Windows__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sold_Order__r.Windows_Rollup__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label># Windows</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Status__c</fullName>
+        <description>Current status of the work order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current status of the work order</inlineHelpText>
+        <label>Work Order Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>New</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wait for Install</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>To be scheduled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>JIP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install Complete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Final Approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Final Failed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Denied</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Assignment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduled &amp; Assigned</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Appt Complete / Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Suspended / On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shared Services</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Type__c</fullName>
+        <description>Type of work order: HOA, Historical, LSWP, Building, Tech Measure, Install, Service. etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of work order: HOA, Historical, LSWP, Building, Tech Measure, Install, Service. etc.</inlineHelpText>
+        <label>Work Order Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HOA</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Historical</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Building Permit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paint/Stain</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LSWP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Collections</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Zip__c</fullName>
+        <description>“Zip code” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“Zip code” part of the work order location</inlineHelpText>
+        <label>Zip</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>RbA Work Order</label>
+    <listViews>
+        <fullName>All_Installs</fullName>
+        <columns>NAME</columns>
+        <columns>Work_Order_Type__c</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <label>*Install  - To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>All_RbA</fullName>
+        <columns>NAME</columns>
+        <columns>Work_Order_Type__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>RECORDTYPE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Tech_Measures</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <label>*Tech Measure - To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Work_Orders_RbA</fullName>
+        <columns>NAME</columns>
+        <columns>Type_image__c</columns>
+        <columns>Work_Order_Type__c</columns>
+        <columns>Municipality__c</columns>
+        <columns>LAST_UPDATE</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>City__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Open Work Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Building_Permits_RbA</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Original_Appt_Date_Time_Install__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>Inspection_Scheduled_Date_Time__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Permit</value>
+        </filters>
+        <label>Building Permits</label>
+    </listViews>
+    <listViews>
+        <fullName>Demo_Install_To_be_Scheduled</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>State__c</field>
+            <operation>equals</operation>
+            <value>MI,Michigan</value>
+        </filters>
+        <label>Demo Install-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Demo_Service_To_be_Scheduled</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>State__c</field>
+            <operation>equals</operation>
+            <value>MI</value>
+        </filters>
+        <label>Demo Service-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Demo_Tech_Measure_Pending_Assignment</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Contact__c</columns>
+        <columns>Primary_Tech_Measure__c</columns>
+        <columns>Appointment_Date__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>State__c</field>
+            <operation>equals</operation>
+            <value>MI</value>
+        </filters>
+        <label>Demo Tech Measure - Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>Demo_Tech_Measure_To_be_Scheduled</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>State__c</field>
+            <operation>equals</operation>
+            <value>MI</value>
+        </filters>
+        <filters>
+            <field>Assigned_Resources__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>Demo Tech Measure-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Draft_Orders_Twin_Cities_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Draft Orders - Twin Cities</label>
+        <queue>Draft_Orders_Twin_Cities</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>HOA</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Municipality__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>HOA</value>
+        </filters>
+        <label>HOA</label>
+    </listViews>
+    <listViews>
+        <fullName>HOA_RbA</fullName>
+        <columns>NAME</columns>
+        <columns>Municipality__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>HOA</value>
+        </filters>
+        <label>HOA</label>
+    </listViews>
+    <listViews>
+        <fullName>Install_Assigned_Not_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>Primary_Installer__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Install - Assigned, Not Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Install_Scheduled_NOT_Confirmed</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Confirmed_Appt_w_Customer__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Install - Scheduled NOT Confirmed</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Install_Scheduled_Not_Assigned</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Appointment_Date__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <label>*Install - Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>Install_WO_Twin_Cities_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Install WO - Twin Cities</label>
+        <queue>Install_WO_Twin_Cities</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>LSWP_Workorders</fullName>
+        <columns>NAME</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Contact__c</columns>
+        <columns>Age__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>Test_Results__c</columns>
+        <columns>Primary_Tech_Measure__c</columns>
+        <columns>Date_scheduled_for_testing__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.LSWP</value>
+        </filters>
+        <label>LSWP Workorders</label>
+    </listViews>
+    <listViews>
+        <fullName>Paint_Stain_RbA</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>Vendor_Contact__c</columns>
+        <columns>Request_sent_to_Paint_Stain_Vendor__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Paint_Stain</value>
+        </filters>
+        <label>Paint/Stain</label>
+    </listViews>
+    <listViews>
+        <fullName>Paint_Stain_WO_Twin_Cities_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Paint/Stain WO - Twin Cities</label>
+        <queue>Paint_Stain_WO_Twin_Cities</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Schedule_Install_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule - Install - TwinCity</label>
+        <queue>Schedule_Install_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Schedule_Permit_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule Permit TwinCity</label>
+        <queue>Schedule_Permit_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Schedule_Tech_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Schedule - Tech - TwinCity</label>
+        <queue>Schedule_Tech_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Service_Assigned_Not_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Primary_Service__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>Primary_Service__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Service - Assigned, Not Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Service_Scheduled_NOT_Confirmed</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Confirmed_Appt_w_Customer__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Service - Scheduled NOT Confirmed</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Service_WO_Twin_Cities_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Service WO - Twin Cities</label>
+        <queue>Service_WO_Twin_Cities</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>TM_Install_WOs_w_Windows</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Work_Order_Status__c</columns>
+        <columns>Work_Order_Type__c</columns>
+        <columns>Windows__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure,Install</value>
+        </filters>
+        <filters>
+            <field>Windows__c</field>
+            <operation>greaterThan</operation>
+            <value>0</value>
+        </filters>
+        <label>Tech Measure/Install WOs w/ Windows</label>
+    </listViews>
+    <listViews>
+        <fullName>TM_Scheduled_Not_Assigned</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Appointment_Date__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <label>*Tech Measure - Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>Tech_Measure_Assigned_Not_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Tech_Measure__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>Primary_Tech_Measure__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Tech Measure - Assigned, Not Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>Tech_Measure_Scheduled_NOT_Confirmed</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Confirmed_Appt_w_Customer__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Tech Measure - Scheduled NOT Confirmed</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Tech_Measure_WO_Twin_Cities_RbA_Work_Order</fullName>
+        <columns>Street__c</columns>
+        <columns>OBJECT_ID</columns>
+        <columns>Account__c</columns>
+        <filterScope>Queue</filterScope>
+        <label>Tech Measure WO - Twin Cities</label>
+        <queue>Tech_Measure_WO_Twin_Cities</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Unassigned_Order_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned Order - TwinCity</label>
+        <queue>Unassigned_Order_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Unassigned_Twin_City_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned - Twin City</label>
+        <queue>Unassigned_Twin_City</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Unassigned_WO_TwinCity_RbA_Work_Order</fullName>
+        <filterScope>Queue</filterScope>
+        <label>Unassigned WO - TwinCity</label>
+        <queue>Unassigned_WO_TwinCity</queue>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>X1_Tech_Measure_To_be_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <label>Tech Measure-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>X1b_Tech_Measure_Pending_Assignment</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <label>Tech Measure-Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>X1c_Tech_Measure_Scheduled_Assigned</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Primary_Tech_Measure__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Primary_Tech_Measure__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Tech Measure-Scheduled &amp; Assigned</label>
+    </listViews>
+    <listViews>
+        <fullName>X1d_Tech_Measure_Not_Synced</fullName>
+        <columns>Appointment_Date__c</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Tech_Measure__c</columns>
+        <columns>Primary_Tech_Measure__c</columns>
+        <columns>Tech_Measure_Synced__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Tech_Measure_Sync_Date_Time__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Tech_Measure_Synced__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>Tech Measure-Not Synced</label>
+    </listViews>
+    <listViews>
+        <fullName>X1e_Tech_Measure_NotConfirmed</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Tech Measure</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment,Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Tech Measure-NotConfirmed</label>
+    </listViews>
+    <listViews>
+        <fullName>X2a_Install_To_be_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Estimated_Ship_Date__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>Estimated_Ship_Date__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Install-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>X2aa_Install_To_be_Scheduled_noshipdate</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Estimated_Ship_Date__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <filters>
+            <field>Estimated_Ship_Date__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Install-To be Scheduled-noshipdate</label>
+    </listViews>
+    <listViews>
+        <fullName>X2b_Install_Pending_Assignment</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Install__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <label>Install-Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>X2c_Install_Scheduled_Assigned</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Install__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Primary_Installer__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Install-Scheduled &amp; Assigned</label>
+    </listViews>
+    <listViews>
+        <fullName>X2e_Install_NotConfirmed</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Install__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment,Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Install-NotConfirmed</label>
+    </listViews>
+    <listViews>
+        <fullName>X3a_Service_To_be_Scheduled</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>To be scheduled</value>
+        </filters>
+        <label>Service-To be Scheduled</label>
+    </listViews>
+    <listViews>
+        <fullName>X3b_Service_Pending_Assignment</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment</value>
+        </filters>
+        <label>Service-Pending Assignment</label>
+    </listViews>
+    <listViews>
+        <fullName>X3c_Service_Scheduled_Assigned</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Scheduled_Appt_Date_Time_Service__c</columns>
+        <columns>Account__c</columns>
+        <columns>Primary_Service__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Primary_Service__c</field>
+            <operation>notEqual</operation>
+        </filters>
+        <label>Service-Scheduled &amp; Assigned</label>
+    </listViews>
+    <listViews>
+        <fullName>X3e_Service_NotConfirmed</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Pending Assignment,Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Appt_w_Customer__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>Service-NotConfirmed</label>
+    </listViews>
+    <nameField>
+        <displayFormat>WO-{00000000}</displayFormat>
+        <label>Work Order #</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>RbA Work Orders</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Actions</fullName>
+        <active>true</active>
+        <description>Holds HOA and Historical Details</description>
+        <label>Actions</label>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Sent_To__c</picklist>
+            <values>
+                <fullName>Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Failed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Install Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JIP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>To be scheduled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wait for Install</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>HOA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Collections</fullName>
+        <active>true</active>
+        <label>Collections</label>
+        <picklistValues>
+            <picklist>Alternate_End_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Alternate_Start_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Appointment_Start_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Cancel_Reason__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Cancelled_Reason__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Home Owner Request</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Lead_Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Order_Type__c</picklist>
+            <values>
+                <fullName>Building Permit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>HOA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Install</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>LSWP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint%2FStain</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pulled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Age of home built after 1978</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reschedule_Reason__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Sent_To__c</picklist>
+            <values>
+                <fullName>Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shared Services</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>Collections</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>LSWP</fullName>
+        <active>true</active>
+        <description>Holds LSWP Details</description>
+        <label>LSWP</label>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Age of home built after 1978</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Wait for Install</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>LSWP</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Paint_Stain</fullName>
+        <active>true</active>
+        <description>Hold Paint / Stain Details</description>
+        <label>Paint/Stain</label>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Presumed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>Paint%2FStain</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Permit</fullName>
+        <active>true</active>
+        <description>Holds Building Permit Details</description>
+        <label>Permit</label>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Applied</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Final Failed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>Building Permit</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Visit</fullName>
+        <active>true</active>
+        <description>Hold Work Order details that can be have a scheduled visit to the home</description>
+        <label>Visit</label>
+        <picklistValues>
+            <picklist>Alternate_End_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Alternate_Start_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Cancel_Reason__c</picklist>
+            <values>
+                <fullName>Customer Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Permit_Sent_To__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason__c</picklist>
+            <values>
+                <fullName>Customer on Vacation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales to Review</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reschedule_Reason__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Test_Results__c</picklist>
+            <values>
+                <fullName>Negative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Positive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Performed_Testing__c</picklist>
+            <values>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Who_Scheduled_Final_Inspection__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Status__c</picklist>
+            <values>
+                <fullName>Appt Complete %2F Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending Assignment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduled %26 Assigned</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Suspended %2F On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>To be scheduled</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Work_Order_Type__c</picklist>
+            <values>
+                <fullName>Install</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>ApptClosed_OpenEvents</fullName>
+        <active>true</active>
+        <description>User cannot set Service WO to Appt Complete / Closed if there are open Events</description>
+        <errorConditionFormula>AND(ISPICKVAL(Work_Order_Status__c, &quot;Appt Complete / Closed&quot;), Number_Open_Events_Formula__c &gt; 0, ISPICKVAL(Work_Order_Type__c , &quot;Service&quot;))</errorConditionFormula>
+        <errorMessage>There are open appointments that need to be addressed before cancelling the Service Work Order</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>CancelReasonRequired</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(RecordType.DeveloperName = &apos;Visit&apos;, ISPICKVAL(Work_Order_Status__c, &quot;Cancelled&quot;),ISBLANK( TEXT(Cancel_Reason__c)))</errorConditionFormula>
+        <errorMessage>Please enter a cancellation reason</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>LSWP_Closed</fullName>
+        <active>true</active>
+        <description>Before Closing a LSWP Work Order the following fields are required:</description>
+        <errorConditionFormula>AND(
+RecordType.Name = &quot;LSWP&quot;,
+ISPICKVAL(Work_Order_Status__c , &quot;Closed&quot;),
+OR(
+ISBLANK(TEXT(Who_Performed_Testing__c)),
+ISBLANK( Testing_completed_by__c ),
+ISBLANK ( Testing_documentation_sent_to_Customer__c ),
+ISBLANK ( Renovate_Right_Booklet_Signed_Date__c ),
+ISBLANK(TEXT( Test_Results__c )),
+EPA_Form_Attached__c  = False))</errorConditionFormula>
+        <errorDisplayField>Work_Order_Status__c</errorDisplayField>
+        <errorMessage>Before Closing a LSWP Work Order the following fields are required:
+Who Performed Testing, Testing Completed By, Doc sent to customer, Renovate Right Booklet Signed, Test Results, EPA Form Attached</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>LSWP_TestResults_RRKChecklist</fullName>
+        <active>false</active>
+        <description>If Test Results is Positive or Presumed, RRK Checklist Attached needs to be checked.</description>
+        <errorConditionFormula>AND(
+RecordType.Name = &quot;LSWP&quot;,
+OR(
+ISPICKVAL(Test_Results__c , &quot;Positive&quot;),
+ISPICKVAL(Test_Results__c , &quot;Presumed&quot;)),
+RRK_Checklist_Attached__c = False)</errorConditionFormula>
+        <errorDisplayField>Test_Results__c</errorDisplayField>
+        <errorMessage>If Test Results is Positive or Presumed, RRK Checklist Attached needs to be checked.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>LockedServiceRequest</fullName>
+        <active>true</active>
+        <description>If Service Request is Locked (Status = Warranty Submitted, Warranty Accepted, Warranty Rejected, or Closed) users may only edit Paint/Stain Work Orders</description>
+        <errorConditionFormula>AND(Sold_Order__r.Lock_Service_Request__c, NOT(ISPICKVAL(Work_Order_Type__c, &quot;Paint/Stain&quot;)))</errorConditionFormula>
+        <errorMessage>The related Service Request is currently locked, only Paint/Stain Work Orders may be updated for this Request.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>PaintStain_Closed</fullName>
+        <active>false</active>
+        <description>KEEP DEACTIVATED - DEPRECATED</description>
+        <errorConditionFormula>AND(
+RecordType.Name = &quot;Paint/Stain&quot;,
+ISPICKVAL(Work_Order_Status__c , &quot;Closed&quot;),
+OR(
+ISBLANK(Request_sent_to_Paint_Stain_Vendor__c),
+Paint_Stain_Order_Attached_to_Order__c = False,
+Paint_Stain_Invoice_Attached__c = False,
+ISBLANK (Vendor__c)
+))</errorConditionFormula>
+        <errorDisplayField>Work_Order_Status__c</errorDisplayField>
+        <errorMessage>Before Closing a LSWP Work Order the following fields are required:
+Vendor, Order Attached, Invoice Attached, Request Sent to Vendor.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Permit_RemoveFinalInspectionDateTime</fullName>
+        <active>true</active>
+        <description>If Permit inspection is cancelled, remove the Final Inspection Date Time value</description>
+        <errorConditionFormula>AND(
+RecordType.Name = &quot;Permit&quot;,
+ISPICKVAL(Work_Order_Status__c, &quot;Cancelled&quot;),
+ NOT(ISBLANK(Final_Inspection_Date_Time__c )))</errorConditionFormula>
+        <errorMessage>Please remove the date from the Final Inspection Date Time field</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>TechMeasure_Closed</fullName>
+        <active>true</active>
+        <description>Ensure there are no open events and the following fields are filled out: TBD for Work_Order_Type = &quot;Tech Measure&quot;</description>
+        <errorConditionFormula>AND(ISPICKVAL(Work_Order_Type__c, &quot;Tech Measure&quot;), (Number_Open_Events_Formula__c &gt; 0),  ISPICKVAL( Work_Order_Status__c , &quot;Appt Complete / Closed&quot;))</errorConditionFormula>
+        <errorMessage>There are Open Scheduled Events on the Work Order, please cancel or Close the events and then Close the Work Order.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>VisitWorkOrderPendingAssignmentCheck</fullName>
+        <active>true</active>
+        <description>Used to prevent users from updating the Work Order Status outside of MapAnything</description>
+        <errorConditionFormula>AND(
+          ISPICKVAL(Work_Order_Status__c, &quot;Pending Assignment&quot;),
+
+     IF(
+          OR(
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Tech Measure&quot;),
+                    ISBLANK( Original_Appt_Date_Time_Tech_Measure__c)
+               ),
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Install&quot;), 
+                    ISBLANK(   Original_Appt_Date_Time_Install__c )
+               ), 
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Service&quot;), 
+                    ISBLANK( Original_Appt_Date_Time_Service__c )
+               )
+          ), true, false
+     ))</errorConditionFormula>
+        <errorMessage>Original Appt Date/Time field must be populated by scheduling this Work Order in MapAnything.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>VisitWorkOrderScheduledCheck</fullName>
+        <active>true</active>
+        <description>Used to prevent users from updating the Work Order Status outside of MapAnything</description>
+        <errorConditionFormula>AND(
+          ISPICKVAL(Work_Order_Status__c, &quot;Scheduled &amp; Assigned&quot;),
+
+     IF(
+          OR(
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Tech Measure&quot;),
+                    OR(ISBLANK( Original_Appt_Date_Time_Tech_Measure__c),
+                    ISBLANK(Primary_Tech_Measure__c))
+               ),
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Install&quot;), 
+                    OR(ISBLANK(Original_Appt_Date_Time_Install__c ),
+                    ISBLANK(Primary_Installer__c ))
+               ), 
+               AND(
+                    ISPICKVAL(Work_Order_Type__c,&quot;Service&quot;), 
+                    OR(ISBLANK( Original_Appt_Date_Time_Service__c ),
+                    ISBLANK(Primary_Service__c))
+               )
+          ), true, false
+     ))</errorConditionFormula>
+        <errorMessage>Original Appt Date/Time field and Primary Resource field must be populated by Scheduling and Assigning this Work Order in MapAnything.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Assign_Work_Order</fullName>
+        <availability>online</availability>
+        <description>This will open the assign modal on the scheduler</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Assign Work Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>var objId = &apos;{!RbA_Work_Order__c.Id}&apos;;
+
+if (typeof(srcUp) == &apos;function&apos;) {
+    srcSelf(&apos;/apex/MA_Scheduler?id=&apos; + objId + &apos;&amp;action=assignResource&amp;consoleNav=true&apos;);
+}
+else {
+    window.location.href = &apos;/apex/MA_Scheduler?id=&apos; + objId + &apos;&amp;action=assignResource&apos;;
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_Install_Packet</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--rbabuild--apxtconga4.cs3.visual.force.com/a28Q0000000eyexIAA
+15-Sep-2016 03:15:16 PM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Print Install Packet</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!RbA_Work_Order__c.Sold_OrderId__c}
+
+&amp;ReportId=[LSWPWO]00O61000003SFjq,
+[PermitWO]00O61000003SFjs,
+[FinanceProgram]00O61000003SFjr,
+[InstallWO]00O61000003pVec,
+[OrderProducts]00O61000003pVef,
+[Payments]00O61000003S1sA,
+[Discounts]00O61000003pVeh,
+[Finance]00O61000003pVei,
+[StoreConfig]00O61000003pVed
+
+&amp;TemplateId=a2AQ00000025Bpj,a2AQ00000025Bpe,a2AQ000000254pi
+
+&amp;AC0=1
+&amp;DefaultPDF=1
+&amp;DS4=1
+&amp;DS0=1
+&amp;DS7=3
+&amp;DC={!IF(ISPICKVAL(RbA_Work_Order__c.Work_Order_Type__c,&quot;Install&quot;),&quot;0&quot;,&quot;1&quot;)}
+&amp;DCL=Install+Packet+For+Install+Work+Orders+Only</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Collctions_2nd_Attempt</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a285B0000004EtAQAU
+06-Jul-2016 10:54:40 AM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Collections 2nd Attempt</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!RbA_Work_Order__c.Id}
+
+&amp;ReportId=[WOwithOrder]00O61000003pVel,
+[WOwStoreConfig]00O5B000000KHBf
+
+&amp;TemplateId=a2A5B00000002wE
+
+&amp;AC0=1
+&amp;AC1=Collection+2nd+Attempt+Sent
+&amp;OFN={!RbA_Work_Order__c.Contact__c}+-+2ndAttempt+-+{!Today()}
+&amp;DefaultPDF=1
+&amp;DS4=1
+&amp;DS0=1
+&amp;DS7=3</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Collection_1st_Attempt</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a285B0000004EtFQAU
+06-Jul-2016 10:58:49 AM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Collection 1st Attempt</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!RbA_Work_Order__c.Id}
+
+&amp;ReportId=[WOwithOrder]00O61000003pVel,
+[WOwStoreConfig]00O5B000000KHBf
+
+&amp;TemplateId=a2A5B00000002wJ
+
+&amp;AC0=1
+&amp;AC1=Collection+1st+Attempt+Sent
+&amp;DefaultPDF=1
+&amp;DS4=1
+&amp;DS0=1
+&amp;DS7=3
+&amp;OFN={!RbA_Work_Order__c.Contact__c}+-+1stAttempt+-+{!Today()}</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Collections_Final_Attempt</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a285B0000004EtKQAU
+06-Jul-2016 11:03:00 AM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Collections Final Attempt</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!RbA_Work_Order__c.Id}
+
+&amp;ReportId=[WOwithOrder]00O61000003pVel,
+[WOwStoreConfig]00O5B000000KHBf
+
+&amp;TemplateId=a2A5B00000002wO
+
+&amp;AC0=1
+&amp;AC1=Collection+Final+Attempt+Sent
+&amp;OFN={!RbA_Work_Order__c.Contact__c}+-+FinalAttempt+-+{!Today()}
+&amp;DefaultPDF=1
+&amp;DS4=1
+&amp;DS0=1
+&amp;DS7=3</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_PaintStain_Work_Order</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a2861000000KDzhAAG
+07-Dec-2016 12:50:20 PM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA PaintStain Work Order</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!RbA_Work_Order__c.Sold_OrderId__c}
+
+&amp;ReportId=[PaintStainWO]00O61000003pVek,
+[WOwithOrder]00O61000003pVel,
+[InstallWOActivities]00O61000003pVec,
+[OrderPurchaseOrders]00O61000003pVeg,
+[OrderProducts]00O61000003pVef,
+[PSOwWO]00O5B000000Kbu8
+
+&amp;TemplateId=a2A61000000iaTG
+
+&amp;DS4=1
+&amp;DS0=1
+&amp;DefaultPDF=1
+&amp;DS7=3</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Schedule_Work_Order</fullName>
+        <availability>online</availability>
+        <description>This will open the schedule modal on the scheduler</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Schedule Work Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>var objId = &apos;{!RbA_Work_Order__c.Id}&apos;;
+
+if (typeof(srcUp) == &apos;function&apos;) {
+    srcSelf(&apos;/apex/MA_Scheduler?id=&apos; + objId + &apos;&amp;action=scheduleWorkOrder&amp;consoleNav=true&apos;);
+}
+else {
+    window.location.href = &apos;/apex/MA_Scheduler?id=&apos; + objId + &apos;&amp;action=scheduleWorkOrder&apos;;
+}</url>
+    </webLinks>
+</CustomObject>

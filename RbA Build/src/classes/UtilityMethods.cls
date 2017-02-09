@@ -405,7 +405,7 @@ global with sharing class UtilityMethods {
 	*******************************************************/
 
 	/*******************************************************
-			TriggerRan functionality
+			OrderTriggerRan functionality
 
 	Static variables and methods used from several triggers/classes
 	to track whether a trigger has already ran
@@ -426,5 +426,30 @@ global with sharing class UtilityMethods {
 	public static void unsetOrderTriggerRan()
 	{
 		alreadyRanOrderTrigger = false;
+	}
+
+	/*******************************************************
+			onHoldTaskAlreadyCreated functionality
+
+	Static variables and methods used to prevent multiple on hold
+	tasks from being created because of the order trigger firing again
+	on workflow
+	*******************************************************/
+
+	private static boolean onHoldTaskAlreadyCreated = false;
+
+	public static boolean hasOnHoldTaskBeenCreated()
+	{
+		return onHoldTaskAlreadyCreated;
+	}
+
+	public static void setOnHoldTaskCreated()
+	{
+		onHoldTaskAlreadyCreated = true;
+	}
+
+	public static void unsetOnHoldTaskCreated()
+	{
+		onHoldTaskAlreadyCreated = false;
 	}
 }

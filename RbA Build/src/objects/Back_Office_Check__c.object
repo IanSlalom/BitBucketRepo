@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>RMS_editBackOfficeCheckRedirect</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junction Object between the Back Office Checklist Configurations and Order.  Keeps the history of items that need to checked in order for the order move through the process.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Completed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Completed</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <externalId>false</externalId>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Back Office Checks</relationshipLabel>
+        <relationshipName>Back_Office_Checks</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the document was signed.</inlineHelpText>
+        <label>Signed Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <label>Back Office Check</label>
+    <nameField>
+        <label>Back Office Check Name</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Back Office Checks</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>SignedDateCannotBeFutureDate</fullName>
+        <active>true</active>
+        <description>User cannot save Back Office Check with a Signed Date in the future.</description>
+        <errorConditionFormula>Signed_Date__c &gt; Today()</errorConditionFormula>
+        <errorDisplayField>Signed_Date__c</errorDisplayField>
+        <errorMessage>You cannot save this record with a Signed Date that is in the future.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>UserCannotUpdateCompletedCheckbox</fullName>
+        <active>true</active>
+        <description>Once Completed checkbox is checked the user cannot update the fields.  The user needs to contact their manager to update the field.</description>
+        <errorConditionFormula>AND( 
+PRIORVALUE(Completed__c), TRUE, 
+ISCHANGED(Completed__c), 
+$User.Update_Back_Office_Checklist_Fields__c &lt;&gt; TRUE)</errorConditionFormula>
+        <errorDisplayField>Completed__c</errorDisplayField>
+        <errorMessage>Once Completed checkbox is checked, you cannot update the field. Please create a task and assign it to your manager.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>UserCannotUpdateSignedDate</fullName>
+        <active>true</active>
+        <description>Once Signed Date is populated, the user cannot update the field.  The user needs to contact their manager to update the field.</description>
+        <errorConditionFormula>AND(
+NOT(ISNEW()), 
+TEXT((PRIORVALUE(Signed_Date__c )))&lt;&gt;&quot;&quot;, 
+ISCHANGED( Signed_Date__c ),
+$User.Update_Back_Office_Checklist_Fields__c &lt;&gt; TRUE)</errorConditionFormula>
+        <errorDisplayField>Signed_Date__c</errorDisplayField>
+        <errorMessage>Once Signed Date is populated, you cannot update the field. Please create a task and assign it to your manager.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Complete_Multiple</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Update</masterLabel>
+        <openType>sidebar</openType>
+        <page>RMS_completeOrderChecks</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
+</CustomObject>

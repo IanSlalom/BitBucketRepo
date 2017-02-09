@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account_Contact_Information__c</fullName>
+        <externalId>false</externalId>
+        <formula>&quot;DBA: &quot; &amp; Store_Configuration__r.Store__r.DBA__c  &amp; BR()&amp;
+&quot;Address: &quot; &amp; BR()&amp;
+Store_Configuration__r.Store__r.ShippingStreet &amp; BR() &amp;
+ Store_Configuration__r.Store__r.ShippingCity &amp; &quot;, &quot;&amp;
+ TEXT(Store_Configuration__r.Store__r.ShippingStateCode) &amp; &quot; &quot; &amp;
+ Store_Configuration__r.Store__r.ShippingPostalCode &amp; BR()&amp; BR()&amp;
+&quot;Phone: &quot; &amp; Store_Configuration__r.Store__r.Phone &amp; BR()&amp;
+&quot;Fax: &quot; &amp; Store_Configuration__r.Store__r.Fax &amp; BR()&amp; BR()&amp;
+&quot;Contractor License(s): &quot;&amp; BR()&amp; 
+&quot;1. &quot; &amp; Store_Configuration__r.Store__r.Contractor_License_1__c &amp;  BR()&amp;
+&quot;2. &quot; &amp; Store_Configuration__r.Store__r.Contractor_License_2__c</formula>
+        <label>Account Contact Information</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Addendum_Discount_Method__c</fullName>
+        <description>rSuite control - Select the type of discount allowed with for the contract addendum</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the type of discount allowed with for the contract addendum</inlineHelpText>
+        <label>Addendum Discount Method</label>
+        <picklist>
+            <picklistValues>
+                <fullName>MSRP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Flat Rate</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Match Sold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Addendum_Flat_Rate_Discount_Percentage__c</fullName>
+        <description>rSuite Control - If Addendum_Discount_Method__c is set to &quot;Flat Rate&quot;, enter a number below that will calculate discount for Addendum Contrat Items</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If Addendum_Discount_Method__c is set to &quot;Flat Rate&quot;, enter a number below that will calculate discount for Addendum Contrat Items</inlineHelpText>
+        <label>Addendum Flat Rate Discount %</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>All_options_except_for_the_above_discoun__c</fullName>
+        <externalId>false</externalId>
+        <label>All Options Except for the Above</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sub-Total</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Before_Signing_Policy__c</fullName>
+        <externalId>false</externalId>
+        <label>Before Signing Policy</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>20</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Combining__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Can it be combined with a volume discount?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Can it be combined with a volume discount?</inlineHelpText>
+        <label>Combining?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Construction_Material__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>This is the product of a custom construction material. It is used by rSuite to lookup the correct pricebook entry</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the Construction Material for use by rSuite to find the custom product pricebook entry</inlineHelpText>
+        <label>Custom Construction Material</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Product2.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Misc Job and Unit Charges</value>
+            </filterItems>
+            <filterItems>
+                <field>Product2.Category__c</field>
+                <operation>equals</operation>
+                <value>MiscUnitConst, MiscJobConst, MiscMullConst</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>rSuite Configuration (Custom Construction Material)</relationshipLabel>
+        <relationshipName>rSuite_Configuration1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Materials__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>This is the product of a custom material. It is used by rSuite to lookup the correct pricebook entry</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the product of a custom construction material. It is used by rSuite to lookup the correct pricebook entry</inlineHelpText>
+        <label>Custom Materials</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Product2.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Construction Materials</value>
+            </filterItems>
+            <filterItems>
+                <field>Product2.Category__c</field>
+                <operation>equals</operation>
+                <value>Material, Trim, Lumber</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>rSuite Configuration (Custom Materials)</relationshipLabel>
+        <relationshipName>rSuite_Configuration2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Misc_Charge__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>This is the product of a custom miscellaneous job and unit charge.  It is used by rSuite to lookup the correct pricebook entry</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the Miscellaneous Job and Unit charge Product for use by rSuite to find the custom product pricebook entry</inlineHelpText>
+        <label>Custom Misc Charge</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Product2.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Misc Job and Unit Charges</value>
+            </filterItems>
+            <filterItems>
+                <field>Product2.Category__c</field>
+                <operation>equals</operation>
+                <value>MiscUnit, MiscJob, MiscMull</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>rSuite Configuration</relationshipLabel>
+        <relationshipName>rSuite_Configuration</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Days_for_Cancellation_Include_Saturdays__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Include Saturdays in number of business days given to the customer for a cancellation date</description>
+        <externalId>false</externalId>
+        <label>Days for Cancellation Include Saturdays</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Days_for_Cancellation__c</fullName>
+        <description>Number of business days given to the customer for a cancellation date</description>
+        <externalId>false</externalId>
+        <label>Days for Cancellation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Sales_Tax__c</fullName>
+        <externalId>false</externalId>
+        <label>Default Sales Tax</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Default_to_best_qualified_option__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Default to best qualified option?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Drywall_Production_Work_Order_Email__c</fullName>
+        <description>rSuite uses this email address to for sending the Drywall Production Work Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses this email address to for sending the Drywall Production Work Order</inlineHelpText>
+        <label>Drywall Production Work Order Email</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Eligibility_Requirements__c</fullName>
+        <description>Price - Total Price after Discounts (&quot;Project Investment&quot;) ; Units - Units as passed from PCS; Discount - Tiered financing option is based on what discount % is entered; Gross Price - Total Price before Discounts (&quot;One Year Price&quot;); Units or Price - Eligible tiered financing option will be based on the better option between Units or Price; Units or Gross Price - Eligible tiered financing option will be based on the better option between Units or Gross Price</description>
+        <externalId>false</externalId>
+        <label>Eligibility Requirements</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Discount</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gross Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Units or Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Units or Gross Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Email_Primary__c</fullName>
+        <description>eGreement cc email address</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the email address that will be in the CC: field for sending eGreement documents</inlineHelpText>
+        <label>Email Primary</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Email_Secondary__c</fullName>
+        <description>eGreement bcc email addresses</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter up to 9 email addresses (separated by commas) that will be in the BCC: field for sending eGreement documents</inlineHelpText>
+        <label>Email Secondary</label>
+        <length>2000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Exterior_Cladding_Work_Order_Email__c</fullName>
+        <description>rSuite uses this email address to for sending the Exterior Cladding Work Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses this email address to for sending the Exterior Cladding Work Order</inlineHelpText>
+        <label>Exterior Cladding Work Order Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Final_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Final Price</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Generic_Disclosure_When_Presenting_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Generic Disclosure When Presenting Price</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Lead_Safe_Work_Practice_Work_Order_Email__c</fullName>
+        <description>Suite uses this email address to for sending the Lead Safe Work Practice Work Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Suite uses this email address to for sending the Lead Safe Work Practice Work Order</inlineHelpText>
+        <label>Lead Safe Work Practice Work Order Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Links_Menu_Title__c</fullName>
+        <description>rSuite - Title of the menu for the links to the external Finance Program applications</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite - Title of the menu for the links to the external Finance Program applications</inlineHelpText>
+        <label>Links Menu Title</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lock_Window_Door_Unit_Qty_When_Pushed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Lock Window &amp; Door Unit Qty When Pushed</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Maximum_Discount_Amount__c</fullName>
+        <description>Maximum allowable discount amount on a project</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Maximum allowable discount amount on a project</inlineHelpText>
+        <label>Maximum Discount $</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Maximum_Discount_Percent__c</fullName>
+        <description>Maximum allowable discount percentage for a project</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Maximum allowable discount percentage for a project</inlineHelpText>
+        <label>Maximum Discount %</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Paint_Stain_Production_Work_Order_Email__c</fullName>
+        <description>rSuite uses this email address to for sending the paint and stain production work order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses this email address to for sending the paint and stain production work order</inlineHelpText>
+        <label>Paint &amp; Stain Prod Work Order Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Payment_Factor__c</fullName>
+        <description>Project Price Monthly Payment Factor for Price Conditioning</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Project Price Monthly Payment Factor for Price Conditioning</inlineHelpText>
+        <label>Payment Factor</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Payment_Terms_Disclaimer__c</fullName>
+        <externalId>false</externalId>
+        <label>Payment Terms Disclaimer</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Primary_Installer_Invoice_Email__c</fullName>
+        <description>rSuite uses this email address to for sending the primary installer invoice</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses this email address to for sending the primary installer invoice</inlineHelpText>
+        <label>Primary Installer Invoice Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Privacy_Policy__c</fullName>
+        <externalId>false</externalId>
+        <label>Privacy Policy</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>20</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Project_Price_Expiration__c</fullName>
+        <description>The display text around overall project price.  Example: Guaranteed for 1 Year</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The display text around overall project price.  Example: Guaranteed for 1 Year</inlineHelpText>
+        <label>Project Price Expiration</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Renewal_Savings_Local_Offer_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Renewal Savings (&quot;Local Offer&quot;) Discount</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sub-Total</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Rep_and_Phone_Number__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Rep and Phone Number</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Repeat_Customer_Offer_Repeat__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Do you want the ability to offer a repeat customer a Repeat discount and an Initial Visit discount?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want the ability to offer a repeat customer a Repeat discount and an Initial Visit discount?</inlineHelpText>
+        <label>Repeat Customer - Repeat/Initial Visit</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Standard_Monthly_Payment_Disclosure_for__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Standard Monthly Payment Disclosure for Price Conditioning</inlineHelpText>
+        <label>Standard Monthly Payment Disclosure</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Store_Configuration__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Store Configuration</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>rSuite Configuration</relationshipLabel>
+        <relationshipName>rSuite_Configuration</relationshipName>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Addendum_Limit__c</fullName>
+        <description>rSuite control - Enter Value (in $&apos;s) of Addendums Measure Technicians have authority to address.  (Above this value will automatically &quot;Suspend &amp; Notify&quot;.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter Value (in $&apos;s) of Addendums Measure Technicians have authority to address.  (Above this value will automatically &quot;Suspend &amp; Notify&quot;.</inlineHelpText>
+        <label>Tech Measure Addendum Limit</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Delta_Threshold__c</fullName>
+        <description>rSuite - TechMapp Control - Enter the whole number which will trigger the Measurement Error Attention message stating &quot;The measured unit dimension is significantly different than the sold unit dimension.  Do you want to verify your dimensions are correct?&quot;</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the whole number which will trigger the Measurement Error Attention message stating &quot;The measured unit dimension is significantly different than the sold unit dimension.  Do you want to verify your dimensions are correct?&quot;</inlineHelpText>
+        <label>Tech Measure Delta Threshold</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_Suspend_Notify_Emails__c</fullName>
+        <description>Email addresses for for Suspended Orders - After Tech measure</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter up to 10 email addresses (separated by commas) to recieve notification that an Order was suspened via TechMapp</inlineHelpText>
+        <label>Tech Measure Suspend &amp; Notify Emails</label>
+        <length>2000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_To_Emails__c</fullName>
+        <description>Email addresses for Tech Measure documents</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter up to 10 email addresses (separated by commas) that will be in the TO: field for sending Tech Measure documents</inlineHelpText>
+        <label>Tech Measure To Emails</label>
+        <length>2000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Tech_Measure_cc_Emails__c</fullName>
+        <description>Email addresses for Tech Measure documents</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter up to 10 email addresses (separated by commas) that will be in the CC: field for sending Tech Measure documents</inlineHelpText>
+        <label>Tech Measure cc Emails</label>
+        <length>2000</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Tiered_Financing__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Tiered Financing</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Title_of_the_Tool__c</fullName>
+        <externalId>false</externalId>
+        <label>Title of the Tool</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Price__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Total Price</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Total_Price_before_Discounts__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Price before Discounts</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Unit_Price__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Unit Price</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Unit_Size__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Unit Size</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>United_Inch__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>United Inch (UI)</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Unsold_Age_In_Months__c</fullName>
+        <description>Indicates how many months of unsold appointments that should be used when a Sales Rep gets appointments from Salesforcce using rSuite</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter how many months of unsold appointments that should be used when a Sales Rep gets appointments from Salesforcce using rSuite</inlineHelpText>
+        <label>Unsold Age (In Months)</label>
+        <precision>4</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Version_Control_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Version Control Name</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Volume_Discount_Taken_On__c</fullName>
+        <externalId>false</externalId>
+        <label>Volume Discount Taken On</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sub-Total</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>isWhyFinancewithRbAEnabled__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>rSuite - eGreement configuration option for displaying why a customer would finance with RbA</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this item if rSuite should display the Why Finance with Renewal by Andersen documentation</inlineHelpText>
+        <label>Enable Why Finance with RbA?</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>rSuite Configuration</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>rSuite Configuration Name</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>rSuite Configuration</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Addendum_Flat_Rate_Percentage_Required</fullName>
+        <active>true</active>
+        <description>If Addendum_Discount_Method__c is set to Flat Rate then  Addendum_Flat_Rate_Discount_Percentage__c is required</description>
+        <errorConditionFormula>TEXT(Addendum_Discount_Method__c) = &apos;Flat Rate&apos; &amp;&amp; ISBLANK(Addendum_Flat_Rate_Discount_Percentage__c)</errorConditionFormula>
+        <errorDisplayField>Addendum_Flat_Rate_Discount_Percentage__c</errorDisplayField>
+        <errorMessage>Addendum Flat Rate percentage is required when Addendum Discount Method is set to &apos;Flat Rate&apos;</errorMessage>
+    </validationRules>
+</CustomObject>

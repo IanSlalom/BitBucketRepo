@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Problem_Component_Problem_Component__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field ID for Problem Component Lookup (to Problem Component List) on Problem Component Assignment Object</inlineHelpText>
+        <label>Problem Component - Problem Component</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Problem_Component_Service_Symptom__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field Id for Service Symptom lookup (Service Symptom List) on the Problem Component Assignment Object</inlineHelpText>
+        <label>Problem Component - Service Symptom</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Procedure_Code_Procedure_Code__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field Id Procedure Code Lookup on the Procedure Code Assignment object</inlineHelpText>
+        <label>Procedure Code - Procedure Code</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Procedure_Code_Service_Product__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field Id for the Service Product lookup on the Procedure Code Assignment object</inlineHelpText>
+        <label>Procedure Code - Service Product</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Master_Product__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field ID for the Master Product Lookup on the Service Product Object</inlineHelpText>
+        <label>Service Product - Master Product</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Service_Product__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field Id for the Service Product Lookup Field on the Service Product Object (Lookup to Product)</inlineHelpText>
+        <label>Service Product - Service Product</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Symptom_Procedure_Code__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field ID for the Procedure Code Lookup on the Service Symptom Assignment object</inlineHelpText>
+        <label>Service Symptom - Procedure Code</label>
+        <length>100</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Symptom_Service_Symptom__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Field ID for Lookup to Service Symptom (Service Symptom List) on the Service Symptom Assignment Object</inlineHelpText>
+        <label>Service Symptom - Service Symptom</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Service Fields</label>
+    <visibility>Public</visibility>
+</CustomObject>

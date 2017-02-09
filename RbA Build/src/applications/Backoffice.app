@@ -7,8 +7,15 @@
     <defaultLandingTab>standard-home</defaultLandingTab>
     <description>Used by the backoffice.</description>
     <detailPageRefreshMethod>none</detailPageRefreshMethod>
+    <enableCustomizeMyTabs>false</enableCustomizeMyTabs>
     <enableKeyboardShortcuts>true</enableKeyboardShortcuts>
+    <enableListViewReskin>true</enableListViewReskin>
     <enableMultiMonitorComponents>true</enableMultiMonitorComponents>
+    <enablePinTabs>true</enablePinTabs>
+    <enableTabHover>true</enableTabHover>
+    <enableTabLimits>false</enableTabLimits>
+    <footerColor>#252525</footerColor>
+    <headerColor>#177860</headerColor>
     <isServiceCloudConsole>true</isServiceCloudConsole>
     <keyboardShortcuts>
         <defaultShortcut>
@@ -155,6 +162,11 @@
             <action>TOGGLE_APP_LEVEL_COMPONENTS</action>
             <active>false</active>
             <keyCommand>Z</keyCommand>
+        </defaultShortcut>
+        <defaultShortcut>
+            <action>REOPEN_LAST_TAB</action>
+            <active>false</active>
+            <keyCommand>SHIFT+C</keyCommand>
         </defaultShortcut>
     </keyboardShortcuts>
     <label>Backoffice</label>

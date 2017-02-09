@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Also known as &quot;Responsibility&quot;</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Category__c</fullName>
+        <description>Categorizes the problem in the service request</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Categorizes the problem in the service request</inlineHelpText>
+        <label>Source of Defect</label>
+        <picklist>
+            <controllingField>Charge_Cost_To__c</controllingField>
+            <picklistValues>
+                <fullName>Aesthetics/Function (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aesthetics/Function (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>AW Logistics</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bayworld</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>EMCO</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Glass(Sash/Panel) (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Glass(Sash/Panel) (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Goodwill</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grilles (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grilles (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hardware (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hardware (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Renewal by Andersen</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Screens (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Screens (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unit (C)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unit (R)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Retailer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Provia</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <controllingFieldValues>Manufacturing</controllingFieldValues>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Charge_Cost_To__c</fullName>
+        <description>The responsible party for the service</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The responsible party for the service</inlineHelpText>
+        <label>Responsibility</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retailer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Installed_Product_Id__c</fullName>
+        <externalId>false</externalId>
+        <formula>Service_Product__r.Sold_Order_Product_Asset__r.Original_Order_Product__r.PricebookEntry.Product2Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Installed Product Id</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installed_Product__c</fullName>
+        <description>Used for UI purposes on VF page to display Installed Product Name</description>
+        <externalId>false</externalId>
+        <formula>Service_Product__r.Sold_Order_Product_Asset__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Installed Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Product_Text__c</fullName>
+        <description>For UI purposes</description>
+        <externalId>false</externalId>
+        <formula>Service_Product__r.Product_Name__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Connects the Charge record to the Order Item</description>
+        <externalId>false</externalId>
+        <label>Service Product</label>
+        <referenceTo>OrderItem</referenceTo>
+        <relationshipLabel>Responsibility</relationshipLabel>
+        <relationshipName>Charges</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Request__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Service Request</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Charges</relationshipLabel>
+        <relationshipName>Charges</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Validate_Service_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used for Service Request functionality</description>
+        <externalId>false</externalId>
+        <label>Validate Service Order</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Variant_Number__c</fullName>
+        <description>The original order product&apos;s variant number.</description>
+        <externalId>false</externalId>
+        <formula>Service_Product__r.Sold_Order_Product_Asset__r.Variant_Number__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The original order product&apos;s variant number.</inlineHelpText>
+        <label>Variant Number</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>What_Where__c</fullName>
+        <description>Based on Responsibility and Source of Defect</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on Responsibility and Source of Defect</inlineHelpText>
+        <label>Defect</label>
+        <picklist>
+            <controllingField>Category__c</controllingField>
+            <picklistValues>
+                <fullName>Addition</fullName>
+                <default>false</default>
+                <controllingFieldValues>Grilles (C)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Caulk</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (C)</controllingFieldValues>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color</fullName>
+                <default>false</default>
+                <controllingFieldValues>Glass(Sash/Panel) (C)</controllingFieldValues>
+                <controllingFieldValues>Glass(Sash/Panel) (R)</controllingFieldValues>
+                <controllingFieldValues>Grilles (C)</controllingFieldValues>
+                <controllingFieldValues>Grilles (R)</controllingFieldValues>
+                <controllingFieldValues>Screens (C)</controllingFieldValues>
+                <controllingFieldValues>Screens (R)</controllingFieldValues>
+                <controllingFieldValues>Unit (C)</controllingFieldValues>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer Satisfaction</fullName>
+                <default>false</default>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Damage</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (C)</controllingFieldValues>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+                <controllingFieldValues>Glass(Sash/Panel) (C)</controllingFieldValues>
+                <controllingFieldValues>Glass(Sash/Panel) (R)</controllingFieldValues>
+                <controllingFieldValues>Grilles (C)</controllingFieldValues>
+                <controllingFieldValues>Grilles (R)</controllingFieldValues>
+                <controllingFieldValues>Hardware (C)</controllingFieldValues>
+                <controllingFieldValues>Hardware (R)</controllingFieldValues>
+                <controllingFieldValues>Screens (C)</controllingFieldValues>
+                <controllingFieldValues>Screens (R)</controllingFieldValues>
+                <controllingFieldValues>Unit (C)</controllingFieldValues>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Data Entry</fullName>
+                <default>false</default>
+                <controllingFieldValues>Glass(Sash/Panel) (R)</controllingFieldValues>
+                <controllingFieldValues>Grilles (R)</controllingFieldValues>
+                <controllingFieldValues>Hardware (R)</controllingFieldValues>
+                <controllingFieldValues>Screens (R)</controllingFieldValues>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Finish</fullName>
+                <default>false</default>
+                <controllingFieldValues>Hardware (C)</controllingFieldValues>
+                <controllingFieldValues>Hardware (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Handing</fullName>
+                <default>false</default>
+                <controllingFieldValues>Unit (C)</controllingFieldValues>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Operation</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Out of Warranty</fullName>
+                <default>false</default>
+                <controllingFieldValues>Goodwill</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pattern</fullName>
+                <default>false</default>
+                <controllingFieldValues>Grilles (C)</controllingFieldValues>
+                <controllingFieldValues>Grilles (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Size</fullName>
+                <default>false</default>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stain</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (C)</controllingFieldValues>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Style</fullName>
+                <default>false</default>
+                <controllingFieldValues>Glass(Sash/Panel) (C)</controllingFieldValues>
+                <controllingFieldValues>Glass(Sash/Panel) (R)</controllingFieldValues>
+                <controllingFieldValues>Grilles (C)</controllingFieldValues>
+                <controllingFieldValues>Grilles (R)</controllingFieldValues>
+                <controllingFieldValues>Hardware (C)</controllingFieldValues>
+                <controllingFieldValues>Hardware (R)</controllingFieldValues>
+                <controllingFieldValues>Screens (C)</controllingFieldValues>
+                <controllingFieldValues>Screens (R)</controllingFieldValues>
+                <controllingFieldValues>Unit (C)</controllingFieldValues>
+                <controllingFieldValues>Unit (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trim</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (C)</controllingFieldValues>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wrap</fullName>
+                <default>false</default>
+                <controllingFieldValues>Aesthetics/Function (C)</controllingFieldValues>
+                <controllingFieldValues>Aesthetics/Function (R)</controllingFieldValues>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <label>Charge</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>CCT-{000}</displayFormat>
+        <label>Charge Cost Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Charges</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Charge_Cost_To__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Charge_Cost_To__c</lookupDialogsAdditionalFields>
+        <lookupFilterFields>NAME</lookupFilterFields>
+        <lookupFilterFields>Charge_Cost_To__c</lookupFilterFields>
+        <lookupPhoneDialogsAdditionalFields>Charge_Cost_To__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Charge_Cost_To__c</searchFilterFields>
+        <searchResultsAdditionalFields>Charge_Cost_To__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

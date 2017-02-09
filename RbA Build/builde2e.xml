@@ -43,7 +43,7 @@
     <!-- Shows deploying code & running tests for code in directory -->
     <target name="deployCode">
       <!-- Upload the contents of the "codepkg" directory, running the tests for just 1 class -->
-        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" testLevel="RunLocalTests" pollWaitMillis="50000" maxPoll="100">
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}"  deployRoot="src" testLevel="NoTestRun" pollWaitMillis="50000" maxPoll="100">
       </sf:deploy>
     </target>
 

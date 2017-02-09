@@ -34,6 +34,10 @@
                 <behavior>Readonly</behavior>
                 <field>Total_Materials_Applied__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Cancellation_Reason__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -38,7 +38,7 @@ public with sharing class RMS_OrderTriggerHandler {
   }
 
   public void OnAfterUpdate(Map<ID, Order>  oldMap, Map<ID, Order> newMap){
-    if(!UtilityMethods.hasOrderTriggerRan()) {
+    if(!UtilityMethods.hasOnHoldTaskBeenCreated()) {
     	createOnHoldTasks(oldMap, newMap);
     }
   }
@@ -180,6 +180,7 @@ public with sharing class RMS_OrderTriggerHandler {
     }
     if(!tasksToInsert.isEmpty()){
       insert tasksToInsert;
+      UtilityMethods.setOnHoldTaskCreated();
     }
   }
   

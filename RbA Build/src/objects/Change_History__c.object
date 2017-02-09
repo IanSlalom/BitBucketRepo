@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Bay_Sales__c</fullName>
+        <description>If the product type is bay, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (AND(RecordType.DeveloperName = &apos;Order_Product&apos;, Product_Type__c = &apos;Bay&apos;), Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is bay, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>Bay Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bay__c</fullName>
+        <description>If the product type is bay, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (AND(RecordType.DeveloperName = &apos;Order_Product&apos;, Product_Type__c = &apos;Bay&apos;), Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is bay, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>Bay</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bookings_Commission_Allocation__c</fullName>
+        <description>The amount allocated to commissions for booking.</description>
+        <externalId>false</externalId>
+        <formula>Retail_Price_Change__c * Bookings_Commission_Percent__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The amount allocated to commissions for booking.</inlineHelpText>
+        <label>Bookings Commission Allocation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bookings_Commission_Percent__c</fullName>
+        <defaultValue>0.5</defaultValue>
+        <description>The percent of the commissions that should be paid at booking. Defaulted to 50%.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The percent of the commissions that should be paid at booking. Defaulted to 50%.</inlineHelpText>
+        <label>Bookings Commission %</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Bow_Sales__c</fullName>
+        <description>If the product type is bow, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Bow&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is bow, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>Bow Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bow__c</fullName>
+        <description>If the product type is bow, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (AND(RecordType.DeveloperName = &apos;Order_Product&apos;, Product_Type__c = &apos;Bow&apos;), Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is bow, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>Bow</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Changes__c</fullName>
+        <externalId>false</externalId>
+        <label>Changes</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <description>If the record type is order discount, then add the retail price to this discount formula.</description>
+        <externalId>false</externalId>
+        <formula>If (RecordType.DeveloperName = &apos;Order_Discount&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the record type is order discount, then add the retail price to this discount formula.</inlineHelpText>
+        <label>Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>ED_Sales__c</fullName>
+        <description>If the product type is entry doors, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Entry Doors&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is entry doors, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>ED Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Entry_Door__c</fullName>
+        <description>If the product type is entry doors, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Entry Doors&apos;, Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is entry doors, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>ED</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FF_Sales__c</fullName>
+        <description>If the product type is full frame, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (AND(RecordType.DeveloperName = &apos;Order_Product&apos;, Product_Type__c = &apos;Full Frame&apos;),  Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is full frame, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>FF Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FF__c</fullName>
+        <description>If the product type is full frame, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Full Frame&apos;,  Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is full frame, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>FF</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Financed__c</fullName>
+        <description>Pulls the financed order checkbox through the order product, order discount, or rba work order, depending on the record type.</description>
+        <externalId>false</externalId>
+        <formula>IF( RecordType.DeveloperName = &apos;Order_Product&apos;, Order_Product__r.Order.Financed_Order__c, 
+IF( RecordType.DeveloperName = &apos;Order_Discount&apos;, Order_Discount__r.Order__r.Financed_Order__c , 
+RbA_Work_Order__r.Sold_Order__r.Financed_Order__c ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulls the financed order checkbox through the order product, order discount, or rba work order, depending on the record type.</inlineHelpText>
+        <label>Financed</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Gross_Sales__c</fullName>
+        <description>Used for reporting to show the gross sales. Just set equal to the price change.</description>
+        <externalId>false</externalId>
+        <formula>Retail_Price_Change__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Used for reporting to show the gross sales. Just set equal to the price change.</inlineHelpText>
+        <label>Gross Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Homeowner__c</fullName>
+        <description>Pulls the bill to contact through the order product, order discount, or rba work order, depending on the record type.</description>
+        <externalId>false</externalId>
+        <formula>IF( RecordType.DeveloperName = &apos;Order_Product&apos;,  Order_Product__r.Order.BillToContact.Full_Name__c , 
+IF( RecordType.DeveloperName = &apos;Order_Discount&apos;, Order_Discount__r.Order__r.BillToContact.Full_Name__c , 
+RbA_Work_Order__r.Sold_Order__r.BillToContact.Full_Name__c ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulls the bill to contact through the order product, order discount, or rba work order, depending on the record type.</inlineHelpText>
+        <label>Homeowner</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IF_Sales__c</fullName>
+        <description>If the product type is insert frame, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Insert Frame&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is insert frame, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>IF Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IF__c</fullName>
+        <description>If the product type is insert frame, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Insert Frame&apos;, Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is insert frame, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>IF</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Line_Processed_Date__c</fullName>
+        <description>The date which the change was made to the order line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date which the change was made to the order line.</inlineHelpText>
+        <label>Line Processed Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Net_Sales__c</fullName>
+        <description>The gross sales minus the discount totals.</description>
+        <externalId>false</externalId>
+        <formula>Gross_Sales__c - Discount__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The gross sales minus the discount totals.</inlineHelpText>
+        <label>Net Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Order_Booking_Date__c</fullName>
+        <description>The date this order was booked.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date this order was booked.</inlineHelpText>
+        <label>Order Booking Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order_Discount__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Order Discount</label>
+        <referenceTo>Order_Discount__c</referenceTo>
+        <relationshipLabel>Change Histories</relationshipLabel>
+        <relationshipName>Change_Histories</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Order_Number__c</fullName>
+        <description>Pulls the order number through the order product, order discount, or rba work order, depending on the record type.</description>
+        <externalId>false</externalId>
+        <formula>IF( RecordType.DeveloperName = &apos;Order_Product&apos;,  Order_Product__r.Order.OrderNumber, 
+IF( RecordType.DeveloperName = &apos;Order_Discount&apos;,   Order_Discount__r.Order__r.OrderNumber , 
+ RbA_Work_Order__r.Sold_Order__r.OrderNumber ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulls the order number through the order product, order discount, or rba work order, depending on the record type.</inlineHelpText>
+        <label>Order #</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Order Product</label>
+        <referenceTo>OrderItem</referenceTo>
+        <relationshipLabel>Change Histories</relationshipLabel>
+        <relationshipName>Change_Histories</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Order_Revenue_Recognition_Date__c</fullName>
+        <description>The date the order linked to this order line item change history was revenue recognized.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the order linked to this order line item change history was revenue recognized.</inlineHelpText>
+        <label>Order Revenue Recognition Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Direct link to orders for reporting purposes.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Direct link to orders for reporting purposes.</inlineHelpText>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Change Histories</relationshipLabel>
+        <relationshipName>Change_Histories</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Other_Sales__c</fullName>
+        <description>If the product type is anything other than the main categories, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (
+AND(Product_Type__c &lt;&gt; &apos;Full Frame&apos;, Product_Type__c &lt;&gt; &apos;Insert Frame&apos;, Product_Type__c &lt;&gt; &apos;Universal&apos;,Product_Type__c &lt;&gt; &apos;Bay&apos;, Product_Type__c &lt;&gt; &apos;Bow&apos;,Product_Type__c &lt;&gt; &apos;Entry Doors&apos;,Product_Type__c &lt;&gt; &apos;Patio &amp; Frenchwood Doors&apos;,Product_Type__c &lt;&gt; &apos;Storm Door&apos;), 
+Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is anything other than the main categories, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>Other Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>PD_Sales__c</fullName>
+        <description>If the product type is patio &amp; frenchwood doors, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Patio &amp; Frenchwood Doors&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is patio &amp; frenchwood doors, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>PD Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Patio_Door__c</fullName>
+        <description>If the product type is patio &amp; frenchwood doors, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Patio &amp; Frenchwood Doors&apos;, Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is patio &amp; frenchwood doors, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>PD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Name__c</fullName>
+        <description>The order item&apos;s product name.</description>
+        <externalId>false</externalId>
+        <formula>Order_Product__r.Product_Name__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The order item&apos;s product name.</inlineHelpText>
+        <label>Product Name</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Type__c</fullName>
+        <description>The product type for reporting purposes.</description>
+        <externalId>false</externalId>
+        <formula>Order_Product__r.Product_Type__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The product type for reporting purposes.</inlineHelpText>
+        <label>Product Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Change__c</fullName>
+        <description>The change in the quantity of order items associated with this change history record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The change in the quantity of order items associated with this change history record.</inlineHelpText>
+        <label>Quantity Change</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity__c</fullName>
+        <description>The quantity of order items associated with this change history record at the time it was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The quantity of order items associated with this change history record at the time it was created.</inlineHelpText>
+        <label>Quantity</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>RbA_Work_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>RbA Work Order</label>
+        <referenceTo>RbA_Work_Order__c</referenceTo>
+        <relationshipLabel>Change Histories</relationshipLabel>
+        <relationshipName>Change_Histories</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Responsible_Party__c</fullName>
+        <externalId>false</externalId>
+        <label>Responsible Party</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Price_Change__c</fullName>
+        <externalId>false</externalId>
+        <label>Retail Price Change</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Retail_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Retail Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Rev_Recognized_Commission_Allocation__c</fullName>
+        <description>The amount allocated to commissions for revenue recognition.</description>
+        <externalId>false</externalId>
+        <formula>Retail_Price_Change__c * Rev_Recognized_Commission_Percent__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The amount allocated to commissions for revenue recognition.</inlineHelpText>
+        <label>Rev Recognized Commission Allocation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Rev_Recognized_Commission_Percent__c</fullName>
+        <defaultValue>0.5</defaultValue>
+        <description>The percent of the commissions that should be paid at revenue recognition. Defaulted to 50%.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The percent of the commissions that should be paid at revenue recognition. Defaulted to 50%.</inlineHelpText>
+        <label>Rev_Recognized Commission %</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>SD_Sales__c</fullName>
+        <description>If the product type is storm door, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Storm Door&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is storm door, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>SD Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep__c</fullName>
+        <description>The sales rep that was tied to this change history record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales rep that was tied to this change history record.</inlineHelpText>
+        <label>Sales Rep</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Door__c</fullName>
+        <description>If the product type is storm door, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Storm Door&apos;, Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is storm door, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>SD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subtype__c</fullName>
+        <description>This picklist designates if this change history record was created when a record was initially created or after it was changed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This picklist designates if this change history record was created when a record was initially created or after it was changed.</inlineHelpText>
+        <label>Subtype</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Initial</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Change</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>UF_Sales__c</fullName>
+        <description>If the product type is universal, then set this equal to the retail price change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Universal&apos;, Retail_Price_Change__c , 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is universal, then set this equal to the retail price change, otherwise, set to 0.</inlineHelpText>
+        <label>UF Sales</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Universal__c</fullName>
+        <description>If the product type is universal, then set this equal to the quantity change, otherwise, set to 0.</description>
+        <externalId>false</externalId>
+        <formula>If (Product_Type__c = &apos;Universal&apos;, Quantity_Change__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>If the product type is universal, then set this equal to the quantity change, otherwise, set to 0.</inlineHelpText>
+        <label>UF</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Change History</label>
+    <nameField>
+        <displayFormat>CH-{0000000}</displayFormat>
+        <label>Change History Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Change Histories</pluralLabel>
+    <recordTypes>
+        <fullName>Order_Discount</fullName>
+        <active>true</active>
+        <label>Order Discount</label>
+        <picklistValues>
+            <picklist>Responsible_Party__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Order_Product</fullName>
+        <active>true</active>
+        <label>Order Product</label>
+        <picklistValues>
+            <picklist>Responsible_Party__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>RbA_Work_Order</fullName>
+        <active>true</active>
+        <label>RbA Work Order</label>
+        <picklistValues>
+            <picklist>Responsible_Party__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

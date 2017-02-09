@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ComposeGmail</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>LogCall</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>MailMerge</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>RequestUpdate</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SendEmail</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ViewAll</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Activity_Cancelled_By__c</fullName>
+        <externalId>false</externalId>
+        <label>Activity Cancelled By</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Business Decision</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Activity_Cancelled_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Activity Cancelled Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Activity_Completed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Activity Completed Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Assigned_To__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Used for adding Service Tasks to Work Order, needed for UI purposes on adding Tasks</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for adding Service Tasks to Work Order, needed for UI purposes on adding Tasks</inlineHelpText>
+        <label>Assigned To</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>User.IsActive</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Activities</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_Event__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Used to denote the Event is &quot;Closed&quot; as the End Date/Time is passed. Used for rollup calculations on Work Orders.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to denote the Event is &quot;Closed&quot; as the End Date/Time is passed. Used for rollup calculations on Work Orders.</inlineHelpText>
+        <label>Closed Event</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Dwelling__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Dwelling</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Dwelling</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Activities</relationshipLabel>
+        <relationshipName>Activities</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Enabled_Appointment_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Enabled+ Appointment Id</label>
+        <length>40</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>End_Date_Time_Minus_1_Hour__c</fullName>
+        <description>Used to calculate when the Event is Closed and set &quot;Closed Event&quot; to True</description>
+        <externalId>false</externalId>
+        <formula>ActivityDateTime - ((60)/1440)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Used to calculate when the Event is Closed and set &quot;Closed Event&quot; to True</inlineHelpText>
+        <label>End Date/Time Minus 1 Hour</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>MA_Scheduler_Event__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>MA Scheduler Event</label>
+        <referenceTo>MA_Scheduler_Event__c</referenceTo>
+        <relationshipLabel>Activities</relationshipLabel>
+        <relationshipName>Activities</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Non_Stock_Material__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Non Stock Material</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Open_Event__c</fullName>
+        <description>Used in calculating # of Open Events on WO</description>
+        <externalId>false</externalId>
+        <formula>ActivityDateTime &gt; Now()</formula>
+        <inlineHelpText>Used in calculating # of Open Events on WO</inlineHelpText>
+        <label>Open Event</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Original_Start_Date__c</fullName>
+        <description>Holds the initial StartDate of the Event in case the StartDate changes. Used for rollups - on Work Orders for the Original Appointment Start Date/Time fields (based on Service Type)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Holds the initial StartDate of the Event in case the StartDate changes. Used for rollups - on Work Orders for the Original Appointment Start Date/Time fields (based on Service Type)</inlineHelpText>
+        <label>Original Start Date</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Primary_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Primary Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Product Limitations</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project Approval</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner Decision</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Incomplete or Missing Paperwork</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vendor Information</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Placeholder1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Resource__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Typically set by Scheduler, used to indicate that the assignee is the Primary Resource. This field is used to ensure the Resource record is then related to the Event.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Typically set by Scheduler, used to indicate that the assignee is the Primary Resource. This field is used to ensure the Resource record is then related to the Event.</inlineHelpText>
+        <label>Primary Resource</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Reason_Cancelled__c</fullName>
+        <externalId>false</externalId>
+        <label>Reason Cancelled</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Resource__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>If the Event is for the Primary Resource, the Resource record is populated here. Used for Scheduling.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the Event is for the Primary Resource, the Resource record is populated here. Used for Scheduling.</inlineHelpText>
+        <label>Resource</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Activities</relationshipLabel>
+        <relationshipName>Activities</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Secondary_Reason__c</fullName>
+        <externalId>false</externalId>
+        <label>Secondary Reason</label>
+        <picklist>
+            <controllingField>Primary_Reason__c</controllingField>
+            <picklistValues>
+                <fullName>Custom Sized Patio Door (Sold as Standard)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Product Limitations</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project can’t be installed as Sold (ie. Insert vs. FF)</fullName>
+                <default>false</default>
+                <controllingFieldValues>Product Limitations</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Size Restrictions</fullName>
+                <default>false</default>
+                <controllingFieldValues>Product Limitations</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Egress Issues</fullName>
+                <default>false</default>
+                <controllingFieldValues>Product Limitations</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other - See Comments</fullName>
+                <default>false</default>
+                <controllingFieldValues>Homeowner Decision</controllingFieldValues>
+                <controllingFieldValues>Incomplete or Missing Paperwork</controllingFieldValues>
+                <controllingFieldValues>Product Limitations</controllingFieldValues>
+                <controllingFieldValues>Project Approval</controllingFieldValues>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner’s Association</fullName>
+                <default>false</default>
+                <controllingFieldValues>Project Approval</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Historical Preservation Council</fullName>
+                <default>false</default>
+                <controllingFieldValues>Project Approval</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Architectural Review Board</fullName>
+                <default>false</default>
+                <controllingFieldValues>Project Approval</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Permit Pending</fullName>
+                <default>false</default>
+                <controllingFieldValues>Project Approval</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Color</fullName>
+                <default>false</default>
+                <controllingFieldValues>Homeowner Decision</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grilles</fullName>
+                <default>false</default>
+                <controllingFieldValues>Homeowner Decision</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+                <controllingFieldValues>Homeowner Decision</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Deferred Installation</fullName>
+                <default>false</default>
+                <controllingFieldValues>Homeowner Decision</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales</fullName>
+                <default>false</default>
+                <controllingFieldValues>Incomplete or Missing Paperwork</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+                <controllingFieldValues>Incomplete or Missing Paperwork</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>NSPR Approval</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SPR Approval</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RbA Acknowledgement</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bayworld Acknowledgement</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Door Acknowledgement</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Patio Door Acknowledgement</fullName>
+                <default>false</default>
+                <controllingFieldValues>Vendor Information</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Placeholder1</fullName>
+                <default>false</default>
+                <controllingFieldValues>Placeholder1</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Homeowner&apos;s Association</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other (See Notes)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Poject can’t be installed as Sold (ie. Insert vs. FF)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project can&apos;t be installed as Sold (ie. Insert vs. FF)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Service_Material_Owner_Id__c</fullName>
+        <description>Used in conjunction with adding Service Tasks to the Work Order. Based on the store configurations, this field hold the Id for the default Service Material Owner. If the user does not assign a material task to a user, the default is added as the Assignee by querying this field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used in conjunction with adding Service Tasks to the Work Order. Based on the store configurations, this field hold the Id for the default Service Material Owner. If the user does not assign a material task to a user, the default is added as the Assignee</inlineHelpText>
+        <label>Service Material Owner Id</label>
+        <length>20</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Type__c</fullName>
+        <description>Defines the Service Task type. Does not need to be added to any page layouts, used only for VF page of adding Service Tasks</description>
+        <externalId>false</externalId>
+        <label>Service Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Service Task</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service Material</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service Material - Non-Stock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Synced_DateTime__c</fullName>
+        <description>Set automatically by Scheduler events. Used to indicate Appointment dates/times are synched between Events, Work Orders, and MA Scheduler</description>
+        <externalId>false</externalId>
+        <label>Synced DateTime</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>isCancelled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the appointment has been cancelled</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if the appointment has been cancelled</inlineHelpText>
+        <label>Is Cancelled?</label>
+        <type>Checkbox</type>
+    </fields>
+    <listViews>
+        <fullName>MyActivities</fullName>
+        <filterScope>Mine</filterScope>
+        <label>My Activities</label>
+    </listViews>
+    <listViews>
+        <fullName>MyDelegatedActivities</fullName>
+        <filterScope>Delegated</filterScope>
+        <label>My Delegated Activities</label>
+    </listViews>
+    <listViews>
+        <fullName>MyTeamsActivities</fullName>
+        <filterScope>Team</filterScope>
+        <label>My Team&apos;s Activities</label>
+    </listViews>
+    <listViews>
+        <fullName>TodaysTasks</fullName>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>TASK.CLOSED</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <filters>
+            <field>ACTIVITY.TASK</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <filters>
+            <field>TASK.DUE_DATE</field>
+            <operation>lessThan</operation>
+            <value>TOMORROW</value>
+        </filters>
+        <label>Today&apos;s Tasks</label>
+    </listViews>
+    <listViews>
+        <fullName>UpcomingEvents</fullName>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>ACTIVITY.TASK</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <filters>
+            <field>TASK.DUE_DATE</field>
+            <operation>greaterThan</operation>
+            <value>YESTERDAY</value>
+        </filters>
+        <label>Upcoming Events</label>
+    </listViews>
+    <searchLayouts>
+        <searchResultsAdditionalFields>TASK.SUBJECT</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>TASK.WHO_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>TASK.WHAT_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>TASK.DUE_DATE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+</CustomObject>
