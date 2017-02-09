@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junctions object to assign discounts to a store through the store configuration</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Buy_Number__c</fullName>
+        <description>The number of units, windows or doors needed before the discount can be applied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of units, windows or doors needed before the discount can be applied</inlineHelpText>
+        <label>Buy #</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <description>The amount of this to be applied.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please enter the amount of this discount.</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Percentage__c</fullName>
+        <description>The percentage of the for this discount.  To be used when applying this discount.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please enter the discount percentage.</inlineHelpText>
+        <label>Discount %</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Product__c</fullName>
+        <externalId>false</externalId>
+        <label>Discount Product</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <description>a discount to link to a store</description>
+        <externalId>false</externalId>
+        <inlineHelpText>a discount to link to a store</inlineHelpText>
+        <label>Discount</label>
+        <referenceTo>Discount__c</referenceTo>
+        <relationshipLabel>Store Discounts</relationshipLabel>
+        <relationshipName>Store_Discounts</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Get_Nth__c</fullName>
+        <description>The Nth unit that the discount applies to, based on the Buy #.  e.g Buy 4 get the 5th free</description>
+        <externalId>false</externalId>
+        <formula>Buy_Number__c + 1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The Nth unit that the discount applies to, based on the Buy #.  e.g Buy 4 get the 5th free</inlineHelpText>
+        <label>Get Nth</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Minimum_Amount_Dollar__c</fullName>
+        <description>The minimum project dollar amount before this discount can be applied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The minimum project dollar amount before this discount can be applied</inlineHelpText>
+        <label>Minimum $ Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Minimum_Requirement_Type__c</fullName>
+        <description>The minimum dollar amount and minimum number of units for discounts are enforced depending on the selection of this field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select how the minimum requirements are applied. 
+$ Amount - only apply the minimum $ amount
+# Units - only apply the minimum # of units rule
+Both - both the min $ amount and min # of units rules must be met
+Either- at least one of the rules is met</inlineHelpText>
+        <label>Minimum Requirement Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>$ Amount</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Minimum_Units__c</fullName>
+        <description>The minimum number of units that need to be purchased before this discount can be applied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The minimum number of units that need to be purchased before this discount can be applied</inlineHelpText>
+        <label>Minimum Units</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Payment_Factor__c</fullName>
+        <description>Used for the Special Financing Discount</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Here&apos;s where you enter the payment factor (% applied to total price to determine the monthly payment) for the Special Financing Offer</inlineHelpText>
+        <label>Payment Factor</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>External Id used for conversion from Pivotal</description>
+        <externalId>true</externalId>
+        <inlineHelpText>Loaded from Pivotal</inlineHelpText>
+        <label>Pivotal Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Price_Expiration__c</fullName>
+        <description>Discount expiration language that is displayed to the customer</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Here&apos;s where you enter the discount expiration language.</inlineHelpText>
+        <label>Price Expiration</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Promotion_End__c</fullName>
+        <description>Date Promotion ends.  Workflow will deactivate promotion one day after this date.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Promotion ends.  Workflow will deactivate promotion one day after this date.</inlineHelpText>
+        <label>Promotion End</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Promotion_Start__c</fullName>
+        <description>Date that the promotion will kick off.  Workflow will automatically activate on this date.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date that the promotion will kick off.  Workflow will automatically activate on this date.</inlineHelpText>
+        <label>Promotion Start</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Special_Financing_Offer_Disclosure__c</fullName>
+        <description>Disclosure for special financing offers</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This special financing disclosure will display under the window picture on the first page of the price presentation.</inlineHelpText>
+        <label>Special Financing Offer Disclosure</label>
+        <length>10000</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Special_Financing_Offer__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>* Will not allow user to go to payment options screen or use the promotional or RbA savings options</inlineHelpText>
+        <label>Special Financing Offer</label>
+        <length>4000</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Store_Configuration__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <description>The configuration of a store to that the discount will be enabled for</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The configuration of a store to that the discount will be enabled for</inlineHelpText>
+        <label>Store Configuration</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>Store Discounts</relationshipLabel>
+        <relationshipName>Store_Discounts</relationshipName>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Tiered_Discount_Type__c</fullName>
+        <description>Used to enforce a uniform type on related discount tier records</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used to enforce a uniform type on related discount tier records</inlineHelpText>
+        <label>Tiered Discount Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName># of Units</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <label>Store Discount</label>
+    <nameField>
+        <label>Store Discount Name</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Store Discounts</pluralLabel>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Buy_Get_One_X_Off</fullName>
+        <active>true</active>
+        <description>A discount that takes a percentage of the Xth after purchasing X-1</description>
+        <label>Buy # Get One X% Off</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Buy_Get_the_X_Free</fullName>
+        <active>true</active>
+        <description>A discount that gives the Xth free after purchasing X-1</description>
+        <label>Buy # Get the X Free</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Special_Financing</fullName>
+        <active>true</active>
+        <description>A discount that uses special financing</description>
+        <label>Special Financing</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Tiered_Discount</fullName>
+        <active>true</active>
+        <description>A discount that has tiers based on number of units or total price.</description>
+        <label>Tiered Discount</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>dollar_off</fullName>
+        <active>true</active>
+        <description>Discounts that take a dollar amount off per Unit, per Window, per Door or the whole project</description>
+        <label>$ Off</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>percent_Off</fullName>
+        <active>true</active>
+        <description>Discounts that take a percentage off per Unit, per Window, per Door or the whole project</description>
+        <label>% Off</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

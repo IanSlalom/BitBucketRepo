@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>RMS_vendorPurchaseOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>RMS_vendorPurchaseOrder</content>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>RMS_viewPurchaseOrder</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The purchase order header for ordering RbA and 3rd party products linked to order line items</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Charge_Cost_To__c</fullName>
+        <externalId>false</externalId>
+        <label>Charge Cost To</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Retailer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Comments__c</fullName>
+        <description>Comments regarding the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Comments regarding the purchase order.</inlineHelpText>
+        <label>Comments</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Confirmation_Number__c</fullName>
+        <description>The PO&apos;s confirmation number from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The PO&apos;s confirmation number from the vendor.</inlineHelpText>
+        <label>Confirmation Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Confirmed_Timestamp__c</fullName>
+        <description>The date and time this order was confirmed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date and time this order was confirmed.</inlineHelpText>
+        <label>Confirmed Timestamp</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Date__c</fullName>
+        <defaultValue>Today()</defaultValue>
+        <description>The date of the purchase order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date of the purchase order</inlineHelpText>
+        <label>Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <description>DELETE: The discount applied to the purchase order (used for AROs)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount applied to the purchase order (used for AROs)</inlineHelpText>
+        <label>Discount</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_Ship_Date__c</fullName>
+        <description>The estimated ship date for the purchase order from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The estimated ship date for the purchase order from the vendor.</inlineHelpText>
+        <label>Estimated Ship Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>GL_Account__c</fullName>
+        <description>DELETE: The GL Account for the cost PO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The GL Account for the cost PO</inlineHelpText>
+        <label>GL Account</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Id_15_digits__c</fullName>
+        <externalId>false</externalId>
+        <formula>LEFT(Id  , 15)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Id - 15 digits</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Number__c</fullName>
+        <description>The invoice number linked to this purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The invoice number linked to this purchase order.</inlineHelpText>
+        <label>Invoice Number</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The parent sales order of this purchase order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The parent sales order of this purchase order</inlineHelpText>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipLabel>Purchase Orders</relationshipLabel>
+        <relationshipName>Purchase_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Ordering_Instructions__c</fullName>
+        <externalId>false</externalId>
+        <label>Ordering Instructions</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>PO_System_Number__c</fullName>
+        <description>A system auto-number used within the Purchase Order Number to create a unique number. This is a system only field.</description>
+        <displayFormat>{000000}</displayFormat>
+        <externalId>false</externalId>
+        <label>PO System Number</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>AutoNumber</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Received_Date__c</fullName>
+        <description>The date the product was received from the vendor.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the product was received from the vendor.</inlineHelpText>
+        <label>Product Received Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>RIBS_Order_Key__c</fullName>
+        <externalId>false</externalId>
+        <label>RIBS Order Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Received_Timestamp__c</fullName>
+        <description>Timestamp of the last date an item on this purchase order was received. This is used to hide the Receive PO button if the timestamp is not today and the PO status is Received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Timestamp of the last date an item on this purchase order was received.</inlineHelpText>
+        <label>Received Timestamp</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Released_Timestamp__c</fullName>
+        <description>The date and time the purchase order was released.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date and time the purchase order was released.</inlineHelpText>
+        <label>Released Timestamp</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Requested_Ship_Date__c</fullName>
+        <description>The date you are requesting the order is ship</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date you are requesting the order is ship</inlineHelpText>
+        <label>Requested Ship Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Service_Request__c</fullName>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot;+Order__r.Id ,  Order__r.OrderNumber)</formula>
+        <label>Service Request</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <description>The status of the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The status moves from Released to Confirmed whenever an Estimated Ship Date is entered, all line items have costs, and (for service POs) all Complete Units have new variant numbers.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>New</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Partially Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Store_Abbreviation__c</fullName>
+        <description>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store&apos;s abbreviation pulled from the related Store Location for this Purchase Order</inlineHelpText>
+        <label>Store Abbreviation</label>
+        <length>3</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The store location from which this purchase order was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store location from which this purchase order was created.</inlineHelpText>
+        <label>Store Location</label>
+        <lookupFilter>
+            <active>true</active>
+            <booleanFilter>1 OR 2</booleanFilter>
+            <errorMessage>Your user account is not configured to create a purchase order for this store location.</errorMessage>
+            <filterItems>
+                <field>$User.Store_Location_Text__c</field>
+                <operation>contains</operation>
+                <valueField>Account.Name</valueField>
+            </filterItems>
+            <filterItems>
+                <field>$Profile.Name</field>
+                <operation>equals</operation>
+                <value>RMS-Data Integration, RMS-Data Migration</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Purchase Orders (Store Location)</relationshipLabel>
+        <relationshipName>Purchase_Orders_Store</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Submitted_Timestamp__c</fullName>
+        <description>The date and time this purchase order was submitted.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date and time this purchase order was submitted.</inlineHelpText>
+        <label>Submitted Timestamp</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Subtotal__c</fullName>
+        <description>The subtotal of the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The subtotal of the purchase order.</inlineHelpText>
+        <label>Subtotal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Tax__c</fullName>
+        <description>The tax applied to the purchase order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The tax applied to the purchase order.</inlineHelpText>
+        <label>Tax</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total__c</fullName>
+        <description>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</description>
+        <externalId>false</externalId>
+        <formula>IF ((ISBLANK(Discount__c)),
+(Subtotal__c +  Tax__c),
+(Subtotal__c - Subtotal__c*Discount__c  +  Tax__c))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Calculates the total of the PO. The formula takes the subtotal minus the discount plus the tax.</inlineHelpText>
+        <label>Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Vendor__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The vendor linked to the PO</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The vendor linked to the PO</inlineHelpText>
+        <label>Vendor</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>The account must be of type Vendor.</errorMessage>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Vendor</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Purchase Orders</relationshipLabel>
+        <relationshipName>Purchase_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>Purchase Order</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Order__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Vendor__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>5. All Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Cost_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Cost_Purchase_Order</value>
+        </filters>
+        <label>1. Cost Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Product_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <columns>Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Product_Purchase_Order</value>
+        </filters>
+        <label>3. Product Purchase Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>Service_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Service_Request__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.Service_Purchase_Order</value>
+        </filters>
+        <label>4. Service Purchase Orders</label>
+    </listViews>
+    <nameField>
+        <label>Purchase Order Number</label>
+        <trackHistory>true</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Purchase Orders</pluralLabel>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Cost_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for non-product / cost purchase orders.</description>
+        <label>Cost Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Product_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for 3rd party product purchase orders.</description>
+        <label>Product Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>RbA_Purchase_Order</fullName>
+        <active>true</active>
+        <description>Record type for Renewal by Andersen purchase orders.</description>
+        <label>RbA Purchase Order</label>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Service_Purchase_Order</fullName>
+        <active>true</active>
+        <label>Service Purchase Order</label>
+        <picklistValues>
+            <picklist>Charge_Cost_To__c</picklist>
+            <values>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Retailer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Process</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Released</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Vendor__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>RECORDTYPE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Order__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Total__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>OWNER.ALIAS</customTabListAdditionalFields>
+        <excludedStandardButtons>New</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>Non_Inventory_PO</listViewButtons>
+        <lookupDialogsAdditionalFields>Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Vendor__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>RECORDTYPE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Order__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Total__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.ALIAS</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Vendor__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>RECORDTYPE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Order__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>LockedServiceRequest</fullName>
+        <active>true</active>
+        <description>If Service Request is Locked (Status = Warranty Submitted, Warranty Accepted, Warranty Rejected, or Closed) users may not edit</description>
+        <errorConditionFormula>Order__r.Lock_Service_Request__c</errorConditionFormula>
+        <errorDisplayField>Charge_Cost_To__c</errorDisplayField>
+        <errorMessage>The Service Request is currently locked, you may not add or update Purchase Orders for this Request.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Cost_Purchase_Order</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a2861000000KE0kAAG
+30-Nov-2016 01:11:50 PM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Cost Purchase Order</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!Purchase_Order__c.Id}
+
+&amp;ReportId=[POswithOrderProducts]00O61000003pVej,
+[OrderwPO]00O5B000000KFC0?pv0={!Purchase_Order__c.Id}~pv1={!Purchase_Order__c.Order__c},
+[POswithStoreConfig]00O5B000000KFC1
+
+&amp;TemplateId=a2A61000000iaZs
+
+&amp;DS7=3
+&amp;DefaultPDF=1
+&amp;AC0=1
+&amp;SC0=1
+&amp;SC1=Attachments</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Purchase_Order</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a285B0000004VGcQAM
+20-Jan-2017 02:54:58 PM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Purchase Order</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!Purchase_Order__c.Id}
+
+&amp;ReportId=[OrderwPO]00O5B000000KFC0,
+[POswithStoreConfig]00O5B000000KFC1,
+[POwithProductDetails]00O5B000000KGTE
+
+&amp;TemplateId=a2A5B0000000Bjy
+
+&amp;DefaultPDF=1
+&amp;DS7=3
+&amp;DS4=1
+&amp;DS0=1</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Service_Purchase_Order</fullName>
+        <availability>online</availability>
+        <description>Originally created by Conga Solution Manager. Date of last use of Update Button from Conga Solution record: https://renewalbyandersen--e2e--apxtconga4.cs52.visual.force.com/a285B0000004K6oQAE
+31-Oct-2016 01:43:42 PM</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>false</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>660</height>
+        <isResizable>false</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Service Purchase Order</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!Purchase_Order__c.Id}
+
+&amp;ReportId=[POswithStoreConfig]00O5B000000KFC1,
+[POswithOrderProducts]00O61000003pVej,
+[OrderwPO]00O5B000000KFC0
+
+&amp;TemplateId=a2A5B00000004FE
+
+&amp;AC0=1
+&amp;DefaultPDF=1
+&amp;DS4=1
+&amp;DS0=1
+&amp;DS7=3</url>
+        <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Purchase_Order</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>New Purchase Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var orderId = &quot;{!Order.Id}&quot;;
+var relatedOrderItems = sforce.connection.query(&quot;SELECT Id FROM OrderItem WHERE OrderId = &apos;{!Order.Id}&apos;&quot;); 
+records = relatedOrderItems.getArray(&apos;records&apos;); 
+if(records.length == 0){ 
+alert(&quot;Cannot create Purchase Order for an Order without Order Products.&quot;); 
+}else{
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+   srcUp(&apos;/apex/RMS_vendorPurchaseOrder?isdtp=vw&amp;orderId=&apos;+orderId);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+   location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ;
+}
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Service_Purchase_Order</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>New Service Purchase Order</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var orderId = &quot;{!Order.Id}&quot;;
+var relatedOrderItems = sforce.connection.query(&quot;SELECT Id FROM OrderItem WHERE OrderId = &apos;{!Order.Id}&apos;&quot;); 
+records = relatedOrderItems.getArray(&apos;records&apos;); 
+if(records.length == 0){ 
+alert(&quot;Cannot create Purchase Order for an Order without Order Products.&quot;); 
+}else{
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+srcUp(&apos;/apex/RMS_createServicePurchaseOrders?isdtp=vw&amp;Id=&apos;+orderId);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+location.href=&apos;/apex/RMS_createServicePurchaseOrders?Id=&apos; +orderId ;
+}
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Non_Inventory_PO</fullName>
+        <availability>online</availability>
+        <description>Displayed on the Purchase Order list view to create a non-inventory / cost-po</description>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Non-Inventory PO</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var orderId = &quot;{!Order.Id}&quot;;
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+srcUp(&apos;/apex/RMS_vendorPurchaseOrder?isdtp=vw&amp;orderId=&apos;+orderId);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ;
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>test</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>test</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)} 
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)} 
+
+var orderId = &quot;{!Order.Id}&quot;; 
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console 
+if (typeof(srcUp) == &apos;function&apos;) { 
+srcUp(&apos;/a1T/e?CF00N3B000000SQ8q=00000126&amp;CF00N3B000000SQ8q_lkid=8013B0000004NZCQA2&amp;CF00N61000003IFpE=Test Dwelling&amp;CF00N61000003IFpE_lkid=0013B000001upLzQAI&amp;00N61000003IFr6=300 Stanley Ave&amp;00N61000003IFpA=Long Beach&amp;00N61000003IFr5=California&amp;00N61000003IFrY=90814&amp;00N61000003IFpL=United States&amp;ent=01I610000001Rdn&amp;retURL=%2F8013B0000004NZCQA2&amp;sfdcIFrameOrigin=https%3A%2F%2Fcs50.salesforce.com&amp;RecordType=0123B000000CgWKQA0&apos;); 
+} 
+// It will execute if the Button/Link will be clicked from normal Salesforce UI 
+else{ 
+location.href=&apos;/apex/RMS_vendorPurchaseOrder?orderId=&apos; +orderId ; 
+}</url>
+    </webLinks>
+</CustomObject>

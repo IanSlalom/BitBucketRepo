@@ -1,0 +1,2566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddQuoteLine</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EditAllQuoteLine</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fieldSets>
+        <fullName>rSuite_API_Fields</fullName>
+        <description>This is used by the mobile api to know which quote line item and order line item fields to include in the API</description>
+        <displayedFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Description</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>ListPrice</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>PricebookEntryId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Quantity</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>UnitPrice</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Aluminum_Sill_Support__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Applied_Grilles__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Apply_to_All_Sashes_Glass__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Apply_to_All_Sashes_Grilles__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Astragal__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Auxillary_Foot_Lock_Color_Match__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Breather_Tubes__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Brickmould_Applied__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Brickmould_Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Casing_Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Casing_Profile__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Casing_Species__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Checkrail_Style__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Child_Product_Pricebook_Entry_Id__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Color_Match_Hinges__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Corrosion_Resistant_Hardware__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Corrosion_Resistant_Hinges__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Corrosion_Resistant_Lock__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Cross_Reference__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Details_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Details_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Details_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Details_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Price_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Price_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Price_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Custom_Grille_Price_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Door_Sill_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Drip_Cap__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Drip_Cap_Pieces__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Frame__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Kerf__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Species__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Thickness__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>EJ_Wall_Depth__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Door_Jamb__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Frame_Depth__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Grille_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Keyed_Lock__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Trim__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Exterior_Trim_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Fibrex_L_Trim__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Finish_Matched_Panel_Stop__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Finger_Lifts__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Floor__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Frame_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glass_Pattern_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glass_Pattern_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glass_Pattern_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glass_Pattern_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glazing_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glazing_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glazing_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Glazing_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Gliding_Screen__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Alignment__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Pattern__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Pattern_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Pattern_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Pattern_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Pattern_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Grille_Style__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Handing__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Handle_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hardware_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hardware_Finish__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hardware_Finish_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hardware_Option__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hardware_Style__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Hubs__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Insect_Screen_Style__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Install_Holes_Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Install_Track_Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Extension_Jamb_Kit__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Grille_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Pre_Finish__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Sash_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Interior_Trim__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Jamb_Liner_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Left_Leg_Inches__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Left_Leg_Fraction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lifts_Pulls__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Linear_Inches__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_High_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_High_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_High_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_High_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_Wide_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_Wide_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_Wide_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Lites_Wide_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Locks_Sash__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Mfg_Mull_Sequence__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Mull_Sequence_Mullion__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Notes__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Number_of_Panels__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Parent_Unit_rSuite_Id__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Part_of_Bay__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Part_of_Bow__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Perm_Applied_Int_Wood_Grille__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Pocket_Notch__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Pricing_Cross_Reference__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Product_Category__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Product_Class__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Product_Family__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Product_Sub_Category__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Right_Leg_Inches__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Right_Leg_Fraction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Room__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>rSuite_Id__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>rSuite_Product_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sales_Height_Fraction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sales_Height_Inches__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sales_Width_Fraction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sales_Width_Inches__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sash_Operation__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Sash_Ratio__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Screen_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Screen_Size__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Screen_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Screen_Veneer_Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Special_Options__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Specialty_Shape__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Spokes__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Storm_Window__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Storm_Window_Color__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Storm_Window_Style__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>SW_Grille_Alignment__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Tax_Credit_Qualified__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Tempered_S1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Tempered_S2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Tempered_S3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Tempered_S4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Unit_Id__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Upgrade_Hinges_To_Metal_Finish__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Wide_Bar__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Window_Opening_Control_Device__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>rSuite API Fields</label>
+    </fieldSets>
+    <fields>
+        <fullName>Aluminum_Sill_Support__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Field to support ordering Doors</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field to support ordering Doors</inlineHelpText>
+        <label>Aluminum Sill Support</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Applied_Grilles__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <label>Applied Grilles</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Apply_to_All_Sashes_Glass__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s glass configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Apply_to_All_Sashes_Grilles__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to apply Sash 1&apos;s grille configuration to all other sashes on the product.</inlineHelpText>
+        <label>Apply to All Sashes</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Astragal__c</fullName>
+        <description>The Astragal Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Astragal Color selected for the product.</inlineHelpText>
+        <label>Astragal</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Auxillary_Foot_Lock_Color_Match__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Field to support doors</description>
+        <externalId>false</externalId>
+        <label>Auxillary Foot Lock Color Match</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Breather_Tubes__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Breather Tubes are needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Breather Tubes are needed.</inlineHelpText>
+        <label>Breather Tubes</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Applied__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if brickmould should be applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if brickmould should be applied to this product.</inlineHelpText>
+        <label>Brickmould Applied</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Location__c</fullName>
+        <description>The Brickmould Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Brickmould Location selected for the product.</inlineHelpText>
+        <label>Brickmould Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Calculated_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Calculated Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Casing_Location__c</fullName>
+        <description>The Casing Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Location selected for the product.</inlineHelpText>
+        <label>Casing Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Profile__c</fullName>
+        <description>The Casing Profile selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Profile selected for the product.</inlineHelpText>
+        <label>Casing Profile</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Casing_Species__c</fullName>
+        <description>The Casing Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Casing Species selected for the product.</inlineHelpText>
+        <label>Casing Species</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Checkrail_Style__c</fullName>
+        <description>The checkrail style applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The checkrail style applied to this product.</inlineHelpText>
+        <label>Checkrail Style</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Child_Product_Pricebook_Entry_Id__c</fullName>
+        <description>a text field to hold an the id for child product pricebook entry.  Have to use this type field because lookups to Pricebook Entry are not allowed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter Enter the Child Product Pricebook Entry Id.  Note this should not be visible in the UI to the end user.</inlineHelpText>
+        <label>Child Product Pricebook Entry Id</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Color_Match_Hinges__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>For doors - if the hinges are to be color matched to the other door hardware</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For doors - if the hinges are to be color matched to the other door hardware</inlineHelpText>
+        <label>Color Match Hinges</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hardware__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this corrosion resistant hardware option has been applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this corrosion resistant hardware option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hardware</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hinges__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this Corrosion Resistant Hinges option has been applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this Corrosion Resistant Hinges option has been applied to this product.</inlineHelpText>
+        <label>Corrosion Resistant Hinges</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Lock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>For Doors, check if the line item includes a corrosion resistant lock</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For Doors, check if the line item includes a corrosion resistant lock</inlineHelpText>
+        <label>Corrosion Resistant Lock</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Cross_Reference__c</fullName>
+        <description>rSuite uses the field to link lines from the various input spreadsheets. It will also be used to help with the loading of Pricebook Entries</description>
+        <externalId>false</externalId>
+        <inlineHelpText>rSuite uses the field to link lines from the various input spreadsheets. It will also be used to help with the loading of Pricebook Entries</inlineHelpText>
+        <label>Cross Reference</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S1__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 1.</inlineHelpText>
+        <label>Custom Grille Details S1</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S2__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 2.</inlineHelpText>
+        <label>Custom Grille Details S2</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S3__c</fullName>
+        <description>Enter details describing the custom grille sold for sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 3.</inlineHelpText>
+        <label>Custom Grille Details S3</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Details_S4__c</fullName>
+        <description>custom grille details for a 4th sash - currently used in doors</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter details describing the custom grille sold for sash 4.</inlineHelpText>
+        <label>Custom Grille Details S4</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S1__c</fullName>
+        <description>Price for the custom grille for sash 1</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 1</inlineHelpText>
+        <label>Custom Grille Price S1</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S2__c</fullName>
+        <description>Price for the custom grille for sash 2</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 2</inlineHelpText>
+        <label>Custom Grille Price S2</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S3__c</fullName>
+        <description>Price for the custom grille for sash 3</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 3</inlineHelpText>
+        <label>Custom Grille Price S3</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Custom_Grille_Price_S4__c</fullName>
+        <description>Price for the custom grille for sash 4</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for the custom grille for sash 4</inlineHelpText>
+        <label>Custom Grille Price S4</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Discount</fullName>
+    </fields>
+    <fields>
+        <fullName>Door_Sill_Color__c</fullName>
+        <externalId>false</externalId>
+        <label>Door Sill Color</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Drip_Cap_Pieces__c</fullName>
+        <description>The Drip Cap Pieces selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Drip Cap Pieces selected for the product.</inlineHelpText>
+        <label>Drip Cap Pieces</label>
+        <precision>1</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Drip_Cap__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>used by rSuite to indicate that this quote line item has drip caps - for pricing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>check if this window needs to charge for drip caps</inlineHelpText>
+        <label>Drip Cap</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Dwelling_Room__c</fullName>
+        <externalId>false</externalId>
+        <label>Dwelling Room</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Color__c</fullName>
+        <description>The EJ Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Color selected for the product.</inlineHelpText>
+        <label>EJ Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Frame__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if an EJ Kerf / Full Frame Addition of L&amp;M and PM is needed.</inlineHelpText>
+        <label>EJ Frame</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Kerf__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>EJ Kerf</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Species__c</fullName>
+        <description>The EJ Species selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Species selected for the product.</inlineHelpText>
+        <label>EJ Species</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Thickness__c</fullName>
+        <description>The EJ Thickness selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Thickness selected for the product.</inlineHelpText>
+        <label>EJ Thickness</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EJ_Wall_Depth__c</fullName>
+        <description>The EJ Wall Depth selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The EJ Wall Depth selected for the product.</inlineHelpText>
+        <label>EJ Wall Depth</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Entered_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Entered Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extended_Price__c</fullName>
+        <externalId>false</externalId>
+        <label>Extended Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Color__c</fullName>
+        <description>The exterior color of the product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior color of the product</inlineHelpText>
+        <label>Exterior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Door_Jamb__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exterior Door Jamb</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Frame_Depth__c</fullName>
+        <externalId>false</externalId>
+        <label>Exterior Frame Depth</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Grille_Color__c</fullName>
+        <description>The Exterior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Grille Color selected for the product.</inlineHelpText>
+        <label>Exterior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Keyed_Lock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Exterior Keyed Lock</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim_Color__c</fullName>
+        <description>The Exterior Trim Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Exterior Trim Color selected for the product.</inlineHelpText>
+        <label>Exterior Trim Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exterior_Trim__c</fullName>
+        <description>The exterior trim option applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The exterior trim option applied to this product.</inlineHelpText>
+        <label>Exterior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fibrex_L_Trim__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if Fibrex L-Trim option is selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if Fibrex L-Trim option is selected for this product.</inlineHelpText>
+        <label>Fibrex L-Trim</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Finger_Lifts__c</fullName>
+        <description>The number of extra finger lifts for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra finger lifts for this product.</inlineHelpText>
+        <label>Finger Lifts</label>
+        <length>1</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Finish_Matched_Panel_Stop__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Finish Matched Panel Stop</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Floor__c</fullName>
+        <description>Identifies the floor for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the floor for this product.</inlineHelpText>
+        <label>Floor</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Frame_Type__c</fullName>
+        <description>The frame type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The frame type applied to this product.</inlineHelpText>
+        <label>Frame Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S1__c</fullName>
+        <description>Select the glass pattern for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 1.</inlineHelpText>
+        <label>Glass Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S2__c</fullName>
+        <description>Select the glass pattern for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 2.</inlineHelpText>
+        <label>Glass Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S3__c</fullName>
+        <description>Select the glass pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 3.</inlineHelpText>
+        <label>Glass Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glass_Pattern_S4__c</fullName>
+        <description>Select the glass pattern for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glass pattern for Sash 4.</inlineHelpText>
+        <label>Glass Pattern S4</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S1__c</fullName>
+        <description>Select the glazing for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 1.</inlineHelpText>
+        <label>Glazing S1</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S2__c</fullName>
+        <description>Select the glazing for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 2.</inlineHelpText>
+        <label>Glazing S2</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S3__c</fullName>
+        <description>Select the glazing for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 3.</inlineHelpText>
+        <label>Glazing S3</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Glazing_S4__c</fullName>
+        <description>Select the glazing for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the glazing for Sash 4.</inlineHelpText>
+        <label>Glazing S4</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Grille_Alignment__c</fullName>
+        <externalId>false</externalId>
+        <label>Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S1__c</fullName>
+        <description>Select the grille pattern for Sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 1.</inlineHelpText>
+        <label>Grille Pattern S1</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S2__c</fullName>
+        <description>Select the grille pattern for Sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 2.</inlineHelpText>
+        <label>Grille Pattern S2</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S3__c</fullName>
+        <description>Select the grille pattern for Sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 3.</inlineHelpText>
+        <label>Grille Pattern S3</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern_S4__c</fullName>
+        <description>Select the grille pattern for Sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the grille pattern for Sash 4.</inlineHelpText>
+        <label>Grille Pattern S4</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Pattern__c</fullName>
+        <description>The grille pattern applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille pattern applied to this product.</inlineHelpText>
+        <label>Grille Pattern</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Grille_Style__c</fullName>
+        <description>The grille style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The grille style selected for this product.</inlineHelpText>
+        <label>Grille Style</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Handing__c</fullName>
+        <description>Handing refers to the direction a window or door opens.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Handing refers to the direction a window or door opens.</inlineHelpText>
+        <label>Handing</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Handle_Type__c</fullName>
+        <description>The handle type selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The handle type selected for this product.</inlineHelpText>
+        <label>Handle Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Color__c</fullName>
+        <description>The hardware color applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware color applied to this product.</inlineHelpText>
+        <label>Hardware Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish_Color__c</fullName>
+        <description>The colors for all products - use product configuration to fill limit the options - for windows this will be used to populate Hardware_Finish__c and Hardware_Color__c for integration with Baan 4. This was implemented to support rSuite.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Choose a hardware color</inlineHelpText>
+        <label>Hardware Finish Color</label>
+        <length>40</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Finish__c</fullName>
+        <description>The hardware finish applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware finish applied to this product.</inlineHelpText>
+        <label>Hardware Finish</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Option__c</fullName>
+        <description>The hardware option selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware option selected for this product.</inlineHelpText>
+        <label>Hardware Option</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hardware_Style__c</fullName>
+        <description>The hardware style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The hardware style selected for this product.</inlineHelpText>
+        <label>Hardware Style</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hubs__c</fullName>
+        <description>The number of hubs selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of hubs selected for the product.</inlineHelpText>
+        <label>Hubs</label>
+        <length>2</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Insect_Screen_Style__c</fullName>
+        <description>The insect screen style selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The insect screen style selected for this product.</inlineHelpText>
+        <label>Insect Screen Style</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Holes_Location__c</fullName>
+        <description>The Install Holes Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Holes Location selected for the product.</inlineHelpText>
+        <label>Install Holes Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Install_Track_Location__c</fullName>
+        <description>The Install Track Location selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Install Track Location selected for the product.</inlineHelpText>
+        <label>Install Track Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Color__c</fullName>
+        <description>The interior color of the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior color of the product.</inlineHelpText>
+        <label>Interior Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Extension_Jamb_Kit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Interior Extension Jamb Kit</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Grille_Color__c</fullName>
+        <description>The Interior Grille Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Grille Color selected for the product.</inlineHelpText>
+        <label>Interior Grille Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Pre_Finish__c</fullName>
+        <externalId>false</externalId>
+        <label>Interior Pre Finish</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Sash_Color__c</fullName>
+        <description>The Interior Sash Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Interior Sash Color selected for the product.</inlineHelpText>
+        <label>Interior Sash Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Interior_Trim__c</fullName>
+        <description>The interior trim selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The interior trim selected for the product.</inlineHelpText>
+        <label>Interior Trim</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Jamb_Liner_Color__c</fullName>
+        <description>The Jamb Liner Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Jamb Liner Color selected for the product.</inlineHelpText>
+        <label>Jamb Liner Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Fraction__c</fullName>
+        <description>The left leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg measurement fraction.</inlineHelpText>
+        <label>Left Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Left_Leg_Inches__c</fullName>
+        <description>The left leg dimension in inches selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The left leg dimension in inches selected for this product.</inlineHelpText>
+        <label>Left Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lifts_Pulls__c</fullName>
+        <description>The number of extra lifts/pulls for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra lifts/pulls for this product.</inlineHelpText>
+        <label>Lifts/Pulls</label>
+        <length>1</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Linear_Inches__c</fullName>
+        <description>Mullion - Linear Inches of the mullion unit</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Linear Inches of the mullion unit</inlineHelpText>
+        <label>Linear Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ListPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S1__c</fullName>
+        <description>Select the number of grille lites high on sash 1.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 1</inlineHelpText>
+        <label>Lites High S1</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S2__c</fullName>
+        <description>Select the number of grille lites high on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 2.</inlineHelpText>
+        <label>Lites High S2</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S3__c</fullName>
+        <description>Select the number of grille lites high on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 3.</inlineHelpText>
+        <label>Lites High S3</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_S4__c</fullName>
+        <description>Select the number of grille lites high on sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites high on sash 4.</inlineHelpText>
+        <label>Lites High S4</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S1__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S1__c * Lites_Wide_S1__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S2__c * Lites_Wide_S2__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S3__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S3__c * Lites_Wide_S3__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_High_Wide_Total_S4__c</fullName>
+        <externalId>false</externalId>
+        <formula>Lites_High_S4__c * Lites_Wide_S4__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Lites High Wide Total S4</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S1__c</fullName>
+        <description>Select the number of grille lites wide on sash 1</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 1</inlineHelpText>
+        <label>Lites Wide S1</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S2__c</fullName>
+        <description>Select the number of grille lites wide on sash 2.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 2.</inlineHelpText>
+        <label>Lites Wide S2</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S3__c</fullName>
+        <description>Select the number of grille lites wide on sash 3.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 3.</inlineHelpText>
+        <label>Lites Wide S3</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lites_Wide_S4__c</fullName>
+        <description>Select the number of grille lites wide on sash 4.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the number of grille lites wide on sash 4.</inlineHelpText>
+        <label>Lites Wide S4</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Locks_Sash__c</fullName>
+        <description>The number of extra locks/sash for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of extra locks/sash for this product.</inlineHelpText>
+        <label>Locks/Sash</label>
+        <length>1</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mfg_Mull_Sequence__c</fullName>
+        <description>The manufacturing mull sequence selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The manufacturing mull sequence selected for this product.</inlineHelpText>
+        <label>Mfg Mull Sequence</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Miscellaneous_Charge_Parent_Unit_Id__c</fullName>
+        <externalId>false</externalId>
+        <label>Miscellaneous Charge Parent Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mull_Sequence_Mullion__c</fullName>
+        <description>The mull sequence mullion selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The mull sequence mullion selected for this product.</inlineHelpText>
+        <label>Mull Sequence Mullion</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Panels__c</fullName>
+        <externalId>false</externalId>
+        <label>Number of Panels</label>
+        <length>5</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Parent_Quote_Line_Item__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Used to link Misc Unit charges and job materials to a window or door quote line item</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Link this Misc Unit Charge or Job Materials to a specific door or window line item</inlineHelpText>
+        <label>Parent Quote Line Item</label>
+        <referenceTo>QuoteLineItem</referenceTo>
+        <relationshipLabel>Quote Line Items</relationshipLabel>
+        <relationshipName>Quote_Line_Items</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Parent_Unit_rSuite_Id__c</fullName>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4 - used to externally link misc job and unit charges or job materials to window/door quote line items</description>
+        <externalId>false</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps - used to externally link misc job and unit charges or construction materials to window/door quote line items</inlineHelpText>
+        <label>Parent Unit rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bay__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bay window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bay window.</inlineHelpText>
+        <label>Part of Bay</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Part_of_Bow__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if this product is a part of a bow window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if this product is a part of a bow window.</inlineHelpText>
+        <label>Part of Bow</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Perm_Applied_Int_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Perm Applied Int Wood Grille</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the permanently applied interior wood grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
+        <label>Permanently Applied Interior Wood Grille</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Pocket_Notch__c</fullName>
+        <externalId>false</externalId>
+        <label>Pocket Notch</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pricing_Cross_Reference__c</fullName>
+        <description>Copy of the the Prodyct/Pricing Cross Reference - used to tie a line item to its princng - Unique id = Pricebook + cross reference</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Copy of the the Prodyct/Pricing Cross Reference - used to tie a line item to its princng - Unique id = Pricebook + cross reference to find the record used to get the pricing - not directly linked otherwise</inlineHelpText>
+        <label>Pricing Cross Reference</label>
+        <length>40</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product2Id</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ProductCode</fullName>
+    </fields>
+    <fields>
+        <fullName>Product_Category__c</fullName>
+        <description>Product Category</description>
+        <externalId>false</externalId>
+        <formula>TEXT(Product2.Category__c)</formula>
+        <inlineHelpText>Product Category</inlineHelpText>
+        <label>Product Category</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Class__c</fullName>
+        <description>used by rSuite for correctly displaying quote line items</description>
+        <externalId>false</externalId>
+        <formula>IF(OR(ISNULL(Parent_Quote_Line_Item__c),ISBLANK(Parent_Quote_Line_Item__c)),&quot;Master Product&quot;, 
+CASE(Product2.Category__c, 
+&quot;MiscUnit&quot;, &quot;Misc Unit Charge&quot;, 
+&quot;MiscMull&quot;, &quot;Misc Unit Charge&quot;, 
+&quot;MiscUnitConst&quot;, &quot;Construction&quot;, 
+&quot;MiscMullConst&quot;, &quot;Construction&quot;, 
+&quot;Material&quot;, &quot;Material&quot;, 
+&quot;Trim&quot;, &quot;Material&quot;, 
+&quot;Lumber&quot;, &quot;Material&quot;, 
+&quot;&quot;))</formula>
+        <inlineHelpText>used by rSuite for correctly displaying quote line items</inlineHelpText>
+        <label>Product Class</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Family__c</fullName>
+        <externalId>false</externalId>
+        <formula>TEXT(Product2.Family)</formula>
+        <label>Product Family</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product_Sub_Category__c</fullName>
+        <description>used by rSuite: set this to the value of the Product2.Sub_Category__c field</description>
+        <externalId>false</externalId>
+        <inlineHelpText>used by rSuite: set this to the value of the Product Sub Category field</inlineHelpText>
+        <label>Product Sub Category</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity</fullName>
+    </fields>
+    <fields>
+        <fullName>QuoteId</fullName>
+        <type>MasterDetail</type>
+    </fields>
+    <fields>
+        <fullName>Right_Leg_Fraction__c</fullName>
+        <description>The right leg measurement fraction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg measurement fraction.</inlineHelpText>
+        <label>Right Leg Fraction</label>
+        <length>5</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Right_Leg_Inches__c</fullName>
+        <description>The right leg in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The right leg in inches.</inlineHelpText>
+        <label>Right Leg</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Room__c</fullName>
+        <description>Identifies the dwelling&apos;s room for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Identifies the dwelling&apos;s room for this product.</inlineHelpText>
+        <label>Room</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SW_Grille_Alignment__c</fullName>
+        <description>The SW grille alignment selected for this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The SW grille alignment selected for this product.</inlineHelpText>
+        <label>SW Grille Alignment</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height_Fraction__c</fullName>
+        <description>The sales height measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales height measurement in fractions.</inlineHelpText>
+        <label>Sales Height Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Height_Inches__c</fullName>
+        <description>The height of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The height of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Height Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Fraction__c</fullName>
+        <description>The sales width measurement in fractions.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sales width measurement in fractions.</inlineHelpText>
+        <label>Sales Width Fraction</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Width_Inches__c</fullName>
+        <description>The width of the opening as measured by sales in inches.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The width of the opening as measured by sales in inches.</inlineHelpText>
+        <label>Sales Width Inches</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sash_Operation__c</fullName>
+        <description>The Sash Operation selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sash Operation selected for the product.</inlineHelpText>
+        <label>Sash Operation</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sash_Ratio__c</fullName>
+        <description>The Sash Ratio selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Sash Ratio selected for the product.</inlineHelpText>
+        <label>Sash Ratio</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Color__c</fullName>
+        <description>The Screen Color selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Screen Color selected for the product.</inlineHelpText>
+        <label>Screen Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Size__c</fullName>
+        <description>Half or Full Size</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Half or Full Size</inlineHelpText>
+        <label>Screen Size</label>
+        <length>20</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Type__c</fullName>
+        <description>The screen type applied to the selected product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen type applied to the selected product.</inlineHelpText>
+        <label>Screen Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Vaneer_Type__c</fullName>
+        <description>The screen vaneer type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen vaneer type applied to this product.</inlineHelpText>
+        <label>Screen Vaneer Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Screen_Veneer_Type__c</fullName>
+        <description>The screen veneer type applied to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The screen veneer type applied to this product.</inlineHelpText>
+        <label>Screen Veneer Type</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ServiceDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Sill_Angle__c</fullName>
+        <externalId>false</externalId>
+        <label>Sill Angle</label>
+        <picklist>
+            <picklistValues>
+                <fullName>FS</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>IS</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>5</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>10</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>11</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>12</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>13</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>14</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Special_Options__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Special Options</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Specialty_Shape__c</fullName>
+        <description>Choose the specialty shape for the window.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Choose the specialty shape for the window.</inlineHelpText>
+        <label>Specialty Shape</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Equal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Peak Pentagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hexagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Octagon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Circle Top</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Chord</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Springline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quarter Circle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Right Triangle</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trapezoid</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Unequal Leg Arch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Half Springline</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Spokes__c</fullName>
+        <description>The number of spokes selected for the product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of spokes selected for the product.</inlineHelpText>
+        <label>Spokes</label>
+        <length>2</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Color__c</fullName>
+        <externalId>false</externalId>
+        <label>Storm Window Color</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window_Style__c</fullName>
+        <externalId>false</externalId>
+        <label>Storm Window Style</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Storm_Window__c</fullName>
+        <externalId>false</externalId>
+        <label>Storm Window</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Subtotal</fullName>
+    </fields>
+    <fields>
+        <fullName>Tax_Credit_Qualified__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if this particular product qualifies for a tax credit.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if this particular product qualifies for a tax credit.</inlineHelpText>
+        <label>Tax Credit Qualified</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S1__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 1 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 1 of this product is tempered.</inlineHelpText>
+        <label>Tempered S1</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S2__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 2 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 2 of this product is tempered.</inlineHelpText>
+        <label>Tempered S2</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S3__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 3 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 3 of this product is tempered.</inlineHelpText>
+        <label>Tempered S3</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tempered_S4__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the glass for Sash 4 of this product is tempered.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the glass for Sash 4 of this product is tempered.</inlineHelpText>
+        <label>Tempered S4</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>TotalPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>UnitPrice</fullName>
+    </fields>
+    <fields>
+        <fullName>Unit_Id__c</fullName>
+        <description>The number used to identify the opening(window or door) location for this product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number used to identify the opening(window or door) location for this product</inlineHelpText>
+        <label>Unit Id</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Upgrade_Hinges_To_Metal_Finish__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Upgrade Hinges To Metal Finish</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Verify_Item_Configuration__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check if you want to verify the product configuration against the makeability rules.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want to verify the product configuration against the makeability rules.</inlineHelpText>
+        <label>Verify Item Configuration</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Wide_Bar__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if the wide Bar grille option was selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if the wide Bar grille option was selected.</inlineHelpText>
+        <label>Wide Bar</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Window_Opening_Control_Device__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Checked if a Window Opening Control Device should be added to this product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Checked if a Window Opening Control Device should be added to this product.</inlineHelpText>
+        <label>Window Opening Control Device</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isInactive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>isInactive</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isStandardSize__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Standard Size</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>rSuite_Product_Type__c</fullName>
+        <description>Product - rSuite Product Type</description>
+        <externalId>false</externalId>
+        <formula>IF((TEXT(Product2.rSuite_Product_Type__c) = &apos;ASeries&apos;  || TEXT(Product2.rSuite_Product_Type__c) = &apos;200400Series&apos;),&apos;Patio Door&apos;,TEXT(Product2.rSuite_Product_Type__c))</formula>
+        <inlineHelpText>Product - rSuite Product Type</inlineHelpText>
+        <label>rSuite Product Type</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>QuoteLineIte_Valid_PBE</fullName>
+        <active>true</active>
+        <description>Validates that a text Id field starts with the correct object type - in this case PricebookEntry</description>
+        <errorConditionFormula>OR( 
+NOT(BEGINS(Child_Product_Pricebook_Entry_Id__c, &apos;01u&apos;)), 
+AND( 
+NOT(ISNULL(Child_Product_Pricebook_Entry_Id__c)), 
+NOT(ISBLANK(Child_Product_Pricebook_Entry_Id__c)), 
+LEN(Child_Product_Pricebook_Entry_Id__c) &lt; 15 
+))</errorConditionFormula>
+        <errorDisplayField>Child_Product_Pricebook_Entry_Id__c</errorDisplayField>
+        <errorMessage>Invalid PricebookEntry Id</errorMessage>
+    </validationRules>
+</CustomObject>

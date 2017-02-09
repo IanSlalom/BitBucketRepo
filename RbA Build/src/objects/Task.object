@@ -1,0 +1,1135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Close</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>DeleteSeries</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>NewTask</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>true</enableFeeds>
+    <fields>
+        <fullName>ActivityDate</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>CallDisposition</fullName>
+    </fields>
+    <fields>
+        <fullName>CallDurationInSeconds</fullName>
+    </fields>
+    <fields>
+        <fullName>CallObject</fullName>
+    </fields>
+    <fields>
+        <fullName>CallType</fullName>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+    </fields>
+    <fields>
+        <fullName>IsVisibleInSelfService</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>OwnerId</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+    </fields>
+    <fields>
+        <fullName>Priority</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>High</fullName>
+                <default>false</default>
+                <highPriority>true</highPriority>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Normal</fullName>
+                <default>true</default>
+                <highPriority>false</highPriority>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>RecurrenceInterval</fullName>
+    </fields>
+    <fields>
+        <fullName>RecurrenceRegeneratedType</fullName>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Completed</fullName>
+                <default>false</default>
+                <closed>true</closed>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Subject</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Send Letter</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Send Quote</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Post Install Call</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>TaskSubtype</fullName>
+    </fields>
+    <fields>
+        <fullName>Type</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>WhatId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>WhoId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypes>
+        <fullName>Collections</fullName>
+        <active>true</active>
+        <label>Collections</label>
+        <picklistValues>
+            <picklist>Activity_Cancelled_By__c</picklist>
+            <values>
+                <fullName>Business Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary_Reason__c</picklist>
+            <values>
+                <fullName>Homeowner Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incomplete or Missing Paperwork</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Product Limitations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Information</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Normal</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason_Cancelled__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Secondary_Reason__c</picklist>
+            <values>
+                <fullName>Architectural Review Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bayworld Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Color</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom Sized Patio Door %28Sold as Standard%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deferred Installation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Egress Issues</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grilles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical Preservation Council</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>NSPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Patio Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permit Pending</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Size Restrictions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Service Material</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Material - Non-Stock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Task</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Subject</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Letter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Quote</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>General</fullName>
+        <active>true</active>
+        <description>Used for General Tasks</description>
+        <label>General</label>
+        <picklistValues>
+            <picklist>Activity_Cancelled_By__c</picklist>
+            <values>
+                <fullName>Business Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary_Reason__c</picklist>
+            <values>
+                <fullName>Homeowner Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incomplete or Missing Paperwork</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Product Limitations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Information</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Normal</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason_Cancelled__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Secondary_Reason__c</picklist>
+            <values>
+                <fullName>Architectural Review Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bayworld Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Color</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom Sized Patio Door %28Sold as Standard%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deferred Installation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Egress Issues</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grilles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical Preservation Council</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>NSPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Patio Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permit Pending</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Size Restrictions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Service Material</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Material - Non-Stock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Task</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Subject</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Letter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Quote</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>On_Hold</fullName>
+        <active>true</active>
+        <label>On Hold</label>
+        <picklistValues>
+            <picklist>Primary_Reason__c</picklist>
+            <values>
+                <fullName>Homeowner Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incomplete or Missing Paperwork</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Product Limitations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Information</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Normal</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Secondary_Reason__c</picklist>
+            <values>
+                <fullName>Architectural Review Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bayworld Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Color</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom Sized Patio Door %28Sold as Standard%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deferred Installation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Egress Issues</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grilles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical Preservation Council</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner%E2%80%99s Association</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>NSPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - See Comments</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Patio Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permit Pending</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project can%E2%80%99t be installed as Sold %28ie%2E Insert vs%2E FF%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Size Restrictions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Service Material</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Material - Non-Stock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Task</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Subject</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Letter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Quote</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Post_Install_Call</fullName>
+        <active>true</active>
+        <description>Post install call record type</description>
+        <label>Post Install Call</label>
+        <picklistValues>
+            <picklist>Activity_Cancelled_By__c</picklist>
+            <values>
+                <fullName>Business Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary_Reason__c</picklist>
+            <values>
+                <fullName>Homeowner Decision</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incomplete or Missing Paperwork</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Product Limitations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Information</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Normal</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason_Cancelled__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Secondary_Reason__c</picklist>
+            <values>
+                <fullName>Architectural Review Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bayworld Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Color</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Custom Sized Patio Door %28Sold as Standard%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deferred Installation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Egress Issues</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entry Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grilles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hardware</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Historical Preservation Council</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>NSPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Patio Door Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Permit Pending</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RbA Acknowledgement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SPR Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Size Restrictions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Service Material</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Material - Non-Stock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Task</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Subject</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Post Install Call</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Send Letter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Send Quote</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type</picklist>
+            <values>
+                <fullName>Call</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Meeting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Add_Collections_Task</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add Collections Task</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/36.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/36.0/apex.js&quot;)}
+
+var oid = &quot;{!RbA_Work_Order__c.Id}&quot;;
+var recType = sforce.connection.query(&quot;SELECT name,Id from RecordType where developername = &apos;Collections&apos; and sobjectType =&apos;Task&apos;&quot;);
+var records = recType.getArray(&quot;records&quot;);
+recordTypeId = records[0].Id;
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+srcUp(&apos;/{!$ObjectType.Task}/e?what_id=&apos;+oid+&apos;&amp;retURL=%2F&apos;+oid+&apos;&amp;RecordType=&apos;+recordTypeId+&apos;&amp;ent=Task&apos;);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+window.open(&apos;/{!$ObjectType.Task}/e?what_id=&apos;+oid+&apos;&amp;retURL=%2F&apos;+oid+&apos;&amp;RecordType=&apos;+recordTypeId+&apos;&amp;ent=Task&apos;);
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Add_Service_Task</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add Service Task</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var oid = &quot;{!RbA_Work_Order__c.Id}&quot;;
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+srcUp(&apos;/apex/RMS_addMultipleTasksToWO?isdtp=vw&amp;id=&apos;+oid);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+ window.open(&apos;/apex/RMS_addMultipleTasksToWO?id=&apos; +oid, &apos;_blank&apos;);
+}</url>
+    </webLinks>
+</CustomObject>

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junction from the discount to the order</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Bill_to_Contact__c</fullName>
+        <externalId>false</externalId>
+        <formula>Order__r.BillToContact.FirstName + &quot; &quot; +  Order__r.BillToContact.LastName</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Bill To Contact</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Order Discounts</relationshipLabel>
+        <relationshipName>Order_Discounts</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Amount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>The amount in dollars discounted from the order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The amount in dollars discounted from the order.</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Description__c</fullName>
+        <description>The description of the discount</description>
+        <externalId>false</externalId>
+        <formula>Store_Discount__r.Discount__r.Description__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The description of the discount</inlineHelpText>
+        <label>Discount Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Discount_Processed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Discount Processed Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order_Booking_Date__c</fullName>
+        <description>The order&apos;s booking date.</description>
+        <externalId>false</externalId>
+        <formula>Order__r.EffectiveDate</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The order&apos;s booking date.</inlineHelpText>
+        <label>Order Booking Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order_Revenue_Recognition_Date__c</fullName>
+        <description>The date the order was revenue recognized.</description>
+        <externalId>false</externalId>
+        <formula>Order__r.Revenue_Recognized_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The date the order was revenue recognized.</inlineHelpText>
+        <label>Order Revenue Recognition Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <description>The discount is applied to this order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The discount is applied to this order</inlineHelpText>
+        <label>Order</label>
+        <referenceTo>Order</referenceTo>
+        <relationshipName>Discount_Applied</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Per_Unit_Discount__c</fullName>
+        <description>This field is used by rSuite for custom disounts that are per unit or window or door - its is the custom amount per unit. It is used by rSuite to calculate Discount Amount</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is used by rSuite for custom disounts that are per unit or window or door - its is the custom amount per unit. It is used by rSuite to calculate Discount Amount</inlineHelpText>
+        <label>Per Unit Discount</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Pivotal_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>unique identifier from pivotal</description>
+        <externalId>true</externalId>
+        <inlineHelpText>unique identifier from pivotal</inlineHelpText>
+        <label>Pivotal Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep__c</fullName>
+        <description>The sales rep tied to this order discount.</description>
+        <externalId>false</externalId>
+        <formula>Order__r.Sales_Rep__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The sales rep tied to this order discount.</inlineHelpText>
+        <label>Sales Rep</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <description>The status of the order discount.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The status of the order discount.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Applied</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Store_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Store Discount</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Store_Discount__c.Active__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <filterItems>
+                <field>Store_Discount__c.Store_Configuration__r.Store__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Store_Location__c</valueField>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>Store_Discount__c</referenceTo>
+        <relationshipLabel>Order Discounts</relationshipLabel>
+        <relationshipName>Order_Discounts</relationshipName>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Store_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The store location that is creating this discount.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The store location that is creating this discount.</inlineHelpText>
+        <label>Store Location</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordTypeId</field>
+                <operation>equals</operation>
+                <value>Store</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Order Discounts</relationshipLabel>
+        <relationshipName>Order_Discounts</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>rSuite_Id__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>an identifier used by rSuite to help them manage jobs in the mobile apps - meets RFC 4122 version 4</description>
+        <externalId>true</externalId>
+        <inlineHelpText>an identifier used by rSuite to help them manage jobs in the mobile apps</inlineHelpText>
+        <label>rSuite Id</label>
+        <length>36</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <label>Order Discount</label>
+    <nameField>
+        <displayFormat>OD-{00000000}</displayFormat>
+        <label>Order Discount Number</label>
+        <trackHistory>true</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Order Discounts</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>CannotReapplyCancelledDiscount</fullName>
+        <active>true</active>
+        <errorConditionFormula>ISPICKVAL(PRIORVALUE(Status__c),&quot;Cancelled&quot;)</errorConditionFormula>
+        <errorMessage>Cannot change an order discount from Cancelled to Applied. Please click &quot;Cancel&quot; to return.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Closed_Order_Rule</fullName>
+        <active>true</active>
+        <description>Cannot add/edit Order Discounts for an Order in Job Closed Status.</description>
+        <errorConditionFormula>OR(TEXT(Order__r.Status) == &apos;Job Closed&apos;,
+   TEXT(Order__r.Status) == &apos;Cancelled&apos;
+)</errorConditionFormula>
+        <errorMessage>You can not add or edit a discount for a closed or cancelled order.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Pending_Cancellation_Order_Rule</fullName>
+        <active>true</active>
+        <description>Cannot add Order Discounts for an Order in Pending Cancellation Status.</description>
+        <errorConditionFormula>AND(TEXT(Order__r.Status) == &apos;Pending Cancellation&apos;,
+  ISNULL(CreatedDate)
+)</errorConditionFormula>
+        <errorMessage>You can not add an order discount to an order pending cancellation.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Cancel_Discount</fullName>
+        <availability>online</availability>
+        <description>Cancels the order discount</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Cancel Discount</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/apex.js&quot;)}
+    var x;
+    if (confirm(&quot;Are you sure you want to cancel this order discount?&quot;) == true) {
+        x = &quot;OK&quot;;
+    } else {
+        x = &quot;Cancel&quot;;
+    }
+    if(x == &apos;OK&apos;){
+
+       // Create a new object variable
+       var od = new sforce.SObject(&apos;Order_Discount__c&apos;);
+
+       // Get this order discount Id
+       od.Id = &quot;{!Order_Discount__c.Id}&quot;;
+ 
+       // Update the status to Cancelled
+       od.Status__c = &quot;Cancelled&quot;;
+ 
+       // Save the change
+       sforce.connection.update([od]);
+ 
+       //refresh the page
+       window.location.reload();
+    }</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Order_Discount</fullName>
+        <availability>online</availability>
+        <description>Custom New Order Discount button to push Store Location through the url.</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Order Discount</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/a0N/e?CF00N6100000Br7Qa={!Order.OrderNumber}&amp;CF00N6100000Br7Qa_lkid={!Order.Id}&amp;CF00N6100000ENiJr={!Order.Store_Location__c}&amp;CF00N6100000ENiJr_lkid={!Order.Store_LocationId__c}&amp;CF00N5B000000WfRv={!Order.BillToContact}&amp;CF00N5B000000WfRv_lkid={!Order.BillToContactId}</url>
+    </webLinks>
+</CustomObject>

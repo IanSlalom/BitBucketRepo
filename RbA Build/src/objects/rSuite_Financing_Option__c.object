@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>An rSuite Financing Option is a grouping of Store Finance Programs of the same type.  (they should all have the same record types)  They are grouped together for display in rSuite.  For instance there could be a grouping of Bridge Loans or a grouping of payment sensitive installment loans.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Card_Title__c</fullName>
+        <description>rSuite - Financing Option Card Title in Price Preso</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Financing Option Card Title in Price Preso</inlineHelpText>
+        <label>Card Title</label>
+        <length>80</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Disclosure__c</fullName>
+        <description>Disclosre for all Finance Programs linked to this option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the Disclosure text for the finance programs linked to this options</inlineHelpText>
+        <label>Disclosure</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Down_Payment_Terms__c</fullName>
+        <description>Down Payment terms for all financing programs associated to this option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the Down Payment Terms to be displayed in Price Preso for all financing programs associated to this option</inlineHelpText>
+        <label>Down Payment Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Financing_Type__c</fullName>
+        <description>Used to filter the type of Store Finance Programs that can be attached to this Store Financing Option - values need to match the Record Types of Store Financing Programs</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the type of Store Finance Programs that can be attached to this Store Financing Option</inlineHelpText>
+        <label>Financing Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Cash Payment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bridge Loan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installment Loan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Interest_Terms__c</fullName>
+        <description>Interest terms for all financing programs associated to this option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the Interest Terms to be displayed in Price Preso for all financing programs associated to this option</inlineHelpText>
+        <label>Interest Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Language__c</fullName>
+        <description>Language for all financing programs associated to this option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the language to be displayed in Price Preso for all financing programs associated to this option</inlineHelpText>
+        <label>Language</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NIWP_Down_Payment_Terms__c</fullName>
+        <description>Holds the down payment terms for No Interest With Payment (NIWP) bridge loans</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the down payment terms for NIWP Brigde loans</inlineHelpText>
+        <label>NIWP Down Payment Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NIWP_Interest_Terms__c</fullName>
+        <description>Holds the interest terms for No Interest With Payment (NIWP) bridge loans</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the interest terms for NIWP Brigde loans</inlineHelpText>
+        <label>NIWP Interest Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NIWP_Payment_Terms__c</fullName>
+        <description>Holds the payment terms for No Interest With Payment (NIWP) bridge loans</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the payment terms for NIWP Brigde loans</inlineHelpText>
+        <label>NIWP Payment Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Option_Order__c</fullName>
+        <description>This is the order which financing option types are presented in rSuite</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select an option order.  This is the order which financing option types are presented in rSuite.  Lower numbers will be displayed before higher numbers.</inlineHelpText>
+        <label>Option Order</label>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Payment_Terms__c</fullName>
+        <description>Payment terms for all financing programs associated to this option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Payment terms for all financing programs associated to this option</inlineHelpText>
+        <label>Payment Terms</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Store_Configuration__c</fullName>
+        <description>Store Configuration for this Store Financing Option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the Store Configuration</inlineHelpText>
+        <label>Store Configuration</label>
+        <referenceTo>Store_Configuration__c</referenceTo>
+        <relationshipLabel>rSuite Financing Options</relationshipLabel>
+        <relationshipName>rSuite_Financing_Options</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Tap_to_Reveal_Interest_Rate_or_Term__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>You have the option to reveal the Interest Rate and Time Period (Term) using a separate tap.  This allows the rep to focus on the monthly payment first before discussing interest rate and term. If checked this option is turned on.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>You have the option to reveal the Interest Rate and Time Period (Term) using a separate tap.  This allows the rep to focus on the monthly payment first before discussing interest rate and term.  Check if you want this option turned on.</inlineHelpText>
+        <label>Tap to Reveal Interest Rate or Term</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>rSuite Financing Option</label>
+    <nameField>
+        <label>rSuite Financing Option Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>rSuite Financing Options</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

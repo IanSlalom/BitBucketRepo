@@ -1,0 +1,2595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>AE_Removable_IDL_SEL_Pattern__c</fullName>
+        <description>Add for Applied Exterior with Removable Interior Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Applied Exterior with Removable Interior Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>AE Removable IDL SEL Pattern</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>AluminumScreenCloth__c</fullName>
+        <description>Insect Screen Options: Add for Aluminum Screen Cloth</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for Aluminum Screen Cloth</inlineHelpText>
+        <label>Aluminum Screen Cloth</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aluminum_Screen_Half__c</fullName>
+        <description>Insect Screen Options: Add for 1/2 aluminum screen cloth (per 1/2 screen)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for 1/2 aluminum screen cloth (per 1/2 screen)</inlineHelpText>
+        <label>Aluminum (1/2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aluminum_Sill_Support__c</fullName>
+        <externalId>false</externalId>
+        <label>Aluminum Sill Support</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Applied_Brickmould__c</fullName>
+        <description>Finished Options: Applied Brickmold</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finished Options: Applied Brickmold</inlineHelpText>
+        <label>Applied Brickmould</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Applied_Grilles__c</fullName>
+        <description>Grille Style Options: Add for permanently applied interior (FDL) -- price per Sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Grille Style Options: Add for permanently applied interior (FDL) -- price per Sash</inlineHelpText>
+        <label>Applied Grilles</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aux_Door_Lock_GD_S_W_or_B__c</fullName>
+        <description>Aux. Door Lock (Gold Dust, Stone, White or Black) - price each</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Aux. Door Lock (Gold Dust, Stone, White or Black) - price each</inlineHelpText>
+        <label>Aux. Door Lock (GD, S, W, or B)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Aux_Door_Lock_Metallic_Finish__c</fullName>
+        <description>Aux. Door Lock (Metallic Finish) - price each</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Aux. Door Lock (Metallic Finish) - price each</inlineHelpText>
+        <label>Aux. Door Lock (Metallic Finish)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Base_Installer_Rate_FF__c</fullName>
+        <description>Installation Rate for Full Frame window products - by size</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the installation rate</inlineHelpText>
+        <label>Base Installer Rate Full Frame</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Base_Installer_Rate_IF__c</fullName>
+        <description>Installation Rate for insert frame window products - by size</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the installation rate</inlineHelpText>
+        <label>Base Installer Rate Insert Frame</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Base_Installer_Rate__c</fullName>
+        <description>Installation Rate for various products and sizes</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the installation rate</inlineHelpText>
+        <label>Base Installer Rate</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Base_Unit__c</fullName>
+        <externalId>false</externalId>
+        <label>Base Unit</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Base_Unit_perLI__c</fullName>
+        <description>Mullion - Overall price for the mullion - per lineal inch</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the base price (per lineal inch) for the mullion unit</inlineHelpText>
+        <label>Base Unit per Lineal Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Blinds_Between_Glass__c</fullName>
+        <externalId>false</externalId>
+        <label>Blinds Between Glass</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Breather_Tubes__c</fullName>
+        <description>The price of Breather Tubes (per unit price)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The price of Breather Tubes (per unit price)</inlineHelpText>
+        <label>Breather Tubes</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Brickmold_Picture_Frame_Price__c</fullName>
+        <description>Finish Options: Brickmold (Picture Frame)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Brickmold (Picture Frame)</inlineHelpText>
+        <label>Brickmold - Picture Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_Base__c</fullName>
+        <description>Base Perimeter Brickmould Price</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the price for Base Perimeter Brickmould Price</inlineHelpText>
+        <label>Brickmould Base</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Brickmould_perLI__c</fullName>
+        <description>Mullon: Base Brickmould Price per Lineal Inch</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the Base Brickmould Price per Lineal Inch</inlineHelpText>
+        <label>Brickmould per Lineal Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Bronze_Sill__c</fullName>
+        <externalId>false</externalId>
+        <label>Bronze Sill</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Casings_Full_Frame_2__c</fullName>
+        <description>Finish Options: Casings for Full Frame Windows 2 1/4&quot; or 2 1/2&quot; Casings - pine, oak, or maple</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Casings for Full Frame Windows 2 1/4&quot; or 2 1/2&quot; Casings - pine, oak, or maple</inlineHelpText>
+        <label>Casings Full Frame (2 1/4&quot; or 2 1/2&quot;)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Casings_Full_Frame_3__c</fullName>
+        <description>Finish Options: Casings for Full Frame Windows 3 1/4&quot; or 3 1/2&quot; Casings - pine, oak, or maple</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Casings for Full Frame Windows 3 1/4&quot; or 3 1/2&quot; Casings - pine, oak, or maple</inlineHelpText>
+        <label>Casings Full Frame (3 1/4&quot; or 3 1/2&quot;)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hardware__c</fullName>
+        <description>Hardware: The price of corrosion resistant hardware.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware: The price of corrosion resistant hardware.</inlineHelpText>
+        <label>Corrosion Resistant Hardware</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Hinges__c</fullName>
+        <description>Corrosion Resistant Hinges (per unit)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Corrosion Resistant Hinges (per unit)</inlineHelpText>
+        <label>Corrosion Resistant Hinges</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Corrosion_Resistant_Locking_Mech_3_Point__c</fullName>
+        <description>Corrosion Resistant Locking Mechanism (3-Point)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Corrosion Resistant Locking Mechanism (3-Point)</inlineHelpText>
+        <label>Corrosion Resistant Locking Mech 3-Point</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Different_Color_Brickmould__c</fullName>
+        <description>Mullion: Different Color Brickmould Charge</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the charge for different color brickmould</inlineHelpText>
+        <label>Different Color Brickmould</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Different_Color_Mullion__c</fullName>
+        <description>Different Color Mullion Charge</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the charge for a different color mullion</inlineHelpText>
+        <label>Different Color Mullion</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Different_Color_Overfit_Chamfered_Edge__c</fullName>
+        <description>Mullion: Different Color Chamfered Edge Overfit Charge</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the charge for different color overfit chamfered edge</inlineHelpText>
+        <label>Different Color Overfit Chamfered Edge</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Door_Description__c</fullName>
+        <description>Door Description column in PCS spread sheet - for ASeries and 200400 Series Doors</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Door Description column in PCS spread sheet - for ASeries and 200400 Series Doors</inlineHelpText>
+        <label>Door Description</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dual_Color__c</fullName>
+        <externalId>false</externalId>
+        <label>Dual Color Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EAG_2_1_4_Profile__c</fullName>
+        <description>Add for 2 1/4&quot; Profile - per grille light (Exterior Applied Grilles only)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for 2 1/4&quot; Profile - per grille light (Exterior Applied Grilles only)</inlineHelpText>
+        <label>EAG 2 1/4&quot; Profile</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EAG_Specified_Equal_Lite_Pattern_Grilles__c</fullName>
+        <description>Add for Specified Equal Lite Pattern Grilles - per grille light (Exterior Applied Grilles only)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Specified Equal Lite Pattern Grilles - per grille light (Exterior Applied Grilles only)</inlineHelpText>
+        <label>EAG Specified Equal Lite Pattern Grilles</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Full_Frame__c</fullName>
+        <description>Extension Jambs for Full Frame Windows</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Extension Jambs for Full Frame Windows</inlineHelpText>
+        <label>EJ Full Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Kerf_Full_Frame_L_M_PM__c</fullName>
+        <description>EJ Kerf / Full Frame Addition of L&amp;M and PM</description>
+        <externalId>false</externalId>
+        <inlineHelpText>EJ Kerf / Full Frame Addition of L&amp;M and PM</inlineHelpText>
+        <label>EJ Kerf Full Frame L&amp;M PM</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Kit_Exterior_Extension__c</fullName>
+        <description>Add for 6-9/16&quot; Exterior Extension Jambs Kit  (FWH only)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for 6-9/16&quot; Exterior Extension Jambs Kit  (FWH only)</inlineHelpText>
+        <label>EJ Kit Exterior Extension</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>EJ_Kit_Interior_Extension__c</fullName>
+        <description>Add for 6-9/16&quot; INTERIOR Extension Jambs Kit  (FWH only)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for 6-9/16&quot; INTERIOR Extension Jambs Kit  (FWH only)</inlineHelpText>
+        <label>EJ Kit Interior Extension</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Estate_Finish_Finger_Lifts__c</fullName>
+        <description>Hardware Options: Estate Finish Finger Lifts</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware Options: Estate Finish Finger Lifts</inlineHelpText>
+        <label>Estate Finish Finger Lifts</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Estate_Finish_Hand_Lift_or_Hand_Pull__c</fullName>
+        <description>Hardware Options: Estate Finish Hand Lift or Hand Pull</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware Options: Estate Finish Hand Lift or Hand Pull</inlineHelpText>
+        <label>Estate Finish Hand Lift or Hand Pull</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Estate_Finish_Hardware__c</fullName>
+        <description>Hardware Options: Estate Finish</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware Options: Estate Finish</inlineHelpText>
+        <label>Estate Finish Hardware</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Estate_Finish_Lock_and_Keeper__c</fullName>
+        <description>Hardware Options: Estate Finish Lock and Keeper</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware Options: Estate Finish Lock and Keeper</inlineHelpText>
+        <label>Estate Finish Lock and Keeper</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_All_Metal_Hinged__c</fullName>
+        <description>Add for Exterior Keyed Lock - All Metal Finishes (HINGED DOOR)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - All Metal Finishes (HINGED DOOR)</inlineHelpText>
+        <label>Ext. Keyed Lock - All Metal Hinged</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Anvers_Gliding__c</fullName>
+        <description>Add for Exterior Keyed Lock - Anvers (GLIDING DOOR, each)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Anvers (GLIDING DOOR, each)</inlineHelpText>
+        <label>Ext. Keyed Lock - Anvers Gliding</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Newbury_Gliding__c</fullName>
+        <description>Add for Exterior Keyed Lock - Newbury (GLIDING DOOR, each)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Newbury (GLIDING DOOR, each)</inlineHelpText>
+        <label>Ext. Keyed Lock - Newbury Gliding</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Tribeca_Gliding__c</fullName>
+        <description>Add for Exterior Keyed Lock - Tribeca (GLIDING DOOR, each)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Tribeca (GLIDING DOOR, each)</inlineHelpText>
+        <label>Ext. Keyed Lock - Tribeca Gliding</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Tribeca_Hinged__c</fullName>
+        <description>Add for Exterior Keyed Lock - Tribeca (HINGED DOOR)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Tribeca (HINGED DOOR)</inlineHelpText>
+        <label>Ext. Keyed Lock - Tribeca Hinged</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Whitmore_or_Covington__c</fullName>
+        <description>Add for Exterior Keyed Lock - Whitmore or Covington (GLIDING DOOR, each)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Whitmore or Covington (GLIDING DOOR, each)</inlineHelpText>
+        <label>Ext. Keyed Lock - Whitmore or Covington</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Ext_Keyed_Lock_Yuma_or_Encino_Glidin__c</fullName>
+        <description>Add for Exterior Keyed Lock - Yuma or Encino (GLIDING DOOR, each)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Exterior Keyed Lock - Yuma or Encino (GLIDING DOOR, each)</inlineHelpText>
+        <label>Ext. Keyed Lock - Yuma or Encino Glidin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Exterior_Frame_Depth__c</fullName>
+        <externalId>false</externalId>
+        <label>Exterior Frame Depth 6-9/16&quot;</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extra_Lift_or_Pull__c</fullName>
+        <externalId>false</externalId>
+        <label>Extra Lift or Pull</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Extra_Lock__c</fullName>
+        <externalId>false</externalId>
+        <label>Extra Lock</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Alder_Mahogany_or_Cherry__c</fullName>
+        <description>Add for Full Divided Light Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Full Divided Light Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</inlineHelpText>
+        <label>FDL Alder, Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Colonial__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Colonial</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Gothic__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Gothic</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Open_Hub_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Open-Hub Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Prairie__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Prairie</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Pre_finished_Interior_Paint_Stain__c</fullName>
+        <description>Add for Full Divided Light Pre-finished Interior Paint/Stain - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Full Divided Light Pre-finished Interior Paint/Stain - price per LITE</inlineHelpText>
+        <label>FDL Pre-finished Interior Paint/Stain</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Pre_finished_Interior_Primed_only__c</fullName>
+        <description>Add for Full Divided Light Pre-finished Interior Primed-only - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Full Divided Light Pre-finished Interior Primed-only - price per LITE</inlineHelpText>
+        <label>FDL Pre-finished Interior Primed-only</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Renaissance__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Renaissance</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Specified_Equal_Lite_Pattern_Grilles__c</fullName>
+        <description>Add for Full Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Full Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>FDL Specified Equal Lite Pattern Grilles</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>FDL Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FDL_Wide_Bar__c</fullName>
+        <description>FDL additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>FDL additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</inlineHelpText>
+        <label>FDL Wide Bar</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FWH_Hinge_Color_Metal_Finishes__c</fullName>
+        <externalId>false</externalId>
+        <label>FWH Hinge Color (Metal Finishes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FWH_Panel_Stops_Metal_Finishes__c</fullName>
+        <description>FWH Panel Stops (Upgraded Metal Finishes)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>FWH Panel Stops (Upgraded Metal Finishes)</inlineHelpText>
+        <label>FWH Panel Stops (Metal Finishes</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FWH_Panel_Stops_Standard_Finishes__c</fullName>
+        <externalId>false</externalId>
+        <label>FWH Panel Stops (Standard Finishes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Factory_Applied_Brickmould__c</fullName>
+        <description>Finish Options: Factory-Applied Brickmould - entire perimeter</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Factory-Applied Brickmould - entire perimeter</inlineHelpText>
+        <label>Factory Applied Brickmould</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Factory_Assembly_Charge__c</fullName>
+        <externalId>false</externalId>
+        <label>Factory Assembly Charge</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Fibrex_L_Trim_or_Drip_Cap__c</fullName>
+        <description>Finish Options: Fibrex® L-Trim OR Drip Cap (1 or 2 piece)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Fibrex® L-Trim OR Drip Cap (1 or 2 piece)</inlineHelpText>
+        <label>Fibrex L-Trim or Drip Cap</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Fixed_Sash_Deduction_Casement__c</fullName>
+        <externalId>false</externalId>
+        <label>Fixed Sash Deduction (Casement)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Forms_Displayed_On__c</fullName>
+        <description>List of forms that this pricing line item will display on. Used by the mobile applications - could also be used internally for Miscellaneous Job and Unit Charges</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Pick the forms this pricing line item will display on</inlineHelpText>
+        <label>Forms Displayed On</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paint &amp; Stain Production Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Formula_Type__c</fullName>
+        <description>The various kinds of formulas for calculating the quantity of Constructions Materials - rSuite</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Pick the kind of formula for calculating the quantity of  this Constructions Materials - rSuite</inlineHelpText>
+        <label>Formula Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Astragal_Wood_Species__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Astragal Wood Species</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_CC_H_C_M_R_or_ES__c</fullName>
+        <description>Frame Finish Clear Coat, Honey, Cinnamon, Mocha, Russet, or Espresso Stain</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Frame Finish Clear Coat, Honey, Cinnamon, Mocha, Russet, or Espresso Stain</inlineHelpText>
+        <label>Frame CC, H, C, M, R, or ES</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Fir_or_Alder__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Fir or Alder</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Mahogany_or_Cherry__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Oak_or_Maple__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Oak or Maple</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Pre_Finished_White_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Pre-Finished White Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Frame_Primed_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Frame Primed Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Full_Divided_Light__c</fullName>
+        <description>Grille Style Options: Add for full divided light (FDL) -- price per Sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Grille Style Options: Add for full divided light (FDL) -- price per Sash</inlineHelpText>
+        <label>Full Divided Light</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Colonial__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Colonial</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Gothic__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Gothic</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Open_Hub_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Open-Hub Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Prairie__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Prairie</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Renaissance__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Renaissance</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_SEL_Pattern_Modified_Check_Rail__c</fullName>
+        <description>Add for Finelight (GBG) Specified Equal Lite Pattern Grilles with Modified Check Rail
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Finelight (GBG) Specified Equal Lite Pattern Grilles with Modified Check Rail
+ - per grille light</inlineHelpText>
+        <label>GBG SEL Pattern Modified Check Rail</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_SEL_Pattern__c</fullName>
+        <description>Add for Finelight (GBG) Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Finelight (GBG) Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>GBG SEL Pattern</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>GBG Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>GBG_Wide_Bar__c</fullName>
+        <description>GBG additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>GBG additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</inlineHelpText>
+        <label>GBG Wide Bar</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Gliding_Screen__c</fullName>
+        <externalId>false</externalId>
+        <label>Gliding Screen</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Grey_Sill__c</fullName>
+        <externalId>false</externalId>
+        <label>Grey Sill</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Grilles_Between_Glass__c</fullName>
+        <description>Grille Style Options: Add for Grilles between glass (GBG) -- price per Sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Grille Style Options: Add for Grilles between glass (GBG) -- price per Sash</inlineHelpText>
+        <label>Grilles Between Glass</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>HTS_Anvers__c</fullName>
+        <description>Add for Hardware Trim Set - Anvers</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Hardware Trim Set - Anvers</inlineHelpText>
+        <label>HTS - Anvers</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>HTS_Newbury__c</fullName>
+        <description>Add for Hardware Trim Set - Newbury</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Hardware Trim Set - Newbury</inlineHelpText>
+        <label>HTS - Newbury</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>HTS_Tribeca_Albany__c</fullName>
+        <description>Add for Hardware Trim Set - Tribeca/Albany</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Hardware Trim Set - Tribeca/Albany</inlineHelpText>
+        <label>HTS - Tribeca/Albany</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>HTS_Whitmore_or_Covington__c</fullName>
+        <description>Add for Hardware Trim Set - Whitmore or Covington</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Hardware Trim Set - Whitmore or Covington</inlineHelpText>
+        <label>HTS - Whitmore or Covington</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>HTS_Yuma_or_Encino__c</fullName>
+        <description>Add for Hardware Trim Set - Yuma or Encino</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Hardware Trim Set - Yuma or Encino</inlineHelpText>
+        <label>HTS - Yuma or Encino</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Heat_Lock__c</fullName>
+        <description>Glass Option - Heat Lock</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Per Unit charge for Heat Lock glass</inlineHelpText>
+        <label>Heat Lock</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Base_6_9_16_Parametric__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Base 6 9/16&quot; Parametric</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_CC_H_C_M_R_or_ES__c</fullName>
+        <description>Interior 6 9/16&quot; Ext. Jambs CC, H, C, M, R, or ES</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Interior 6 9/16&quot; Ext. Jambs CC, H, C, M, R, or ES</inlineHelpText>
+        <label>IEJ CC, H, C, M, R, or ES</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Fir_or_Alder__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Fir or Alder</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Mahogany_or_Cherry__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Oak_or_Maple__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Oak or Maple</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Pre_Finished_White_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Pre-Finished White Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>IEJ_Primed_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>IEJ Primed Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Colonial__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Colonial</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Gothic__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Gothic</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Open_Hub_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Open-Hub Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Prairie__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Prairie</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Renaissance__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Renaissance</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Sunburst__c</fullName>
+        <externalId>false</externalId>
+        <label>INTW Sunburst</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>INTW_Wide_Bar__c</fullName>
+        <description>INTW additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>INTW additional upcharge for wide bar (1 1/8&quot;) grille vs regular (3/4&quot;) grille width -- price per sash</inlineHelpText>
+        <label>INTW Wide Bar</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Trim_Insert_Frame__c</fullName>
+        <description>Interior Trim for Insert-Frame Windows (quarter round, shoe, flat, or colonial)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Interior Trim for Insert-Frame Windows (quarter round, shoe, flat, or colonial)</inlineHelpText>
+        <label>Interior Trim - Insert Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Wood_Grilles_INTW__c</fullName>
+        <description>Grille Style Options: Add for interior wood grilles (INTW) -- price per Sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Grille Style Options: Add for interior wood grilles (INTW) -- price per Sash</inlineHelpText>
+        <label>Interior Wood Grilles (INTW)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Interior_Wood_Only__c</fullName>
+        <description>Grille Style Options: Add for interior wood grilles (INTW) -- price per Sash</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Grille Style Options: Add for interior wood grilles (INTW) -- price per Sash</inlineHelpText>
+        <label>Interior Wood Only</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Jamb_Liner_Special_Color_Combination__c</fullName>
+        <externalId>false</externalId>
+        <label>Jamb Liner Special Color Combination</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>LaminatedAndTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Laminated And Tempered (per sq. foot)</inlineHelpText>
+        <label>Laminated And Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Laminated__c</fullName>
+        <description>Windows -- Glass Options: Add for Laminated (per sq. foot)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Laminated (per sq. foot)</inlineHelpText>
+        <label>Laminated</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Min_Qty_to_Round_to__c</fullName>
+        <description>The minimum quantity to round to when calculation the number of units for Construction Materials - can differ by store, so its here instead of on the Product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the minimum quantity to round to when calculation the number of units for Construction Materials</inlineHelpText>
+        <label>Min Qty to Round to</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Nail_Flange__c</fullName>
+        <externalId>false</externalId>
+        <label>Nail Flange</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Nail_Flange_perLI__c</fullName>
+        <description>Mullions: Perimeter Factory Cut Nail Flange Flange (Price per LI)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the price per lineal inch for factory cut nailing flange</inlineHelpText>
+        <label>Nail Flange per Lineal Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Oak_or_Maple_Veneer__c</fullName>
+        <externalId>false</externalId>
+        <label>Oak or Maple Veneer</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>ObscureTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Obscure Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Obscure Tempered</inlineHelpText>
+        <label>Obscure Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Obscure_Casacade_Fern_or_Reed__c</fullName>
+        <externalId>false</externalId>
+        <label>Obscure, Casacade, Fern, or Reed</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Obscure__c</fullName>
+        <description>Windows -- Glass Options: Add for Obscure</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Obscure</inlineHelpText>
+        <label>Obscure</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Overfit_Chamfered_Edge__c</fullName>
+        <description>Finish Options: Chamfered Edge Overfit Flange</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finish Options: Chamfered Edge Overfit Flange</inlineHelpText>
+        <label>Overfit Chamfered Edge</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Overfit_Chamfered_Edge_perLI__c</fullName>
+        <description>Mullion: Perimeter Factory Cut Chamfered Edge Overfit (Price per LI)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the price per lineal inch for factory cut overfit chamfered edge</inlineHelpText>
+        <label>Overfit Chamfered Edge per Lineal Inch</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Overfit_Flange_Price__c</fullName>
+        <description>Finishes: Overfit Flange Price</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Finishes: Overfit Flange Price</inlineHelpText>
+        <label>Overfit Flange</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_CC_H_C_M_R_or_ES__c</fullName>
+        <description>Panel Finish Clear Coat, Honey, Cinnamon, Mocha, Russet, or Espresso Stain</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Panel Finish Clear Coat, Honey, Cinnamon, Mocha, Russet, or Espresso Stain</inlineHelpText>
+        <label>Panel CC, H, C, M, R, or ES</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_Fir_or_Alder__c</fullName>
+        <externalId>false</externalId>
+        <label>Panel Fir or Alder</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_Mahogany_or_Cherry__c</fullName>
+        <externalId>false</externalId>
+        <label>Panel Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_Oak_or_Maple__c</fullName>
+        <externalId>false</externalId>
+        <label>Panel Oak or Maple</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_Pre_Finished_White_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Panel Pre-Finished White Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Panel_Primed_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Panel Primed Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Pre_Fin_White_with_White_Exterior__c</fullName>
+        <externalId>false</externalId>
+        <label>Pre Fin White with White Exterior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Pre_fin_White_Int_with_Non_white_Ext__c</fullName>
+        <description>Add for pre-finished white interior with a non-white exterior</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for pre-finished white interior with a non-white exterior</inlineHelpText>
+        <label>Pre-fin White Int with Non-white Ext</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Premium_Stainable_Wood_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Premium Stainable Wood Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Price_Book__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Linking Pricing Configuration records to Pricebooks for filtering.  Ideally this would be linked to Pricebook Entries but that&apos;s not allowed.,</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the Pricebook</inlineHelpText>
+        <label>Price Book</label>
+        <referenceTo>Pricebook2</referenceTo>
+        <relationshipLabel>Pricing Configurations</relationshipLabel>
+        <relationshipName>Pricing_Configurations</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Formula_Description__c</fullName>
+        <description>Descriptive text that explains how the quantity for the Miscellaneous Job and Unit Charge is calculated</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Descriptive text that explains how the quantity for the Miscellaneous Job and Unit Charge is calculated</inlineHelpText>
+        <label>Quantity Formula Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Formula__c</fullName>
+        <description>The formula for calculation the quantity of the construction materials or misc job an unit charges</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select a formula for quantity calculation</inlineHelpText>
+        <label>Quantity Formula</label>
+        <picklist>
+            <picklistValues>
+                <fullName>UI*2/12</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>RIG_Alder_Mahogany_or_Cherry__c</fullName>
+        <description>Add for Removeable Interior Grille Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Removeable Interior Grille Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</inlineHelpText>
+        <label>RIG Alder, Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>RIG_Pre_finished_Interior_Paint_Stain__c</fullName>
+        <description>Add for Removeable Interior GrillePre-finished Interior Paint/Stain - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Removeable Interior GrillePre-finished Interior Paint/Stain - price per LITE</inlineHelpText>
+        <label>RIG Pre-finished Interior Paint/Stain</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>RIG_Pre_finished_Interior_Primed_only__c</fullName>
+        <description>Add for Removeable Interior Grille Pre-finished Interior Primed-only - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Removeable Interior Grille Pre-finished Interior Primed-only - price per LITE</inlineHelpText>
+        <label>RIG Pre-finished Interior Primed-only</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>RIG_SEL_Pattern__c</fullName>
+        <description>Add for Removeable Interior Grille Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>&quot;Add for Removeable Interior Grille Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>RIG SEL Pattern</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Removable_Grilles_Only__c</fullName>
+        <externalId>false</externalId>
+        <label>Removable Grilles Only</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SDL_Alder_Mahogany_or_Cherry__c</fullName>
+        <description>Add for Simulated Divided Light Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Simulated Divided Light Wood Species of Alder, Mahogany or Cherry 
+ - per grille light</inlineHelpText>
+        <label>SDL Alder, Mahogany or Cherry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SDL_Pre_finished_Interior_Paint_Stain__c</fullName>
+        <description>Add for Pre-finished Interior Paint/Stain - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Pre-finished Interior Paint/Stain - price per LITE</inlineHelpText>
+        <label>SDL Pre-finished Interior Paint/Stain</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SDL_Pre_finished_Interior_Primed_only__c</fullName>
+        <description>Add for Pre-finished Interior Primed-only - price per LITE</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Pre-finished Interior Primed-only - price per LITE</inlineHelpText>
+        <label>SDL Pre-finished Interior Primed only</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SDL_Specified_Equal_Lite_Pattern_Grille__c</fullName>
+        <description>Add for Simulated Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Simulated Divided Light Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>SDL Specified Equal Lite Pattern Grille</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SEL_Pattern_Modified_Check_Rail__c</fullName>
+        <description>Add for Finelight Specified Equal Lite Pattern Grilles with Modified Check Rail
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Finelight Specified Equal Lite Pattern Grilles with Modified Check Rail
+ - per grille light</inlineHelpText>
+        <label>SEL Pattern Modified Check Rail</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SEL_Pattern__c</fullName>
+        <description>Add for Finelight Specified Equal Lite Pattern Grilles
+ - per grille light</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for Finelight Specified Equal Lite Pattern Grilles
+ - per grille light</inlineHelpText>
+        <label>SEL Pattern</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Clear_Coat_Wood_Finish__c</fullName>
+        <description>Upgrade Wood Screen Finish - Clear Coat only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Upgrade Wood Screen Finish - Clear Coat only</inlineHelpText>
+        <label>Screen Clear Coat Wood Finish</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Frame_Pine__c</fullName>
+        <description>Upgrade Screen Frame to Wood - Pine</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Upgrade Screen Frame to Wood - Pine</inlineHelpText>
+        <label>Screen Pine Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Hinged_or_Retractable__c</fullName>
+        <externalId>false</externalId>
+        <label>Screen Hinged or Retractable</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Oak_or_Maple_Frame__c</fullName>
+        <description>Upgrade Screen Frame to Wood - Oak or Maple</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Upgrade Screen Frame to Wood - Oak or Maple</inlineHelpText>
+        <label>Screen Oak or Maple Frame</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Special_Color_Combination__c</fullName>
+        <description>Insect Screen Options: Add for special color combination</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for special color combination</inlineHelpText>
+        <label>Screen Special Color Combination</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Stained_Wood_Finish__c</fullName>
+        <externalId>false</externalId>
+        <label>Screen Stained Wood Finish</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Top_Hung_Gliding__c</fullName>
+        <description>Add for TOP HUNG Gliding Screen (Total unit screen price)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Add for TOP HUNG Gliding Screen (Total unit screen price)</inlineHelpText>
+        <label>Screen Top Hung Gliding</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SmartSunAndTempered__c</fullName>
+        <description>Windows -- Glass Options: Add for SmartSun And Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for SmartSun and Tempered</inlineHelpText>
+        <label>SmartSun And Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SmartSun__c</fullName>
+        <description>Windows -- Glass Options: Add for SmartSun</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for SmartSun</inlineHelpText>
+        <label>SmartSun</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Special_Grille_Color_Combination__c</fullName>
+        <externalId>false</externalId>
+        <label>Special Grille Color Combination</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Special_Hardware_Color_Combination__c</fullName>
+        <description>Hardware Options: Add for special color combination</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hardware Options: Add for special color combination</inlineHelpText>
+        <label>Hardware Special Color Combination</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SpecialtyGlazing__c</fullName>
+        <description>Windows -- Glass Options: Add for Specialty Glazing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Specialty Glazing</inlineHelpText>
+        <label>Specialty Glazing</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>SpecialtyTemperedGlazing__c</fullName>
+        <description>Windows -- Glass Options: Add for Specialty Tempered Glazing</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Specialty Tempered Glazing</inlineHelpText>
+        <label>Specialty Tempered Glazing</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Stainable_Wood_Interior__c</fullName>
+        <externalId>false</externalId>
+        <label>Stainable Wood Interior</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Tempered__c</fullName>
+        <description>Windows -- Glass Options: Add for Tempered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Windows -- Glass Options: Add for Tempered</inlineHelpText>
+        <label>Tempered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Triple_Pane_Glazing__c</fullName>
+        <description>Triple pane glazing glass option</description>
+        <externalId>false</externalId>
+        <inlineHelpText>per unit pricing for triple pane glazing option</inlineHelpText>
+        <label>Triple Pane Glazing</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruScene_Dual__c</fullName>
+        <description>Insect Screen Options: Add for TruScene dual screen for Units over 49.5 inches W &amp; H</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TruScene dual screen for Units over 49.5 inches W &amp; H</inlineHelpText>
+        <label>TruScene (Dual)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruScene_Half__c</fullName>
+        <description>Insect Screen Options: Add for 1/2 TruScene screen cloth (per 1/2 screen)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for 1/2 TruScene screen cloth (per 1/2 screen)</inlineHelpText>
+        <label>TruScene (1/2)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruScene_Wood_Veneer__c</fullName>
+        <description>Insect Screen Options: Add for TruScene with wood vaneer (per screen)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TruScene with wood vaneer (per screen)</inlineHelpText>
+        <label>TruScene (Wood Veneer)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>TruScene__c</fullName>
+        <description>Insect Screen Options: Add for TruScene with interior color match (per screen)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Insect Screen Options: Add for TruScene with interior color match (per screen)</inlineHelpText>
+        <label>TruScene</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Units_per_Opening__c</fullName>
+        <description>Number of units of a construction material per opening</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the number of units of a construction material per opening e.g 0.1</inlineHelpText>
+        <label>Units per Opening</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Wide_Opening_Hinge__c</fullName>
+        <externalId>false</externalId>
+        <label>Wide-Opening Hinge</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Window_Opening_Control_Device__c</fullName>
+        <externalId>false</externalId>
+        <label>Window Opening Control Device</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <label>Pricing Configuration</label>
+    <listViews>
+        <fullName>A_Series_Doors</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>Door_Description__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.A_Series_Doors_Pricing_Configuration</value>
+        </filters>
+        <label>A-Series Doors</label>
+    </listViews>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Misc_Job_and_Unit_Charges</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>Forms_Displayed_On__c</columns>
+        <columns>Formula_Type__c</columns>
+        <columns>Units_per_Opening__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.Misc_Job_and_Unit_Charges</value>
+        </filters>
+        <label>Misc Job and Unit Charges</label>
+    </listViews>
+    <listViews>
+        <fullName>Mullion_Pricing_Config</fullName>
+        <columns>NAME</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.Mullion_Pricing_Configuration</value>
+        </filters>
+        <label>Mullion Pricing Config</label>
+    </listViews>
+    <listViews>
+        <fullName>Specialty_Windows</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.X20400_Doors_Pricing_Configuration,Pricing_Configuration__c.Specialty_Windows_Pricing_Configuration</value>
+        </filters>
+        <label>Specialty Windows</label>
+    </listViews>
+    <listViews>
+        <fullName>Windows</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.Window_Pricing_Configuration</value>
+        </filters>
+        <label>Windows</label>
+    </listViews>
+    <listViews>
+        <fullName>X200_400_Series_Doors</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>Door_Description__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.X20400_Doors_Pricing_Configuration</value>
+        </filters>
+        <label>200-400 Series Doors</label>
+    </listViews>
+    <nameField>
+        <label>Pricing Configuration Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Pricing Configurations</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>A_Series_Doors_Pricing_Configuration</fullName>
+        <active>true</active>
+        <label>A Series Doors Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Construction_Materials</fullName>
+        <active>true</active>
+        <description>Pricing configuration for Construction Materials</description>
+        <label>Construction Materials</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Misc_Job_and_Unit_Charges</fullName>
+        <active>true</active>
+        <description>Pricing configuration for Miscellaneous Job and Unit Charges</description>
+        <label>Misc Job and Unit Charges</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Mullion_Pricing_Configuration</fullName>
+        <active>true</active>
+        <description>Pricing configuration for Mullions</description>
+        <label>Mullion Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Specialty_Windows_Pricing_Configuration</fullName>
+        <active>true</active>
+        <label>Specialty Windows Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Window_Pricing_Configuration</fullName>
+        <active>true</active>
+        <label>Window Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>X20400_Doors_Pricing_Configuration</fullName>
+        <active>true</active>
+        <label>200400 Doors Pricing Configuration</label>
+        <picklistValues>
+            <picklist>Forms_Displayed_On__c</picklist>
+            <values>
+                <fullName>Drywall Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exterior Cladding Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lead Safe Work Practice Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Paint %26 Stain Production Work Order</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>Construction_Materials_Quantity</fullName>
+        <active>true</active>
+        <description>Rule that enforces population of certain fields based on the value of the quantity formula field and the record type</description>
+        <errorConditionFormula>IF(RecordType.DeveloperName = &apos;Construction_Materials&apos;, 
+  IF((TEXT(Formula_Type__c) = &apos;Fixed&apos; &amp;&amp; ISNULL(Units_per_Opening__c)) || 
+  (TEXT(Formula_Type__c) = &apos;Formulaic&apos; &amp;&amp; ISBLANK(TEXT(Quantity_Formula__c))), true, false), 
+false)</errorConditionFormula>
+        <errorDisplayField>Formula_Type__c</errorDisplayField>
+        <errorMessage>If Formula Type is Fixed then Units per Opening is required
+If Formula Type is Formulaic then Quantity Formula is required</errorMessage>
+    </validationRules>
+</CustomObject>

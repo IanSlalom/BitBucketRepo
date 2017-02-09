@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Junction object between Account and Contacts.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Contact History</relationshipLabel>
+        <relationshipName>Associated_Contacts</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Dwelling__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <externalId>false</externalId>
+        <inlineHelpText>What Dwelling is this Contact associated with?</inlineHelpText>
+        <label>Dwelling</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Contacts</relationshipLabel>
+        <relationshipName>Associated_Contacts</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Full_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>Contact__r.Full_Name__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Displays full name of Contact</inlineHelpText>
+        <label>Full Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Primary_Contact__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Indicates that this Contact is the Primary Contact for the associated Account</description>
+        <externalId>false</externalId>
+        <label>Primary Contact</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Dwelling_for_Contact__c</fullName>
+        <externalId>false</externalId>
+        <formula>Dwelling__r.Id = Contact__r.AccountId</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Primary Dwelling for Contact</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <description>Tracks the type of association the contact has with the account/dwelling</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Tracks the type of association the contact has with the account/dwelling</inlineHelpText>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Current Resident</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Past Resident</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Current Renter</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Past Renter</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Owner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Unique_Contact_History__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <externalId>false</externalId>
+        <inlineHelpText>Set by Workflow Rule to ensure unique Contact History records. Not used in migration.</inlineHelpText>
+        <label>Unique Contact History</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Update_Contact_Account__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for automation purposes of updating the Primary Dwelling on the Contact record. Not to be populated during migration.</inlineHelpText>
+        <label>Update Contact Account</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Contact History</label>
+    <nameField>
+        <displayFormat>CH-{00}</displayFormat>
+        <label>CH#</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Contact Histories</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>Add_Existing_Contact</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add Existing Contact</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!requireScript(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!requireScript(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var aid = &quot;{!Account.Id}&quot;;
+var aname = &quot;{!Account.Name}&quot;;
+
+// It will execute if the Button/Link will be clicked from with in Service Cloud Console
+if (typeof(srcUp) == &apos;function&apos;) {
+srcUp(&apos;/apex/RMS_addExistingContact?isdtp=vw&amp;aid=&apos;+aid+&apos;&amp;aname=&apos;+aname);
+}
+// It will execute if the Button/Link will be clicked from normal Salesforce UI
+else{
+window.open(&apos;/apex/RMS_addExistingContact?aid=&apos; +aid +&apos;&amp;aname=&apos;+aname, &apos;_self&apos;);
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Contact</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>New Contact</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/33.0/apex.js&quot;)}
+
+var x;
+
+var primary = &apos;{!Account.Primary_Contact__c}&apos;;
+
+if(primary.length &gt; 1){
+if (confirm(&quot;{!Account.Primary_Contact__c} is the current Primary Contact. If the new Contact is marked as a primary contact, {!Account.Primary_Contact__c} will no longer be listed as the primary. Please click &apos;OK&apos; to acknowledge this message and proceed.&quot;)) {
+
+     // Executes if the Button/Link will be clicked from within Service Console
+     if (typeof(srcUp) == &apos;function&apos;) {
+          srcUp(&apos;/003/e?retURL=%2F{!Account.Id}&amp;accid={!Account.Id}&amp;RecordType=012610000000o9e&amp;ent=Contact&apos;);
+     }
+     // Executes if the Button/Link will be clicked from normal Salesforce UI
+     else{
+          location.href=&apos;/003/e?retURL=%2F{!Account.Id}&amp;accid={!Account.Id}&amp;RecordType=012610000000o9e&amp;ent=Contact&apos;;
+     }
+}
+} else {
+     // Executes if the Button/Link will be clicked from within Service Console
+     if (typeof(srcUp) == &apos;function&apos;) {
+          srcUp(&apos;/003/e?retURL=%2F{!Account.Id}&amp;accid={!Account.Id}&amp;RecordType=012610000000o9e&amp;ent=Contact&apos;);
+     }
+     // Executes if the Button/Link will be clicked from normal Salesforce UI
+     else{
+          location.href=&apos;/003/e?retURL=%2F{!Account.Id}&amp;accid={!Account.Id}&amp;RecordType=012610000000o9e&amp;ent=Contact&apos;;
+     }
+
+}</url>
+    </webLinks>
+</CustomObject>

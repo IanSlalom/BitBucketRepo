@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>hold external links for the rSuite mobile application</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Display_Name__c</fullName>
+        <description>the name displayed in rSuite for the link</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the Name to be displayed in rSuite</inlineHelpText>
+        <label>Display Name</label>
+        <length>80</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Finance_Company__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Finance company for this external link</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select a finance company</inlineHelpText>
+        <label>Finance Company</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Account.RecordType.Name</field>
+                <operation>equals</operation>
+                <value>Finance Company</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>rSuite External Links</relationshipLabel>
+        <relationshipName>rSuite_External_Links</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Link_Path__c</fullName>
+        <description>the external link path - putting in a text field because URL fields are too short</description>
+        <externalId>false</externalId>
+        <inlineHelpText>enter the external link path - e.g. www.google.com/search?q=foo</inlineHelpText>
+        <label>Link Path</label>
+        <length>2000</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Link_Type__c</fullName>
+        <description>type of link path - web or app</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the link type</inlineHelpText>
+        <label>Link Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>app</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>web URL</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>rSuite_Configuration__c</fullName>
+        <description>Parent configuration for this external link</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select the rSuite Configuration</inlineHelpText>
+        <label>rSuite Configuration</label>
+        <referenceTo>rSuite_Configuration__c</referenceTo>
+        <relationshipLabel>rSuite External Links</relationshipLabel>
+        <relationshipName>rSuite_External_Links</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>rSuite External Link</label>
+    <nameField>
+        <displayFormat>rSEL-{0000}</displayFormat>
+        <label>rSuite External Link Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>rSuite External Links</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>
