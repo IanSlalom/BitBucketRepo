@@ -37,17 +37,16 @@ private class RMS_mobileAppContactHelperTests {
 		System.assert(!cList.isEmpty());
 		//Assert Contact History is created
 		List<Contact_History__c> cHistList = [select Contact__c, Dwelling__c, Type__c from Contact_History__c where Dwelling__c = :dwelling.Id and Contact__c =: clist[0].Id];
-// This assert is failing in E2E & Prod so I commented out the rest of the assertions
-//		System.assert(!cHistList.isEmpty());
-//		System.assertEquals(cHistList[0].Dwelling__c, dwelling.Id);
-//		System.assertEquals(cHistList[0].Type__c, 'Current Resident');
+		System.assert(!cHistList.isEmpty());
+		System.assertEquals(cHistList[0].Dwelling__c, dwelling.Id);
+		System.assertEquals(cHistList[0].Type__c, 'Current Resident');
 		//Assert Opportunity Contact Role is created
 		List<OpportunityContactRole> cRoleList = [select ContactId, OpportunityId,Role from OpportunityContactRole where OpportunityId = :opp.Id and ContactId =: clist[0].Id];
-//		System.assert(!cRoleList.isEmpty());
-//		System.assertEquals(cRoleList[0].OpportunityId, opp.Id);
-//		System.assertEquals(cRoleList[0].Role, 'Decision Maker');
+		System.assert(!cRoleList.isEmpty());
+		System.assertEquals(cRoleList[0].OpportunityId, opp.Id);
+		System.assertEquals(cRoleList[0].Role, 'Decision Maker');
 		//Assert Json response contains contact Id
-//		System.assert(jsonResult.contains(clist[0].Id));		
+		System.assert(jsonResult.contains(clist[0].Id));		
 	}
 
 	@isTest

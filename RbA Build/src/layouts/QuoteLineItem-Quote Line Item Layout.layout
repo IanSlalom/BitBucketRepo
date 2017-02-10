@@ -47,8 +47,12 @@
                 <field>Product_Category__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Product_Sub_Category__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Pricing_Cross_Reference__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -84,10 +88,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>isInactive__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Pricing_Cross_Reference__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

@@ -180,7 +180,7 @@ public with sharing class RMS_cloneQuoteController {
 			Lites_Wide_S4__c, Locks_Sash__c, Mfg_Mull_Sequence__c,
 			Mull_Sequence_Mullion__c, Notes__c, Number_of_Panels__c,Parent_Quote_Line_Item__c,
 			Parent_Unit_rSuite_Id__c,Part_of_Bay__c,
-			Part_of_Bow__c, Permanently_Applied_Interior_Wood_Grille__c,
+			Part_of_Bow__c, 
 			Perm_Applied_Int_Wood_Grille__c,Pivotal_Id__c, PricebookEntryId,
 			Pricing_Cross_Reference__c, Product2Id, Product_Category__c,
 			Product_Class__c,Product_Family__c, Product_Sub_Category__c,
@@ -188,7 +188,7 @@ public with sharing class RMS_cloneQuoteController {
 			Room__c,rSuite_Product_Type__c, Sales_Height_Fraction__c,
 			Sales_Height_Inches__c,Sales_Width_Fraction__c, Sales_Width_Inches__c,
 			Sash_Operation__c, Sash_Ratio__c, Screen_Color__c,
-			Screen_Size__c, Screen_Type__c, Screen_Vaneer_Type__c,
+			Screen_Size__c, Screen_Type__c, 
 			Screen_Veneer_Type__c,ServiceDate,SortOrder,Spokes__c,Subtotal,
 			SW_Grille_Alignment__c,SystemModstamp,Tax_Credit_Qualified__c,
 			Tempered_S1__c,Tempered_S2__c,Tempered_S3__c,Tempered_S4__c,
@@ -307,7 +307,6 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.Parent_Quote_Line_Item__c = qli.Parent_Quote_Line_Item__c;
 			qli2.Part_of_Bay__c = qli.Part_of_Bay__c;
 			qli2.Part_of_Bow__c = qli.Part_of_Bow__c; 
-			qli2.Permanently_Applied_Interior_Wood_Grille__c = qli.Permanently_Applied_Interior_Wood_Grille__c;
 			qli2.Perm_Applied_Int_Wood_Grille__c = qli.Perm_Applied_Int_Wood_Grille__c;
 			qli2.PricebookEntryId = qli.PricebookEntryId;
 			qli2.Pricing_Cross_Reference__c = qli.Pricing_Cross_Reference__c;
@@ -326,7 +325,6 @@ public with sharing class RMS_cloneQuoteController {
 			qli2.Screen_Color__c = qli.Screen_Color__c;
 			qli2.Screen_Size__c = qli.Screen_Size__c; 
 			qli2.Screen_Type__c = qli.Screen_Type__c; 
-			qli2.Screen_Vaneer_Type__c = qli.Screen_Vaneer_Type__c;
 			qli2.Screen_Veneer_Type__c = qli.Screen_Veneer_Type__c;
 			qli2.ServiceDate = qli.ServiceDate;
 			qli2.Spokes__c = qli.Spokes__c;

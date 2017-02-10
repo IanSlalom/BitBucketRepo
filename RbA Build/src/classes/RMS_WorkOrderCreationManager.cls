@@ -31,7 +31,7 @@ public with sharing class RMS_WorkOrderCreationManager {
         for(Order o : ordersBeingAssigned){
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
-            	system.debug('****** order: '+o);
+            	//system.debug('****** order: '+o);
                 if(o.OpportunityId != null){
                     relatedOpportunityIds.add(o.OpportunityId);
                 } 
@@ -210,7 +210,7 @@ public with sharing class RMS_WorkOrderCreationManager {
             
             //LOOP THROUGH ACTIVATED ORDERS AND CREATE WORK ORDERS
             for(Order ord : activatedOrders){
-				System.Debug('*********ord' +ord);                
+				//System.Debug('*********ord' +ord);                
                 Account dwelling = dwellingIdtoDwellingMap.get(ord.AccountId);
                 Store_Configuration__c storeConfig;
                 
@@ -287,7 +287,7 @@ public with sharing class RMS_WorkOrderCreationManager {
          	if (o.Id == UtilityMethods.getDummyOrderId()) continue;
             relatedAccountIds.add(o.AccountId);
             //IF OPPORTUNITY POPULATED THEN ADD TO LIST
-            	system.debug('****** order: '+o);
+            	//system.debug('****** order: '+o);
                 if(o.OpportunityId != null){
                     relatedOpportunityIds.add(o.OpportunityId);
                 } 
@@ -348,7 +348,7 @@ public with sharing class RMS_WorkOrderCreationManager {
          	if (ord.RecordTypeId == changeOrderRecordTypeId) continue;
          	if (ord.Id == UtilityMethods.getDummyOrderId()) continue;
             //CHECKING IF CURRENT ORDER'S OPPORTUNITY HAS ANY RELATED TECH MEASURES IF SO, SKIP LOGIC AND ASSIGN THOSE TO THIS WORK ORDER
-            system.debug('****** ord ' + ord);
+            //system.debug('****** ord ' + ord);
             if(ord.OpportunityId != null && oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId) != null){
                 
 	            list<RbA_Work_Order__c> techMeasureWorkOrders = oppIdtoListOfTechMeasureWOMap.get(ord.OpportunityId);
