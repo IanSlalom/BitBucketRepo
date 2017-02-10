@@ -25,7 +25,7 @@ Unauthorized use is prohibited.
 ***********************************************************/
 public with sharing class RMS_createContactHistoryManager {
     
-    Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
+    Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer', 'Contact');
     map<String, RMS_Settings__c> RMS_Settings_map = RMS_Settings__c.getAll(); 
     //Id masterAccountId = RMS_Settings_map.get('Unassigned Account Id').Value__c;
     
@@ -208,7 +208,7 @@ public with sharing class RMS_createContactHistoryManager {
         Map<Id, Contact_History__c> contactHMap = new Map<Id,Contact_History__c>([SELECT Id from Contact_History__c WHERE Id in:childCH AND Dwelling__c in:relatedAccountIds AND Type__c = 'Current Resident']);
         
         List<Contact_History__c> updatedContact = new list<Contact_History__c>();
-        Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer_Contacts', 'Contact');
+        Id customerContactRecordType = UtilityMethods.retrieveRecordTypeId('Customer', 'Contact');
         
         for(Contact con : listNew){
             if(contactHMap.isEmpty()){
