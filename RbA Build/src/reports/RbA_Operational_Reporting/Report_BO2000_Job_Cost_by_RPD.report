@@ -76,10 +76,6 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Series_2_Rollup__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Entry_Door_Rollup__c</field>
     </columns>
     <columns>

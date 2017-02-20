@@ -26,11 +26,6 @@
     </columns>
     <filter>
         <criteriaItems>
-            <column>Order$Revenue_Recognized_Date__c</column>
-            <operator>equals</operator>
-            <value></value>
-        </criteriaItems>
-        <criteriaItems>
             <column>Order$Payments_Received__c</column>
             <operator>greaterThan</operator>
             <value>0</value>

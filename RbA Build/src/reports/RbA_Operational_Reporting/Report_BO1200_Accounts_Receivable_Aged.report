@@ -21,6 +21,15 @@
     <columns>
         <field>Order$Sales_Rep__c</field>
     </columns>
+    <columns>
+        <field>Order$Amount_Due__c</field>
+    </columns>
+    <columns>
+        <field>Order$AR_Reason__c</field>
+    </columns>
+    <columns>
+        <field>Order$AR_Age__c</field>
+    </columns>
     <filter>
         <criteriaItems>
             <column>Order$Revenue_Recognized_Date__c</column>

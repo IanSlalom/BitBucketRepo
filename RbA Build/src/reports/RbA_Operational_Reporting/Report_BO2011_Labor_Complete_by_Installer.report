@@ -7,6 +7,9 @@
         <field>FK_NAME</field>
     </columns>
     <columns>
+        <field>FK_$RbA_Work_Order__c.Work_Order_Type__c</field>
+    </columns>
+    <columns>
         <field>FK_$RbA_Work_Order__c.Contact__c</field>
     </columns>
     <columns>

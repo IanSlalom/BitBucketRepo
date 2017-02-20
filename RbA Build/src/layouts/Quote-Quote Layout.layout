@@ -25,10 +25,6 @@
                 <behavior>Readonly</behavior>
                 <field>AccountId</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Sub_Total__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -55,11 +51,16 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Totals</label>
-        <layoutColumns/>
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Subtotal</field>
+                <field>Calculated_Sub_Total__c</field>
+            </layoutItems>
+        </layoutColumns>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Sub_Total__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

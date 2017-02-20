@@ -112,7 +112,7 @@
         <field>Pricing_Configuration__c$SDL_Specified_Equal_Lite_Pattern_Grille__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$RIG_SEL_Pattern__c</field>
+        <field>Pricing_Configuration__c$Interior_Wood_Only__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$SEL_Pattern__c</field>

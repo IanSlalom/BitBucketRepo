@@ -35,6 +35,18 @@
                 <behavior>Edit</behavior>
                 <field>Vendor__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Master_Legacy_Product__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Number_Service_Products__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Has_Service_Products__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -161,6 +173,13 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <customButtons>Add_Service_Product</customButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Service_Product__c</fields>
+        <relatedList>Service_Product__c.Master_Product__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <relatedList>RelatedStandardPriceList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -183,7 +202,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h4B000000FYys</masterLabel>
+        <masterLabel>00h610000035AxJ</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

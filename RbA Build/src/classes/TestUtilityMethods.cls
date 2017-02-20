@@ -311,7 +311,7 @@ public with sharing class TestUtilityMethods {
 		PricebookEntryId = masterProdId,
 		QuoteId = quoteId,
 		Quantity = 1,
-		UnitPrice = 1,
+		UnitPrice = 40,
 		Child_Product_Pricebook_Entry_Id__c = childProdId,
 		Calculated_Price__c = 100
 		);

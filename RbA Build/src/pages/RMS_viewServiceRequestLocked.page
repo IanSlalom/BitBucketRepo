@@ -203,6 +203,7 @@
                 <apex:outputField value="{!Order.Date_Cancelled__c}"/>
                 <apex:outputField value="{!Order.RecordType.Name}"/><br/>
                 <apex:outputField value="{!Order.hasPO__c}"/>
+                <apex:outputField value="{!Order.Job_in_Progress_All_Time__c}"/>      
             </apex:pageBlockSection>
             <script> twistSection(document.getElementById('{!$Component.block1.si}').getElementsByTagName('img')[0]) </script>
             <apex:pageBlockSection title="Additional Information" collapsible="true" columns="2" id="ai">

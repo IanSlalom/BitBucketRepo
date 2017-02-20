@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
-        <field>Order.Work_Orders1__r$Scheduled_Appt_Date_Time_Install__c</field>
+        <field>Order.Work_Orders1__r$Primary_Installer__c</field>
     </columns>
     <columns>
-        <field>Order$OrderNumber</field>
+        <field>Order.Work_Orders1__r$Scheduled_Appt_Date_Time_Install__c</field>
     </columns>
     <columns>
         <field>Order$Name</field>
@@ -45,12 +45,17 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Order.Work_Orders1__r$Primary_Installer__c</field>
+        <field>Order$OrderNumber</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
         <field>Order$Account</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Order.Work_Orders1__r.Activities$Owner</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>BO7503-Sch Installs by Date by Installer</name>
@@ -61,12 +66,8 @@
     <reportType>Orders_with_RbA_Work_Orders_with_Activities__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
-    <sortColumn>Order.Work_Orders1__r$Scheduled_Appt_Date_Time_Install__c</sortColumn>
-    <sortOrder>Asc</sortOrder>
     <timeFrameFilter>
         <dateColumn>Order$Installation_Date_Complete__c</dateColumn>
-        <endDate>2016-08-31</endDate>
-        <interval>INTERVAL_CUSTOM</interval>
-        <startDate>2015-07-01</startDate>
+        <interval>INTERVAL_LASTTHISMONTH</interval>
     </timeFrameFilter>
 </Report>
