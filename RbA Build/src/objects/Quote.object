@@ -25,6 +25,10 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>NewQuote</actionName>
         <type>Default</type>
     </actionOverrides>
@@ -34,6 +38,10 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>SyncQuote</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -63,6 +71,15 @@
     <fields>
         <fullName>BillingName</fullName>
         <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Calculated_Sub_Total__c</fullName>
+        <externalId>false</externalId>
+        <label>Calculated Sub Total</label>
+        <summarizedField>QuoteLineItem.Calculated_Price__c</summarizedField>
+        <summaryForeignKey>QuoteLineItem.QuoteId</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>Cloned_Quote_Id__c</fullName>
@@ -252,7 +269,7 @@
         <fullName>Sub_Total__c</fullName>
         <externalId>false</externalId>
         <label>Sub Total</label>
-        <summarizedField>QuoteLineItem.Calculated_Price__c</summarizedField>
+        <summarizedField>QuoteLineItem.Roll_Up_Subtotal__c</summarizedField>
         <summaryFilterItems>
             <field>QuoteLineItem.isInactive__c</field>
             <operation>notEqual</operation>
@@ -278,7 +295,7 @@
         <fullName>Total__c</fullName>
         <description>The total of the quote (total product price - discounts)</description>
         <externalId>false</externalId>
-        <formula>Subtotal - Discount_Amount__c</formula>
+        <formula>Sub_Total__c - Discount_Amount__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The total of the quote (total product price - discounts)</inlineHelpText>
         <label>Total</label>
@@ -310,6 +327,17 @@
         <type>Text</type>
         <unique>true</unique>
     </fields>
+    <listViews>
+        <fullName>mine</fullName>
+        <columns>QUOTE.NAME</columns>
+        <columns>OPPORTUNITY.NAME</columns>
+        <columns>QUOTE.ISSYNCING</columns>
+        <columns>QUOTE.EXPIRATIONDATE</columns>
+        <columns>QUOTE.SUBTOTAL</columns>
+        <columns>QUOTE.TOTALPRICE</columns>
+        <filterScope>Mine</filterScope>
+        <label>My Quotes</label>
+    </listViews>
     <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
     <recordTypes>
         <fullName>Quote_Record_Type</fullName>
@@ -352,6 +380,7 @@
         </picklistValues>
     </recordTypes>
     <searchLayouts>
+        <customTabListAdditionalFields>QUOTE.NAME</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>QUOTE.NAME</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>ACCOUNT.NAME</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>OPPORTUNITY.NAME</lookupDialogsAdditionalFields>

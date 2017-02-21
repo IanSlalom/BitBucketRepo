@@ -184,6 +184,10 @@
                 <fullName>MiscMullConst</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>MiscBayBow</fullName>
+                <default>false</default>
+            </picklistValues>
             <restrictedPicklist>true</restrictedPicklist>
             <sorted>false</sorted>
         </picklist>
@@ -242,6 +246,19 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>DisplayUrl</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>ExternalDataSourceId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ExternalId</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>Family</fullName>
         <picklist>
             <picklistValues>
@@ -272,6 +289,15 @@
         </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Has_Service_Products__c</fullName>
+        <externalId>false</externalId>
+        <formula>NOT(ISNULL(Number_Service_Products__c)) &amp;&amp; Number_Service_Products__c &gt; 0</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Has Service Products</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Height__c</fullName>
@@ -310,6 +336,14 @@
         <trackHistory>false</trackHistory>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Master_Legacy_Product__c</fullName>
+        <externalId>false</externalId>
+        <formula>CONTAINS(RecordType.Name, &quot;Legacy&quot;)|| CONTAINS(RecordType.Name, &quot;Master&quot;)</formula>
+        <label>Master/Legacy Product</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Master_Product__c</fullName>
@@ -619,6 +653,18 @@ Name,
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Number_Service_Products__c</fullName>
+        <defaultValue>0</defaultValue>
+        <externalId>false</externalId>
+        <label>Number Service Products</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Number_of_Units__c</fullName>
         <description>Number of Units to be ordered with this mullion</description>
         <externalId>false</externalId>
@@ -852,6 +898,18 @@ NULL)</formula>
             <sorted>false</sorted>
         </picklist>
         <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>QuantityUnitOfMeasure</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>Each</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
     </fields>
@@ -1373,6 +1431,10 @@ NULL)</formula>
         <columns>PRODUCT2.CUSTOMER_PRODUCT_ID</columns>
         <columns>PRODUCT2.DESCRIPTION</columns>
         <columns>PRODUCT2.FAMILY</columns>
+        <columns>rSuite_Product_Type__c</columns>
+        <columns>Category__c</columns>
+        <columns>Sub_Category__c</columns>
+        <columns>PRODUCT2.ACTIVE</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>

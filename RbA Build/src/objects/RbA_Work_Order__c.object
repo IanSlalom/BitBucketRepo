@@ -327,6 +327,38 @@ ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Sig
                 <fullName>1:30 pm</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>6:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>6:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>7:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>8:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:00 am</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>9:30 am</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <required>false</required>
@@ -1480,6 +1512,19 @@ IF(Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c &gt; Update_Renovate_Righ
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Retail_Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>Sold_Order__r.Retail_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Retail Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Scheduled_Appt_Date_Time_Install__c</fullName>
         <description>Set by related WO Event, based on Service Type, reflects the StartDateTime. Unlike Original Appt Date/Time, this field updates should the Event be rescheduled.</description>
         <externalId>false</externalId>
@@ -1739,6 +1784,17 @@ Name of the Person that completed the testing.</inlineHelpText>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Labor_Cost__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Labor Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Type_image__c</fullName>
@@ -2100,6 +2156,7 @@ NULL)</formula>
         <columns>Contact__c</columns>
         <columns>Account__c</columns>
         <columns>Appointment_Duration__c</columns>
+        <columns>Retail_Total__c</columns>
         <columns>CREATED_DATE</columns>
         <filterScope>Everything</filterScope>
         <filters>
@@ -2881,6 +2938,7 @@ NULL)</formula>
         <columns>Account__c</columns>
         <columns>Estimated_Ship_Date__c</columns>
         <columns>Appointment_Duration__c</columns>
+        <columns>Retail_Total__c</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>RECORDTYPE</field>
@@ -2911,6 +2969,7 @@ NULL)</formula>
         <columns>Account__c</columns>
         <columns>Estimated_Ship_Date__c</columns>
         <columns>Appointment_Duration__c</columns>
+        <columns>Retail_Total__c</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>RECORDTYPE</field>
@@ -2989,6 +3048,38 @@ NULL)</formula>
             <operation>notEqual</operation>
         </filters>
         <label>Install-Scheduled &amp; Assigned</label>
+    </listViews>
+    <listViews>
+        <fullName>X2d_Install_Not_Synced</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Install</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Tech_Measure_Synced__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>2d.Install-Not Synced</label>
     </listViews>
     <listViews>
         <fullName>X2e_Install_NotConfirmed</fullName>
@@ -3105,6 +3196,38 @@ NULL)</formula>
         <label>Service-Scheduled &amp; Assigned</label>
     </listViews>
     <listViews>
+        <fullName>X3d_Service_Not_Synced</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Account__c</columns>
+        <columns>Appointment_Duration__c</columns>
+        <columns>Primary_Installer__c</columns>
+        <columns>Appointment_Start_Time__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>RbA_Work_Order__c.Visit</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>Service</value>
+        </filters>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operation>equals</operation>
+            <value>Scheduled &amp; Assigned</value>
+        </filters>
+        <filters>
+            <field>Tech_Measure_Synced__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>3d.Service-Not Synced</label>
+    </listViews>
+    <listViews>
         <fullName>X3e_Service_NotConfirmed</fullName>
         <columns>NAME</columns>
         <columns>Contact__c</columns>
@@ -3148,6 +3271,13 @@ NULL)</formula>
         <active>true</active>
         <description>Holds HOA and Historical Details</description>
         <label>Actions</label>
+        <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
@@ -3758,6 +3888,13 @@ NULL)</formula>
         <description>Holds LSWP Details</description>
         <label>LSWP</label>
         <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
                 <fullName>Homeowner</fullName>
@@ -3857,6 +3994,13 @@ NULL)</formula>
         <description>Hold Paint / Stain Details</description>
         <label>Paint/Stain</label>
         <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
                 <fullName>Homeowner</fullName>
@@ -3951,6 +4095,44 @@ NULL)</formula>
         <active>true</active>
         <description>Holds Building Permit Details</description>
         <label>Permit</label>
+        <picklistValues>
+            <picklist>Appointment_End_Time__c</picklist>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Cancelled_Reason__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Home Owner Request</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Order Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project On Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Resource Constraint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Conflict</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Permit_Sent_To__c</picklist>
             <values>
@@ -4201,6 +4383,105 @@ NULL)</formula>
                 <fullName>12%3A30 pm</fullName>
                 <default>false</default>
             </values>
+            <values>
+                <fullName>6%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A30 am</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Appointment_Start_Time__c</picklist>
+            <values>
+                <fullName>1%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>1%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>11%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A00 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12%3A30 pm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8%3A30 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A00 am</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>9%3A30 am</fullName>
+                <default>false</default>
+            </values>
         </picklistValues>
         <picklistValues>
             <picklist>Cancel_Reason__c</picklist>
@@ -4356,6 +4637,13 @@ NULL)</formula>
         <active>true</active>
         <errorConditionFormula>AND(RecordType.DeveloperName = &apos;Visit&apos;, ISPICKVAL(Work_Order_Status__c, &quot;Cancelled&quot;),ISBLANK( TEXT(Cancel_Reason__c)))</errorConditionFormula>
         <errorMessage>Please enter a cancellation reason</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>CannotCloseInstallOrder</fullName>
+        <active>false</active>
+        <description>Cannot close Order manually, only set by Sold Order</description>
+        <errorConditionFormula>AND(NOT(ISPICKVAL(Sold_Order__r.Status,&quot;Cancelled&quot;) ),ISPICKVAL( Work_Order_Status__c,&quot;Cancelled&quot; ))</errorConditionFormula>
+        <errorMessage>Orders may only be cancelled by cancelling the related Sold Order. Users may not set the status to cancelled manually.</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>LSWP_Closed</fullName>

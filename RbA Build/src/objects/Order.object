@@ -1336,11 +1336,6 @@ This is a holding field for now.</inlineHelpText>
         <externalId>false</externalId>
         <label># of Products</label>
         <summaryFilterItems>
-            <field>OrderItem.Miscellaneous_Charge_Parent_Unit_Id__c</field>
-            <operation>equals</operation>
-            <value></value>
-        </summaryFilterItems>
-        <summaryFilterItems>
             <field>OrderItem.Status__c</field>
             <operation>notEqual</operation>
             <value>Cancelled</value>
