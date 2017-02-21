@@ -3346,12 +3346,6 @@ a Construction Material is figured</inlineHelpText>
         <unique>false</unique>
     </fields>
     <validationRules>
-        <fullName>ChargeCostPrimaryandSecondaryRequired</fullName>
-        <active>false</active>
-        <errorConditionFormula>AND((NOT(ISPICKVAL( Charge_Cost_To__c , &apos;Customer - Replace&apos;))) ,(OR(ISBLANK(TEXT(Charge_Cost_To__c)), ISBLANK(TEXT(Primary_Reason__c)))),  Order.RecordType.DeveloperName  = &apos;CORO_Service&apos;) ||  (AND(Order.RecordType.DeveloperName  = &apos;CORO_Service&apos;,ISBLANK(TEXT(Charge_Cost_To__c))))</errorConditionFormula>
-        <errorMessage>Charge Cost To, Primary Reason, and Secondary Reason are required</errorMessage>
-    </validationRules>
-    <validationRules>
         <fullName>OrderItem_Valid_PBE</fullName>
         <active>true</active>
         <description>Validates that a text Id field starts with the correct object type - in this case PricebookEntry</description>

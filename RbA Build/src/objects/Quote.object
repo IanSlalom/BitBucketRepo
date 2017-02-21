@@ -327,17 +327,6 @@
         <type>Text</type>
         <unique>true</unique>
     </fields>
-    <listViews>
-        <fullName>mine</fullName>
-        <columns>QUOTE.NAME</columns>
-        <columns>OPPORTUNITY.NAME</columns>
-        <columns>QUOTE.ISSYNCING</columns>
-        <columns>QUOTE.EXPIRATIONDATE</columns>
-        <columns>QUOTE.SUBTOTAL</columns>
-        <columns>QUOTE.TOTALPRICE</columns>
-        <filterScope>Mine</filterScope>
-        <label>My Quotes</label>
-    </listViews>
     <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
     <recordTypes>
         <fullName>Quote_Record_Type</fullName>
