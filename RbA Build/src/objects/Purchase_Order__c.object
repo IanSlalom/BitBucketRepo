@@ -538,6 +538,22 @@
         <label>3. Product Purchase Orders</label>
     </listViews>
     <listViews>
+        <fullName>RbA_Purchase_Orders</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Vendor__c</columns>
+        <columns>RECORDTYPE</columns>
+        <columns>Order__c</columns>
+        <columns>Total__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Purchase_Order__c.RbA_Purchase_Order</value>
+        </filters>
+        <label>2. RbA Purchase Orders</label>
+    </listViews>
+    <listViews>
         <fullName>Service_Purchase_Orders</fullName>
         <columns>NAME</columns>
         <columns>Date__c</columns>
@@ -795,6 +811,30 @@
 &amp;SC0=1
 &amp;SC1=Attachments</url>
         <width>900</width>
+    </webLinks>
+    <webLinks>
+        <fullName>Conga_Composer_RbA_Product_Purchase_Order</fullName>
+        <availability>online</availability>
+        <description>Created by Conga Solution Manager. Record link: https://renewalbyandersen--dev1--apxtconga4.cs3.visual.force.com/a28Q0000000egHRIAY.</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>RbA Product Purchase Order</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://composer.congamerge.com?SolMgr=1
+&amp;sessionId={!API.Session_ID}
+&amp;serverUrl={!API.Partner_Server_URL_290}
+&amp;Id={!Purchase_Order__c.Id}
+&amp;TemplateId=a2AQ0000002538N</url>
     </webLinks>
     <webLinks>
         <fullName>Conga_Composer_RbA_Purchase_Order</fullName>

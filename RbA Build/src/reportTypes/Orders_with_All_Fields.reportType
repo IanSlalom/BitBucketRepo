@@ -13,6 +13,16 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>AR_Age__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>AR_Reason__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Contract</field>
             <table>Order</table>
         </columns>
@@ -569,11 +579,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Secondary_Save_Reason__c</field>
-            <table>Order</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Series_2_Rollup__c</field>
             <table>Order</table>
         </columns>
         <columns>

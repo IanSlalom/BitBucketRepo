@@ -223,9 +223,38 @@ private class RMS_mobileAppRequestHelperTest {
 	} 
 
 	/* 
+	 * testFindAppointmentsException
+	 */
+	static testmethod void testFindAppointmentsException(){
+/*		Profile p = [SELECT Id FROM Profile WHERE Name='Sys Admin']; 
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		User u = tUtil.createUser(p.id);
+		u.Default_Store_Location__c = '77 - Twin Cities, MN';
+		insert u;
+
+        System.runAs(u) {
+*/
+		    Test.startTest();
+	       	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
+			String jsonResult = mHelper.findAppointments(UserInfo.getUserId());
+			Test.stopTest();
+			RMS_mobileAppRequestHelper.Appointments testresult = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.Appointments.class);
+			System.debug('####: ' + testresult);
+
+			System.assert(testresult.getErrors().size() == 1);
+			System.assert(testresult.salesAppts == null);
+//        }
+	} 
+
+	/* 
 	 * testResultSalesAppointments
 	 */
 	static testmethod void testfilterOppbyOrderStatus(){
+	    List<String> orderFilter = new List<String>{'Draft','Pending Cancellation','Cancelled','Job Closed',
+			'Draft','Pending Cancellation','Cancelled','Job Closed',
+			'Draft','Pending Cancellation','Cancelled','Job Closed',
+			'Draft','Pending Cancellation','Cancelled','Job Closed'};
 		// Turn off the financial trigger to avoid SOQL limits in test class
 		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
 		insert turnOffFinancialTrigger;
@@ -241,10 +270,30 @@ private class RMS_mobileAppRequestHelperTest {
 		Account dwelling1 = tutil.createDwellingAccount('filterTest' + System.now());
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
-		
+
+		// create an opportunity for each order status		
 		List<Opportunity> itemsToInsert = new List<Opportunity>();		
-		for (Integer i = 0; i < 16; i++) {
+		for (Integer i = 0; i < 4; i++) {
 			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'New', u.Id, Date.today());
+			opp1.OwnerId = u.Id;
+			opp1.Store_Location__c = store1.Id;
+			itemsToInsert.add(opp1);
+		}
+		// Les'ts add a few more for other opportunity stages
+		for (Integer i = 0; i < 4; i++) {
+			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'In Progress', u.Id, Date.today());
+			opp1.OwnerId = u.Id;
+			opp1.Store_Location__c = store1.Id;
+			itemsToInsert.add(opp1);
+		}
+		for (Integer i = 0; i < 4; i++) {
+			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'Quoted', u.Id, Date.today());
+			opp1.OwnerId = u.Id;
+			opp1.Store_Location__c = store1.Id;
+			itemsToInsert.add(opp1);
+		}
+		for (Integer i = 0; i < 4; i++) {
+			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'Measured', u.Id, Date.today());
 			opp1.OwnerId = u.Id;
 			opp1.Store_Location__c = store1.Id;
 			itemsToInsert.add(opp1);
@@ -252,9 +301,6 @@ private class RMS_mobileAppRequestHelperTest {
 		insert itemsToInsert;
 
 		// add orders of various statuses to the opportunities - not the last status should not be filtered out
-	    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
-			'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
-			'To Be Ordered','Seasonal Service','Closed', 'Draft'};
 		List<Order> ordersToInsert = new List<Order>();
 		for (Integer j = 0; j < itemsToInsert.size(); j++) {
 			Order order1 = new Order(Name='Sold Order ' + j, 
@@ -276,8 +322,23 @@ private class RMS_mobileAppRequestHelperTest {
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			mHelper.filterOppbyOrderStatus(oppMap);
 			Test.stopTest();
-			System.assert(oppMap.size() == 1);
-			System.assert(oppMap.get(itemsToInsert[15].Id) != null);
+			System.assert(oppMap.size() == 10);
+			System.assert(oppMap.get(itemsToInsert[0].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[1].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[2].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[3].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[4].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[5].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[6].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[7].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[8].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[9].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[10].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[11].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[12].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[13].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[14].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[15].Id) == null);
         }
 	}
 	/* 
@@ -597,7 +658,7 @@ private class RMS_mobileAppRequestHelperTest {
 		Quote_Discount__c qd1 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
 		insert qd1;
 		Quote_Discount__c qd2 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quotetoUpdate.Id);
-		qd2.Discount_Amount__c = 4;
+		qd2.Discount_Amount__c = 3;
 		insert qd2; // this one will be deleted
 		Quote_Discount__c qd3 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete.Id);
 		insert qd3; // this one will be deleted by cascading delete
@@ -605,7 +666,7 @@ private class RMS_mobileAppRequestHelperTest {
 		insert qd4; // this one will be deleted by cascading delete
 		Quote_Discount__c qd5 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToInsert.Id);
 		Quote_Discount__c qd6 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToInsert.Id);
-		qd6.Discount_Amount__c = 4; // this one will not be inserted
+		qd6.Discount_Amount__c = 3; // this one will not be inserted
 		// these two should never be inserted because of a cascading delete
 		Quote_Discount__c qd7 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
 		Quote_Discount__c qd8 = tUtil.createQuoteDiscount(store1.Active_Store_Configuration__c, quoteToDelete2.Id);
@@ -673,7 +734,7 @@ private class RMS_mobileAppRequestHelperTest {
 		jsonInput = jsonInput.replace('"Name":"quoteToDelete2"','"IsDeleted":true,"Name":"quoteToDelete2"');
 		jsonInput = jsonInput.replace('"Description":"qliToDelete"','"IsDeleted":true,"Description":"qliToDelete"');
 		jsonInput = jsonInput.replace('"Description":"qliToDeleteFromInsert"','"IsDeleted":true,"Description":"qliToDeleteFromInsert"');
-		jsonInput = jsonInput.replace('"Discount_Amount__c":4','"IsDeleted":true,"Discount_Amount__c":4');
+		jsonInput = jsonInput.replace('"Discount_Amount__c":3','"IsDeleted":true,"Discount_Amount__c":4');
 		jsonInput = jsonInput.replace('"Amount_Financed__c":4','"IsDeleted":true,"Amount_Financed__c":4');
 		System.debug('###### Input: ' + jsonInput);
 		RMS_mobileAppRequestHelper.SalesAppointment appt = (RMS_mobileAppRequestHelper.SalesAppointment)JSON.deserialize(jsonInput, RMS_mobileAppRequestHelper.SalesAppointment.class);
@@ -1336,6 +1397,117 @@ private class RMS_mobileAppRequestHelperTest {
 			financeToUpdate = [SELECT Program_Rate__c from Quote_Financing__c where Id =: financeToUpdate.Id];
 			System.assertEquals(financeToUpdate.Program_Rate__c, 20);
 			System.assert(financeToInsert.Id != null);
+        }
+	
+	} 
+
+	/* 
+	 * testSaveQuoteLineItemsLinking
+	 */
+	static testmethod void testSaveQuoteLineItemsLinking(){
+
+		// Turn off the financial trigger to avoid SOQL limits in test class
+		RMS_Settings__c turnOffFinancialTrigger = new RMS_Settings__c(Name='Turn Financial Transactions Off', Value__c = 'Yes');
+		insert turnOffFinancialTrigger;
+
+		TestUtilityMethods tUtil = new TestUtilityMethods();
+		tUtil.setUpConfigs();
+		Profile p = [SELECT Id FROM Profile WHERE Name='RMS-Sales']; 
+
+		Datetime newApptTime = Datetime.now().addDays(1);
+		Datetime tmApptTime = Datetime.now().addDays(5);
+
+		User u = tUtil.createUser(p.id);
+		insert u;
+
+		tUtil.createSalesAppt(u.Id, newApptTime, false, false);
+
+		Account store1 = [SELECT id, Name, Active_Store_Configuration__c FROM Account Where Name = '77 - Twin Cities, MN'][0];
+		Account dwelling1 = tUtil.createDwellingAccount('456');
+		dwelling1.Store_Location__c = store1.id;
+		dwelling1.OwnerId = u.Id;
+		insert dwelling1;
+
+		List<SObject> itemsToInsert = new List<SObject>();		
+		
+		Opportunity opp1 = tutil.createOpportunity('TMAppt',dwelling1.id, 'New', u.Id);
+		opp1.OwnerId = u.Id;
+		itemsToInsert.add(opp1);
+		// create the store discounts
+
+		insert itemsToInsert;
+		//clean out the list
+		itemsToInsert.clear();
+		
+		Pricebook2 pb = tutil.createPricebook2('saveQuoteTest', store1.Active_Store_Configuration__c);
+		itemsToInsert.add(pb);
+		insert itemsToInsert;
+		itemsToInsert.clear();
+
+		Quote quote1 = tutil.createQuote(opp1.id, pb.Id);
+		quote1.isSold__c = true;
+		itemsToInsert.add(quote1);
+		insert itemsToInsert;
+		//clean out the list
+		itemsToInsert.clear();
+			
+		// qli to update
+		QuoteLineItem qli1 = tutil.createQLIMasterChildProducts(pb.Id, quote1.Id);
+		qli1.Description = 'original description';
+		qli1.rSuite_Id__c = 'rsuite-id-1234';
+		itemsToInsert.add(qli1);
+		QuoteLineItem qli2 = tutil.createQLIMasterChildProducts(pb.Id, quote1.Id);
+		qli2.Description = 'original description';
+		qli2.rSuite_Id__c = 'rsuite-id-2234';
+		itemsToInsert.add(qli2);
+		QuoteLineItem qli3 = tutil.createQLIMasterChildProducts(pb.Id, quote1.Id);
+		qli3.Description = 'original description';
+		qli3.rSuite_Id__c = 'rsuite-id-3234';
+		qli3.Parent_Unit_rSuite_Id__c = qli1.rSuite_Id__c;
+		itemsToInsert.add(qli3);
+
+		// qli add insert
+		QuoteLineItem qli4 = tutil.createQLIMasterChildProducts(pb.Id, quote1.Id);
+		qli4.PricebookEntryId = null;
+		qli4.rSuite_Id__c = 'rsuite-id-4234';
+		qli4.Parent_Unit_rSuite_Id__c = qli1.rSuite_Id__c;
+		System.assert(qli4.Id == null);
+		QuoteLineItem qli5 = tutil.createQLIMasterChildProducts(pb.Id, quote1.Id);
+		qli5.PricebookEntryId = null;
+		qli5.rSuite_Id__c = 'rsuite-id-5234';
+		System.assert(qli5.Id == null);
+
+		insert itemsToInsert;
+		//clean out the list
+		itemsToInsert.clear();
+		// updates
+		opp1.StageName = 'Sold';
+
+		RMS_mobileAppRequestHelper.QuoteContainer quoteContainer = new RMS_mobileAppRequestHelper.QuoteContainer();
+		quoteContainer.aQuote = quote1;
+		quoteContainer.quoteLineItems = new List<QuoteLineItem>{qli1, qli2, qli3, qli4, qli5};
+		quoteContainer.quoteDiscountList = new List<Quote_Discount__c>();
+		quoteContainer.quoteFinancingList = new List<Quote_Financing__c>();
+		RMS_mobileAppRequestHelper.OpportunityContainer oppContainer = new RMS_mobileAppRequestHelper.OpportunityContainer();
+		oppContainer.oppty = opp1;
+		oppContainer.quoteContainerList = new List<RMS_mobileAppRequestHelper.QuoteContainer>{quoteContainer};
+		RMS_mobileAppRequestHelper.SalesAppointment salesAppt = new RMS_mobileAppRequestHelper.SalesAppointment();
+		salesAppt.opptyContainer = oppContainer;
+
+        System.runAs(u) {
+        	Test.StartTest();
+        	RMS_mobileAppRequestHelper helper = new RMS_mobileAppRequestHelper();
+			helper.saveQuoteLineItemsDiscountsandFinancing(salesAppt);
+			Test.StopTest();
+
+			//Assert Quote Line Items are Upserted
+			System.assert(qli4.Id != null);
+			System.assert(qli5.Id != null);
+			System.assert(qli1.Parent_Quote_Line_Item__c == null);
+			System.assert(qli2.Parent_Quote_Line_Item__c == null);
+			System.assert(qli5.Parent_Quote_Line_Item__c == null);
+			System.assert(qli3.Parent_Quote_Line_Item__c == qli1.id);
+			System.assert(qli4.Parent_Quote_Line_Item__c == qli1.id);
         }
 	
 	} 

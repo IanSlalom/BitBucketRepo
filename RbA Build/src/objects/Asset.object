@@ -612,7 +612,7 @@
         <fullName>Closed_Order_Asset_Rule</fullName>
         <active>true</active>
         <description>Cannot add/edit assets for a closed order.</description>
-        <errorConditionFormula>TEXT(Sold_Order__r.Status) == &apos;Job Closed&apos;</errorConditionFormula>
+        <errorConditionFormula>AND(TEXT(Sold_Order__r.Status) == &apos;Job Closed&apos;,$Profile.Name &lt;&gt; &quot;RMS-Data Integration&quot;)</errorConditionFormula>
         <errorMessage>You can not add or edit assets for a closed order.</errorMessage>
     </validationRules>
     <validationRules>

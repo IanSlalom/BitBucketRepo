@@ -38,7 +38,7 @@
     
     </script>
     <apex:form >
-        <apex:pageBlock mode="edit" title='Edit Service Product: {!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}'>
+        <apex:pageBlock mode="edit" title="Edit Service Product: {!OrderItem.Sold_Order_Product_Asset__r.Variant_Number__c} - {!OrderItem.PriceBookEntry.Name}">
             <apex:pageBlockButtons >
                 <apex:commandButton value="Cancel" action="{!cancelOrderItem}" immediate="true"/>
                 <apex:commandButton action="{!saveCloseTab}" value="Save" />                

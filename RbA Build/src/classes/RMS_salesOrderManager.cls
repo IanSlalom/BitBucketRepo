@@ -21,7 +21,7 @@ public with sharing class RMS_salesOrderManager {
 		Map<Id, Opportunity> mapOld, 
 		Map<Id, Opportunity> mapNew) {
 
-	 	system.debug('****** Inside RMS_salesOrderManager/createSalesOrderOnOpportunityClosedWon');
+	 	system.debug('###### RMS_salesOrderManager.createSalesOrderOnOpportunityClosedWon start');
 	 	
 	 	//CREATE AND POPULATE LIST OF ONLY OPPORTUNITIES THAT HAVE BEEN CLOSED/WON AND HAVE A SYNCED QUOTE TO PREFORM LOGIC ON
 	 	List<Opportunity> closedWonOpportunities = new List<Opportunity>();
@@ -35,13 +35,13 @@ public with sharing class RMS_salesOrderManager {
 		// only do the following if we have closed won opportunities
 		if (closedWonOpportunitiesIds.size() > 0) {
 			// get the quotes, quote line items, quote discounts, quote financing of the sold quote and the primary contact for each close won opportunity
-			List<Quote> soldQuoteList = [select Id, OpportunityId, Pricebook2Id, isSold__c, Name,
+			List<Quote> soldQuoteList = [select Id, OpportunityId, Pricebook2Id, isSold__c, Name, rSuite_Id__c,
 				Opportunity.AccountId, Opportunity.Store_Location__c, Opportunity.OwnerId, Opportunity.Account.BillingStreet,
 				Opportunity.Account.BillingCity, Opportunity.Account.BillingStateCode, Opportunity.Account.BillingPostalCode, 
 				Opportunity.Account.BillingCountryCode,	Opportunity.Description, Opportunity.CloseDate, Opportunity.Pricebook2Id
 				from Quote where isSold__c = true and OpportunityId in :closedWonOpportunitiesIds];
 
-			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c,
+			List<Quote_Discount__c> qdList = [select Id, Name, Discount_Amount__c, Per_Unit_Discount__c, rSuite_Id__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c,
 				Quote__r.OpportunityId 
 				from Quote_Discount__c where Quote__c in :soldQuoteList];
 
@@ -81,6 +81,26 @@ public with sharing class RMS_salesOrderManager {
 				List<OrderItem> oiList = createOrderItems(qliList, newOrders, qliFieldsMap);
 				if (oiList.size() > 0) {
 					insert oiList;
+					// now update the link order sub items to order items
+					// find orderitems that refer to parent order items
+					List<OrderItem> coiList = new List<OrderItem>();
+					for(OrderItem oi : oiList) {
+						if(oi.Parent_Unit_rSuite_Id__c != null && !oi.Parent_Unit_rSuite_Id__c.equals('')) {
+							coiList.add(oi);
+						}
+					}
+					if (coiList.size() > 0) {
+						// link the children to the parents
+						for(OrderItem coi : coiList) {
+							for(OrderItem oi : oiList) {
+								if(coi.Parent_Unit_rSuite_Id__c.equals(oi.rSuite_Id__c)) {
+									coi.Parent_Order_Item__c = oi.Id;
+									break;
+								}
+							}
+						}
+						update coiList;
+					}
 				}
 
 				// create the order discounts from the quote discounts
@@ -138,6 +158,8 @@ public with sharing class RMS_salesOrderManager {
 			ord.BillingCountryCode = qt.Opportunity.Account.BillingCountryCode;
 			ord.Status = 'Draft';
 			ord.EffectiveDate = qt.Opportunity.CloseDate;
+			ord.rSuite_Id__c = qt.rSuite_Id__c;
+//TODO: upddate this to support other record types
 			ord.RecordTypeId = UtilityMethods.RecordTypeFor('Order', 'CORO_Record_Type');
 			// spin through the primary contacts and assign the name and primary contact
 			for (OpportunityContactRole ocr : primaryContacts) {
@@ -173,8 +195,6 @@ public with sharing class RMS_salesOrderManager {
 		qliFieldsMap.remove('ListPrice');
 		qliFieldsMap.remove('CreateDate');
 		qliFieldsMap.remove('Parent_Quote_Line_Item__c');
-		qliFieldsMap.remove('Parent_Unit_rSuite_Id__c');
-		qliFieldsMap.remove('rSuite_Id__c');
 
 		// lets get the OrderLineItem fields for dynamic assignment
  		SObjectType oiType = Schema.getGlobalDescribe().get('OrderItem');
@@ -227,6 +247,7 @@ public with sharing class RMS_salesOrderManager {
 			od.Store_Discount__c = qd.Store_Discount__c;
 			od.Discount_Amount__c = qd.Discount_Amount__c;
 			od.Per_Unit_Discount__c = qd.Per_Unit_Discount__c;
+			od.rSuite_Id__c = qd.rSuite_Id__c;
 			od.Status__c = qd.Status__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {

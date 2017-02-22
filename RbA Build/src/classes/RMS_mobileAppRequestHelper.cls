@@ -15,6 +15,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 	private static final String MULTILE_ERROR_HEADER = 'Multipe errors occured while attempting to save appointment {0}: Please contact technical support.  Error Id:{1}\n';
 	private static final String RECORD_ERROR_MESSAGE = 'Object:{0} :Fields:{1} :Error Status Code:{2} :Error Message:{3}\n';
 	private static final String EXCEPTION_ERROR_MESSAGE = 'Object:{0} :Unhandled Exception:{1} :Exception Stack Trace:{2}\n';
+	private static final String GET_APPTS_EXCEPTION_ERROR_MESSAGE = 'GetAppointments:Unhandled Exception:{0} :Exception Stack Trace:{1}: Error Id:{2}\n';
 	private static String SHARED_FIELDS;
 	// fields unique to Quote line items
 	private static final String QLI_QUERY_START = 'SELECT LineNumber, QuoteId, Subtotal, TotalPrice, Parent_Quote_Line_Item__c, isInactive__c, isDeleted';
@@ -52,7 +53,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 	  //get all sales opportunities assigned to me excluding old ones
 	  Integer unSoldAge = getUnsoldAge(userId);
 	  Date afterDate = Date.today().addMonths(-unSoldAge);
-	  String whereClause = 'where OwnerId = :userId and ' +
+	  String whereClause = 'where OwnerId = :userId and isDeleted = false and ' +
 	  	'((StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
 	  	'((StageName = \'New\' or StageName = \'In Progress\' or StageName = \'Quoted\') and CloseDate > :afterDate))';	  
 	  String query = OPP_QUERY + ' ' + whereClause;
@@ -96,7 +97,13 @@ public with sharing class RMS_mobileAppRequestHelper {
     } catch (Exception e) {
       System.debug(LoggingLevel.ERROR, e);
 	  System.debug(LoggingLevel.Error, e.getStackTraceString());
-      return JSON.serialize(e);
+	  String message = e.getMessage() + '::' + e.getStackTraceString();
+	  Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doGet', message, null, userId);
+	  String[] errParms = new String[]{e.getMessage(), e.getStackTraceString(), supportLogId};
+	  String formattedMessage = String.format(GET_APPTS_EXCEPTION_ERROR_MESSAGE, errParms);
+      Appointments myAppts = new Appointments();
+      myAppts.getErrors().add(formattedMessage);
+      return JSON.serialize(myAppts);
     }
   }
 
@@ -105,15 +112,36 @@ public with sharing class RMS_mobileAppRequestHelper {
 	 * @return: void
 	 */
 	public void filterOppbyOrderStatus(Map<Id,Opportunity> oppsToFilter) {
-	    // fitter out the statuses we don't want
-	    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
-			'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
-			'To Be Ordered','Seasonal Service','Closed','Activated'};
-		List<Id> oppIds = new List<Id>(oppsToFilter.keySet());
+	    /* this method will use CORO and ARO orders to filter out opportunities that should not be returned by get appointments
+	     * this means that Service Orders will not be used to filter opportunities
+	     * - a point of clarification Service Orders will not be attached to opportunities so we only need to worry about CORO and ARO Order Statuses
+	     */
+	    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','Job Closed','Activated'};
+	     // get a list of opportunities with orders that should be removed from the result
+//	    Map<Id,AggregateResult> oppsToKeepMap = [select count(Id) cnt, OpportunityId Id from Order where OpportunityId in: oppsToFilter.keySet() and
+//	    	Status not in :orderFilter group by OpportunityId];
+	    
+//		List<Id> oppIds = new List<Id>(oppsToFilter.keySet());
+		
 	    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :oppsToFilter.keySet()];
+	    System.debug('#####ord: ' + filterOrders);
+	    System.debug('#####opp: ' + oppsToFilter.values());
 	    // remove rows found
 	    for (Order ord : filterOrders) {
-	    	oppsToFilter.remove(ord.OpportunityId);
+//	    	AggrgateResult ar = oppsToKeepMap.get(ord.OpportunityId);
+//	    	if (ar == null || ar.get('cnt') == 0) {
+//	    		// we don't have an order on this opportunity that means we automatically want to keep it in the list
+//	    		// so check further
+//	    		
+//	    	}
+	    	if(ord.Status.equals('Pending Cancellation') || ord.Status.equals('Cancelled')) {
+	    		Opportunity opp = oppsToFilter.get(ord.OpportunityId);
+	    		if (!opp.StageName.equals('New') && !opp.StageName.equals('In Progress') && !opp.StageName.equals('Quoted')) {
+			    	oppsToFilter.remove(ord.OpportunityId);
+	    		}
+	    	} else {
+		    	oppsToFilter.remove(ord.OpportunityId);
+	    	}
 	    }
 	}
 
@@ -266,12 +294,13 @@ public with sharing class RMS_mobileAppRequestHelper {
     return tmAppts;
   }
     
+  /* This is not currently used by rSuite - commenting out the code */
   /* @method: populateHistoricOpportunities(List<Id> opptyIds)
    * @param: List<Id> accoutnIds - list of accountIds that will be used to find the opportunities
    * @param: List<Id> opportunityIds - list of opportunities to exclude from this list
    * @return:Map of List of OpportunityContainers mapped to account (dwelling Ids) excluding the passed in oppIds
    */
-  public Map<Id, List<OpportunityContainer>> populateHistoricOpportunities(List<Id> acctIds, List<Id> oppIds) {
+/*  public Map<Id, List<OpportunityContainer>> populateHistoricOpportunities(List<Id> acctIds, List<Id> oppIds) {
     Map<Id, Opportunity> hoMap = new Map<Id, Opportunity>([SELECT Id from Opportunity where Id NOT in :oppIds and AccountId in :acctIds]);
     Map<Id, OpportunityContainer> hocsMap = populateOpportunityStructure(hoMap);
 
@@ -288,6 +317,7 @@ public with sharing class RMS_mobileAppRequestHelper {
     }
     return acctToOppMap;
   }
+*/
 
   /* @method: buildQLIQuery()
    * @return: String quote line item query
@@ -684,8 +714,20 @@ public with sharing class RMS_mobileAppRequestHelper {
 		}
     }
 	// now set the master product on the qli if its not set - the child product might only be set
+	// also link the line items together in parent/child relationships
+	List<QuoteLineItem> clist = new List<QuoteLineItem>();
 	if (qliList.size() > 0) {
 		qliList = addMasterProducts(qliList);
+		// now separate the qlis into two buckets - one of parent line items and one of child line items
+		// child line items will need to be linked to their parents
+		for(QuoteLineItem qli : qliList) {
+			if (qli.Parent_Unit_rSuite_Id__c != null && !qli.Parent_Unit_rSuite_Id__c.equals('')) {
+				// only if the parent unit is not set prep it for update
+				if (qli.Parent_Quote_Line_Item__c == null) {
+					clist.add(qli);
+				}
+			}
+		}
 	}
 
     try {
@@ -707,6 +749,35 @@ public with sharing class RMS_mobileAppRequestHelper {
 				sa.getErrors().add(formattedMessage);
 			}
           }
+        }
+        // now link the children to the parents
+        if (clist.size() > 0) {
+        	for (QuoteLineItem cqli: clist) {
+        		for (QuoteLineItem qli: qliList) {
+        			if (cqli.Parent_Unit_rSuite_Id__c.equals(qli.rSuite_Id__c)) {
+        				cqli.Parent_Quote_Line_Item__c = qli.Id;
+        				break;
+        			}
+        		}
+        	}
+        	// now update these records
+        	Database.SaveResult[] ulsr = Database.update(cList, false);
+        	for (Database.SaveResult ur: ulsr) {
+	          if (!ur.isSuccess()) {
+	            // add error messages 
+	            // Operation failed, so get all errors               
+				String[] errParms = null;
+				for(Database.Error err : ur.getErrors()) {
+					String fields = '';
+					for (String field : err.getFields()) {
+						fields = fields + field + ', ';
+					}
+					errParms = new String[]{'Quote Line Item',fields, err.getStatusCode().name(), err.getMessage()};
+					String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+					sa.getErrors().add(formattedMessage);
+				}
+	          }
+        	}
         }
       }
       // attempt to insert the qoute discount records

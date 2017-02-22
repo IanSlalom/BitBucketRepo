@@ -30,10 +30,21 @@
     </columns>
     <description>BO4002 Detail Inventory Stock Status Report</description>
     <filter>
+        <booleanFilter>1 AND (2 OR 3)</booleanFilter>
         <criteriaItems>
             <column>Asset$RecordType</column>
             <operator>equals</operator>
             <value>Asset.Installed_Products</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Asset$Quantity_Written_Off__c</column>
+            <operator>equals</operator>
+            <value>0</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Asset$Quantity_Written_Off__c</column>
+            <operator>equals</operator>
+            <value></value>
         </criteriaItems>
     </filter>
     <format>Summary</format>

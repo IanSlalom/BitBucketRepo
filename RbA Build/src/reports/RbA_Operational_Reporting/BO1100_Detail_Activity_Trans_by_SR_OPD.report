@@ -56,9 +56,6 @@
         <field>Order$Entry_Door_Rollup__c</field>
     </columns>
     <columns>
-        <field>Order$Series_2_Rollup__c</field>
-    </columns>
-    <columns>
         <field>Order$Bay_Bow_Rollup__c</field>
     </columns>
     <columns>
@@ -81,7 +78,6 @@
             <operator>equals</operator>
             <value></value>
         </criteriaItems>
-        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>

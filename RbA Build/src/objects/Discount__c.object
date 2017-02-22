@@ -80,14 +80,15 @@
     </fields>
     <fields>
         <fullName>Pivotal_Id__c</fullName>
-        <externalId>false</externalId>
+        <caseSensitive>true</caseSensitive>
+        <externalId>true</externalId>
         <label>Pivotal Id</label>
         <length>255</length>
         <required>false</required>
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
-        <unique>false</unique>
+        <unique>true</unique>
     </fields>
     <fields>
         <fullName>Promotion_End__c</fullName>
@@ -112,31 +113,6 @@
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Store_Location__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The store or group of stores this discount is used by</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The store or group of stores this discount is used by</inlineHelpText>
-        <label>Store Location</label>
-        <lookupFilter>
-            <active>true</active>
-            <errorMessage>The selected account must be a store.</errorMessage>
-            <filterItems>
-                <field>Account.RecordTypeId</field>
-                <operation>equals</operation>
-                <value>Store</value>
-            </filterItems>
-            <isOptional>false</isOptional>
-        </lookupFilter>
-        <referenceTo>Account</referenceTo>
-        <relationshipLabel>Discounts</relationshipLabel>
-        <relationshipName>Discounts</relationshipName>
-        <required>false</required>
-        <trackHistory>true</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>isPromoOffer__c</fullName>
         <defaultValue>true</defaultValue>
         <description>Check if this discount is considered a promo offer</description>
@@ -150,6 +126,12 @@
     <label>Discount</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Active__c</columns>
+        <columns>Description__c</columns>
+        <columns>isPromoOffer__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <columns>LAST_UPDATE</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

@@ -256,6 +256,7 @@
         <members>RbAWorkOrderTrigger</members>
         <members>RefundTrigger</members>
         <members>ResourceTrigger</members>
+        <members>ServiceProductTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
         <members>journalEntryTrigger</members>
@@ -631,6 +632,7 @@
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4200_Receivings_Postings</members>
+        <members>RbA_Operational_Reporting/Report_BO8008_First_Time_Through_NEW</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
         <members>RbA_Operational_Reporting/Report_Misc_Cash_Receipts_Reconciliation</members>
@@ -655,6 +657,7 @@
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>
+        <members>Orders_with_Sold_Orders</members>
         <members>Orders_with_or_without_Activities</members>
         <members>Payments_with_All_Order_Fields</members>
         <members>Payments_with_or_without_Journal_Entries</members>
@@ -709,6 +712,7 @@
         <members>Procedure_Code_Assignment__c</members>
         <members>Procedure_Code__c</members>
         <members>Purchase_Order__c</members>
+        <members>QuoteLineItem</members>
         <members>RbA_Work_Order__c</members>
         <members>Resource__c</members>
         <members>Service_Product__c</members>

@@ -90,10 +90,10 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         //displays the Service Products for each Product availble to select
         //for the Service Request
         List<id> assetIds=new List<id>();
-        for(Asset a : [SELECT    Id,Product2.RecordTypeId
+        for(Asset a : [SELECT    Id,Product2.RecordTypeId,Product2.Has_Service_Products__c
                        FROM Asset 
                        WHERE AccountId = :o.AccountId
-                       AND Product2.RecordTypeId = :masterProductId]){
+                       AND Product2.Has_Service_Products__c = TRUE]){
                            assetIds.add(a.id);
                        }        
         selectedAssets = [SELECT    Id,
@@ -153,9 +153,9 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         listOILegacy=new list<OrderItem>();
         
         List<id> productIds=new List<id>();
-        for(Product2 p : [SELECT    Id
+        for(Product2 p : [SELECT    Id,Has_Service_Products__c
                           FROM Product2 
-                          WHERE RecordTypeId = :masterProductId]){
+                          WHERE Has_Service_Products__c = TRUE]){
                               productIds.add(p.id);
                           }        
         selectedProductsLegacy = [SELECT Id, 

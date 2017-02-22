@@ -49,6 +49,9 @@
         <field>Pricing_Configuration__c$Stainable_Wood_Interior__c</field>
     </columns>
     <columns>
+        <field>Pricing_Configuration__c$Premium_Stainable_Wood_Interior__c</field>
+    </columns>
+    <columns>
         <field>Pricing_Configuration__c$Fixed_Sash_Deduction_Casement__c</field>
     </columns>
     <columns>
@@ -112,7 +115,7 @@
         <field>Pricing_Configuration__c$Grilles_Between_Glass__c</field>
     </columns>
     <columns>
-        <field>Pricing_Configuration__c$Interior_Wood_Grilles_INTW__c</field>
+        <field>Pricing_Configuration__c$Interior_Wood_Only__c</field>
     </columns>
     <columns>
         <field>Pricing_Configuration__c$Full_Divided_Light__c</field>

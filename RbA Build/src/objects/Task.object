@@ -62,6 +62,9 @@
         <fullName>Email</fullName>
     </fields>
     <fields>
+        <fullName>IsRecurrence</fullName>
+    </fields>
+    <fields>
         <fullName>IsVisibleInSelfService</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
@@ -653,6 +656,33 @@
         <active>true</active>
         <label>On Hold</label>
         <picklistValues>
+            <picklist>Activity_Cancelled_By__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Primary_Reason__c</picklist>
             <values>
                 <fullName>Homeowner Decision</fullName>
@@ -688,6 +718,33 @@
             <values>
                 <fullName>Normal</fullName>
                 <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason_Cancelled__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
             </values>
         </picklistValues>
         <picklistValues>
@@ -750,6 +807,10 @@
             </values>
             <values>
                 <fullName>Permit Pending</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project can%27t be installed as Sold %28ie%2E Insert vs%2E FF%29</fullName>
                 <default>false</default>
             </values>
             <values>
