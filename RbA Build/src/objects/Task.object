@@ -721,33 +721,6 @@
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Reason_Cancelled__c</picklist>
-            <values>
-                <fullName>Family Emergency</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Lost to Competitor</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Other - Specify in Notes</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Project on Hold</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Spouse Unavailable</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Weather</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Secondary_Reason__c</picklist>
             <values>
                 <fullName>Architectural Review Board</fullName>
