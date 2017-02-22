@@ -656,33 +656,6 @@
         <active>true</active>
         <label>On Hold</label>
         <picklistValues>
-            <picklist>Activity_Cancelled_By__c</picklist>
-            <values>
-                <fullName>Homeowner</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Installer</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Sales Representative</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Scheduler</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Service Technician</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Tech Measure</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Primary_Reason__c</picklist>
             <values>
                 <fullName>Homeowner Decision</fullName>

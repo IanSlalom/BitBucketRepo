@@ -255,7 +255,6 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Frame_Type__c = 'FT1; FT2';
 		prodConfig.Checkrail_Style__c = 'CR1; CR2';
 		prodConfig.Interior_Trim__c = 'TR1; TR2';
-		prodConfig.Handing__c = 'HO1; HO2';
 		prodConfig.Hardware_Finish__c = 'HF1; HF2';
 		prodConfig.Hardware_Color__c = 'HC1; HC2';
 		prodConfig.Hardware_Style__c = 'HS1; HS2';
@@ -369,10 +368,6 @@ private class RMS_prodConfigExtensionTest {
 		// Verify the interior trim picklist items
 		List<SelectOption> interiorTrmItems = ext.interiorTrimItems;
 		System.AssertEquals(3, interiorTrmItems.size());
-
-		// Verify the handing option picklist items
-		List<SelectOption> handingOptItems = ext.handingOptionItems;
-		System.AssertEquals(3, handingOptItems.size());
 
 		// Verify the hardwareFinishItems
 		List<SelectOption> hardwareFinishItems = ext.hardwareFinishItems;
@@ -623,7 +618,6 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Frame_Type__c = 'FT1; FT2';
 		prodConfig.Checkrail_Style__c = 'CR1; CR2';
 		prodConfig.Interior_Trim__c = 'TR1; TR2';
-		prodConfig.Handing__c = 'HO1; HO2';
 		prodConfig.Hardware_Finish__c = 'HF1; HF2';
 		prodConfig.Hardware_Color__c = 'HC1; HC2';
 		prodConfig.Hardware_Style__c = 'HS1; HS2';
