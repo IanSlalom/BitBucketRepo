@@ -191,6 +191,60 @@
         <active>true</active>
         <label>Default</label>
         <picklistValues>
+            <picklist>Activity_Cancelled_By__c</picklist>
+            <values>
+                <fullName>Homeowner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Installer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sales Representative</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scheduler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Technician</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Measure</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reason_Cancelled__c</picklist>
+            <values>
+                <fullName>Family Emergency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Lost to Competitor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other - Specify in Notes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project on Hold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spouse Unavailable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weather</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Service_Type__c</picklist>
             <values>
                 <fullName>Service Material</fullName>

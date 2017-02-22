@@ -438,6 +438,7 @@
             <picklistValues>
                 <fullName>In Progress</fullName>
                 <default>false</default>
+                <description>A quote was started but not completed on this visit</description>
                 <closed>false</closed>
                 <forecastCategory>Pipeline</forecastCategory>
                 <probability>25</probability>
@@ -446,6 +447,8 @@
             <picklistValues>
                 <fullName>Quoted</fullName>
                 <default>false</default>
+                <description>Quote has moved to Price Preso but not eGreement…not sold
+Demo - No Sales</description>
                 <closed>true</closed>
                 <forecastCategory>Omitted</forecastCategory>
                 <probability>0</probability>
@@ -462,6 +465,7 @@
             <picklistValues>
                 <fullName>Measured</fullName>
                 <default>false</default>
+                <description>Job was submitted from TechMapp</description>
                 <closed>true</closed>
                 <forecastCategory>Closed</forecastCategory>
                 <probability>100</probability>
@@ -470,6 +474,7 @@
             <picklistValues>
                 <fullName>Suspended</fullName>
                 <default>false</default>
+                <description>Suspended would only happen initially in TechMapp. Either the Measure Technician (within TechMapp) or the Sales Person (identified via TechMapp’s suspend &amp; notify button) would resolve the Suspended project and submit from TechMapp</description>
                 <closed>true</closed>
                 <forecastCategory>Closed</forecastCategory>
                 <probability>100</probability>
@@ -478,6 +483,7 @@
             <picklistValues>
                 <fullName>Canceled</fullName>
                 <default>false</default>
+                <description>Job was sold, but subsequently cancelled via the 3-day right of refusal process</description>
                 <closed>true</closed>
                 <forecastCategory>Omitted</forecastCategory>
                 <probability>0</probability>

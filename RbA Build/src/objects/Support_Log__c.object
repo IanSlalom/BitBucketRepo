@@ -135,7 +135,7 @@
         <externalId>false</externalId>
         <inlineHelpText>rSuite api data</inlineHelpText>
         <label>rSuite API Payload</label>
-        <length>65536</length>
+        <length>131072</length>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>5</visibleLines>

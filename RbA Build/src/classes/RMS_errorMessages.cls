@@ -140,6 +140,7 @@ public with sharing class RMS_errorMessages {
 	public static final String LABOR_AMOUNTS_NULL = '&bull;Both Internal and External Costs are null.';
 	public static final String INSTALLER_HAS_NO_BAAN_NUMBER = '&bull;The Installer you have selected\'s account has no Baan Business Partner Number';
 	public static final String VENDOR_HAS_NO_BAAN_NUMBER = '&bull;The Vendor you have selected\'s account has no Baan Business Partner Number';
+	public static final String ASSET_VENDOR_HAS_NO_BAAN_NUMBER = '&bull;The Vendor on this Asset has no Baan Business Partner Number';
 	public static final String EXTERNAL_AMOUNT_NULL = '&bull;The External payment amount cannot be zero or empty on a Misc Reimbursement.';
 
 	public static final String ASSET_ID_IS_NULL = '&bull;The Asset Id is null.';

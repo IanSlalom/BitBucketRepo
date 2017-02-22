@@ -8,7 +8,7 @@
         <isActive>true</isActive>
         <isCrossBlock>false</isCrossBlock>
         <masterLabel>Discount %</masterLabel>
-        <scale>0</scale>
+        <scale>1</scale>
     </aggregates>
     <aggregates>
         <calculatedFormula>Order.Installation_Margin__c:SUM/Order.Retail_Total__c:SUM</calculatedFormula>
@@ -56,9 +56,6 @@
         <field>Order$Entry_Door_Rollup__c</field>
     </columns>
     <columns>
-        <field>Order$Series_2_Rollup__c</field>
-    </columns>
-    <columns>
         <field>Order$Bay_Bow_Rollup__c</field>
     </columns>
     <columns>
@@ -81,7 +78,6 @@
             <operator>equals</operator>
             <value></value>
         </criteriaItems>
-        <language>en_US</language>
     </filter>
     <format>Summary</format>
     <groupingsDown>

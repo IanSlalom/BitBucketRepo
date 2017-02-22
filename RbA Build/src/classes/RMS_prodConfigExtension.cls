@@ -413,8 +413,9 @@ public class RMS_prodConfigExtension {
 	public List<SelectOption> measurementFractionItems{
 		get
 		{   
+			Set<String> currentValues = new Set<String>{orderLineItem.Width_Fraction__c,orderLineItem.Height_Fraction__c,orderLineItem.Right_Leg_Fraction__c,orderLineItem.Left_Leg_Fraction__c};
 			if (lMeasurementFractionItems == null) {
-				lMeasurementFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Measurement_Fractions__c);
+				lMeasurementFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Measurement_Fractions__c, currentValues);
 			}			   
 			return lMeasurementFractionItems;
 		}
@@ -440,6 +441,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lExteriorColorItems == null) {
+				Set<String> currentValues = new Set<String>{orderLineItem.Exterior_Color__c};
 				Set<String> extColors = new Set<String>();
 				for(Color_Configuration__c cc: ColorConfigs){
 					if(cc.Exterior_Color__c != null){
@@ -450,7 +452,7 @@ public class RMS_prodConfigExtension {
 				for(String color: extColors){
 					extColorsString += color + ';';
 				}
-				lExteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(extColorsString);
+				lExteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(extColorsString, currentValues);
 
 			}			   
 			return lExteriorColorItems;
@@ -463,6 +465,7 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (interiorColorItems == null) {
+				Set<String> currentValues = new Set<String>{orderLineItem.Interior_Color__c};
 				Set<String> intColors = new Set<String>();
 				for(Color_Configuration__c cc: ColorConfigs){
 					if(cc.Interior_Color__c != null){
@@ -476,7 +479,7 @@ public class RMS_prodConfigExtension {
 					intColorsString += color + ';';
 				}
 
-				lInteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(intColorsString);
+				lInteriorColorItems = RMS_ProdConfigManager.retrievePickListItems(intColorsString, currentValues);
 
 			}			   
 			return lInteriorColorItems;
@@ -490,7 +493,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGlazingItems == null) {
-				lGlazingItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glazing__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Glazing_S1__c,orderLineItem.Glazing_S2__c,orderLineItem.Glazing_S3__c,orderLineItem.Glazing_S4__c};
+				lGlazingItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glazing__c, currentValues);
 			}			   
 			return lGlazingItems;
 		}
@@ -502,7 +506,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGlassPatternItems == null) {
-				lGlassPatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glass_Pattern__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Glass_Pattern_S1__c,orderLineItem.Glass_Pattern_S2__c,orderLineItem.Glass_Pattern_S3__c,orderLineItem.Glass_Pattern_S4__c};
+				lGlassPatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Glass_Pattern__c, currentValues);
 			}			   
 			return lGlassPatternItems;
 		}
@@ -514,7 +519,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrilleStyleItems == null) {
-				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Style__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Grille_Style__c};
+				lGrilleStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Style__c, currentValues);
 			}			   
 			return lGrilleStyleItems;
 		}
@@ -526,7 +532,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lGrillePatternItems== null) {
-				lGrillePatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Patterns__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Grille_Pattern__c};
+				lGrillePatternItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Grille_Patterns__c, currentValues);
 			}
 			return lGrillePatternItems;
 		}
@@ -538,7 +545,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLitesWideItems== null) {
-				lLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_Wide__c);
+				Set<String> currentValues = new Set<String>{string.valueof(orderLineItem.Lites_Wide_S1__c),string.valueof(orderLineItem.Lites_Wide_S2__c),string.valueof(orderLineItem.Lites_Wide_S4__c)};
+				lLitesWideItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_Wide__c, currentValues);
 			}			   
 			return lLitesWideItems;
 		}
@@ -550,7 +558,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLitesHighItems== null) {
-				lLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_High__c);
+				Set<String> currentValues = new Set<String>{string.valueof(orderLineItem.Lites_High_S1__c),string.valueof(orderLineItem.Lites_High_S2__c),string.valueof(orderLineItem.Lites_High_S4__c)};
+				lLitesHighItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lites_High__c, currentValues);
 			}			   
 			return lLitesHighItems;
 		}
@@ -562,7 +571,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHubItems== null) {
-				lHubItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hubs__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hubs__c};
+				lHubItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hubs__c, currentValues);
 			}			   
 			return lHubItems;
 		}
@@ -574,7 +584,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lSpokeItems== null) {
-				lSpokeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Spokes__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Spokes__c};
+				lSpokeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Spokes__c, currentValues);
 			}			   
 			return lSpokeItems;
 		}
@@ -586,7 +597,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lExteriorTrimItems== null) {
-				lExteriorTrimItems= RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Exterior_Trim__c};
+				lExteriorTrimItems= RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim__c, currentValues);
 			}			   
 			return lExteriorTrimItems;
 		}
@@ -598,7 +610,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lFrameTypeItems == null) {
-				lFrameTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Frame_Type__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Frame_Type__c};
+				lFrameTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Frame_Type__c, currentValues);
 			}			   
 			return lFrameTypeItems;
 		}
@@ -610,7 +623,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lCheckrailStyleItems == null) {
-				lCheckrailStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Checkrail_Style__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Checkrail_Style__c};
+				lCheckrailStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Checkrail_Style__c, currentValues);
 			}			   
 			return lCheckrailStyleItems;
 		}
@@ -622,21 +636,10 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInteriorTrimItems == null) {
-				lInteriorTrimItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Trim__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Interior_Trim__c};
+				lInteriorTrimItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Trim__c, currentValues);
 			}			   
 			return lInteriorTrimItems;
-		}
-	} 
-
-	/******* Handing Option Items  *****************/
-	private static transient List<SelectOption> lHandingOptionItems;
-	public List<SelectOption> handingOptionItems {
-		get
-		{   
-			if (lHandingOptionItems == null) {
-				lHandingOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Handing__c);
-			}			   
-			return lHandingOptionItems;
 		}
 	} 
 
@@ -646,7 +649,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHardwareFinishItems == null) {
-				lHardwareFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hardware_Finish__c};
+				lHardwareFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish__c, currentValues);
 			}			   
 			return lHardwareFinishItems;
 		}
@@ -658,7 +662,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHardwareColorItems == null) {
-				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hardware_Color__c};
+				lHardwareColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Color__c, currentValues);
 			}			   
 			return lHardwareColorItems;
 		}
@@ -670,7 +675,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHardwareFinishColorItems == null) {
-				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hardware_Finish_Color__c};
+				lHardwareFinishColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Finish_Color__c, currentValues);
 			}			   
 			return lHardwareFinishColorItems;
 		}
@@ -682,7 +688,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLeftOrRightItems == null) {
-				lLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Height_L_or_R_Leg_Height__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Is_Height_L_or_R_Leg_Height__c};
+				lLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Height_L_or_R_Leg_Height__c, currentValues);
 			}			   
 			return lLeftOrRightItems;
 		}
@@ -694,7 +701,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLegLeftOrRightItems == null) {
-				lLegLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Is_Leg_Height_L_or_R_Leg_Height__c};
+				lLegLeftOrRightItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Is_Leg_Height_L_or_R_Leg_Height__c, currentValues);
 			}			   
 			return lLegLeftOrRightItems;
 		}
@@ -706,7 +714,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (llegExteriorFractionItems == null) {
-				llegExteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Exterior_Fraction__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Leg_Height_Exterior_Fraction__c};
+				llegExteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Exterior_Fraction__c, currentValues);
 			}			   
 			return llegExteriorFractionItems;
 		}
@@ -718,7 +727,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (llegInteriorFractionItems == null) {
-				llegInteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Interior_Fraction__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Leg_Height_Interior_Fraction__c};
+				llegInteriorFractionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Leg_Height_Interior_Fraction__c, currentValues);
 			}			   
 			return llegInteriorFractionItems;
 		}
@@ -730,12 +740,12 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lMeetRailDimensionItems == null) {
-				lMeetRailDimensionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Meet_Rail_Dimension__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Meet_Rail_Dimension__c};
+				lMeetRailDimensionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Meet_Rail_Dimension__c, currentValues);
 			}			   
 			return lMeetRailDimensionItems;
 		}
 	}
-
 
 
 	/******* Set up Hardware Style Items  *****************/
@@ -744,7 +754,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHardwareStyleItems == null) {
-				lHardwareStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Style__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hardware_Style__c};
+				lHardwareStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Style__c, currentValues);
 			}			   
 			return lHardwareStyleItems;
 		}
@@ -756,7 +767,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lHardwareOptionItems == null) {
-				lHardwareOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Option__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Hardware_Option__c};
+				lHardwareOptionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Hardware_Option__c, currentValues);
 			}			   
 			return lHardwareOptionItems;
 		}
@@ -768,7 +780,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLiftsPullsItems == null) {
-				lLiftsPullsItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lifts_Pulls__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Lifts_Pulls__c};
+				lLiftsPullsItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Lifts_Pulls__c, currentValues);
 			}			   
 			return lLiftsPullsItems;
 		}
@@ -780,7 +793,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lLocksSashItems == null) {
-				lLocksSashItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Locks_Sash__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Locks_Sash__c};
+				lLocksSashItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Locks_Sash__c, currentValues);
 			}			   
 			return lLocksSashItems;
 		}
@@ -792,7 +806,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lfingerLiftItems == null) {
-				lfingerLiftItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Finger_Lifts__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Finger_Lifts__c};
+				lfingerLiftItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Finger_Lifts__c, currentValues);
 			}			   
 			return lfingerLiftItems;
 		}
@@ -804,7 +819,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lScreenTypeItems == null) {
-				lScreenTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Type__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Screen_Type__c};
+				lScreenTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Type__c, currentValues);
 			}
 			return lScreenTypeItems;
 		}
@@ -816,7 +832,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lScreenVeneerTypeItems== null) {
-				lScreenVeneerTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Veneer_Type__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Screen_Veneer_Type__c};
+				lScreenVeneerTypeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Veneer_Type__c, currentValues);
 			}
 			return lScreenVeneerTypeItems;
 		}
@@ -828,7 +845,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lSillAngleItems== null) {
-				lSillAngleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sill_Angle__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Sill_Angle__c};
+				lSillAngleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sill_Angle__c, currentValues);
 			}
 			return lSillAngleItems;
 		}
@@ -840,7 +858,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lMullSequenceMullionItems== null) {
-				lMullSequenceMullionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Mull_Sequence_Mullion__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Mull_Sequence_Mullion__c};
+				lMullSequenceMullionItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Mull_Sequence_Mullion__c, currentValues);
 			}
 			return lMullSequenceMullionItems;
 		}
@@ -852,7 +871,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lSashRatioItems == null) {
-				lSashRatioItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Ratio__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Sash_Ratio__c};
+				lSashRatioItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Ratio__c, currentValues);
 			}
 			return lSashRatioItems;
 		}
@@ -864,7 +884,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lSashOperationItems == null) {
-				lSashOperationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Operation__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Sash_Operation__c};
+				lSashOperationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Sash_Operation__c, currentValues);
 			}
 			return lSashOperationItems;
 		}
@@ -876,7 +897,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lEJThicknessItems == null) {
-				lEJThicknessItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Thickness__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.EJ_Thickness__c};
+				lEJThicknessItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Thickness__c, currentValues);
 			}
 			return lEJThicknessItems;
 		}
@@ -888,7 +910,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lEJWallDepthItems == null) {
-				lEJWallDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Wall_Depth__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.EJ_Wall_Depth__c};
+				lEJWallDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Wall_Depth__c, currentValues);
 			}
 			return lEJWallDepthItems;
 		}
@@ -900,7 +923,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lEJSpeciesItems == null) {
-				lEJSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Species__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.EJ_Species__c};
+				lEJSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Species__c, currentValues);
 			}
 			return lEJSpeciesItems;
 		}
@@ -912,7 +936,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lEJColorItems == null) {
-				lEJColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.EJ_Color__c};
+				lEJColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.EJ_Color__c, currentValues);
 			}
 			return lEJColorItems;
 		}
@@ -924,7 +949,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lCasingProfileItems == null) {
-				lCasingProfileItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Profile__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Casing_Profile__c};
+				lCasingProfileItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Profile__c, currentValues);
 			}
 			return lCasingProfileItems;
 		}
@@ -936,7 +962,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lCasingSpeciesItems == null) {
-				lCasingSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Species__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Casing_Species__c};
+				lCasingSpeciesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Species__c, currentValues);
 			}
 			return lCasingSpeciesItems;
 		}
@@ -948,7 +975,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lCasingLocationItems == null) {
-				lCasingLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Location__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Casing_Location__c};
+				lCasingLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Casing_Location__c, currentValues);
 			}
 			return lCasingLocationItems;
 		}
@@ -960,7 +988,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lBrickmouldLocationItems == null) {
-				lBrickmouldLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Brickmould_Location__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Brickmould_Location__c};
+				lBrickmouldLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Brickmould_Location__c, currentValues);
 			}
 			return lBrickmouldLocationItems;
 		}
@@ -972,7 +1001,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lDripCapPiecesItems == null) {
-				lDripCapPiecesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Drip_Cap_Pieces__c);
+				Set<String> currentValues = new Set<String>{string.valueof(orderLineItem.Drip_Cap_Pieces__c)};
+				lDripCapPiecesItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Drip_Cap_Pieces__c, currentValues);
 			}
 			return lDripCapPiecesItems;
 		}
@@ -984,7 +1014,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lScreenColorItems == null) {
-				lScreenColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Screen_Color__c};
+				lScreenColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Color__c, currentValues);
 			}
 			return lScreenColorItems;
 		}
@@ -996,7 +1027,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lExteriorGrilleColorItems == null) {
-				lExteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Grille_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Exterior_Grille_Color__c};
+				lExteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Grille_Color__c, currentValues);
 			}
 			return lExteriorGrilleColorItems;
 		}
@@ -1008,7 +1040,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInteriorGrilleColorItems == null) {
-				lInteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Grille_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Interior_Grille_Color__c};
+				lInteriorGrilleColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Grille_Color__c, currentValues);
 			}
 			return lInteriorGrilleColorItems;
 		}
@@ -1020,7 +1053,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lStormWindowColorItems == null) {
-				lStormWindowColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Storm_Window_Color__c};
+				lStormWindowColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Color__c, currentValues);
 			}
 			return lStormWindowColorItems;
 		}
@@ -1032,7 +1066,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lExteriorTrimColorItems == null) {
-				lExteriorTrimColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Exterior_Trim_Color__c};
+				lExteriorTrimColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Trim_Color__c, currentValues);
 			}
 			return lExteriorTrimColorItems;
 		}
@@ -1044,7 +1079,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lJambLinerColorItems == null) {
-				lJambLinerColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Jamb_Liner_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Jamb_Liner_Color__c};
+				lJambLinerColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Jamb_Liner_Color__c, currentValues);
 			}
 			return lJambLinerColorItems;
 		}
@@ -1056,7 +1092,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInteriorSashColorItems == null) {
-				lInteriorSashColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Sash_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Interior_Sash_Color__c};
+				lInteriorSashColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Sash_Color__c, currentValues);
 			}
 			return lInteriorSashColorItems;
 		}
@@ -1068,7 +1105,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lAstragalColorItems == null) {
-				lAstragalColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Astragal__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Astragal__c};
+				lAstragalColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Astragal__c, currentValues);
 			}
 			return lAstragalColorItems;
 		}
@@ -1080,7 +1118,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lStormWindowItems == null) {
-				lStormWindowItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Storm_Window__c};
+				lStormWindowItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window__c, currentValues);
 			}
 			return lStormWindowItems;
 		}
@@ -1092,7 +1131,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lStormWindowStyleItems == null) {
-				lStormWindowStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Style__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Storm_Window_Style__c};
+				lStormWindowStyleItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Storm_Window_Style__c, currentValues);
 			}
 			return lStormWindowStyleItems;
 		}
@@ -1104,7 +1144,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lInstallTrackLocationItems == null) {
-				lInstallTrackLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Install_Track_Location__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Install_Track_Location__c};
+				lInstallTrackLocationItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Install_Track_Location__c, currentValues);
 			}
 			return lInstallTrackLocationItems;
 		}
@@ -1117,7 +1158,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (linteriorPreFinishItems == null) {
-				linteriorPreFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Pre_Finish__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Interior_Pre_Finish__c};
+				linteriorPreFinishItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Interior_Pre_Finish__c, currentValues);
 			}
 			return linteriorPreFinishItems;
 		}
@@ -1130,7 +1172,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lExteriorFrameDepthItems == null) {
-				lExteriorFrameDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Frame_Depth__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Exterior_Frame_Depth__c};
+				lExteriorFrameDepthItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Exterior_Frame_Depth__c, currentValues);
 			}
 			return lExteriorFrameDepthItems;
 		}
@@ -1142,7 +1185,8 @@ public class RMS_prodConfigExtension {
 		get
 		{   
 			if (lDoorSillColorItems == null) {
-				lDoorSillColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Door_Sill_Color__c);
+				Set<String> currentValues = new Set<String>{orderLineItem.Door_Sill_Color__c};
+				lDoorSillColorItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Door_Sill_Color__c, currentValues);
 			}
 			return lDoorSillColorItems;
 		}

@@ -187,7 +187,7 @@
     </fields>
     <fields>
         <fullName>Base_Installer_Rate__c</fullName>
-        <description>Installation Rate for various products and sizes</description>
+        <description>Installation Rate for door products - by size</description>
         <externalId>false</externalId>
         <inlineHelpText>Enter the installation rate</inlineHelpText>
         <label>Base Installer Rate</label>
@@ -2354,6 +2354,32 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Construction_Materials</fullName>
@@ -2398,6 +2424,13 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Misc_Job_and_Unit_Charges</fullName>
@@ -2435,6 +2468,13 @@
             </values>
             <values>
                 <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2521,6 +2561,32 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Window_Pricing_Configuration</fullName>
@@ -2549,6 +2615,32 @@
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>X20400_Doors_Pricing_Configuration</fullName>
@@ -2574,6 +2666,32 @@
             </values>
             <values>
                 <fullName>Primary Installer Invoice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Formula_Type__c</picklist>
+            <values>
+                <fullName>Fixed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Formulaic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quantifiable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Variable</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quantity_Formula__c</picklist>
+            <values>
+                <fullName>UI*2%2F12</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

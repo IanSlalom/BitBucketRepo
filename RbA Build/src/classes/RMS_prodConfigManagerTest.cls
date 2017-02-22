@@ -210,6 +210,30 @@ private class RMS_prodConfigManagerTest {
 		// Verify there are 4 options in the list (including the --select--)			
 		System.AssertEquals(4, options.size());
 
+		// Test with a null current value
+		options = RMS_prodConfigManager.retrievePickListItems(testString, null);
+
+		// Verify there are 4 options in the list (including the --select--)			
+		System.AssertEquals(4, options.size());
+
+		// Test with a null list and two current values
+		options = RMS_prodConfigManager.retrievePickListItems(null, new Set<String>{'currentValue1', 'currentValue2'});
+
+		// Verify there are 3 options in the list (including the --select--)			
+		System.AssertEquals(3, options.size());
+
+		// Test with a blank list and one current value
+		options = RMS_prodConfigManager.retrievePickListItems('', new Set<String>{'currentValue'});
+
+		// Verify there are 2 options in the list (including the --select--)			
+		System.AssertEquals(2, options.size());
+
+		// Test with a picklist and a current value
+		options = RMS_prodConfigManager.retrievePickListItems(testString, new Set<String>{'currentValue', null});
+
+		// Verify there are 5 options in the list (including the --select--) and the current value			
+		System.AssertEquals(5, options.size());
+
 	}	
 
 	/*******************************************************

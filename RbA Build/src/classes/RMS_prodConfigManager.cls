@@ -1206,6 +1206,40 @@ public with sharing class RMS_prodConfigManager {
 		}			   
 		return pickListItems;
 	} 
+
+	/*******************************************************
+					retrievePickListItems method
+	*******************************************************/
+	//Method to receive a multi picklist and return select options for use in a single picklist.
+	public static List<SelectOption> retrievePickListItems(String multiPickList, Set<String> currentValues) {
+		System.Debug('**************multiPickList=' +multiPickList);
+		List<SelectOption> pickListItems = new List<SelectOption>();
+		pickListItems.add(new SelectOption('', '-- Select --'));
+		Set<String> pickListItemsToAdd = new Set<String>();
+
+		// If both the multipicklist and the set of current values is null just return nothing
+		if (String.isBlank(multiPickList) && (currentValues == null)) return pickListItems;
+		
+		// If the multipicklist is not blank, split it into individual strings and add to the set
+		if (!String.isBlank(multiPickList)) {
+			for (String pickListItem : multiPickList.split(';')) {
+				pickListItemsToAdd.add(pickListItem);
+			}
+		}	
+		// If the currentValues list is not blank, split it into individual strings and add to the set
+		if (currentValues != null) {
+			currentValues.remove(null);
+			for (String pickListItem : currentValues) {
+				pickListItemsToAdd.add(pickListItem);
+			}
+		}	
+		// Loop through the set and create select options for each string
+		for (String pickListItem : pickListItemsToAdd) {
+			pickListItems.add(new SelectOption(pickListItem, pickListItem));
+		}
+			
+		return pickListItems;
+	} 
 	
 	/*******************************************************
 					error message methods

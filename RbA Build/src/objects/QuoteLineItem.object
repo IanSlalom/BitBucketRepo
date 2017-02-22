@@ -1080,15 +1080,6 @@
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Dwelling_Room__c</fullName>
-        <externalId>false</externalId>
-        <label>Dwelling Room</label>
-        <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>EJ_Color__c</fullName>
         <description>The EJ Color selected for the product.</description>
         <externalId>false</externalId>
@@ -1860,15 +1851,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Miscellaneous_Charge_Parent_Unit_Id__c</fullName>
-        <externalId>false</externalId>
-        <label>Miscellaneous Charge Parent Unit Id</label>
-        <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Mull_Sequence_Mullion__c</fullName>
         <description>The mull sequence mullion selected for this product.</description>
         <externalId>false</externalId>
@@ -1883,8 +1865,9 @@
         <fullName>Notes__c</fullName>
         <externalId>false</externalId>
         <label>Notes</label>
-        <required>false</required>
-        <type>TextArea</type>
+        <length>4196</length>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Number_of_Panels__c</fullName>
@@ -1944,15 +1927,6 @@
         <externalId>false</externalId>
         <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
         <label>Perm Applied Int Wood Grille</label>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Checked if the permanently applied interior wood grille option was selected.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
-        <label>Permanently Applied Interior Wood Grille</label>
         <type>Checkbox</type>
     </fields>
     <fields>
@@ -2072,6 +2046,15 @@ CASE(Product2.Category__c,
         <scale>0</scale>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Roll_Up_Subtotal__c</fullName>
+        <externalId>false</externalId>
+        <label>Roll Up Subtotal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Room__c</fullName>
@@ -2197,17 +2180,6 @@ CASE(Product2.Category__c,
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Screen_Vaneer_Type__c</fullName>
-        <description>The screen vaneer type applied to this product.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The screen vaneer type applied to this product.</inlineHelpText>
-        <label>Screen Vaneer Type</label>
-        <length>255</length>
-        <required>false</required>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Screen_Veneer_Type__c</fullName>
         <description>The screen veneer type applied to this product.</description>
         <externalId>false</externalId>
@@ -2220,84 +2192,6 @@ CASE(Product2.Category__c,
     </fields>
     <fields>
         <fullName>ServiceDate</fullName>
-    </fields>
-    <fields>
-        <fullName>Sill_Angle__c</fullName>
-        <externalId>false</externalId>
-        <label>Sill Angle</label>
-        <picklist>
-            <picklistValues>
-                <fullName>FS</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>IS</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>0</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>1</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>2</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>5</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>6</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>7</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>8</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>9</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>10</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>11</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>12</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>13</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>14</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Special_Options__c</fullName>

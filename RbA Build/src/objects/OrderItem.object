@@ -885,16 +885,6 @@
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>Dwelling_Room__c</fullName>
-        <externalId>false</externalId>
-        <label>Dwelling Room</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>EJ_Color__c</fullName>
         <description>The EJ Color selected for the product.</description>
         <externalId>false</externalId>
@@ -1442,6 +1432,16 @@
         <inlineHelpText>The number of hubs selected for the product.</inlineHelpText>
         <label>Hubs</label>
         <length>2</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IF_FF__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(CONTAINS(Frame_Type__c, &quot;Full&quot;),&quot;FF&quot;,IF(CONTAINS(Frame_Type__c, &quot;Insert&quot;),&quot;IF&quot;,null))</formula>
+        <label>IF/FF</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Text</type>
@@ -2014,16 +2014,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Miscellaneous_Charge_Parent_Unit_Id__c</fullName>
-        <externalId>false</externalId>
-        <label>Miscellaneous Charge Parent Unit Id</label>
-        <length>255</length>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Mull_Sequence_Mullion__c</fullName>
         <description>The mull sequence mullion selected for this product.</description>
         <externalId>false</externalId>
@@ -2085,11 +2075,10 @@
         <fullName>Notes__c</fullName>
         <externalId>false</externalId>
         <label>Notes</label>
-        <length>255</length>
-        <required>false</required>
+        <length>4196</length>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Number_Manufacturer_Charges__c</fullName>
@@ -2255,16 +2244,6 @@
         <externalId>false</externalId>
         <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
         <label>Perm Applied Int Wood Grille</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
-        <fullName>Permanently_Applied_Interior_Wood_Grille__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Checked if the permanently applied interior wood grille option was selected.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Checked if the permanently applied interior wood grille option was selected.</inlineHelpText>
-        <label>Permanently Applied Interior Wood Grille</label>
         <trackHistory>false</trackHistory>
         <type>Checkbox</type>
     </fields>
@@ -3332,14 +3311,6 @@ a Construction Material is figured</inlineHelpText>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>isStandardSize__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Standard Size</label>
-        <trackHistory>false</trackHistory>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>isTechMeasureComplete__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Used in rSuite to indicate that all of the Tech Measure items are complete for a particular unit</description>
@@ -3388,6 +3359,17 @@ LEN(Child_Product_Pricebook_Entry_Id__c) &lt; 15
         <errorDisplayField>Child_Product_Pricebook_Entry_Id__c</errorDisplayField>
         <errorMessage>Invalid PricebookEntry Id</errorMessage>
     </validationRules>
+    <webLinks>
+        <fullName>Add_Line_Item</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Add Line Item</masterLabel>
+        <openType>sidebar</openType>
+        <page>RMS_prodConfigEdit</page>
+        <protected>false</protected>
+    </webLinks>
     <webLinks>
         <fullName>Add_Product</fullName>
         <availability>online</availability>

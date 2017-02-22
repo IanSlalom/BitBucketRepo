@@ -1399,23 +1399,6 @@
         <type>Picklist</type>
     </fields>
     <fields>
-        <fullName>Exterior_Door_Jamb__c</fullName>
-        <externalId>false</externalId>
-        <label>Exterior Door Jamb</label>
-        <picklist>
-            <picklistValues>
-                <fullName>6 9/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>10</visibleLines>
-    </fields>
-    <fields>
         <fullName>Exterior_Frame_Depth_Control__c</fullName>
         <externalId>false</externalId>
         <label>Exterior Frame Depth Control</label>
@@ -1568,27 +1551,6 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Exterior_Keyed_Lock__c</fullName>
-        <externalId>false</externalId>
-        <label>Exterior Keyed Lock</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Normal</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Exterior_Trim_Color_Control__c</fullName>
@@ -3579,23 +3541,6 @@ Used for Makeability and Tech Measure.</description>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Interior_Extension_Jamb_Kit__c</fullName>
-        <externalId>false</externalId>
-        <label>Interior Extension Jamb Kit</label>
-        <picklist>
-            <picklistValues>
-                <fullName>6 9/16</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>10</visibleLines>
     </fields>
     <fields>
         <fullName>Interior_Grille_Color_Control__c</fullName>
@@ -6688,59 +6633,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
-        <fullName>Screen_Vaneer_Type_Control__c</fullName>
-        <description>Controls whether Screen Vaneer Type is required, enabled, or disabled for this product configuration.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Controls whether Screen Vaneer Type is required, enabled, or disabled for this product configuration.</inlineHelpText>
-        <label>Screen Vaneer Type Control</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
-    </fields>
-    <fields>
-        <fullName>Screen_Vaneer_Type__c</fullName>
-        <description>Select the screen vaneer types that should be made available for selection in the product configuration page.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Select the screen vaneer types that should be made available for selection in the product configuration page.</inlineHelpText>
-        <label>Screen Vaneer Type</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MultiselectPicklist</type>
-        <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
         <fullName>Screen_Veneer_Type_Control__c</fullName>
         <description>Controls whether Screen Veneer Type is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -7116,30 +7008,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         <trackTrending>false</trackTrending>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
-    </fields>
-    <fields>
-        <fullName>Standard_Size_Control__c</fullName>
-        <externalId>false</externalId>
-        <label>Standard Size</label>
-        <picklist>
-            <picklistValues>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Storm_Window_Color_Control__c</fullName>
@@ -8817,6 +8685,10 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
+                <fullName>Natural</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Oak</fullName>
                 <default>false</default>
             </values>
@@ -9149,13 +9021,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Exterior_Door_Jamb__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Exterior_Frame_Depth_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -9245,32 +9110,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         </picklistValues>
         <picklistValues>
             <picklist>Exterior_Keyed_Lock_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Keyed_Lock__c</picklist>
-            <values>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Normal</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Trim_Color_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
                 <default>false</default>
@@ -9910,6 +9749,13 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Hardware_Style__c</picklist>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Height_Backdown_Fractions__c</picklist>
             <values>
                 <fullName>1%2F16</fullName>
@@ -10403,13 +10249,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Interior_Extension_Jamb_Kit__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -12350,36 +12189,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Screen_Vaneer_Type_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Screen_Vaneer_Type__c</picklist>
-            <values>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Screen_Veneer_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -12563,21 +12372,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         </picklistValues>
         <picklistValues>
             <picklist>Spokes_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Standard_Size_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
                 <default>false</default>
@@ -13645,6 +13439,10 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
+                <fullName>Natural</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Oak</fullName>
                 <default>false</default>
             </values>
@@ -13977,13 +13775,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Exterior_Door_Jamb__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Exterior_Frame_Depth_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -14083,17 +13874,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Keyed_Lock__c</picklist>
-            <values>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Normal</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -14738,6 +14518,13 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Hardware_Style__c</picklist>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Height_Backdown_Fractions__c</picklist>
             <values>
                 <fullName>1%2F16</fullName>
@@ -15231,13 +15018,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Interior_Extension_Jamb_Kit__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -17178,36 +16958,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Screen_Vaneer_Type_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Screen_Vaneer_Type__c</picklist>
-            <values>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Screen_Veneer_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -17391,21 +17141,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         </picklistValues>
         <picklistValues>
             <picklist>Spokes_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Standard_Size_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
                 <default>false</default>
@@ -18608,14 +18343,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>EJ_Wall_Depth__c</picklist>
             <values>
-                <fullName>4 9%2F16%22</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>6 9%2F16%22</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Custom</fullName>
                 <default>false</default>
             </values>
@@ -18824,13 +18551,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Exterior_Door_Jamb__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Exterior_Frame_Depth_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -18930,17 +18650,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Keyed_Lock__c</picklist>
-            <values>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Normal</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -20184,13 +19893,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Interior_Extension_Jamb_Kit__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -22210,36 +21912,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Screen_Vaneer_Type_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Screen_Vaneer_Type__c</picklist>
-            <values>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Screen_Veneer_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -22496,21 +22168,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>9</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Standard_Size_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -23703,14 +23360,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>EJ_Wall_Depth__c</picklist>
             <values>
-                <fullName>4 9%2F16%22</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>6 9%2F16%22</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Custom</fullName>
                 <default>false</default>
             </values>
@@ -23919,13 +23568,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Exterior_Door_Jamb__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Exterior_Frame_Depth_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -24025,17 +23667,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Keyed_Lock__c</picklist>
-            <values>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Normal</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -25279,13 +24910,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Interior_Extension_Jamb_Kit__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -27305,36 +26929,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Screen_Vaneer_Type_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Screen_Vaneer_Type__c</picklist>
-            <values>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Screen_Veneer_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -27591,21 +27185,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>9</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Standard_Size_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -28995,13 +28574,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Exterior_Door_Jamb__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Exterior_Frame_Depth_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -29101,17 +28673,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Exterior_Keyed_Lock__c</picklist>
-            <values>
-                <fullName>All Metal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Normal</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -29756,6 +29317,13 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Hardware_Style__c</picklist>
+            <values>
+                <fullName>Standard</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Height_Backdown_Fractions__c</picklist>
             <values>
                 <fullName>1%2F16</fullName>
@@ -30249,13 +29817,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Interior_Extension_Jamb_Kit__c</picklist>
-            <values>
-                <fullName>6 9%2F16</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -32196,36 +31757,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Screen_Vaneer_Type_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Screen_Vaneer_Type__c</picklist>
-            <values>
-                <fullName>Maple</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Oak</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Pine</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
             <picklist>Screen_Veneer_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -32409,21 +31940,6 @@ Used for Makeability and rSuite Tech Measure.</description>
         </picklistValues>
         <picklistValues>
             <picklist>Spokes_Control__c</picklist>
-            <values>
-                <fullName>Disabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Enabled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Required</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Standard_Size_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
                 <default>false</default>
