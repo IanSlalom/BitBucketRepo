@@ -37,7 +37,9 @@
         };
 
         function setStatus() {
-            document.getElementById('{!$Component.theForm}').elements['j_id0:theForm:hideSection:j_id31:hiddenField1'].value = 'Ready to Order';
+            // document.getElementById('{!$Component.theForm}').elements['j_id0:theForm:hideSection:j_id31:hiddenField1'].value = 'Ready to Order';
+            document.getElementById('hiddenField1').value = 'Ready to Order';
+            console.log(document.getElementById('hiddenField1').value);
         };
 
     
@@ -65,12 +67,13 @@
         <apex:pageBlock title="Service Order" id="hideSection">              
             <apex:pageBlockSection columns="1" collapsible="true">
                 <apex:inputField value="{!Order.EffectiveDate}" id="startDate"/>
-                <apex:inputField value="{!Order.Status}" id="hiddenField1"/>
+                <!-- <div id='hiddenfield'><apex:inputField value="{!Order.Status}" id="hiddenField1"/></div> -->
                  <apex:inputField value="{!Order.Accountid}" />
                 <apex:inputField value="{!Order.Store_Location__c}" /> 
             </apex:pageBlockSection>
         </apex:pageBlock>
         <apex:actionFunction name="saveOrder" action="{!saveOrder}"/>
+        <div id='hiddenField1'>{!Order.Status}</div>
         <div id="aid" style="display:none;">{!aid}</div>
         <div id="slid" style="display:none;">{!slid}</div>
     </apex:form>   

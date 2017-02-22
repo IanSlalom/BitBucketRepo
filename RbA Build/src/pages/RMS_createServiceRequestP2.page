@@ -34,7 +34,7 @@
         <apex:pageBlock title="Service Request">
             <apex:pageBlockButtons location="both">
                 <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>
-                <apex:commandButton action="{!saveClose}" value="Save"/>                
+                <apex:commandButton value="Save" action="{!saveClose}"/>                
                 <apex:commandButton value="Continue" action="{!saveContinue}"/>
             </apex:pageBlockButtons> 
             
@@ -127,5 +127,6 @@
             </apex:pageBlockSection>
             
         </apex:pageBlock>
+        <div id="orderId" style="display:none;">{!Order.Id}</div>
     </apex:form>   
 </apex:page>

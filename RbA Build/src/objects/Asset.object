@@ -117,6 +117,20 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>Legacy_Asset__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <inlineHelpText>Used for Service Requests when there is not an asset on the account</inlineHelpText>
+        <label>Legacy Asset</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>LocationId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Location_Details__c</fullName>
         <description>Combines details about the Asset for UI on creating a Service Request.</description>
         <externalId>false</externalId>
@@ -612,7 +626,7 @@
         <fullName>Closed_Order_Asset_Rule</fullName>
         <active>true</active>
         <description>Cannot add/edit assets for a closed order.</description>
-        <errorConditionFormula>TEXT(Sold_Order__r.Status) == &apos;Job Closed&apos;</errorConditionFormula>
+        <errorConditionFormula>AND(TEXT(Sold_Order__r.Status) == &apos;Job Closed&apos;,$Profile.Name &lt;&gt; &quot;RMS-Data Integration&quot;)</errorConditionFormula>
         <errorMessage>You can not add or edit assets for a closed order.</errorMessage>
     </validationRules>
     <validationRules>

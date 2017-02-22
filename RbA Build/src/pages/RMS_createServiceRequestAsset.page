@@ -1,0 +1,61 @@
+<apex:page standardController="Asset" showHeader="false" sidebar="false" extensions="RMS_createServiceRequestAssetManager">
+    <apex:pageMessages />
+    <apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+    <apex:includeScript value="/support/console/26.0/integration.js"/>
+    <apex:includeScript value="{!$Resource.jquery}" />
+    
+    <script type="text/javascript">
+    window.onload = function() {
+        testOpenSubtab();        
+        
+    };
+    
+
+    function testOpenSubtab() {
+        //First find the ID of the primary tab to put the new subtab in
+        sforce.console.getEnclosingPrimaryTabId(openSubtab);
+    };
+    
+    var openSubtab = function openSubtab(result) {
+        var primaryTabId = result.id;
+        sforce.console.setTabTitle('Create Asset');
+    }; 
+    
+        function  getAccountId()
+    {
+        return document.getElementById( 'aid' ).innerHTML;
+    }
+    
+            function  getSLId()
+    {
+        return document.getElementById( 'slid' ).innerHTML;
+    }
+    
+    </script>
+    <apex:form id="theForm">
+        <apex:pageBlock title="Create Asset">
+            <apex:pageBlockButtons location="both">
+               <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>               
+                <apex:commandButton action="{!saveContinueAsset}" value="Continue"/>
+            </apex:pageBlockButtons> 
+
+            
+            <apex:pageBlockSection >
+                <apex:inputField value="{!Asset.ContactId}" required="true"/>
+                <apex:outputField value="{!Asset.Name}"/>
+                <apex:inputField value="{!Asset.Product2Id}" required="true"/>      
+                <apex:outputField value="{!Asset.AccountId}" id="aid"/> 
+                <apex:inputField value="{!Asset.Quantity}" required="true"/>               
+                <apex:outputField value="{!Asset.Store_Location__c}" id="slid"/> 
+                <apex:inputField value="{!Asset.Unit_Wholesale_Cost__c}"/>
+                <apex:inputField value="{!Asset.Variant_Number__c}"/>
+                <apex:inputField value="{!Asset.Price}"/>                              
+                <apex:inputField value="{!Asset.Vendor__c}"/>
+                <apex:inputField value="{!Asset.InstallDate}"/>                 
+                <apex:inputField value="{!Asset.Description}" style="width: 288px; height: 118px;"/>                                                                                
+            </apex:pageBlockSection>            
+            
+        </apex:pageBlock>
+        
+    </apex:form>   
+</apex:page>

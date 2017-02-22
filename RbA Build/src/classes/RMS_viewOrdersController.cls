@@ -19,6 +19,8 @@ public with sharing class RMS_viewOrdersController {
     public String strurl;
     public String baseUrl{get;set;}
     public String createServiceRequestURL{get;set;}
+    public String createAssetURL{get;set;}
+    public integer num_assets;
     
     public Id serviceRecordTypeId{get;set;}
     public Id CORORecordTypeId{get;set;}
@@ -71,7 +73,17 @@ public with sharing class RMS_viewOrdersController {
                   AND 	AccountId =: acc.Id];	 
         
         system.debug(orders);
-        createServiceRequestURL = '/apex/RMS_createServiceRequestRedirect?aid='+acc.Id+'&slid='+acc.Store_Location__c; 
+        
+        List<AggregateResult> results2=[select COUNT (Id) 
+                                        FROM Asset 
+                                        WHERE AccountId = :acc.Id];
+        num_assets = (Integer) results2[0].get('expr0');
+        
+        If (num_assets > 0){
+            createServiceRequestURL = '/apex/RMS_createServiceRequestRedirect?aid='+acc.Id+'&slid='+acc.Store_Location__c; 
+        } else {
+            createServiceRequestURL = '/apex/RMS_createAssetRedirect?aid='+acc.Id+'&slid='+acc.Store_Location__c+'&name=NewAsset';    
+        }        
         
     }
     

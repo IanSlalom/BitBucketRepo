@@ -24,25 +24,214 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     public integer sales_tax;
     public list<OrderItem > listOI{ get; set; }  
     public Integer invalidRequest;
-    public List<Service_Product__c> serviceProducts {get;set;}
-    public List<Asset> selectedAssets {get;set;}
+    public List<Service_Product__c> serviceProducts {
+        get{
+            system.debug('***** '+ serviceProducts);
+            if(serviceProducts == null){
+                serviceProducts = [SELECT Id, Name, Master_Product__c,
+                                    Service_Product__c, Service_Product__r.Name
+                                    FROM Service_Product__c
+                                    WHERE Master_Product__c in: assetIdToProductIdMap.values()
+                                    ORDER BY Name];                 
+            } 
+            return serviceProducts;
+        }
+        set;
+    }
+    public List<Asset> selectedAssets {
+         get{
+            system.debug('******** selectedAssets ' + selectedAssets);
+            if (selectedAssets ==  null){
+                selectedAssets = [SELECT Id, Name, Product_Name__c, Install_Date__c,
+                          Product2Id, Variant_Number__c, Product2.Name, Original_Order_Variant_Number__c, 
+                          Location_Details__c, Original_Order_Product__c, Status
+                          FROM Asset 
+                          WHERE Id = :assetIds
+                          AND Status != 'Replaced'
+                          ORDER BY Name];
+            }  
+            return selectedAssets;            
+        }
+        set;
+    }
     public Id masterProductId = UtilityMethods.GetRecordTypeIdsMapForSObject(Product2.sObjectType).get('Master_Product');    
-    public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;}   
-    public Boolean hasValidationErrors {get{return ApexPages.hasMessages(ApexPages.Severity.ERROR);}}
+    public Map<Id,List<ProductWrapper>> AssetToProductWrapperMap{get;set;} //transient   
+    public Boolean hasValidationErrors {
+        get{
+            return ApexPages.hasMessages(ApexPages.Severity.ERROR);
+        }
+    }
     public String baseURL{get;set;}
     public String cancelUpdateURL{get;set;}
-    Public string propPickValSelected2 { get; set; }
+    public string propPickValSelected2 { get; set; }
     public String updateSTURL{get;set;}
     public String editRedirect{get;set;}
-    private List<OrderItem> allAccs {get; set;}
+    public List<OrderItem> allAccs {get; set;}
     public List<GroupWrapper> groups {get; set;}
     public String groupFieldName {get; set;}
     public List<SelectOption> groupOptions {get; set;}
     public List<Charge__c> charges {get; set;}
-    public list<OrderItem > listOILegacy{ get; set; }    
-    public List<Product2> selectedProductsLegacy {get;set;}
-    public List<Service_Product__c> serviceProductsLegacy {get;set;}
-    public Map<Id,List<ProductWrapper2>> ProductToProductWrapperMapLegacy{get;set;}
+    public list<OrderItem> listOILegacy{ get; set; }  
+    private static List<id> productIds{
+        get{
+            system.debug('****** '+ productIds);
+            if (productIds == null){
+                productIds = new List<id>();
+                for(Product2 p : [SELECT Id,Has_Service_Products__c
+                                  FROM Product2 
+                                  WHERE Has_Service_Products__c = TRUE]){
+                    productIds.add(p.id);
+                } 
+            }
+            return productIds;
+        }
+        set;
+    }  //transient
+    public Map<Id, String> selectedProductsLegacy {
+        get{
+            if(selectedProductsLegacy == null){
+                selectedProductsLegacy = new Map<Id,String>();
+                List<Product2> listselectedProductsLegacy = [SELECT Id, Name
+                                          FROM Product2
+                                          WHERE Id IN: productIds
+                                          ORDER BY Name
+                                          LIMIT 100];
+                                          for (Product2 p:listselectedProductsLegacy){
+                                            selectedProductsLegacy.put(p.Id, p.Name);
+                                          }
+            }  
+            return selectedProductsLegacy;                    
+        }
+        set;
+    } //transient
+    private List<Service_Product__c> serviceProductsLegacy {
+        get{
+            if (serviceProductsLegacy == null ){
+                serviceProductsLegacy = new List<Service_Product__c>();
+                serviceProductsLegacy = [SELECT    Id, Name, Master_Product__c,
+                  Service_Product__c, Service_Product__r.Name
+                  FROM Service_Product__c
+                  WHERE Master_Product__c in: selectedProductsLegacy.keySet()
+                  ORDER BY Name];
+            }
+            return serviceProductsLegacy;
+           }
+        set;
+    }
+    public Map<Id,List<ProductWrapper2>> ProductToProductWrapperMapLegacy{
+        get{
+            if (ProductToProductWrapperMapLegacy == null && masterProductToProductWrapperMapLegacy != null){
+                ProductToProductWrapperMapLegacy = new Map<Id, List<ProductWrapper2>>();
+                integer i=1;
+                for(Id p: selectedProductsLegacy.keySet()){
+                    if(masterProductToProductWrapperMapLegacy.containsKey(p)){
+                        ProductToProductWrapperMapLegacy.put(p,masterProductToProductWrapperMapLegacy.get(p).clone());
+                    }else{
+                        ProductToProductWrapperMapLegacy.put(p, new List<ProductWrapper2>());
+                    }
+
+                    i=i+1;
+                    system.debug('incrementing counter  ProductToProductWrapperMapLegacy '+ i);
+                    if(i>100){
+                        //break;
+                    }
+                }
+            } 
+            return ProductToProductWrapperMapLegacy;
+        }
+        set;
+    } //transient
+    public Map<Id,List<ProductWrapper2>> masterProductToProductWrapperMapLegacy{
+        get{
+            if (masterProductToProductWrapperMapLegacy == null){
+                masterProductToProductWrapperMapLegacy = new Map<Id,List<ProductWrapper2>>();
+                integer i=1;
+                for(Service_Product__c prod: [SELECT Id, Name, Master_Product__c,
+                                              Service_Product__c, Service_Product__r.Name
+                                              FROM Service_Product__c
+                                              WHERE Master_Product__c in: selectedProductsLegacy.keySet()
+                                              ORDER BY Name]){
+
+                    if(masterProductToProductWrapperMapLegacy.containsKey(prod.Master_Product__c)){
+                        masterProductToProductWrapperMapLegacy.get(prod.Master_Product__c).add(new ProductWrapper2(prod));
+                    }else{
+                        masterProductToProductWrapperMapLegacy.put(prod.Master_Product__c,new List<ProductWrapper2>{new ProductWrapper2(prod)});
+                    }
+
+                    i=i+1;
+                    system.debug('incrementing counter masterProductToProductWrapperMapLegacy '+ i);
+                    if(i>100){
+                        //break;
+                    }
+                }
+            }
+        return masterProductToProductWrapperMapLegacy;
+        }
+        set;
+    } //transient
+    public Map<Id,List<ProductWrapper>> masterProductToProductWrapperMap{
+        get{
+            if (masterProductToProductWrapperMap == null){
+                masterProductToProductWrapperMap = new Map<Id,List<ProductWrapper>>();
+                integer i=1;
+                for(Service_Product__c prod: serviceProducts){
+                    if(masterProductToProductWrapperMap.containsKey(prod.Master_Product__c)){
+                        masterProductToProductWrapperMap.get(prod.Master_Product__c).add(new ProductWrapper(prod));
+                    }else{
+                        masterProductToProductWrapperMap.put(prod.Master_Product__c,new List<ProductWrapper>{new ProductWrapper(prod)});
+                    }
+
+                    i=i+1;
+                    system.debug('incrementing counter masterProductToProductWrapperMap '+ i);
+                    if(i>100){
+                        //break;
+                    }
+                }
+            }
+            return masterProductToProductWrapperMap;
+        }
+        set;
+    } //transient
+    public Map<Id,Id> assetIdToProductIdMap{
+        get{
+            if (assetIdToProductIdMap == null){
+                assetIdToProductIdMap = new Map<Id,Id>();
+                system.debug('******* ' + assetIdToProductIdMap);
+                for(Asset a: [SELECT    Id, Name, Product_Name__c, Install_Date__c,
+                              Product2Id, Variant_Number__c, Product2.Name, 
+                              Original_Order_Variant_Number__c, Location_Details__c, 
+                              Original_Order_Product__c, Status
+                              FROM Asset 
+                              WHERE Id = :assetIds
+                              AND Status != 'Replaced'
+                              ORDER BY Name]){
+                    assetIdToProductIdMap.put(a.Id, a.Product2Id);
+                }
+                system.debug('******* assetIdToProductIdMap ' + assetIdToProductIdMap);
+            } 
+            return assetIdToProductIdMap;
+        }
+        set;
+    } //transient
+    public List<id> assetIds{
+        get{
+            system.debug('******* in getassetIds()');
+            system.debug('******* in o.AccountId '+ o.AccountId);
+            if (assetIds == null){
+                system.debug('******* assetIds = was null ' + o.AccountId);
+                assetIds = new List<id>();
+                for(Asset a : [SELECT Id,Product2.RecordTypeId,Product2.Has_Service_Products__c
+                               FROM Asset 
+                               WHERE AccountId = :o.AccountId
+                               AND Product2.Has_Service_Products__c = TRUE]){
+                                   assetIds.add(a.id);
+                } 
+            }
+            system.debug('******* in getassetIds() ' + assetIds);
+            return assetIds;
+        }
+        set;
+    } //transient
     
     public RMS_ServiceOrderExtensionMgr(ApexPages.StandardController stdController) {
         if(!test.isRunningTest()){
@@ -71,69 +260,62 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                                         WHERE AccountId = :aid];
         num_assets = (Integer) results2[0].get('expr0');
         
-        
-        
-        listOI=new list<OrderItem>();
-        
-        allAccs=[select id, OrderId, Product_Name__c,Installed_Product_Name__c,
+        listOI = new list<OrderItem>();
+        system.debug('****** ApexPages.currentPage().getParameters().get(Id) ' + ApexPages.currentPage().getParameters().get('Id'));
+        allAccs = [select id, OrderId, Product_Name__c,Installed_Product_Name__c,
                  (select id, Charge_Cost_To__c, Category__c, What_Where__c, Service_Product__c, Service_Request__c from Charges__r)
                  from OrderItem
                  where OrderId =: o.Id];
+        system.debug('*******  allAccs ' +allAccs);         
+        //ApexPages.currentPage().getParameters().get('Id')         
         
-        groupFieldName='Installed_Product_Name__c';
+        groupFieldName = 'Installed_Product_Name__c';
         
         setupGrouping();
-        groupOptions=new List<SelectOption>();
+        groupOptions = new List<SelectOption>();
         groupOptions.add(new SelectOption('Installed_Product_Name__c', 'Installed_Product_Name__c'));
+        listOILegacy = new list<OrderItem>();
         //finding the Assets of the related Account to populate on P2 list
         //code then finds the products for each of the Assets and then
         //displays the Service Products for each Product availble to select
         //for the Service Request
-        List<id> assetIds=new List<id>();
-        for(Asset a : [SELECT    Id,Product2.RecordTypeId
-                       FROM Asset 
-                       WHERE AccountId = :o.AccountId
-                       AND Product2.RecordTypeId = :masterProductId]){
-                           assetIds.add(a.id);
-                       }        
-        selectedAssets = [SELECT    Id,
-                          Name,
-                          Product_Name__c, 
-                          Install_Date__c,
-                          Product2Id,
-                          Variant_Number__c,
-                          Product2.Name, 
-                          Original_Order_Variant_Number__c, 
-                          Location_Details__c,
-                          Original_Order_Product__c,
-                          Status
-                          FROM Asset 
-                          WHERE Id = :assetIds
-                          AND Status != 'Replaced'
-                          ORDER BY Name];
+        //assetIds = new List<id>();
+        //for(Asset a : [SELECT Id,Product2.RecordTypeId,Product2.Has_Service_Products__c
+        //               FROM Asset 
+        //               WHERE AccountId = :o.AccountId
+        //               AND Product2.Has_Service_Products__c = TRUE]){
+        //                   assetIds.add(a.id);
+        //}        
+        //selectedAssets = [SELECT Id, Name, Product_Name__c, Install_Date__c,
+        //                  Product2Id, Variant_Number__c, Product2.Name, Original_Order_Variant_Number__c, 
+        //                  Location_Details__c, Original_Order_Product__c, Status
+        //                  FROM Asset 
+        //                  WHERE Id = :assetIds
+        //                  AND Status != 'Replaced'
+        //                  ORDER BY Name];
         
-        //Mapping Assets to Products, grabbing ids
-        Map<Id,Id> assetIdToProductIdMap = new Map<Id,Id>();
-        for(Asset a: selectedAssets){
-            assetIdToProductIdMap.put(a.Id,a.Product2Id);
-        }
-        List<Service_Product__c> serviceProducts = [SELECT    Id,
-                                                    Name,
-                                                    Master_Product__c,
-                                                    Service_Product__c,
-                                                    Service_Product__r.Name
-                                                    FROM Service_Product__c
-                                                    WHERE Master_Product__c in: assetIdToProductIdMap.values()
-                                                    ORDER BY Name];
-        Map<Id,List<ProductWrapper>> masterProductToProductWrapperMap = new Map<Id,List<ProductWrapper>>();
-        
-        for(Service_Product__c prod: serviceProducts){
-            if(masterProductToProductWrapperMap.containsKey(prod.Master_Product__c)){
-                masterProductToProductWrapperMap.get(prod.Master_Product__c).add(new ProductWrapper(prod));
-            }else{
-                masterProductToProductWrapperMap.put(prod.Master_Product__c,new List<ProductWrapper>{new ProductWrapper(prod)});
-            }
-        }
+        ////Mapping Assets to Products, grabbing ids
+        //assetIdToProductIdMap = new Map<Id,Id>();
+        //for(Asset a: selectedAssets){
+        //    assetIdToProductIdMap.put(a.Id,a.Product2Id);
+        //}
+        //serviceProducts = [SELECT    Id,
+        //                                            Name,
+        //                                            Master_Product__c,
+        //                                            Service_Product__c,
+        //                                            Service_Product__r.Name
+        //                                            FROM Service_Product__c
+        //                                            WHERE Master_Product__c in: assetIdToProductIdMap.values()
+        //                                            ORDER BY Name];
+
+        //masterProductToProductWrapperMap = new Map<Id,List<ProductWrapper>>();
+        //for(Service_Product__c prod: serviceProducts){
+        //    if(masterProductToProductWrapperMap.containsKey(prod.Master_Product__c)){
+        //        masterProductToProductWrapperMap.get(prod.Master_Product__c).add(new ProductWrapper(prod));
+        //    }else{
+        //        masterProductToProductWrapperMap.put(prod.Master_Product__c,new List<ProductWrapper>{new ProductWrapper(prod)});
+        //    }
+        //}
         
         
         AssetToProductWrapperMap = new Map<Id, List<ProductWrapper>>();
@@ -150,73 +332,218 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
         system.debug(AssetToProductWrapperMap);
         
-        listOILegacy=new list<OrderItem>();
         
-        List<id> productIds=new List<id>();
-        for(Product2 p : [SELECT    Id
-                          FROM Product2 
-                          WHERE RecordTypeId = :masterProductId]){
-                              productIds.add(p.id);
-                          }        
-        selectedProductsLegacy = [SELECT Id, 
-                                  Name
-                                  FROM Product2
-                                  WHERE Id IN: productIds
-                                  ORDER BY Name];
+        //productIds = new List<id>();
+        //for(Product2 p : [SELECT    Id,Has_Service_Products__c
+        //                  FROM Product2 
+        //                  WHERE Has_Service_Products__c = TRUE]){
+        //                      productIds.add(p.id);
+        //                  }        
+        //selectedProductsLegacy = [SELECT Id, 
+        //                          Name
+        //                          FROM Product2
+        //                          WHERE Id IN: productIds
+        //                          ORDER BY Name];
         
-        //Map<Id,Id> assetIdToProductIdMap = new Map<Id,Id>();
-        //for(Asset a: selectedAssets){
-        //assetIdToProductIdMap.put(a.Id,a.Product2Id);
-        //}
-        
-        
-        List<Service_Product__c> serviceProductsLegacy = [SELECT    Id,
-                                                          Name,
-                                                          Master_Product__c,
-                                                          Service_Product__c,
-                                                          Service_Product__r.Name
-                                                          FROM Service_Product__c
-                                                          WHERE Master_Product__c in: selectedProductsLegacy
-                                                          ORDER BY Name];
-        Map<Id,List<ProductWrapper2>> masterProductToProductWrapperMapLegacy = new Map<Id,List<ProductWrapper2>>();
-        
-        for(Service_Product__c prod: serviceProductsLegacy){
-            if(masterProductToProductWrapperMapLegacy.containsKey(prod.Master_Product__c)){
-                masterProductToProductWrapperMapLegacy.get(prod.Master_Product__c).add(new ProductWrapper2(prod));
-            }else{
-                masterProductToProductWrapperMapLegacy.put(prod.Master_Product__c,new List<ProductWrapper2>{new ProductWrapper2(prod)});
-            }
+        assetIdToProductIdMap = new Map<Id,Id>();
+        for(Asset a: selectedAssets){
+            assetIdToProductIdMap.put(a.Id,a.Product2Id);
         }
         
+        //serviceProductsLegacy = [SELECT    Id, Name, Master_Product__c,
+        //                      Service_Product__c, Service_Product__r.Name
+        //                      FROM Service_Product__c
+        //                      WHERE Master_Product__c in: selectedProductsLegacy.keySet()
+        //                      ORDER BY Name];
         
-        ProductToProductWrapperMapLegacy = new Map<Id, List<ProductWrapper2>>();
-        for(Product2 p: selectedProductsLegacy){
-            if(masterProductToProductWrapperMapLegacy.containsKey(p.Id)){
-                ProductToProductWrapperMapLegacy.put(p.Id,masterProductToProductWrapperMapLegacy.get(p.Id).clone());
-            }else{
-                ProductToProductWrapperMapLegacy.put(p.Id, new List<ProductWrapper2>());
+    } 
+    //public List<OrderItem> getallAccs(){
+    //    if (allAccs == null){
+    //        allAccs = [select id, OrderId, Product_Name__c,Installed_Product_Name__c,
+    //         (select id, Charge_Cost_To__c, Category__c, What_Where__c, Service_Product__c, Service_Request__c from Charges__r)
+    //         from OrderItem
+    //         where OrderId =:ApexPages.currentPage().getParameters().get('Id')];
+    //        return allAccs;
+    //     } else {
+    //        return allAccs;
+    //     }
+    //}
+    //public List<Asset> getselectedAssets(){
+    //    system.debug('********** in getselectedAssets ');
+    //    if (selectedAssets == null){
+    //        system.debug('********** assetIds ' + assetIds);
+    //        selectedAssets = [SELECT Id, Name, Product_Name__c, Install_Date__c, Product2Id,
+    //              Variant_Number__c,Product2.Name, Original_Order_Variant_Number__c, 
+    //              Location_Details__c, Original_Order_Product__c, Status
+    //              FROM Asset 
+    //              WHERE Id = :assetIds
+    //              AND Status != 'Replaced'
+    //              ORDER BY Name];
+    //        return selectedAssets;
+    //    } else {
+    //        return selectedAssets;
+    //    }
+    //}
+    //public List<id> getAssetIds(){
+    //    system.debug('******* in getassetIds()');
+    //    system.debug('******* in o.AccountId '+ o.AccountId);
+    //    if (assetIds == null){
+    //        system.debug('******* ' + o.AccountId);
+    //        assetIds = new List<id>();
+    //        for(Asset a : [SELECT Id,Product2.RecordTypeId,Product2.Has_Service_Products__c
+    //                       FROM Asset 
+    //                       WHERE AccountId = :o.AccountId
+    //                       AND Product2.Has_Service_Products__c = TRUE]){
+    //                           assetIds.add(a.id);
+    //        } 
+    //        return assetIds;
+    //    } else {
+    //        return assetIds;
+    //    }
+    //}
+
+    //public List<Service_Product__c> getserviceProducts(){
+    //    if (serviceProducts == null){
+    //        serviceProducts = [SELECT Id, Name, Master_Product__c,
+    //                            Service_Product__c, Service_Product__r.Name
+    //                            FROM Service_Product__c
+    //                            WHERE Master_Product__c in: assetIdToProductIdMap.values()
+    //                            ORDER BY Name];                      
+    //    }
+    //    return serviceProducts;
+    //}
+    //public Map<Id,Id> getassetIdToProductIdMap(){
+        
+    //    if (assetIdToProductIdMap == null){
+    //        assetIdToProductIdMap = new Map<Id,Id>();
+    //        for(Asset a: [SELECT    Id,
+    //                          Name,
+    //                          Product_Name__c, 
+    //                          Install_Date__c,
+    //                          Product2Id,
+    //                          Variant_Number__c,
+    //                          Product2.Name, 
+    //                          Original_Order_Variant_Number__c, 
+    //                          Location_Details__c,
+    //                          Original_Order_Product__c,
+    //                          Status
+    //                          FROM Asset 
+    //                          WHERE Id = :assetIds
+    //                          AND Status != 'Replaced'
+    //                          ORDER BY Name]){
+    //            assetIdToProductIdMap.put(a.Id, a.Product2Id);
+    //        }
+    //        return assetIdToProductIdMap;
+    //    } else {
+    //        return assetIdToProductIdMap;
+    //    }
+    //}
+    public Map<Id,List<ProductWrapper>> getmasterProductToProductWrapperMap(){
+        if (masterProductToProductWrapperMap == null){
+            masterProductToProductWrapperMap = new Map<Id,List<ProductWrapper>>();
+            for(Service_Product__c prod: serviceProducts){
+                if(masterProductToProductWrapperMap.containsKey(prod.Master_Product__c)){
+                    masterProductToProductWrapperMap.get(prod.Master_Product__c).add(new ProductWrapper(prod));
+                }else{
+                    masterProductToProductWrapperMap.put(prod.Master_Product__c,new List<ProductWrapper>{new ProductWrapper(prod)});
+                }
             }
         }
-        system.debug(ProductToProductWrapperMapLegacy);
+        return masterProductToProductWrapperMap;
+
     }
-    
-    
-    
+    //public Map<Id, List<ProductWrapper>> getAssetToProductWrapperMap(){
+    //    if (AssetToProductWrapperMap == null){
+    //        AssetToProductWrapperMap = new Map<Id, List<ProductWrapper>>();
+    //        system.debug('****** selectedAssets '+ selectedAssets);
+    //        for(Asset a: selectedAssets){
+    //            if(masterProductToProductWrapperMap.containsKey(a.Product2Id)){
+    //                List<ProductWrapper> wrapperList = new List<ProductWrapper>();
+    //                for(ProductWrapper wrap: masterProductToProductWrapperMap.get(a.Product2Id)){
+    //                    wrapperList.add(new ProductWrapper(wrap.product));
+    //                }
+    //                AssetToProductWrapperMap.put(a.Id,wrapperList);
+    //            }else{
+    //                AssetToProductWrapperMap.put(a.Id, new List<ProductWrapper>());
+    //            }
+    //        }
+    //    } 
+    //    system.debug('******** AssetToProductWrapperMap '+ AssetToProductWrapperMap);
+    //    return AssetToProductWrapperMap;
+    //}
+    //public List<id> getproductIds(){
+    //    if (productIds == null){
+    //        productIds = new List<id>();
+    //        for(Product2 p : [SELECT    Id,Has_Service_Products__c FROM Product2 
+    //                          WHERE Has_Service_Products__c = TRUE]){
+    //            productIds.add(p.id);
+    //        } 
+    //    } 
+    //    return productIds;                   
+    //}
+
+    //public List<Product2> getselectedProductsLegacy(){
+    //    if (selectedProductsLegacy == null){
+    //        selectedProductsLegacy = [SELECT Id, 
+    //                      Name
+    //                      FROM Product2
+    //                      WHERE Id IN: productIds
+    //                      ORDER BY Name];
+    //    }
+    //    return selectedProductsLegacy;
+    //}
+
+    //public Map<Id,List<ProductWrapper2>> getmasterProductToProductWrapperMapLegacy(){
+    //    if (masterProductToProductWrapperMapLegacy == null){
+    //        masterProductToProductWrapperMapLegacy = new Map<Id,List<ProductWrapper2>>();
+    //        for(Service_Product__c prod: [SELECT    Id,
+    //                                      Name,
+    //                                      Master_Product__c,
+    //                                      Service_Product__c,
+    //                                      Service_Product__r.Name
+    //                                      FROM Service_Product__c
+    //                                      WHERE Master_Product__c in: selectedProductsLegacy
+    //                                      ORDER BY Name]){
+    //            if(masterProductToProductWrapperMapLegacy.containsKey(prod.Master_Product__c)){
+    //                masterProductToProductWrapperMapLegacy.get(prod.Master_Product__c).add(new ProductWrapper2(prod));
+    //            }else{
+    //                masterProductToProductWrapperMapLegacy.put(prod.Master_Product__c,new List<ProductWrapper2>{new ProductWrapper2(prod)});
+    //            }
+    //        }
+    //        return masterProductToProductWrapperMapLegacy;
+    //    } else {
+    //        return masterProductToProductWrapperMapLegacy;
+    //    }    
+    //}
+    //public Map<Id,List<ProductWrapper2>> getProductToProductWrapperMapLegacy(){
+    //    if (ProductToProductWrapperMapLegacy == null && masterProductToProductWrapperMapLegacy != null){
+    //        ProductToProductWrapperMapLegacy = new Map<Id, List<ProductWrapper2>>();
+    //        for(Product2 p: selectedProductsLegacy){
+    //            if(masterProductToProductWrapperMapLegacy.containsKey(p.Id)){
+    //                ProductToProductWrapperMapLegacy.put(p.Id,masterProductToProductWrapperMapLegacy.get(p.Id).clone());
+    //            }else{
+    //                ProductToProductWrapperMapLegacy.put(p.Id, new List<ProductWrapper2>());
+    //            }
+    //        }
+    //        system.debug('*** constructing ProductToProductWrapperMapLegacy '+ ProductToProductWrapperMapLegacy);
+    //        return ProductToProductWrapperMapLegacy;
+    //    } 
+    //    return ProductToProductWrapperMapLegacy;
+         
+        
+    //}
+    ///End of getters    
     
     //Universal Methods
     public PageReference customDelete(){
         //deletes the order and redirects to delete confirmation page
         
-        
         PageReference deletePage = new PageReference('/'+ o.AccountId);
         deletePage.setRedirect(true);
         delete o;
         return deletePage;
-        
-        
+
     }
-    
-    
     
     //Redirect Page Methods
     
@@ -281,13 +608,28 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
                 newPage = new PageReference('/apex/RMS_createServiceRequestP1?id='+ o.Id + '&retUrl=' + o.Id);
             } else {
                 If (num_assets > 0){
+                    list<Contact_History__c> ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id 
+                        FROM Contact_History__c 
+                       WHERE Dwelling__c =: o.AccountId 
+                        AND Primary_Contact__c = true];
+                    if (ch.size()>0){
+                        o.BillToContactId = ch[0].Contact__c;
+                        upsert o;
+                    }  
                     newPage = new PageReference('/apex/RMS_createServiceRequestP2?id='+ o.Id + '&retUrl=' + o.Id); 
                 } else{
-                    Contact_History__c ch = new Contact_History__c();
-                    ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id FROM Contact_History__c WHERE Dwelling__c =: o.AccountId AND Primary_Contact__c = true];
-                    o.BillToContactId = ch.Contact__c;
-                    upsert o;
+                   list<Contact_History__c> ch = [Select Contact__c, Dwelling__c, Primary_Contact__c, Id 
+                        FROM Contact_History__c 
+                       WHERE Dwelling__c =: o.AccountId 
+                        AND Primary_Contact__c = true];
+                    if (ch.size()>0){
+                        o.BillToContactId = ch[0].Contact__c;
+                        upsert o;
+                    }           
+                    
                     newPage = new PageReference('/apex/RMS_ServiceRequestLegacyP1?id='+ o.Id + '&retUrl=' + o.Id);
+                    //newPage = new PageReference('/apex/RMS_createServiceRequestAsset?aid='+o.AccountId);
+                    //delete o; 
                 }
             }
             
@@ -610,17 +952,18 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     }
     private void setupGrouping()
     {
-        Map<String, List<OrderItem>> groupedMap=new Map<String, List<OrderItem>>();
+        Map<String, List<OrderItem>> groupedMap = new Map<String, List<OrderItem>>();
+        system.debug('*****printing allAccs '+ allAccs);
         for (OrderItem acc : allAccs)
         {
-            String key=String.valueof(acc.get(groupFieldName));
-            if ( (null==key) || (0==key.length()) )
+            String key = String.valueof(acc.get(groupFieldName));
+            if ( (null == key) || (0 == key.length()) )
             {
                 key='Undefined';
             }
             
-            List<OrderItem> groupedAccs=groupedMap.get(key);
-            if (null==groupedAccs)
+            List<OrderItem> groupedAccs = groupedMap.get(key);
+            if (null == groupedAccs)
             {
                 groupedAccs=new List<OrderItem>();
                 groupedMap.put(key, groupedAccs);
@@ -629,7 +972,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
             groupedAccs.add(acc);
         }
         
-        groups=new List<GroupWrapper>();
+        groups = new List<GroupWrapper>();
         for (String key : groupedMap.keySet())
         {
             GroupWrapper gr=new GroupWrapper();
@@ -658,7 +1001,7 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         }
         if(ch.size() > 0 ){
             update ch;  
-            pr = new PageReference('/apex/RMS_viewServiceRequest?id='+o.Id);
+            pr = new PageReference('/apex/RMS_viewServiceRequest?id=' + o.Id);
             pr.setRedirect(true);
             return pr;
         } else {
@@ -853,8 +1196,6 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
     } 
     
     
-    
-    
     Public string propPickValSelectedLegacy { get; set; }
     public List<SelectOption> getPickLstValueLegacy()
     {
@@ -865,7 +1206,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         Order od = new order();
         od = [SELECT Sold_Order_JIP_Eligible__c 
               FROM Order 
-              WHERE Id =:o.id];            
+              WHERE Id =:o.id];    
+        system.debug('********** od.Sold_Order_JIP_Eligible__c '+ od.Sold_Order_JIP_Eligible__c);            
         IF (od.Sold_Order_JIP_Eligible__c){
             for(Schema.PicklistEntry f : ple){
                 if(f.getValue() == 'Job In Progress' || f.getValue() == 'Save'){
@@ -1329,7 +1671,8 @@ public with sharing class RMS_ServiceOrderExtensionMgr  {
         Order od = new order();
         od = [SELECT Sold_Order_JIP_Eligible__c 
               FROM Order 
-              WHERE Id =:o.id];            
+              WHERE Id =:o.id]; 
+        system.debug('******* '+ od.Sold_Order_JIP_Eligible__c);           
         IF (od.Sold_Order_JIP_Eligible__c){
             for(Schema.PicklistEntry f : ple){
                 if(f.getValue() == 'Job In Progress' || f.getValue() == 'Save'){

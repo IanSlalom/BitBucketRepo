@@ -68,6 +68,7 @@
         <members>RMS_createContactHistoryManagerTests</members>
         <members>RMS_createServicePurchaseOrdersExtTest</members>
         <members>RMS_createServicePurchaseOrdersExtension</members>
+        <members>RMS_createServiceRequestAssetManager</members>
         <members>RMS_createWorkOrderController</members>
         <members>RMS_createWorkOrderControllerTest</members>
         <members>RMS_editBackOfficeCheckRedirectExtTest</members>
@@ -148,6 +149,7 @@
         <members>testRMS_addWarrantiesExt</members>
         <members>testRMS_assignServiceTaskOwner</members>
         <members>testRMS_createContactHistoryMgr</members>
+        <members>testRMS_createServiceRequestAssetManager</members>
         <members>testRMS_editableTaskList</members>
         <members>testRMS_editableTaskListExt</members>
         <members>testRMS_orderHistoryController</members>
@@ -201,7 +203,9 @@
         <members>RMS_closeTabPage</members>
         <members>RMS_completeOrderChecks</members>
         <members>RMS_createActionsWorkOrder</members>
+        <members>RMS_createAssetRedirect</members>
         <members>RMS_createServicePurchaseOrders</members>
+        <members>RMS_createServiceRequestAsset</members>
         <members>RMS_createServiceRequestP1</members>
         <members>RMS_createServiceRequestP2</members>
         <members>RMS_createServiceRequestP3</members>
@@ -693,6 +697,7 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Asset</members>
         <members>Charge__c</members>
         <members>Contact_History__c</members>
         <members>Discount__c</members>

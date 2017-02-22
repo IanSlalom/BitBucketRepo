@@ -80,7 +80,7 @@
     <!-- ACTIONS --> 
     <apex:pageBlock >
     <apex:form >
-        <apex:commandButton onclick="callGenerateConsoleURL('{!createServiceRequestURL}', 'Create Service Request');return false" id="newVisitButton2" value="Create Service Request" style="margin-left:20%"/>
+        <apex:commandButton onclick="callGenerateConsoleURL('{!createServiceRequestURL}', 'Create Service Request');return false" id="newVisitButton2" value="Create Service Request" style="margin-left:20%"/>      
     </apex:form>
         
             <apex:pageBlockTable title="Service Requests" value="{!orders}" var="ord" style="width:100%">
