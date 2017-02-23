@@ -103,7 +103,7 @@
 					</apex:outputpanel>
 				</apex:column>
 				<apex:column >
-					 <apex:outputpanel rendered="{!(wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId || (wrapper.OrderItem.Purchase_Order__r.Status__c == 'New' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'In Process' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'On Hold' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'Rejected'))&& wrapper.OrderItem.Status__c != 'Cancelled'}">
+					 <apex:outputpanel rendered="{!(wrapper.OrderItem.PricebookEntry.Product2.RecordTypeId == miscJobId || wrapper.OrderItem.Purchase_Order__c == null || (wrapper.OrderItem.Purchase_Order__r.Status__c == 'New' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'In Process' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'On Hold' || wrapper.OrderItem.Purchase_Order__r.Status__c == 'Rejected')) && wrapper.OrderItem.Status__c != 'Cancelled'}">
                     <apex:commandButton value="Cancel" onClick="callGenerateConsoleURL('/apex/RMS_CancelOrderLine?id={!wrapper.OrderItem.Id}','Cancel Order Product');return false"  rendered="{!Order.Revenue_Recognized_Date__c == null}">
                         <apex:param name="itemToCancel" assignTo="{!orderItemToCancel}" value="{!wrapper.OrderItem.Id}"/>
                     </apex:commandButton>
