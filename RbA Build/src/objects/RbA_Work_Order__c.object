@@ -1558,6 +1558,21 @@ IF(Sold_Order__r.Renovate_Right_Booklet_Signed_Date__c &gt; Update_Renovate_Righ
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Scheduled_Appt_Date_Time__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK(Appointment_Date__c)),
+TEXT(MONTH(Appointment_Date__c))+
+&quot;/&quot;+TEXT(DAY(Appointment_Date__c))+ 
+&quot;/&quot;+TEXT(YEAR(Appointment_Date__c))+&quot; &quot;+TEXT(Appointment_Start_Time__c),
+null)</formula>
+        <label>Scheduled Appt Date/Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Scheduled_As_Type__c</fullName>
         <description>This field is used by the scheduler to determine if a work order was scheduled for a different type technician.  Example: Service work order scheduled for a Tech Measure</description>
         <externalId>false</externalId>
