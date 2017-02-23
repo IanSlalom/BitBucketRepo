@@ -34,6 +34,7 @@
     </script>
     <apex:form id="theForm">
         <apex:pageBlock title="Create Asset">
+            <apex:pageMessage summary="This Account does not currently have any Assets to create a Service Request for. Please create an Asset for the Installed Product first." severity="error" strength="3"/>
             <apex:pageBlockButtons location="both">
                <apex:commandButton value="Cancel" action="{!customDelete}" immediate="true"/>               
                 <apex:commandButton action="{!saveContinueAsset}" value="Continue"/>
