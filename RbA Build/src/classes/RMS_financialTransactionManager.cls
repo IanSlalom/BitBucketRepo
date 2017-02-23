@@ -194,6 +194,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__r.BillToContactId,
                                                     Order__r.Retail_Total__c,
                                                     Order__r.Retail_Subtotal__c,
+                                                    Order__r.Status, 
                                                     Payment_Amount__c,
                                                     Payment_Type__c,
                                                     Order__r.Store_Location__c,
@@ -446,6 +447,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Related_Work_Order__r.Sold_Order__r.Store_Location__c,
                                                     Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c,
                                                     Related_Work_Order__r.Sold_Order__r.RecordTypeId,
+                                                    Related_Work_Order__r.Sold_Order__r.Status,
                                                     Work_Order_Type__c,
                                                     CreatedById,
                                                     Name,
@@ -846,7 +848,8 @@ public with sharing class RMS_financialTransactionManager {
                                                     Original_Order_Product__c,
                                                     Original_Order_Product__r.Remake__c,
                                                     Original_Order_Product__r.GL_Account__c,
-                                                    Vendor_Credit__c
+                                                    Vendor_Credit__c,
+                                                    Purchase_Order__c
                                                     
                                                     FROM Asset WHERE Id IN :mapNew.keyset() AND RecordTypeId IN :RecordTypeIds AND Sold_Order__r.RecordTypeId IN :orderRecordTypes];        
         
@@ -1420,6 +1423,7 @@ public with sharing class RMS_financialTransactionManager {
                             newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
                             newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
                             newJE.Baan_Business_Partner_Number__c = baanBPN;
+                            newJE.Purchase_Order__c = a.Purchase_Order__c;
                             
                             if(assetType == 'InventoryReceived' || assetType == 'ServiceInventoryReceived' || assetType == 'CostProductReceived'){
                                 if (a.Quantity == null || a.Unit_Wholesale_Cost__c == null){
@@ -1567,6 +1571,7 @@ public with sharing class RMS_financialTransactionManager {
                                 je.Order__c = a.Sold_Order__c;
                                 je.Customer__c = a.Sold_Order__r.BillToContactId; 
                                 je.Baan_Business_Partner_Number__c = baanBPN;
+                                je.Purchase_Order__c = a.Purchase_Order__c;
                                 if(assetType == 'InventoryReceived' || assetType == 'ServiceInventoryReceived' || assetType == 'CostProductReceived'){
         
                                     je.Type__c = jeType;
@@ -1696,6 +1701,7 @@ public with sharing class RMS_financialTransactionManager {
                                     newJE.Customer__c = a.Sold_Order__r.BillToContactId;
                                     newJE.Type__c = jeType;
                                     newJE.Baan_Business_Partner_Number__c = baanBPN;
+                                    newJE.Purchase_Order__c = a.Purchase_Order__c;
                                     
                                     if(assetType == 'InventoryReceived' || assetType == 'ServiceInventoryReceived' || assetType == 'CostProductReceived'){
                                         newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
@@ -2687,6 +2693,7 @@ public with sharing class RMS_financialTransactionManager {
                                                     Order__r.Revenue_Recognized_Date__c,
                                                     Order__r.BillToContactId,
                                                     Order__r.RecordTypeId,
+                                                    Order__r.Status,
                                                     CreatedById,
                                                     Name,
                                                     Store_Location__c,
@@ -2851,7 +2858,8 @@ public with sharing class RMS_financialTransactionManager {
                                                                 Type__c,                                                
                                                                 Order__r.Revenue_Recognized_Date__c,
                                                                 Order__r.BillToContactId,
-                                                                Order__r.RecordTypeId
+                                                                Order__r.RecordTypeId,
+                                                                Order__r.Status
                                                     
                                                     
                                                     FROM Business_Adjustment__c WHERE Id IN :mapNew.keyset() AND Order__r.RecordTypeId IN :orderRecordTypes];       
@@ -3251,6 +3259,10 @@ public with sharing class RMS_financialTransactionManager {
             dynamicErrorMessage = RMS_errorMessages.CONTACT_IS_NULL;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+        if(payment.Order__r.Status == 'Draft'){
+            dynamicErrorMessage = RMS_errorMessages.ORDER_STATUS_IS_DRAFT;
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        }
         
         return errorMessage;        
     }
@@ -3287,6 +3299,10 @@ public with sharing class RMS_financialTransactionManager {
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }else if(typeOfLabor == 'LaborMiscReimbursement' && labor.GL_Account__r.Name != null && labor.GL_Account__r.Name.length() <= 3){
             dynamicErrorMessage = RMS_errorMessages.GLA_NUMBER_THREE_OR_LESS;
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        }
+        if(labor.Related_Work_Order__r.Sold_Order__r.Status == 'Draft'){
+            dynamicErrorMessage = RMS_errorMessages.ORDER_STATUS_IS_DRAFT;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
         
@@ -3411,6 +3427,10 @@ public with sharing class RMS_financialTransactionManager {
             dynamicErrorMessage = RMS_errorMessages.CONTACT_IS_NULL;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
+        if(ref.Order__r.Status == 'Draft'){
+            dynamicErrorMessage = RMS_errorMessages.ORDER_STATUS_IS_DRAFT;
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        }
 
         return errorMessage;        
     }
@@ -3441,6 +3461,10 @@ public with sharing class RMS_financialTransactionManager {
         }
         if(ba.Order__r.BillToContactId == null){
             dynamicErrorMessage = RMS_errorMessages.CONTACT_IS_NULL;
+            errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
+        }
+        if(ba.Order__r.Status == 'Draft'){
+            dynamicErrorMessage = RMS_errorMessages.ORDER_STATUS_IS_DRAFT;
             errorMessage = (String.isBlank(errorMessage)) ? dynamicErrorMessage : errorMessage + '<BR>' + dynamicErrorMessage;
         }
 
