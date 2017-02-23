@@ -98,7 +98,7 @@ private class RMS_financialTransManLaborTest {
                                     EffectiveDate= Date.Today(), 
                                     Store_Location__c = store1.Id,
                                     Opportunity = opp1,                                     
-                                    Status ='Draft',
+                                    Status ='Tech Measure Needed',
                                     BillToContactId = contact1.id, 
                                     Pricebook2Id = Test.getStandardPricebookId(),
                                     recordTypeId=UtilityMethods.retrieveRecordTypeId('CORO_Record_Type', 'Order')
