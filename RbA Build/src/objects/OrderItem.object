@@ -2147,6 +2147,17 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Order_Product_Purchased__c</fullName>
+        <externalId>false</externalId>
+        <formula>OrderItemNumber&amp;&quot; - &quot;&amp;Product_Name__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Order Product Purchased</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Order_Revenue_Recognition_Date__c</fullName>
         <description>The date the order was revenue recognized.</description>
         <externalId>false</externalId>
