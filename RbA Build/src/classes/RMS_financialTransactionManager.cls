@@ -1220,7 +1220,9 @@ public with sharing class RMS_financialTransactionManager {
 
                     //FOR VENDOR CREDIT
                     //jeTypeToFTCreditNumber.put('Inventory Returned - Cost Product Received', assetIdToCPRFTL.get(a.id)[0].Credit_Account_Number__r.Name);
-                    jeTypeToFTDebitNumber.put('Inventory Returned - Cost Product Received', assetIdToCPRFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+					//jeTypeToFTDebitNumber.put('Inventory Returned - Cost Product Received', assetIdToCPRFTL.get(a.id)[0].Credit_Account_Number__r.Name);
+					//JETT 4567 Un-Reversed the debit/credit numbers for inventory returned
+                    jeTypeToFTDebitNumber.put('Inventory Returned - Cost Product Received', assetIdToCPRFTL.get(a.id)[0].Debit_Account_Number__r.Name);
                 }
 
                 /*
@@ -1361,6 +1363,7 @@ public with sharing class RMS_financialTransactionManager {
                     
                     if(vendorCreditAT == true){
                         aType = 'VendorCredit';
+                        baanBPN = a.vendor__r.Baan_Business_Partner_Number__c;
                         if(assetSubType == 'vendorCreateNew'){
                             if(assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Inventory Received - External Vendor'){
                                 jType = 'Inventory Returned - External Vendor';
@@ -1376,11 +1379,12 @@ public with sharing class RMS_financialTransactionManager {
                                         assetIdToLatestJEforVendorCredit.get(a.id).Type__c == 'Service Inventory Received - Remake Intercompany Consolidation Center'){
                                 jType = 'Service Inventory Returned - Intercompany Consolidation Center';
                             }
-                            creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
-                            debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
+                            // JETT-4567 Un-reversed the debit/credit account numbers for vendor credit
+                            creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
+                            debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
                         }else if(assetSubType == 'vendorEdit'){
-                            creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
-                            debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
+                            creditAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Credit_General_Ledger_Account__c;
+                            debitAccountN = assetIdToLatestJEforVendorCredit.get(a.id).Debit_General_Ledger_Account__c;
                         }
                     
                         /*
@@ -1440,13 +1444,14 @@ public with sharing class RMS_financialTransactionManager {
                             }else if(assetType == 'InventoryWriteOff' || assetType == 'PostRecognizedInventoryWriteOff'){
                                 newJE.Amount__c = (newQuantityWrittenOff - oldQuantityWrittenOff) * a.Unit_Wholesale_Cost__c;
                             }else if(assetType == 'VendorCredit'){
-                                newJE.Amount__c = a.Vendor_Credit__c;
+                            	// JETT-4567 Make the vendor credit amount negative in the journal entry
+                                newJE.Amount__c = a.Vendor_Credit__c * -1;
                             }
-                            
-                            if(newJE.Amount__c < 0){
+                            // JETT-4567 Allow negative values for vendor credit
+                            if(newJE.Amount__c < 0 && assetType != 'VendorCredit'){
                                 mapNew.get(a.id).addError(RMS_errorMessages.NEGATIVE_FINACIAL_TRANSACTION, FALSE);
                             }
-                            if(newJE.Amount__c > 0){ 
+                            if((newJE.Amount__c > 0) || (newJE.Amount__c < 0 && assetType == 'VendorCredit')){ 
                                 journalEntriesToUpsert.add(newJE);
                             }
                         }else{
@@ -1625,30 +1630,31 @@ public with sharing class RMS_financialTransactionManager {
                                 else if(assetType == 'VendorCredit'){
                                     je.Type__c = assetIdToLatestJEforVendorCredit.get(a.id).Type__c;
                                     if(assetIdToLatestJEforVendorCredit.get(a.id) != null && assetIdToLatestJEforVendorCredit.get(a.id).Sent_to_BaanERP__c == false){
-                                        je.Amount__c = je.Amount__c + (newVendorCredit - oldVendorCredit);
-                                        je.Debit_General_Ledger_Account__c = creditAccountNumber;
-                                        je.Credit_General_Ledger_Account__c = debitAccountNumber;
+                                        //JETT-4567 Unreversed the debit/credit account numbers for vendor credit and changed the calculation
+                                        je.Amount__c = je.Amount__c + (oldVendorCredit - newVendorCredit);
+                                        je.Debit_General_Ledger_Account__c = debitAccountNumber;
+                                        je.Credit_General_Ledger_Account__c = creditAccountNumber;
                                     }else{
                                         
                                         //CHECKING IF JE.AMOUNT SHOULD BE CALCULATED AS A NEGITIVE AMOUNT 
                                         system.debug('ads je.Debit_General_Ledger_Account__c: '+je.Debit_General_Ledger_Account__c);
                                         system.debug('ads je.Credit_General_Ledger_Account__c: '+je.Credit_General_Ledger_Account__c);
-                                
-                                        if( je.Debit_General_Ledger_Account__c ==  oldTypeDebitAccountNumber&& 
+									 // JETT-4567 This is already negative so not needed	                                
+                                     /*   if( je.Debit_General_Ledger_Account__c ==  oldTypeDebitAccountNumber&& 
                                             je.Credit_General_Ledger_Account__c == oldTypeCreditAccountNumber){
                                                 system.debug('ads changing to negative amount: '+je.Amount__c);
                                                 je.Amount__c = je.Amount__c*-1;
-                                        }
+                                        }*/
            
-                                        if(je.Amount__c + (newVendorCredit-oldVendorCredit)  > 0){
-                                            je.Amount__c = je.Amount__c + (newVendorCredit-oldVendorCredit);
+                                        if(je.Amount__c + (oldVendorCredit-newVendorCredit)  < 0){
+                                            je.Amount__c = je.Amount__c + (oldVendorCredit-newVendorCredit);
                                             je.Debit_General_Ledger_Account__c = debitAccountNumber;
                                             je.Credit_General_Ledger_Account__c = creditAccountNumber;
                                     
-                                        }else if(je.Amount__c + (newVendorCredit-oldVendorCredit) == 0){
+                                        }else if(je.Amount__c + (oldVendorCredit-newVendorCredit) == 0){
                                             journalEntriesToDelete.add(je);
                                         }else{
-                                            je.Amount__c = Math.abs(je.Amount__c + (newVendorCredit-oldVendorCredit));
+                                            je.Amount__c = Math.abs(je.Amount__c + (oldVendorCredit-newVendorCredit));
                                             je.Debit_General_Ledger_Account__c = debitAccountNumber;
                                             je.Credit_General_Ledger_Account__c = creditAccountNumber;
                                     
@@ -1722,16 +1728,10 @@ public with sharing class RMS_financialTransactionManager {
                                     else if(assetType == 'VendorCredit'){ 
                                         newJE.Type__c = assetIdToLatestJEforVendorCredit.get(a.id).Type__c;
                                         newJE.Baan_Business_Partner_Number__c = a.Vendor__r.Baan_Business_Partner_Number__c;
-                                        if(newVendorCredit > oldVendorCredit){
-                                            newJE.Amount__c = newVendorCredit-oldVendorCredit;
-                                            newJE.Debit_General_Ledger_Account__c = creditAccountNumber;
-                                            newJE.Credit_General_Ledger_Account__c = debitAccountNumber;
-                                        
-                                        }else if (newVendorCredit < oldVendorCredit){
-                                            newJE.Amount__c = Math.abs(newVendorCredit-oldVendorCredit);
-                                            newJE.Debit_General_Ledger_Account__c = debitAccountNumber; 
-                                            newJE.Credit_General_Ledger_Account__c = creditAccountNumber;  
-                                        }
+                                        // JETT-4567 Set the value to the old value minus the new to get a negative total for increases
+                                        newJE.Amount__c = oldVendorCredit-newVendorCredit;
+                                        newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
+                                        newJE.Credit_General_Ledger_Account__c = creditAccountNumber;
                                     }
                                 else if(assetType == 'InventoryWriteOff' || assetType == 'PostRecognizedInventoryWriteOff'){
                                         newJE.Debit_General_Ledger_Account__c = debitAccountNumber;
