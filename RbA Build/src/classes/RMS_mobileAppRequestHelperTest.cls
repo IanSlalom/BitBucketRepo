@@ -207,10 +207,10 @@ private class RMS_mobileAppRequestHelperTest {
 		// generating sold with quotes and orders, the boolean will set the stagename to sold
 //		tUtil.createSalesAppt(u.Id, newApptTime, true, true,'New','GETNEW4');
 		tUtil.createSalesAppt(u.Id, oldApptTime, true, true, 'New', 'GETOLD4');
+		Test.startTest();
 		tUtil.createSalesAppt(u.Id, reallyOldApptTime, true, true, 'New','GETOLDER4');
 
         System.runAs(u) {
-		    Test.startTest();
 			String jsonResult = mHelper.findAppointments(u.Id);
 			Test.stopTest();
 			RMS_mobileAppRequestHelper.Appointments testresult = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.Appointments.class);
