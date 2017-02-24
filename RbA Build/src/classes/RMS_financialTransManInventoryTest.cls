@@ -402,14 +402,14 @@ private class RMS_financialTransManInventoryTest {
 		System.AssertEquals(invWriteOffCredit.Name, je.Credit_General_Ledger_Account__c);
 
 		// Delete the Asset and verify the journal entry is deleted
-//		delete asset1;
+		delete asset1;
 
-//		decimal jeCount = 0;
-//		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Inventory Write-Off']) {
-//			jeCount += 1;
-//		}
+		decimal jeCount = 0;
+		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Inventory Write-Off']) {
+			jeCount += 1;
+		}
 
-//		System.AssertEquals(0, jeCount);
+		System.AssertEquals(0, jeCount);
 		
 		
 		Test.stopTest();
@@ -478,14 +478,14 @@ private class RMS_financialTransManInventoryTest {
 		System.AssertEquals(invWriteOffCredit.Name, je.Credit_General_Ledger_Account__c);
 
 		// Delete the Asset and verify the journal entry is deleted
-//		delete asset1;
+		delete asset1;
 
-//		decimal jeCount = 0;
-//		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Post Recognized Inventory Write-Off']) {
-//			jeCount += 1;
-//		}
+		decimal jeCount = 0;
+		for (Journal_Entry__c j : [SELECT Id from Journal_Entry__c WHERE Type__c = 'Post Recognized Inventory Write-Off']) {
+			jeCount += 1;
+		}
 
-//		System.AssertEquals(0, jeCount);
+		System.AssertEquals(0, jeCount);
 		
 		Test.stopTest();
 	}

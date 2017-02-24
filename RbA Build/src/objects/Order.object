@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
+        <actionName>ActivateOrder</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Approve</actionName>
         <type>Default</type>
     </actionOverrides>
@@ -122,6 +126,16 @@
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>AR_Write_Off__c</fullName>
+        <externalId>false</externalId>
+        <label>AR-Write Off $</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>AccountId</fullName>
@@ -564,6 +578,18 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Discount_Amount__c/Retail_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Discount %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Door_Cost_Rollup__c</fullName>
         <externalId>false</externalId>
         <label>Door Cost Rollup</label>
@@ -930,6 +956,16 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Initial_Subtotal__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Subtotal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Install_Complete_Date__c</fullName>
@@ -1741,6 +1777,18 @@ This is a holding field for now.</inlineHelpText>
         <fullName>Product_COGS__c</fullName>
         <externalId>false</externalId>
         <label>Product COGS</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Product_Cost_Jobs__c</fullName>
+        <externalId>false</externalId>
+        <formula>Product_Cost__c - AR_Write_Off__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product Cost (Jobs)</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -2847,6 +2895,11 @@ NULL)</formula>
             <value>D</value>
         </filters>
         <label>All Draft Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>AllOrders</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Orders</label>
     </listViews>
     <listViews>
         <fullName>All_Orders</fullName>

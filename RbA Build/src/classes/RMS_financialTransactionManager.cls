@@ -53,7 +53,6 @@ public with sharing class RMS_financialTransactionManager {
     }
     
     public void onBeforeDeletePayment(list<Payment__c> listOld, map<Id, Payment__c> mapOld){
-        
         allowDeleteOrNot(listOld, mapOld);
     }
     
@@ -77,19 +76,53 @@ public with sharing class RMS_financialTransactionManager {
     
     //ASSET
     public void onAfterInsertAsset(list<Asset> listNew, map<id,Asset> mapNew){
-        if(!turnFinancialTransactionsOff){
-            createOrUpdateJournalEntryAsset(listNew, mapNew, null, 'insert');
+        if(turnFinancialTransactionsOff) return;
+
+		List<Asset> reducedNewList = new List<Asset>();
+		Map<Id, Asset> reducedNewMap = new Map<Id, Asset>();
+        for (Asset asset : listNew) {
+        	if(asset.Legacy_Asset__c == false){
+        		reducedNewList.add(asset);
+        		reducedNewMap.put(asset.id, asset);
+        	}
         }
+        
+		if (reducedNewList.size() == 0) return;
+
+        createOrUpdateJournalEntryAsset(listNew, mapNew, null, 'insert');
     }
 
     public void onAfterUpdateAsset(list<Asset> listOld, list<Asset> listNew, map<Id, Asset> mapOld, map<Id, Asset> mapNew){
-        if(!turnFinancialTransactionsOff){
-            createOrUpdateJournalEntryAsset(listNew, mapNew, mapOld, 'update');
+        if(turnFinancialTransactionsOff) return;
+        
+		List<Asset> reducedNewList = new List<Asset>();
+		Map<Id, Asset> reducedOldMap = new Map<Id, Asset>();
+		Map<Id, Asset> reducedNewMap = new Map<Id, Asset>();
+        for (Asset asset : listNew) {
+        	if(asset.Legacy_Asset__c == false){
+        		reducedNewList.add(asset);
+        		reducedNewMap.put(asset.id, asset);
+        		reducedOldMap.put(asset.id, mapOld.get(asset.id));
+        	}
         }
+        
+		if (reducedNewList.size() == 0) return;
+
+        createOrUpdateJournalEntryAsset(listNew, mapNew, mapOld, 'update');
     }
     
     public void onBeforeDeleteAsset(list<Asset> listOld, map<Id, Asset> mapOld){
-        allowDeleteOrNot(listOld, mapOld);
+		List<Asset> reducedOldList = new List<Asset>();
+		Map<Id, Asset> reducedOldMap = new Map<Id, Asset>();
+        for (Asset asset : listOld) {
+        	if(asset.Legacy_Asset__c == false){
+        		reducedOldList.add(asset);
+        		reducedOldMap.put(asset.id, asset);
+        	}
+        }
+        
+		if (reducedOldList.size() == 0) return;
+        allowDeleteOrNot(reducedOldList, reducedOldMap);
     }
     
     //ORDER
