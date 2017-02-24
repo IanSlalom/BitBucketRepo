@@ -319,7 +319,6 @@
         <members>Payment__c</members>
         <members>Preferred_Resource__c</members>
         <members>Pricebook2</members>
-        <members>PricebookEntry</members>
         <members>Pricing_Configuration__c</members>
         <members>Problem_Component_Config__c</members>
         <members>Problem_Component_List__c</members>

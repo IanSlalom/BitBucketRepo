@@ -41,8 +41,8 @@ private class RMS_mobileAppRequestHelperTest {
        	Integer months = mHelper.getUnsoldAge(u.Id);
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime oldApptTime = Datetime.now().addMonths(-(months - 1));
-		Datetime reallyOldApptTime = Datetime.now().addYears(-(months + 12));
-		Datetime tmApptTime = Datetime.now().addDays(5);
+		Datetime reallyOldApptTime = Datetime.now().addMonths(-(months + 12));
+//		Datetime tmApptTime = Datetime.now().addDays(5);
 		tUtil.createSalesAppt(u.Id, newApptTime, false, true,'Quoted','GETNEW');
 		tUtil.createSalesAppt(u.Id, oldApptTime, false, true, 'Quoted', 'GETOLD');
 		tUtil.createSalesAppt(u.Id, reallyOldApptTime, false, true, 'Quoted','GETOLDER');
@@ -57,8 +57,8 @@ private class RMS_mobileAppRequestHelperTest {
 
 	  Date afterDate = newApptTime.addYears(-1).date();
 	  Id uid = u.Id;
-	  String whereClause = 'where OwnerId = :uid and ' +
-	  	'((StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
+	  String whereClause = 'where OwnerId = :uid and (StageName != \'Canceled\' or ' +
+	  	'(StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
 	  	'((StageName = \'New\' or StageName = \'In Progress\' or StageName = \'Quoted\') and CloseDate > :afterDate))';	  
 	  String query = 'select Id, Name, StageName, CloseDate from Opportunity' + ' ' + whereClause;
 	  List<Opportunity> opps1 = [select Id, Name, StageName, CloseDate from Opportunity];
@@ -113,8 +113,7 @@ private class RMS_mobileAppRequestHelperTest {
        	Integer months = mHelper.getUnsoldAge(u.Id);
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime oldApptTime = Datetime.now().addMonths(-(months - 1));
-		Datetime reallyOldApptTime = Datetime.now().addYears(-(months + 12));
-		Datetime tmApptTime = Datetime.now().addDays(5);
+		Datetime reallyOldApptTime = Datetime.now().addMonths(-(months + 12));
 		tUtil.createSalesAppt(u.Id, newApptTime, false, false,'New','GETNEW2');
 		tUtil.createSalesAppt(u.Id, oldApptTime, false, false, 'New', 'GETOLD2');
 		tUtil.createSalesAppt(u.Id, reallyOldApptTime, false, false, 'New','GETOLDER2');
@@ -159,8 +158,7 @@ private class RMS_mobileAppRequestHelperTest {
        	Integer months = mHelper.getUnsoldAge(u.Id);
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime oldApptTime = Datetime.now().addMonths(-(months - 1));
-		Datetime reallyOldApptTime = Datetime.now().addYears(-(months + 12));
-		Datetime tmApptTime = Datetime.now().addDays(5);
+		Datetime reallyOldApptTime = Datetime.now().addMonths(-(months + 12));
 		tUtil.createSalesAppt(u.Id, newApptTime, false, true,'In Progress','GETNEW3');
 		tUtil.createSalesAppt(u.Id, oldApptTime, false, true, 'In Progress', 'GETOLD3');
 		tUtil.createSalesAppt(u.Id, reallyOldApptTime, false, true, 'In Progress','GETOLDER3');
@@ -205,20 +203,21 @@ private class RMS_mobileAppRequestHelperTest {
        	Integer months = mHelper.getUnsoldAge(u.Id);
 		Datetime newApptTime = Datetime.now().addDays(1);
 		Datetime oldApptTime = Datetime.now().addMonths(-(months - 1));
-		Datetime reallyOldApptTime = Datetime.now().addYears(-(months + 12));
-		Datetime tmApptTime = Datetime.now().addDays(5);
-		tUtil.createSalesAppt(u.Id, newApptTime, true, true,'Sold','GETNEW4');
-		tUtil.createSalesAppt(u.Id, oldApptTime, true, true, 'Sold', 'GETOLD4');
-		tUtil.createSalesAppt(u.Id, reallyOldApptTime, true, true, 'Sold','GETOLDER4');
+		Datetime reallyOldApptTime = Datetime.now().addMonths(-(months + 12));
+		// generating sold with quotes and orders, the boolean will set the stagename to sold
+//		tUtil.createSalesAppt(u.Id, newApptTime, true, true,'New','GETNEW4');
+		tUtil.createSalesAppt(u.Id, oldApptTime, true, true, 'New', 'GETOLD4');
+		tUtil.createSalesAppt(u.Id, reallyOldApptTime, true, true, 'New','GETOLDER4');
 
         System.runAs(u) {
 		    Test.startTest();
 			String jsonResult = mHelper.findAppointments(u.Id);
 			Test.stopTest();
 			RMS_mobileAppRequestHelper.Appointments testresult = (RMS_mobileAppRequestHelper.Appointments)JSON.deserialize(jsonResult, RMS_mobileAppRequestHelper.Appointments.class);
-			System.debug('####: ' + testresult.salesAppts.size() + '::' + testresult);
+			System.debug('####: ' + testresult);
+			System.debug('####: ' + testresult.salesAppts.size());
 
-			System.assert(testresult.salesAppts.size() == 3);
+			System.assert(testresult.salesAppts.size() == 2);
         }
 	} 
 
@@ -248,9 +247,27 @@ private class RMS_mobileAppRequestHelperTest {
 	} 
 
 	/* 
-	 * testResultSalesAppointments
+	 * testfilterOppbyOrderStatus
 	 */
 	static testmethod void testfilterOppbyOrderStatus(){
+		// for this we need to create opportunities in the following stages with and without orders
+		// Opportunity = New, Order = none - should not get filterd
+		// Opportunity = In Progress, Order = none - should not get filterd
+		// Opportunity = Quoted, Order = none - should not get filtered
+		// Opportunity = Sold, Order = Draft - shoud not get filtered
+		// Opportunity = Measured, Order = Draft - should not get filtered
+		// Opportunity = Measured, Order = Job Closed - should get filtered
+		// Opportunity = In Progress, Order = cancelled - should not get filterd
+		// Opportunity = Quoted, Order = cancelled - should not get filtered
+		// Opportunity = Sold, Order = Cancelled, Order = Draft - shoud not get filtered
+		// Opportunity = Measured, Order = Cancelled, Order = Draft - should not get filtered
+		// Opportunity = Measured, Order = Cancelled, Order = Job Closed - should get filtered
+		// Opportunity = In Progress, Order = Pending Cancellation - should not get filterd
+		// Opportunity = Quoted, Order = Pending Cancellation - should not get filtered
+		// Opportunity = Sold, Order = Pending Cancellation, Order = Draft - shoud not get filtered
+		// Opportunity = Measured, Order = Pending Cancellation, Order = Draft - should not get filtered
+		// Opportunity = Measured, Order = Pending Cancellation, Order = Job Closed - should get filtered
+		
 	    List<String> orderFilter = new List<String>{'Draft','Pending Cancellation','Cancelled','Job Closed',
 			'Draft','Pending Cancellation','Cancelled','Job Closed',
 			'Draft','Pending Cancellation','Cancelled','Job Closed',
@@ -271,76 +288,232 @@ private class RMS_mobileAppRequestHelperTest {
 		dwelling1.Store_Location__c = store1.id;
 		insert dwelling1;
 
-		// create an opportunity for each order status		
+		// create the opportunities and orders
 		List<Opportunity> itemsToInsert = new List<Opportunity>();		
-		for (Integer i = 0; i < 4; i++) {
-			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'New', u.Id, Date.today());
-			opp1.OwnerId = u.Id;
-			opp1.Store_Location__c = store1.Id;
-			itemsToInsert.add(opp1);
-		}
-		// Les'ts add a few more for other opportunity stages
-		for (Integer i = 0; i < 4; i++) {
-			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'In Progress', u.Id, Date.today());
-			opp1.OwnerId = u.Id;
-			opp1.Store_Location__c = store1.Id;
-			itemsToInsert.add(opp1);
-		}
-		for (Integer i = 0; i < 4; i++) {
-			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'Quoted', u.Id, Date.today());
-			opp1.OwnerId = u.Id;
-			opp1.Store_Location__c = store1.Id;
-			itemsToInsert.add(opp1);
-		}
-		for (Integer i = 0; i < 4; i++) {
-			Opportunity opp1 =  tUtil.createOpportunity('TestOpp' + i, dwelling1.id, 'Measured', u.Id, Date.today());
-			opp1.OwnerId = u.Id;
-			opp1.Store_Location__c = store1.Id;
-			itemsToInsert.add(opp1);
-		}
-		insert itemsToInsert;
-
-		// add orders of various statuses to the opportunities - not the last status should not be filtered out
 		List<Order> ordersToInsert = new List<Order>();
-		for (Integer j = 0; j < itemsToInsert.size(); j++) {
-			Order order1 = new Order(Name='Sold Order ' + j, 
-				AccountId = dwelling1.id, 
-				EffectiveDate= Date.Today(), 
-				Store_Location__c = store1.Id,
-				OpportunityId = itemsToInsert[j].Id,									 
-				Status = orderFilter[j],
-				OwnerId = u.Id, 
-				Pricebook2Id = Test.getStandardPricebookId()
-			);
-			ordersToInsert.add(order1);
-		}
+		// new Opp no order
+		Opportunity opp1 =  tUtil.createOpportunity('TestOpp1', dwelling1.id, 'New', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		// In Progress Opp no order
+		opp1 =  tUtil.createOpportunity('TestOpp2', dwelling1.id, 'In Progress', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		// Quoted Opp no order
+		opp1 =  tUtil.createOpportunity('TestOpp3', dwelling1.id, 'Quoted', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		// Sold Opp Draft order
+		opp1 =  tUtil.createOpportunity('TestOpp4', dwelling1.id, 'Sold', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		Order order1 = new Order(Name='Sold Order ' + 1, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Draft order
+		opp1 =  tUtil.createOpportunity('TestOpp5', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 2, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Job Closed order
+		opp1 =  tUtil.createOpportunity('TestOpp6', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 3, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Job Closed',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+////////////////////////////////////////
+		// In Progress Opp 'Cancelled' order
+		opp1 =  tUtil.createOpportunity('TestOpp7', dwelling1.id, 'In Progress', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Cancelled Order ' + 4, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Cancelled',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Quoted Opp 'Cancelled' order
+		opp1 =  tUtil.createOpportunity('TestOpp8', dwelling1.id, 'Quoted', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Cancelled Order ' + 5, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Cancelled',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Sold Opp Draft order, Cancelled Order
+		opp1 =  tUtil.createOpportunity('TestOpp9', dwelling1.id, 'Sold', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 6, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Cancelled Order ' + 7, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Cancelled',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Draft order, Cancelled Order
+		opp1 =  tUtil.createOpportunity('TestOpp10', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 8, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Cancelled Order ' + 9, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Cancelled',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Job Closed order, Cancelled Order
+		opp1 =  tUtil.createOpportunity('TestOpp11', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 10, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Job Closed',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Cancelled Order ' + 11, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Cancelled',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+////////////////////////////////////////
+		// In Progress Opp 'Pending Cancellation' order
+		opp1 =  tUtil.createOpportunity('TestOpp12', dwelling1.id, 'In Progress', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Pending Cancellation Order ' + 12, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Pending Cancellation',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Quoted Opp 'Pending Cancellation' order
+		opp1 =  tUtil.createOpportunity('TestOpp13', dwelling1.id, 'Quoted', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Pending Cancellation Order ' + 13, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Pending Cancellation',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Sold Opp Draft order, Pending Cancellation Order
+		opp1 =  tUtil.createOpportunity('TestOpp14', dwelling1.id, 'Sold', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 14, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Pending Cancellation Order ' + 15, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Pending Cancellation',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Draft order, Pending Cancellation Order
+		opp1 =  tUtil.createOpportunity('TestOpp15', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 16, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Draft',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Pending Cancellation Order ' + 17, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Pending Cancellation',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		// Measured Opp Job Closed order, Pending Cancellation Order
+		opp1 =  tUtil.createOpportunity('TestOpp16', dwelling1.id, 'Measured', u.Id, Date.today());
+		opp1.OwnerId = u.Id;
+		opp1.Store_Location__c = store1.Id;
+		itemsToInsert.add(opp1);
+		upsert itemsToInsert;
+		order1 = new Order(Name='Sold Order ' + 18, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Job Closed',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		order1 = new Order(Name='Pending Cancellation Order ' + 19, AccountId = dwelling1.id, EffectiveDate= Date.Today(), 
+			Store_Location__c = store1.Id, OpportunityId = opp1.Id, Status = 'Pending Cancellation',
+			OwnerId = u.Id, Pricebook2Id = Test.getStandardPricebookId()
+		);
+		ordersToInsert.add(order1);
+		upsert itemsToInsert;
 		insert ordersToInsert;
-		
+
+
+
+
 		Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>(itemsToInsert);
         System.runAs(u) {
 		    Test.startTest();
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			mHelper.filterOppbyOrderStatus(oppMap);
 			Test.stopTest();
-			System.assert(oppMap.size() == 10);
+System.debug('#####: size ' + oppMap.size() + '###: ' + oppMap);
+			System.assert(oppMap.size() == 13);
 			System.assert(oppMap.get(itemsToInsert[0].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[1].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[2].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[3].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[3].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[4].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[5].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[5].Id) == null);
 			System.assert(oppMap.get(itemsToInsert[6].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[7].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[7].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[8].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[9].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[10].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[11].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[10].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[11].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[12].Id) != null);
-			System.assert(oppMap.get(itemsToInsert[13].Id) == null);
-			System.assert(oppMap.get(itemsToInsert[14].Id) == null);
+			System.assert(oppMap.get(itemsToInsert[13].Id) != null);
+			System.assert(oppMap.get(itemsToInsert[14].Id) != null);
 			System.assert(oppMap.get(itemsToInsert[15].Id) == null);
         }
 	}
+
 	/* 
 	 * testResultSalesAppointments
 	 */

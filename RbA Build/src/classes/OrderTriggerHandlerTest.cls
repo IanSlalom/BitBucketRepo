@@ -3,7 +3,7 @@ public with sharing class OrderTriggerHandlerTest {
 
 	
 	static testmethod void test1(){ 
-		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+/*		Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
 		TestUtilityMethods utilities = new TestUtilityMethods();
 		utilities.setUpConfigs();
 		Account store = [SELECT Id FROM account WHERE Name ='77 - Twin Cities, MN'];
@@ -84,7 +84,7 @@ public with sharing class OrderTriggerHandlerTest {
 		ord1.Apex_Context__c = true;
 		update ord1;
 		
-		delete ord1;
+		delete ord1;*/
 		
 		//TODO:Assertions
 	}
