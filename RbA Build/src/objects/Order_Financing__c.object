@@ -125,6 +125,19 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Initial_Payment_Amount__c</fullName>
+        <description>an initial payment amount captured in rSuite - probably ends up in some of the egreement documents</description>
+        <externalId>false</externalId>
+        <inlineHelpText>an initial payment amount captured in rSuite - probably ends up in some of the egreement documents</inlineHelpText>
+        <label>Initial Payment Amount</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Program_Fee__c</fullName>
         <description>The program fee (percentage) times the amount financed.</description>
         <externalId>false</externalId>
