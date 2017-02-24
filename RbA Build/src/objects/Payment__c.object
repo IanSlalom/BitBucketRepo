@@ -590,13 +590,6 @@
         <errorDisplayField>Payment_Amount__c</errorDisplayField>
         <errorMessage>The payment amount must be a positive number.</errorMessage>
     </validationRules>
-    <validationRules>
-        <fullName>Refund_Amount_Cannot_Exceed_Payment</fullName>
-        <active>false</active>
-        <description>The amount refunded cannot exceed the original payment</description>
-        <errorConditionFormula>Amount_Refunded__c &gt; Payment_Amount__c</errorConditionFormula>
-        <errorMessage>The amount refunded cannot exceed the original payment amount.</errorMessage>
-    </validationRules>
     <webLinks>
         <fullName>Misc_Cash_Receipt</fullName>
         <availability>online</availability>

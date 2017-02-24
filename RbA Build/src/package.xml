@@ -319,7 +319,6 @@
         <members>Payment__c</members>
         <members>Preferred_Resource__c</members>
         <members>Pricebook2</members>
-        <members>PricebookEntry</members>
         <members>Pricing_Configuration__c</members>
         <members>Problem_Component_Config__c</members>
         <members>Problem_Component_List__c</members>
@@ -617,6 +616,8 @@
         <members>RbA_Operational_Reporting/Report_BO1000_Cash_Receipt_Posting</members>
         <members>RbA_Operational_Reporting/Report_BO1001_CurrentConDepoService</members>
         <members>RbA_Operational_Reporting/Report_BO1001_Current_Consumer_Deposit</members>
+        <members>RbA_Operational_Reporting/Report_BO1100_Change_Histories</members>
+        <members>RbA_Operational_Reporting/Report_BO1100_Orders</members>
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <aggregates>
+        <calculatedFormula>Order.Discount_Amount__c:SUM/ Order.Retail_Subtotal__c:SUM</calculatedFormula>
+        <datatype>percent</datatype>
+        <description>Discount/Retail Subtotal</description>
+        <developerName>FORMULA1</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Discount %</masterLabel>
+        <scale>0</scale>
+    </aggregates>
+    <aggregates>
+        <calculatedFormula>Order.Installation_Margin__c:SUM/Order.Retail_Total__c:SUM</calculatedFormula>
+        <datatype>percent</datatype>
+        <description>Installation Margin / Retail Total</description>
+        <developerName>FORMULA2</developerName>
+        <isActive>false</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Margin %</masterLabel>
+        <scale>0</scale>
+    </aggregates>
+    <aggregates>
+        <calculatedFormula>Order.Labor__c:SUM/Order.Retail_Total__c:SUM</calculatedFormula>
+        <datatype>percent</datatype>
+        <description>Labor / Retail Total</description>
+        <developerName>FORMULA3</developerName>
+        <isActive>false</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Labor Cost %</masterLabel>
+        <scale>0</scale>
+    </aggregates>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$FF_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$IF_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Bay_Bow_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Door_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Entry_Door_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Series_2_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Patio_Door_Rollup__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Retail_Subtotal__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Retail_Total__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Discount_Amount__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Order$RecordType</column>
+            <operator>equals</operator>
+            <value>Order.CORO_Record_Type</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Status</column>
+            <operator>equals</operator>
+            <value>On Hold,Tech Measure Needed,Tech Measure Scheduled,Ready to Order,Order Released,Install Needed,Install Scheduled,Install Complete,Job in Progress,Job Closed,Pending Cancellation,Cancelled</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Order$OrderNumber</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Report BO1100 - Orders</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Orders_with_All_Fields__c</reportType>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Order$Order_Processed_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

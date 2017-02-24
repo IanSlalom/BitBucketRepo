@@ -164,7 +164,7 @@ public with sharing class RMS_errorMessages {
 //  commented out per JETT-3638
 //	public static final String AMOUNT_OF_PAYMENT_EXCEEDS_PRICE = '&bull;The amount of payment exceeds the quoted price. Please issue a refund or adjust/correct a payment.';
 	public static final String CHANGED_WRITE_OFF_AND_VENDOR_CREDIT = '&bull;You are unable to change the Quantity Written Off the same time you change Vendor Credit.';
-	
+	public static final String ORDER_STATUS_IS_DRAFT = '&bull;This record cannot be created because the Order is in draft status.';
 	
 	/*******************************************************
 					Redirect Errors

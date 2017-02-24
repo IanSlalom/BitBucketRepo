@@ -27,6 +27,7 @@ public with sharing class RMS_createServiceRequestAssetManager  {
             
             
             o.Name='New Asset';
+            o.Legacy_Asset__c = true;
             o.AccountId = aid;                                                    
             o.RecordTypeId = UtilityMethods.retrieveRecordTypeId('Installed_Products', 'Asset');
             o.Status = 'Installed'; 
@@ -91,4 +92,8 @@ public with sharing class RMS_createServiceRequestAssetManager  {
         return deletePage;
         
     }
+    
+    
+    
+    
 }

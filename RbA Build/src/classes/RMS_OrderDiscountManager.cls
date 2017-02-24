@@ -26,6 +26,7 @@ public with sharing class RMS_OrderDiscountManager {
             if(od.Status__c == 'Applied' ){
                 Change_History__c ch = new Change_History__c();
                 ch.Order_Discount__c = od.Id; 
+                ch.Order__c = od.Order__c;
                 ch.Retail_Price__c = od.Discount_Amount__c * -1;
                 ch.Retail_Price_Change__c =  od.Discount_Amount__c * -1;
                 ch.Quantity__c = 1;
@@ -52,7 +53,8 @@ public with sharing class RMS_OrderDiscountManager {
         
         list<Change_History__c> relatedChangeHistories = [SELECT    id, 
                                                                     Changes__c, 
-                                                                    Order_Product__c, 
+                                                                    Order_Product__c,
+			                                                        Order__c,
                                                                     Retail_Price__c, 
                                                                     Retail_Price_Change__c,
                                                                     Quantity__c,
@@ -126,6 +128,8 @@ public with sharing class RMS_OrderDiscountManager {
             if( orderDiscountIdToListChangeHistory.get(od.id) == null || 
                 orderDiscountIdToListChangeHistory.get(od.id).size() == 0){
                 rCH.Order_Discount__c = od.Id;
+                rCH.Order__c = od.Order__c;
+                    
                 if(typeOfChange == 'justDiscount'){
                     rCh.Retail_Price__c = newMap.get(od.id).Discount_Amount__c * -1;
                     rCH.Retail_Price_Change__c =  (oldMap.get(od.id).Discount_Amount__c - newMap.get(od.id).Discount_Amount__c); 

@@ -141,6 +141,17 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Changed_Item__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Order_Product__c), &quot;ORDER DISCOUNT&quot;,Order_Product__r.Order_Product_Purchased__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Changed Item</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Changes__c</fullName>
         <externalId>false</externalId>
         <label>Changes</label>

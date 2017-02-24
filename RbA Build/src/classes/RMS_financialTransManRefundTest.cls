@@ -47,7 +47,7 @@ private class RMS_financialTransManRefundTest {
 									EffectiveDate= Date.Today(), 
 									Store_Location__c = store1.Id,
 									Opportunity = opp1, 									
-									Status ='Draft',
+									Status ='Tech Measure Needed',
 									BillToContactId = contact1.id, 
 									Pricebook2Id = Test.getStandardPricebookId()
 								);
