@@ -2897,18 +2897,6 @@ NULL)</formula>
         <label>4. All Orders</label>
     </listViews>
     <listViews>
-        <fullName>All_Orders</fullName>
-        <columns>ORDERS.ORDER_NUMBER</columns>
-        <columns>SALES.ACCOUNT.NAME</columns>
-        <columns>ORDER.BILL_TO_CONTACT</columns>
-        <columns>ORDERS.TOTAL_AMOUNT</columns>
-        <columns>ORDERS.EFFECTIVE_DATE</columns>
-        <columns>ORDERS.STATUS</columns>
-        <columns>CORE.USERS.LAST_NAME</columns>
-        <filterScope>Everything</filterScope>
-        <label>4. All Orders</label>
-    </listViews>
-    <listViews>
         <fullName>Change_Orders</fullName>
         <columns>ORDERS.EFFECTIVE_DATE</columns>
         <columns>RecordTypeName__c</columns>
