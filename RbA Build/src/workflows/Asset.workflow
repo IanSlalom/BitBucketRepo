@@ -17,9 +17,9 @@
         </actions>
         <active>true</active>
         <criteriaItems>
-            <field>Asset.Name</field>
+            <field>Asset.Legacy_Asset__c</field>
             <operation>equals</operation>
-            <value>New Asset</value>
+            <value>True</value>
         </criteriaItems>
         <criteriaItems>
             <field>Product2.Name_Part_Number__c</field>
