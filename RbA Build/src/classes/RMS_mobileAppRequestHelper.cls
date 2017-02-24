@@ -53,8 +53,8 @@ public with sharing class RMS_mobileAppRequestHelper {
 	  //get all sales opportunities assigned to me excluding old ones
 	  Integer unSoldAge = getUnsoldAge(userId);
 	  Date afterDate = Date.today().addMonths(-unSoldAge);
-	  String whereClause = 'where OwnerId = :userId and isDeleted = false and ' +
-	  	'((StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
+	  String whereClause = 'where OwnerId = :userId and isDeleted = false and ((StageName != \'Canceled\' and ' +
+	  	'StageName != \'New\' and StageName != \'In Progress\' and StageName != \'Quoted\') or ' +
 	  	'((StageName = \'New\' or StageName = \'In Progress\' or StageName = \'Quoted\') and CloseDate > :afterDate))';	  
 	  String query = OPP_QUERY + ' ' + whereClause;
 	  Map<Id, Opportunity> salesOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
@@ -117,30 +117,21 @@ public with sharing class RMS_mobileAppRequestHelper {
 	     * - a point of clarification Service Orders will not be attached to opportunities so we only need to worry about CORO and ARO Order Statuses
 	     */
 	    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','Job Closed','Activated'};
-	     // get a list of opportunities with orders that should be removed from the result
-//	    Map<Id,AggregateResult> oppsToKeepMap = [select count(Id) cnt, OpportunityId Id from Order where OpportunityId in: oppsToFilter.keySet() and
-//	    	Status not in :orderFilter group by OpportunityId];
-	    
-//		List<Id> oppIds = new List<Id>(oppsToFilter.keySet());
 		
-	    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :oppsToFilter.keySet()];
-	    System.debug('#####ord: ' + filterOrders);
-	    System.debug('#####opp: ' + oppsToFilter.values());
+	    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status not in :orderFilter and OpportunityId in :oppsToFilter.keySet()];
 	    // remove rows found
-	    for (Order ord : filterOrders) {
-//	    	AggrgateResult ar = oppsToKeepMap.get(ord.OpportunityId);
-//	    	if (ar == null || ar.get('cnt') == 0) {
-//	    		// we don't have an order on this opportunity that means we automatically want to keep it in the list
-//	    		// so check further
-//	    		
-//	    	}
-	    	if(ord.Status.equals('Pending Cancellation') || ord.Status.equals('Cancelled')) {
-	    		Opportunity opp = oppsToFilter.get(ord.OpportunityId);
-	    		if (!opp.StageName.equals('New') && !opp.StageName.equals('In Progress') && !opp.StageName.equals('Quoted')) {
-			    	oppsToFilter.remove(ord.OpportunityId);
+	    for (Opportunity opp : oppsToFilter.values()) {
+	    	Boolean found = false;
+	    	if (opp.StageName != 'New' && opp.StageName != 'In Progress' && opp.StageName != 'Quoted') {
+	    		for (Order ord : filterOrders) {
+	    			if (ord.OpportunityId == opp.Id) {
+	    				found = true;
+	    				break;
+	    			}
 	    		}
-	    	} else {
-		    	oppsToFilter.remove(ord.OpportunityId);
+	    		if (found == false) {
+	    			oppsToFilter.remove(opp.Id);
+	    		} 
 	    	}
 	    }
 	}
@@ -232,13 +223,6 @@ public with sharing class RMS_mobileAppRequestHelper {
 	String whereClause = 'where Id in :opportunityIds';
 	String query = OPP_QUERY + ' ' + whereClause;
 	Map<Id, Opportunity> relatedOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
-/*    // fitter out the statuses we don't want
-    List<String> orderFilter = new List<String>{'Pending Cancellation','Cancelled','New','Product Ordered','Service Scheduled','Warranty Submitted',
-		'Warranty Accepted','Warranty Rejected','Service On Hold','Customer Call Back','Service To Be Scheduled','Service Complete',
-		'To Be Ordered','Seasonal Service','Closed','Activated','Pending Cancellation','Cancelled'};
-    List<Order> filterOrders = [select Id, OpportunityId, Status from Order where Status in :orderFilter and OpportunityId in :opportunityIdList];
-    // remove rows found
-*/
 
     // get the accounts
 	//TODO: Validate that these fields are nut null, otherwise this will blow up
