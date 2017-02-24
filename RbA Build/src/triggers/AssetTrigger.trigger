@@ -31,9 +31,6 @@ trigger AssetTrigger on Asset (after delete, after insert, after undelete,
     }
     //IF NOT DATA LOADING PROFILE RUN LOGIC
     else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile ID').Value__c ) ){
-// Taking this out temporarily because it doesn't handle deletes
-//         for (Asset asset : Trigger.new) {
-//             if(asset.Legacy_Asset__c == FALSE){
         //HANDLERS AND MANAGERS
         RMS_financialTransactionManager financialTransactionManager = new RMS_financialTransactionManager();
             
@@ -81,6 +78,4 @@ trigger AssetTrigger on Asset (after delete, after insert, after undelete,
         }
         */
     }
-//         }
- //   }
 }
