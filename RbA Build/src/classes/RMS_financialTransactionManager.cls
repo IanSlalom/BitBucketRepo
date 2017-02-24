@@ -81,13 +81,13 @@ public with sharing class RMS_financialTransactionManager {
 		List<Asset> reducedNewList = new List<Asset>();
 		Map<Id, Asset> reducedNewMap = new Map<Id, Asset>();
         for (Asset asset : listNew) {
-        	if(asset.Legacy_Asset__c == FALSE){
+        	if(asset.Legacy_Asset__c == false){
         		reducedNewList.add(asset);
         		reducedNewMap.put(asset.id, asset);
         	}
         }
         
-		if (reducedNewList == null) return;
+		if (reducedNewList.size() == 0) return;
 
         createOrUpdateJournalEntryAsset(listNew, mapNew, null, 'insert');
     }
@@ -99,14 +99,14 @@ public with sharing class RMS_financialTransactionManager {
 		Map<Id, Asset> reducedOldMap = new Map<Id, Asset>();
 		Map<Id, Asset> reducedNewMap = new Map<Id, Asset>();
         for (Asset asset : listNew) {
-        	if(asset.Legacy_Asset__c == FALSE){
+        	if(asset.Legacy_Asset__c == false){
         		reducedNewList.add(asset);
         		reducedNewMap.put(asset.id, asset);
         		reducedOldMap.put(asset.id, mapOld.get(asset.id));
         	}
         }
         
-		if (reducedNewList == null) return;
+		if (reducedNewList.size() == 0) return;
 
         createOrUpdateJournalEntryAsset(listNew, mapNew, mapOld, 'update');
     }
@@ -115,13 +115,13 @@ public with sharing class RMS_financialTransactionManager {
 		List<Asset> reducedOldList = new List<Asset>();
 		Map<Id, Asset> reducedOldMap = new Map<Id, Asset>();
         for (Asset asset : listOld) {
-        	if(asset.Legacy_Asset__c == FALSE){
+        	if(asset.Legacy_Asset__c == false){
         		reducedOldList.add(asset);
         		reducedOldMap.put(asset.id, asset);
         	}
         }
         
-		if (reducedOldList == null) return;
+		if (reducedOldList.size() == 0) return;
         allowDeleteOrNot(reducedOldList, reducedOldMap);
     }
     
