@@ -323,6 +323,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Discount__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Retail_Total__c</field>
             <table>Order</table>
         </columns>
@@ -534,6 +539,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Permit_Cost__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Initial_Subtotal__c</field>
             <table>Order</table>
         </columns>
         <columns>

@@ -578,6 +578,18 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>Discount_Amount__c/Retail_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Discount %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Door_Cost_Rollup__c</fullName>
         <externalId>false</externalId>
         <label>Door Cost Rollup</label>
@@ -2883,6 +2895,11 @@ NULL)</formula>
             <value>D</value>
         </filters>
         <label>All Draft Orders</label>
+    </listViews>
+    <listViews>
+        <fullName>AllOrders</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Orders</label>
     </listViews>
     <listViews>
         <fullName>All_Orders</fullName>
