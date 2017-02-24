@@ -40,6 +40,7 @@
         <field>Order$Series_2_Rollup__c</field>
     </columns>
     <columns>
+        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Initial_Subtotal__c</field>
     </columns>
     <columns>

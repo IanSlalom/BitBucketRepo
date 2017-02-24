@@ -263,6 +263,7 @@
         <members>ServiceProductTrigger</members>
         <members>TaskTrigger</members>
         <members>UserTrigger</members>
+        <members>changeHistoryTrigger</members>
         <members>journalEntryTrigger</members>
         <members>municipalityTrigger</members>
         <members>serviceSymptomTrigger</members>
