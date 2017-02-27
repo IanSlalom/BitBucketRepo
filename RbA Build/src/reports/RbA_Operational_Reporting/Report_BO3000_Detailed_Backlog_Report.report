@@ -7,7 +7,7 @@
         <field>Order.Unique_Identifier__c</field>
     </columns>
     <columns>
-        <field>ORDER_EFFECTIVE_DATE</field>
+        <field>Order.Order_Processed_Date__c</field>
     </columns>
     <columns>
         <field>ORDER_BILLING_FIRST_NAME</field>
@@ -32,10 +32,6 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Permit_Cost__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
         <field>Order.Amount_Financed__c</field>
     </columns>
     <description>Report BO3000 - Detailed Backlog Report</description>
@@ -43,7 +39,7 @@
         <criteriaItems>
             <column>ORDER_STATUS</column>
             <operator>notEqual</operator>
-            <value>Job Closed</value>
+            <value>Job Closed,Draft,Install Complete</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>
@@ -55,7 +51,7 @@
     <reportType>OrderList</reportType>
     <showDetails>true</showDetails>
     <timeFrameFilter>
-        <dateColumn>ORDER_EFFECTIVE_DATE</dateColumn>
+        <dateColumn>Order.Order_Processed_Date__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
