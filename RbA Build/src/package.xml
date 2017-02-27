@@ -663,6 +663,7 @@
         <members>Order_Report_for_Cut_Over_Prep</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
+        <members>Orders_with_Labor</members>
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>
