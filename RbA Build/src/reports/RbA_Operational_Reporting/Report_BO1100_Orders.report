@@ -45,6 +45,10 @@
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
+        <field>Order$Initial_Discount__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Retail_Subtotal__c</field>
     </columns>
     <columns>
@@ -62,7 +66,7 @@
         <criteriaItems>
             <column>Order$RecordType</column>
             <operator>equals</operator>
-            <value>Order.CORO_Record_Type</value>
+            <value>Order.CORO_Record_Type,Order.Change_Order</value>
         </criteriaItems>
         <criteriaItems>
             <column>Order$Status</column>

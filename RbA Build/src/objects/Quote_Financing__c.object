@@ -88,12 +88,12 @@
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Initial_Payment_Amount__c</fullName>
+        <fullName>Payment_Display__c</fullName>
         <defaultValue>0</defaultValue>
-        <description>an initial payment amount captured in rSuite - probably ends up in some of the egreement documents</description>
+        <description>field to capture a dispaly amount for rSuite</description>
         <externalId>false</externalId>
-        <inlineHelpText>an initial payment amount captured in rSuite - probably ends up in some of the egreement documents</inlineHelpText>
-        <label>Initial Payment Amount</label>
+        <inlineHelpText>field to capture a dispaly amount for rSuite</inlineHelpText>
+        <label>Payment Display</label>
         <precision>12</precision>
         <required>false</required>
         <scale>2</scale>

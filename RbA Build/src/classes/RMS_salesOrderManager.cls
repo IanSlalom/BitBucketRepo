@@ -47,7 +47,7 @@ public with sharing class RMS_salesOrderManager {
 
 			// get the quote financing
 			List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c,
-				Authorization_Code__c, Initial_Payment_Amount__c, Related_Quote__r.OpportunityId
+				Authorization_Code__c, Payment_Display__c, Related_Quote__r.OpportunityId
 				from Quote_Financing__c where Related_Quote__c in :soldQuoteList];
 
 		 	//Dynamicaly query for all QuoteLineItem fields
@@ -274,7 +274,7 @@ public with sharing class RMS_salesOrderManager {
 			ordf.Amount_Financed__c = qf.Amount_Financed__c;
 			ordf.Store_Finance_Program__c = qf.Store_Finance_Program__c;
 			ordf.Authorization_Code__c = qf.Authorization_Code__c;
-			ordf.Initial_Payment_Amount__c = qf.Initial_Payment_Amount__c;
+			ordf.Payment_Display__c = qf.Payment_Display__c;
 			ordf.Expiration_Date__c = qf.Expiration_Date__c;
 			ordf.Program_Rate__c = qf.Program_Rate__c;
 			ordf.Program_Fee__c = qf.Program_Fee__c;
