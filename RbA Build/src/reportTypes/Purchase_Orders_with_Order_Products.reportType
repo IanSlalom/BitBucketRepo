@@ -865,6 +865,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Screen_Size__c</field>
+            <table>Purchase_Order__c.Order_Products__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Sent_to_Baan__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>

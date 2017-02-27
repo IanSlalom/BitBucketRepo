@@ -545,6 +545,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Screen_Size__c</field>
+            <table>Order.OrderItems</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Unit_Id__c</field>
             <table>Order.OrderItems</table>
         </columns>
