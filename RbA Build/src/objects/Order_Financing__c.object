@@ -125,6 +125,19 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Payment_Display__c</fullName>
+        <description>field to capture a dispaly amount for rSuite</description>
+        <externalId>false</externalId>
+        <inlineHelpText>field to capture a dispaly amount for rSuite</inlineHelpText>
+        <label>Payment Display</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Program_Fee__c</fullName>
         <description>The program fee (percentage) times the amount financed.</description>
         <externalId>false</externalId>

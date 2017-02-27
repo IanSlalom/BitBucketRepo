@@ -47,7 +47,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Juntion object to Finance Program to the Quote object.</description>
+    <description>Junction object to Finance Program to the Quote object.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -86,6 +86,20 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Payment_Display__c</fullName>
+        <defaultValue>0</defaultValue>
+        <description>field to capture a dispaly amount for rSuite</description>
+        <externalId>false</externalId>
+        <inlineHelpText>field to capture a dispaly amount for rSuite</inlineHelpText>
+        <label>Payment Display</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Pivotal_Id__c</fullName>
