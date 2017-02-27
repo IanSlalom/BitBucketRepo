@@ -622,6 +622,8 @@
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
+        <members>RbA_Operational_Reporting/Report_BO2000_Labor</members>
+        <members>RbA_Operational_Reporting/Report_BO2000_Orders</members>
         <members>RbA_Operational_Reporting/Report_BO2004_Job_Cost_Summary_Stain</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
@@ -638,6 +640,7 @@
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4200_Receivings_Postings</members>
+        <members>RbA_Operational_Reporting/Report_BO4202_Remake_by_Local</members>
         <members>RbA_Operational_Reporting/Report_BO8008_First_Time_Through_NEW</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
