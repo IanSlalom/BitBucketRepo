@@ -178,6 +178,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Finance_Program_Fees__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>ShippingState</field>
             <table>Order</table>
         </columns>
@@ -189,6 +194,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>ShippingCountry</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Finance_Fees__c</field>
             <table>Order</table>
         </columns>
         <columns>
@@ -674,6 +684,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Windows_Rollup__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Initial_Discount__c</field>
             <table>Order</table>
         </columns>
         <columns>

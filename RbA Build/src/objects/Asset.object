@@ -98,6 +98,17 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>GL_Account__c</fullName>
+        <externalId>false</externalId>
+        <formula>Original_Order_Product__r.Purchase_Order__r.GL_Account__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>GL Account</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>InstallDate</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -272,6 +283,17 @@
     <fields>
         <fullName>PurchaseDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>Purchase_Order_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>Original_Order_Product__r.Purchase_Order__r.RecordType.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Purchase Order Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Purchase_Order__c</fullName>
@@ -623,6 +645,12 @@
         <description>Cannot add/edit assets for a closed order.</description>
         <errorConditionFormula>AND(TEXT(Sold_Order__r.Status) == &apos;Job Closed&apos;,$Profile.Name &lt;&gt; &quot;RMS-Data Integration&quot;)</errorConditionFormula>
         <errorMessage>You can not add or edit assets for a closed order.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>LegacyAssetsMustHaveMasterProducts</fullName>
+        <active>true</active>
+        <errorConditionFormula>Legacy_Asset__c &amp;&amp; NOT(ISBLANK( Product2Id )) &amp;&amp; NOT(Product2.Has_Service_Products__c)</errorConditionFormula>
+        <errorMessage>This asset is created for a Service Request, you must select a Product that has Service Products</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>LockedServiceRequest</fullName>
