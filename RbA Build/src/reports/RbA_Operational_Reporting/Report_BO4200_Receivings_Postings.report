@@ -19,6 +19,9 @@
         <aggregateTypes>Sum</aggregateTypes>
         <field>Asset.Received_Products__r$Extended__c</field>
     </columns>
+    <columns>
+        <field>Asset$Date_Received__c</field>
+    </columns>
     <description>Service POs</description>
     <filter>
         <criteriaItems>
@@ -38,7 +41,7 @@
         <field>Asset.Received_Products__r$Date__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Report BO4200 - Receivings Postings</name>
+    <name>BO4200-Receivings Postings-Service PO</name>
     <params>
         <name>co</name>
         <value>1</value>
