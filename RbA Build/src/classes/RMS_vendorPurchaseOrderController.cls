@@ -892,7 +892,11 @@ checkConfirmed method
                         allOrderItemsHaveWholesaleCost = false;
                         break;
                     }
-                    else if (oiw.orderItem.Unit_Wholesale_Cost__c <= 0) {
+                    else if (oiw.orderItem.Unit_Wholesale_Cost__c < 0) {
+                        allOrderItemsHaveWholesaleCost = false;
+                        break;        		
+                    }
+                    else if (oiw.orderItem.Unit_Wholesale_Cost__c == 0 && (!servicePurchaseOrder || oiw.orderItem.Charge_Cost_To__c != 'Manufacturing')) {
                         allOrderItemsHaveWholesaleCost = false;
                         break;        		
                     }
