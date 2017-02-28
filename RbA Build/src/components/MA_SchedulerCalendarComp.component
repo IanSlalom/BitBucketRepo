@@ -968,9 +968,9 @@
             <input type="hidden" id="eventOptionsDate" />
             <input type="hidden" id="eventOptionsMultiDayOrder" />
             <div onclick="viewEditWorkOrder(true); closeEventOptionsModal();" class="batchHide">View / Edit</div>
-            <div onclick="showAvailabilityModal(false, true); closeEventOptionsModal();" class="batchHide">Reschedule</div>
-            <div onclick="showAssignResourceModal(false, true, false, isBatchResources); closeEventOptionsModal();" >Modify Resources for Entire Work Order</div>
-            <div onclick="showAssignResourceModal(false, true, true, isBatchResources); closeEventOptionsModal();" >Modify Resources for this Day Only</div>
+            <div onclick="showAvailabilityModal(false, true, true); closeEventOptionsModal();" class="batchHide">Reschedule</div>
+            <div onclick="showAssignResourceModal(false, true, false, isBatchResources, true); closeEventOptionsModal();" >Modify Resources for Entire Work Order</div>
+            <div onclick="showAssignResourceModal(false, true, true, isBatchResources, true); closeEventOptionsModal();" >Modify Resources for this Day Only</div>
             <div onclick="showCancellationModal(true); closeEventOptionsModal();" class="batchHide">Cancel Work Order</div>
         </div>
 

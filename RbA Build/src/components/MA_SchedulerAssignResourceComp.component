@@ -354,6 +354,7 @@
     </style>
 
     <script>
+        var skipSchedule = false;
         var assignedSkillsToResourcesMap = {};
         //var forceAssignmentScheduleCombo = false;
         var forceAssignmentScheduleCombo = true;
@@ -370,10 +371,14 @@
         /*      this method opens the assign resource modal         */
         /*                                                          */
         /************************************************************/
-        function showAssignResourceModal(isForcedNextStep, isReassign, isSingleDay, isBatched) {
+        function showAssignResourceModal(isForcedNextStep, isReassign, isSingleDay, isBatched, isSkipSchedule) {
             closeAssignResourceModal();
             var woToResIds = [];
             var workOrderId;
+
+            if (isSkipSchedule != undefined && isSkipSchedule != null) {
+                skipSchedule = isSkipSchedule;
+            }
 
             if(isBatched){
                 workOrderId = $('#eventOptionsRecordId').val();
@@ -536,9 +541,11 @@
                 }
                 */
 
-                if (response.isSingleDay && eventOptionsMultiDayOrder != undefined && eventOptionsMultiDayOrder != null     && eventOptionsMultiDayOrder != '') {
+                if (skipSchedule || (response.isSingleDay && eventOptionsMultiDayOrder != undefined && eventOptionsMultiDayOrder != null && eventOptionsMultiDayOrder != '')) {
                     forceAssignmentScheduleCombo = false;
                 }
+
+                skipSchedule = false;
             }
         }
 
@@ -862,7 +869,7 @@
             if (response.success) {
                 $('#calendar').fullCalendar('refetchEvents');
                 if (forceAssignmentScheduleCombo) {
-                    showAvailabilityModal(true, false);
+                    showAvailabilityModal(true, false, true);
                 }
                 closeAssignResourceModal();
             }
