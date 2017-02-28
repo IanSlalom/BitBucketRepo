@@ -538,6 +538,29 @@
         <label>3. Product Purchase Orders</label>
     </listViews>
     <listViews>
+        <fullName>Purchase_Orders_Released_No_Confirm</fullName>
+        <columns>NAME</columns>
+        <columns>Vendor__c</columns>
+        <columns>Order__c</columns>
+        <columns>CREATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Released</value>
+        </filters>
+        <filters>
+            <field>Confirmed_Timestamp__c</field>
+            <operation>equals</operation>
+        </filters>
+        <filters>
+            <field>Vendor__c</field>
+            <operation>equals</operation>
+            <value>Renewal by Andersen</value>
+        </filters>
+        <label>Purchase Orders Released RbA- No Confirm</label>
+    </listViews>
+    <listViews>
         <fullName>RbA_Purchase_Orders</fullName>
         <columns>NAME</columns>
         <columns>Date__c</columns>

@@ -145,6 +145,10 @@
     <listViews>
         <fullName>All1</fullName>
         <columns>Pivotal_Field__c</columns>
+        <columns>Salesforce_API_Name__c</columns>
+        <columns>PCS_Value__c</columns>
+        <columns>Salesforce_Value__c</columns>
+        <columns>Pivotal_Value__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
