@@ -31,6 +31,9 @@
     <columns>
         <field>OrderItem$Order.Primary_Installer__c</field>
     </columns>
+    <columns>
+        <field>OrderItem$Date_Received__c</field>
+    </columns>
     <description>Remake Report by Local Responsibility</description>
     <filter>
         <booleanFilter>(1 AND 2 AND (3 OR 4)) AND 5</booleanFilter>

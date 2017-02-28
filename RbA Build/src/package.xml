@@ -566,6 +566,9 @@
         <members>RbA_Operational_Reporting/B02000_by_Booking_for_Comms_Ungrouped</members>
         <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions</members>
         <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions_Ungrouped</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Install_Adj</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Joined</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Refunds</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
