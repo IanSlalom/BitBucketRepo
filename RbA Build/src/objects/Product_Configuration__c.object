@@ -1667,14 +1667,6 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Brickmould/Picture Frame</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Brickmould/Traditional</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
                 <fullName>Nailing Flange</fullName>
                 <default>false</default>
             </picklistValues>
@@ -1684,10 +1676,6 @@
             </picklistValues>
             <picklistValues>
                 <fullName>Overfit Brickmould</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Overfit Chamfered Edge</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -1722,8 +1710,20 @@
                 <fullName>Chamfered Edge Overfit All Sides</fullName>
                 <default>false</default>
             </picklistValues>
-            <picklistValues>
+                    <picklistValues>
                 <fullName>Chamfered Edge Overfit No Sill</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brickmould / Picture Frame</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brickmould / Traditional</fullName>
+                <default>false</default>
+            </picklistValues>
+    <picklistValues>
+                <fullName>Chamfered Edge Overfit Flange</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2038,7 +2038,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>High Performance SmartSun Heat Lock Glass</fullName>
+                <fullName>High Performance SmartSun with HeatLock Glass</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2216,23 +2216,23 @@
         <label>Grille Style</label>
         <picklist>
             <picklistValues>
-                <fullName>Grilles Between Glass</fullName>
+                <fullName>Simulated Divided Light (FDL w/o spacer)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Interior Wood Only</fullName>
+                <fullName>Grilles Between Glass (GBG)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Interior Wood and GBG</fullName>
+                <fullName>Interior Wood Only (INTW)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Full Divided Light (FDL with spacer)</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Full Divided Light</fullName>
+                <fullName>Interior Wood and GBG (INTW + GBG)</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -2644,11 +2644,11 @@ Used for Makeability and Tech Measure.</description>
         <label>Hardware Option</label>
         <picklist>
             <picklistValues>
-                <fullName>Normal</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Wide Opening</fullName>
+                <fullName>Wide Opening Hinge</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -6630,39 +6630,23 @@ Used for Makeability and rSuite Tech Measure.</description>
         <label>Screen Type</label>
         <picklist>
             <picklistValues>
-                <fullName>Full Screen Fiberglass</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Full Screen Aluminum</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Full Screen TruScene</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Half Screen Fiberglass</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Half Screen Aluminum</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Half Screen TruScene</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Dual Aluminum</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
                 <fullName>Dual TruScene</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
                 <fullName>TruScene with Wood Veneer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TruScene</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -9165,6 +9149,21 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Exterior_Trim_Color_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Exterior_Trim_Color__c</picklist>
             <values>
                 <fullName>Black</fullName>
@@ -9230,10 +9229,6 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Overfit Brickmould</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Overfit Chamfered Edge</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -9521,23 +9516,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Grille_Style__c</picklist>
             <values>
-                <fullName>Full Divided Light</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Grilles Between Glass</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood Only</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood and GBG</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Interior Wood and GBG %28INTW %2B GBG%29</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -9766,11 +9745,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Hardware_Option__c</picklist>
             <values>
-                <fullName>Normal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Wide Opening</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -12067,27 +12042,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Sash_Operation__c</picklist>
             <values>
-                <fullName>Active%2FPassive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Active%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Left</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStat%2FStat</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Passive%2FActive</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -12095,19 +12050,7 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stat%2FStat%2FRight Vent</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FActive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FRight Vent</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -12248,6 +12191,21 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Type__c</picklist>
+            <values>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TruScene</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -14024,10 +13982,6 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Overfit Chamfered Edge</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Overfit Flange</fullName>
                 <default>false</default>
             </values>
@@ -14312,23 +14266,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Grille_Style__c</picklist>
             <values>
-                <fullName>Full Divided Light</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Grilles Between Glass</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood Only</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood and GBG</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Interior Wood and GBG %28INTW %2B GBG%29</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -14557,11 +14495,11 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Hardware_Option__c</picklist>
             <values>
-                <fullName>Normal</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Wide Opening</fullName>
+                <fullName>Wide Opening Hinge</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -16858,27 +16796,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Sash_Operation__c</picklist>
             <values>
-                <fullName>Active%2FPassive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Active%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Left</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStat%2FStat</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Passive%2FActive</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -16886,19 +16804,7 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stat%2FStat%2FRight Vent</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FActive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FRight Vent</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -18854,10 +18760,6 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Overfit Chamfered Edge</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Overfit Flange</fullName>
                 <default>false</default>
             </values>
@@ -19146,23 +19048,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Grille_Style__c</picklist>
             <values>
-                <fullName>Full Divided Light</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Grilles Between Glass</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood Only</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood and GBG</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Interior Wood and GBG %28INTW %2B GBG%29</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -19391,11 +19277,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Hardware_Option__c</picklist>
             <values>
-                <fullName>Normal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Wide Opening</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -21819,31 +21701,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Sash_Operation__c</picklist>
             <values>
-                <fullName>Active%2FPassive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Active%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Active%2FStationary%2FActive</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Left</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStat%2FStat</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Passive%2FActive</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -21851,19 +21709,7 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stat%2FStat%2FRight Vent</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FActive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FRight Vent</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -23893,10 +23739,6 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Overfit Chamfered Edge</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Overfit Flange</fullName>
                 <default>false</default>
             </values>
@@ -24185,23 +24027,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Grille_Style__c</picklist>
             <values>
-                <fullName>Full Divided Light</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Grilles Between Glass</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood Only</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood and GBG</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Interior Wood and GBG %28INTW %2B GBG%29</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -24430,11 +24256,11 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Hardware_Option__c</picklist>
             <values>
-                <fullName>Normal</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Wide Opening</fullName>
+                <fullName>Wide Opening Hinge</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -26874,6 +26700,10 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
+                <fullName>Left Vent %2F Stat %2F Right Vent</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Left Vent%2FStat%2FStat</fullName>
                 <default>false</default>
             </values>
@@ -27053,7 +26883,23 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Screen_Type__c</picklist>
             <values>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Dual TruScene</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TruScene</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TruScene with Wood Veneer</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -28889,10 +28735,6 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Overfit Chamfered Edge</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Overfit Flange</fullName>
                 <default>false</default>
             </values>
@@ -29177,23 +29019,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Grille_Style__c</picklist>
             <values>
-                <fullName>Full Divided Light</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Grilles Between Glass</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood Only</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Interior Wood and GBG</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Simulated Divided Light</fullName>
+                <fullName>Interior Wood and GBG %28INTW %2B GBG%29</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -29422,11 +29248,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Hardware_Option__c</picklist>
             <values>
-                <fullName>Normal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Wide Opening</fullName>
+                <fullName>Normal Hinge</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -31723,27 +31545,7 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Sash_Operation__c</picklist>
             <values>
-                <fullName>Active%2FPassive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Active%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Left</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStat%2FStat</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Left Vent%2FStationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Passive%2FActive</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -31751,19 +31553,7 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stat%2FStat%2FRight Vent</fullName>
-                <default>false</default>
-            </values>
-            <values>
                 <fullName>Stationary</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FActive</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Stationary%2FRight Vent</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -31904,6 +31694,21 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Type__c</picklist>
+            <values>
+                <fullName>Aluminum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fiberglass</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TruScene</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
