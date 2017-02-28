@@ -6556,6 +6556,47 @@ Used for Makeability and rSuite Tech Measure.</description>
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>Screen_Size_Control__c</fullName>
+        <externalId>false</externalId>
+        <label>Screen Size</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Screen_Size__c</fullName>
+        <externalId>false</externalId>
+        <label>Screen Size</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Half Screen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
         <fullName>Screen_Type_Control__c</fullName>
         <description>Controls whether Screen Type is required, enabled, or disabled for this product configuration.</description>
         <externalId>false</externalId>
@@ -12174,6 +12215,28 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Screen_Size_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size__c</picklist>
+            <values>
+                <fullName>Half Screen</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Screen_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -16939,6 +17002,28 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>White</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size__c</picklist>
+            <values>
+                <fullName>Half Screen</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -21886,6 +21971,28 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>White</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size__c</picklist>
+            <values>
+                <fullName>Half Screen</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -26907,6 +27014,28 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Screen_Size_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size__c</picklist>
+            <values>
+                <fullName>Half Screen</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Screen_Type_Control__c</picklist>
             <values>
                 <fullName>Disabled</fullName>
@@ -31738,6 +31867,28 @@ Used for Makeability and rSuite Tech Measure.</description>
             </values>
             <values>
                 <fullName>White</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size_Control__c</picklist>
+            <values>
+                <fullName>Disabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Enabled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Required</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Screen_Size__c</picklist>
+            <values>
+                <fullName>Half Screen</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

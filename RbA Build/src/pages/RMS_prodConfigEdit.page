@@ -257,6 +257,9 @@
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenTypeItems}"/>
             </apex:selectList>
+            <apex:selectList value="{!OrderItem.Screen_Size__c}" label="Screen Size" size="1" id="screenSize" html-data-jsid="screenSize" required="{!prodConfig.mpc.Screen_Size_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Size_Control__c == 'Disabled'  || mode != 'e'}" >
+                <apex:selectOptions value="{!screenSizeItems}"/>
+            </apex:selectList>
  <!--             <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenVeneerTypeItems}"/>
             </apex:selectList>

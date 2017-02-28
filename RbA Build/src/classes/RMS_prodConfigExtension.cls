@@ -826,6 +826,19 @@ public class RMS_prodConfigExtension {
 		}
 	} 
 
+	/******* Screen Size Items  *****************/
+	private static transient List<SelectOption> lScreenSizeItems;
+	public List<SelectOption> screenSizeItems {
+		get
+		{   
+			if (lScreenSizeItems == null) {
+				Set<String> currentValues = new Set<String>{orderLineItem.Screen_Size__c};
+				lScreenSizeItems = RMS_prodConfigManager.retrievePickListItems(prodConfig.mpc.Screen_Size__c, currentValues);
+			}
+			return lScreenSizeItems;
+		}
+	} 
+
 	/******* Screen Veneer Type Items  *****************/
 /*	private static transient List<SelectOption> lScreenVeneerTypeItems;
 	public List<SelectOption> screenVeneerTypeItems{
