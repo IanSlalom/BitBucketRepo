@@ -855,11 +855,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Screen_Size__c</field>
-            <table>Purchase_Order__c.Order_Products__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Screen_Type__c</field>
             <table>Purchase_Order__c.Order_Products__r</table>
         </columns>
