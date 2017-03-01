@@ -510,6 +510,17 @@ Retail_Price_Change__c , 0)</formula>
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Report_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( (Line_Processed_Date__c &lt;= Order__r.Order_Processed_Date__c) || ISBLANK(Order__r.Order_Processed_Date__c), &quot;Initial&quot;,&quot;Change&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Report Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Responsible_Party__c</fullName>
         <externalId>false</externalId>
         <label>Responsible Party</label>
@@ -696,6 +707,17 @@ Retail_Price_Change__c , 0)</formula>
                 <default>false</default>
             </values>
         </picklistValues>
+        <picklistValues>
+            <picklist>Subtype__c</picklist>
+            <values>
+                <fullName>Change</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Initial</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
     </recordTypes>
     <recordTypes>
         <fullName>Order_Product</fullName>
@@ -713,6 +735,17 @@ Retail_Price_Change__c , 0)</formula>
             </values>
             <values>
                 <fullName>Sales</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Subtype__c</picklist>
+            <values>
+                <fullName>Change</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Initial</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

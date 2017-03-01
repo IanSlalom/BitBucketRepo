@@ -481,6 +481,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Screen_Size__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Screen_Color__c</field>
             </layoutItems>
         </layoutColumns>
@@ -936,6 +940,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Sash_Ratio_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Screen_Size_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

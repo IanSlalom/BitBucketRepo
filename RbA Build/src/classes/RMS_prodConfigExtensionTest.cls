@@ -262,6 +262,7 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Lifts_Pulls__c = '1; 2';
 		prodConfig.Locks_Sash__c = '1; 2';
 		prodConfig.Screen_Type__c = 'ST1; ST2';
+		prodConfig.Screen_Size__c = 'SS1; SS2';
 		prodConfig.Screen_Veneer_Type__c = 'SV1; SV2';
 		prodConfig.Sill_Angle__c = '1; 2';
 		prodConfig.Mull_Sequence_Mullion__c = 'a; b';
@@ -625,6 +626,7 @@ private class RMS_prodConfigExtensionTest {
 		prodConfig.Lifts_Pulls__c = '1; 2';
 		prodConfig.Locks_Sash__c = '1; 2';
 		prodConfig.Screen_Type__c = 'ST1; ST2';
+		prodConfig.Screen_Size__c = 'SS1; SS2';
 		prodConfig.Screen_Veneer_Type__c = 'SV1; SV2';
 		prodConfig.Sill_Angle__c = '1; 2';
 		prodConfig.Mull_Sequence_Mullion__c = 'a; b';

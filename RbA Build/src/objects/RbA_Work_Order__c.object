@@ -800,6 +800,17 @@ ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Sig
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Initial_Labor__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Labor</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Inspection_Cancelled_Reason__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Reason inspection was cancelled</inlineHelpText>
@@ -2509,6 +2520,55 @@ NULL)</formula>
         <sharedTo>
             <allInternalUsers></allInternalUsers>
         </sharedTo>
+    </listViews>
+    <listViews>
+            <fullName>LSWP_Date_Scheduled_No_Results</fullName>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Sold_Order__c</columns>
+        <columns>Date_scheduled_for_testing__c</columns>
+        <columns>Test_Results__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>LSWP</value>
+        </filters>
+        <filters>
+            <field>Date_scheduled_for_testing__c</field>
+            <operation>lessThan</operation>
+            <value>TODAY</value>
+        </filters>
+        <filters>
+            <field>Test_Results__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>LSWP - Waiting for Results</label>
+    </listViews>
+    <listViews>
+        <fullName>LSWP_Waiting_For_Test_Scheduling</fullName>
+        <booleanFilter>1 AND 2 AND 3</booleanFilter>
+        <columns>NAME</columns>
+        <columns>Contact__c</columns>
+        <columns>Sold_Order__c</columns>
+        <columns>Request_sent_to_Contractor__c</columns>
+        <columns>Date_scheduled_for_testing__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Work_Order_Type__c</field>
+            <operation>equals</operation>
+            <value>LSWP</value>
+        </filters>
+        <filters>
+            <field>Request_sent_to_Contractor__c</field>
+            <operation>lessThan</operation>
+            <value>TODAY</value>
+        </filters>
+        <filters>
+            <field>Date_scheduled_for_testing__c</field>
+            <operation>equals</operation>
+        </filters>
+        <label>LSWP- Waiting For Test Scheduling</label>
     </listViews>
     <listViews>
         <fullName>LSWP_Workorders</fullName>

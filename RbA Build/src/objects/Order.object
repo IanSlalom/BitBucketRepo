@@ -561,6 +561,19 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
+        <fullName>Discount_Amount2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Discount_Amount__c * -1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Used for Finance Reports</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>A roll-up sum of all discounts applied to this order (see the order discount related list).</description>
         <externalId>false</externalId>
@@ -820,6 +833,18 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Finance_Fees__c</fullName>
+        <externalId>false</externalId>
+        <formula>Finance_Program_Fees__c / Retail_Total__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Finance Fees %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Finance_Program_Fees__c</fullName>
         <description>A rollup of all of the financing fees applied to this order.</description>
         <externalId>false</externalId>
@@ -956,6 +981,26 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Initial_Discount__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Initial_Labor__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Labor</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Initial_Subtotal__c</fullName>
@@ -3218,6 +3263,27 @@ NULL)</formula>
         <label>Orders - Ready to Order</label>
     </listViews>
     <listViews>
+        <fullName>Orders_Revenue_Recognized_Balance_Due</fullName>
+        <columns>ORDERS.ORDER_NUMBER</columns>
+        <columns>SALES.ACCOUNT.NAME</columns>
+        <columns>ORDERS.TOTAL_AMOUNT</columns>
+        <columns>ORDERS.EFFECTIVE_DATE</columns>
+        <columns>ORDERS.STATUS</columns>
+        <columns>CONTRACT.CONTRACT_NUMBER</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Revenue_Recognized_Date__c</field>
+            <operation>equals</operation>
+            <value>YESTERDAY</value>
+        </filters>
+        <filters>
+            <field>Balance_Due__c</field>
+            <operation>greaterThan</operation>
+            <value>0</value>
+        </filters>
+        <label>Orders Revenue Recognized - Balance Due</label>
+    </listViews>
+    <listViews>
         <fullName>Orders_Tech_Measure_Needed</fullName>
         <columns>Order_Owner__c</columns>
         <columns>ORDERS.ORDER_NUMBER</columns>
@@ -4889,24 +4955,24 @@ IF(ISBLANK(Payments_Received__c), 0, Payments_Received__c)</errorConditionFormul
     var x;
     if (confirm(&quot;Are you sure you want to cancel this order?&quot;)) {
       var revRec = &quot;{!Order.Revenue_Recognized_Date__c}&quot;;
-	  if(revRec != null &amp;&amp; revRec.length &gt;0){
-		  alert(&quot;An order with a Revenue Recognized Date cannot be cancelled.&quot;);
-	  }else if(&quot;{!Order.Retail_Total__c}&quot; != &quot;{!Order.Amount_Due__c}&quot;){
-		  alert(&quot;Please enter a refund before cancelling the Order.&quot;);
-	  }else if(&quot;{!Order.Cancellation_Reason__c}&quot; == null || &quot;{!Order.Cancellation_Reason__c}&quot; == &apos;&apos;){
-		  alert(&quot;You must select a Cancellation Reason.&quot;);
-	  }else{	  
-		   var orderId = &quot;{!Order.Id}&quot;;
-			
-		   // Executes if the Button/Link will be clicked from within Service Console
-		   if (typeof(srcUp) == &apos;function&apos;) {
-			  srcUp(&apos;/apex/RMS_cancelOrder?isdtp=vw&amp;id=&apos;+orderId);
-		   }
-		   // Executes if the Button/Link will be clicked from normal Salesforce UI
-		   else{
-			  location.href=&apos;/apex/RMS_cancelOrder?id=&apos; +orderId ;
-		   }
-		}
+      if(revRec != null &amp;&amp; revRec.length &gt;0){
+          alert(&quot;An order with a Revenue Recognized Date cannot be cancelled.&quot;);
+      }else if(&quot;{!Order.Retail_Total__c}&quot; != &quot;{!Order.Amount_Due__c}&quot;){
+          alert(&quot;Please enter a refund before cancelling the Order.&quot;);
+      }else if(&quot;{!Order.Cancellation_Reason__c}&quot; == null || &quot;{!Order.Cancellation_Reason__c}&quot; == &apos;&apos;){
+          alert(&quot;You must select a Cancellation Reason.&quot;);
+      }else{      
+           var orderId = &quot;{!Order.Id}&quot;;
+            
+           // Executes if the Button/Link will be clicked from within Service Console
+           if (typeof(srcUp) == &apos;function&apos;) {
+              srcUp(&apos;/apex/RMS_cancelOrder?isdtp=vw&amp;id=&apos;+orderId);
+           }
+           // Executes if the Button/Link will be clicked from normal Salesforce UI
+           else{
+              location.href=&apos;/apex/RMS_cancelOrder?id=&apos; +orderId ;
+           }
+        }
     }</url>
     </webLinks>
     <webLinks>
@@ -4925,7 +4991,7 @@ var revRec = &quot;{!Order.Revenue_Recognized_Date__c}&quot;;
 
 if(revRec == null || revRec.length == 0){
 alert(&quot;You cannot create a change order from an order that has not been revenue recognized.&quot;);
-}else{	
+}else{  
 var recordtype= sforce.connection.query(&quot;select Id from recordtype where DeveloperName =&apos;Change_Order&apos; and SObjectType = &apos;Order&apos;&quot;);
 var recordTypeRecords = recordtype.getArray(&quot;records&quot;);
 var changeOrderRecordTypeId = recordTypeRecords[0].Id;

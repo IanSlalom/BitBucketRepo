@@ -22,13 +22,6 @@
         <aggregateTypes>Sum</aggregateTypes>
         <field>Labor__c.External_Labor_Amount__c</field>
     </columns>
-    <filter>
-        <criteriaItems>
-            <column>Labor__c.External_Labor_Amount__c</column>
-            <operator>notEqual</operator>
-            <value></value>
-        </criteriaItems>
-    </filter>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>

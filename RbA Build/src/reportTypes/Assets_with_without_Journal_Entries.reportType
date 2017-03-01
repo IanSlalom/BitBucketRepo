@@ -210,6 +210,16 @@
             <field>Purchase_Order__c</field>
             <table>Asset</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sold_Order__c.Revenue_Recognized_Date__c</field>
+            <table>Asset</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Sold_Order__c.Revenue_Recognized__c</field>
+            <table>Asset</table>
+        </columns>
         <masterLabel>Assets</masterLabel>
     </sections>
     <sections>

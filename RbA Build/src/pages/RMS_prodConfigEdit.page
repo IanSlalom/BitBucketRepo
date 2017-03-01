@@ -162,7 +162,7 @@
                 <apex:outputLabel value="Quantity"></apex:outputLabel>
 
  -->    		
- 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
+ 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType">
                 	<apex:selectOptions value="{!frameTypeItems}"/>
             	</apex:selectList>               
             	<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ejFrame" /> 
@@ -256,6 +256,9 @@
             <apex:outputField value="{!OrderItem.Fibrex_L_Trim__c}"  rendered="{!prodConfig.mpc.Fibrex_L_Trim_Control__c == 'Disabled'  || mode != 'e'}" html-data-jsid="outfibrexLTrim" />
             <apex:selectList value="{!OrderItem.Screen_Type__c}" label="Screen Type" size="1" id="screenType" html-data-jsid="screenType" onChange="callRule('screenType')" required="{!prodConfig.mpc.Screen_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenTypeItems}"/>
+            </apex:selectList>
+            <apex:selectList value="{!OrderItem.Screen_Size__c}" label="Screen Size" size="1" id="screenSize" html-data-jsid="screenSize" required="{!prodConfig.mpc.Screen_Size_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Size_Control__c == 'Disabled'  || mode != 'e'}" >
+                <apex:selectOptions value="{!screenSizeItems}"/>
             </apex:selectList>
  <!--             <apex:selectList value="{!OrderItem.Screen_Veneer_Type__c}" label="Veneer Type" size="1" id="screenVeneerType" html-data-jsid="screenVeneerType" required="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Screen_Veneer_Type_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!screenVeneerTypeItems}"/>
@@ -388,6 +391,11 @@
             <apex:outputField value="{!OrderItem.Exterior_Door_Jamb__c}" label="Exterior Door Jamb" id="outExteriorDoorJamb" rendered="{!prodConfig.mpc.Interior_Extension_Jamb_Kit_Control__c == 'Disabled' || mode != 'e'}" />			
 	
             <apex:outputField value="{!OrderItem.Exterior_Frame_Depth__c}" label="Exterior Frame Depth" id="outExteriorFrameDepth" rendered="{!prodConfig.mpc.Exterior_Frame_Depth_Control__c == 'Disabled' || mode != 'e'}" />
+
+            <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" size="1" id="hardwareFinishColor" required="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareFinishColor">
+                <apex:selectOptions value="{!hardwareFinishColorItems}"/>
+            </apex:selectList>
+            <apex:outputField value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" id="outhardwareFinishColor"  rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Disabled' || mode != 'e'}" />
 			 
 			<apex:selectList value="{!OrderItem.Door_Sill_Color__c}" label="Door Sill Color" size="1" id="DoorSillColor" required="{!prodConfig.mpc.Door_Sill_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Door_Sill_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="">
             	<apex:selectOptions value="{!DoorSillColorItems}"/>
@@ -478,11 +486,6 @@
                 <apex:selectOptions value="{!hardwareColorItems}"/>
             </apex:selectList>
             <apex:outputField value="{!OrderItem.Hardware_Color__c}" label="Hardware Color" id="outhardwareColor"  rendered="{!prodConfig.mpc.Hardware_Color_Control__c == 'Disabled' || mode != 'e'}" />
-
-            <apex:selectList value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" size="1" id="hardwareFinishColor" required="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="hardwareFinishColor">
-                <apex:selectOptions value="{!hardwareFinishColorItems}"/>
-            </apex:selectList>
-            <apex:outputField value="{!OrderItem.Hardware_Finish_Color__c}" label="Hardware Finish Color" id="outhardwareFinishColor"  rendered="{!prodConfig.mpc.Hardware_Finish_Color_Control__c == 'Disabled' || mode != 'e'}" />
 
             <apex:inputField value="{!OrderItem.Window_Opening_Control_Device__c}"  required="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c != 'Disabled' && mode == 'e'}"  html-data-jsid=""/>
             <apex:outputField value="{!OrderItem.Window_Opening_Control_Device__c}" rendered="{!prodConfig.mpc.Window_Opening_Control_Device_Control__c != 'Disabled' && mode != 'e'}"  html-data-jsid=""/>
@@ -671,7 +674,7 @@
         	glazing(2);
         	glazing(3);
         	glazing(4);
-        	frameType();
+//        	frameType();
         	specialOptionsLoad();
         	specialtyWindow();
         }

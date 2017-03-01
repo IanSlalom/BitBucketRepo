@@ -566,6 +566,9 @@
         <members>RbA_Operational_Reporting/B02000_by_Booking_for_Comms_Ungrouped</members>
         <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions</members>
         <members>RbA_Operational_Reporting/B02000_by_RPD_for_Commissions_Ungrouped</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Install_Adj</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Joined</members>
+        <members>RbA_Operational_Reporting/BO1000_Cash_Receipt_Posting_Refunds</members>
         <members>RbA_Operational_Reporting/BO1100_Detail_Activity_Trans_by_SR_OPD</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Joined_Report</members>
         <members>RbA_Operational_Reporting/BO1200_Deposit_Slip_Journal_Entries</members>
@@ -622,6 +625,8 @@
         <members>RbA_Operational_Reporting/Report_BO1100_with_address</members>
         <members>RbA_Operational_Reporting/Report_BO1200_Accounts_Receivable_Aged</members>
         <members>RbA_Operational_Reporting/Report_BO2000_Job_Cost_by_RPD</members>
+        <members>RbA_Operational_Reporting/Report_BO2000_Labor</members>
+        <members>RbA_Operational_Reporting/Report_BO2000_Orders</members>
         <members>RbA_Operational_Reporting/Report_BO2004_Job_Cost_Summary_Stain</members>
         <members>RbA_Operational_Reporting/Report_BO2006_Job_Close_Posting_by_RPD</members>
         <members>RbA_Operational_Reporting/Report_BO2008_Serv_Job_Close_POST_RPD_JE</members>
@@ -638,6 +643,7 @@
         <members>RbA_Operational_Reporting/Report_BO4000_Receivings_Posting_Summa</members>
         <members>RbA_Operational_Reporting/Report_BO4004_Field_Inventory</members>
         <members>RbA_Operational_Reporting/Report_BO4200_Receivings_Postings</members>
+        <members>RbA_Operational_Reporting/Report_BO4202_Remake_by_Local</members>
         <members>RbA_Operational_Reporting/Report_BO8008_First_Time_Through_NEW</members>
         <members>RbA_Operational_Reporting/Report_BO_2000_Lead_Installer</members>
         <members>RbA_Operational_Reporting/Report_Discount_Analysis</members>
@@ -657,9 +663,11 @@
         <members>Assets_with_without_Journal_Entries</members>
         <members>Cycle_Time_Reports</members>
         <members>Labor_with_Work_Order_with_Order</members>
+        <members>Order_Products_with_POs_and_Charges</members>
         <members>Order_Report_for_Cut_Over_Prep</members>
         <members>Orders_with_All_Fields</members>
         <members>Orders_with_All_Fields_Clone</members>
+        <members>Orders_with_Labor</members>
         <members>Orders_with_Order_Products</members>
         <members>Orders_with_Purchase_Orders</members>
         <members>Orders_with_RbA_Work_Orders_with_Activities</members>

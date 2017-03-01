@@ -81,7 +81,7 @@
                 }
                 else if (onLoadAction == 'scheduleWorkOrder') {
                     $('#listViewOptionsRecordId').val(onLoadWorkOrderId);
-                    showAvailabilityModal(false, false);
+                    showAvailabilityModal(false, false, true);
                 }
             }
         }
@@ -347,7 +347,7 @@
 
     <div id="listViewOptionsModal">
         <input type="hidden" id="listViewOptionsRecordId" />
-        <div id="" onclick="showAvailabilityModal(false, false); closeListViewOptionsModal();">Schedule Work Order</div>
+        <div id="" onclick="showAvailabilityModal(false, false, true); closeListViewOptionsModal();">Schedule Work Order</div>
         <div onclick="showAssignResourceModal(false, false, false); closeListViewOptionsModal();">Assign a Resource</div>
         <div onclick="viewEditWorkOrder(false); closeListViewOptionsModal();">View / Edit</div>
     </div>

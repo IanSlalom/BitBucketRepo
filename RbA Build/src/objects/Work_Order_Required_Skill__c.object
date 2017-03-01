@@ -97,4 +97,11 @@
         <errorConditionFormula>RbA_Work_Order__r.Sold_Order__r.Lock_Service_Request__c</errorConditionFormula>
         <errorMessage>The Service Request for this Work Order is currently locked, you may not add additional skills to this Work Order.</errorMessage>
     </validationRules>
+    <validationRules>
+        <fullName>ScheduledWorkOrdder</fullName>
+        <active>true</active>
+        <description>If WO is scheduled, users may not add skills</description>
+        <errorConditionFormula>AND(NOT(ISPICKVAL(RbA_Work_Order__r.Work_Order_Status__c, &quot;To be scheduled&quot;)),NOT(ISPICKVAL(RbA_Work_Order__r.Work_Order_Status__c, &quot;Cancelled&quot;)))</errorConditionFormula>
+        <errorMessage>This Work Order has already been scheduled, you may not add additional skills to this Work Order. If you need to adjust the skills, cancel the appointment first.</errorMessage>
+    </validationRules>
 </CustomObject>

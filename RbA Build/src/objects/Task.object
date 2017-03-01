@@ -927,7 +927,7 @@ window.open(&apos;/{!$ObjectType.Task}/e?what_id=&apos;+oid+&apos;&amp;retURL=%2
         <availability>online</availability>
         <displayType>massActionButton</displayType>
         <linkType>javascript</linkType>
-        <masterLabel>Add Service Task</masterLabel>
+        <masterLabel>Add/Edit Service Task</masterLabel>
         <openType>onClickJavaScript</openType>
         <protected>false</protected>
         <requireRowSelection>false</requireRowSelection>

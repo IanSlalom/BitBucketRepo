@@ -18,6 +18,8 @@
 <apex:component controller="MA_SchedulerController">
 
 	<script>
+		var skipAssignment = false;
+		var showAssignButtonOnBooking = false;
 	    var forceScheduleAssignmentCombo = false;
 	    var apexSchedulingController = 'MA_SchedulerController';
 	    var processBookingResponse = { onSuccess: processBookingSuccess, onFailure: processResponseError };
@@ -51,9 +53,15 @@
         /*      this method opens the check availability modal 		*/
         /*                                                 		 	*/
         /************************************************************/
-        function showAvailabilityModal(isForcedNextStep, isReschedule) {
+        function showAvailabilityModal(isForcedNextStep, isReschedule, isSkipAssignment) {
 			var workOrderId;
+			showAssignButtonOnBooking = false;
 			forceScheduleAssignmentCombo = false;
+			$('#scheduleBookAssignBtn').fadeOut(175);
+
+			if (isSkipAssignment != undefined && isSkipAssignment != null) {
+				skipAssignment = isSkipAssignment;
+			}
 
 			if (isForcedNextStep) {
 				workOrderId = $('#assignResourceWorkOrderId').val();
@@ -61,6 +69,9 @@
 			else if (isReschedule) {
 				$('#rescheduleReasonRow').show();
 				workOrderId = $('#eventOptionsRecordId').val();
+
+				showAssignButtonOnBooking = true;
+				$('#scheduleBookAssignBtn').delay(175).fadeIn(175);
 			}
 			else {
 				$('#rescheduleReasonRow').hide();
@@ -101,9 +112,11 @@
 		            $('#workOrderType').text(record.Work_Order_Type__c);
 		            $('.rescheduleReason').val(record.Reschedule_Reason__c);
 
-		            if (record.Work_Order_Type__c == 'Install' && (!record.Assigned_Resources__r || record.Assigned_Resources__r.length == 0)) {
+		            if (!skipAssignment && record.Work_Order_Type__c == 'Install' && (!record.Assigned_Resources__r || record.Assigned_Resources__r.length == 0)) {
 		            	forceScheduleAssignmentCombo = true;
 		            }
+
+		            skipAssignment = false;
 
 		            var address = record.Street__c + ', ' + record.City__c + ', ' + record.State__c + ' ' + record.Zip__c;
 		            address = formatAddress(address);
@@ -360,15 +373,22 @@
 		    response = JSON.parse(response);
 
 		    if (response.success) {
+		        $('#calendar').fullCalendar('gotoDate', response.appointmentDate);
 		        $('.listViewportWrapper .refreshListButton').click();
 		        //$('#calendar').fullCalendar('refetchEvents');
-		        $('#calendar').fullCalendar('gotoDate', response.appointmentDate);
 
 		    	if (forceScheduleAssignmentCombo) {
-		    		showAssignResourceModal(true, false, false);
+		    		showAssignResourceModal(true, false, false, false, true);
 		    	}
+		    	/*
+		    	else {
+		    		$('#calendar').fullCalendar('refetchEvents');
+		    	}
+		    	*/
 
 		        closeScheduleWorkOrderModal();
+		        $('#calendar').fullCalendar('refetchEvents');
+		        //$('#loaderModal').hide();
 		    }
 		    else {
 		        handleError('MA_SchedulerWorkOrderSchedulingComp : saveScheduleWorkOrder', response);
@@ -416,7 +436,7 @@
 			checkAvailEnd();
 
 		    $('#scheduleSeeAvailBtn').delay(175).fadeIn(175);
-		    $('#scheduleBookBtn').fadeOut(175);
+		    $('#scheduleBookBtn, #scheduleBookAssignBtn').fadeOut(175);
 		    $('input[type="radio"][name="bookingWindow"]:checked').attr('checked', false);
 		}
 
@@ -450,6 +470,11 @@
         function selectNextAvailable() {
 		    $('#scheduleSeeAvailBtn').fadeOut(175);
 		    $('#scheduleBookBtn').delay(175).fadeIn(175);
+
+		    if (showAssignButtonOnBooking) {
+		    	$('#scheduleBookAssignBtn').delay(175).fadeIn(175);
+		    }
+
 		    document.getElementById('availabilityEndDate').value = "";
 		    document.getElementById('availabilityStartDate').value = "";
 		}
@@ -706,6 +731,7 @@
 	                    <button class="ma-button ma-button--white" onclick="closeScheduleWorkOrderModal();">Cancel</button>
 	                    <button class="ma-button ma-button--green" id="scheduleSeeAvailBtn" onclick="checkAvailability(false);" style="display:none">See Available Times</button>
 	                    <button class="ma-button ma-button--green" id="scheduleBookBtn" onclick="saveScheduleWorkOrder();">Book</button>
+	                    <button class="ma-button ma-button--green" id="scheduleBookAssignBtn" onclick="forceScheduleAssignmentCombo = true; saveScheduleWorkOrder();">Assign Resource</button>
 	                </div>
 	            </div>
 	        </div>
