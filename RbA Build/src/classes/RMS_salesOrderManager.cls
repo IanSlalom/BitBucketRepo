@@ -47,7 +47,8 @@ public with sharing class RMS_salesOrderManager {
 
 			// get the quote financing
 			List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c,
-				Authorization_Code__c, Payment_Display__c, Related_Quote__r.OpportunityId
+				Authorization_Code__c, Payment_Display__c, Related_Quote__r.OpportunityId,
+                Expiration_Date__c, Program_Fee__c, Program_Rate__c, rSuite_Id__c, Related_Quote__r.Opportunity.Store_Location__c
 				from Quote_Financing__c where Related_Quote__c in :soldQuoteList];
 
 		 	//Dynamicaly query for all QuoteLineItem fields
@@ -278,7 +279,8 @@ public with sharing class RMS_salesOrderManager {
 			ordf.Expiration_Date__c = qf.Expiration_Date__c;
 			ordf.Program_Rate__c = qf.Program_Rate__c;
 			ordf.Program_Fee__c = qf.Program_Fee__c;
-
+            ordf.rSuite_Id__c = qf.rSuite_Id__c;
+            ordf.Store_Location__c = qf.Related_Quote__r.Opportunity.Store_Location__c;
 			//assign the correct order to the order discount
 			for (Order ord : theOrders) {
 				if (ord.QuoteId == qf.Related_Quote__c) {

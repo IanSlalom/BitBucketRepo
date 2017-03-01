@@ -355,7 +355,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 	List<QuoteLineItem> qliList = Database.query(qliQuery);
 
     // get the quote discounts
-    List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
+    List<Quote_Discount__c> qdList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Quote__c, rSuite_Id__c, Per_Unit_Discount__c from Quote_Discount__c where Quote__c in :quoteMap.keySet() and isDeleted = false];
     // get the quote financing
     List<Quote_Financing__c> qfList = [SELECT Id, Name, Amount_Financed__c, Store_Finance_Program__c, Related_Quote__c, Authorization_Code__c, Expiration_Date__c, Program_Rate__c, Program_Fee__c, rSuite_Id__c from Quote_Financing__c where Related_Quote__c in :quoteMap.keySet() and isDeleted = false];
     // build the quote containers
@@ -507,7 +507,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @return: List<Order_Discount__c>
    */
     public List<Order_Discount__c> queryOrderDiscounts(Set<Id> orderIds){
-    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
+    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Per_Unit_Discount__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
     return odList;
   }
 
@@ -531,7 +531,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 		return oiList;    
 	}
 
-  /* @method: updateOpportunity(Id OppId, String status)
+  /* @method: resultSalesAppointments(Id userId, String input)
    * @param: Id oppId
    * @param: String status
    * @return: String - JSON string with of SFDC ids of quotes, orders and discounts
@@ -549,42 +549,27 @@ public with sharing class RMS_mobileAppRequestHelper {
 		// field level validation?
 		// only attempt to save quotes if sales appointments exist
 		if (appt != null) {
-			System.SavePoint sp = Database.setSavePoint();
-			// process deletes
-			appt = processDeletes(appt);
-			try {
-				// note that the appt.getErrors.size check is made multiple times because errors can be added each step alson the way
-				// now lets save the quotes to the opportunitiez
-				if (appt.getErrors().size() == 0) {
-					appt = saveQuotes(appt);
+			// first check to see if we need to cancel an order
+			if (appt.opptyContainer.oppty.StageName == 'Pending Cancelation') {
+				// now check to see if we need to first save this as a canceled order or just cancel the order
+				if (appt.opptyContainer.anOrderContainer == null || 
+					appt.opptyContainer.anOrderContainer.anOrder == null ||
+					appt.opptyContainer.anOrderContainer.anOrder.Id == null ||
+					appt.opptyContainer.anOrderContainer.anOrder.Id.equals('')){
+					// we do not have an existing order we need to save the appointment first
+					// set the oppty stage
+					appt.opptyContainer.oppty.StageName = 'Sold';
+					appt = saveSalesAppointment(appt);
+					// now that it has been saved successfully prep the order for cancellation
+					appt.opptyContainer.oppty.StageName = 'Pending Cancelation';
 				}
-				// now lets save the quote line items and discounts to the quotes - if we don't have an error
-				if (appt.getErrors().size() == 0) {
-					appt=saveQuoteLineItemsDiscountsandFinancing(appt);
+				// now run the cancellation operation
+				if (appt.isSaveSuccessful) {
+					
 				}
-			} catch (NoQuotesException e) {
-				// this is a no-op -basically there were no quotes on the appointment so nothing to save
-			}
-			// now save the opportunity changes - if we don't have an error
-			if (appt.getErrors().size() == 0 && appt.opptyContainer != null && appt.opptyContainer.oppty != null) {
-				Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
-				if (!sr.isSuccess()) {            
-					String[] errParms = null;
-					for(Database.Error err : sr.getErrors()) {
-						String fields = '';
-						for (String field : err.getFields()) {
-							fields = fields + field + ', ';
-						}
-						errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
-						String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
-						appt.getErrors().add(formattedMessage);
-					}
-				}
-			}
-			// roll back if we have errors
-			if (appt.getErrors().size() > 0) {
-				Database.rollBack(sp);
-				appt.isSaveSuccessful = false;
+			} else {
+				// just do a normal save operation
+				appt = saveSalesAppointment(appt);
 			}
 		} else {
 			appt.getErrors().add('No Sales Appointments Found');
@@ -600,6 +585,50 @@ public with sharing class RMS_mobileAppRequestHelper {
 		return JSON.serialize(appt);
 	}
 
+  /* @method: saveSalesAppointment(SalesAppointment appt)
+   * @param: SalesAppointment appt
+   * @return: SalesAppointment - updated appointment
+   */
+    public SalesAppointment saveSalesAppointment(SalesAppointment appt){
+		System.SavePoint sp = Database.setSavePoint();
+		// process deletes
+		appt = processDeletes(appt);
+		try {
+			// note that the appt.getErrors.size check is made multiple times because errors can be added each step alson the way
+			// now lets save the quotes to the opportunitiez
+			if (appt.getErrors().size() == 0) {
+				appt = saveQuotes(appt);
+			}
+			// now lets save the quote line items and discounts to the quotes - if we don't have an error
+			if (appt.getErrors().size() == 0) {
+				appt=saveQuoteLineItemsDiscountsandFinancing(appt);
+			}
+		} catch (NoQuotesException e) {
+			// this is a no-op -basically there were no quotes on the appointment so nothing to save
+		}
+		// now save the opportunity changes - if we don't have an error
+		if (appt.getErrors().size() == 0 && appt.opptyContainer != null && appt.opptyContainer.oppty != null) {
+			Database.SaveResult sr  = Database.update(appt.opptyContainer.oppty, false);
+			if (!sr.isSuccess()) {            
+				String[] errParms = null;
+				for(Database.Error err : sr.getErrors()) {
+					String fields = '';
+					for (String field : err.getFields()) {
+						fields = fields + field + ', ';
+					}
+					errParms = new String[]{'Opportunity',fields, err.getStatusCode().name(), err.getMessage()};
+					String formattedMessage = String.format(RECORD_ERROR_MESSAGE, errParms);
+					appt.getErrors().add(formattedMessage);
+				}
+			}
+		}
+		// roll back if we have errors
+		if (appt.getErrors().size() > 0) {
+			Database.rollBack(sp);
+			appt.isSaveSuccessful = false;
+		}
+		return appt;
+	}
 
   /* @method: saveQuotes(SalesAppointment sa)
    * @param: SalesAppointment sa
@@ -1316,6 +1345,7 @@ public with sharing class RMS_mobileAppRequestHelper {
 				appts.getErrors().add('Only one Opportunity can be submitted for cancellation. This request had ' + opportunityIds.size() + '.');
 				return JSON.serialize(appts);
 			}
+///////////////////			
 			// get the related orders
 			Map<Id, Order> orderMap = queryOrders(opportunityIds);
 			// If the order does not exist return an error.
