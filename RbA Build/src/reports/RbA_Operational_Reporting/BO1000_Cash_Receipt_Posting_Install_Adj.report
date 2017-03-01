@@ -7,6 +7,9 @@
         <field>CUST_NAME</field>
     </columns>
     <columns>
+        <field>Business_Adjustment__c.Type__c</field>
+    </columns>
+    <columns>
         <field>Business_Adjustment__c.Contact__c</field>
     </columns>
     <columns>
@@ -15,15 +18,8 @@
     <columns>
         <field>Business_Adjustment__c.Amount__c</field>
     </columns>
-    <filter>
-        <criteriaItems>
-            <column>Business_Adjustment__c.Type__c</column>
-            <operator>equals</operator>
-            <value>Install Adjustment</value>
-        </criteriaItems>
-    </filter>
     <format>Tabular</format>
-    <name>BO1000-Cash Receipt Posting-Install Adj</name>
+    <name>BO1000-Cash Receipt Posting-Business Adj</name>
     <params>
         <name>co</name>
         <value>1</value>

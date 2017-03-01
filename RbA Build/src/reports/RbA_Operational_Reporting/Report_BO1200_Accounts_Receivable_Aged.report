@@ -43,6 +43,11 @@
         </criteriaItems>
     </filter>
     <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Order$Account</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
     <name>Rpt BO1200 Accounts Receivable Aged TrBa</name>
     <params>
         <name>co</name>

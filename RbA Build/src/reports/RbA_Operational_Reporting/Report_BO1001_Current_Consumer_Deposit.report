@@ -4,6 +4,9 @@
         <field>Order$OrderNumber</field>
     </columns>
     <columns>
+        <field>Order$RecordType</field>
+    </columns>
+    <columns>
         <field>Order$Unique_Identifier__c</field>
     </columns>
     <columns>
@@ -21,19 +24,33 @@
         <field>Order$Payments_Received__c</field>
     </columns>
     <columns>
+        <field>Order$Amount_Refunded__c</field>
+    </columns>
+    <columns>
+        <field>Order$Business_Adjustments__c</field>
+    </columns>
+    <columns>
+        <field>Order$Non_Sufficient_Funds__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Amount_Due__c</field>
     </columns>
     <filter>
         <criteriaItems>
+            <column>Order$RecordTypeName__c</column>
+            <operator>equals</operator>
+            <value>CORO_Record_Type,CORO_Service</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Revenue_Recognized_Date__c</column>
+            <operator>equals</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
             <column>Order$Payments_Received__c</column>
             <operator>greaterThan</operator>
             <value>0</value>
-        </criteriaItems>
-        <criteriaItems>
-            <column>Order$RecordTypeName__c</column>
-            <operator>equals</operator>
-            <value>CORO_Record_Type</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>

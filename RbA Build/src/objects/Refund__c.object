@@ -57,6 +57,19 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
+        <fullName>Amount_Negative__c</fullName>
+        <externalId>false</externalId>
+        <formula>Amount__c *-1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Amount (Negative)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Amount__c</fullName>
         <description>The amount refunded</description>
         <externalId>false</externalId>
@@ -252,6 +265,6 @@
         <openType>replace</openType>
         <protected>false</protected>
         <requireRowSelection>false</requireRowSelection>
-        <url>/a0W/e?CF00N6100000DWI5X={!Order.OrderNumber}&amp;CF00N6100000DWI5X_lkid={!Order.Id}&amp;CF00N6100000DWI5c={!Order.Store_Location__c}&amp;CF00N6100000DWI5c_lkid={!Order.Store_LocationId__c}&amp;CF00N5B000000W718={!Order.BillToContact}&amp;CF00N5B000000W718_lkid={!Order.BillToContactId}</url>
+        <url>/a0W/e?CF00N6100000DWI5X={!Order.OrderNumber}&amp;CF00N6100000DWI5X_lkid={!Order.Id}&amp;CF00N6100000DWI5c={!Order.Store_Location__c}&amp;CF00N6100000DWI5c_lkid={!Order.Store_LocationId__c}&amp;CF00N6100000H70kF={!Order.BillToContact}&amp;CF00N6100000H70kF_lkid={!Order.BillToContactId}</url>
     </webLinks>
 </CustomObject>
