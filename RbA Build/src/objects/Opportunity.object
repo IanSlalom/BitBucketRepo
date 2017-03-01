@@ -65,6 +65,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Pending Cancelation</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Quoted</fullName>
             <default>false</default>
         </values>
@@ -95,6 +99,10 @@
         </values>
         <values>
             <fullName>New</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Cancelation</fullName>
             <default>false</default>
         </values>
         <values>
@@ -449,9 +457,9 @@
                 <default>false</default>
                 <description>Quote has moved to Price Preso but not eGreement…not sold
 Demo - No Sales</description>
-                <closed>true</closed>
-                <forecastCategory>Omitted</forecastCategory>
-                <probability>0</probability>
+                <closed>false</closed>
+                <forecastCategory>Pipeline</forecastCategory>
+                <probability>50</probability>
                 <won>false</won>
             </picklistValues>
             <picklistValues>
@@ -487,6 +495,15 @@ Demo - No Sales</description>
                 <closed>true</closed>
                 <forecastCategory>Omitted</forecastCategory>
                 <probability>0</probability>
+                <won>false</won>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Cancelation</fullName>
+                <default>false</default>
+                <description>This stage is used by rSuite by a Salesperson to start the cancellation process - usually when an order needs to be changed - it will only be there temporarily</description>
+                <closed>false</closed>
+                <forecastCategory>Pipeline</forecastCategory>
+                <probability>50</probability>
                 <won>false</won>
             </picklistValues>
             <sorted>false</sorted>
