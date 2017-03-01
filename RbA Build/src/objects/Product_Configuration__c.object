@@ -1710,7 +1710,7 @@
                 <fullName>Chamfered Edge Overfit All Sides</fullName>
                 <default>false</default>
             </picklistValues>
-                    <picklistValues>
+            <picklistValues>
                 <fullName>Chamfered Edge Overfit No Sill</fullName>
                 <default>false</default>
             </picklistValues>
@@ -1722,7 +1722,7 @@
                 <fullName>Brickmould / Traditional</fullName>
                 <default>false</default>
             </picklistValues>
-    <picklistValues>
+            <picklistValues>
                 <fullName>Chamfered Edge Overfit Flange</fullName>
                 <default>false</default>
             </picklistValues>
@@ -6326,43 +6326,43 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Left Vent/Stationary</fullName>
+                <fullName>Left Vent / Stationary</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Stationary/Right Vent</fullName>
+                <fullName>Stationary / Right Vent</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Left Vent/Stat/Stat</fullName>
+                <fullName>Left Vent / Stat / Stat</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Stat/Stat/Right Vent</fullName>
+                <fullName>Stat / Stat / Right Vent</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Active/Passive</fullName>
+                <fullName>Active / Passive</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Active/Stationary</fullName>
+                <fullName>Active / Stationary</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Stationary/Active</fullName>
+                <fullName>Stationary / Active</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Passive/Active</fullName>
+                <fullName>Passive / Active</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Active/Stationary/Active</fullName>
+                <fullName>Active / Stationary / Active</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>Left Vent/Stat/Right Vent</fullName>
+                <fullName>Left Vent / Stat / Right Vent</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -26684,15 +26684,15 @@ Used for Makeability and rSuite Tech Measure.</description>
         <picklistValues>
             <picklist>Sash_Operation__c</picklist>
             <values>
-                <fullName>Active%2FPassive</fullName>
+                <fullName>Active %2F Passive</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Active%2FStationary</fullName>
+                <fullName>Active %2F Stationary</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Active%2FStationary%2FActive</fullName>
+                <fullName>Active %2F Stationary %2F Active</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -26704,15 +26704,15 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Left Vent%2FStat%2FStat</fullName>
+                <fullName>Left Vent %2F Stat %2F Stat</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Left Vent%2FStationary</fullName>
+                <fullName>Left Vent %2F Stationary</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Passive%2FActive</fullName>
+                <fullName>Passive %2F Active</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -26720,7 +26720,7 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stat%2FStat%2FRight Vent</fullName>
+                <fullName>Stat %2F Stat %2F Right Vent</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -26728,11 +26728,11 @@ Used for Makeability and rSuite Tech Measure.</description>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stationary%2FActive</fullName>
+                <fullName>Stationary %2F Active</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stationary%2FRight Vent</fullName>
+                <fullName>Stationary %2F Right Vent</fullName>
                 <default>false</default>
             </values>
             <values>
