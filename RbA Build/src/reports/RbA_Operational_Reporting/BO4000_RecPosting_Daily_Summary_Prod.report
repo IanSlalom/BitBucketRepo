@@ -18,6 +18,9 @@
     <columns>
         <field>Account.Assets.Received_Products__r$Amount__c</field>
     </columns>
+    <columns>
+        <field>Account.Assets$Date_Received__c</field>
+    </columns>
     <description>BO4000 - RecPosting Daily Summary - Product POs</description>
     <filter>
         <criteriaItems>

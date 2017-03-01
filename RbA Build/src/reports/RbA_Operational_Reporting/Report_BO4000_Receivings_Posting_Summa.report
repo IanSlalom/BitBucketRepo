@@ -12,6 +12,9 @@
     <columns>
         <field>Account.Assets.Received_Products__r$Extended__c</field>
     </columns>
+    <columns>
+        <field>Account.Assets$Date_Received__c</field>
+    </columns>
     <description>Report BO4000 - Receivings Posting Summary</description>
     <filter>
         <criteriaItems>
@@ -26,13 +29,13 @@
         <field>Account.Assets$Purchase_Order__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Report BO4000 - Receivings Posting Summa</name>
+    <name>BO4000 - RecPosting Summary - Product PO</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
     <reportType>Accounts_with_Assets_with_Received_Products__c</reportType>
-    <scope>user</scope>
+    <scope>organization</scope>
     <showDetails>true</showDetails>
     <timeFrameFilter>
         <dateColumn>Account.Assets$Date_Received__c</dateColumn>
