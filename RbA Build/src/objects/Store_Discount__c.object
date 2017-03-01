@@ -466,6 +466,116 @@ Either- at least one of the rules is met</inlineHelpText>
         </picklistValues>
     </recordTypes>
     <recordTypes>
+        <fullName>Initial_Savings</fullName>
+        <active>true</active>
+        <description>for presntation day savings</description>
+        <label>Initial Savings</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Repeat_Savings</fullName>
+        <active>true</active>
+        <description>Repeat customer savings</description>
+        <label>Repeat Savings</label>
+        <picklistValues>
+            <picklist>Discount_Product__c</picklist>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Window</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Minimum_Requirement_Type__c</picklist>
+            <values>
+                <fullName>%24 Amount</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Either</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Units</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Tiered_Discount_Type__c</picklist>
+            <values>
+                <fullName>%23 of Units</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Total Price</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
         <fullName>Special_Financing</fullName>
         <active>true</active>
         <description>A discount that uses special financing</description>
