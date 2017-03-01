@@ -52,8 +52,7 @@
         <field>Order$Retail_Subtotal__c</field>
     </columns>
     <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Discount_Amount__c</field>
+        <field>Order$Discount_Amount2__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>

@@ -203,6 +203,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Initial_Labor__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>ShippingStateCode</field>
             <table>Order</table>
         </columns>
@@ -634,6 +639,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Sales_Tax__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Discount_Amount2__c</field>
             <table>Order</table>
         </columns>
         <columns>

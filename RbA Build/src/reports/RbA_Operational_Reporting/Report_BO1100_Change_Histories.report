@@ -45,7 +45,7 @@
             <value>0</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Change_History__c.Subtype__c</column>
+            <column>Change_History__c.Report_Type__c</column>
             <operator>equals</operator>
             <value>Change</value>
         </criteriaItems>

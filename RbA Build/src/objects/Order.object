@@ -561,6 +561,19 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
+        <fullName>Discount_Amount2__c</fullName>
+        <externalId>false</externalId>
+        <formula>Discount_Amount__c * -1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Used for Finance Reports</inlineHelpText>
+        <label>Discount Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Discount_Amount__c</fullName>
         <description>A roll-up sum of all discounts applied to this order (see the order discount related list).</description>
         <externalId>false</externalId>
@@ -973,6 +986,16 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <fullName>Initial_Discount__c</fullName>
         <externalId>false</externalId>
         <label>Initial Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Initial_Labor__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Labor</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>

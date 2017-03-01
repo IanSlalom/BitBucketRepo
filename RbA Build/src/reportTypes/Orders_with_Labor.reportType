@@ -735,6 +735,11 @@
             <field>CreatedDate</field>
             <table>Order.Work_Orders1__r.Labor1__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Report_Type__c</field>
+            <table>Order.Work_Orders1__r.Labor1__r</table>
+        </columns>
         <masterLabel>Labor</masterLabel>
     </sections>
 </ReportType>

@@ -28,6 +28,11 @@
             <operator>notEqual</operator>
             <value></value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order.Work_Orders1__r.Labor1__r$Report_Type__c</column>
+            <operator>equals</operator>
+            <value>Change</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO2000 - Labor</name>

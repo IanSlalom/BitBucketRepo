@@ -800,6 +800,17 @@ ISBLANK(Sold_Order__r.Installation_Date__c), TODAY()- Renovate_Right_Booklet_Sig
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Initial_Labor__c</fullName>
+        <externalId>false</externalId>
+        <label>Initial Labor</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Inspection_Cancelled_Reason__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Reason inspection was cancelled</inlineHelpText>
@@ -2511,7 +2522,7 @@ NULL)</formula>
         </sharedTo>
     </listViews>
     <listViews>
-        <fullName>LSWP_Date_Scheduled_No_Results</fullName>
+            <fullName>LSWP_Date_Scheduled_No_Results</fullName>
         <columns>NAME</columns>
         <columns>Contact__c</columns>
         <columns>Sold_Order__c</columns>

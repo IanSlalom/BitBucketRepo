@@ -399,6 +399,18 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Report_Type__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( ( DATEVALUE(CreatedDate) &lt;= Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c) || ISBLANK(Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c), &quot;Initial&quot;,&quot;Change&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Report Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Sent_to_Baan_Date__c</fullName>
         <description>The date this labor record was sent to Baan</description>
         <externalId>false</externalId>
@@ -468,13 +480,12 @@
         <label>Store Location</label>
         <lookupFilter>
             <active>true</active>
-            <errorMessage>Sorry, your user account is not configured to use for this store location.</errorMessage>
             <filterItems>
                 <field>$User.Store_Location_Text__c</field>
                 <operation>contains</operation>
                 <valueField>Account.Name</valueField>
             </filterItems>
-            <isOptional>false</isOptional>
+            <isOptional>true</isOptional>
         </lookupFilter>
         <referenceTo>Account</referenceTo>
         <relationshipLabel>Labor</relationshipLabel>

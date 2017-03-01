@@ -91,6 +91,9 @@
         <field>Order$Other_Cost_Rollup__c</field>
     </columns>
     <columns>
+        <field>Order$Initial_Labor__c</field>
+    </columns>
+    <columns>
         <field>Order$Labor__c</field>
     </columns>
     <columns>
