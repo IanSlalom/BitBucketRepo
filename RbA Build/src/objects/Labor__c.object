@@ -401,7 +401,7 @@
     <fields>
         <fullName>Report_Type__c</fullName>
         <externalId>false</externalId>
-        <formula>IF( ( DATEVALUE(CreatedDate) &lt;= Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c) || ISBLANK(Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c), &quot;Initial&quot;,&quot;Change&quot;)</formula>
+        <formula>IF( ( Date_Applied__c &lt;= Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c) || ISBLANK(Related_Work_Order__r.Sold_Order__r.Revenue_Recognized_Date__c), &quot;Initial&quot;,&quot;Change&quot;)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Report Type</label>
         <required>false</required>
