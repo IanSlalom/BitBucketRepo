@@ -162,7 +162,7 @@
                 <apex:outputLabel value="Quantity"></apex:outputLabel>
 
  -->    		
- 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType" onChange="callRule('frameType')">
+ 				<apex:selectList value="{!OrderItem.Frame_Type__c}" label="Frame Type" size="1" id="frameType"  required="{!prodConfig.mpc.Frame_Type_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Frame_Type_Control__c == 'Disabled' || mode != 'e'}" html-data-jsid="frameType">
                 	<apex:selectOptions value="{!frameTypeItems}"/>
             	</apex:selectList>               
             	<apex:inputField value="{!OrderItem.EJ_Frame__c}" required="{!prodConfig.mpc.EJ_Frame_Control__c == 'Required' && verifyProducts == true}" rendered="{!prodConfig.mpc.EJ_Frame_Control__c != 'Disabled' && mode == 'e'}" html-data-jsid="ejFrame" /> 
@@ -674,7 +674,7 @@
         	glazing(2);
         	glazing(3);
         	glazing(4);
-        	frameType();
+//        	frameType();
         	specialOptionsLoad();
         	specialtyWindow();
         }
