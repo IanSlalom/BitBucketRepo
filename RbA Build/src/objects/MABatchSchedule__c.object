@@ -126,6 +126,19 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>MABatchSchedules</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>BatchDate__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>BatchResults__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>BatchDate__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>BatchResults__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>BatchDate__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>BatchResults__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>BatchDate__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>BatchResults__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

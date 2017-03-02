@@ -444,6 +444,23 @@
         <excludedStandardButtons>Accept</excludedStandardButtons>
         <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
         <listViewButtons>New_Municipality</listViewButtons>
+    <searchLayouts>
+        <customTabListAdditionalFields>For_Retail_Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>City_Township__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Building_Application_Type__c</customTabListAdditionalFields>
+        <excludedStandardButtons>New</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>New_Municipality</listViewButtons>
+        <lookupDialogsAdditionalFields>For_Retail_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>City_Township__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Building_Application_Type__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>For_Retail_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>City_Township__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Building_Application_Type__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>For_Retail_Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>City_Township__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Building_Application_Type__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <webLinks>

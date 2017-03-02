@@ -301,6 +301,11 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Screen Configurations</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Product_Configuration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Screen_Type__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Product_Configuration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Screen_Type__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

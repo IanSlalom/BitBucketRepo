@@ -196,6 +196,15 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Quote Financing</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Related_Quote__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Store_Finance_Program__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Amount_Financed__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Expiration_Date__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Related_Quote__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Finance_Program__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Amount_Financed__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Expiration_Date__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

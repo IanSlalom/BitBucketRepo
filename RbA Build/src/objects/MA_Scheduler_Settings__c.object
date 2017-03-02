@@ -91,6 +91,11 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>MA Scheduler Settings</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Settings__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Settings__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Settings__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Settings__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

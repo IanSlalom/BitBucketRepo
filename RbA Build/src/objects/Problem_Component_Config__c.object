@@ -96,7 +96,20 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Problem Component Assignment</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Problem_Component__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Symptom__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>LAST_UPDATE</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Problem_Component__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Symptom__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>LAST_UPDATE</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Problem_Component__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Symptom__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>LAST_UPDATE</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Problem_Component__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Symptom__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LAST_UPDATE</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <webLinks>
         <fullName>Assign_Problem_Component</fullName>

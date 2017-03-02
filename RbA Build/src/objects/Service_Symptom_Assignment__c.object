@@ -100,7 +100,16 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Service Symptom Assignments</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Service_Symptom__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Procedure_Code__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Symptom__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Procedure_Code__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Symptom__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Procedure_Code__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Symptom__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Procedure_Code__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <webLinks>
         <fullName>Assign_Procedure_Code</fullName>

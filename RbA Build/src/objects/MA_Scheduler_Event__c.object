@@ -148,6 +148,23 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>MA Scheduler Events</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>RbA_Work_Order__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Resource__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>StartDateTime__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>EndDateTime__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>RbA_Work_Order__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Resource__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>StartDateTime__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>EndDateTime__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>RbA_Work_Order__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Resource__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>StartDateTime__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>EndDateTime__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>RbA_Work_Order__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Resource__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>StartDateTime__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>EndDateTime__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

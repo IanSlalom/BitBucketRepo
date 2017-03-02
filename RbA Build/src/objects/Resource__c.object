@@ -389,10 +389,21 @@ TODAY()- BLANKVALUE(Work_Comp_Insurance_Expiration_Date__c, DATE(2999, 01, 01))
     <searchLayouts>
         <customTabListAdditionalFields>Resource_Type__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>User_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Retail_Location_Formula__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Active__c</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>Resource_Type__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>User_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Retail_Location_Formula__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Active__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Resource_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>User_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Retail_Location_Formula__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Active__c</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>Resource_Type__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>User_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Retail_Location_Formula__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Active__c</searchResultsAdditionalFields>
     </searchLayouts>
+
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

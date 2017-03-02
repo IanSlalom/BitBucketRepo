@@ -158,6 +158,31 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Order Code Lookups</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Salesforce_API_Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Salesforce_Value__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Pivotal_Field__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Pivotal_Value__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Baan_IV_Value__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>PCS_Value__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Salesforce_API_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Salesforce_Value__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Pivotal_Field__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Pivotal_Value__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Baan_IV_Value__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>PCS_Value__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Salesforce_API_Name__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Salesforce_Value__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Pivotal_Field__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Pivotal_Value__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Baan_IV_Value__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PCS_Value__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Salesforce_API_Name__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Salesforce_Value__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Pivotal_Field__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Pivotal_Value__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Baan_IV_Value__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PCS_Value__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

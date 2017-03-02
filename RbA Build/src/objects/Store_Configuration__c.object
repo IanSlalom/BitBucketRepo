@@ -848,11 +848,22 @@
     <pluralLabel>Store Configurations</pluralLabel>
     <searchLayouts>
         <customTabListAdditionalFields>Store__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>rSuite_Configuration__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>UPDATEDBY_USER.ALIAS</customTabListAdditionalFields>
+        <customTabListAdditionalFields>LAST_UPDATE</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>Store__c</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>UPDATEDBY_USER</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>rSuite_Configuration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>UPDATEDBY_USER.ALIAS</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>LAST_UPDATE</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Store__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>rSuite_Configuration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>UPDATEDBY_USER.ALIAS</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>LAST_UPDATE</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>Store__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>rSuite_Configuration__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>UPDATEDBY_USER.ALIAS</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LAST_UPDATE</searchResultsAdditionalFields>
     </searchLayouts>
+
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>
