@@ -143,6 +143,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Amount_Refunded__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>BillingCountryCode</field>
             <table>Order</table>
         </columns>
@@ -198,6 +203,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Business_Adjustments__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>Finance_Fees__c</field>
             <table>Order</table>
         </columns>
@@ -224,6 +234,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>ShippingLongitude</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Non_Sufficient_Funds__c</field>
             <table>Order</table>
         </columns>
         <columns>

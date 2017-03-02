@@ -13,7 +13,7 @@
         <field>Refund__c.Description__c</field>
     </columns>
     <columns>
-        <field>Refund__c.Amount__c</field>
+        <field>Refund__c.Amount_Negative__c</field>
     </columns>
     <format>Summary</format>
     <groupingsDown>
