@@ -496,7 +496,7 @@ public with sharing class RMS_mobileAppRequestHelper {
       Comments_and_Questions__c, Estimated_Install_Duration__c,
 	  Sales_Rep__c, Sales_Rep_Email__c, Sales_Rep_Phone__c,
 	  Primary_Tech_Measure_Name__c, Primary_Tech_Measure_Phone__c, Primary_Tech_Measure_Email__c,
-	  Cancel_Eligible__c, Apex_Context__c, QuoteId
+	  Cancel_Eligible__c, Apex_Context__c, QuoteId, rSuite_Id__c
       from Order where OpportunityId in :opptyIds and isDeleted = false and Status != 'Cancelled' and Status != 'Pending Cancellation']);
 
     return orderMap;
@@ -507,7 +507,7 @@ public with sharing class RMS_mobileAppRequestHelper {
    * @return: List<Order_Discount__c>
    */
     public List<Order_Discount__c> queryOrderDiscounts(Set<Id> orderIds){
-    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Per_Unit_Discount__c, Status__c, Order__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
+    List<Order_Discount__c> odList = [SELECT Id, Name, Discount_Amount__c, Store_Discount__c, Discount_Description__c, Per_Unit_Discount__c, Status__c, Order__c, rSuite_Id__c from Order_Discount__c where Order__c in :orderIds and isDeleted = false];
     return odList;
   }
 
