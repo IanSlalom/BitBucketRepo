@@ -29,6 +29,9 @@
         <field>Asset$Unit_Wholesale_Cost__c</field>
     </columns>
     <columns>
+        <field>Asset$Total_Wholesale_Cost__c</field>
+    </columns>
+    <columns>
         <field>Asset.Journal_Entries__r$Debit_General_Ledger_Account__c</field>
     </columns>
     <description>BO4002 Detail Inventory Stock Status Report</description>

@@ -220,6 +220,11 @@
             <field>Sold_Order__c.Revenue_Recognized__c</field>
             <table>Asset</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Total_Wholesale_Cost__c</field>
+            <table>Asset</table>
+        </columns>
         <masterLabel>Assets</masterLabel>
     </sections>
     <sections>

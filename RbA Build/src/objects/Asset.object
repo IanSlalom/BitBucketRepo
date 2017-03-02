@@ -427,6 +427,18 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Total_Wholesale_Cost__c</fullName>
+        <externalId>false</externalId>
+        <formula>Original_Order_Product__r.Total_Wholesale_Cost__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Wholesale Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Unit_Wholesale_Cost__c</fullName>
         <externalId>false</externalId>
         <label>Unit Wholesale Cost</label>

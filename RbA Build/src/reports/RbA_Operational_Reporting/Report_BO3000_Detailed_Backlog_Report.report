@@ -7,6 +7,9 @@
         <field>Order.Unique_Identifier__c</field>
     </columns>
     <columns>
+        <field>ORDER_STATUS</field>
+    </columns>
+    <columns>
         <field>Order.Order_Processed_Date__c</field>
     </columns>
     <columns>
@@ -19,6 +22,9 @@
         <field>Order.Primary_Installer__c</field>
     </columns>
     <columns>
+        <field>Order.Number_of_Units__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order.Retail_Subtotal__c</field>
     </columns>
@@ -27,19 +33,28 @@
         <field>Order.Discount_Amount__c</field>
     </columns>
     <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Retail_Total__c</field>
+        <field>Order.Discount__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
-        <field>Order.Amount_Financed__c</field>
+        <field>Order.Retail_Total__c</field>
     </columns>
     <description>Report BO3000 - Detailed Backlog Report</description>
     <filter>
         <criteriaItems>
             <column>ORDER_STATUS</column>
             <operator>notEqual</operator>
-            <value>Job Closed,Draft,Install Complete</value>
+            <value>Draft</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order.Revenue_Recognized_Date__c</column>
+            <operator>equals</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order.Retail_Total__c</column>
+            <operator>notEqual</operator>
+            <value>0</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>
