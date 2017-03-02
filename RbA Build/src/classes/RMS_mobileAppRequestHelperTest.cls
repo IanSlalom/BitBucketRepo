@@ -917,13 +917,13 @@ System.debug('#####: size ' + oppMap.size() + '###: ' + oppMap);
 			// test processing of deletes
         	RMS_mobileAppRequestHelper mHelper = new RMS_mobileAppRequestHelper();
 			RMS_mobileAppRequestHelper.SalesAppointment processedAppt = mHelper.processDeletes(appt);
-			List<Quote> remainingQuotes = [select Id, Name, OpportunityId from Quote where OpportunityId = :opp.Id];
+			List<Quote> remainingQuotes = [select Id, Name, OpportunityId, isDeleted from Quote where OpportunityId = :opp.Id];
+			List<QuoteLineItem> remainingQLI = [select Id, Description, QuoteId, isDeleted from QuoteLineItem where QuoteId in :remainingQuotes];
+			List<Quote_Discount__c> remainingQD = [select Id, Name, Quote__c, isDeleted from Quote_Discount__c where Quote__c in :remainingQuotes];
+			List<Quote_Financing__c> remainingQF = [select Id, Name, Related_Quote__c, isDeleted from Quote_Financing__c where Related_Quote__c in :remainingQuotes];
 			System.assert(remainingQuotes.size() == 1);
-			List<QuoteLineItem> remainingQLI = [select Id, Description, QuoteId from QuoteLineItem where QuoteId in :remainingQuotes];
 			System.assert(remainingQLI.size() == 1);
-			List<Quote_Discount__c> remainingQD = [select Id, Name, Quote__c from Quote_Discount__c where Quote__c in :remainingQuotes];
 			System.assert(remainingQD.size() == 1);
-			List<Quote_Financing__c> remainingQF = [select Id, Name, Related_Quote__c from Quote_Financing__c where Related_Quote__c in :remainingQuotes];
 			System.assert(remainingQF.size() == 1);
 			System.assert(processedAppt.opptyContainer.quoteContainerList.size() == 2);
 			System.assert(processedAppt.opptyContainer.quoteContainerList[0].quoteLineItems.size() == 1);
