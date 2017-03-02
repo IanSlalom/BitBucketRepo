@@ -48,6 +48,7 @@ public class RMS_prodConfigExtension {
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		verifyProducts = true;
 		this.orderLineItem = (OrderItem)stdController.getRecord();
+		specialOptionsCheck = this.orderLineItem.Special_Options__c;
 		isMiscJob = false;
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';
@@ -82,7 +83,7 @@ public class RMS_prodConfigExtension {
 				for (OrderItem orderItem : [SELECT Id, PricebookEntryId, PricebookEntry.Pricebook2Id, 
 											PricebookEntry.Product2Id, Order.Status, Specialty_Shape__c, 
 											Purchase_Order__c, Verify_Item_Configuration__c, PricebookEntry.Product2.RecordType.DeveloperName,
-											Responsible_Party__c, Order.RecordType.DeveloperName 
+											Responsible_Party__c, Order.RecordType.DeveloperName, Special_Options__c
 											From OrderItem WHERE Id =: orderLineItem.Id]) {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
@@ -137,6 +138,17 @@ public class RMS_prodConfigExtension {
                      
     public boolean getVerifyProducts() {
         return verifyProducts;
+    }
+
+    public  boolean specialOptionsCheck  {get;set;}
+
+    public PageReference toggleSpecialOptions() {
+            specialOptionsCheck = (specialOptionsCheck == true) ? false : true;
+            return null;
+    }
+                     
+    public boolean getSpecialOptionsCheck() {
+        return specialOptionsCheck;
     }
 
 	/******* property for the product configuration wrapper  *****************/
@@ -1232,6 +1244,7 @@ public class RMS_prodConfigExtension {
 		orderLineItem.Verify_Item_Configuration__c = (mode == 'v') ? orderLineItem.Verify_Item_Configuration__c :
 		 											 (prodConfig.mpc != null && !orderLineItem.NSPR__c) ? true : false;
 		verifyProducts = orderLineItem.Verify_Item_Configuration__c;
+		specialOptionsCheck = orderLineItem.Special_Options__c;
 		return null;
 
 	}

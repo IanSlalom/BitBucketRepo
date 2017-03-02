@@ -76,6 +76,10 @@
                 <behavior>Edit</behavior>
                 <field>Pivotal_Id__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Apex_Context__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
