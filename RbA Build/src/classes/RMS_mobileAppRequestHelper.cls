@@ -60,14 +60,15 @@ public with sharing class RMS_mobileAppRequestHelper {
 	  Map<Id, Opportunity> salesOpportunityMap = new Map<Id, Opportunity>((List<Opportunity>)Database.query(query));
 
 	  filterOppbyOrderStatus(salesOpportunityMap);
-      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Synced_DateTime__c, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and WhatId in: salesOpportunityMap.keySet()];
+      List<Event> salesEvents = [SELECT Id, StartDateTime, EndDateTime, Synced_DateTime__c, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and WhatId in: salesOpportunityMap.keySet() for UPDATE];
 
       // get all my appoints in the last year and going forward
+/* skipping tech measure appointments for now need updated filtering logic - also tm is out of scope
       Datetime myTimeStamp = Datetime.now().addYears(-1);
       List<Event> techmEvents = [SELECT Id, StartDateTime, EndDateTime, Synced_DateTime__c, Subject, WhoId, WhatId, Type, isCancelled__c FROM Event Where OwnerId =: userId and StartDateTime >= :myTimeStamp and Type = 'Tech Measure'];
       System.debug('RMS_mobileAppRequestHelper.findAppointments: salesEvents: ' + salesEvents);
       System.debug('RMS_mobileAppRequestHelper.findAppointments: tmEvents: ' + techmEvents);
-
+*/
       Appointments myAppts = new Appointments();
       // process the sales appointments
       if (salesEvents.size() > 0) {
@@ -78,9 +79,21 @@ public with sharing class RMS_mobileAppRequestHelper {
 	          e.Synced_DateTime__c = Datetime.now();
 		  }
         }
-        update salesEvents;
+        try {
+        	update salesEvents;
+        } catch (Exception e) {
+        	// this should not cause get appointments to fail
+		    System.debug(LoggingLevel.ERROR, e);
+			System.debug(LoggingLevel.Error, e.getStackTraceString());
+			String message = e.getMessage() + '::' + e.getStackTraceString();
+			Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileAppRequestHelper.findAppointments', message, null, userId);
+			String[] errParms = new String[]{e.getMessage(), e.getStackTraceString(), supportLogId};
+			String formattedMessage = String.format(GET_APPTS_EXCEPTION_ERROR_MESSAGE, errParms);
+		    myAppts.getErrors().add(formattedMessage);
+        }
       }
 
+/* skipping tech measure appointments for now need updated filtering logic - also tm is out of scope
       // process the tech measure appointmsnts
       if (techmEvents.size() > 0) {
         myAppts.tmAppts = this.populateTMAppointments(techmEvents);
@@ -90,15 +103,27 @@ public with sharing class RMS_mobileAppRequestHelper {
 	          e.Synced_DateTime__c = Datetime.now();
 		  }
         }
+        try {
          update techmEvents;
+        } catch (Exception e) {
+        	// this should not cause get appointments to fail
+		    System.debug(LoggingLevel.ERROR, e);
+			System.debug(LoggingLevel.Error, e.getStackTraceString());
+			String message = e.getMessage() + '::' + e.getStackTraceString();
+			Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileAppRequestHelper.findAppointments', message, null, userId);
+			String[] errParms = new String[]{e.getMessage(), e.getStackTraceString(), supportLogId};
+			String formattedMessage = String.format(GET_APPTS_EXCEPTION_ERROR_MESSAGE, errParms);
+		    myAppts.getErrors().add(formattedMessage);
+        }
       }
+*/
       myAppts.getApptsCompletedTimeStamp = Datetime.now();
       return JSON.serialize(myAppts);
     } catch (Exception e) {
       System.debug(LoggingLevel.ERROR, e);
 	  System.debug(LoggingLevel.Error, e.getStackTraceString());
 	  String message = e.getMessage() + '::' + e.getStackTraceString();
-	  Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileApplicationAPIController.doGet', message, null, userId);
+	  Id supportLogId = UtilityMethods.supportLog('RMS', 'RMS_mobileAppRequestHelper.findAppointments', message, null, userId);
 	  String[] errParms = new String[]{e.getMessage(), e.getStackTraceString(), supportLogId};
 	  String formattedMessage = String.format(GET_APPTS_EXCEPTION_ERROR_MESSAGE, errParms);
       Appointments myAppts = new Appointments();

@@ -64,7 +64,7 @@ private class RMS_mobileAppAPIControllerTest {
 		RMS_mobileAppAPIController.doPost();
 		Blob b = (blob) (RestContext.response.responseBody);
 		System.debug('###### ' + b.toString());
-		System.assert(b.toString().startsWith('{"opptyContainer":'));
+		System.assert(b.toString().startsWith('An Error has occurred.'));
 		
 		//Cover various helper class method invocations
 		RestContext.request.requestURI = '/1net/'+RMS_mobileAppAPIController.SAVE_TECH_MEASURE;
