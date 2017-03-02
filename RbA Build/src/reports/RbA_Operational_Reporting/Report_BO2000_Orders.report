@@ -85,10 +85,22 @@
         <field>Order$IF_Rollup_Cost__c</field>
     </columns>
     <columns>
+        <field>Order$Door_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <field>Order$Bay_Bow_Cost_Rollup__c</field>
+    </columns>
+    <columns>
         <field>Order$Series_2_Cost_Rollup__c</field>
     </columns>
     <columns>
         <field>Order$Other_Cost_Rollup__c</field>
+    </columns>
+    <columns>
+        <field>Order$Product_Cost__c</field>
+    </columns>
+    <columns>
+        <field>Order$Product_Cost_Percent__c</field>
     </columns>
     <columns>
         <field>Order$Initial_Labor__c</field>
@@ -126,6 +138,11 @@
             <column>Order$Sales_Rep__c</column>
             <operator>notEqual</operator>
             <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$OrderNumber</column>
+            <operator>equals</operator>
+            <value>00412779,00412770</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>
