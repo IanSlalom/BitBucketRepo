@@ -48,7 +48,6 @@ public class RMS_prodConfigExtension {
 	public RMS_prodConfigExtension(ApexPages.StandardController stdController) {
 		verifyProducts = true;
 		this.orderLineItem = (OrderItem)stdController.getRecord();
-		specialOptionsCheck = this.orderLineItem.Special_Options__c;
 		isMiscJob = false;
 		newOrderItem = stdController.getId() == null;
 		ordStat = 'dft';
@@ -77,6 +76,7 @@ public class RMS_prodConfigExtension {
 				relatedChangeOrder = [Select RecordType.DeveloperName from Order where Id =: orderId].RecordType.DeveloperName == 'Change_Order';
 			priceBookId = ApexPages.currentPage().getParameters().get('pid');		 
 			this.orderLineItem.Responsible_Party__c = 'Homeowner';
+			specialOptionsCheck = false;
 		// If we are editing an order item, retrieve the master product and price book id from the order item
 		} else {
 			system.debug('ads: on construction: orderLineItem: '+orderLineItem);
@@ -88,6 +88,7 @@ public class RMS_prodConfigExtension {
 					masterProductId = orderItem.PricebookEntry.Product2Id;
 					priceBookId = String.ValueOf(orderItem.PricebookEntry.Pricebook2Id);
 					orderId = orderItem.OrderId;
+					specialOptionsCheck = orderItem.Special_Options__c;
 					poId = orderItem.Purchase_Order__c;
 					oiId = orderItem.Id;
 					relatedChangeOrder = (orderItem.Order.RecordType.DeveloperName == 'Change_Order');
