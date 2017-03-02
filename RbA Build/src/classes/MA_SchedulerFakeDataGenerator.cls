@@ -194,7 +194,8 @@ public class MA_SchedulerFakeDataGenerator {
 		RbA_Work_Order__c wo = new RbA_Work_Order__c(
 			Account__c = dwellingId,
 			Contact__c = homeOwnerId,
-			Work_Order_Type__c = workOrderType
+			Work_Order_Type__c = workOrderType,
+			Work_Order_Status__c = 'To Be Scheduled'
 //			Appointment_End_Time__c = '12:00 PM',
 //			Appointment_Start_Time__c = '10:00 AM',
 //			Appointment_Duration__c = isMultiDay ? 20 : 2,
