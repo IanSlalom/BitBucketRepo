@@ -24,6 +24,15 @@
         <field>Order$Payments_Received__c</field>
     </columns>
     <columns>
+        <field>Order$Business_Adjustments__c</field>
+    </columns>
+    <columns>
+        <field>Order$Non_Sufficient_Funds__c</field>
+    </columns>
+    <columns>
+        <field>Order$Amount_Refunded__c</field>
+    </columns>
+    <columns>
         <aggregateTypes>Sum</aggregateTypes>
         <field>Order$Amount_Due__c</field>
     </columns>

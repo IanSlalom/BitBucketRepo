@@ -12,7 +12,7 @@
             <field>Payment__c.Payment_Method__c</field>
         </columns>
         <columns>
-            <field>CUST_RECORDTYPE</field>
+            <field>Payment__c.Payment_Type__c</field>
         </columns>
         <columns>
             <field>Payment__c.GL_Account__c</field>
@@ -36,7 +36,7 @@
         <scope>organization</scope>
         <timeFrameFilter>
             <dateColumn>Payment__c.Payment_Date__c</dateColumn>
-            <interval>INTERVAL_LASTMONTH</interval>
+            <interval>INTERVAL_TODAY</interval>
         </timeFrameFilter>
     </block>
     <block>
@@ -68,7 +68,7 @@
         <reportType>OrderCustomEntity$Refund__c</reportType>
         <timeFrameFilter>
             <dateColumn>Refund__c.Date__c</dateColumn>
-            <interval>INTERVAL_LASTMONTH</interval>
+            <interval>INTERVAL_TODAY</interval>
         </timeFrameFilter>
     </block>
     <block>
@@ -105,7 +105,7 @@
         <scope>organization</scope>
         <timeFrameFilter>
             <dateColumn>Business_Adjustment__c.Date__c</dateColumn>
-            <interval>INTERVAL_LASTMONTH</interval>
+            <interval>INTERVAL_TODAY</interval>
         </timeFrameFilter>
     </block>
     <blockInfo>

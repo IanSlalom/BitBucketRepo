@@ -56,6 +56,11 @@
             <operator>notEqual</operator>
             <value>0</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order.RecordTypeName__c</column>
+            <operator>notEqual</operator>
+            <value>CORO_Service</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO3000 - Detailed Backlog Report</name>
