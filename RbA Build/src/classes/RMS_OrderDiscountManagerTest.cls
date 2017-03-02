@@ -63,8 +63,8 @@ private class RMS_OrderDiscountManagerTest {
         orderDiscount1.Status__c = 'Cancelled';
         update orderDiscount1;
 
-		List<Change_History__c> chResults3 = [SELECT Id, RecordTypeId, Order_Discount__c, Subtype__c, Retail_Price__c, Retail_Price_Change__c, Changes__c FROM Change_History__c WHERE Order_Discount__c =: orderDiscount1.Id AND SubType__c = 'Change' ORDER BY CreatedDate DESC];
-		System.AssertEquals(2, chResults3.size());
+        List<Change_History__c> chResults3 = [SELECT Id, RecordTypeId, Order_Discount__c, Subtype__c, Retail_Price__c, Retail_Price_Change__c, Changes__c FROM Change_History__c WHERE Order_Discount__c =: orderDiscount1.Id AND SubType__c = 'Change' AND Retail_Price__c = 0];
+		System.AssertEquals(1, chResults3.size());
 		System.AssertEquals(UtilityMethods.RecordTypeFor('Change_History__c', 'Order_Discount'), chResults2[0].RecordTypeId);
 		System.AssertEquals('Change', chResults3[0].Subtype__c);
 		System.AssertEquals(orderDiscount1.Id, chResults3[0].Order_Discount__c);
