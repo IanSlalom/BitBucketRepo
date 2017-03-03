@@ -94,6 +94,19 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>RbA Skills</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Install_Duration__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Tech_Measure_Duration__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>OWNER.ALIAS</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Install_Duration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Tech_Measure_Duration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.ALIAS</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Install_Duration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Tech_Measure_Duration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>OWNER.ALIAS</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Install_Duration__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Tech_Measure_Duration__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

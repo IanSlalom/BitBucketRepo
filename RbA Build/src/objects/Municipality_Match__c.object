@@ -146,6 +146,17 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Municipalities Match</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Agency_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>City_Township__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>County__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>State__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Zip_Code__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Agency_Name__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>City_Township__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>County__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>State__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Zip_Code__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

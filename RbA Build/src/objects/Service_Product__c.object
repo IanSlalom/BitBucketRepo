@@ -130,7 +130,16 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Service Products</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Service_Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Master_Product__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Master_Product__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Product__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Master_Product__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Master_Product__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <webLinks>
         <fullName>Add_Master_Product</fullName>

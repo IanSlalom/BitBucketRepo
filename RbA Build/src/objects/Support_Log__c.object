@@ -158,6 +158,19 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Support Logs</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>User__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Operation__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Details__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>User__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Operation__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Details__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>User__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Operation__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Details__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>User__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Operation__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Details__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

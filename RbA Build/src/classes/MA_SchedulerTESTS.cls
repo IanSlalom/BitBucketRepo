@@ -263,7 +263,7 @@ private class MA_SchedulerTESTS {
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
-		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', true);
+		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeNonBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', true);
 
 		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 1', storeConfig.Id);
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);
@@ -318,7 +318,7 @@ private class MA_SchedulerTESTS {
 		Account dwelling = MA_SchedulerFakeDataGenerator.createFakeDwelling(true, store.Id);
 		Contact homeOwner = MA_SchedulerFakeDataGenerator.createFakeContact(true, store.Id);
 		Store_Configuration__c storeConfig = MA_SchedulerFakeDataGenerator.createFakeStoreConfig(true, store.Id);
-		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
+		RbA_Work_Order__c wo = MA_SchedulerFakeDataGenerator.createFakeNonBookedWorkOrder(true, dwelling.Id, homeOwner.Id, 'Tech Measure', false);
 
 		Resource__c res1 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 1', storeConfig.Id);
 		Resource__c res2 = MA_SchedulerFakeDataGenerator.createFakeResource(false, 'Tech Measure 2', storeConfig.Id);

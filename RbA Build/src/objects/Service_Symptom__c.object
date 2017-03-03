@@ -156,7 +156,28 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Service Symptoms</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Request__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Installed_Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Product_Text__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Symptom__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Account__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Request__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Installed_Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Product_Text__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Symptom__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Account__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Request__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Installed_Product__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Product_Text__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Symptom__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Request__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Installed_Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Product_Text__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Symptom__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <validationRules>
         <fullName>ServiceSymptomsforManufacturerRbAOnly</fullName>

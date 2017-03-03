@@ -782,6 +782,12 @@
         <lookupDialogsAdditionalFields>Order__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>Total__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>OWNER.ALIAS</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Vendor__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>RECORDTYPE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Order__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Total__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>OWNER.ALIAS</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>Date__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Vendor__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>RECORDTYPE</searchResultsAdditionalFields>
@@ -789,6 +795,7 @@
         <searchResultsAdditionalFields>Total__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
+
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>LockedServiceRequest</fullName>
