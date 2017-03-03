@@ -163,6 +163,11 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
+            <field>Order_Service_Retail_Total__c</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
             <field>BillingGeocodeAccuracy</field>
             <table>Order</table>
         </columns>
@@ -194,6 +199,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>ShippingPostalCode</field>
+            <table>Order</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Initial_Retail_Total__c</field>
             <table>Order</table>
         </columns>
         <columns>

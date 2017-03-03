@@ -41,24 +41,24 @@ else if(!(UserInfo.getProfileId() == RMS_Settings_map.get('Data Loading Profile 
     // After Insert 
     //else 
     if(Trigger.isInsert && Trigger.isAfter){
-     orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+     RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
     } 
     
     // After Update
     else if(Trigger.isUpdate && Trigger.isAfter){
-        orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
     }
                 
     //After Delete
     else if(Trigger.isDelete && Trigger.isAfter){    
-        orders = (List<SObject>) dlrs.RollupService.rollup(trigger.old);
+        RMS_FutureRollups.rollupOrderItemsToOrders(trigger.oldMap.keySet());
     }
     
     // After Undelete 
     
     else if(Trigger.isUnDelete){
         
-        orders = (List<SObject>) dlrs.RollupService.rollup(trigger.new);
+        RMS_FutureRollups.rollupOrderItemsToOrders(trigger.newMap.keySet());
     }
     
     // Try - Catch to catch any dml errors doing the sproduct rollup and displaying

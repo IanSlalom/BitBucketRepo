@@ -67,7 +67,7 @@
         </params>
         <reportType>OrderCustomEntity$Refund__c</reportType>
         <timeFrameFilter>
-            <dateColumn>Refund__c.Date__c</dateColumn>
+            <dateColumn>CUST_CREATED_DATE</dateColumn>
             <interval>INTERVAL_TODAY</interval>
         </timeFrameFilter>
     </block>
@@ -88,13 +88,6 @@
         <columns>
             <field>Business_Adjustment__c.Amount__c</field>
         </columns>
-        <filter>
-            <criteriaItems>
-                <column>Business_Adjustment__c.Type__c</column>
-                <operator>equals</operator>
-                <value>Install Adjustment</value>
-            </criteriaItems>
-        </filter>
         <format>Summary</format>
         <name>Business Adjustments</name>
         <params>
@@ -104,7 +97,7 @@
         <reportType>CustomEntity$Business_Adjustment__c@Business_Adjustment__c.Order__c</reportType>
         <scope>organization</scope>
         <timeFrameFilter>
-            <dateColumn>Business_Adjustment__c.Date__c</dateColumn>
+            <dateColumn>CUST_CREATED_DATE</dateColumn>
             <interval>INTERVAL_TODAY</interval>
         </timeFrameFilter>
     </block>

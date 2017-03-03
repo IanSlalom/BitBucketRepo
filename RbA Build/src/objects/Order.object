@@ -1003,6 +1003,18 @@ BillingCity +&quot;, &quot;+ BillingState +&quot; &quot;+ BillingPostalCode+BR()
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Initial_Retail_Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>Initial_Discount__c + Initial_Subtotal__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Initial Retail Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>Initial_Subtotal__c</fullName>
         <externalId>false</externalId>
         <label>Initial Subtotal</label>
@@ -1491,6 +1503,18 @@ This is a holding field for now.</inlineHelpText>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order_Service_Retail_Total__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( RecordTypeName__c == &apos;CORO_Service&apos;,  Invoice_Subtotal__c + Sales_Tax__c, Retail_Total__c  )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Order/Service Retail Total</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>OriginalOrderId</fullName>

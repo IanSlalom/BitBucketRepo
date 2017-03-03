@@ -19,11 +19,6 @@
             <value>Order.CORO_Record_Type,Order.Change_Order</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Order$Sales_Rep__c</column>
-            <operator>notEqual</operator>
-            <value></value>
-        </criteriaItems>
-        <criteriaItems>
             <column>Order$Revenue_Recognized_Date__c</column>
             <operator>notEqual</operator>
             <value></value>
@@ -32,11 +27,6 @@
             <column>Order.Work_Orders1__r.Labor1__r$Report_Type__c</column>
             <operator>equals</operator>
             <value>Change</value>
-        </criteriaItems>
-        <criteriaItems>
-            <column>Order$OrderNumber</column>
-            <operator>equals</operator>
-            <value>00412779,00412770</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>

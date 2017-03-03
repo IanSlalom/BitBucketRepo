@@ -37,7 +37,7 @@
         <criteriaItems>
             <field>Product2.Name</field>
             <operation>equals</operation>
-            <value>Paint &amp; Stain</value>
+            <value>Paint/Stain</value>
         </criteriaItems>
         <criteriaItems>
             <field>OrderItem.Paint_Stain__c</field>
