@@ -1439,7 +1439,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Construction Materials</value>
+            <value>Construction%2FMaterials</value>
         </filters>
         <label>Construction Materials</label>
     </listViews>
