@@ -134,6 +134,16 @@
             <operator>notEqual</operator>
             <value></value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$OrderNumber</column>
+            <operator>notEqual</operator>
+            <value>00000110</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO2000 - Orders</name>

@@ -34,7 +34,7 @@
     </columns>
     <description>BO4002 Detail Inventory Stock Status Report</description>
     <filter>
-        <booleanFilter>(((1 AND (2 OR 3)) AND 4)) AND 5</booleanFilter>
+        <booleanFilter>((((1 AND (2 OR 3)) AND 4)) AND 5) AND 6</booleanFilter>
         <criteriaItems>
             <column>Asset$RecordType</column>
             <operator>equals</operator>
@@ -59,6 +59,11 @@
             <column>Asset.Journal_Entries__r$Debit_General_Ledger_Account__c</column>
             <operator>notEqual</operator>
             <value>88500400500550</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Asset$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
         </criteriaItems>
     </filter>
     <format>Summary</format>

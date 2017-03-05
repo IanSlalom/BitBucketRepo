@@ -61,6 +61,16 @@
             <operator>notEqual</operator>
             <value>CORO_Service</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order.Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>ORDER_NUMBER</column>
+            <operator>notEqual</operator>
+            <value>00000110</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO3000 - Detailed Backlog Report</name>

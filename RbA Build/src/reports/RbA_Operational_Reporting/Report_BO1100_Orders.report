@@ -76,6 +76,16 @@
             <operator>equals</operator>
             <value>On Hold,Tech Measure Needed,Tech Measure Scheduled,Ready to Order,Order Released,Install Needed,Install Scheduled,Install Complete,Job in Progress,Job Closed,Pending Cancellation,Cancelled</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Name</column>
+            <operator>notEqual</operator>
+            <value>Dummy Cost PO Order</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO1100 - Orders</name>
