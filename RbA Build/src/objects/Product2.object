@@ -1421,7 +1421,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Child Product</value>
+            <value>PRODUCT2.Child_Product</value>
         </filters>
         <label>Child Products</label>
     </listViews>
@@ -1439,7 +1439,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Construction %2F Materials</value>
+            <value>PRODUCT2.Construction_Materials</value>
         </filters>
         <label>Construction Materials</label>
     </listViews>
@@ -1455,7 +1455,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Door Components</value>
+            <value>PRODUCT2.Door_Components</value>
         </filters>
         <label>Door Components</label>
     </listViews>
@@ -1472,37 +1472,37 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Bays and Bows</value>
+            <value>PRODUCT2.Legacy_Bays_and_Bows</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Construction Materials</value>
+            <value>PRODUCT2.Legacy_Construction_Materials</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Doors</value>
+            <value>PRODUCT2.Legacy_Doors</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Entry Doors</value>
+            <value>PRODUCT2.Legacy_Entry_Doors</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Miscellaneous Charge</value>
+            <value>PRODUCT2.Legacy_Miscellaneous_Charge</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Series 2</value>
+            <value>PRODUCT2.Legacy_Series_2</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Legacy Service</value>
+            <value>PRODUCT2.Legacy_Service</value>
         </filters>
         <label>Legacy Products</label>
     </listViews>
@@ -1519,7 +1519,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Master Product</value>
+            <value>PRODUCT2.Master_Product</value>
         </filters>
         <label>Master Products</label>
     </listViews>
@@ -1535,7 +1535,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Misc Job and Unit Charges</value>
+            <value>PRODUCT2.Misc_Job_and_Unit_Charges</value>
         </filters>
         <label>Misc Unit Charges</label>
     </listViews>
@@ -1559,7 +1559,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Service Product</value>
+            <value>PRODUCT2.Service_Product</value>
         </filters>
         <label>Service Products</label>
     </listViews>
