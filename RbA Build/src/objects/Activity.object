@@ -236,7 +236,6 @@
                 <fullName>Placeholder1</fullName>
                 <default>false</default>
             </picklistValues>
-            <restrictedPicklist>true</restrictedPicklist>
             <sorted>false</sorted>
         </picklist>
         <required>false</required>
@@ -439,7 +438,6 @@
                 <fullName>Project can&apos;t be installed as Sold (ie. Insert vs. FF)</fullName>
                 <default>false</default>
             </picklistValues>
-            <restrictedPicklist>true</restrictedPicklist>
             <sorted>false</sorted>
         </picklist>
         <required>false</required>

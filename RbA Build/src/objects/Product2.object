@@ -1421,7 +1421,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Child_Product</value>
+            <value>PRODUCT2.Child_Product</value>
         </filters>
         <label>Child Products</label>
     </listViews>
@@ -1439,7 +1439,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Construction_Materials</value>
+            <value>PRODUCT2.Construction_Materials</value>
         </filters>
         <label>Construction Materials</label>
     </listViews>
@@ -1455,7 +1455,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Door_Components</value>
+            <value>PRODUCT2.Door_Components</value>
         </filters>
         <label>Door Components</label>
     </listViews>
@@ -1472,37 +1472,37 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Bays_and_Bows</value>
+            <value>PRODUCT2.Legacy_Bays_and_Bows</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Construction_Materials</value>
+            <value>PRODUCT2.Legacy_Construction_Materials</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Doors</value>
+            <value>PRODUCT2.Legacy_Doors</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Entry_Doors</value>
+            <value>PRODUCT2.Legacy_Entry_Doors</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Miscellaneous_Charge</value>
+            <value>PRODUCT2.Legacy_Miscellaneous_Charge</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Series_2</value>
+            <value>PRODUCT2.Legacy_Series_2</value>
         </filters>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Legacy_Service</value>
+            <value>PRODUCT2.Legacy_Service</value>
         </filters>
         <label>Legacy Products</label>
     </listViews>
@@ -1519,7 +1519,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Master_Product</value>
+            <value>PRODUCT2.Master_Product</value>
         </filters>
         <label>Master Products</label>
     </listViews>
@@ -1535,7 +1535,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Misc_Job_and_Unit_Charges</value>
+            <value>PRODUCT2.Misc_Job_and_Unit_Charges</value>
         </filters>
         <label>Misc Unit Charges</label>
     </listViews>
@@ -1559,7 +1559,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Service_Product</value>
+            <value>PRODUCT2.Service_Product</value>
         </filters>
         <label>Service Products</label>
     </listViews>
@@ -8291,18 +8291,24 @@ NULL)</formula>
     <searchLayouts>
         <customTabListAdditionalFields>PRODUCT2.NAME</customTabListAdditionalFields>
         <customTabListAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</customTabListAdditionalFields>
+        <customTabListAdditionalFields>PRODUCT2.RECORD_TYPE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Product_Type__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>PRODUCT2.DESCRIPTION</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>PRODUCT2.NAME</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>PRODUCT2.RECORD_TYPE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Product_Type__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>PRODUCT2.DESCRIPTION</lookupDialogsAdditionalFields>
-        <lookupDialogsAdditionalFields>PRODUCT2.FAMILY</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>PRODUCT2.NAME</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>PRODUCT2.RECORD_TYPE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Product_Type__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>PRODUCT2.DESCRIPTION</lookupPhoneDialogsAdditionalFields>
-        <lookupPhoneDialogsAdditionalFields>PRODUCT2.FAMILY</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>PRODUCT2.NAME</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>PRODUCT2.CUSTOMER_PRODUCT_ID</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PRODUCT2.RECORD_TYPE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Product_Type__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>PRODUCT2.DESCRIPTION</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>PRODUCT2.FAMILY</searchResultsAdditionalFields>
     </searchLayouts>
+
 </CustomObject>

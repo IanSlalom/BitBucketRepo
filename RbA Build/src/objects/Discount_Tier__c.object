@@ -124,7 +124,18 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Discount Tiers</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Store_Discount__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Discount_Percentage__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Tier_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Total_Price__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Total_Units__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Discount__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Discount_Percentage__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Tier_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Total_Price__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Total_Units__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>StoreDiscount_Tiered_Type_Equals_NumUnit</fullName>

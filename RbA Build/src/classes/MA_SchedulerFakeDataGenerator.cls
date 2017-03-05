@@ -190,6 +190,26 @@ public class MA_SchedulerFakeDataGenerator {
 		return wo;
 	}
 
+	public static RbA_Work_Order__c createFakeNonBookedWorkOrder(Boolean insertNeeded, Id dwellingId, Id homeOwnerId, String workOrderType, Boolean isMultiDay) {
+		RbA_Work_Order__c wo = new RbA_Work_Order__c(
+			Account__c = dwellingId,
+			Contact__c = homeOwnerId,
+			Work_Order_Type__c = workOrderType,
+			Work_Order_Status__c = 'To Be Scheduled'
+			
+//			Appointment_End_Time__c = '12:00 PM',
+//			Appointment_Start_Time__c = '10:00 AM',
+//			Appointment_Duration__c = isMultiDay ? 20 : 2,
+//			Appointment_Date__c = Date.parse('01/10/1987')
+		);
+
+		if (insertNeeded) {
+			insert wo;
+		}
+
+		return wo;
+	}
+
 	public static MA_Scheduler_Event__c createFakeMaEvent(Boolean insertNeeded, Id woId, Id resourceId) {
 		Date startDate = Date.parse('01/10/1987');
 		Time startTime = Time.newInstance(12, 0, 0, 0);

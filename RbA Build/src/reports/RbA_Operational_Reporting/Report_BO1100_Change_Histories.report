@@ -49,6 +49,11 @@
             <operator>equals</operator>
             <value>Change</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>FK_$Order.Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO1100 - Change Histories</name>

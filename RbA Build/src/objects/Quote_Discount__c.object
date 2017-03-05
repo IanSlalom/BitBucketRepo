@@ -219,6 +219,17 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Quote Discounts</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Quote__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Store_Discount__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Store_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Discount_Amount__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Quote__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Discount__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Discount_Amount__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Status__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

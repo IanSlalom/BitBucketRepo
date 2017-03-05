@@ -250,7 +250,18 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Order Financing</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Store_Finance_Program__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Related_Order__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Contact__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Store_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Amount_Financed__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Finance_Program__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Related_Order__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Contact__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Amount_Financed__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <validationRules>
         <fullName>Amount_Financed_Check</fullName>

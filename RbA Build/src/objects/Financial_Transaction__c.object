@@ -386,6 +386,23 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Financial Transactions</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Transaction_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Store_Configuration__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Debit_Account_Number__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Credit_Account_Number__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Transaction_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Store_Configuration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Debit_Account_Number__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Credit_Account_Number__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Transaction_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Configuration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Debit_Account_Number__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Credit_Account_Number__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Transaction_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Store_Configuration__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Debit_Account_Number__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Credit_Account_Number__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

@@ -119,7 +119,20 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Procedure Code Assignments</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Procedure_Code__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Description__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Procedure_Code__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Description__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Procedure_Code__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Product__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Description__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Procedure_Code__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Description__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <webLinks>
         <fullName>Assign_Procedure_Code</fullName>

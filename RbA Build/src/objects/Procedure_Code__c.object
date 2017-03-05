@@ -104,7 +104,16 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Procedure Codes</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Time_Minutes_Each__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Procedure_Code_Description__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Time_Minutes_Each__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Procedure_Code_Description__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Time_Minutes_Each__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Procedure_Code_Description__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Time_Minutes_Each__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Procedure_Code_Description__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Procedure_Code_3_Digits_Only</fullName>

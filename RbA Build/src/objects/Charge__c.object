@@ -442,13 +442,30 @@
     <pluralLabel>Charges</pluralLabel>
     <searchLayouts>
         <customTabListAdditionalFields>Charge_Cost_To__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Installed_Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Product_Text__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>What_Where__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>Charge_Cost_To__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Installed_Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Product_Text__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>What_Where__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATED_DATE</lookupDialogsAdditionalFields>
         <lookupFilterFields>NAME</lookupFilterFields>
         <lookupFilterFields>Charge_Cost_To__c</lookupFilterFields>
         <lookupPhoneDialogsAdditionalFields>Charge_Cost_To__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Installed_Product__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Product_Text__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>What_Where__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATED_DATE</lookupPhoneDialogsAdditionalFields>
         <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Charge_Cost_To__c</searchFilterFields>
         <searchResultsAdditionalFields>Charge_Cost_To__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Installed_Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Product_Text__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>What_Where__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATED_DATE</searchResultsAdditionalFields>
     </searchLayouts>
+
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

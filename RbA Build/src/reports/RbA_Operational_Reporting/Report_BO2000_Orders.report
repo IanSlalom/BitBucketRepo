@@ -70,7 +70,7 @@
         <field>Order$Initial_Discount__c</field>
     </columns>
     <columns>
-        <field>Order$Discount_Amount__c</field>
+        <field>Order$Discount_Amount2__c</field>
     </columns>
     <columns>
         <field>Order$Finance_Program_Fees__c</field>
@@ -135,14 +135,14 @@
             <value></value>
         </criteriaItems>
         <criteriaItems>
-            <column>Order$Sales_Rep__c</column>
-            <operator>notEqual</operator>
-            <value></value>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
         </criteriaItems>
         <criteriaItems>
             <column>Order$OrderNumber</column>
-            <operator>equals</operator>
-            <value>00412779,00412770</value>
+            <operator>notEqual</operator>
+            <value>00000110</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>

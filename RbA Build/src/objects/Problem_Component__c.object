@@ -180,6 +180,23 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Problem Components</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Installed_Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Product_Text__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Symptom__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Problem_Component_asgn__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Installed_Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Product_Text__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Symptom__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Problem_Component_asgn__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Installed_Product__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Product_Text__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Symptom__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Problem_Component_asgn__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Installed_Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Product_Text__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Symptom__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Problem_Component_asgn__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

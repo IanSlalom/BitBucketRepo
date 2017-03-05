@@ -19,11 +19,6 @@
             <value>Order.CORO_Record_Type,Order.Change_Order</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Order$Sales_Rep__c</column>
-            <operator>notEqual</operator>
-            <value></value>
-        </criteriaItems>
-        <criteriaItems>
             <column>Order$Revenue_Recognized_Date__c</column>
             <operator>notEqual</operator>
             <value></value>
@@ -34,9 +29,9 @@
             <value>Change</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Order$OrderNumber</column>
-            <operator>equals</operator>
-            <value>00412779,00412770</value>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>

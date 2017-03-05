@@ -784,7 +784,14 @@ Store_Configuration__r.Store__r.ShippingStreet &amp; BR() &amp;
         <type>Text</type>
     </nameField>
     <pluralLabel>rSuite Configuration</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Store_Configuration__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Total_Price__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Account_Contact_Information__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Store_Configuration__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Total_Price__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Account_Contact_Information__c</lookupPhoneDialogsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Addendum_Flat_Rate_Percentage_Required</fullName>

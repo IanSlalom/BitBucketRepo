@@ -16,8 +16,7 @@
         <field>Order$BillToContact</field>
     </columns>
     <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>Order$Retail_Total__c</field>
+        <field>Order$Order_Service_Retail_Total__c</field>
     </columns>
     <columns>
         <aggregateTypes>Sum</aggregateTypes>
@@ -51,6 +50,16 @@
             <column>Order$Payments_Received__c</column>
             <operator>greaterThan</operator>
             <value>0</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Status</column>
+            <operator>notEqual</operator>
+            <value>Cancelled</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>
