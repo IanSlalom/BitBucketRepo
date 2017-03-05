@@ -28,6 +28,11 @@
             <operator>equals</operator>
             <value>Change</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO2000 - Labor</name>

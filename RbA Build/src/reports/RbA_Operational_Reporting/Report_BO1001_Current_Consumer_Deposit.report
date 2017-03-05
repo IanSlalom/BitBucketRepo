@@ -51,6 +51,16 @@
             <operator>greaterThan</operator>
             <value>0</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Order$Status</column>
+            <operator>notEqual</operator>
+            <value>Cancelled</value>
+        </criteriaItems>
     </filter>
     <format>Tabular</format>
     <name>Report BO1001 - Current Consumer Deposit</name>

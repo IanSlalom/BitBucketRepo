@@ -41,6 +41,11 @@
             <operator>greaterThan</operator>
             <value>0</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Order$Store_Location__c</column>
+            <operator>contains</operator>
+            <value>Twin Cities</value>
+        </criteriaItems>
     </filter>
     <format>Summary</format>
     <groupingsDown>
