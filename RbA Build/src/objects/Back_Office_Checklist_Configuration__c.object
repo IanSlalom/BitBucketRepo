@@ -70,7 +70,7 @@
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
         <label>Deposit Received</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
@@ -88,7 +88,7 @@
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
         <label>Project Preparation Expectations</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>

@@ -16,7 +16,7 @@
                 <field>Part_Number__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>ProductCode</field>
             </layoutItems>
             <layoutItems>
