@@ -347,7 +347,10 @@
         <fields>NAME</fields>
         <fields>Discount__c</fields>
         <fields>Active__c</fields>
+        <fields>UPDATEDBY_USER</fields>
         <relatedList>Store_Discount__c.Store_Configuration__c</relatedList>
+        <sortField>Active__c</sortField>
+        <sortOrder>Desc</sortOrder>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
@@ -355,9 +358,10 @@
         <fields>Finance_Company__c</fields>
         <fields>Active__c</fields>
         <fields>Option_Order__c</fields>
+        <fields>UPDATEDBY_USER</fields>
         <relatedList>Store_Finance_Program__c.Store_Configuration__c</relatedList>
-        <sortField>NAME</sortField>
-        <sortOrder>Asc</sortOrder>
+        <sortField>Active__c</sortField>
+        <sortOrder>Desc</sortOrder>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
