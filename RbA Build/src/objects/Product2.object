@@ -1455,7 +1455,7 @@ NULL)</formula>
         <filters>
             <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
-            <value>Product2.Door_Components</value>
+            <value>Door_Components</value>
         </filters>
         <label>Door Components</label>
     </listViews>
