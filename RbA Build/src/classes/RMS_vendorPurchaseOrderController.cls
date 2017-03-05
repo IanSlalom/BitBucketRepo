@@ -484,7 +484,7 @@ public with sharing class RMS_vendorPurchaseOrderController {
                                 Parent_Order_Item__r.Installed_Product_Asset__c,
                                 Vendor_Credit_to_Receive__c, Date_Vendor_Credit__c, Installed_Product_Asset__r.Vendor_Credit__c,
                                 Sold_Order_Product_Asset__c, Sold_Order_Product_Asset__r.Product_Name__c
-                                FROM OrderItem Where OrderId =: orderId AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
+                                FROM OrderItem Where OrderId =: orderId AND OrderId !=: UtilityMethods.getDummyOrderId() AND Status__c != 'Cancelled'];  // AND Purchase_Order__c = null
         }
         
         // If there are related order items

@@ -46,9 +46,22 @@ public with sharing class RMS_financialTransactionManager {
     }
 
     public void onAfterUpdatePayment(list<Payment__c> listOld, list<Payment__c> listNew, map<Id, Payment__c> mapOld, map<Id, Payment__c> mapNew){
-        if(!turnFinancialTransactionsOff){
-            createOrUpdateJournalEntryPayment(listNew, mapNew);
+        if(turnFinancialTransactionsOff) return;
+
+		// Jett-4602 Temporarily allow users to change the payment's order without having the financial trans manager code running
+		List<Payment__c> reducedNewList = new List<Payment__c>();
+		Map<Id, Payment__c> reducedNewMap = new Map<Id, Payment__c>();
+        for (Payment__c pay : listNew) {
+        	if(pay.Order__c != mapOld.get(pay.Id).Order__c)continue;
+        		
+        	reducedNewList.add(pay);
+        	reducedNewMap.put(pay.id, pay);
+        	
         }
+        
+		if (reducedNewList.size() == 0) return;
+
+        createOrUpdateJournalEntryPayment(listNew, mapNew);
 //      lockPaymentRecords(listOld, mapNew);
     }
     
