@@ -232,7 +232,27 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
+                <fullName>0073 - MAC 2B4 Contact</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0074 - MAC 2B Contract</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0076 - MAC Contract</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
                 <fullName>0077 - Twin Cities</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0078 - Eau Claire</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0079 - St. Cloud </fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -674,7 +694,27 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
+                <fullName>0073 - MAC 2B4 Contact</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0074 - MAC 2B Contract</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0076 - MAC Contract</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
                 <fullName>0077 - Twin Cities</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0078 - Eau Claire</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>0079 - St. Cloud </fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
