@@ -1054,6 +1054,419 @@
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>0003 - West, TX</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0060 - Rochester, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0066 - Mankato, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0073 - MAC 2B4 Contact</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0074 - MAC 2B Contract</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0076 - MAC Contract</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0077 - Twin Cities, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0078 - Eau Claire</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0079 - St. Cloud</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0085 - Maryland</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0086 - Pittsburgh, PA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0092 - Detroit, MI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0093 - Cleveland, OH</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0096 - Boston, MA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0097 - Washington, DC - Virginia</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0110 - Marshall, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0115 - Madison, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0117 - Milwaukee, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0125 - Duluth, MN - Superior, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0175 - Albert Lea, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0420 - Des Moines, IA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0440 - Virginia Beach, VA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0442 - Charlotte, NC</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0457 - Salt Lake, UT</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0465 - Central Virginia, VA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0535 - New Jersey - -New York Metro, NJ</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0575 - Louisville-Lexington, KY and Southern Indiana</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0576 - Cincinnati, OH</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0580 - Northeastern, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0590 - Central, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0600 - Sioux Falls, SD</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0620 - Siren, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0621 - Grand Forks, ND</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0622 - Brainerd, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0623 - Iron Range, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0624 - Eastern IA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0625 - Chippewa Valley, WI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0630 - Seattle, WA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0631 - Eastern, WA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0660 - Portland, OR</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0665 - San Antonio, TX</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0685 - Topeka, KS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0686 - Western, KS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0687 - Wichita, KS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0688 - Omaha and Lincoln, NE</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0689 - Columbus, OH</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0705 - Las Vegas, NV</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0710 - Westchester, NY</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0720 - Phoenix, AZ</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0725 - Fargo, ND</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0726 - Bismarck, ND</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0727 - St. Cloud, MN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0730 - Austin, TX</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0731 - Houston, TX</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0732 - Dallas-Fort Worth, TX</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0733 - St. Louis, MO</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0734 - Kansas City, KS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0735 - Central, PA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0755 - Albuquerque-Santa Fe, NM</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0756 - Tucson, AZ</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0757 - San Diego, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0758 - Boise, ID</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0760 - Central Carolina, NC</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0770 - Eastern, NY</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0790 - Knoxville, TN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0791 - Nashville, TN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0800 - Chicago, IL</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0800 - Long Island, NY</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0810 - Central, NY</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0830 - Greater Philadelphia, PA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0835 - Northern AZ</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0845 - Dayton, OH</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0850 - Western, NY</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0855 - Anchorage, AK</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0856 - Vancouver, BC</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0864 - Portland, ME</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0866 - Greater MI</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0867 - Indianapolis, IN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0868 - South Bend, IN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0875 - Northeast PA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0890 - San Francisco, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0905 - Southern New England</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0910 - Thousand Oaks, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0911 - Orange County, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0912 - NW Los Angeles, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0914 - Toronto, ON</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0915 - Oklahoma City, OK</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0916 - Tulsa, OK</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0925 - Sacramento, CA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0930 - Atlanta, GA</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0935 - Central IL</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0945 - Colorado</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0947 - Colorado Springs, CO</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0948 - Fort Collins, CO</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0960 - Greater ME</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0965 - Chattanooga, TN</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0970 - Wyoming</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0975 - Northwest Ohio</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0980 - Central Iowa</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0985 - North and Central AL</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>0990 - Central FL</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Demo Store - BW</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
