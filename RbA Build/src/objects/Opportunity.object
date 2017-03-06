@@ -951,7 +951,6 @@ Demo - No Sales</description>
         <searchResultsAdditionalFields>OPPORTUNITY.CLOSE_DATE</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
-
     <sharingModel>Private</sharingModel>
     <webLinks>
         <fullName>APXTConga4__Conga_Composer_OAuth</fullName>
@@ -1063,10 +1062,19 @@ var country = &quot;{!Account.ShippingCountry}&quot;;
 var duration = &apos;2&apos;; 
 
 var contact = sforce.connection.query(&quot;SELECT Contact__c,Dwelling__c,Contact__r.Id,Contact__r.Full_Name__c FROM Contact_History__c WHERE Dwelling__c = &apos;{!Account.Id}&apos; AND Primary_Contact__c = TRUE LIMIT 1&quot;);
-records = contact.getArray(&quot;records&quot;);
 
-var contactId = records[0].Contact__r.Id;
-var contactName = records[0].Contact__r.Full_Name__c;
+var contactId 
+var contactName;
+
+if (contact.size &gt; 0) {
+records = contact.getArray(&quot;records&quot;);
+contactId = records[0].Contact__r.Id;
+contactName = records[0].Contact__r.Full_Name__c;
+}
+else {
+contactId = &quot;&quot;;
+contactName = &quot;&quot;;
+}
 
 //Service Console 
 if (typeof(srcUp) == &apos;function&apos;) { 
