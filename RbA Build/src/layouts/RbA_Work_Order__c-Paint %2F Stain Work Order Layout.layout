@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>Conga_Composer_RbA_PaintStain_Work_Order</customButtons>
+    <customButtons>Conga_Composer_RbA_Collection_1st_Attempt</customButtons>
+    <customButtons>Conga_Composer_RbA_Collctions_2nd_Attempt</customButtons>
+    <customButtons>Conga_Composer_RbA_Collections_Final_Attempt</customButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
