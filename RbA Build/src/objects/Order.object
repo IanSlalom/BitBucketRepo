@@ -180,7 +180,7 @@
         <fullName>Amount_Due__c</fullName>
         <description>The amount due on the order. It&apos;s different depending on if it&apos;s a service order or regular order.</description>
         <externalId>false</externalId>
-        <formula>IF( Validate_Service_Order__c,  Invoice_Subtotal__c + Sales_Tax__c + Amount_Refunded__c - Payments_Received__c - Business_Adjustments__c + Non_Sufficient_Funds__c, Retail_Total__c - Payments_Received__c + Sales_Tax__c + Amount_Refunded__c - Business_Adjustments__c + Non_Sufficient_Funds__c)</formula>
+        <formula>IF( Validate_Service_Order__c,  Invoice_Subtotal__c + Sales_Tax__c + Amount_Refunded__c - Payments_Received__c - Business_Adjustments__c + Non_Sufficient_Funds__c, Retail_Total__c - Payments_Received__c + Sales_Tax__c + Amount_Refunded__c - Business_Adjustments__c + Non_Sufficient_Funds__c + Permit_Cost__c)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <inlineHelpText>The amount due on the order. It&apos;s different depending on if it&apos;s a service order or regular order.</inlineHelpText>
         <label>Amount Due</label>
