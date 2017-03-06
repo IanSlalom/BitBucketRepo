@@ -1437,7 +1437,7 @@ NULL)</formula>
         <columns>PRODUCT2.ACTIVE</columns>
         <filterScope>Everything</filterScope>
         <filters>
-            <field>PRODUCT2.RECORDTYPE</field>
+            <field>PRODUCT2.RECORD_TYPE</field>
             <operation>equals</operation>
             <value>PRODUCT2.Construction_Materials</value>
         </filters>
