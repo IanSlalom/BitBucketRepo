@@ -232,7 +232,7 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
-                <fullName>0077 - Twin Cities, MN</fullName>
+                <fullName>0077 - Twin Cities</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
@@ -674,6 +674,10 @@
                 <default>false</default>
             </picklistValues>
             <picklistValues>
+                <fullName>0077 - Twin Cities</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
                 <fullName>0085 - Maryland</fullName>
                 <default>false</default>
             </picklistValues>
@@ -1039,10 +1043,6 @@
             </picklistValues>
             <picklistValues>
                 <fullName>0990 - Central FL</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>0077 - Twin Cities, MN</fullName>
                 <default>false</default>
             </picklistValues>
             <picklistValues>
