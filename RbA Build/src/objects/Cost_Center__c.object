@@ -63,7 +63,7 @@
         <externalId>false</externalId>
         <inlineHelpText>The cost center value</inlineHelpText>
         <label>Cost Center Number</label>
-        <length>3</length>
+        <length>4</length>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
