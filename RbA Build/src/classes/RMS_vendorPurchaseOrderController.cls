@@ -786,15 +786,17 @@ po.Status__c = 'Confirmed';
 po.Confirmed_Timestamp__c = System.Now();
 }
 }  */  
-        try{
-            // upsert the purchase order
-            upsert po;
-        } catch (Exception e){
-            System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
-            return null;
-        }
-        
+		// Do not update the PO if we are in receiving, vendor credit or write off mode
+		if (!receiving && !vendorCredit && !writeOff) {
+        	try{
+            	// upsert the purchase order
+            	upsert po;
+        	} catch (Exception e){
+            	System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the save method upserting the PO:' + e);
+            	ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+            	return null;
+        	}
+		}
         // Used for redirecting to the view page from javascript
         poId = po.Id;
         
@@ -855,8 +857,8 @@ po.Confirmed_Timestamp__c = System.Now();
         
         List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(orderItemsToUpdateList, po.Subtotal__c, po.Tax__c);    
         if (orderItemsToTax != null) update orderItemsToTax;
-        // If the po status has changed update it
-        if (String.isNotBlank(receiveStatus)) {
+        // If the po status has changed because of receiving, update it
+        if (String.isNotBlank(receiveStatus) && receiving) {
             orderStatus = receiveStatus;
             po.Status__c = orderStatus;
             po.Received_Timestamp__c = System.Now();
