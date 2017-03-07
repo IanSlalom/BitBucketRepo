@@ -1573,17 +1573,6 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>Obscure_Casacade_Fern_or_Reed__c</fullName>
-        <externalId>false</externalId>
-        <label>Obscure, Casacade, Fern, or Reed</label>
-        <precision>18</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Currency</type>
-    </fields>
-    <fields>
         <fullName>Obscure__c</fullName>
         <description>Windows -- Glass Options: Add for Obscure</description>
         <externalId>false</externalId>
@@ -2250,6 +2239,23 @@
         <label>All</label>
     </listViews>
     <listViews>
+        <fullName>Construction_Materials</fullName>
+        <columns>NAME</columns>
+        <columns>Base_Unit__c</columns>
+        <columns>Formula_Type__c</columns>
+        <columns>Quantity_Formula__c</columns>
+        <columns>Min_Qty_to_Round_to__c</columns>
+        <columns>Units_per_Opening__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Pricing_Configuration__c.Construction_Materials</value>
+        </filters>
+        <label>Construction Materials</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
         <fullName>Misc_Job_and_Unit_Charges</fullName>
         <columns>NAME</columns>
         <columns>Base_Unit__c</columns>
@@ -2269,6 +2275,14 @@
     <listViews>
         <fullName>Mullion_Pricing_Config</fullName>
         <columns>NAME</columns>
+        <columns>Base_Unit_perLI__c</columns>
+        <columns>Brickmould_Base__c</columns>
+        <columns>Brickmould_perLI__c</columns>
+        <columns>Different_Color_Brickmould__c</columns>
+        <columns>Different_Color_Mullion__c</columns>
+        <columns>Different_Color_Overfit_Chamfered_Edge__c</columns>
+        <columns>Nail_Flange_perLI__c</columns>
+        <columns>Overfit_Chamfered_Edge_perLI__c</columns>
         <columns>UPDATEDBY_USER</columns>
         <columns>LAST_UPDATE</columns>
         <filterScope>Everything</filterScope>
@@ -2278,6 +2292,7 @@
             <value>Pricing_Configuration__c.Mullion_Pricing_Configuration</value>
         </filters>
         <label>Mullion Pricing Config</label>
+        <language>en_US</language>
     </listViews>
     <listViews>
         <fullName>Specialty_Windows</fullName>
