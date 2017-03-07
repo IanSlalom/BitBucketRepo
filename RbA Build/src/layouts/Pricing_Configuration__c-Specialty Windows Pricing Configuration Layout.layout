@@ -68,10 +68,6 @@
                 <behavior>Edit</behavior>
                 <field>Tempered__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Obscure_Casacade_Fern_or_Reed__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
