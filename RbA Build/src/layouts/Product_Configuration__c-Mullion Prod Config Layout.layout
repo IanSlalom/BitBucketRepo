@@ -39,11 +39,19 @@
                 <behavior>Edit</behavior>
                 <field>Interior_Color__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Exterior_Trim__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Mull_Sequence_Mullion__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Measurement_Fractions__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -87,6 +95,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Exterior_Color_Control__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Exterior_Trim_Control__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -180,6 +192,12 @@
         <fields>LAST_UPDATE</fields>
         <fields>UPDATEDBY_USER.ALIAS</fields>
         <relatedList>Mullion_Size_Configuration__c.Mullion_Product_Configuration__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Exterior_Color__c</fields>
+        <fields>Interior_Color__c</fields>
+        <relatedList>Color_Configuration__c.Product_Configuration__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
