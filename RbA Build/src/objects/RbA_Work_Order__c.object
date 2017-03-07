@@ -1336,6 +1336,28 @@ IF(
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Primary_Resource_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Work_Order_Type__c,&quot;Service&quot;), Primary_Service__r.Name, IF(ISPICKVAL(Work_Order_Type__c,&quot;Install&quot;),  Primary_Installer__r.Name,  Primary_Tech_Measure__r.Name))</formula>
+        <label>Primary Resource Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Primary_Resource_Phone__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Work_Order_Type__c,&quot;Service&quot;), Primary_Service__r.Phone_Number__c, IF(ISPICKVAL(Work_Order_Type__c,&quot;Install&quot;), Primary_Installer__r.Phone_Number__c, Primary_Tech_Measure__r.Phone_Number__c))</formula>
+        <label>Primary Resource Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Primary_Service__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>

@@ -174,7 +174,7 @@ TODAY()- BLANKVALUE(Work_Comp_Insurance_Expiration_Date__c, DATE(2999, 01, 01))
     <fields>
         <fullName>Phone_Number__c</fullName>
         <externalId>false</externalId>
-        <formula>RbA_User__r.Contact.Account.Phone</formula>
+        <formula>IF(ISBLANK(RbA_User__r.MobilePhone), RbA_User__r.Contact.Account.Phone,RbA_User__r.MobilePhone)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Phone Number</label>
         <required>false</required>
