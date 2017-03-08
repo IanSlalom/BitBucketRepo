@@ -661,7 +661,7 @@
     	var mode = '{!mode}';
 
 		if (mode == 'e') {  
-        	startUpDefaults();
+//        	startUpDefaults();
 //        	exteriorColor('Sandtone');
 //        	exteriorColor('Terratone');
 //        	exteriorColor('Dark Bronze');
