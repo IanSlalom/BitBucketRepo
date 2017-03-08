@@ -4794,7 +4794,7 @@ RRK_Checklist_Attached__c = False)</errorConditionFormula>
         <fullName>LockedServiceRequest</fullName>
         <active>true</active>
         <description>If Service Request is Locked (Status = Warranty Submitted, Warranty Accepted, Warranty Rejected, or Closed) users may only edit Paint/Stain Work Orders</description>
-        <errorConditionFormula>AND(Sold_Order__r.Lock_Service_Request__c, NOT(ISPICKVAL(Work_Order_Type__c, &quot;Paint/Stain&quot;)))</errorConditionFormula>
+        <errorConditionFormula>AND(Sold_Order__r.Lock_Service_Request__c, NOT(ISPICKVAL(Work_Order_Type__c, &quot;Paint/Stain&quot;)), !ISCHANGED(Initial_Labor__c), !ISCHANGED(Total_Labor_Cost__c),!ISCHANGED(Labor_Install__c), !ISCHANGED(Labor_Paint_Stain__c) )</errorConditionFormula>
         <errorMessage>The related Service Request is currently locked, only Paint/Stain Work Orders may be updated for this Request.</errorMessage>
     </validationRules>
     <validationRules>
