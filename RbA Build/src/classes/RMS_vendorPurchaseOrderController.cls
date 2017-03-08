@@ -841,22 +841,24 @@ po.Confirmed_Timestamp__c = System.Now();
         if (orderItemsToUpdateList == null) {  // && ApexPages.hasMessages()
             return null;
         } 
-        try{
-            // update the order items
-            update orderItemsToUpdateList;
+		if (!receiving && !vendorCredit && !writeOff) {
+        	try{
+            	// update the order items
+            	update orderItemsToUpdateList;
             
-        } catch (Exception e){
-            System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the receivelineitems method updating the line items:' + e);
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
-            return null;
-        }
+	        } catch (Exception e){
+    	        System.debug('************The following exception occurred in the RMS_vendorPurchaseOrderController in the receivelineitems method updating the line items:' + e);
+        	    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, RMS_ErrorMessages.SAVE_PO_EXCEPTION));
+            	return null;
+       		 }
+		}
         
         
         
         List<orderItem> orderItemsToTax = utilityMethods.calculateTaxes(orderItemsToUpdateList, po.Subtotal__c, po.Tax__c);    
         if (orderItemsToTax != null) update orderItemsToTax;
         // If the po status has changed update it
-        if (String.isNotBlank(receiveStatus)) {
+        if (String.isNotBlank(receiveStatus) && receiving) {
             orderStatus = receiveStatus;
             po.Status__c = orderStatus;
             po.Received_Timestamp__c = System.Now();
