@@ -204,10 +204,10 @@
             <apex:selectList value="{!OrderItem.Mull_Sequence_Mullion__c}" label="Mull Sequence Mullion" size="1" id="mullSequenceMullion"   required="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Mull_Sequence_Mullion_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!mullSequenceMullionItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" html-data-jsid="exteriorColor" onChange="callRule('exteriorColor')" required="{!prodConfig.mpc.Exterior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Exterior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Exterior_Color__c}" label="Exterior Color" size="1" id="exteriorColor" html-data-jsid="exteriorColor" required="{!prodConfig.mpc.Exterior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Exterior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!exteriorColorItems}"/>
             </apex:selectList>
-            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" onChange="callRule('interiorColor')" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Interior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
+            <apex:selectList value="{!OrderItem.Interior_Color__c}" label="Interior Color" size="1" id="interiorColor" html-data-jsid="interiorColor" required="{!prodConfig.mpc.Interior_Color_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Interior_Color_Control__c == 'Disabled'  || mode != 'e'}" >
                 <apex:selectOptions value="{!interiorColorItems}"/>
             </apex:selectList>
 		    <apex:selectList value="{!OrderItem.Glazing_S1__c}" label="Glazing {!sashFieldName}" size="1" id="glazing1"  required="{!prodConfig.mpc.Glazing_Control__c == 'Required' && verifyProducts == true}" disabled="{!prodConfig.mpc.Glazing_Control__c == 'Disabled'  || mode != 'e'}" rendered ="{!numSashes >= 1}" html-data-jsid="glazing1" onChange="callRule('glazing1')" >
@@ -662,9 +662,9 @@
 
 		if (mode == 'e') {  
         	startUpDefaults();
-        	exteriorColor('Sandtone');
-        	exteriorColor('Terratone');
-        	exteriorColor('Dark Bronze');
+//        	exteriorColor('Sandtone');
+//        	exteriorColor('Terratone');
+//        	exteriorColor('Dark Bronze');
         	screenType();
 //        	grilleStyle();
 //        	grillePattern(1);
@@ -745,7 +745,7 @@
         
     function startUpDefaults(){
         if(j$("select[data-jsid='screenType']").val() == ''){
-            j$("select[data-jsid='screenType']").val('Full Screen Fiberglass');
+            j$("select[data-jsid='screenType']").val('Fiberglass');
         }
     }
     
