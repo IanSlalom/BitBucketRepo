@@ -25,11 +25,15 @@ public with sharing class PurchaseOrderTriggerHandler {
     //List<Purchase_Order__c> newPurchase_Order__cs = [select Id, Name from Purchase_Order__c where Id IN :newPurchase_Order__cIDs];
   }
 
+  
   public void OnBeforeUpdate( Map<ID, Purchase_Order__c> oldMap, Map<ID, Purchase_Order__c> newMap){
     //Example Map usage
     //Map<ID, Contact> contacts = new Map<ID, Contact>( [select Id, FirstName, LastName, Email from Contact where Purchase_Order__cId IN :Purchase_Order__cMap.keySet()] );
   }
   */
+  public void OnBeforeUpdate( Map<ID, Purchase_Order__c> oldMap, Map<ID, Purchase_Order__c> newMap){
+    updateOrderStatusIfNecessary(oldMap, newMap);  
+  }
   public void OnAfterUpdate( Map<ID, Purchase_Order__c> oldMap, Map<ID, Purchase_Order__c> newMap){
 
     updateOrderStatusToOrderReleased(oldMap, newMap);
@@ -72,13 +76,13 @@ public with sharing class PurchaseOrderTriggerHandler {
       }
     }
 
-	//If there are no order ids to update, just return
-	if (orderIds.size() == 0) return;
+  //If there are no order ids to update, just return
+  if (orderIds.size() == 0) return;
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status, Apex_Context__c FROM Order WHERE Id in: orderIds AND Status = 'Ready to Order']);
 
-	// Return if there were no orders in Ready to Order status.
-	if (parentOrders.size() == 0) return;
+  // Return if there were no orders in Ready to Order status.
+  if (parentOrders.size() == 0) return;
 
     //This query is modified to exclude Ids of records that have Status updated to Released in the test class, but no update dml is actually issued.
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in: poIdsToExclude];
@@ -119,13 +123,13 @@ public with sharing class PurchaseOrderTriggerHandler {
       }
     }
 
-	//If there are no order ids to update, just return
-	if (orderIds.size() == 0) return;
+  //If there are no order ids to update, just return
+  if (orderIds.size() == 0) return;
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status, Apex_Context__c FROM Order WHERE Id in: orderIds AND Status = 'Order Released']);
 
-	// Return if there were no orders in Order Released status.
-	if (parentOrders.size() == 0) return;
+  // Return if there were no orders in Order Released status.
+  if (parentOrders.size() == 0) return;
 
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: parentOrders.keySet() AND Id not in : poIdsToExclude];
     for(Id orderId: parentOrders.keySet()){
@@ -162,9 +166,9 @@ public with sharing class PurchaseOrderTriggerHandler {
         poIdsToExclude.add(po.Id);
       }
     }
-	
-	//If there are no order ids to update, just return
-	if (orderIds.size() == 0) return;
+  
+  //If there are no order ids to update, just return
+  if (orderIds.size() == 0) return;
 
     parentOrders = new Map<Id,Order>([SELECT Id, Status, hasPO__c FROM Order WHERE Id in: orderIds]);
     List<Purchase_Order__c> allRelatedPOs = [Select Id, Order__c, Status__c from Purchase_Order__c where Order__c in: orderIds AND Status__c != 'Cancelled' AND  Id not in : poIdsToExclude];
@@ -197,5 +201,14 @@ public with sharing class PurchaseOrderTriggerHandler {
       o.hasPO__c = true; 
     }
     update ordersToUpdate;
+  }
+  public static void updateOrderStatusIfNecessary(Map<Id, Purchase_Order__c> oldMap, Map<Id,Purchase_Order__c> newMap){
+    for (Purchase_Order__c po: newMap.values()){
+      if(po.Status__c=='Released' 
+        && oldMap.get(po.Id).Confirmed_Timestamp__c == null 
+        && po.Confirmed_Timestamp__c != null){
+          po.Status__c='Confirmed';
+      }
+    }
   }
 }
